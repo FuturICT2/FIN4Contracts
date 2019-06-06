@@ -7,47 +7,46 @@ Team **Action Magic for Finance 4.0** in the SoSe2019 [TUM](https://www.tum.de/)
 
 Start [Ganache](https://truffleframework.com/ganache) and use *Quickstart*.
 
-`truffle migrate` to place the smart contract on the local blockchain.
+`truffle migrate` to place the smart contract on the local blockchain
 
-Via the gear-icon in Ganache, *Add Project* and select the `truffle-config.js` to add this project and therewith be able to see the values in the smart contract. Click *Save and Restart* top right.  
-(This might throw an error on Ganache - if that happens it doesn't seem possible to see the smart contract via Ganache unfortunately. TODO: fix this?)
+[//]: <> (
+Via the gear-icon in Ganache, *Add Project* and select the `truffle-config.js` to add this project and therewith be able to see the values in the smart contract. Click *Save and Restart* top right. This might throw an error on Ganache - if that happens it doesn't seem possible to see the smart contract via Ganache unfortunately. TODO: fix this?
+)
 
 ## Usage
 
-#### Command Line
+[//]: <> (#### Command Line)
 
+All the following takes place in:  
 `truffle console`
 
-Register giver and receiver:
-```solidity
-ActionMagic.deployed().then(function(instance){instance.becomeActionGiver()})
-
-ActionMagic.deployed().then(function(instance){instance.becomeActionReceiver({from:"0xccAFBbEcc6ed0512209608CAece7b659506171FD"})})
-```
-Where `from` pretends to send this from another account and not the first one that is used by default. See the *Accounts* tab in Ganache for the 10 addresses and pick one other than the first.
-
-Giver makes a claim:
+Get the addresses of the `ProofDummy` and `KISSConversationToken` smart contracts:
 
 ```solidity
-ActionMagic.deployed().then(function(instance){instance.actionGiverInitiatesClaim()})
+ProofDummy.address
+KISSConversationToken.address
 ```
 
-Receiver gets a message about a claim to approve via the update-polling function:
+Use the `ProofDummy` address to register it as a required proof for `KISSConversationToken`:
 
 ```solidity
-ActionMagic.deployed().then(function(instance){return instance.updatePolling({from:"0xccAFBbEcc6ed0512209608CAece7b659506171FD"})})
+KISSConversationToken.deployed().then(function(instance){return instance.addRequiredProof('0x3646008A0fdC887F4cB5c06FbEACa09Dc0e09d59')})
 ```
 
-Receiver approves the claim:
+Submit a claim (it will get the `claimId 0`):
 
 ```solidity
-ActionMagic.deployed().then(function(instance){instance.actionReceiverApprovesClaim({from:"0xccAFBbEcc6ed0512209608CAece7b659506171FD"})})
+KISSConversationToken.deployed().then(function(instance){return instance.submitClaim()})
 ```
-Check if the `claimApprovedByActionReceiver` boolean has become true:
+
+Submit your proof to `ProofDummy` by including the address of the token you want to mint and the `claimId` (it gets immediately auto-approved):
 
 ```solidity
-ActionMagic.deployed().then(function(instance){return instance.claimApprovedByActionReceiver()})
+ProofDummy.deployed().then(function(instance){return instance.submitProof('0xEa3abc42dE134f0F2050d5D58b714f91bCe1CB0A','0')})
 ```
 
-Done. For now :smiley:
+Check if your claim with `claimId 0` (you could have multiple ones pending, therefore not just your address but also an Id for the claim is necessary) is approved. It should return `true`:
 
+```solidity
+KISSConversationToken.deployed().then(function(instance){return instance.getClaimStatus('0')})
+```
