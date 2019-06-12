@@ -28,6 +28,9 @@ class App extends Component {
   
   bigchainDBdev() {
     // BigchainDB, wip following https://www.bigchaindb.com/developers/guide/tutorial-piece-of-art/
+    // see also here for more (better?) example: https://git.fortiss.org/Blockchain/student-practical-courses/blockchain-dev-env/blob/master/demos/bcdb-nodejs/demo.js
+    // requires a local BigchainDB running, either like this: https://blog.bigchaindb.com/the-status-of-the-bigchaindb-testnet-90d446edd2b4
+    // or like here: https://git.fortiss.org/Blockchain/student-practical-courses/blockchain-dev-env
 
     const conn = new BigchainDB.Connection(API_PATH)
     var seed = bip39.mnemonicToSeedSync("fantasticFin4 seedPhrase").slice(0, 32)
