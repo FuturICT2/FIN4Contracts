@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import {kissConversationTokenContract, proofDummyContract} from './web3-setup';
 const BigchainDB = require('bigchaindb-driver')
 const API_PATH = 'http://localhost:9984/api/v1/' //'https://test.bigchaindb.com/api/v1/'
 const bip39 = require('bip39')
@@ -15,7 +16,16 @@ class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
+  }
+  
+  submitClaim() {
+    kissConversationTokenContract.methods.submitClaim().send({
+      from: '0x30fee34fb0096f1f4712c4Ae4D6164b2Ae6b2644' // got from calling web3.eth.getAccounts()
+    });
+    // proofDummyContract.submitProof('0xEa3abc42dE134f0F2050d5D58b714f91bCe1CB0A', '0');
+  }
+  
+  bigchainDBdev() {
     // BigchainDB, wip following https://www.bigchaindb.com/developers/guide/tutorial-piece-of-art/
 
     const conn = new BigchainDB.Connection(API_PATH)
@@ -73,12 +83,16 @@ class App extends Component {
 
   handleSubmit(event) {
     console.log(this.state);
+    this.bigchainDBdev();
     event.preventDefault();
   }
 
   render() {
     return (
       <div className="App">
+        <div>
+          <button onClick={this.submitClaim()}>Submit a claim</button>
+        </div>
         <form onSubmit={this.handleSubmit}>
           <label>
             Name:
