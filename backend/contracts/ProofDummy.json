@@ -1,0 +1,26 @@
+[
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "SCtoReceiveProof",
+                "type": "address"
+            },
+            {
+                "name": "claimId",
+                "type": "uint256"
+            }
+        ],
+        "name": "submitProof",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function",
+        "signature": "0x82e6b20d"
+    }
+]
