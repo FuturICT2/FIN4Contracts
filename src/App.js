@@ -14,6 +14,7 @@ class App extends Component {
       date: ''
     };
 
+    this.handleSubmitClaim = this.submitClaim.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -91,7 +92,7 @@ class App extends Component {
     return (
       <div className="App">
         <div>
-          <button onClick={this.submitClaim()}>Submit a claim</button>
+          <button onClick={this.handleSubmitClaim}>Submit a claim</button>
         </div>
         <form onSubmit={this.handleSubmit}>
           <label>
