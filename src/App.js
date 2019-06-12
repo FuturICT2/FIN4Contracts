@@ -20,7 +20,7 @@ class App extends Component {
   
   submitClaim() {
     kissConversationTokenContract.methods.submitClaim().send({
-      from: '0x30fee34fb0096f1f4712c4Ae4D6164b2Ae6b2644' // got from calling web3.eth.getAccounts()
+      from: '0xB648892c8d3c1f5d38A3A7751cdc644Fd879Add1' // got from calling web3.eth.getAccounts()
     });
     // proofDummyContract.submitProof('0xEa3abc42dE134f0F2050d5D58b714f91bCe1CB0A', '0');
   }
