@@ -13,7 +13,7 @@ Start [Ganache](https://truffleframework.com/ganache) and use *Quickstart*.
 Via the gear-icon in Ganache, *Add Project* and select the `truffle-config.js` to add this project and therewith be able to see the values in the smart contract. Click *Save and Restart* top right. This might throw an error on Ganache - if that happens it doesn't seem possible to see the smart contract via Ganache unfortunately. TODO: fix this?
 )
 
-## Usage
+## Usage (outdated)
 
 [//]: <> (#### Command Line)
 
