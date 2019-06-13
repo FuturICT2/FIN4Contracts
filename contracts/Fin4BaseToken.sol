@@ -32,7 +32,7 @@ contract Fin4BaseToken is ERC20, ERC20Detailed, ERC20Mintable {
   }
 
   function getClaimStatus(uint claimId) public view returns(address, bool) {
-    require(msg.sender == claims[claimId].claimer);
+    require(msg.sender == claims[claimId].claimer, "sender address must equal the claimer of the claim with that claimId");
     // TODO loop over all, not just return the status of the first one
     return (requiredProofs[0], claims[claimId].proof_statuses[requiredProofs[0]]);
   }
@@ -49,7 +49,7 @@ contract Fin4BaseToken is ERC20, ERC20Detailed, ERC20Mintable {
 
   // called from ProofDummy, therefore msg.sender is its address
   function receiveApprovedProof(address claimer, uint claimId) public returns(bool) {
-    require(claimer == claims[claimId].claimer);
+    require(claimer == claims[claimId].claimer, "claimer address must equal the claimer of the claim with this claimId");
     claims[claimId].proof_statuses[msg.sender] = true;
     return true;
   }
