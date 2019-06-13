@@ -1,13 +1,19 @@
 pragma solidity ^0.5.0;
 
-contract Fin4BaseToken {
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
+
+contract Fin4BaseToken is ERC20, ERC20Detailed, ERC20Mintable {
 
   address[] public requiredProofs;
   uint nextClaimId = 0;
 
-  constructor() public {
-      //requiredProofs.push(0x8Ec64a3a7f6021b5f66edb9D6f11AE1862280aaf);
-  }
+  constructor(string memory name, string memory symbol, uint8 decimals)
+    ERC20Detailed(name, symbol, decimals)
+    ERC20Mintable()
+    ERC20()
+    public {}
 
   struct Claim {
     uint claimId;
