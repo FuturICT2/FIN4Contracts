@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-contract KISSConversationToken {
+contract Fin4BaseToken {
 
   address[] public requiredProofs;
   uint nextClaimId = 0;

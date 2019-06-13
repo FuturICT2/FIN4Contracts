@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
-import {kissConversationTokenContract, proofDummyContract} from './web3-setup';
+import {fin4BaseTokenContract, proofDummyContract} from './web3-setup';
 const BigchainDB = require('bigchaindb-driver')
 const API_PATH = 'http://localhost:9984/api/v1/' //'https://test.bigchaindb.com/api/v1/'
 const bip39 = require('bip39')
@@ -20,7 +20,7 @@ class App extends Component {
   }
   
   submitClaim() {
-    kissConversationTokenContract.methods.submitClaim().send({
+    fin4BaseTokenContract.methods.submitClaim().send({
       from: '0xB648892c8d3c1f5d38A3A7751cdc644Fd879Add1' // got from calling web3.eth.getAccounts()
     });
     // proofDummyContract.submitProof('0xEa3abc42dE134f0F2050d5D58b714f91bCe1CB0A', '0');
