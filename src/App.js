@@ -1,21 +1,13 @@
 import React, {Component} from 'react';
 import './App.css';
 import {fin4BaseTokenContract, proofDummyContract} from './web3-setup';
-const BigchainDB = require('bigchaindb-driver')
-const bip39 = require('bip39')
+//const BigchainDB = require('bigchaindb-driver')
+//const bip39 = require('bip39')
 
 class App extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      name: '',
-      date: ''
-    };
-
     this.handleSubmitClaim = this.submitClaim.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
   
   submitClaim() {
@@ -23,12 +15,6 @@ class App extends Component {
       from: '0xB648892c8d3c1f5d38A3A7751cdc644Fd879Add1' // got from calling web3.eth.getAccounts()
     });
     // proofDummyContract.submitProof('0xEa3abc42dE134f0F2050d5D58b714f91bCe1CB0A', '0');
-  }
-
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
   }
 
   handleSubmit(event) {
@@ -43,22 +29,11 @@ class App extends Component {
         <div>
           <button onClick={this.handleSubmitClaim}>Submit a claim</button>
         </div>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input name="name" type="text" value={this.state.name} onChange={this.handleChange} />
-          </label>
-          <label>
-            Date:
-            <input name="date" type="date" value={this.state.date} onChange={this.handleChange} />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
       </div>
     );
   }
 
-  bigchainDBdev() {
+  /*bigchainDBdev() {
     // BigchainDB, wip following https://www.bigchaindb.com/developers/guide/tutorial-piece-of-art/
     // see also here for more (better?) example: https://git.fortiss.org/Blockchain/student-practical-courses/blockchain-dev-env/blob/master/demos/bcdb-nodejs/demo.js
     // requires a local BigchainDB running, either like this: https://blog.bigchaindb.com/the-status-of-the-bigchaindb-testnet-90d446edd2b4
@@ -98,7 +73,7 @@ class App extends Component {
             document.body.innerHTML += '<h3>Transaction created</h3>';
             document.body.innerHTML += txSigned.id
         })
-  }
+  }*/
 }
 
 export default App;
