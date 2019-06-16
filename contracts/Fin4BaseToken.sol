@@ -37,6 +37,16 @@ contract Fin4BaseToken is ERC20, ERC20Detailed, ERC20Mintable {
     return (requiredProofs[0], claims[claimId].proof_statuses[requiredProofs[0]]);
   }
 
+  function getMyTotalNumberOfClaims() public view returns(uint) {
+    uint count = 0;
+    for (uint i = 0; i < nextClaimId; i ++) {
+      if (claims[i].claimer == msg.sender) {
+          count ++;
+      }
+    }
+    return count;
+  }
+
   function submitClaim() public returns (uint) {
     Claim storage claim = claims[nextClaimId];
     claim.claimer = msg.sender;
