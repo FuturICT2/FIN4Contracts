@@ -1,6 +1,7 @@
 build/
 .idea/
 package-lock.json
+.env
 
 # below is created from the create-react-app command
 
