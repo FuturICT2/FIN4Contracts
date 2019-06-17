@@ -4,7 +4,7 @@ import { ContractForm } from 'drizzle-react-components';
 
 const ClaimSubmission = () => (
 	<>
-		<h2>Submit Claim</h2>
+		<h2>New Claim</h2>
 		<LoadingContainer>
 			<ContractForm contract="Fin4BaseToken" method="submitClaim" />
 		</LoadingContainer>
