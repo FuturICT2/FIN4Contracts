@@ -1,19 +1,18 @@
-
-import React from "react";
+import React from 'react';
 import {
   AccountData,
   ContractData,
   ContractForm,
-} from "drizzle-react-components";
+} from 'drizzle-react-components';
 
-export default ({accounts}) => (
+export default ({ accounts }) => (
   <div className="App">
     <div className="section">
       <h2>Active Account</h2>
       <AccountData accountIndex="0" units="ether" precision="3" />
     </div>
 
-    <hr></hr>
+    <hr />
 
     <div className="section">
       <h2>Submit Claim</h2>
@@ -26,4 +25,4 @@ export default ({accounts}) => (
   </div>
 );
 
-//this.contracts.Fin4BaseToken.methods.getDev().call().then(function(result) {}) 
+// this.contracts.Fin4BaseToken.methods.getDev().call().then(function(result) {})
