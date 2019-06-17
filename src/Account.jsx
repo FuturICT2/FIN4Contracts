@@ -1,12 +1,13 @@
 import React from 'react';
-import {
-	AccountData
-} from 'drizzle-react-components';
+import { LoadingContainer } from 'drizzle-react-components';
+import { AccountData } from 'drizzle-react-components';
 
 const Account = ({ accounts }) => (
 	<>
 		<h2>Active Account</h2>
-		<AccountData accountIndex="0" units="ether" precision="3" />
+		<LoadingContainer>
+			<AccountData accountIndex="0" units="ether" precision="3" />
+		</LoadingContainer>
 	</>
 );
 

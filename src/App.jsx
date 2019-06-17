@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { DrizzleProvider } from 'drizzle-react';
-import { LoadingContainer } from 'drizzle-react-components';
 
+import { DrizzleProvider } from 'drizzle-react';
 import drizzleConfig from './drizzle-config';
+
 import Account from './Account';
 import ClaimSubmission from './ClaimSubmission';
 import Claims from './Claims';
@@ -10,18 +10,14 @@ import Claims from './Claims';
 class App extends Component {
 	render() {
 		return (
-			<>
-				<h1>Finance 4.0</h1>
-				<DrizzleProvider options={drizzleConfig}>
-					<LoadingContainer>
-						<>
-							<Account />
-							<ClaimSubmission />
-							<Claims />
-						</>
-					</LoadingContainer>
-				</DrizzleProvider>
-			</>
+			<DrizzleProvider options={drizzleConfig}>
+				<>
+					<h1>Finance 4.0</h1>
+					<Account />
+					<ClaimSubmission />
+					<Claims />
+				</>
+			</DrizzleProvider>
 		);
 	}
 }
