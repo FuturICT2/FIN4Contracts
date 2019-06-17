@@ -14,9 +14,11 @@ class App extends Component {
 				<h1>Finance 4.0</h1>
 				<DrizzleProvider options={drizzleConfig}>
 					<LoadingContainer>
-						<Account />
-						<ClaimSubmission />
-						<Claims />
+						<div>
+							<Account />
+							<ClaimSubmission />
+							<Claims />
+						</div>
 					</LoadingContainer>
 				</DrizzleProvider>
 			</>
