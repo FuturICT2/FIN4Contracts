@@ -18,6 +18,7 @@ contract Fin4BaseToken is ERC20, ERC20Detailed, ERC20Mintable {
   struct Claim {
     uint claimId;
     address claimer;
+    bool isApproved;
     mapping(address => bool) proof_statuses;
   }
 
@@ -47,12 +48,38 @@ contract Fin4BaseToken is ERC20, ERC20Detailed, ERC20Mintable {
     return count;
   }
 
+  function getStatusesOfMyClaims() public view returns(bool[] memory) {
+    // TODO can I instead call here the getMyTotalNumberOfClaims() function?
+    uint count = 0;
+    for (uint i = 0; i < nextClaimId; i ++) {
+      if (claims[i].claimer == msg.sender) {
+          count ++;
+      }
+    }
+    // "trick" to return array of structs via https://medium.com/coinmonks/solidity-tutorial-returning-structs-from-public-functions-e78e48efb378
+    // workaround for "dynamic" memory-arrays: https://delegatecall.com/questions/workaround-for-return-dynamic-array-from-solidity69924f08-a061-426f-a326-2bed3f566e53
+    //uint[] memory claimIdArr = new uint[](count);
+    bool[] memory isApprovedArr = new bool[](count);
+    //string[] memory statuses = new string[](count);
+    count = 0;
+    for (uint i = 0; i < nextClaimId; i ++) {
+      if (claims[i].claimer == msg.sender) {
+          //claimIdArr[count] = i;
+          isApprovedArr[count] = claims[i].isApproved;
+          //statuses[count] = string(abi.encodePacked(i, ",", claims[i].isApproved));
+          count ++;
+      }
+    }
+    return isApprovedArr;
+  }
+
   function submitClaim() public returns (uint) {
     Claim storage claim = claims[nextClaimId];
     claim.claimer = msg.sender;
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
+    claim.isApproved = false;
     nextClaimId ++;
     return nextClaimId - 1;
   }
@@ -61,6 +88,7 @@ contract Fin4BaseToken is ERC20, ERC20Detailed, ERC20Mintable {
   function receiveApprovedProof(address claimer, uint claimId) public returns(bool) {
     require(claimer == claims[claimId].claimer, "claimer address must equal the claimer of the claim with this claimId");
     claims[claimId].proof_statuses[msg.sender] = true;
+    // TODO if all required proofs are true, switch isApproved to true
     return true;
   }
 

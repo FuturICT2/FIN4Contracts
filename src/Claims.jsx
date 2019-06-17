@@ -12,6 +12,12 @@ const Claims = () => (
 				method="getMyTotalNumberOfClaims"
 			/>
 		</LoadingContainer>
+
+		<h2>Statuses of your claims</h2>
+
+		<LoadingContainer>
+			<ContractData contract="Fin4BaseToken" method="getStatusesOfMyClaims" />
+		</LoadingContainer>
 	</>
 );
 
