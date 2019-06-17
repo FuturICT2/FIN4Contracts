@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { DrizzleProvider } from 'drizzle-react';
 import { LoadingContainer } from 'drizzle-react-components';
 
-import drizzleConfig from '../drizzle-config';
+import drizzleConfig from './drizzle-config';
 import Account from './Account';
 import ClaimSubmission from './ClaimSubmission';
 import Claims from './Claims';
