@@ -6,7 +6,7 @@ const Account = ({ accounts }) => (
 	<>
 		<h2>Active Account</h2>
 		<LoadingContainer>
-			<AccountData accountIndex="0" units="ether" precision="3" />
+			<AccountData accountIndex={0} units="ether" precision={3} />
 		</LoadingContainer>
 	</>
 );
