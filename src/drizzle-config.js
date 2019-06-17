@@ -1,7 +1,7 @@
 import Fin4BaseToken from './build/contracts/Fin4BaseToken.json';
 import ProofDummy from './build/contracts/ProofDummy.json';
 
-const options = {
+const drizzleConfig = {
 	web3: {
 		block: false,
 		fallback: {
@@ -12,4 +12,4 @@ const options = {
 	contracts: [Fin4BaseToken, ProofDummy]
 };
 
-export default options;
+export default drizzleConfig;
