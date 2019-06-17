@@ -4,7 +4,7 @@ import { ContractData } from 'drizzle-react-components';
 
 const Claims = () => (
 	<>
-		<h2>Claims submitted by you</h2>
+		<h2>Old Claims</h2>
 
 		<LoadingContainer>
 			<ContractData
