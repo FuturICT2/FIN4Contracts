@@ -47,7 +47,7 @@ class ClaimStatuses extends Component {
 	}
 }
 
-ClaimStatusesComponent.contextTypes = {
+ClaimStatuses.contextTypes = {
 	drizzle: PropTypes.object
 };
 
@@ -57,4 +57,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(ClaimStatusesComponent, mapStateToProps);
+export default drizzleConnect(ClaimStatuses, mapStateToProps);

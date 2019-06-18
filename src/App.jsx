@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Menu from './Menu';
+import MenuTop from './MenuTop';
+import MenuBottom from './MenuBottom';
 
 import { DrizzleProvider } from 'drizzle-react';
 import drizzleConfig from './drizzle-config';
@@ -11,7 +12,7 @@ class App extends Component {
 	render() {
 		return (
 			<>
-				<Menu />
+				<MenuTop />
 				<DrizzleProvider options={drizzleConfig}>
 					<>
 						<Account />
@@ -19,6 +20,7 @@ class App extends Component {
 						<Claims />
 					</>
 				</DrizzleProvider>
+				<MenuBottom />
 			</>
 		);
 	}
