@@ -17,7 +17,7 @@ const Claims = () => (
 		<h2>Statuses of your claims</h2>
 
 		<LoadingContainer>
-			<ClaimStatusesComponent />
+			<ClaimStatuses />
 		</LoadingContainer>
 	</>
 );
