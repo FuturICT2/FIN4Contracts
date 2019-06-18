@@ -1,7 +1,7 @@
 import React from 'react';
 import { LoadingContainer } from 'drizzle-react-components';
 import { ContractData } from 'drizzle-react-components';
-import ClaimStatusesComponent from './ClaimStatusesComponent';
+import ClaimStatuses from './ClaimStatuses';
 
 const Claims = () => (
 	<>
