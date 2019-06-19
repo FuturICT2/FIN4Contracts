@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Route, BrowserRouter as Router } from 'react-router-dom';
-import colors from './colors-config';
-import menu from './menu-config';
+import colors from './config/colors-config';
+import menu from './config/menu-config';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
@@ -32,16 +32,18 @@ const MenuBottom = function() {
 				}}
 				showLabels
 				className={classes.root}>
-				{menu.map((route, i) => (
-					<BottomNavigationAction
-						key={i}
-						component={Link}
-						to={route.path}
-						label={route.label}
-						icon={<route.icon />}
-						className={classes.element}
-					/>
-				))}
+				{menu.map((route, i) => {
+					return (
+						<BottomNavigationAction
+							key={i}
+							component={Link}
+							to={route.path}
+							label={route.label}
+							icon={<route.icon />}
+							className={classes.element}
+						/>
+					);
+				})}
 			</BottomNavigation>
 
 			{/* register menu routes */}

@@ -1,5 +1,5 @@
-import Fin4BaseToken from './build/contracts/Fin4BaseToken.json';
-import ProofDummy from './build/contracts/ProofDummy.json';
+import Fin4BaseToken from '../build/contracts/Fin4BaseToken.json';
+import ProofDummy from '../build/contracts/ProofDummy.json';
 
 const drizzleConfig = {
 	web3: {
