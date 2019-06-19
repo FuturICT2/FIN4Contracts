@@ -1,11 +1,10 @@
 import React from 'react';
+import { Link, Route, BrowserRouter as Router } from 'react-router-dom';
 import colors from './colors-config';
+import menu from './menu-config';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import AccountIcon from '@material-ui/icons/AccountCircle';
-import AddIcon from '@material-ui/icons/AddCircle';
-import ListIcon from '@material-ui/icons/ViewList';
 
 const useStyles = makeStyles({
 	root: {
@@ -25,29 +24,31 @@ const MenuBottom = function() {
 	const [value, setValue] = React.useState(0);
 
 	return (
-		<BottomNavigation
-			value={value}
-			onChange={(event, newValue) => {
-				setValue(newValue);
-			}}
-			showLabels
-			className={classes.root}>
-			<BottomNavigationAction
-				label="Me"
-				icon={<AccountIcon />}
-				className={classes.element}
-			/>
-			<BottomNavigationAction
-				label="Submit Claim"
-				icon={<AddIcon />}
-				className={classes.element}
-			/>
-			<BottomNavigationAction
-				label="History"
-				icon={<ListIcon />}
-				className={classes.element}
-			/>
-		</BottomNavigation>
+		<Router>
+			<BottomNavigation
+				value={value}
+				onChange={(event, newValue) => {
+					setValue(newValue);
+				}}
+				showLabels
+				className={classes.root}>
+				{menu.map((route, i) => (
+					<BottomNavigationAction
+						key={i}
+						component={Link}
+						to={route.path}
+						label={route.label}
+						icon={<route.icon />}
+						className={classes.element}
+					/>
+				))}
+			</BottomNavigation>
+
+			{/* register menu routes */}
+			{menu.map((route, i) => (
+				<Route key={i} render={() => <route.component />} path={route.path} />
+			))}
+		</Router>
 	);
 };
 
