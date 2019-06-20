@@ -4,6 +4,8 @@ import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
 
+import 'contracts/Fin4Token.sol';
+
 contract Fin4BaseToken is ERC20, ERC20Detailed, ERC20Mintable {
 
   address[] public requiredProofs;
@@ -23,6 +25,19 @@ contract Fin4BaseToken is ERC20, ERC20Detailed, ERC20Mintable {
   }
 
   mapping (uint => Claim) public claims;
+
+  address[] public children;
+
+  function createNewToken() public returns(address) {
+    Fin4Token newToken = new Fin4Token("Dev Token", "DEV", 18);
+    address newTokenAdr = address(newToken);
+    children.push(newTokenAdr);
+    return newTokenAdr;
+  }
+
+  function getChildren() public view returns(address[] memory) {
+    return children;
+  }
 
   function getRequiredProofsCount() public view returns(uint) {
     return requiredProofs.length;
