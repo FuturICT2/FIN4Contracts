@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const MenuTop = () => {
+const TopBar = () => {
 	const classes = useStyles();
 	return (
 		<div className={classes.root}>
@@ -38,4 +38,4 @@ const MenuTop = () => {
 	);
 };
 
-export default MenuTop;
+export default TopBar;

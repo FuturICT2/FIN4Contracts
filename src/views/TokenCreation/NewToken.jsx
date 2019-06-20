@@ -1,6 +1,7 @@
 import React from 'react';
 import { LoadingContainer } from 'drizzle-react-components';
-import { ContractForm, ContractData } from 'drizzle-react-components';
+import { ContractData } from 'drizzle-react-components';
+import ContractForm from '../../ContractForm';
 
 const NewToken = () => (
 	<>

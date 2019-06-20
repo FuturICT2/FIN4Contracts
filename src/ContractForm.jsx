@@ -22,7 +22,7 @@ const translateType = type => {
 	}
 };
 
-class ActionContractForm extends Component {
+class ContractForm extends Component {
 	constructor(props, context) {
 		super(props);
 
@@ -128,18 +128,18 @@ class ActionContractForm extends Component {
 					);
 				})}
 				<Button variant="contained" color="primary" onClick={this.handleSubmit}>
-					Claim the action
+					Submit
 				</Button>
 			</form>
 		);
 	}
 }
 
-ActionContractForm.contextTypes = {
+ContractForm.contextTypes = {
 	drizzle: PropTypes.object
 };
 
-ActionContractForm.propTypes = {
+ContractForm.propTypes = {
 	contract: PropTypes.string.isRequired,
 	method: PropTypes.string.isRequired,
 	sendArgs: PropTypes.object,
@@ -157,4 +157,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(ActionContractForm, mapStateToProps);
+export default drizzleConnect(ContractForm, mapStateToProps);
