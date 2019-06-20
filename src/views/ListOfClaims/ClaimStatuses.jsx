@@ -1,4 +1,4 @@
-// adopted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractData.js
+// adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractData.js
 
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';

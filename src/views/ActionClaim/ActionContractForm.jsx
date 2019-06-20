@@ -1,8 +1,13 @@
-// adopted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
+// adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
 
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
+
 import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import DateFnsUtils from '@date-io/moment';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 const translateType = type => {
 	switch (true) {
@@ -17,53 +22,134 @@ const translateType = type => {
 	}
 };
 
-class ClaimStatuses extends Component {
+class ActionContractForm extends Component {
 	constructor(props, context) {
 		super(props);
+
+		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+
 		this.contracts = context.drizzle.contracts;
-		this.state = {
-			dataKey: this.contracts.Fin4BaseToken.methods.getStatusesOfMyClaims.cacheCall()
+		this.utils = context.drizzle.web3.utils;
+
+		// Get the contract ABI
+		const abi = this.contracts[this.props.contract].abi;
+
+		this.inputs = [];
+		var initialState = {
+			dates: this.inputs
+				.filter((input, index) => this.props.labels[index] === 'date')
+				.map(input => new Date())
 		};
+
+		// Iterate over abi for correct function.
+		for (var i = 0; i < abi.length; i++) {
+			if (abi[i].name === this.props.method) {
+				this.inputs = abi[i].inputs;
+
+				for (var j = 0; j < this.inputs.length; j++) {
+					initialState[this.inputs[j].name] = '';
+				}
+
+				break;
+			}
+		}
+
+		this.state = initialState;
+	}
+
+	handleSubmit(event) {
+		event.preventDefault();
+
+		const convertedInputs = this.inputs.map(input => {
+			if (input.type === 'bytes32') {
+				return this.utils.toHex(this.state[input.name]);
+			}
+			return this.state[input.name];
+		});
+
+		if (this.props.sendArgs) {
+			return this.contracts[this.props.contract].methods[
+				this.props.method
+			].cacheSend(...convertedInputs, this.props.sendArgs);
+		}
+
+		return this.contracts[this.props.contract].methods[
+			this.props.method
+		].cacheSend(...convertedInputs);
+	}
+
+	handleInputChange(event) {
+		const value =
+			event.target.type === 'checkbox'
+				? event.target.checked
+				: event.target.value;
+		this.setState({ [event.target.name]: value });
 	}
 
 	render() {
-		if (!this.props.contracts.Fin4BaseToken.initialized) {
-			return <span>Initializing...</span>;
+		if (this.props.render) {
+			return this.props.render({
+				inputs: this.inputs,
+				inputTypes: this.inputs.map(input => translateType(input.type)),
+				state: this.state,
+				handleInputChange: this.handleInputChange,
+				handleSubmit: this.handleSubmit
+			});
 		}
 
-		if (
-			!(
-				this.state.dataKey in
-				this.props.contracts.Fin4BaseToken.getStatusesOfMyClaims
-			)
-		) {
-			return <span>Fetching...</span>;
-		}
-
-		var pendingSpinner = this.props.contracts.Fin4BaseToken.synced ? '' : ' 🔄';
-
-		var displayData = this.props.contracts.Fin4BaseToken.getStatusesOfMyClaims[
-			this.state.dataKey
-		].value;
-		var claimIdsArr = displayData[0];
-		var isApprovedArr = displayData[1];
-
-		const displayListItems = claimIdsArr.map((claimId, index) => {
-			return (
-				<li key={index}>
-					claim #{`${claimId}`}: {`${isApprovedArr[index]}`}
-					{pendingSpinner}
-				</li>
-			);
-		});
-
-		return <ul>{displayListItems}</ul>;
+		return (
+			<form
+				className="pure-form pure-form-stacked"
+				onSubmit={this.handleSubmit}>
+				{this.inputs.map((input, index) => {
+					var inputType = translateType(input.type);
+					var inputLabel = this.props.labels
+						? this.props.labels[index]
+						: input.name;
+					return inputLabel === 'date' ? (
+						<MuiPickersUtilsProvider utils={DateFnsUtils}>
+							<DatePicker
+								key={input.name}
+								id={input.name}
+								label={inputLabel}
+								value={this.state.dates[index]}
+								onChange={x => this.handleInputChange(x.getTime())}
+							/>
+						</MuiPickersUtilsProvider>
+					) : (
+						<TextField
+							key={input.name}
+							id={input.name}
+							type={inputType}
+							label={inputLabel}
+							onChange={this.handleInputChange}
+						/>
+					);
+				})}
+				<Button variant="contained" color="primary" onClick={this.handleSubmit}>
+					Claim the action
+				</Button>
+			</form>
+		);
 	}
 }
 
-ClaimStatuses.contextTypes = {
+ActionContractForm.contextTypes = {
 	drizzle: PropTypes.object
 };
+
+ActionContractForm.propTypes = {
+	contract: PropTypes.string.isRequired,
+	method: PropTypes.string.isRequired,
+	sendArgs: PropTypes.object,
+	labels: PropTypes.arrayOf(PropTypes.string),
+	render: PropTypes.func
+};
+
+/*
+ * Export connected component.
+ */
 
 const mapStateToProps = state => {
 	return {
@@ -71,4 +157,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(ClaimStatuses, mapStateToProps);
+export default drizzleConnect(ActionContractForm, mapStateToProps);

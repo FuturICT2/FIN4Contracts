@@ -1,13 +1,13 @@
 import React from 'react';
 import { LoadingContainer } from 'drizzle-react-components';
-import { ContractForm } from 'drizzle-react-components';
+import ActionContractForm from './ActionContractForm';
 
 const ClaimSubmission = () => (
 	<>
 		<h2>New Claim</h2>
 
 		<LoadingContainer>
-			<ContractForm contract="Fin4BaseToken" method="submitClaim" />
+			<ActionContractForm contract="Fin4BaseToken" method="submitClaim" />
 		</LoadingContainer>
 	</>
 );
