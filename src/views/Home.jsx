@@ -1,20 +1,18 @@
 import React from 'react';
 import { LoadingContainer } from 'drizzle-react-components';
 import { AccountData } from 'drizzle-react-components';
-import ClaimStatuses from './ClaimStatuses';
+import ActionClaimStatuses from './ActionClaimStatuses';
 
-const Account = () => (
+const Home = () => (
 	<>
-		<h2>Active Account</h2>
-
 		<LoadingContainer>
 			<AccountData accountIndex={0} units="ether" precision={3} />
 		</LoadingContainer>
 
 		<LoadingContainer>
-			<ClaimStatuses />
+			<ActionClaimStatuses />
 		</LoadingContainer>
 	</>
 );
 
-export default Account;
+export default Home;

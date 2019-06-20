@@ -4,7 +4,7 @@ import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class ClaimStatuses extends Component {
+class ActionClaimStatuses extends Component {
 	constructor(props, context) {
 		super(props);
 		this.contracts = context.drizzle.contracts;
@@ -48,7 +48,7 @@ class ClaimStatuses extends Component {
 	}
 }
 
-ClaimStatuses.contextTypes = {
+ActionClaimStatuses.contextTypes = {
 	drizzle: PropTypes.object
 };
 
@@ -58,4 +58,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(ClaimStatuses, mapStateToProps);
+export default drizzleConnect(ActionClaimStatuses, mapStateToProps);

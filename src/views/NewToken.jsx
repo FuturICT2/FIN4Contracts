@@ -1,12 +1,10 @@
 import React from 'react';
 import { LoadingContainer } from 'drizzle-react-components';
 import { ContractData } from 'drizzle-react-components';
-import ContractForm from '../../ContractForm';
+import ContractForm from '../ContractForm';
 
 const NewToken = () => (
 	<>
-		<h2>New Token</h2>
-
 		<LoadingContainer>
 			<ContractForm contract="Fin4BaseToken" method="createNewToken" />
 		</LoadingContainer>
