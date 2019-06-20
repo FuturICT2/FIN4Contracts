@@ -1,9 +1,10 @@
+// adopted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractData.js
+
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class ClaimStatuses extends Component {
-	// adopted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractData.js
 	constructor(props, context) {
 		super(props);
 		this.contracts = context.drizzle.contracts;
