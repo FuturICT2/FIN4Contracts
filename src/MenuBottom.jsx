@@ -15,7 +15,8 @@ const useStyles = makeStyles({
 		background: colors.main
 	},
 	element: {
-		color: colors.main2
+		color: colors.main2,
+		maxWidth: 'none'
 	}
 });
 
@@ -25,6 +26,12 @@ const MenuBottom = function() {
 
 	return (
 		<Router>
+			{/* register menu routes */}
+			{menu.map((route, i) => (
+				<Route key={i} render={() => <route.component />} path={route.path} />
+			))}
+
+			{/* bottom tab bar */}
 			<BottomNavigation
 				value={value}
 				onChange={(event, newValue) => {
@@ -45,11 +52,6 @@ const MenuBottom = function() {
 					);
 				})}
 			</BottomNavigation>
-
-			{/* register menu routes */}
-			{menu.map((route, i) => (
-				<Route key={i} render={() => <route.component />} path={route.path} />
-			))}
 		</Router>
 	);
 };
