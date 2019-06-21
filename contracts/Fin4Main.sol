@@ -18,11 +18,10 @@ contract Fin4Main {
 	mapping (uint => Claim) public claims;
 
 	function createNewToken(string memory name, string memory symbol, uint8 decimals) public returns(address) {
-    Fin4Token newToken = new Fin4Token("Dev Token", "DEV", 18);
+    Fin4Token newToken = new Fin4Token(name, symbol, decimals);
     children.push(address(newToken));
     return address(newToken);
   }
-
 	function submitClaim(string memory action, uint quantity, uint date, string memory comment) public returns (uint) {
     // TODO: proofs input
     
@@ -34,6 +33,10 @@ contract Fin4Main {
     claim.isApproved = false;
     nextClaimId ++;
     return nextClaimId - 1;
+  }
+
+  function getChildren() public view returns(address[] memory) {
+    return children;
   }
 
 }
