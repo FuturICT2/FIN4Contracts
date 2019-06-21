@@ -1,7 +1,7 @@
 import React from 'react';
 import { LoadingContainer } from 'drizzle-react-components';
 import { AccountData } from 'drizzle-react-components';
-import ActionClaimStatuses from './ActionClaimStatuses';
+import ContractData from '../ContractData';
 
 const Home = () => (
 	<>
@@ -10,7 +10,7 @@ const Home = () => (
 		</LoadingContainer>
 
 		<LoadingContainer>
-			<ActionClaimStatuses />
+			<ContractData contract="Fin4BaseToken" method="getStatusesOfMyClaims" />
 		</LoadingContainer>
 	</>
 );
