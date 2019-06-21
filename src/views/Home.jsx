@@ -9,7 +9,7 @@ const Home = () => (
 		</LoadingContainer>
 
 		<LoadingContainer>
-			<ContractData contract="Fin4Main" method="getStatusesOfMyClaims" />
+			<ContractData contract="Fin4Claim" method="getStatuses" />
 		</LoadingContainer>
 	</>
 );

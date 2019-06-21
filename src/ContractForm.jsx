@@ -9,7 +9,6 @@ import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import styled from 'styled-components';
-import Divider from '@material-ui/core/Divider';
 
 
 const translateType = type => {
@@ -116,19 +115,22 @@ class ContractForm extends Component {
 							<p>
 								<MuiPickersUtilsProvider utils={DateFnsUtils}>
 									<DatePicker
-										key={input.name}
-										id={input.name}
+										key={index}
+										id={index}
 										label={inputLabel}
 										value={this.state.dates[index]}
-										onChange={x => this.handleInputChange(x.getTime())}
+										onChange={x => {
+											console.log(x)
+											return this.handleInputChange(x)
+										}}
 									/>
 								</MuiPickersUtilsProvider>
 							</p>
 						) : (
 								<p>
 									<TextField
-										key={input.name}
-										id={input.name}
+										key={index}
+										id={index}
 										multiline={inputLabel === 'comment'}
 										type={inputType}
 										label={inputLabel}
@@ -162,10 +164,10 @@ ContractForm.propTypes = {
 
 const StyledPaper = styled(Paper)`
 padding: 1em;
-margin: 1em;
+margin: 2em 1em 100px;
 position: relative;
 background: white;
-fontSize: '15px';
+fontSize: 15px;
 `
 
 /*

@@ -29,4 +29,24 @@ contract Fin4Claim {
     return nextClaimId - 1;
   }
 
+  function getStatuses() public view returns(uint[] memory, bool[] memory) {
+    uint count = 0;
+    for (uint i = 0; i < nextClaimId; i ++) {
+      if (claims[i].claimer == msg.sender) {
+          count ++;
+      }
+    }
+    uint[] memory claimIdArr = new uint[](count);
+    bool[] memory isApprovedArr = new bool[](count);
+    count = 0;
+    for (uint i = 0; i < nextClaimId; i ++) {
+      if (claims[i].claimer == msg.sender) {
+          claimIdArr[count] = i;
+          isApprovedArr[count] = claims[i].isApproved;
+          count ++;
+      }
+    }
+    return (claimIdArr, isApprovedArr);
+  }
+
 }
