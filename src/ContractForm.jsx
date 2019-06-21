@@ -105,43 +105,44 @@ class ContractForm extends Component {
 		return (
 			<StyledPaper >
 				<form
-				className="pure-form pure-form-stacked"
-				onSubmit={this.handleSubmit}>
-				{this.inputs.map((input, index) => {
-					var inputType = translateType(input.type);
-					var inputLabel = this.props.labels
-						? this.props.labels[index]
-						: input.name;
-					return inputLabel === 'date' ? (
-						<p>
-						<MuiPickersUtilsProvider utils={DateFnsUtils}>
-							<DatePicker
-								key={input.name}
-								id={input.name}
-								label={inputLabel}
-								value={this.state.dates[index]}
-								onChange={x => this.handleInputChange(x.getTime())}
-							/>
-						</MuiPickersUtilsProvider> 
-						</p>
-					) : (
-						<p>
-						<TextField
-							key={input.name}
-							id={input.name}
-							type={inputType}
-							label={inputLabel}
-							onChange={this.handleInputChange}
-						/>
-						</p>
-					);
-				})}
-				<Button variant="contained" color="primary" onClick={this.handleSubmit}>
-					<AddIcon/> &nbsp;
-					Submit
+					className="pure-form pure-form-stacked"
+					onSubmit={this.handleSubmit}>
+					{this.inputs.map((input, index) => {
+						var inputType = translateType(input.type);
+						var inputLabel = this.props.labels
+							? this.props.labels[index]
+							: input.name;
+						return inputLabel === 'date' ? (
+							<p>
+								<MuiPickersUtilsProvider utils={DateFnsUtils}>
+									<DatePicker
+										key={input.name}
+										id={input.name}
+										label={inputLabel}
+										value={this.state.dates[index]}
+										onChange={x => this.handleInputChange(x.getTime())}
+									/>
+								</MuiPickersUtilsProvider>
+							</p>
+						) : (
+								<p>
+									<TextField
+										key={input.name}
+										id={input.name}
+										multiline={inputLabel === 'comment'}
+										type={inputType}
+										label={inputLabel}
+										onChange={this.handleInputChange}
+									/>
+								</p>
+							);
+					})}
+					<Button variant="contained" color="primary" onClick={this.handleSubmit}>
+						<AddIcon /> &nbsp;
+						Submit
 				</Button>
-			</form>
-		 </StyledPaper>
+				</form>
+			</StyledPaper>
 		);
 	}
 }
