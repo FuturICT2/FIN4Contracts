@@ -4,12 +4,14 @@ import { DrizzleProvider } from 'drizzle-react';
 
 import drizzleConfig from './config/drizzle-config';
 import menuItems from './config/menu-config';
+import TopBar from './TopBar';
 import NavigationBar from './NavigationBar';
 
 class App extends Component {
 	render() {
 		return (
 			<Router>
+				<TopBar />
 
 				<DrizzleProvider options={drizzleConfig}>
 					<>
