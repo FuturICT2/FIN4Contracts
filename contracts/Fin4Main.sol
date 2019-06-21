@@ -22,6 +22,7 @@ contract Fin4Main {
     children.push(address(newToken));
     return address(newToken);
   }
+
 	function submitClaim(string memory action, uint quantity, uint date, string memory comment) public returns (uint) {
     // TODO: proofs input
     Claim storage claim = claims[nextClaimId];

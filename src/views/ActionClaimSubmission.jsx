@@ -4,7 +4,7 @@ import ContractForm from '../ContractForm';
 
 const ActionClaimSubmission = () => (
 	<LoadingContainer>
-		<ContractForm contract="Fin4Main" method="submitClaim" />
+		<ContractForm contract="Fin4Claim" method="submit" />
 	</LoadingContainer>
 );
 
