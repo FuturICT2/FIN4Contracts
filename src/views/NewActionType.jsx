@@ -14,13 +14,6 @@ const NewActionType = () => (
 		<LoadingContainer>
 			<ContractData contract="Fin4Main" method="getChildren" />
 		</LoadingContainer>
-
-		<h2>Just checking</h2>
-
-		<LoadingContainer>
-			<ContractData contract="Fin4Main" method="getName" />
-		</LoadingContainer>
-	
 	</>
 );
 

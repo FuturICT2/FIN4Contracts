@@ -96,9 +96,6 @@ class ContractData extends Component {
 
 			return <ul>{displayListItems}</ul>;
 		}
-		console.log(displayData);
-		console.log(displayData.length);
-		console.log(typeof displayData === 'object');
 
 		// If retun value is an object
 		if (typeof displayData === 'object') {
