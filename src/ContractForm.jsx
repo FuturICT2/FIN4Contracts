@@ -1,13 +1,16 @@
-// adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
-
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import styled from 'styled-components';
+import Divider from '@material-ui/core/Divider';
+
 
 const translateType = type => {
 	switch (true) {
@@ -98,8 +101,10 @@ class ContractForm extends Component {
 			});
 		}
 
+
 		return (
-			<form
+			<StyledPaper >
+				<form
 				className="pure-form pure-form-stacked"
 				onSubmit={this.handleSubmit}>
 				{this.inputs.map((input, index) => {
@@ -108,6 +113,7 @@ class ContractForm extends Component {
 						? this.props.labels[index]
 						: input.name;
 					return inputLabel === 'date' ? (
+						<p>
 						<MuiPickersUtilsProvider utils={DateFnsUtils}>
 							<DatePicker
 								key={input.name}
@@ -116,8 +122,10 @@ class ContractForm extends Component {
 								value={this.state.dates[index]}
 								onChange={x => this.handleInputChange(x.getTime())}
 							/>
-						</MuiPickersUtilsProvider>
+						</MuiPickersUtilsProvider> 
+						</p>
 					) : (
+						<p>
 						<TextField
 							key={input.name}
 							id={input.name}
@@ -125,15 +133,19 @@ class ContractForm extends Component {
 							label={inputLabel}
 							onChange={this.handleInputChange}
 						/>
+						</p>
 					);
 				})}
 				<Button variant="contained" color="primary" onClick={this.handleSubmit}>
+					<AddIcon/> &nbsp;
 					Submit
 				</Button>
 			</form>
+		 </StyledPaper>
 		);
 	}
 }
+
 
 ContractForm.contextTypes = {
 	drizzle: PropTypes.object
@@ -146,6 +158,14 @@ ContractForm.propTypes = {
 	labels: PropTypes.arrayOf(PropTypes.string),
 	render: PropTypes.func
 };
+
+const StyledPaper = styled(Paper)`
+padding: 1em;
+margin: 1em;
+position: relative;
+background: white;
+fontSize: '15px';
+`
 
 /*
  * Export connected component.
