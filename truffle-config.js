@@ -1,6 +1,11 @@
 const path = require('path');
 var HDWalletProvider = require("truffle-hdwallet-provider");
-const keys = require('./src/config/keys.json');
+
+try {
+	const keys = require('./src/config/keys.json');
+} catch(err) {
+	console.log("./src/config/keys.json not found");
+}
 
 module.exports = {
 	contracts_build_directory: path.join(__dirname, 'src/build/contracts'),
@@ -30,7 +35,7 @@ module.exports = {
 			provider: function() {
 				return new HDWalletProvider(keys.MNEMONIC, 'http://172.20.0.103:8545/')
 			  },
-			  network_id: 5,
+			  network_id: 7,
 			  gas: 4465030,
 			  gasPrice: 10000000000
 		}
