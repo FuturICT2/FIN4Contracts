@@ -9,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import styled from 'styled-components';
+import TokenSelectorComponent from './views/TokenSelectorComponent';
 
 const translateType = type => {
 	switch (true) {
@@ -113,22 +115,33 @@ class ContractForm extends Component {
 						var inputLabel = this.props.labels
 							? this.props.labels[index]
 							: input.name;
-						return inputLabel === 'date' ? (
-							<MuiPickersUtilsProvider key="" utils={DateFnsUtils}>
-								<DatePicker
-									key={input.name}
-									name={input.name}
-									label={inputLabel}
-									value={this.state.dates[index]}
-									onChange={x => {
-										console.log(x)
-										return this.handleInputChange(x)
-									}}
-									style={inputFieldStyle}
-								/>
-							</MuiPickersUtilsProvider>
-						) : (
-								<TextField
+
+						if (inputLabel === 'date') {
+							return (
+								<MuiPickersUtilsProvider key="mpup" utils={DateFnsUtils}>
+									<DatePicker
+										key={input.name}
+										name={input.name}
+										label={inputLabel}
+										value={this.state.dates[index]}
+										onChange={x => {
+											console.log(x)
+											return this.handleInputChange(x)
+										}}
+										style={inputFieldStyle}
+									/>
+								</MuiPickersUtilsProvider>
+							);
+						}
+
+						if (this.props.dropdownList && this.props.dropdownList[0] === input.name) {
+							return (
+								<TokenSelectorComponent key="tsc" style={inputFieldStyle}/>
+							);
+						}
+
+						return (
+								<TextField // renders the number field automatically by detecting the inputType
 									key={input.name}
 									name={input.name}
 									multiline={inputLabel === 'comment'}
