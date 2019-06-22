@@ -135,7 +135,10 @@ class ContractForm extends Component {
 
 						if (this.props.dropdownList && this.props.dropdownList[0] === input.name) {
 							return (
-								<ActionTypeSelector key="tsc" />
+								<ActionTypeSelector key="tsc" onChange={x => {
+									console.log(x)
+									return this.handleInputChange(x)
+								}} />
 							);
 						}
 

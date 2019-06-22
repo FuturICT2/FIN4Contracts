@@ -15,10 +15,6 @@ class ActionTypeSelector extends Component {
         };
     }
 
-    handleChange = event => {
-        this.setState({ selected: event.target.value, name: event.target.name });
-    };
-
     render() {
         if (!this.props.contracts.Fin4Main.initialized) {
             return <span>Initializing...</span>;
@@ -46,7 +42,7 @@ class ActionTypeSelector extends Component {
                 }} style={{
                     width: '100%',
                     marginBottom: '15px'
-                }} value={this.state.selected} onChange={this.handleChange}>
+                }} value={this.state.selected} onChange={this.props.onChange}>
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
