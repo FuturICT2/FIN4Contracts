@@ -1,8 +1,9 @@
 const path = require('path');
 var HDWalletProvider = require("truffle-hdwallet-provider");
 
+var keys;
 try {
-	const keys = require('./src/config/keys.json');
+	keys = require('./src/config/keys.json');
 } catch(err) {
 	console.log("./src/config/keys.json not found");
 }
@@ -27,7 +28,7 @@ module.exports = {
 			provider: function() {
 				return new HDWalletProvider(keys.MNEMONIC, 'https://goerli.infura.io/v3/' + keys.INFURA_API_KEY)
 			  },
-			  network_id: 5,
+			  network_id: 7,
 			  gas: 4465030,
 			  gasPrice: 10000000000
 		},
@@ -35,7 +36,7 @@ module.exports = {
 			provider: function() {
 				return new HDWalletProvider(keys.MNEMONIC, 'http://172.20.0.103:8545/')
 			  },
-			  network_id: 7,
+			  network_id: 5,
 			  gas: 4465030,
 			  gasPrice: 10000000000
 		}
