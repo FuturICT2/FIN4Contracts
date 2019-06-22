@@ -99,7 +99,7 @@ class ContractData extends Component {
 
 		// If retun value is an object
 		if (typeof displayData === 'object') {
-			if (Object.keys(displayData).length == 2) {
+			if (Object.keys(displayData).length === 2) {
 				// = indicator for return value of getStatusesOfMyClaims TODO: better indicator?
 				var claimIdsArr = displayData[0];
 				var isApprovedArr = displayData[1];
@@ -118,7 +118,7 @@ class ContractData extends Component {
 			const displayObjectProps = [];
 
 			Object.keys(displayData).forEach(key => {
-				if (i != key) {
+				if (i !== key) {
 					displayObjectProps.push(
 						<li key={i}>
 							<strong>{key}</strong>
