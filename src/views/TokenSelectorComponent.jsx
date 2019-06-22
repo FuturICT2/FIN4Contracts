@@ -29,13 +29,11 @@ class TokenSelectorComponent extends Component { // adopted from https://www.js-
         var pendingSpinner = this.props.contracts.Fin4Main.synced ? '' : 'syncing';
 
         var displayData = this.props.contracts.Fin4Main.getActionNames[this.state.dataKey].value;
-
-        var tokenNameArr = displayData[0];
-        var tokenAddressArr = displayData[1];
+        var tokenAddressArr = displayData;
         
-        const menuItems = tokenNameArr.map((tokenName, index) => {
+        const menuItems = tokenAddressArr.map((tokenAdr, i) => {
             return (
-                <MenuItem key={index} value={tokenAddressArr[index]}>{tokenName}</MenuItem>
+                <MenuItem key={i} value={tokenAdr}>{tokenAdr}</MenuItem>
             );
 		});
 
