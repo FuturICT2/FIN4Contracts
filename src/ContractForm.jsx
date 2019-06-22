@@ -116,35 +116,34 @@ class ContractForm extends Component {
 							? this.props.labels[index]
 							: input.name;
 						return inputLabel === 'date' ? (
-								<MuiPickersUtilsProvider key="" utils={DateFnsUtils}>
-									<DatePicker
-										key={input.name}
-										name={input.name}
-										label={inputLabel}
-										value={this.state.dates[index]}
-										onChange={x => {
-											console.log(x)
-											return this.handleInputChange(x)
-										}}
-										style={{ width: "400px" }}
-									/>
-								</MuiPickersUtilsProvider>
+							<MuiPickersUtilsProvider key="" utils={DateFnsUtils}>
+								<DatePicker
+									key={input.name}
+									name={input.name}
+									label={inputLabel}
+									value={this.state.dates[index]}
+									onChange={x => {
+										console.log(x)
+										return this.handleInputChange(x)
+									}}
+									style={inputFieldStyle}
+								/>
+							</MuiPickersUtilsProvider>
 						) : (
-									<TextField
-										key={input.name}
-										name={input.name}
-										multiline={inputLabel === 'comment'}
-										type={inputType}
-										label={inputLabel}
-										onChange={this.handleInputChange}
-										style={{ width: "400px" }}
-									/>
-							
+								<TextField
+									key={input.name}
+									name={input.name}
+									multiline={inputLabel === 'comment'}
+									type={inputType}
+									label={inputLabel}
+									onChange={this.handleInputChange}
+									style={inputFieldStyle}
+								/>
+
 							);
 					})}
-					<br /><br />
 					<p style={{ textAlign: "center" }}>
-						<Button  key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
+						<Button key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
 							<AddIcon /> &nbsp;Submit
 						</Button>
 					</p>
@@ -157,12 +156,17 @@ class ContractForm extends Component {
 const StyledPaper = styled(Paper)`
 	padding: 1em;
 	margin: 0 auto;
-	max-width: 460px;
+	max-width: 400px;
 `
 const Title = styled(Typography)`
 	text-align: center;
 	color: ${colors.main};
 `
+
+const inputFieldStyle = {
+	width: '100%',
+	marginBottom: '15px'
+}
 
 ContractForm.contextTypes = {
 	drizzle: PropTypes.object
