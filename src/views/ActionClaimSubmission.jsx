@@ -10,7 +10,7 @@ const ActionClaimSubmission = () => (
 		</LoadingContainer>
 
 		<LoadingContainer>
-			<ContractData contract="Fin4Claim" method="getStatuses" />
+			<ContractData contract="Fin4Claim" method="getStatuses" header={["ID", "status"]} />
 		</LoadingContainer>
 	</>
 );

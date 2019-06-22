@@ -104,37 +104,40 @@ class ContractData extends Component {
 			return <ul>{displayListItems}</ul>;
 		}
 
-		// If retun value is an object
+		// If retun value is an object of type 
+		// {0: ["a", "b", ...], 1: ["c", "d", ...], ...}
+		// for displaying table with rows [a, c], [b, d], ...
 		if (typeof displayData === 'object') {
-			console.log(JSON.stringify(displayData))
-			return (<span></span>
-				// <Paper>
-				// 	<Table>
-				// 		<TableHead>
-				// 			<TableRow>
-				// 				{Object.values(displayData)[0].map((key, index) => {
-				// 					return (<TableCell key={index}>{key}</TableCell>)
-				// 				})}
-				// 			</TableRow>
-				// 		</TableHead>
-				// 		<TableBody>
-				// 			{Object.values(displayData).forEach(columns => {
-				// 				return (<TableRow>
-				// 					{/* {columns} */}
-				// 				</TableRow>)
-				// 			})}
-				// 		</TableBody>
-				// 	</Table>
-				// </Paper>
+			return (
+				(Object.values(displayData) &&
+					Object.values(displayData).length > 0 &&
+					Object.values(displayData)[0] &&
+					Object.values(displayData)[0].length > 0) ? (
+						<Paper>
+							<Table>
+								<TableHead>
+									<TableRow>
+										{this.props.header.map((key, index) => {
+											return <TableCell key={index}>{key}</TableCell>
+										})}
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{/* check that there exist entries */}
+									{Object.values(displayData)[0].map(row => {
+										return <TableRow key={row}>{
+											Object.values(displayData).map((column, c) => {
+												return <TableCell key={`${row}-${c}`}>{Object.values(displayData)[c][row].toString()}</TableCell>
+											})
+										}</TableRow>
+									})}
+								</TableBody>
+							</Table>
+						</Paper>
+					) : (<span>No entries</span>)
+
 			)
 		}
-
-		return (
-			<span>
-				{`${displayData}`}
-				{pendingSpinner}
-			</span>
-		);
 	}
 }
 
