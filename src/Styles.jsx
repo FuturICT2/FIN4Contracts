@@ -5,6 +5,7 @@ const Container = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-evenly;
+	align-items: flex-start;
 
 	> * {
 		padding: 1em;
