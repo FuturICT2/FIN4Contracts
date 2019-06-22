@@ -16,7 +16,9 @@ const useStyles = makeStyles(theme => ({
 	title: {
 		flexGrow: 1,
 		textAlign: 'center',
-		fontSize: '2rem'
+		fontSize: '2rem',
+		letterSpacing: 3,
+		fontWeight: 'bold'
 	}
 }));
 
