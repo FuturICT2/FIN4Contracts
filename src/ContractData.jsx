@@ -128,8 +128,9 @@ class ContractData extends Component {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{/* sort descending by claim id (and thus date) */}
-									{Object.values(displayData).map(x => x.reverse())[0].map((row, r) => {
+									{Object.values(displayData)[0].map((row, r) => {
+										console.log(Object.values(displayData))
+										// row = row.reversed()
 										return <TableRow key={row}>{
 											Object.values(displayData).map(column => {
 												return <TableCell key={`${row}-${column}`}>{column[r].toString()}</TableCell>
