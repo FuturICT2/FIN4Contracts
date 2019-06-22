@@ -11,7 +11,7 @@ class ActionTypeSelector extends Component {
         this.contracts = context.drizzle.contracts;
         this.state = {
             selected: 'None',
-            dataKey: this.contracts.Fin4Main.methods.getActionNames.cacheCall()
+            dataKey: this.contracts.Fin4Main.methods.getChildren.cacheCall()
         };
     }
 
@@ -24,11 +24,11 @@ class ActionTypeSelector extends Component {
             return <span>Initializing...</span>;
         }
 
-        if (!(this.state.dataKey in this.props.contracts.Fin4Main.getActionNames)) {
+        if (!(this.state.dataKey in this.props.contracts.Fin4Main.getChildren)) {
             return <span>Fetching...</span>;
         }
 
-        var displayData = this.props.contracts.Fin4Main.getActionNames[this.state.dataKey].value;
+        var displayData = this.props.contracts.Fin4Main.getChildren[this.state.dataKey].value;
         var tokenAddressArr = displayData;
 
         const menuItems = tokenAddressArr.map((tokenAdr, i) => {
