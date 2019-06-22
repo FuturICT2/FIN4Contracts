@@ -109,7 +109,8 @@ class ContractData extends Component {
 		// for displaying table with rows [a, c], [b, d], ...
 		if (typeof displayData === 'object') {
 			return (
-				(Object.values(displayData) &&
+				(displayData &&
+					Object.values(displayData) &&
 					Object.values(displayData).length > 0 &&
 					Object.values(displayData)[0] &&
 					Object.values(displayData)[0].length > 0) ? (

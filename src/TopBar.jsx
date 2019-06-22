@@ -19,7 +19,7 @@ const TopBar = () => {
 	const classes = useStyles();
 	return (
 		<AppBar position="static" className={classes.bar}>
-			<img src="/header.png" alt="header image of finfoo" className={classes.headerImage} />
+			<img src="/header.png" alt="header of finfoo" className={classes.headerImage} />
 		</AppBar>
 	);
 };
