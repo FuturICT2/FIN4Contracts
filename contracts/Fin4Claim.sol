@@ -26,10 +26,10 @@ contract Fin4Claim {
 
     Claim storage claim = claims[nextClaimId];
     claim.claimer = msg.sender;
-    claim.action = string(action);
-    claim.quantity = uint(quantity);
-    claim.date = uint(date);
-    claim.comment = string(comment);
+    claim.action = action;
+    claim.quantity = quantity;
+    claim.date = date;
+    claim.comment = comment;
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
@@ -38,16 +38,13 @@ contract Fin4Claim {
     return nextClaimId - 1;
   }
 
-  function getStatuses() public view returns(string[] memory, uint[] memory, bool[] memory) {
+  function getStatuses() public view returns(uint[] memory, bool[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
       if (claims[i].claimer == msg.sender) {
           count ++;
       }
     }
-    string[] memory header = new string[](2);
-    header[0] = string("ID");
-    header[1] = string("state");
     uint[] memory ids = new uint[](count);
     bool[] memory states = new bool[](count);
     count = 0;
@@ -58,7 +55,7 @@ contract Fin4Claim {
           count ++;
       }
     }
-    return (header, ids, states);
+    return (ids,states);
   }
 
 }
