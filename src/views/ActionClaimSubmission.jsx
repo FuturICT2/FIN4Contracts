@@ -6,7 +6,7 @@ import ContractData from '../ContractData';
 const ActionClaimSubmission = () => (
 	<>
 		<LoadingContainer>
-			<ContractForm contract="Fin4Claim" method="submit" title="Claim an action" dropdownList={["action", "getActionNames"]} />
+			<ContractForm contract="Fin4Claim" method="submit" title="Claim an action" dropdownList={["action", "Fin4Main", "getActionNames"]} />
 		</LoadingContainer>
 
 		<LoadingContainer>
