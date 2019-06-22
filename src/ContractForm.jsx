@@ -115,22 +115,33 @@ class ContractForm extends Component {
 						var inputLabel = this.props.labels
 							? this.props.labels[index]
 							: input.name;
-						return inputLabel === 'date' ? (
-							<MuiPickersUtilsProvider key="" utils={DateFnsUtils}>
-								<DatePicker
-									key={input.name}
-									name={input.name}
-									label={inputLabel}
-									value={this.state.dates[index]}
-									onChange={x => {
-										console.log(x)
-										return this.handleInputChange(x)
-									}}
-									style={inputFieldStyle}
-								/>
-							</MuiPickersUtilsProvider>
-						) : (
-								<TextField
+
+						if (inputLabel === 'date') {
+							return (
+								<MuiPickersUtilsProvider key="" utils={DateFnsUtils}>
+									<DatePicker
+										key={input.name}
+										name={input.name}
+										label={inputLabel}
+										value={this.state.dates[index]}
+										onChange={x => {
+											console.log(x)
+											return this.handleInputChange(x)
+										}}
+										style={inputFieldStyle}
+									/>
+								</MuiPickersUtilsProvider>
+							);
+						}
+
+						if (this.props.dropdownList && this.props.dropdownList[0] === input.name) {
+							return (
+								"TODO"
+							);
+						}
+
+						return (
+								<TextField // renders the number field automatically by detecting the inputType
 									key={input.name}
 									name={input.name}
 									multiline={inputLabel === 'comment'}
@@ -139,7 +150,6 @@ class ContractForm extends Component {
 									onChange={this.handleInputChange}
 									style={inputFieldStyle}
 								/>
-
 							);
 					})}
 					<p style={{ textAlign: "center" }}>
