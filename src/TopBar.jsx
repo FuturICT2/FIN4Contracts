@@ -6,12 +6,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
-	root: {
-		flexGrow: 1,
-		margin: -8
-	},
 	bar: {
-		background: colors.main
+		background: colors.main,
+		marginBottom: 20
 	},
 	menuButton: {
 		marginRight: theme.spacing(2)
@@ -26,15 +23,13 @@ const useStyles = makeStyles(theme => ({
 const TopBar = () => {
 	const classes = useStyles();
 	return (
-		<div className={classes.root}>
-			<AppBar position="static" className={classes.bar}>
-				<Toolbar>
-					<Typography variant="h1" className={classes.title}>
-						FINFOO
+		<AppBar position="static" className={classes.bar}>
+			<Toolbar>
+				<Typography variant="h1" className={classes.title}>
+					FINFOO
 					</Typography>
-				</Toolbar>
-			</AppBar>
-		</div>
+			</Toolbar>
+		</AppBar>
 	);
 };
 

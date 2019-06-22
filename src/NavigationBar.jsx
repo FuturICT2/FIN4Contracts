@@ -8,19 +8,20 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 
 const useStyles = makeStyles({
 	root: {
+		background: colors.main,
 		position: 'fixed',
 		bottom: 0,
 		left: 0,
-		right: 0,
-		background: colors.main
+		right: 0
 	},
 	element: {
 		color: colors.main2,
-		maxWidth: 'none'
+		maxWidth: 'none',
+		width: '100%'
 	}
 });
 
-const NavigationBar = function() {
+const NavigationBar = function () {
 	const classes = useStyles();
 	const [value, setValue] = React.useState(0);
 

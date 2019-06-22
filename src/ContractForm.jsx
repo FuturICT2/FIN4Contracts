@@ -112,11 +112,10 @@ class ContractForm extends Component {
 							? this.props.labels[index]
 							: input.name;
 						return inputLabel === 'date' ? (
-							<p>
+							<>
 								<MuiPickersUtilsProvider utils={DateFnsUtils}>
 									<DatePicker
 										key={index}
-										id={index}
 										label={inputLabel}
 										value={this.state.dates[index]}
 										onChange={x => {
@@ -125,18 +124,21 @@ class ContractForm extends Component {
 										}}
 									/>
 								</MuiPickersUtilsProvider>
-							</p>
+								<br />
+								<br />
+							</>
 						) : (
-								<p>
+								<>
 									<TextField
 										key={index}
-										id={index}
 										multiline={inputLabel === 'comment'}
 										type={inputType}
 										label={inputLabel}
 										onChange={this.handleInputChange}
 									/>
-								</p>
+									<br />
+									<br />
+								</>
 							);
 					})}
 					<Button variant="contained" color="primary" onClick={this.handleSubmit}>
@@ -149,6 +151,11 @@ class ContractForm extends Component {
 	}
 }
 
+const StyledPaper = styled(Paper)`
+	padding: 1em;
+	margin: 0 auto;
+	max-width: 460px;
+`
 
 ContractForm.contextTypes = {
 	drizzle: PropTypes.object
@@ -161,14 +168,6 @@ ContractForm.propTypes = {
 	labels: PropTypes.arrayOf(PropTypes.string),
 	render: PropTypes.func
 };
-
-const StyledPaper = styled(Paper)`
-padding: 1em;
-margin: 1em;
-position: relative;
-background: white;
-fontSize: 15px;
-`
 
 /*
  * Export connected component.
