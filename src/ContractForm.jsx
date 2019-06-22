@@ -122,6 +122,7 @@ class ContractForm extends Component {
 											console.log(x)
 											return this.handleInputChange(x)
 										}}
+										style={{ width: "400px" }}
 									/>
 								</MuiPickersUtilsProvider>
 								<br />
@@ -135,15 +136,16 @@ class ContractForm extends Component {
 										type={inputType}
 										label={inputLabel}
 										onChange={this.handleInputChange}
+										style={{ width: "400px" }}
 									/>
 									<br />
 									<br />
 								</>
 							);
 					})}
-					<p style={{textAlign: "center"}}>
+					<p style={{ textAlign: "center" }}>
 						<Button variant="contained" color="primary" onClick={this.handleSubmit}>
-						<AddIcon /> &nbsp;Submit
+							<AddIcon /> &nbsp;Submit
 						</Button>
 					</p>
 				</form>
