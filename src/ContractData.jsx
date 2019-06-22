@@ -138,7 +138,7 @@ class ContractData extends Component {
 								</TableBody>
 							</Table>
 						</Paper>
-					) : (<span>No entries</span>)
+					) : (<></>)
 			)
 		}
 	}

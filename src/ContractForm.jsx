@@ -137,7 +137,6 @@ class ContractForm extends Component {
 									onChange={this.handleInputChange}
 									style={inputFieldStyle}
 								/>
-
 							);
 					})}
 					<p style={{ textAlign: "center" }}>
