@@ -164,7 +164,7 @@ ContractForm.propTypes = {
 
 const StyledPaper = styled(Paper)`
 padding: 1em;
-margin: 2em 1em 100px;
+margin: 1em;
 position: relative;
 background: white;
 fontSize: 15px;
