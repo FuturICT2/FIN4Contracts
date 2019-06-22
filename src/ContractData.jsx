@@ -3,13 +3,13 @@
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 class ContractData extends Component {
 	constructor(props, context) {
@@ -114,6 +114,9 @@ class ContractData extends Component {
 					Object.values(displayData)[0] &&
 					Object.values(displayData)[0].length > 0) ? (
 						<Paper>
+							<Typography variant="h5" component="h3">
+								{this.props.title}
+							</Typography>
 							<Table>
 								<TableHead>
 									<TableRow>
@@ -135,7 +138,6 @@ class ContractData extends Component {
 							</Table>
 						</Paper>
 					) : (<span>No entries</span>)
-
 			)
 		}
 	}

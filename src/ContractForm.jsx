@@ -1,7 +1,6 @@
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 
-import colors from './config/colors-config';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -10,7 +9,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import styled from 'styled-components';
 
 const translateType = type => {
 	switch (true) {
@@ -103,10 +101,10 @@ class ContractForm extends Component {
 
 
 		return (
-			<StyledPaper >
-				<Title variant="h5" component="h3">
+			<Paper >
+				<Typography variant="h5" component="h3">
 					{this.props.title}
-				</Title>
+				</Typography>
 				<form
 					className="pure-form pure-form-stacked"
 					onSubmit={this.handleSubmit}>
@@ -148,20 +146,10 @@ class ContractForm extends Component {
 						</Button>
 					</p>
 				</form>
-			</StyledPaper >
+			</Paper >
 		);
 	}
 }
-
-const StyledPaper = styled(Paper)`
-	padding: 1em;
-	margin: 0 auto;
-	max-width: 400px;
-`
-const Title = styled(Typography)`
-	text-align: center;
-	color: ${colors.main};
-`
 
 const inputFieldStyle = {
 	width: '100%',
