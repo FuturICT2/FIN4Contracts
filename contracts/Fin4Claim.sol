@@ -58,4 +58,10 @@ contract Fin4Claim {
     return (ids,states);
   }
 
+  // for dev purposes only, this is NOT the normal flow
+  function approveClaim(uint claimId) public returns(bool) {
+    claims[claimId].isApproved = true;
+    return true;
+  }
+
 }

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Select, MenuItem } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
+import ActionNameRetriever from './ActionNameRetriever';
 
 class ActionTypeSelector extends Component {
     constructor(props, context) {
@@ -32,7 +33,7 @@ class ActionTypeSelector extends Component {
 
         const menuItems = tokenAddressArr.map((tokenAdr, i) => {
             return (
-                <MenuItem key={i} value={tokenAdr}>{tokenAdr}</MenuItem>
+                <MenuItem key={i} value={tokenAdr}><ActionNameRetriever tokenAdr={tokenAdr}/></MenuItem>
             );
         });
 
