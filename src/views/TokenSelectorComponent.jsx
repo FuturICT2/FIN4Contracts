@@ -8,9 +8,8 @@ class TokenSelectorComponent extends Component { // adopted from https://www.js-
         super(props);
         this.contracts = context.drizzle.contracts;
         this.state = {
-            data: this.getDev(),
             selected: 'None',
-			//dataKey: this.contracts.Fin4BaseToken.methods.getStatusesOfMyClaims.cacheCall()
+			dataKey: this.contracts.Fin4Main.methods.getActionNames.cacheCall()
 		};
     }
 
@@ -18,27 +17,34 @@ class TokenSelectorComponent extends Component { // adopted from https://www.js-
         this.setState({ selected: event.target.value, name: event.target.name });
     };
 
-    getDev() {
-        return [        
-            {name: 'asdfasdf', code: 'A'}, {name: 'qqrwerw', code: 'B'}, {name: 'shdsfgh', code: 'C'}
-        ]
-    }
-
-    renderOptions() {
-        return this.state.data.map((dt, i) => {
-            return (
-                <MenuItem key={i} value={dt.country_name}>{dt.code}</MenuItem>
-            );
-        });
-    }
-
     render() {
+        if (!this.props.contracts.Fin4Main.initialized) {
+			return <span>Initializing...</span>;
+        }
+        
+        if (!(this.state.dataKey in this.props.contracts.Fin4Main.getActionNames)) {
+			return <span>Fetching...</span>;
+        }
+
+        var pendingSpinner = this.props.contracts.Fin4Main.synced ? '' : 'syncing';
+
+        var displayData = this.props.contracts.Fin4Main.getActionNames[this.state.dataKey].value;
+
+        var tokenNameArr = displayData[0];
+        var tokenAddressArr = displayData[1];
+        
+        const menuItems = tokenNameArr.map((tokenName, index) => {
+            return (
+                <MenuItem key={index} value={tokenAddressArr[index]}>{tokenName}</MenuItem>
+            );
+		});
+
         return (
             <Select key="select" style={{
                 width: '100%',
                 marginBottom: '15px'
               }} value={this.state.selected} onChange={this.handleChange}>
-                {this.renderOptions()}
+                {menuItems}
            </Select>
         );
     }
