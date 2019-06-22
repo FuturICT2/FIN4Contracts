@@ -26,12 +26,39 @@ contract Fin4Main {
     }
 
     function mintToken(address tokenAddress,uint256 amount) public{
-        Fin4Token(tokenAddress).mint(msg.sender,amount);
+        Fin4Token token = Fin4Token(tokenAddress);
+        token.mint(msg.sender,amount);
     }
 
     function getBalance(address tokenAddress) public view returns(uint256){
         return Fin4Token(tokenAddress).balanceOf(msg.sender);
     }
 
+    //TODO: Please fix this implementation. It's not optimal
+    function getAllTokenBalance() public view returns(string[] memory, string[] memory, uint256[] memory){
+      //Fin4Actions[] memory fin4Tokens = new Fin4Actions[](children.length);
+        uint count = 0;
+        for (uint i = 0; i < children.length; i ++) {
+          if (Fin4Token(children[i]).balanceOf(msg.sender) != 0) {
+              count ++;
+          }
+        }
+        uint[] memory balance = new uint[](count);
+        string[] memory name = new string[](count);
+        string[] memory symbol = new string[](count);
 
+        uint256 j = 0;
+        for (uint i = 0; i < children.length; i++){
+          Fin4Token tok = Fin4Token(children[i]);
+          uint256 bal = tok.balanceOf(msg.sender);
+          if (bal != 0) {
+                name[j] = tok.name();
+                symbol[j] = tok.symbol();
+                balance[j] = tok.balanceOf(msg.sender);
+                j++;
+          }
+        }
+
+        return(symbol,name,balance);
+    }
 }
