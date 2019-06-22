@@ -116,8 +116,7 @@ class ContractForm extends Component {
 							? this.props.labels[index]
 							: input.name;
 						return inputLabel === 'date' ? (
-							<>
-								<MuiPickersUtilsProvider utils={DateFnsUtils}>
+								<MuiPickersUtilsProvider key="" utils={DateFnsUtils}>
 									<DatePicker
 										key={input.name}
 										name={input.name}
@@ -130,11 +129,7 @@ class ContractForm extends Component {
 										style={{ width: "400px" }}
 									/>
 								</MuiPickersUtilsProvider>
-								<br />
-								<br />
-							</>
 						) : (
-								<>
 									<TextField
 										key={input.name}
 										name={input.name}
@@ -144,11 +139,10 @@ class ContractForm extends Component {
 										onChange={this.handleInputChange}
 										style={{ width: "400px" }}
 									/>
-									<br />
-									<br />
-								</>
+							
 							);
 					})}
+					<br /><br />
 					<p style={{ textAlign: "center" }}>
 						<Button  key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
 							<AddIcon /> &nbsp;Submit
