@@ -26,10 +26,10 @@ contract Fin4Claim {
 
     Claim storage claim = claims[nextClaimId];
     claim.claimer = msg.sender;
-    claim.action = action;
-    claim.quantity = quantity;
-    claim.date = date;
-    claim.comment = comment;
+    claim.action = string(action);
+    claim.quantity = uint(quantity);
+    claim.date = uint(date);
+    claim.comment = string(comment);
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
