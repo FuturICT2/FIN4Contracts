@@ -12,7 +12,7 @@ const NewActionType = () => (
 		<h2>Children of Fin4BaseToken</h2>
 
 		<LoadingContainer>
-			<ContractData contract="Fin4Main" method="getChildren" />
+			<ContractData contract="Fin4Main" method="getActionNames" />
 		</LoadingContainer>
 	</>
 );
