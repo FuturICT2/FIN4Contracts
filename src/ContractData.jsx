@@ -109,6 +109,7 @@ class ContractData extends Component {
 		// for displaying table with rows [a, c], [b, d], ...
 		if (typeof displayData === 'object') {
 			return (
+				/* check that there exist entries */
 				(displayData &&
 					Object.values(displayData) &&
 					Object.values(displayData).length > 0 &&
@@ -127,11 +128,11 @@ class ContractData extends Component {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{/* check that there exist entries */}
-									{Object.values(displayData)[0].map(row => {
+									{/* sort descending by claim id (and thus date) */}
+									{Object.values(displayData).map(x => x.reverse())[0].map((row, r) => {
 										return <TableRow key={row}>{
-											Object.values(displayData).map((column, c) => {
-												return <TableCell key={`${row}-${c}`}>{Object.values(displayData)[c][row].toString()}</TableCell>
+											Object.values(displayData).map(column => {
+												return <TableCell key={`${row}-${column}`}>{column[r].toString()}</TableCell>
 											})
 										}</TableRow>
 									})}
