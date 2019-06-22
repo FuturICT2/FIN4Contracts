@@ -17,12 +17,12 @@ contract Fin4Main {
     return children;
   }
 
-    function getActionNames() public view returns(string[] memory){
+    function getActionNames() public view returns(string[] memory, address[] memory){
       string[] memory actionNames = new string[](children.length);
       for (uint i = 0; i < children.length; i++){
           actionNames[i] = Fin4Token(children[i]).name();
       }
-      return actionNames;
+      return (actionNames,children);
     }
 
     function mintToken(address tokenAddress,uint256 amount) public{
