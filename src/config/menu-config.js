@@ -10,13 +10,13 @@ const menu = [
 	{
 		component: ActionClaimSubmission,
 		path: '/action/claim',
-		label: 'Claim Action',
+		label: 'Actions',
 		icon: AddIcon
 	},
 	{
 		component: NewActionType,
 		path: '/action/create',
-		label: 'Create Action Type',
+		label: 'Action Types',
 		icon: AddIcon
 	}
 ];
