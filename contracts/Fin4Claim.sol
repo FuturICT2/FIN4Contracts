@@ -1,4 +1,5 @@
 pragma solidity ^0.5.0;
+pragma experimental ABIEncoderV2;
 
 import 'contracts/Fin4Token.sol';
 
@@ -11,6 +12,10 @@ contract Fin4Claim {
     uint claimId;
     address claimer;
     bool isApproved;
+    string action;
+    uint quantity;
+    uint date;
+    string comment;
     mapping(address => bool) proof_statuses;
   }
 
@@ -21,6 +26,10 @@ contract Fin4Claim {
 
     Claim storage claim = claims[nextClaimId];
     claim.claimer = msg.sender;
+    claim.action = action;
+    claim.quantity = quantity;
+    claim.date = date;
+    claim.comment = comment;
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
@@ -29,24 +38,27 @@ contract Fin4Claim {
     return nextClaimId - 1;
   }
 
-  function getStatuses() public view returns(uint[] memory, bool[] memory) {
+  function getStatuses() public view returns(string[] memory, uint[] memory, bool[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
       if (claims[i].claimer == msg.sender) {
           count ++;
       }
     }
-    uint[] memory claimIdArr = new uint[](count);
-    bool[] memory isApprovedArr = new bool[](count);
+    string[] memory header = new string[](2);
+    header[0] = "ID";
+    header[1] = "state";
+    uint[] memory ids = new uint[](count);
+    bool[] memory states = new bool[](count);
     count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
       if (claims[i].claimer == msg.sender) {
-          claimIdArr[count] = i;
-          isApprovedArr[count] = claims[i].isApproved;
+          ids[count] = i;
+          states[count] = claims[i].isApproved;
           count ++;
       }
     }
-    return (claimIdArr, isApprovedArr);
+    return (header, ids, states);
   }
 
 }
