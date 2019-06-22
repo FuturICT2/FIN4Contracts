@@ -141,12 +141,13 @@ class ContractForm extends Component {
 								</>
 							);
 					})}
-					<Button variant="contained" color="primary" onClick={this.handleSubmit}>
-						<AddIcon /> &nbsp;
-						Submit
-				</Button>
+					<p style={{textAlign: "center"}}>
+						<Button variant="contained" color="primary" onClick={this.handleSubmit}>
+						<AddIcon /> &nbsp;Submit
+						</Button>
+					</p>
 				</form>
-			</StyledPaper>
+			</StyledPaper >
 		);
 	}
 }
