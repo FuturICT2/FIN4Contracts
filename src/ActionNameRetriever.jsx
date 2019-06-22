@@ -9,7 +9,7 @@ class ActionNameRetriever extends Component {
         this.contracts = context.drizzle.contracts;
 
         const web3 = new Web3(window.web3.currentProvider);
-        var Fin4TokenJson = require('../build/contracts/Fin4Token.json');
+        var Fin4TokenJson = require('./build/contracts/Fin4Token.json');
 
         var Fin4TokenConfig = {
             contractName: this.props.tokenAdr,
@@ -35,7 +35,7 @@ class ActionNameRetriever extends Component {
         }
         var name = this.props.contracts[this.props.tokenAdr].name[this.state.dataKeyName].value;
         var symbol = this.props.contracts[this.props.tokenAdr].symbol[this.state.dataKeySymbol].value;
-        return name + " [" + symbol + "]";
+        return <span><b>{name}</b> [{symbol}]</span>
     }
 }
 

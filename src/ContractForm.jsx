@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import ActionTypeSelector from './views/ActionTypeSelector';
+import ActionTypeSelector from './ActionTypeSelector';
 
 const translateType = type => {
 	switch (true) {
