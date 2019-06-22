@@ -46,8 +46,8 @@ contract Fin4Claim {
       }
     }
     string[] memory header = new string[](2);
-    header[0] = "ID";
-    header[1] = "state";
+    header[0] = string("ID");
+    header[1] = string("state");
     uint[] memory ids = new uint[](count);
     bool[] memory states = new bool[](count);
     count = 0;
