@@ -11,7 +11,7 @@ const ActionClaimSubmission = () => (
 				contract="Fin4Claim" 
 				method="submit" 
 				title="Claim an action" 
-				dropdownList={["action", "Fin4Main", "getActionNames"]} 
+				dropdownList={["action", "Fin4Main", "getChildren"]} 
 			/>
 		</LoadingContainer>
 
