@@ -10,35 +10,41 @@ import NavigationBar from './NavigationBar';
 class App extends Component {
 	render() {
 		return (
-			<>
-				<TopBar />
+			<Router>
 				<Container>
-					<Router>
+					<TopBar />
 
-						<DrizzleProvider options={drizzleConfig}>
-							<>
-								{/* register menu routes */}
-								{menuItems.map((route, i) => (
-									<Route
-										exact
-										key={i}
-										render={() => <route.component />}
-										path={route.path}
-									/>
-								))}
-							</>
-						</DrizzleProvider>
-
-						<NavigationBar />
-					</Router>
+					<DrizzleProvider options={drizzleConfig}>
+						<>
+							{/* register menu routes */}
+							{menuItems.map((route, i) => (
+								<Route
+									exact
+									key={i}
+									render={() => <route.component />}
+									path={route.path}
+								/>
+							))}
+						</>
+					</DrizzleProvider>
+					<Spacer />
 				</Container>
-			</>
+
+				<NavigationBar />
+			</Router>
 		);
 	}
 }
 
 const Container = styled.div`
-	padding: 20px 20px 100px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 100%;
+`
+
+const Spacer = styled.div`
+	margin-top: 100px;
 `
 
 export default App;

@@ -9,8 +9,6 @@ const NewActionType = () => (
 			<ContractForm contract="Fin4Main" method="createNewToken" />
 		</LoadingContainer>
 
-		<h2>Children of Fin4BaseToken</h2>
-
 		<LoadingContainer>
 			<ContractData contract="Fin4Main" method="getActionNames" />
 		</LoadingContainer>
