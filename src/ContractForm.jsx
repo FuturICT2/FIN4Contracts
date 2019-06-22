@@ -9,8 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import styled from 'styled-components';
-import TokenSelectorComponent from './views/TokenSelectorComponent';
+import ActionTypeSelector from './views/ActionTypeSelector';
 
 const translateType = type => {
 	switch (true) {
@@ -136,21 +135,21 @@ class ContractForm extends Component {
 
 						if (this.props.dropdownList && this.props.dropdownList[0] === input.name) {
 							return (
-								<TokenSelectorComponent key="tsc" style={inputFieldStyle}/>
+								<ActionTypeSelector key="tsc" />
 							);
 						}
 
 						return (
-								<TextField // renders the number field automatically by detecting the inputType
-									key={input.name}
-									name={input.name}
-									multiline={inputLabel === 'comment'}
-									type={inputType}
-									label={inputLabel}
-									onChange={this.handleInputChange}
-									style={inputFieldStyle}
-								/>
-							);
+							<TextField // renders the number field automatically by detecting the inputType
+								key={input.name}
+								name={input.name}
+								multiline={inputLabel === 'comment'}
+								type={inputType}
+								label={inputLabel}
+								onChange={this.handleInputChange}
+								style={inputFieldStyle}
+							/>
+						);
 					})}
 					<p style={{ textAlign: "center" }}>
 						<Button key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
