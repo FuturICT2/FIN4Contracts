@@ -6,7 +6,7 @@ import ContractData from '../ContractData';
 const NewActionType = () => (
 	<>
 		<LoadingContainer>
-			<ContractForm contract="Fin4Main" method="createNewToken" />
+			<ContractForm contract="Fin4Main" method="createNewToken" title="Create a New Action Type" />
 		</LoadingContainer>
 
 		<LoadingContainer>
