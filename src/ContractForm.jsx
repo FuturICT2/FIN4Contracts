@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import styled from 'styled-components';
+import TokenSelectorComponent from './views/TokenSelectorComponent';
 
 const translateType = type => {
 	switch (true) {
@@ -118,7 +119,7 @@ class ContractForm extends Component {
 
 						if (inputLabel === 'date') {
 							return (
-								<MuiPickersUtilsProvider key="" utils={DateFnsUtils}>
+								<MuiPickersUtilsProvider key="mpup" utils={DateFnsUtils}>
 									<DatePicker
 										key={input.name}
 										name={input.name}
@@ -136,7 +137,7 @@ class ContractForm extends Component {
 
 						if (this.props.dropdownList && this.props.dropdownList[0] === input.name) {
 							return (
-								"TODO"
+								<TokenSelectorComponent key="tsc" style={inputFieldStyle}/>
 							);
 						}
 
