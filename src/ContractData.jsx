@@ -4,6 +4,13 @@ import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
 class ContractData extends Component {
 	constructor(props, context) {
 		super(props);
@@ -99,40 +106,27 @@ class ContractData extends Component {
 
 		// If retun value is an object
 		if (typeof displayData === 'object') {
-			if (Object.keys(displayData).length === 2) {
-				// = indicator for return value of getStatusesOfMyClaims TODO: better indicator?
-				var claimIdsArr = displayData[0];
-				var isApprovedArr = displayData[1];
-				const displayListItems = claimIdsArr.map((claimId, index) => {
-					return (
-						<li key={index}>
-							claim #{`${claimId}`}: {`${isApprovedArr[index]}`}
-							{pendingSpinner}
-						</li>
-					);
-				});
-				return <ul>{displayListItems}</ul>;
-			}
-
-			var i = 0;
-			const displayObjectProps = [];
-
-			Object.keys(displayData).forEach(key => {
-				if (i !== key) {
-					displayObjectProps.push(
-						<li key={i}>
-							<strong>{key}</strong>
-							{pendingSpinner}
-							<br />
-							{`${displayData[key]}`}
-						</li>
-					);
-				}
-
-				i++;
-			});
-
-			return <ul>{displayObjectProps}</ul>;
+			console.log(JSON.stringify(displayData))
+			return (<span></span>
+				// <Paper>
+				// 	<Table>
+				// 		<TableHead>
+				// 			<TableRow>
+				// 				{Object.values(displayData)[0].map((key, index) => {
+				// 					return (<TableCell key={index}>{key}</TableCell>)
+				// 				})}
+				// 			</TableRow>
+				// 		</TableHead>
+				// 		<TableBody>
+				// 			{Object.values(displayData).forEach(columns => {
+				// 				return (<TableRow>
+				// 					{/* {columns} */}
+				// 				</TableRow>)
+				// 			})}
+				// 		</TableBody>
+				// 	</Table>
+				// </Paper>
+			)
 		}
 
 		return (
