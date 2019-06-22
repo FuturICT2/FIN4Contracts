@@ -119,7 +119,8 @@ class ContractForm extends Component {
 							<>
 								<MuiPickersUtilsProvider utils={DateFnsUtils}>
 									<DatePicker
-										key={index}
+										key={input.name}
+										name={input.name}
 										label={inputLabel}
 										value={this.state.dates[index]}
 										onChange={x => {
@@ -135,7 +136,8 @@ class ContractForm extends Component {
 						) : (
 								<>
 									<TextField
-										key={index}
+										key={input.name}
+										name={input.name}
 										multiline={inputLabel === 'comment'}
 										type={inputType}
 										label={inputLabel}
@@ -148,7 +150,7 @@ class ContractForm extends Component {
 							);
 					})}
 					<p style={{ textAlign: "center" }}>
-						<Button variant="contained" color="primary" onClick={this.handleSubmit}>
+						<Button  key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
 							<AddIcon /> &nbsp;Submit
 						</Button>
 					</p>
