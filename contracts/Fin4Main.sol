@@ -35,32 +35,28 @@ contract Fin4Main {
       return Fin4Token(tokenAddress).balanceOf(msg.sender);
   }
 
-  //TODO: Please fix this implementation. It's not optimal
-  function getAllTokenBalance() public view returns(string[] memory, string[] memory, uint256[] memory){
-    //Fin4Actions[] memory fin4Tokens = new Fin4Actions[](children.length);
+  function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
     uint count = 0;
     for (uint i = 0; i < children.length; i ++) {
-      if (Fin4Token(children[i]).balanceOf(msg.sender) != 0) {
+      //if (Fin4Token(children[i]).balanceOf(msg.sender) != 0) {
           count ++;
-      }
+      //}
     }
-    uint[] memory balance = new uint[](count);
-    string[] memory name = new string[](count);
-    string[] memory symbol = new string[](count);
+    uint[] memory balances = new uint[](count);
+    address[] memory addresses = new address[](count);
 
     uint256 j = 0;
     for (uint i = 0; i < children.length; i++){
       Fin4Token tok = Fin4Token(children[i]);
-      uint256 bal = tok.balanceOf(msg.sender);
-      if (bal != 0) {
-            name[j] = tok.name();
-            symbol[j] = tok.symbol();
-            balance[j] = tok.balanceOf(msg.sender);
-            j++;
-      }
+      //uint256 bal = tok.balanceOf(msg.sender);
+      //if (bal != 0) {
+      balances[j] = tok.balanceOf(msg.sender);
+      addresses[j] = address(tok);
+      j++;
+      //}
     }
 
-    return(symbol,name,balance);
+    return (addresses, balances);
   }
 
 
