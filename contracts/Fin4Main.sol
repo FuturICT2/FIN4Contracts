@@ -17,6 +17,12 @@ contract Fin4Main {
     return children;
   }
 
+ 
+  function transferTokens(address tokenAddress, address accountAddress) public{
+      Fin4Token token = Fin4Token(tokenAddress);
+      token.transfer(accountAddress,1);
+  }
+
   function getActionNames() public view returns(address[] memory) { // string[] memory
     //string[] memory actionNames = new string[](children.length);
     //for (uint i = 0; i < children.length; i++){
