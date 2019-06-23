@@ -40,15 +40,15 @@ class ActionTypeSelector extends Component {
 
         return (
             <>
-                <InputLabel htmlFor="select-action">action</InputLabel>
-                <Select key="select" inputProps={{
+                <InputLabel shrink htmlFor="select-action">action</InputLabel>
+                <Select displayEmpty key="select" inputProps={{
                     name: 'action',
                     id: 'select-action',
                 }} style={{
                     width: '100%',
                     marginBottom: '15px'
                 }} value={this.state.selected} onChange={this.handleChange}>
-                    <MenuItem value="">
+                    <MenuItem selected disabled value="">
                         <em>None</em>
                     </MenuItem>
                     {menuItems}
