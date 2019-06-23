@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const DonorCard = ({ imagePath, title, description, readMore }) => {
+const DonorCard = ({ imagePath, title, description, readMore, actionButtonText }) => {
 	const classes = useStyles();
 
 	return (
@@ -40,7 +40,7 @@ const DonorCard = ({ imagePath, title, description, readMore }) => {
 			</CardActionArea>
 			<CardActions>
 				<Button size="small" color="secondary">
-					Donate
+					{actionButtonText}
         </Button>
 				<a href={readMore} rel="noopener noreferrer" target="_blank">
 					<Button size="small" color="primary">
