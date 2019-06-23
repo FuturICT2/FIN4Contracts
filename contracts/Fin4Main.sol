@@ -17,6 +17,12 @@ contract Fin4Main {
     return children;
   }
 
+ 
+  function transferTokens(address tokenAddress, address accountAddress) public{
+      Fin4Token token = Fin4Token(tokenAddress);
+      token.transfer(accountAddress,1);
+  }
+
   function getActionNames() public view returns(address[] memory) { // string[] memory
     //string[] memory actionNames = new string[](children.length);
     //for (uint i = 0; i < children.length; i++){
@@ -92,12 +98,23 @@ contract Fin4Main {
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
-    claim.isApproved = false;
+
+    //TODO: Need to be always set to false
+    //We set it to true just for the Demo to show the transfer to token to the user
+    if(nextClaimId % 2 == 0){
+        claim.isApproved = false;
+    }else{
+      claim.isApproved = true;
+      mintToken(action, quantity);
+    }
+    
     nextClaimId ++;
     return nextClaimId - 1;
+
+
   }
 
-  function getStatuses() public view returns(uint[] memory, bool[] memory) {
+  function getStatuses() public view returns(uint[] memory, bool[] memory, uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
       if (claims[i].claimer == msg.sender) {
@@ -105,16 +122,18 @@ contract Fin4Main {
       }
     }
     uint[] memory ids = new uint[](count);
+    uint[] memory quantity = new uint[](count);
     bool[] memory states = new bool[](count);
     count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
       if (claims[i].claimer == msg.sender) {
           ids[count] = i;
           states[count] = claims[i].isApproved;
+          quantity[count] = claims[i].quantity;
           count ++;
       }
     }
-    return (ids,states);
+    return (ids,states,quantity);
   }
 
   // for dev purposes only, this is NOT the normal flow

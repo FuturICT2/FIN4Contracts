@@ -30,7 +30,7 @@ const ActionClaimSubmission = () => (
 				contract="Fin4Main"
 				method="getStatuses"
 				title="Your Previous Claims"
-				header={["ID", "Approved"]}
+				header={["ID", "Approved", "Quantity"]}
 			/>
 		</LoadingContainer>
 	</Container>
