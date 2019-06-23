@@ -18,7 +18,7 @@ Set up your MetaMask extension to point to the AVADO "Ethereum Goerli testnet no
 
 Make sure you have some Goerli Ether by using your MetaMask account address in the Goerli-faucet: `https://goerli-faucet.slock.it`
 
-Please be patient when some transactions might take a little longer.
+Please be patient when some transactions might take a little longer. Also note that the balances in the "More" view under "My Action Tokens" are wrongly showing `0`. This works locally but not on the deployment so far.
 
 ## Inspiration
 
