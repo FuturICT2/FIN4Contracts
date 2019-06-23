@@ -34,13 +34,21 @@ The second page to be accessed via the bottom bar, *More*, shows a users balance
 
 ## How we built it
 
-We started with `truffle init` and `create-react-app` to get a skeleton for both connecting to blockchains as well as having a frontend. To make calls to the smart contracts we use `drizzle`. Each time an action type is created, an **ERC-20** token get's newly deployed. The signing of transactions happens via **MetaMask**. Locally we used **Ganache** as personal Ethereum blockchain. The deployment on the AWS EC2 instance (see the *Try it out* section above) connects via the AVADO node (in the Trust Square network) to the Ethereum Goerli testnet. This approach is preferrable over using centralized services like Infura.
+We started with `truffle init` and `create-react-app` to get a skeleton for both connecting to blockchains as well as having a frontend. To make calls to the smart contracts we use `drizzle`.
+
+Each time an action type is created, an **ERC-20** token get's newly deployed. The signing of transactions happens via **MetaMask**. Locally we used **Ganache** as personal Ethereum blockchain.
+
+For deploying our solution we instantiated the "Truffle Ethereum Development" template from the **AWS** marketplace as **EC2** instance.
+
+The deployment on the AWS EC2 instance (see the *Try it out* section above) connects via the **AVADO node** (in the Trust Square network) to the Ethereum Goerli testnet. This approach is preferrable over using centralized services like Infura.
 
 ## Challenges we ran into
 
 The versions of truffle and especially solidity have been changing rapidly in the last months, therefore a lot of the documentation and examples we found online are outdated and require modification to use it with the current version. So lots of times we couldn't find reliable sources and had to tinker with things ourselves. Some things are rather unintuitive when coming from "conventional programming", like how hard it can be to return a string array from a smart contract function.
 
 The local AVADO node was only visible within the network, so our AWS instance wasn't able to connect to it. This took a while to realize. The AVADO team then kindly provided us with a publicly accessible URL.
+
+The difference in workflow of local Ganache vs. testnet is different and it took us some time to figure things out.
 
 ## Accomplishments that we're proud of
 
