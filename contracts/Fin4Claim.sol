@@ -12,7 +12,7 @@ contract Fin4Claim {
     uint claimId;
     address claimer;
     bool isApproved;
-    string action;
+    address actionAdr;
     uint quantity;
     uint date;
     string comment;
@@ -21,12 +21,12 @@ contract Fin4Claim {
 
 	mapping (uint => Claim) public claims;
 
-	function submit(string memory action, uint quantity, uint date, string memory comment) public returns (uint) {
+	function submit(address action, uint quantity, uint date, string memory comment) public returns (uint) {
     // TODO: proofs input
 
     Claim storage claim = claims[nextClaimId];
     claim.claimer = msg.sender;
-    claim.action = action;
+    claim.actionAdr = action;
     claim.quantity = quantity;
     claim.date = date;
     claim.comment = comment;

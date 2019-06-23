@@ -129,7 +129,6 @@ class ContractData extends Component {
 								</TableHead>
 								<TableBody>
 									{Object.values(displayData)[0].map((row, r) => {
-										console.log(Object.values(displayData))
 										// row = row.reversed()
 										return <TableRow key={row}>{
 											Object.values(displayData).map(column => {
