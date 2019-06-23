@@ -5,7 +5,6 @@ import 'contracts/Fin4Token.sol';
 
 contract Fin4Claim {
 
-  address[] public requiredProofs;
   uint nextClaimId = 0;
 
 	struct Claim {
@@ -22,14 +21,13 @@ contract Fin4Claim {
 	mapping (uint => Claim) public claims;
 
 	function submit(address action, uint quantity, uint date, string memory comment) public returns (uint) {
-    // TODO: proofs input
-
     Claim storage claim = claims[nextClaimId];
     claim.claimer = msg.sender;
     claim.actionAdr = action;
     claim.quantity = quantity;
     claim.date = date;
     claim.comment = comment;
+    address[] memory requiredProofs = Fin4Token(action).getRequiredProofs();
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
