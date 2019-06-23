@@ -11,12 +11,13 @@ const Container = styled.div`
 		padding: 1em;
 		margin: 25px;
 		width: 400px;
-		opacity: .9;
+		opacity: .85;
 	}
 
 	h3 {
 		text-align: center;
 		color: ${colors.main};
+		margin-bottom: 25px;
 	}
 `
 
