@@ -28,6 +28,8 @@ The second page to be accessed via the bottom bar, *More*, shows a users balance
 
 ## How we built it
 
+We started with `truffle init` and `create-react-app` to get a skeleton for both connecting to blockchains as well as having a frontend. To make calls to the smart contracts we use `drizzle`. Each time an action type is created, an **ERC-20** token get's newly deployed. The signing of transactions happens via **MetaMask**. Locally we used **Ganache** as personal Ethereum blockchain. The deployment on the AWS EC2 instance (see the *Try it out* section above) connects via the AVADO node (in the Trust Square network) to the Ethereum Goerli testnet. This approach is preferrable over using centralized services like Infura.
+
 ## Challenges we ran into
 
 infura
@@ -43,6 +45,8 @@ We want to implement a way for action type creators to choose from various proof
 
 #### Marketplace
 Besides donating to organizations we also want to support donations to individuals (maybe you want to donate some of your collected hours in a timebank-like scheme to an elderly person who can't collect hours easily). Ideally involvement on the marketplace itself gets rewarded with a type of meta appreciation token.
+
+TODO rewards
 
 ## Setup for testnet deployment
 
