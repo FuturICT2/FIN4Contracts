@@ -27,13 +27,14 @@ class More extends React.Component {
 		return (
 			<>
 				<Container>
-				<LoadingContainer>
-					<ContractRetriever/>
-				</LoadingContainer>
+					<LoadingContainer>
+						<ContractRetriever title="My Action Tokens" />
+					</LoadingContainer>
 				</Container>
 				<div>
-					{donationReceivers.map(d => {
+					{donationReceivers.map((d, i) => {
 						return <DonorCard
+							key={i}
 							title={d.title}
 							imagePath={d.imagePath}
 							description={d.description}

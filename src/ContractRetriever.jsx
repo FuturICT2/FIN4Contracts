@@ -2,6 +2,13 @@ import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import StringRetriever from './StringRetriever';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 class ContractRetriever extends Component {
     constructor(props, context) {
@@ -23,29 +30,43 @@ class ContractRetriever extends Component {
 
         var tokenAddressArr = this.props.contracts.Fin4Main.getChildren[this.state.dataKey].value;
 
-        const balances = tokenAddressArr.map((tokenAdr, i) => {
-            return (
-                <>
-                    <span style={{ fontWeight: 'bold' }}>
-                        <StringRetriever tokenAdr={tokenAdr} attribute={'name'} />
-                    </span>
-                    &nbsp;
-                    <span>
-                        [<StringRetriever tokenAdr={tokenAdr} attribute={'symbol'} />]
-                    </span>
-                    &nbsp;
-                    <span>
-                        [<StringRetriever tokenAdr={tokenAdr} attribute={'balanceOfMe'} />]
-                    </span>
-                </>
-            );
+        const names = [];
+        const symbols = [];
+        const balances = [];
+
+        tokenAddressArr.forEach(t => {
+            names.push(<StringRetriever tokenAdr={t} attribute={'name'} />);
+            symbols.push(<StringRetriever tokenAdr={t} attribute={'symbol'} />);
+            balances.push(<StringRetriever tokenAdr={t} attribute={'balanceOfMe'} />);
         });
 
         return (
-            <>
-                {balances}
-            </>
-        );
+            <Paper>
+                <Typography variant="h5" component="h3">
+                    {this.props.title}
+                </Typography>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            {["Name", "Symbol", "Balance"].map((key, index) => {
+                                return <TableCell key={index}>{key}</TableCell>
+                            })}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {names.map((n, i) => {
+                            return (
+                                <TableRow key={i}>
+                                    <TableCell key={`1`}>{names[i]}</TableCell>
+                                    <TableCell key={`2`}>{symbols[i]}</TableCell>
+                                    <TableCell key={`3`}>{balances[i]}</TableCell>
+                                </TableRow>
+                            )
+                        })}
+                    </TableBody>
+                </Table>
+            </Paper>
+        )
     }
 }
 

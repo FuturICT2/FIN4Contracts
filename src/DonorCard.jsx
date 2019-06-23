@@ -42,7 +42,7 @@ const DonorCard = ({ imagePath, title, description, readMore }) => {
 				<Button size="small" color="secondary">
 					Donate
         </Button>
-				<a href={readMore} target="_blank">
+				<a href={readMore} rel="noopener noreferrer" target="_blank">
 					<Button size="small" color="primary">
 						Learn More
 					</Button>
