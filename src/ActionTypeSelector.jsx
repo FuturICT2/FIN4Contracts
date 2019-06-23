@@ -17,6 +17,7 @@ class ActionTypeSelector extends Component {
 
     handleChange = event => {
         this.setState({ selected: event.target.value, name: event.target.name });
+        this.props.onChange(event);
     };
 
     render() {
