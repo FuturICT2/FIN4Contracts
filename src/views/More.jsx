@@ -23,10 +23,37 @@ const donationReceivers = [
 	}
 ];
 
+const spendingOffers = [
+	{
+		title: "Free Tire Repair",
+		imagePath: "https://cdn.pixabay.com/photo/2016/04/06/22/08/girl-1312964_960_720.png",
+		description: "We are glad to offer this special service once per year.",
+		readMore: "https://hackathon.trustsquare.ch/"
+	},
+	{
+		title: "Trip To the Bouldering Park",
+		imagePath: "https://images.unsplash.com/photo-1522163182402-834f871fd851",
+		description: "Adventure, Sports, Fitness - you earned it.",
+		readMore: "https://hackathon.trustsquare.ch/"
+	}
+];
+
 class More extends React.Component {
 	render() {
 		return (
 			<Wrapper>
+				<div>
+					{spendingOffers.map((s, i) => {
+						return <DonorCard
+							key={i}
+							title={s.title}
+							imagePath={s.imagePath}
+							description={s.description}
+							readMore={s.readMore}
+							actionButtonText="redeem now"
+						/>
+					})}
+				</div>
 				<Container>
 					<LoadingContainer>
 						<ContractRetriever title="My Action Tokens" />
@@ -40,6 +67,7 @@ class More extends React.Component {
 							imagePath={d.imagePath}
 							description={d.description}
 							readMore={d.readMore}
+							actionButtonText="donate"
 						/>
 					})}
 				</div>
