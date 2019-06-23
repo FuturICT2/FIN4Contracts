@@ -18,6 +18,8 @@ Set up your MetaMask extension to point to the AVADO "Ethereum Goerli testnet no
 
 Make sure you have some Goerli Ether by using your MetaMask account address in the Goerli-faucet: `https://goerli-faucet.slock.it`
 
+Please be patient when some transactions might take a little longer.
+
 ## Inspiration
 
 *FINFOO* is a multidimensional and multilayered finance system, destined to develop into a self-organizing and nuanced incentive system to contribute to healthier and more vibrant social and ecological spaces worldwide. More info in our video.
