@@ -36,7 +36,7 @@ module.exports = {
 			provider: function() {
 				return new HDWalletProvider(keys.MNEMONIC, 'http://62.12.152.38:8548') //http://gatex.cysec.systems:8545  http://172.20.0.103:8545
 			  },
-			  network_id: 7,
+			  network_id: 5,
 			  gas: 4465030,
 			  gasPrice: 10000000000
 		}
