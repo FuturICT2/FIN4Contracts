@@ -17,6 +17,14 @@ class StringRetriever extends Component {
         }
         context.drizzle.addContract(Fin4TokenConfig);
 
+        /*this.msgSender = null;
+        var self = this;
+        if (this.props.arg == 'msg.sender') {
+            web3.eth.getAccounts().then((acc) => {
+                self.msgSender = acc[0];
+            });
+        }*/
+
         this.state = {
             dataKeyName: this.contracts[this.props.tokenAdr].methods[this.props.attribute].cacheCall()
         };
@@ -24,8 +32,11 @@ class StringRetriever extends Component {
 
     render() {
         if (!this.props.contracts[this.props.tokenAdr]) {
-            return "Retrieving token name...";
+            return "Retrieving token...";
         }
+        /*if (this.props.arg == 'msg.sender' && this.msgSender === null) {
+            return "Retrieving user account...";
+        }*/
         if (!this.props.contracts[this.props.tokenAdr].initialized) {
             return "Initializing";
         }

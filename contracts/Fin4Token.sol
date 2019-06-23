@@ -28,4 +28,8 @@ contract Fin4Token is ERC20Detailed, ERC20Mintable {
     requiredProofs.push(proofType);
     return true;
   }
+
+  function balanceOfMe() public view returns(uint256) {
+    return balanceOf(msg.sender);
+  }
 }
