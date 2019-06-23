@@ -3,6 +3,12 @@
 #### Team 43 @ [#SBHACK19](https://hackathon.trustsquare.ch/)
 [@benjaminaaron](https://github.com/benjaminaaron) |  [@sangeetajoseph8](https://github.com/sangeetajoseph8) | [@ShreshthaKriti](https://github.com/ShreshthaKriti) | [@simonzachau](https://github.com/simonzachau)
 
+---
+- URL to working application: `http://ec2-18-209-102-101.compute-1.amazonaws.com:3000` (see section *Try it out*)
+- URL to public github repository: `https://github.com/benjaminaaron/FINFOO`
+- Short description about our application and usage description of the live deployment are below
+---
+
 ## Try it out
 
 The live deployment is located at:
@@ -32,11 +38,21 @@ We started with `truffle init` and `create-react-app` to get a skeleton for both
 
 ## Challenges we ran into
 
-infura
+The versions of truffle and especially solidity have been changing rapidly in the last months, therefore a lot of the documentation and examples we found online are outdated and require modification to use it with the current version. So lots of times we couldn't find reliable sources and had to tinker with things ourselves. Some things are rather unintuitive when coming from "conventional programming", like how hard it can be to return a string array from a smart contract function.
+
+The local AVADO node was only visible within the network, so our AWS instance wasn't able to connect to it. This took a while to realize. The AVADO team then kindly provided us with a publicly accessible URL.
 
 ## Accomplishments that we're proud of
+
+To get something functional up and running in such a small time. And the cause itself could really be worth it and create a lot of good in the world.
  
 ## What we learned
+
+We had almost no blockchain-implementation experience beforehand, so the learning curve was very steep and therefore rewarding.
+
+We learned to use the tools listed in *How we built it* and definitely improved our team communication and code-collaboration skills.
+
+Also for all of us it was the first time in Zürich and we really enjoyed experiencing the city a little bit.
 
 ## What's next for FINFOO
 
@@ -44,9 +60,13 @@ infura
 We want to implement a way for action type creators to choose from various proof types that users will have to provide when they submit a claim. For instance one proof type smart contract could handle uploaded photos (stored in IPFS) and show them to the action type creator to get approved or not. Another proof type could use oracles to ask for a users location history to verify she was at a certain place at a certain time. Yet another one could ask users doing an action together to bump their phones together for an NFC handshake etc. Ideally an action type creator can choose from a sufficient amount of readily build proof type smart contracts. Should she need another one though, we want to make it relatively easy to deploy one with the custom logic.
 
 #### Marketplace
-Besides donating to organizations we also want to support donations to individuals (maybe you want to donate some of your collected hours in a timebank-like scheme to an elderly person who can't collect hours easily). Ideally involvement on the marketplace itself gets rewarded with a type of meta appreciation token.
+Besides donating to organizations we also want to support donations to individuals (maybe you want to donate some of your collected hours in a timebank-like scheme to an elderly person who can't collect hours easily). 
 
-TODO rewards
+Furthermore, organizations or NGOs with social or ecological should be able to offer rewards for people who collected certain types of tokens.
+
+Ideally involvement on the marketplace itself gets rewarded with a type of meta appreciation token.
+
+When giving it the right spin and getting insurances and governments on board (as proof of the social engagement of citizens), this could even evolve into a social global welfare fund.
 
 ## Setup for testnet deployment
 
