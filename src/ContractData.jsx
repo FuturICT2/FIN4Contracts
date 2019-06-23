@@ -10,6 +10,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import True from '@material-ui/icons/CheckCircleOutline';
+import False from '@material-ui/icons/HighlightOff';
 
 class ContractData extends Component {
 	constructor(props, context) {
@@ -131,7 +133,13 @@ class ContractData extends Component {
 									{Object.values(displayData)[0].map((row, r) => {
 										return <TableRow key={row}>{
 											Object.values(displayData).map(column => {
-												return <TableCell key={`${row}-${column}`}>{column[r].toString()}</TableCell>
+												return <TableCell key={`${row}-${column}`}>{
+													column[r].toString() === "false" ? 
+													<False /> : 
+													(column[r].toString() === "true" ? 
+													<True /> : 
+													column[r].toString())
+												}</TableCell>
 											})
 										}</TableRow>
 									})}
