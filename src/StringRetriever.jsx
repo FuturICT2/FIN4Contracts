@@ -1,5 +1,5 @@
 import { drizzleConnect } from 'drizzle-react';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
 
@@ -44,7 +44,7 @@ class StringRetriever extends Component {
             return "Fetching";
         }
         var attribute = this.props.contracts[this.props.tokenAdr][this.props.attribute][this.state.dataKeyName].value;
-        return <>{attribute}</>
+        return attribute
     }
 }
 

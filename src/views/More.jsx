@@ -2,6 +2,7 @@ import React from 'react';
 import { LoadingContainer } from 'drizzle-react-components';
 import Container from '../Styles';
 import ContractRetriever from '../ContractRetriever';
+import styled from 'styled-components';
 
 import DonorCard from '../DonorCard';
 // import { LoadingContainer } from 'drizzle-react-components';
@@ -25,15 +26,16 @@ const donationReceivers = [
 class More extends React.Component {
 	render() {
 		return (
-			<>
+			<Wrapper>
 				<Container>
-				<LoadingContainer>
-					<ContractRetriever/>
-				</LoadingContainer>
+					<LoadingContainer>
+						<ContractRetriever title="My Action Tokens" />
+					</LoadingContainer>
 				</Container>
 				<div>
-					{donationReceivers.map(d => {
+					{donationReceivers.map((d, i) => {
 						return <DonorCard
+							key={i}
 							title={d.title}
 							imagePath={d.imagePath}
 							description={d.description}
@@ -41,9 +43,15 @@ class More extends React.Component {
 						/>
 					})}
 				</div>
-			</>
+			</Wrapper>
 		)
 	}
 }
+
+const Wrapper = styled.div`
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+`
 
 export default More;
