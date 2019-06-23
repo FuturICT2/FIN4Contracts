@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Select, MenuItem } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
-import ActionNameRetriever from './ActionNameRetriever';
+import StringRetriever from './StringRetriever';
 
 class ActionTypeSelector extends Component {
     constructor(props, context) {
@@ -29,12 +29,19 @@ class ActionTypeSelector extends Component {
             return <span>Fetching...</span>;
         }
 
-        var displayData = this.props.contracts.Fin4Main.getChildren[this.state.dataKey].value;
-        var tokenAddressArr = displayData;
+        var tokenAddressArr = this.props.contracts.Fin4Main.getChildren[this.state.dataKey].value;
 
         const menuItems = tokenAddressArr.map((tokenAdr, i) => {
             return (
-                <MenuItem key={i} value={tokenAdr}><ActionNameRetriever tokenAdr={tokenAdr}/></MenuItem>
+                <MenuItem key={i} value={tokenAdr}>
+                    <span style={{ fontWeight: 'bold' }}>
+                        <StringRetriever tokenAdr={tokenAdr} attribute={'name'} />
+                    </span>
+                    &nbsp;
+                    <span>
+                        [<StringRetriever tokenAdr={tokenAdr} attribute={'symbol'} />]
+                    </span>
+                </MenuItem>
             );
         });
 

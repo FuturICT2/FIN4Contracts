@@ -7,11 +7,18 @@ import Container from '../Styles'
 const NewActionType = () => (
 	<Container>
 		<LoadingContainer>
-			<ContractForm contract="Fin4Main" method="createNewToken" title="Create a New Action Type" />
+			<ContractForm
+				contract="Fin4Main"
+				method="createNewToken"
+				title="Create a New Action Type"
+			/>
 		</LoadingContainer>
 
 		<LoadingContainer>
-			<ContractData contract="Fin4Main" method="getActionNames" />
+			<ContractData
+				contract="Fin4Main"
+				method="getChildren"
+			/>
 		</LoadingContainer>
 	</Container>
 );

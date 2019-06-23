@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
 
-class ActionNameRetriever extends Component {
+class StringRetriever extends Component {
     constructor(props, context) {
         super(props);
         this.contracts = context.drizzle.contracts;
@@ -16,10 +16,9 @@ class ActionNameRetriever extends Component {
             web3Contract: new web3.eth.Contract(Fin4TokenJson.abi, this.props.tokenAdr)
         }
         context.drizzle.addContract(Fin4TokenConfig);
-        
+
         this.state = {
-            dataKeyName: this.contracts[this.props.tokenAdr].methods.name.cacheCall(),
-            dataKeySymbol: this.contracts[this.props.tokenAdr].methods.symbol.cacheCall(),
+            dataKeyName: this.contracts[this.props.tokenAdr].methods[this.props.attribute].cacheCall()
         };
     }
 
@@ -30,16 +29,15 @@ class ActionNameRetriever extends Component {
         if (!this.props.contracts[this.props.tokenAdr].initialized) {
             return "Initializing";
         }
-        if (!(this.state.dataKeyName in this.props.contracts[this.props.tokenAdr].name && this.state.dataKeySymbol in this.props.contracts[this.props.tokenAdr].symbol)) {
+        if (!(this.state.dataKeyName in this.props.contracts[this.props.tokenAdr][this.props.attribute])) {
             return "Fetching";
         }
-        var name = this.props.contracts[this.props.tokenAdr].name[this.state.dataKeyName].value;
-        var symbol = this.props.contracts[this.props.tokenAdr].symbol[this.state.dataKeySymbol].value;
-        return <span><b>{name}</b> [{symbol}]</span>
+        var attribute = this.props.contracts[this.props.tokenAdr][this.props.attribute][this.state.dataKeyName].value;
+        return <>{attribute}</>
     }
 }
 
-ActionNameRetriever.contextTypes = {
+StringRetriever.contextTypes = {
     drizzle: PropTypes.object
 };
 
@@ -49,4 +47,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default drizzleConnect(ActionNameRetriever, mapStateToProps);
+export default drizzleConnect(StringRetriever, mapStateToProps);
