@@ -124,7 +124,6 @@ class ContractForm extends Component {
 										label={inputLabel}
 										value={this.state.dates[index]}
 										onChange={x => {
-											console.log(x)
 											return this.handleInputChange(x)
 										}}
 										style={inputFieldStyle}
@@ -136,7 +135,6 @@ class ContractForm extends Component {
 						if (this.props.dropdownList && this.props.dropdownList[0] === input.name) {
 							return (
 								<ActionTypeSelector key="tsc" onChange={x => {
-									console.log(x)
 									return this.handleInputChange(x)
 								}} />
 							);
