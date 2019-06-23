@@ -124,7 +124,8 @@ class ContractForm extends Component {
 										label={inputLabel}
 										value={this.state.dates[index]}
 										onChange={x => {
-											return this.handleInputChange(x)
+											console.log('coming soon')
+											// return this.handleInputChange(x)
 										}}
 										style={inputFieldStyle}
 									/>
