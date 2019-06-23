@@ -11,4 +11,21 @@ contract Fin4Token is ERC20Detailed, ERC20Mintable {
     ERC20()
     public {}
 
+    address[] public requiredProofs;
+
+  // called from ProofDummy, therefore msg.sender is the address of that SC
+  function receiveProofApproval(address claimer, uint claimId) public returns(bool) {
+    // claims[claimId].proof_statuses[msg.sender] = true;
+    // TODO if all required proofs are true, switch isApproved to true
+    return true;
+  }
+
+  function getRequiredProofs() public view returns(address[] memory) {
+    return requiredProofs;
+  }
+
+  function addRequiredProof(address proofType) public returns(bool) {
+    requiredProofs.push(proofType);
+    return true;
+  }
 }
