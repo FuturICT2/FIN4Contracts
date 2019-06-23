@@ -4,12 +4,12 @@ import colors from './config/colors-config';
 const Container = styled.div`
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-evenly;
+	justify-content: center;
 	align-items: flex-start;
 
-	> * {
+	.MuiPaper-root {
 		padding: 1em;
-		margin: 10px;
+		margin: 25px;
 		width: 400px;
 		opacity: .9;
 	}

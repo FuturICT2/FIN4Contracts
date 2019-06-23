@@ -1,5 +1,9 @@
 body {
-	background: #D4D4D4;
+	background: #D4D4D4 url('/bg-trees.png') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 	margin: 0;
 }
 

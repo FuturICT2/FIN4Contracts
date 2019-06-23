@@ -6,14 +6,24 @@ import Container from '../Styles';
 
 const ActionClaimSubmission = () => (
 	<Container>
-		<LoadingContainer>
-			<ContractForm 
-				contract="Fin4Claim" 
-				method="submit" 
-				title="Claim an action" 
-				dropdownList={["action", "Fin4Main", "getChildren"]} 
-			/>
-		</LoadingContainer>
+		<div>
+			<LoadingContainer>
+				<ContractForm
+					contract="Fin4Claim"
+					method="submit"
+					title="Claim an Action"
+					dropdownList={["action", "Fin4Main", "getChildren"]}
+				/>
+			</LoadingContainer>
+
+			<LoadingContainer>
+				<ContractForm
+					contract="Fin4Main"
+					method="createNewToken"
+					title="Create a New Action Type"
+				/>
+			</LoadingContainer>
+		</div>
 
 		<LoadingContainer>
 			<ContractData
