@@ -55,9 +55,6 @@ class ActionTypeSelector extends Component {
                     width: '100%',
                     marginBottom: '15px'
                 }} value={this.state.selected} onChange={this.handleChange}>
-                    <MenuItem selected disabled value="">
-                        <em>None</em>
-                    </MenuItem>
                     {menuItems}
                 </Select>
             </>
