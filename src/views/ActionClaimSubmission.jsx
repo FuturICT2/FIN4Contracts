@@ -9,7 +9,7 @@ const ActionClaimSubmission = () => (
 		<div>
 			<LoadingContainer>
 				<ContractForm
-					contract="Fin4Claim"
+					contract="Fin4Main"
 					method="submit"
 					title="Claim an Action"
 					dropdownList={["action", "Fin4Main", "getChildren"]}
@@ -27,7 +27,7 @@ const ActionClaimSubmission = () => (
 
 		<LoadingContainer>
 			<ContractData
-				contract="Fin4Claim"
+				contract="Fin4Main"
 				method="getStatuses"
 				title="Your Previous Claims"
 				header={["ID", "Approved"]}
