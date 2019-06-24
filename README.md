@@ -1,6 +1,7 @@
-# FINFOO
+# FINFOO ([#SBHACK19](https://hackathon.trustsquare.ch/) project)
 
-#### Team 43 @ [#SBHACK19](https://hackathon.trustsquare.ch/)
+**Winner of the prize *Fast track to [CV Labs Blockchain Incubator](https://cvvc.com/index.php/cv-labs/our-project-one/programm)***
+
 [@benjaminaaron](https://github.com/benjaminaaron) |  [@sangeetajoseph8](https://github.com/sangeetajoseph8) | [@ShreshthaKriti](https://github.com/ShreshthaKriti) | [@simonzachau](https://github.com/simonzachau)
 
 ---
