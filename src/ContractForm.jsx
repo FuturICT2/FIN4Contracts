@@ -1,13 +1,15 @@
-// adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
-
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import ActionTypeSelector from './ActionTypeSelector';
 
 const translateType = type => {
 	switch (true) {
@@ -98,41 +100,71 @@ class ContractForm extends Component {
 			});
 		}
 
+
 		return (
-			<form
-				className="pure-form pure-form-stacked"
-				onSubmit={this.handleSubmit}>
-				{this.inputs.map((input, index) => {
-					var inputType = translateType(input.type);
-					var inputLabel = this.props.labels
-						? this.props.labels[index]
-						: input.name;
-					return inputLabel === 'date' ? (
-						<MuiPickersUtilsProvider utils={DateFnsUtils}>
-							<DatePicker
+			<Paper >
+				<Typography variant="h5" component="h3">
+					{this.props.title}
+				</Typography>
+				<form
+					className="pure-form pure-form-stacked"
+					onSubmit={this.handleSubmit}>
+					{this.inputs.map((input, index) => {
+						var inputType = translateType(input.type);
+						var inputLabel = this.props.labels
+							? this.props.labels[index]
+							: input.name;
+
+						if (inputLabel === 'date') {
+							return (
+								<MuiPickersUtilsProvider key="mpup" utils={DateFnsUtils}>
+									<DatePicker
+										key={input.name}
+										name={input.name}
+										label={inputLabel}
+										value={this.state.dates[index]}
+										onChange={x => {
+											console.log('coming soon')
+											// return this.handleInputChange(x)
+										}}
+										style={inputFieldStyle}
+									/>
+								</MuiPickersUtilsProvider>
+							);
+						}
+
+						if (this.props.dropdownList && this.props.dropdownList[0] === input.name) {
+							return (
+								<ActionTypeSelector key="tsc" onChange={this.handleInputChange} />
+							);
+						}
+
+						return (
+							<TextField // renders the number field automatically by detecting the inputType
 								key={input.name}
-								id={input.name}
+								name={input.name}
+								multiline={inputLabel === 'comment'}
+								type={inputType}
 								label={inputLabel}
-								value={this.state.dates[index]}
-								onChange={x => this.handleInputChange(x.getTime())}
+								onChange={this.handleInputChange}
+								style={inputFieldStyle}
 							/>
-						</MuiPickersUtilsProvider>
-					) : (
-						<TextField
-							key={input.name}
-							id={input.name}
-							type={inputType}
-							label={inputLabel}
-							onChange={this.handleInputChange}
-						/>
-					);
-				})}
-				<Button variant="contained" color="primary" onClick={this.handleSubmit}>
-					Submit
-				</Button>
-			</form>
+						);
+					})}
+					<p style={{ textAlign: "center" }}>
+						<Button key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
+							<AddIcon /> &nbsp;Submit
+						</Button>
+					</p>
+				</form>
+			</Paper >
 		);
 	}
+}
+
+const inputFieldStyle = {
+	width: '100%',
+	marginBottom: '15px'
 }
 
 ContractForm.contextTypes = {

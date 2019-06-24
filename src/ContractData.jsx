@@ -3,6 +3,15 @@
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import True from '@material-ui/icons/CheckCircleOutline';
+import False from '@material-ui/icons/HighlightOff';
 
 class ContractData extends Component {
 	constructor(props, context) {
@@ -96,54 +105,50 @@ class ContractData extends Component {
 
 			return <ul>{displayListItems}</ul>;
 		}
-		console.log(displayData);
-		console.log(displayData.length);
-		console.log(typeof displayData === 'object');
 
-		// If retun value is an object
+		// If retun value is an object of type 
+		// {0: ["a", "b", ...], 1: ["c", "d", ...], ...}
+		// for displaying table with rows [a, c], [b, d], ...
 		if (typeof displayData === 'object') {
-			if (Object.keys(displayData).length == 2) {
-				// = indicator for return value of getStatusesOfMyClaims TODO: better indicator?
-				var claimIdsArr = displayData[0];
-				var isApprovedArr = displayData[1];
-				const displayListItems = claimIdsArr.map((claimId, index) => {
-					return (
-						<li key={index}>
-							claim #{`${claimId}`}: {`${isApprovedArr[index]}`}
-							{pendingSpinner}
-						</li>
-					);
-				});
-				return <ul>{displayListItems}</ul>;
-			}
-
-			var i = 0;
-			const displayObjectProps = [];
-
-			Object.keys(displayData).forEach(key => {
-				if (i != key) {
-					displayObjectProps.push(
-						<li key={i}>
-							<strong>{key}</strong>
-							{pendingSpinner}
-							<br />
-							{`${displayData[key]}`}
-						</li>
-					);
-				}
-
-				i++;
-			});
-
-			return <ul>{displayObjectProps}</ul>;
+			return (
+				/* check that there exist entries */
+				(displayData &&
+					Object.values(displayData) &&
+					Object.values(displayData).length > 0 &&
+					Object.values(displayData)[0] &&
+					Object.values(displayData)[0].length > 0) ? (
+						<Paper>
+							<Typography variant="h5" component="h3">
+								{this.props.title}
+							</Typography>
+							<Table>
+								<TableHead>
+									<TableRow>
+										{this.props.header.map((key, index) => {
+											return <TableCell key={index}>{key}</TableCell>
+										})}
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{Object.values(displayData)[0].map((row, r) => {
+										return <TableRow key={row}>{
+											Object.values(displayData).map(column => {
+												return <TableCell key={`${row}-${column}`}>{
+													column[r].toString() === "false" ? 
+													<False /> : 
+													(column[r].toString() === "true" ? 
+													<True /> : 
+													column[r].toString())
+												}</TableCell>
+											})
+										}</TableRow>
+									})}
+								</TableBody>
+							</Table>
+						</Paper>
+					) : (<></>)
+			)
 		}
-
-		return (
-			<span>
-				{`${displayData}`}
-				{pendingSpinner}
-			</span>
-		);
 	}
 }
 

@@ -1,9 +1,7 @@
-build/
-.idea/
-package-lock.json
 .env
-
-# below is created from the create-react-app command
+src/build/
+.idea/
+src/config/keys.json
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 

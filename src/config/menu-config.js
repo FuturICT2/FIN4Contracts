@@ -1,23 +1,21 @@
-import AccountIcon from '@material-ui/icons/AccountCircle';
-import AddIcon from '@material-ui/icons/AddCircle';
+import Home from '@material-ui/icons/DirectionsRun';
+import StarIcon from '@material-ui/icons/StarRate';
 
-import Home from '../views/Home';
+import More from '../views/More';
 import ActionClaimSubmission from '../views/ActionClaimSubmission';
-import NewToken from '../views/NewToken';
 
 const menu = [
-	{ component: Home, path: '/', label: 'Me', icon: AccountIcon },
 	{
 		component: ActionClaimSubmission,
-		path: '/action/claim',
-		label: 'Claim Action',
-		icon: AddIcon
+		path: '/',
+		label: 'Actions',
+		icon: Home
 	},
 	{
-		component: NewToken,
-		path: '/action/create',
-		label: 'Create Action Type',
-		icon: AddIcon
+		component: More,
+		path: '/more',
+		label: 'More',
+		icon: StarIcon
 	}
 ];
 
