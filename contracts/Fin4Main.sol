@@ -9,7 +9,7 @@ contract Fin4Main {
   address[] public proofTypes;
 
 	function createNewToken(string memory name, string memory symbol, uint8 decimals) public returns(address) {
-    Fin4Token newToken = new Fin4Token(name, symbol, decimals);
+    Fin4Token newToken = new Fin4Token(name, symbol, decimals, address(this));
     children.push(address(newToken));
     return address(newToken);
   }
