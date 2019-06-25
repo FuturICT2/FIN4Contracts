@@ -11,7 +11,7 @@ contract Fin4Token is ERC20Detailed, ERC20Mintable {
     ERC20()
     public {}
 
-  address[] public requiredProofs;
+  address[] public requiredProofTypes;
 
   // called from ProofDummy, therefore msg.sender is the address of that SC
   function receiveProofApproval(address claimer, uint claimId) public returns(bool) {
@@ -20,12 +20,12 @@ contract Fin4Token is ERC20Detailed, ERC20Mintable {
     return true;
   }
 
-  function getRequiredProofs() public view returns(address[] memory) {
-    return requiredProofs;
+  function getRequiredProofTypes() public view returns(address[] memory) {
+    return requiredProofTypes;
   }
 
-  function addRequiredProof(address proofType) public returns(bool) {
-    requiredProofs.push(proofType);
+  function addRequiredProofType(address proofType) public returns(bool) {
+    requiredProofTypes.push(proofType);
     return true;
   }
 

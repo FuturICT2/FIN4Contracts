@@ -27,7 +27,7 @@ contract Fin4Claim {
     claim.quantity = quantity;
     claim.date = date;
     claim.comment = comment;
-    address[] memory requiredProofs = Fin4Token(action).getRequiredProofs();
+    address[] memory requiredProofs = Fin4Token(action).getRequiredProofTypes();
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
