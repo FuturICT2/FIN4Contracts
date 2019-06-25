@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const Card = ({ imagePath, title, description, readMore, actionButtonText }) => {
+const Fin4Card = ({ imagePath, title, description, readMore, actionButtonText }) => {
 	const classes = useStyles();
 
 	return (
@@ -52,4 +52,4 @@ const Card = ({ imagePath, title, description, readMore, actionButtonText }) => 
 	);
 }
 
-export default Card;
+export default Fin4Card;
