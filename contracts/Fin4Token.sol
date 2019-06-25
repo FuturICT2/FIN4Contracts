@@ -3,6 +3,8 @@ pragma solidity ^0.5.0;
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
 
+import 'contracts/Fin4MainAbstract.sol';
+
 contract Fin4Token is ERC20Detailed, ERC20Mintable {
 
   constructor(string memory name, string memory symbol, uint8 decimals, address Fin4MainAdr)
@@ -28,6 +30,8 @@ contract Fin4Token is ERC20Detailed, ERC20Mintable {
   }
 
   function addRequiredProofType(address proofType) public returns(bool) {
+    // bool isRegistered = Fin4Main_adr.call(bytes4(sha3("proofTypeIsRegistered(address)")), proofType);
+    require(Fin4MainAbstract(Fin4Main_adr).proofTypeIsRegistered(proofType), "Proof type is not registered in Fin4Main");
     requiredProofTypes.push(proofType);
     return true;
   }
