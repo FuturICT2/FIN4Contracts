@@ -4,13 +4,14 @@ import "contracts/Fin4Token.sol";
 
 contract Fin4BaseProofType {
 
-  string public name;
-  string public description;
+  string private name;
+  string private  description;
+  string private requirements;
 
-  constructor(string memory _name, string memory _description)
-    public {
-      _name = name;
-      _description = description;
+  constructor(string memory _name, string memory _description, string memory _requirements) public {
+      name = _name;
+      description = _description;
+      requirements = _requirements;
     }
 
   function getName() public returns(string memory) {
@@ -19,6 +20,10 @@ contract Fin4BaseProofType {
 
   function getDescription() public returns(string memory) {
     return description;
+  }
+
+  function getRequirements() public returns(string memory) {
+    return requirements;
   }
 
   function _sendApproval(address tokenAdrToReceiveProof, address claimer, uint claimId) private returns(bool) {
