@@ -11,7 +11,7 @@ contract Fin4Token is ERC20Detailed, ERC20Mintable {
     ERC20()
     public {}
 
-    address[] public requiredProofs;
+  address[] public requiredProofs;
 
   // called from ProofDummy, therefore msg.sender is the address of that SC
   function receiveProofApproval(address claimer, uint claimId) public returns(bool) {

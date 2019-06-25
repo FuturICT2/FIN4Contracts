@@ -17,7 +17,6 @@ contract Fin4Main {
     return children;
   }
 
- 
   function transferTokens(address tokenAddress, address accountAddress) public{
       Fin4Token token = Fin4Token(tokenAddress);
       token.transfer(accountAddress,1);
@@ -65,7 +64,6 @@ contract Fin4Main {
     return (addresses, balances);
   }
 
-
   //TODO: Mintable Role for other contracts trying to run the mintToken funtion.
 
   uint nextClaimId = 0;
@@ -94,20 +92,16 @@ contract Fin4Main {
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
-
     //TODO: Need to be always set to false
     //We set it to true just for the Demo to show the transfer to token to the user
-    if(nextClaimId % 2 == 0){
+    if (nextClaimId % 2 == 0) {
         claim.isApproved = false;
-    }else{
+    } else {
       claim.isApproved = true;
       mintToken(action, quantity);
     }
-    
     nextClaimId ++;
     return nextClaimId - 1;
-
-
   }
 
   function getStatuses() public view returns(uint[] memory, bool[] memory, uint[] memory) {
