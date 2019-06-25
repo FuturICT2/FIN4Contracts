@@ -4,9 +4,7 @@ import Container from '../Styles';
 import ContractRetriever from '../ContractRetriever';
 import styled from 'styled-components';
 
-import DonorCard from '../DonorCard';
-// import { LoadingContainer } from 'drizzle-react-components';
-// import ContractData from '../ContractData';
+import Card from '../Card';
 
 const donationReceivers = [
 	{
@@ -44,7 +42,7 @@ class More extends React.Component {
 			<Wrapper>
 				<div>
 					{spendingOffers.map((s, i) => {
-						return <DonorCard
+						return <Card
 							key={i}
 							title={s.title}
 							imagePath={s.imagePath}
@@ -61,7 +59,7 @@ class More extends React.Component {
 				</Container>
 				<div>
 					{donationReceivers.map((d, i) => {
-						return <DonorCard
+						return <Card
 							key={i}
 							title={d.title}
 							imagePath={d.imagePath}

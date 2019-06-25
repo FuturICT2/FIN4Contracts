@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const DonorCard = ({ imagePath, title, description, readMore, actionButtonText }) => {
+const Card = ({ imagePath, title, description, readMore, actionButtonText }) => {
 	const classes = useStyles();
 
 	return (
@@ -52,4 +52,4 @@ const DonorCard = ({ imagePath, title, description, readMore, actionButtonText }
 	);
 }
 
-export default DonorCard;
+export default Card;
