@@ -13,10 +13,22 @@ contract Fin4BaseProofType {
       _description = description;
     }
 
-  function submitProof(address proofTypeAdrToReceiveProof, uint claimId) public returns(bool) {
-    // TODO method in SC deriving from this one
-    Fin4Token(proofTypeAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
+  function getName() public returns(string memory) {
+    return name;
+  }
+
+  function getDescription() public returns(string memory) {
+    return description;
+  }
+
+  function _sendApproval(address tokenAdrToReceiveProof, address claimer, uint claimId) private returns(bool) {
+    // private ensures it can only be called from within this SC?
+    Fin4Token(tokenAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
     return true;
+  }
+
+  function _sendDisapproval(address tokenAdrToReceiveProof, address claimer, uint claimId, string memory reason) public returns(bool) {
+    // TODO
   }
 
 }
