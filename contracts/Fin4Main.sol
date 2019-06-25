@@ -6,6 +6,7 @@ import 'contracts/Fin4Token.sol';
 contract Fin4Main {
 
   address[] public children;
+  address[] public proofTypes;
 
 	function createNewToken(string memory name, string memory symbol, uint8 decimals) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, decimals);
@@ -15,6 +16,24 @@ contract Fin4Main {
 
   function getChildren() public view returns(address[] memory) {
     return children;
+  }
+
+  function addProofType(address proofType) public returns(bool) {
+    proofTypes.push(proofType);
+    return true;
+  }
+
+  function getProofTypes() public view returns(address[] memory) {
+    return proofTypes;
+  }
+
+  function proofTypeIsRegistered(address proofTypeToCheck) public view returns(bool) {
+    for (uint i = 0; i < proofTypes.length; i++) {
+      if (proofTypes[i] == proofTypeToCheck) {
+        return true;
+      }
+    }
+    return false;
   }
 
   function transferTokens(address tokenAddress, address accountAddress) public{
