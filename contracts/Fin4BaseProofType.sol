@@ -14,15 +14,15 @@ contract Fin4BaseProofType {
       requirements = _requirements;
     }
 
-  function getName() public returns(string memory) {
+  function getName() public view returns(string memory) {
     return name;
   }
 
-  function getDescription() public returns(string memory) {
+  function getDescription() public view returns(string memory) {
     return description;
   }
 
-  function getRequirements() public returns(string memory) {
+  function getRequirements() public view returns(string memory) {
     return requirements;
   }
 
