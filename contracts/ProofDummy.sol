@@ -9,7 +9,7 @@ contract ProofDummy is Fin4BaseProofType {
     public {}
 
     function initProofSubmission(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
-        _sendApproval(tokenAdrToReceiveProof, msg.sender);
+        // _sendApproval(tokenAdrToReceiveProof, msg.sender);
         return true;
     }
 
