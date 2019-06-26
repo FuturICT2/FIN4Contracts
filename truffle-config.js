@@ -3,9 +3,9 @@ var HDWalletProvider = require("truffle-hdwallet-provider");
 
 var keys;
 try {
-	keys = require('./src/config/keys.json');
+	keys = require('./src/config/ethereum-keys.json');
 } catch(err) {
-	console.log("./src/config/keys.json not found");
+	console.log("./src/config/ethereum-keys.json not found");
 }
 
 module.exports = {

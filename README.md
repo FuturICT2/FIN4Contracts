@@ -35,7 +35,7 @@ sudo npm install -g truffle
 ```
 
 #### For testnet-deployment 
-Add and fill this file: `src/config/keys.json`
+Add and fill this file: `src/config/ethereum-keys.json`
 ```json
 {
     "MNEMONIC": "",
