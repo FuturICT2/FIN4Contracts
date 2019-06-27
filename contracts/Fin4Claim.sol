@@ -3,7 +3,7 @@ pragma experimental ABIEncoderV2;
 
 import 'contracts/Fin4Token.sol';
 
-contract Fin4Claim {
+contract Fin4Claim { // abstract class
 
   uint nextClaimId = 0;
 
@@ -27,7 +27,7 @@ contract Fin4Claim {
     claim.quantity = quantity;
     claim.date = date;
     claim.comment = comment;
-    address[] memory requiredProofs = Fin4Token(action).getRequiredProofTypes();
+    address[] memory requiredProofs = getRequiredProofTypes();
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
@@ -42,6 +42,8 @@ contract Fin4Claim {
     nextClaimId ++;
     return nextClaimId - 1;
   }
+
+  function getRequiredProofTypes() public view returns(address[] memory);
 
   function getStatuses() public view returns(uint[] memory, bool[] memory, uint[] memory) {
     uint count = 0;

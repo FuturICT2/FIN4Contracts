@@ -3,11 +3,11 @@ pragma solidity ^0.5.0;
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
 
-import 'contracts/Fin4ClaimAbstract.sol';
+import 'contracts/Fin4Claim.sol';
 
-contract Fin4Token is ERC20Detailed, ERC20Mintable {
+contract Fin4Token is Fin4Claim, ERC20Detailed, ERC20Mintable {
 
-  constructor(string memory name, string memory symbol, uint8 decimals, address Fin4MainAdr)//, address Fin4ClaimAdr)
+  constructor(string memory name, string memory symbol, uint8 decimals, address Fin4MainAdr)
     ERC20Detailed(name, symbol, decimals)
     ERC20Mintable()
     ERC20()
@@ -17,7 +17,6 @@ contract Fin4Token is ERC20Detailed, ERC20Mintable {
     }
 
   address public Fin4Main_adr;
-  address public Fin4Claim_adr;
   address[] public requiredProofTypes;
 
   // called from ProofDummy, therefore msg.sender is the address of that SC
