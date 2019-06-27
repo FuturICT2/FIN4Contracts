@@ -65,4 +65,26 @@ contract Fin4Main {
   }
 
   // TODO: Mintable Role for other contracts trying to run the mintToken funtion.
+
+  address[] public proofTypes;
+
+  function addProofType(address proofType) public returns(bool) {
+    proofTypes.push(proofType);
+    return true;
+  }
+
+  function getProofTypes() public view returns(address[] memory) {
+    return proofTypes;
+  }
+
+  // called from Fin4Token instances to ensure the required proof types there are a subset of the proofTypes here
+  function proofTypeIsRegistered(address proofTypeToCheck) public view returns(bool) {
+    for (uint i = 0; i < proofTypes.length; i++) {
+      if (proofTypes[i] == proofTypeToCheck) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }
