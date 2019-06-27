@@ -3,35 +3,59 @@
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Web3 from 'web3';
 
 class ContractData extends Component {
 	constructor(props, context) {
 		super(props);
 
-		// Fetch initial value from chain and return cache key for reactive updates.
 		var methodArgs = this.props.methodArgs ? this.props.methodArgs : [];
-
 		this.contracts = context.drizzle.contracts;
+
+		if (this.props.contractAddress) {
+			const web3 = new Web3(window.web3.currentProvider);
+			var Fin4TokenJson = require('./build/contracts/Fin4Token.json');
+
+			// needs time and has no callback -> timout below
+			context.drizzle.addContract({
+				contractName: this.props.contractAddress,
+				web3Contract: new web3.eth.Contract(Fin4TokenJson.abi, this.props.contractAddress)
+			});
+
+			this.contractIdentifier = this.props.contractAddress;
+		} else {
+			this.contractIdentifier = this.props.contractName;
+		}
+
 		this.state = {
-			dataKey: this.contracts[this.props.contract].methods[
-				this.props.method
-			].cacheCall(...methodArgs)
+			dataKey: undefined
 		};
+
+		// conditional timout if addContract was called above
+		var setDataKey = setInterval(() => {
+			if (this.props.contractName) {
+				clearInterval(setDataKey);
+			}
+			try {
+				this.setState({
+					dataKey: this.contracts[this.contractIdentifier].methods[this.props.method].cacheCall(...methodArgs)
+				});
+				clearInterval(setDataKey);
+			} catch (e) { }
+		}, 10)
 	}
 
-	// Will not fix legacy component
-	// eslint-disable-next-line react/no-deprecated
 	componentWillReceiveProps(nextProps) {
-		const { methodArgs, contract, method } = this.props;
+		const { methodArgs, contractName, method } = this.props;
 
-		const didContractChange = contract !== nextProps.contract;
+		const didContractChange = contractName !== nextProps.contractName;
 		const didMethodChange = method !== nextProps.method;
 		const didArgsChange =
 			JSON.stringify(methodArgs) !== JSON.stringify(nextProps.methodArgs);
 
 		if (didContractChange || didMethodChange || didArgsChange) {
 			this.setState({
-				dataKey: this.contracts[nextProps.contract].methods[
+				dataKey: this.contracts[nextProps.contractName].methods[
 					nextProps.method
 				].cacheCall(...nextProps.methodArgs)
 			});
@@ -40,7 +64,9 @@ class ContractData extends Component {
 
 	render() {
 		// Contract is not yet intialized.
-		if (!this.props.contracts[this.props.contract].initialized) {
+		if (this.state.dataKey === undefined
+			|| !this.contracts[this.contractIdentifier]
+			|| !this.props.contracts[this.contractIdentifier].initialized) {
 			return <span>Initializing...</span>;
 		}
 
@@ -48,15 +74,13 @@ class ContractData extends Component {
 		if (
 			!(
 				this.state.dataKey in
-				this.props.contracts[this.props.contract][this.props.method]
+				this.props.contracts[this.contractIdentifier][this.props.method]
 			)
 		) {
 			return <span>Fetching...</span>;
 		}
 
-		var displayData = this.props.contracts[this.props.contract][
-			this.props.method
-		][this.state.dataKey].value;
+		var displayData = this.props.contracts[this.contractIdentifier][this.props.method][this.state.dataKey].value;
 
 		if (this.props.callback) {
 			return this.props.callback(displayData);
@@ -70,13 +94,10 @@ ContractData.contextTypes = {
 
 ContractData.propTypes = {
 	contracts: PropTypes.object.isRequired,
-	contract: PropTypes.string.isRequired,
+	contractName: PropTypes.string,
+	contractAddress: PropTypes.string,
 	method: PropTypes.string.isRequired,
-	methodArgs: PropTypes.array,
-	hideIndicator: PropTypes.bool,
-	toUtf8: PropTypes.bool,
-	toAscii: PropTypes.bool,
-	render: PropTypes.func
+	methodArgs: PropTypes.array
 };
 
 /*

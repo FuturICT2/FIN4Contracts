@@ -2,7 +2,7 @@ import React from 'react';
 import { LoadingContainer } from 'drizzle-react-components';
 import ContractForm from '../ContractForm';
 import Container from '../Styles';
-import ContractDataFetcher from '../ContractDataFetcher';
+import ContractData from '../ContractData';
 
 const renderClaimStatusesPerActionContract = displayData => {
 	// TODO
@@ -13,9 +13,9 @@ const contractAdresses2ClaimSubmission = displayData => {
 	const actionAdrsWhereUserHasClaims = displayData.map((address, index) => {
 		return (
 			<li key={index}>
-				<ContractDataFetcher
-					contractAddress={address} // Fin4Token address
-					method="name" // getClaimStatuses
+				<ContractData
+					contractAddress={address}
+					method="name"
 					callback={renderClaimStatusesPerActionContract}
 				/>
 			</li>
@@ -46,11 +46,10 @@ const ActionClaimSubmission = () => (
 		</div>
 
 		<LoadingContainer>
-			<ContractDataFetcher
+			<ContractData
 				contractName="Fin4Main"
 				method="getActionsWhereUserHasClaims"
 				callback={contractAdresses2ClaimSubmission}
-				// header={["ID", "Approved", "Quantity"]}
 			/>
 		</LoadingContainer>
 	</Container>
