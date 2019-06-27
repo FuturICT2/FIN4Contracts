@@ -3,15 +3,6 @@
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import True from '@material-ui/icons/CheckCircleOutline';
-import False from '@material-ui/icons/HighlightOff';
 
 class ContractData extends Component {
 	constructor(props, context) {
@@ -63,91 +54,12 @@ class ContractData extends Component {
 			return <span>Fetching...</span>;
 		}
 
-		// Show a loading spinner for future updates.
-		var pendingSpinner = this.props.contracts[this.props.contract].synced
-			? ''
-			: ' 🔄';
-
-		// Optionally hide loading spinner (EX: ERC20 token symbol).
-		if (this.props.hideIndicator) {
-			pendingSpinner = '';
-		}
-
 		var displayData = this.props.contracts[this.props.contract][
 			this.props.method
 		][this.state.dataKey].value;
 
-		// Optionally convert to UTF8
-		if (this.props.toUtf8) {
-			displayData = this.context.drizzle.web3.utils.hexToUtf8(displayData);
-		}
-
-		// Optionally convert to Ascii
-		if (this.props.toAscii) {
-			displayData = this.context.drizzle.web3.utils.hexToAscii(displayData);
-		}
-
-		// If a render prop is given, have displayData rendered from that component
-		if (this.props.render) {
-			return this.props.render(displayData);
-		}
-
-		// If return value is an array
-		if (Array.isArray(displayData)) {
-			const displayListItems = displayData.map((datum, index) => {
-				return (
-					<li key={index}>
-						{`${datum}`}
-						{pendingSpinner}
-					</li>
-				);
-			});
-
-			return <ul>{displayListItems}</ul>;
-		}
-
-		// If retun value is an object of type 
-		// {0: ["a", "b", ...], 1: ["c", "d", ...], ...}
-		// for displaying table with rows [a, c], [b, d], ...
-		if (typeof displayData === 'object') {
-			return (
-				/* check that there exist entries */
-				(displayData &&
-					Object.values(displayData) &&
-					Object.values(displayData).length > 0 &&
-					Object.values(displayData)[0] &&
-					Object.values(displayData)[0].length > 0) ? (
-						<Paper>
-							<Typography variant="h5" component="h3">
-								{this.props.title}
-							</Typography>
-							<Table>
-								<TableHead>
-									<TableRow>
-										{this.props.header.map((key, index) => {
-											return <TableCell key={index}>{key}</TableCell>
-										})}
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{Object.values(displayData)[0].map((row, r) => {
-										return <TableRow key={row}>{
-											Object.values(displayData).map(column => {
-												return <TableCell key={`${row}-${column}`}>{
-													column[r].toString() === "false" ? 
-													<False /> : 
-													(column[r].toString() === "true" ? 
-													<True /> : 
-													column[r].toString())
-												}</TableCell>
-											})
-										}</TableRow>
-									})}
-								</TableBody>
-							</Table>
-						</Paper>
-					) : (<></>)
-			)
+		if (this.props.callback) {
+			return this.props.callback(displayData);
 		}
 	}
 }

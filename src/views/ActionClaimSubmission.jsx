@@ -3,6 +3,19 @@ import { LoadingContainer } from 'drizzle-react-components';
 import ContractForm from '../ContractForm';
 import ContractData from '../ContractData';
 import Container from '../Styles';
+import StringRetriever from '../StringRetriever';
+
+const contractAdresses2ClaimSubmission = displayData => {
+	const displayListItems = displayData.map((address, index) => {
+		return (
+			<li key={index}>
+				{address}
+			</li>
+		);
+	});
+
+	return <ul>{displayListItems}</ul>;
+}
 
 const ActionClaimSubmission = () => (
 	<Container>
@@ -12,7 +25,7 @@ const ActionClaimSubmission = () => (
 					contract="Fin4Main"
 					method="submit"
 					title="Claim an Action"
-					dropdownList={["action", "Fin4Main", "getChildren"]}
+					dropdownList={["action"]}
 				/>
 			</LoadingContainer>
 
@@ -30,7 +43,8 @@ const ActionClaimSubmission = () => (
 				contract="Fin4Main"
 				method="getActionsWhereUserHasClaims"
 				title="Action types where you have claims"
-				header={["Action type address"]} // "ID", "Approved", "Quantity"]}
+				callback={contractAdresses2ClaimSubmission}
+			//header={["ID", "Approved", "Quantity"]}
 			/>
 		</LoadingContainer>
 	</Container>

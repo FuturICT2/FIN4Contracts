@@ -35,11 +35,11 @@ class ActionTypeSelector extends Component {
             return (
                 <MenuItem key={i} value={tokenAdr}>
                     <span style={{ fontWeight: 'bold' }}>
-                        <StringRetriever tokenAdr={tokenAdr} attribute={'name'} />
+                        <StringRetriever tokenAdr={tokenAdr} attribute="name" />
                     </span>
                     &nbsp;
                     <span>
-                        [<StringRetriever tokenAdr={tokenAdr} attribute={'symbol'} />]
+                        [<StringRetriever tokenAdr={tokenAdr} attribute="symbol" />]
                     </span>
                 </MenuItem>
             );
