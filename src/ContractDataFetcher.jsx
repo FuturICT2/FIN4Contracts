@@ -15,8 +15,8 @@ class ContractDataFetcher extends Component {
             var Fin4TokenJson = require('./build/contracts/Fin4Token.json');
 
             var Fin4TokenConfig = {
-                contractName: this.props.contractAdr,
-                web3Contract: new web3.eth.Contract(Fin4TokenJson.abi, this.props.contractAdr)
+                contractName: this.props.contractAddress,
+                web3Contract: new web3.eth.Contract(Fin4TokenJson.abi, this.props.contractAddress)
             }
             context.drizzle.addContract(Fin4TokenConfig);
 
