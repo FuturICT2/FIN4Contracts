@@ -1,9 +1,7 @@
 pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 
-import 'contracts/Fin4Token.sol';
-
-contract Fin4Claim { // abstract class
+contract Fin4ClaimableAbstract { // abstract class
 
   uint nextClaimId = 0;
 
@@ -11,7 +9,6 @@ contract Fin4Claim { // abstract class
     uint claimId;
     address claimer;
     bool isApproved;
-    address actionAdr;
     uint quantity;
     uint date;
     string comment;
@@ -20,10 +17,9 @@ contract Fin4Claim { // abstract class
 
 	mapping (uint => Claim) public claims;
 
-	function submit(address action, uint quantity, uint date, string memory comment) public returns (uint) {
+	function submit(uint quantity, uint date, string memory comment) public returns (uint) {
     Claim storage claim = claims[nextClaimId];
     claim.claimer = msg.sender;
-    claim.actionAdr = action;
     claim.quantity = quantity;
     claim.date = date;
     claim.comment = comment;
@@ -45,10 +41,10 @@ contract Fin4Claim { // abstract class
 
   function getRequiredProofTypes() public view returns(address[] memory);
 
-  function getStatuses() public view returns(uint[] memory, bool[] memory, uint[] memory) {
+  function getClaimStatuses(address claimer) public view returns(uint[] memory, bool[] memory, uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
-      if (claims[i].claimer == msg.sender) {
+      if (claims[i].claimer == claimer) {
           count ++;
       }
     }
@@ -57,7 +53,7 @@ contract Fin4Claim { // abstract class
     bool[] memory states = new bool[](count);
     count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
-      if (claims[i].claimer == msg.sender) {
+      if (claims[i].claimer == claimer) {
           ids[count] = i;
           states[count] = claims[i].isApproved;
           quantity[count] = claims[i].quantity;

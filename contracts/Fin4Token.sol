@@ -3,9 +3,9 @@ pragma solidity ^0.5.0;
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
 
-import 'contracts/Fin4Claim.sol';
+import 'contracts/Fin4ClaimableAbstract.sol';
 
-contract Fin4Token is Fin4Claim, ERC20Detailed, ERC20Mintable {
+contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
 
   constructor(string memory name, string memory symbol, uint8 decimals, address Fin4MainAdr)
     ERC20Detailed(name, symbol, decimals)
