@@ -3,6 +3,7 @@
 #rm -rf src/build  --> the --reset flag apparently does that
 rm src/config/deployedAddresses.json
 
+rm -r src/build
 truffle compile
 truffle migrate --reset > out
 
