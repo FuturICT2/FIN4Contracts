@@ -117,7 +117,7 @@ class ContractForm extends Component {
 
 						if (inputLabel === 'date') {
 							return (
-								<MuiPickersUtilsProvider key="mpup" utils={DateFnsUtils}>
+								<MuiPickersUtilsProvider key={input.name} utils={DateFnsUtils}>
 									<DatePicker
 										key={input.name}
 										name={input.name}
@@ -133,7 +133,9 @@ class ContractForm extends Component {
 							);
 						}
 
-						if (this.props.dropdownList && this.props.dropdownList[0] === input.name) {
+						if (this.props.dropdownList
+							&& this.props.dropdownList.length > 0
+							&& this.props.dropdownList.includes(input.name)) {
 							return (
 								<ActionTypeSelector key="tsc" onChange={this.handleInputChange} />
 							);

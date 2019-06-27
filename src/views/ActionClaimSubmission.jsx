@@ -32,7 +32,7 @@ const ActionClaimSubmission = () => (
 					contract="Fin4Main"
 					method="submit"
 					title="Claim an Action"
-					dropdownList={["action"]}
+					dropdownList={['action']}
 				/>
 			</LoadingContainer>
 
