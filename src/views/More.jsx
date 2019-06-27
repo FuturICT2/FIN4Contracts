@@ -23,9 +23,7 @@ class More extends React.Component {
 					})}
 				</div>
 				<Container>
-					<LoadingContainer>
-						<ContractRetriever title="My Action Tokens" />
-					</LoadingContainer>
+					<ContractRetriever title="My Action Tokens" />
 				</Container>
 				<div>
 					{dummyData.donationReceivers.map((d, i) => {

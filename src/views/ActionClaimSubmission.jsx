@@ -1,5 +1,4 @@
 import React from 'react';
-import { LoadingContainer } from 'drizzle-react-components';
 import ContractForm from '../ContractForm';
 import Container from '../Styles';
 import ContractData from '../ContractData';
@@ -27,31 +26,25 @@ const contractAdresses2ClaimSubmission = displayData => {
 const ActionClaimSubmission = () => (
 	<Container>
 		<div>
-			<LoadingContainer>
-				<ContractForm
-					contract="Fin4Main"
-					method="submit"
-					title="Claim an Action"
-					dropdownList={['action']}
-				/>
-			</LoadingContainer>
+			<ContractForm
+				contract="Fin4Main"
+				method="submit"
+				title="Claim an Action"
+				dropdownList={['action']}
+			/>
 
-			<LoadingContainer>
-				<ContractForm
-					contract="Fin4Main"
-					method="createNewToken"
-					title="Create a New Action Type"
-				/>
-			</LoadingContainer>
+			<ContractForm
+				contract="Fin4Main"
+				method="createNewToken"
+				title="Create a New Action Type"
+			/>
 		</div>
 
-		<LoadingContainer>
-			<ContractData
-				contractName="Fin4Main"
-				method="getActionsWhereUserHasClaims"
-				callback={contractAdresses2ClaimSubmission}
-			/>
-		</LoadingContainer>
+		<ContractData
+			contractName="Fin4Main"
+			method="getActionsWhereUserHasClaims"
+			callback={contractAdresses2ClaimSubmission}
+		/>
 	</Container>
 );
 
