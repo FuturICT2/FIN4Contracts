@@ -1,20 +1,27 @@
 import React from 'react';
 import { LoadingContainer } from 'drizzle-react-components';
 import ContractForm from '../ContractForm';
-import ContractData from '../ContractData';
 import Container from '../Styles';
-import StringRetriever from '../StringRetriever';
+import ContractDataFetcher from '../ContractDataFetcher';
+
+const renderClaimStatusesPerActionContract = displayData => {
+	// TODO
+	return displayData;
+}
 
 const contractAdresses2ClaimSubmission = displayData => {
-	const displayListItems = displayData.map((address, index) => {
+	const actionAdrsWhereUserHasClaims = displayData.map((address, index) => {
 		return (
 			<li key={index}>
-				{address}
+				<ContractDataFetcher
+					contractAddress={address} // Fin4Token address
+					method="name" // getClaimStatuses
+					callback={renderClaimStatusesPerActionContract}
+				/>
 			</li>
 		);
 	});
-
-	return <ul>{displayListItems}</ul>;
+	return <ul>{actionAdrsWhereUserHasClaims}</ul>;
 }
 
 const ActionClaimSubmission = () => (
@@ -39,12 +46,11 @@ const ActionClaimSubmission = () => (
 		</div>
 
 		<LoadingContainer>
-			<ContractData
-				contract="Fin4Main"
+			<ContractDataFetcher
+				contractName="Fin4Main"
 				method="getActionsWhereUserHasClaims"
-				title="Action types where you have claims"
 				callback={contractAdresses2ClaimSubmission}
-			//header={["ID", "Approved", "Quantity"]}
+				// header={["ID", "Approved", "Quantity"]}
 			/>
 		</LoadingContainer>
 	</Container>
