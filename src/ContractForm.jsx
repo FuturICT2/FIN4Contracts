@@ -179,14 +179,6 @@ class ContractForm extends Component {
 							);
 						}
 
-						if (this.props.dropdownList
-							&& this.props.dropdownList.length > 0
-							&& this.props.dropdownList.includes(input.name)) {
-							return (
-								<ActionTypeSelector key="tsc" onChange={this.handleInputChange} />
-							);
-						}
-
 						return (
 							<TextField // renders the number field automatically by detecting the inputType
 								key={input.name}
