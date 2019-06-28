@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ContractForm from '../ContractForm';
 import Container from '../Styles';
 import ContractData from '../ContractData';
+import ActionTypeSelector from '../ActionTypeSelector';
 
 const renderClaimStatusesPerActionContract = displayData => {
 	console.log(displayData);
@@ -23,29 +24,55 @@ const contractAdresses2ClaimSubmission = displayData => {
 	return <ul>{actionAdrsWhereUserHasClaims}</ul>;
 }
 
-const ActionClaimSubmission = () => (
-	<Container>
-		<div>
-			<ContractForm
+
+
+class ActionClaimSubmission extends Component {
+	constructor(props, context) {
+		super(props);
+		this.handleActionTypeChange = this.handleActionTypeChange.bind(this);
+		this.state = {
+            selectedActionTypeAddress: null
+        };
+    }
+
+	handleActionTypeChange(event) {
+		this.setState({
+			selectedActionTypeAddress: event.target.value
+		});
+	}
+
+	render() {
+		var claimForm = "";
+		if (this.state.selectedActionTypeAddress != null) {
+			claimForm = <ContractForm
 				contract="Fin4Main"
 				method="submit"
 				title="Claim an Action"
-				dropdownList={['action']}
 			/>
+		  }
 
-			<ContractForm
-				contract="Fin4Main"
-				method="createNewToken"
-				title="Create a New Action Type"
-			/>
-		</div>
+		return (
+			<Container>
+				<div>
+					<ActionTypeSelector key="tsc" onChange={this.handleActionTypeChange} />
 
-		<ContractData
-			contractName="Fin4Main"
-			method="getActionsWhereUserHasClaims"
-			callback={contractAdresses2ClaimSubmission}
-		/>
-	</Container>
-);
+					{claimForm}					
+
+					<ContractForm
+						contract="Fin4Main"
+						method="createNewToken"
+						title="Create a New Action Type"
+					/>
+				</div>
+
+				<ContractData
+					contractName="Fin4Main"
+					method="getActionsWhereUserHasClaims"
+					callback={contractAdresses2ClaimSubmission}
+				/>
+			</Container>
+		)
+	}
+}
 
 export default ActionClaimSubmission;
