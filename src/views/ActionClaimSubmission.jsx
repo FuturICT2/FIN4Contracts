@@ -9,8 +9,8 @@ const renderClaimStatusesPerActionContract = displayData => {
 	return "TODO";
 }
 
-const contractAdresses2ClaimSubmission = displayData => {
-	const actionAdrsWhereUserHasClaims = displayData.map((address, index) => {
+const actionsWhereUserHasClaims = displayData => {
+	const listItems = displayData.map((address, index) => {
 		return (
 			<li key={index}>
 				<ContractData
@@ -21,7 +21,7 @@ const contractAdresses2ClaimSubmission = displayData => {
 			</li>
 		);
 	});
-	return <ul>{actionAdrsWhereUserHasClaims}</ul>;
+	return <ul>{listItems}</ul>;
 }
 
 
@@ -72,7 +72,7 @@ class ActionClaimSubmission extends Component {
 				<ContractData
 					contractName="Fin4Main"
 					method="getActionsWhereUserHasClaims"
-					callback={contractAdresses2ClaimSubmission}
+					callback={actionsWhereUserHasClaims}
 				/>
 			</Container>
 		)
