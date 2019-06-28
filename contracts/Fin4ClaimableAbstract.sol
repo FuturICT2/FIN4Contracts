@@ -44,7 +44,7 @@ contract Fin4ClaimableAbstract { // abstract class
 
   function getRequiredProofTypes() public view returns(address[] memory);
 
-  function getClaimStatuses() public view returns(uint[] memory, bool[] memory, uint[] memory) {
+  function getClaimStatuses() public view returns(address, uint[] memory, bool[] memory, uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
       if (claims[i].claimer == msg.sender) {
@@ -63,7 +63,7 @@ contract Fin4ClaimableAbstract { // abstract class
           count ++;
       }
     }
-    return (ids, states, quantity);
+    return (address(this), ids, states, quantity);
   }
 
   function getComment(uint claimID) public view returns(string memory) {
