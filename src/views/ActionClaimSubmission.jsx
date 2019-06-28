@@ -63,7 +63,7 @@ class ActionClaimSubmission extends Component {
 					{claimForm}					
 
 					<ContractForm
-						contract="Fin4Main"
+						contractName="Fin4Main"
 						method="createNewToken"
 						title="Create a New Action Type"
 					/>

@@ -34,8 +34,10 @@ class ContractForm extends Component {
 		this.contracts = context.drizzle.contracts;
 		this.utils = context.drizzle.web3.utils;
 
+		this.contractIdentifier = this.props.contractName;
+
 		// Get the contract ABI
-		const abi = this.contracts[this.props.contract].abi;
+		const abi = this.contracts[this.contractIdentifier].abi;
 
 		this.inputs = [];
 		var initialState = {
@@ -71,12 +73,12 @@ class ContractForm extends Component {
 		});
 
 		if (this.props.sendArgs) {
-			return this.contracts[this.props.contract].methods[
+			return this.contracts[this.contractIdentifier].methods[
 				this.props.method
 			].cacheSend(...convertedInputs, this.props.sendArgs);
 		}
 
-		return this.contracts[this.props.contract].methods[
+		return this.contracts[this.contractIdentifier].methods[
 			this.props.method
 		].cacheSend(...convertedInputs);
 	}
@@ -174,7 +176,7 @@ ContractForm.contextTypes = {
 };
 
 ContractForm.propTypes = {
-	contract: PropTypes.string.isRequired,
+	// contract: PropTypes.string.isRequired,
 	method: PropTypes.string.isRequired,
 	sendArgs: PropTypes.object,
 	labels: PropTypes.arrayOf(PropTypes.string),
