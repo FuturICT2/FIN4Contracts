@@ -37,6 +37,9 @@ class StringRetriever extends Component {
         }
 
         var attribute = this.props.contracts[this.props.tokenAdr][this.props.attribute][this.state.dataKeyName].value;
+        if (this.props.callback) {
+            this.props.callback(this.props.tokenAdr, this.props.attribute, attribute);
+        }
         return attribute
     }
 }

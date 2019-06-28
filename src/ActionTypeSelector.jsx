@@ -13,11 +13,19 @@ class ActionTypeSelector extends Component {
             selected: 'None',
             dataKey: this.contracts.Fin4Main.methods.getChildren.cacheCall()
         };
+        this.contractsInfoObj = {};
+    }
+
+    storeAttribute = (tokenAdr, attribute, value) => {
+        if (!this.contractsInfoObj[tokenAdr]) {
+            this.contractsInfoObj[tokenAdr] = {};
+        }
+        this.contractsInfoObj[tokenAdr][attribute] = value;
     }
 
     handleChange = event => {
         this.setState({ selected: event.target.value, name: event.target.name });
-        this.props.onChange(event);
+        this.props.onChange(event, this.contractsInfoObj[event.target.value]);
     };
 
     render() {
@@ -35,11 +43,11 @@ class ActionTypeSelector extends Component {
             return (
                 <MenuItem key={i} value={tokenAdr}>
                     <span style={{ fontWeight: 'bold' }}>
-                        <StringRetriever tokenAdr={tokenAdr} attribute="name" />
+                        <StringRetriever tokenAdr={tokenAdr} attribute="name" callback={this.storeAttribute} />
                     </span>
                     &nbsp;
                     <span>
-                        [<StringRetriever tokenAdr={tokenAdr} attribute="symbol" />]
+                        [<StringRetriever tokenAdr={tokenAdr} attribute="symbol" callback={this.storeAttribute} />]
                     </span>
                 </MenuItem>
             );

@@ -31,13 +31,17 @@ class ActionClaimSubmission extends Component {
 		super(props);
 		this.handleActionTypeChange = this.handleActionTypeChange.bind(this);
 		this.state = {
-            selectedActionTypeAddress: null
+			selectedActionTypeAddress: null,
+			selectedActionTypeName: "",
+			selectedActionTypeSymbol: ""
         };
     }
 
-	handleActionTypeChange(event) {
+	handleActionTypeChange(event, contractInfoObj) {
 		this.setState({
-			selectedActionTypeAddress: event.target.value
+			selectedActionTypeAddress: event.target.value,
+			selectedActionTypeName: contractInfoObj.name,
+			selectedActionTypeSymbol: contractInfoObj.symbol
 		});
 	}
 
@@ -47,7 +51,7 @@ class ActionClaimSubmission extends Component {
 			claimForm = <ContractForm
 				contract="Fin4Main"
 				method="submit"
-				title="Claim an Action"
+				title={"Claim a " + this.state.selectedActionTypeName + "-Action"}
 			/>
 		  }
 
