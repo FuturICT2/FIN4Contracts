@@ -4,8 +4,8 @@ import Container from '../Styles';
 import ContractData from '../ContractData';
 
 const renderClaimStatusesPerActionContract = displayData => {
-	// TODO
-	return displayData;
+	console.log(displayData);
+	return "TODO";
 }
 
 const contractAdresses2ClaimSubmission = displayData => {
@@ -14,7 +14,7 @@ const contractAdresses2ClaimSubmission = displayData => {
 			<li key={index}>
 				<ContractData
 					contractAddress={address}
-					method="name"
+					method="getClaimStatuses"
 					callback={renderClaimStatusesPerActionContract}
 				/>
 			</li>

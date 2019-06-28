@@ -41,10 +41,10 @@ contract Fin4ClaimableAbstract { // abstract class
 
   function getRequiredProofTypes() public view returns(address[] memory);
 
-  function getClaimStatuses(address claimer) public view returns(uint[] memory, bool[] memory, uint[] memory) {
+  function getClaimStatuses() public view returns(uint[] memory, bool[] memory, uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
-      if (claims[i].claimer == claimer) {
+      if (claims[i].claimer == msg.sender) {
           count ++;
       }
     }
@@ -53,7 +53,7 @@ contract Fin4ClaimableAbstract { // abstract class
     bool[] memory states = new bool[](count);
     count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
-      if (claims[i].claimer == claimer) {
+      if (claims[i].claimer == msg.sender) {
           ids[count] = i;
           states[count] = claims[i].isApproved;
           quantity[count] = claims[i].quantity;
