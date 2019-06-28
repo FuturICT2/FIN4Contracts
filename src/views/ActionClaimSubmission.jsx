@@ -5,8 +5,7 @@ import ContractData from '../ContractData';
 import ActionTypeSelector from '../ActionTypeSelector';
 
 const renderClaimStatusesPerActionContract = displayData => {
-	console.log(displayData);
-	return "TODO";
+	return displayData[0];
 }
 
 const actionsWhereUserHasClaims = displayData => {
