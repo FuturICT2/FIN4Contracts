@@ -50,31 +50,42 @@ class ContractForm extends Component {
 			this.contractIdentifier = this.props.contractName;
 		}
 
-		var initState = () => {
+		var initState = (self) => {
 			// Get the contract ABI
-			const abi = this.contracts[this.contractIdentifier].abi;
+			const abi = self.contracts[self.contractIdentifier].abi;
 
 			this.inputs = [];
 			var initialState = {
-				dates: this.inputs
-					.filter((input, index) => this.props.labels[index] === 'date')
+				dates: self.inputs
+					.filter((input, index) => self.props.labels[index] === 'date')
 					.map(input => new Date())
 			};
 
 			// Iterate over abi for correct function.
 			for (var i = 0; i < abi.length; i++) {
-				if (abi[i].name === this.props.method) {
-					this.inputs = abi[i].inputs;
-
-					for (var j = 0; j < this.inputs.length; j++) {
-						initialState[this.inputs[j].name] = '';
+				if (abi[i].name === self.props.method) {
+					self.inputs = abi[i].inputs;
+					for (var j = 0; j < self.inputs.length; j++) {
+						initialState[self.inputs[j].name] = '';
 					}
-
 					break;
 				}
 			}
 
-			this.setState(initialState);
+			self.setState(initialState);
+		}
+
+		var init = () => {
+			if (this.props.contractAddress) {
+				var self = this;
+				(new Web3(window.web3.currentProvider)).eth.getAccounts(function(error, result) {
+					if (error != null) console.log("Couldn't get accounts");
+					self.contracts[self.contractIdentifier].options.from = result[0];
+					initState(self);
+				});
+			} else {
+				initState(this);
+			}
 		}
 
 		this.state = {};
@@ -82,7 +93,7 @@ class ContractForm extends Component {
 		// conditional timout if addContract was called above
 		var setDataKey = setInterval(() => {
 			try {
-				initState();
+				init();
 				clearInterval(setDataKey);
 			} catch (e) { }
 		}, 10)
