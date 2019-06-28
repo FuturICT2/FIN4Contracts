@@ -49,7 +49,7 @@ class ActionClaimSubmission extends Component {
 		var claimForm = "";
 		if (this.state.selectedActionTypeAddress != null) {
 			claimForm = <ContractForm
-				contract="Fin4Main"
+				contractAddress={this.state.selectedActionTypeAddress}
 				method="submit"
 				title={"Claim a " + this.state.selectedActionTypeName + "-Action"}
 			/>

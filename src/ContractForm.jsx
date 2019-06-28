@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import ActionTypeSelector from './ActionTypeSelector';
+import Web3 from 'web3';
 
 const translateType = type => {
 	switch (true) {
@@ -34,32 +35,57 @@ class ContractForm extends Component {
 		this.contracts = context.drizzle.contracts;
 		this.utils = context.drizzle.web3.utils;
 
-		this.contractIdentifier = this.props.contractName;
+		if (this.props.contractAddress) {
+			const web3 = new Web3(window.web3.currentProvider);
+			var Fin4TokenJson = require('./build/contracts/Fin4Token.json');
 
-		// Get the contract ABI
-		const abi = this.contracts[this.contractIdentifier].abi;
+			// needs time and has no callback -> timout below
+			context.drizzle.addContract({
+				contractName: this.props.contractAddress,
+				web3Contract: new web3.eth.Contract(Fin4TokenJson.abi, this.props.contractAddress)
+			});
 
-		this.inputs = [];
-		var initialState = {
-			dates: this.inputs
-				.filter((input, index) => this.props.labels[index] === 'date')
-				.map(input => new Date())
-		};
-
-		// Iterate over abi for correct function.
-		for (var i = 0; i < abi.length; i++) {
-			if (abi[i].name === this.props.method) {
-				this.inputs = abi[i].inputs;
-
-				for (var j = 0; j < this.inputs.length; j++) {
-					initialState[this.inputs[j].name] = '';
-				}
-
-				break;
-			}
+			this.contractIdentifier = this.props.contractAddress;
+		} else {
+			this.contractIdentifier = this.props.contractName;
 		}
 
-		this.state = initialState;
+		var initState = () => {
+			// Get the contract ABI
+			const abi = this.contracts[this.contractIdentifier].abi;
+
+			this.inputs = [];
+			var initialState = {
+				dates: this.inputs
+					.filter((input, index) => this.props.labels[index] === 'date')
+					.map(input => new Date())
+			};
+
+			// Iterate over abi for correct function.
+			for (var i = 0; i < abi.length; i++) {
+				if (abi[i].name === this.props.method) {
+					this.inputs = abi[i].inputs;
+
+					for (var j = 0; j < this.inputs.length; j++) {
+						initialState[this.inputs[j].name] = '';
+					}
+
+					break;
+				}
+			}
+
+			this.setState(initialState);
+		}
+
+		this.state = {};
+
+		// conditional timout if addContract was called above
+		var setDataKey = setInterval(() => {
+			try {
+				initState();
+				clearInterval(setDataKey);
+			} catch (e) { }
+		}, 10)
 	}
 
 	handleSubmit(event) {
@@ -102,6 +128,9 @@ class ContractForm extends Component {
 			});
 		}
 
+		if (!this.state.dates) { // better identifier then dates? TODO
+			return "";
+		}
 
 		return (
 			<Paper >
