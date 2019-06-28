@@ -28,19 +28,25 @@ const translateType = type => {
 class ContractForm extends Component {
 	constructor(props, context) {
 		super(props);
+		this.context = context;
 
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 
-		this.contracts = context.drizzle.contracts;
-		this.utils = context.drizzle.web3.utils;
+		this.state = {};
+		this.rebuild();
+	}
+
+	rebuild() {
+		this.contracts = this.context.drizzle.contracts;
+		this.utils = this.context.drizzle.web3.utils;
 
 		if (this.props.contractAddress) {
 			const web3 = new Web3(window.web3.currentProvider);
 			var Fin4TokenJson = require('./build/contracts/Fin4Token.json');
 
 			// needs time and has no callback -> timout below
-			context.drizzle.addContract({
+			this.context.drizzle.addContract({
 				contractName: this.props.contractAddress,
 				web3Contract: new web3.eth.Contract(Fin4TokenJson.abi, this.props.contractAddress)
 			});
@@ -88,8 +94,6 @@ class ContractForm extends Component {
 			}
 		}
 
-		this.state = {};
-
 		// conditional timout if addContract was called above
 		var setDataKey = setInterval(() => {
 			try {
@@ -97,6 +101,16 @@ class ContractForm extends Component {
 				clearInterval(setDataKey);
 			} catch (e) { }
 		}, 10)
+	}
+
+	componentDidUpdate(previousProps) {
+		if (this.props.contractName) {
+			return;
+		}
+		const didContractChange = this.props.contractAddress !== previousProps.contractAddress;
+		if (didContractChange) {
+			this.rebuild();
+		}	
 	}
 
 	handleSubmit(event) {
