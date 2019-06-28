@@ -118,16 +118,6 @@ class ContractForm extends Component {
 	}
 
 	render() {
-		if (this.props.render) {
-			return this.props.render({
-				inputs: this.inputs,
-				inputTypes: this.inputs.map(input => translateType(input.type)),
-				state: this.state,
-				handleInputChange: this.handleInputChange,
-				handleSubmit: this.handleSubmit
-			});
-		}
-
 		if (!this.state.dates) { // better identifier then dates? TODO
 			return "";
 		}
@@ -209,7 +199,6 @@ ContractForm.propTypes = {
 	method: PropTypes.string.isRequired,
 	sendArgs: PropTypes.object,
 	labels: PropTypes.arrayOf(PropTypes.string),
-	render: PropTypes.func
 };
 
 /*
