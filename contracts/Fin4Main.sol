@@ -64,14 +64,14 @@ contract Fin4Main {
     return (addresses, balances);
   }
 
-  function _hasChild(address child) private returns (bool) {
+  /*function _hasChild(address child) private returns (bool) {
     for (uint i = 0; i < children.length; i++) {
       if (children[i] == child) {
         return true;
       }
     }
     return false;
-  }
+  }*/
 
   function _userClaimedOnThisActionAlready(address user, address action) private returns (bool) {
     for (uint i = 0; i < actionsWhereUserHasClaims[user].length; i++) {
@@ -82,17 +82,23 @@ contract Fin4Main {
     return false;
   }
 
-  function submit(address action, uint quantity, uint date, string memory comment) public returns (bool) {
+  /*function submit(address action, uint quantity, uint date, string memory comment) public returns (bool) {
     require(_hasChild(action), "An action type with that address is not registered in Fin4Main");
     Fin4Token(action).submit(quantity, date, comment);
     if (!_userClaimedOnThisActionAlready(msg.sender, action)) {
       actionsWhereUserHasClaims[msg.sender].push(action);
     }
     return true;
-  }
+  }*/
 
   function getActionsWhereUserHasClaims() public view returns(address[] memory) {
     return actionsWhereUserHasClaims[msg.sender];
+  }
+
+  function claimSubmissionPingback(address claimer) public returns(bool) {
+    if (!_userClaimedOnThisActionAlready(claimer, msg.sender)) {
+      actionsWhereUserHasClaims[claimer].push(msg.sender);
+    }
   }
 
   mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses

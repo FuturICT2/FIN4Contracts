@@ -36,8 +36,11 @@ contract Fin4ClaimableAbstract { // abstract class
       // TODO mintToken(action, quantity);
     }
     nextClaimId ++;
+    pingbackClaimSubmissionToMain();
     return nextClaimId - 1;
   }
+
+  function pingbackClaimSubmissionToMain() public returns(bool);
 
   function getRequiredProofTypes() public view returns(address[] memory);
 

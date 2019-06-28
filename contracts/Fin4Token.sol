@@ -4,6 +4,7 @@ import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
 
 import 'contracts/Fin4ClaimableAbstract.sol';
+import 'contracts/Fin4MainAbstract.sol';
 
 contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
 
@@ -17,6 +18,11 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
 
   address public Fin4Main_adr;
   address[] public requiredProofTypes;
+
+  function pingbackClaimSubmissionToMain() public returns(bool) {
+    Fin4MainAbstract(Fin4Main_adr).claimSubmissionPingback(msg.sender);
+    return true;
+  }
 
   // called from ProofDummy, therefore msg.sender is the address of that SC
   function receiveProofApproval(address claimer, uint claimId) public returns(bool) {
