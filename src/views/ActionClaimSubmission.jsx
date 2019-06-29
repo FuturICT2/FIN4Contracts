@@ -5,10 +5,12 @@ import ContractData from '../ContractData';
 import ActionTypeSelector from '../ActionTypeSelector';
 
 const renderClaimStatusesPerActionContract = displayData => {
-	var proofTypeAddress = displayData[0];
-	var ids = displayData[1];
-	var states = displayData[2];
-	var quantities = displayData[3];
+	var tokenAddress = displayData[0];
+	var tokenName = displayData[1];
+	var tokenSymbol = displayData[2];
+	var ids = displayData[3];
+	var states = displayData[4];
+	var quantities = displayData[5];
 	const listItems = ids.map((id, index) => {
 		return (
 			<li key={index}>
@@ -16,7 +18,7 @@ const renderClaimStatusesPerActionContract = displayData => {
 			</li>
 		);
 	});
-	return <div>{proofTypeAddress}<ul>{listItems}</ul></div>;
+	return <div><b>{tokenName}</b> [{tokenSymbol}] {tokenAddress}<ul>{listItems}</ul></div>;
 }
 
 const actionsWhereUserHasClaims = displayData => {
@@ -33,8 +35,6 @@ const actionsWhereUserHasClaims = displayData => {
 	});
 	return <ul>{listItems}</ul>;
 }
-
-
 
 class ActionClaimSubmission extends Component {
 	constructor(props, context) {
