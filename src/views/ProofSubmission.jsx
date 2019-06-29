@@ -1,5 +1,20 @@
 import React, { Component } from 'react';
 import Container from '../Styles';
+import ContractData from '../ContractData';
+
+const requiredProofTypeAddresses = data => {
+    var tokenName = data[0];
+    var tokenSymbol = data[1];
+    var claimer = data[2];
+    var isApproved = data[3];
+    var quantity = Number(data[4]);
+    var date = Number(data[5]);
+    var comment = data[6];
+    var requiredProofTypes = data[7];
+    var proofTypeStatuses = data[8];
+
+	return "";
+}
 
 class ProofSubmission extends Component {
 	constructor(props, context) {
@@ -17,6 +32,12 @@ class ProofSubmission extends Component {
 		return (
 			<Container>
                 {this.tokenAddress} {this.claimId}
+                <ContractData
+                    contractAddress={this.tokenAddress}
+                    method="getClaim"
+                    methodArgs={[this.claimId]}
+					callback={requiredProofTypeAddresses}
+				/>
 			</Container>
 		)
 	}
