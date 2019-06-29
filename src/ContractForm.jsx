@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import DateFnsUtils from '@date-io/moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import ActionTypeSelector from './ActionTypeSelector';
+import Web3 from 'web3';
 
 const translateType = type => {
 	switch (true) {
@@ -27,37 +28,89 @@ const translateType = type => {
 class ContractForm extends Component {
 	constructor(props, context) {
 		super(props);
+		this.context = context;
 
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 
-		this.contracts = context.drizzle.contracts;
-		this.utils = context.drizzle.web3.utils;
+		this.state = {};
+		this.rebuild();
+	}
 
-		// Get the contract ABI
-		const abi = this.contracts[this.props.contract].abi;
+	rebuild() {
+		this.contracts = this.context.drizzle.contracts;
+		this.utils = this.context.drizzle.web3.utils;
 
-		this.inputs = [];
-		var initialState = {
-			dates: this.inputs
-				.filter((input, index) => this.props.labels[index] === 'date')
-				.map(input => new Date())
-		};
+		if (this.props.contractAddress) {
+			const web3 = new Web3(window.web3.currentProvider);
+			var Fin4TokenJson = require('./build/contracts/Fin4Token.json');
 
-		// Iterate over abi for correct function.
-		for (var i = 0; i < abi.length; i++) {
-			if (abi[i].name === this.props.method) {
-				this.inputs = abi[i].inputs;
+			// needs time and has no callback -> timout below
+			this.context.drizzle.addContract({
+				contractName: this.props.contractAddress,
+				web3Contract: new web3.eth.Contract(Fin4TokenJson.abi, this.props.contractAddress)
+			});
 
-				for (var j = 0; j < this.inputs.length; j++) {
-					initialState[this.inputs[j].name] = '';
+			this.contractIdentifier = this.props.contractAddress;
+		} else {
+			this.contractIdentifier = this.props.contractName;
+		}
+
+		var initState = (self) => {
+			// Get the contract ABI
+			const abi = self.contracts[self.contractIdentifier].abi;
+
+			this.inputs = [];
+			var initialState = {
+				dates: self.inputs
+					.filter((input, index) => self.props.labels[index] === 'date')
+					.map(input => new Date())
+			};
+
+			// Iterate over abi for correct function.
+			for (var i = 0; i < abi.length; i++) {
+				if (abi[i].name === self.props.method) {
+					self.inputs = abi[i].inputs;
+					for (var j = 0; j < self.inputs.length; j++) {
+						initialState[self.inputs[j].name] = '';
+					}
+					break;
 				}
+			}
 
-				break;
+			self.setState(initialState);
+		}
+
+		var init = () => {
+			if (this.props.contractAddress) {
+				var self = this;
+				(new Web3(window.web3.currentProvider)).eth.getAccounts(function(error, result) {
+					if (error != null) console.log("Couldn't get accounts");
+					self.contracts[self.contractIdentifier].options.from = result[0];
+					initState(self);
+				});
+			} else {
+				initState(this);
 			}
 		}
 
-		this.state = initialState;
+		// conditional timout if addContract was called above
+		var setDataKey = setInterval(() => {
+			try {
+				init();
+				clearInterval(setDataKey);
+			} catch (e) { }
+		}, 10)
+	}
+
+	componentDidUpdate(previousProps) {
+		if (this.props.contractName) {
+			return;
+		}
+		const didContractChange = this.props.contractAddress !== previousProps.contractAddress;
+		if (didContractChange) {
+			this.rebuild();
+		}	
 	}
 
 	handleSubmit(event) {
@@ -71,12 +124,12 @@ class ContractForm extends Component {
 		});
 
 		if (this.props.sendArgs) {
-			return this.contracts[this.props.contract].methods[
+			return this.contracts[this.contractIdentifier].methods[
 				this.props.method
 			].cacheSend(...convertedInputs, this.props.sendArgs);
 		}
 
-		return this.contracts[this.props.contract].methods[
+		return this.contracts[this.contractIdentifier].methods[
 			this.props.method
 		].cacheSend(...convertedInputs);
 	}
@@ -90,16 +143,9 @@ class ContractForm extends Component {
 	}
 
 	render() {
-		if (this.props.render) {
-			return this.props.render({
-				inputs: this.inputs,
-				inputTypes: this.inputs.map(input => translateType(input.type)),
-				state: this.state,
-				handleInputChange: this.handleInputChange,
-				handleSubmit: this.handleSubmit
-			});
+		if (!this.state.dates) { // better identifier then dates? TODO
+			return "";
 		}
-
 
 		return (
 			<Paper >
@@ -117,7 +163,7 @@ class ContractForm extends Component {
 
 						if (inputLabel === 'date') {
 							return (
-								<MuiPickersUtilsProvider key="mpup" utils={DateFnsUtils}>
+								<MuiPickersUtilsProvider key={input.name} utils={DateFnsUtils}>
 									<DatePicker
 										key={input.name}
 										name={input.name}
@@ -130,12 +176,6 @@ class ContractForm extends Component {
 										style={inputFieldStyle}
 									/>
 								</MuiPickersUtilsProvider>
-							);
-						}
-
-						if (this.props.dropdownList && this.props.dropdownList[0] === input.name) {
-							return (
-								<ActionTypeSelector key="tsc" onChange={this.handleInputChange} />
 							);
 						}
 
@@ -172,11 +212,10 @@ ContractForm.contextTypes = {
 };
 
 ContractForm.propTypes = {
-	contract: PropTypes.string.isRequired,
+	// contract: PropTypes.string.isRequired,
 	method: PropTypes.string.isRequired,
 	sendArgs: PropTypes.object,
 	labels: PropTypes.arrayOf(PropTypes.string),
-	render: PropTypes.func
 };
 
 /*

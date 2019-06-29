@@ -51,7 +51,7 @@ contract Fin4Main {
     address[] memory addresses = new address[](count);
 
     uint256 j = 0;
-    for (uint i = 0; i < children.length; i++){
+    for (uint i = 0; i < children.length; i++) {
       Fin4Token tok = Fin4Token(children[i]);
       //uint256 bal = tok.balanceOf(msg.sender);
       //if (bal != 0) {
@@ -64,5 +64,66 @@ contract Fin4Main {
     return (addresses, balances);
   }
 
+  /*function _hasChild(address child) private returns (bool) {
+    for (uint i = 0; i < children.length; i++) {
+      if (children[i] == child) {
+        return true;
+      }
+    }
+    return false;
+  }*/
+
+  function _userClaimedOnThisActionAlready(address user, address action) private returns (bool) {
+    for (uint i = 0; i < actionsWhereUserHasClaims[user].length; i++) {
+      if (actionsWhereUserHasClaims[user][i] == action) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /*function submit(address action, uint quantity, uint date, string memory comment) public returns (bool) {
+    require(_hasChild(action), "An action type with that address is not registered in Fin4Main");
+    Fin4Token(action).submit(quantity, date, comment);
+    if (!_userClaimedOnThisActionAlready(msg.sender, action)) {
+      actionsWhereUserHasClaims[msg.sender].push(action);
+    }
+    return true;
+  }*/
+
+  function getActionsWhereUserHasClaims() public view returns(address[] memory) {
+    return actionsWhereUserHasClaims[msg.sender];
+  }
+
+  function claimSubmissionPingback(address claimer) public returns(bool) {
+    if (!_userClaimedOnThisActionAlready(claimer, msg.sender)) {
+      actionsWhereUserHasClaims[claimer].push(msg.sender);
+    }
+  }
+
+  mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
+
   // TODO: Mintable Role for other contracts trying to run the mintToken funtion.
+
+  address[] public proofTypes;
+
+  function addProofType(address proofType) public returns(bool) {
+    proofTypes.push(proofType);
+    return true;
+  }
+
+  function getProofTypes() public view returns(address[] memory) {
+    return proofTypes;
+  }
+
+  // called from Fin4Token instances to ensure the required proof types there are a subset of the proofTypes here
+  function proofTypeIsRegistered(address proofTypeToCheck) public view returns(bool) {
+    for (uint i = 0; i < proofTypes.length; i++) {
+      if (proofTypes[i] == proofTypeToCheck) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }

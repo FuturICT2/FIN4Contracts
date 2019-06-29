@@ -1,5 +1,4 @@
 import Fin4Main from '../build/contracts/Fin4Main.json';
-import Fin4Claim from '../build/contracts/Fin4Claim.json';
 import ProofDummy from '../build/contracts/ProofDummy.json';
 
 const drizzleConfig = {
@@ -10,7 +9,7 @@ const drizzleConfig = {
 			url: 'ws://127.0.0.1:7545'
 		}
 	},
-	contracts: [Fin4Main, Fin4Claim, ProofDummy]
+	contracts: [Fin4Main, ProofDummy]
 };
 
 export default drizzleConfig;
