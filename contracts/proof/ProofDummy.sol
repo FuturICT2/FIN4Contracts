@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import "contracts/Fin4BaseProofType.sol";
+import "contracts/proof/Fin4BaseProofType.sol";
 
 contract ProofDummy is Fin4BaseProofType {
 
