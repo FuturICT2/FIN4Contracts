@@ -5,7 +5,7 @@ import "contracts/Fin4Token.sol";
 contract Fin4BaseProofType {
 
   string private name;
-  string private  description;
+  string private description;
   string private requirements;
 
   constructor(string memory _name, string memory _description) public {
