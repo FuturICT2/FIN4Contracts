@@ -2,10 +2,10 @@ pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
 
-contract ProofDummy is Fin4BaseProofType {
+contract ImmediateAutoApproval is Fin4BaseProofType {
 
   constructor()
-    Fin4BaseProofType("Proof Dummy", "For dev", "initProofSubmission:")
+    Fin4BaseProofType("ImmediateAutoApproval", "Sends the approval immediately, no checks")
     public {}
 
     function initProofSubmission(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {

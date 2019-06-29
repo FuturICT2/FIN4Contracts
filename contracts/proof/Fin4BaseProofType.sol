@@ -8,10 +8,10 @@ contract Fin4BaseProofType {
   string private  description;
   string private requirements;
 
-  constructor(string memory _name, string memory _description, string memory _requirements) public {
+  constructor(string memory _name, string memory _description) public {
       name = _name;
       description = _description;
-      requirements = _requirements;
+      // requirements = _requirements;
     }
 
   function getName() public view returns(string memory) {
