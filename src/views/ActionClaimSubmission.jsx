@@ -5,7 +5,18 @@ import ContractData from '../ContractData';
 import ActionTypeSelector from '../ActionTypeSelector';
 
 const renderClaimStatusesPerActionContract = displayData => {
-	return displayData[0];
+	var proofTypeAddress = displayData[0];
+	var ids = displayData[1];
+	var states = displayData[2];
+	var quantities = displayData[3];
+	const listItems = ids.map((id, index) => {
+		return (
+			<li key={index}>
+				claimId: <b>{id}</b>, approved: <b>{states[index] + ""}</b>, quantity: <b>{quantities[index]}</b>
+			</li>
+		);
+	});
+	return <div>{proofTypeAddress}<ul>{listItems}</ul></div>;
 }
 
 const actionsWhereUserHasClaims = displayData => {
