@@ -22,8 +22,8 @@ contract Fin4BaseProofType {
     return description;
   }
 
-  function getInfo() public view returns(string memory, string memory) {
-    return (name, description);
+  function getInfo() public view returns(address, string memory, string memory) {
+    return (address(this), name, description);
   }
 
   function getRequirements() public view returns(string memory) {

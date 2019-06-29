@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../Styles';
 import ContractData from '../ContractData';
+import ContractForm from '../ContractForm';
 
 class ProofSubmission extends Component {
 	constructor(props, context) {
@@ -25,22 +26,33 @@ class ProofSubmission extends Component {
         var requiredProofTypes = data[7];
         var proofTypeStatuses = data[8];
 
-        const proofTypeInfo = data => {
-            var name = data[0];
-            var description = data[1];
-            return (<span><b>{name}</b>: {description}</span>)
-        }
+        this.getProofTypeInfoAndShowForm = data => {
+            var address = data[0];
+            var name = data[1];
+            var description = data[2];
+            return (
+                <div>
+                <span><b>{name}</b>: {description}</span>
+                <ContractForm
+                    contractAddress={address}
+                    contractJson={name + ".json"}
+                    method="submitProof"
+                    title={"Initiate proof for " + name}
+                />
+            </div>
+            )
+        };
 
-        const proofTypes = requiredProofTypes.map((address, index) => {
+        this.proofTypes = requiredProofTypes.map((address, index) => {
             return (
                 <div key={"div_" + index}>
                     <hr></hr>
                     <span key={index}>
                         <ContractData
                             contractAddress={address}
-                            contractJson="Fin4BaseProofType"
+                            contractJson="Fin4BaseProofType.json"
                             method="getInfo"
-                            callback={proofTypeInfo}
+                            callback={this.getProofTypeInfoAndShowForm}
                         />
                         <br></br>{proofTypeStatuses[index] + ""}<br></br><br></br>
                     </span>
@@ -50,7 +62,7 @@ class ProofSubmission extends Component {
 
         return (<div>Claim <i>{this.claimId}</i> on action type <b>{tokenName}</b> [{tokenSymbol}]<br></br><br></br>
         isApproved: <i>{isApproved + ""}</i>, quantity: <i>{quantity}</i>, date: <i>{date}</i>, comment: <i>{comment}</i><br></br><br></br>
-        {proofTypes}
+        {this.proofTypes}
         </div>);
     }
 
