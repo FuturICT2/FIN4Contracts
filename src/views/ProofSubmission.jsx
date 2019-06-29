@@ -25,9 +25,26 @@ class ProofSubmission extends Component {
         var requiredProofTypes = data[7];
         var proofTypeStatuses = data[8];
 
+        const proofTypeInfo = data => {
+            var name = data[0];
+            var description = data[1];
+            return (<span><b>{name}</b>: {description}</span>)
+        }
+
         const proofTypes = requiredProofTypes.map((address, index) => {
             return (
-                <span key={index}><hr></hr>{address}<br></br>{proofTypeStatuses[index] + ""}<br></br><br></br></span>
+                <div key={"div_" + index}>
+                    <hr></hr>
+                    <span key={index}>
+                        <ContractData
+                            contractAddress={address}
+                            contractJson="Fin4BaseProofType"
+                            method="getInfo"
+                            callback={proofTypeInfo}
+                        />
+                        <br></br>{proofTypeStatuses[index] + ""}<br></br><br></br>
+                    </span>
+                </div>
             );
         });
 
