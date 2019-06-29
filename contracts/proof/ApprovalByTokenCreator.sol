@@ -13,4 +13,8 @@ contract ApprovalByTokenCreator is Fin4BaseProofType {
         return true;
     }
 
+    function submitProof() public returns(bool) {
+      return true;
+    }
+
 }
