@@ -6,6 +6,8 @@ module.exports = async function (deployer) {
 
 	// via https://ethereum.stackexchange.com/a/30579
 
+	// TODO make a nice loop here through all ProofTypes in /contracts/proof without having to list them specifically?
+
 	await Promise.all([
 		deployer.deploy(ImmediateAutoApproval),
 		deployer.deploy(ApprovalByTokenCreator),
