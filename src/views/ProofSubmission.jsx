@@ -32,7 +32,8 @@ class ProofSubmission extends Component {
             var description = data[2];
             return (
                 <div>
-                <span><b>{name}</b>: {description}</span>
+                <span><b>{name}</b>: {description}<br></br></span>
+                <i>{address}</i>
                 <ContractForm
                     contractAddress={address}
                     contractJson={name + ".json"}
