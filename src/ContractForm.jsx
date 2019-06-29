@@ -49,7 +49,7 @@ class ContractForm extends Component {
 				contractJson = this.props.contractJson;
 			}
 
-			var tokenJson = require('./build/contracts/Fin4Token.json');
+			var tokenJson = require('./build/contracts/' + contractJson);
 
 			// needs time and has no callback -> timout below
 			this.context.drizzle.addContract({
