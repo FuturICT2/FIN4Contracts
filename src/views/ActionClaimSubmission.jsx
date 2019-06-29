@@ -12,9 +12,14 @@ const renderClaimStatusesPerActionContract = displayData => {
 	var states = displayData[4];
 	var quantities = displayData[5];
 	const listItems = ids.map((id, index) => {
+		var linkToProofSubmission = "";
+		if (states[index] === false) {
+			var url = "/proof?tokenAddress=" + tokenAddress + "&claimId=" + ids[index];
+			linkToProofSubmission = (<a href={url}>submit proof</a>);
+		}
 		return (
 			<li key={index}>
-				claimId: <b>{id}</b>, approved: <b>{states[index] + ""}</b>, quantity: <b>{quantities[index]}</b>
+				claimId: <b>{id}</b>, approved: <b>{states[index] + ""}</b>, quantity: <b>{quantities[index]}</b> {linkToProofSubmission}
 			</li>
 		);
 	});
