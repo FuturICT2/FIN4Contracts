@@ -35,7 +35,18 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
   // called from ProofType contracts, therefore msg.sender is the address of that SC
   function receiveProofApproval(address claimer, uint claimId) public returns(bool) {
     claims[claimId].proof_statuses[msg.sender] = true;
-    // TODO if all required proofs are true, switch isApproved to true
+    if (_allProofTypesApprovedOnClaim(claimId)) {
+      claims[claimId].isApproved = true;
+    }
+    return true;
+  }
+
+  function _allProofTypesApprovedOnClaim(uint claimId) private view returns(bool) {
+    for (uint i = 0; i < requiredProofTypes.length; i ++) {
+      if (!claims[claimId].proof_statuses[requiredProofTypes[i]]) {
+        return false;
+      }
+    }
     return true;
   }
 
