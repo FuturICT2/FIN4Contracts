@@ -23,33 +23,37 @@ const renderInfoAndBalancePerChild = data => {
 			<TableCell key="3">{balance}</TableCell>
 		</TableRow>
 	);
-}
+};
 
-const fetchChildrenInfo = data => {
-	return <Paper>
-		<Typography variant="h5" component="h3">
-			My Action Tokens
-		</Typography>
-		<Table>
-			<TableHead>
-				<TableRow>
-					{['Name', 'Symbol', 'Balance'].map((key, index) => {
-						return <TableCell key={index}>{key}</TableCell>;
+const showBalanceByActionType = data => {
+	return (
+		<Paper>
+			<Typography variant="h5" component="h3">
+				My Action Tokens
+			</Typography>
+			<Table>
+				<TableHead>
+					<TableRow>
+						{['Name', 'Symbol', 'Balance'].map((key, index) => {
+							return <TableCell key={index}>{key}</TableCell>;
+						})}
+					</TableRow>
+				</TableHead>
+				<TableBody>
+					{data.map((address, index) => {
+						return (
+							<ContractData
+								key={index}
+								contractAddress={address}
+								method="getInfoAndBalance"
+								callback={renderInfoAndBalancePerChild}
+							/>
+						);
 					})}
-				</TableRow>
-			</TableHead>
-			<TableBody>
-				{data.map((address, index) => {
-					return (
-						<ContractData key={index}
-							contractAddress={address}
-							method="getInfoAndBalance"
-							callback={renderInfoAndBalancePerChild}
-						/>)
-				})}
-			</TableBody>
-		</Table>
-	</Paper>
+				</TableBody>
+			</Table>
+		</Paper>
+	);
 };
 
 class More extends React.Component {
@@ -71,11 +75,7 @@ class More extends React.Component {
 					})}
 				</div>
 				<Container>
-					<ContractData
-						contractName="Fin4Main"
-						method="getChildren"
-						callback={fetchChildrenInfo}
-					/>
+					<ContractData contractName="Fin4Main" method="getChildren" callback={showBalanceByActionType} />
 				</Container>
 				<div>
 					{dummyData.donationReceivers.map((d, i) => {
