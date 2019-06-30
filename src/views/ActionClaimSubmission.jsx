@@ -4,52 +4,49 @@ import { Container, Box } from '../Styles';
 import ContractData from '../ContractData';
 import ActionTypeSelector from '../ActionTypeSelector';
 
-const renderClaimStatusesPerActionContract = data => {
-	var tokenAddress = data[0];
-	var tokenName = data[1];
-	var tokenSymbol = data[2];
-	var ids = data[3];
-	var states = data[4];
-	var quantities = data[5];
-	const listItems = ids
-		? ids.map((id, index) => {
-				var linkToProofSubmission = '';
-				if (states[index] === false) {
-					var url =
-						'/proof?tokenAddress=' + tokenAddress + '&claimId=' + ids[index];
-					linkToProofSubmission = <a href={url}>submit proof</a>;
-				}
-				return (
-					<li key={index}>
-						claimId: <b>{id}</b>, approved: <b>{states[index] + ''}</b>,
-						quantity: <b>{quantities[index]}</b> {linkToProofSubmission}
-					</li>
-				);
-		  })
-		: [];
-	return (
-		<div>
-			<b>{tokenName}</b> [{tokenSymbol}] {tokenAddress}
-			<ul>{listItems}</ul>
-		</div>
-	);
+const getClaims = data => {
+	return data[3].map((id, index) => {
+		return {
+			id: id,
+			tokenName: data[1],
+			tokenSymbol: data[2],
+			tokenAddress: data[0],
+			isApproved: data[4][index],
+			quantity: data[5][index]
+		};
+	});
 };
 
-const actionsWhereUserHasClaims = data => {
-	const listItems = data
+const showClaimByActionTypes = data => {
+	const claims = data
 		? data.map((address, index) => {
 				return (
-					<li key={index}>
-						<ContractData
-							contractAddress={address}
-							method="getClaimStatuses"
-							callback={renderClaimStatusesPerActionContract}
-						/>
-					</li>
+					<ContractData
+						contractAddress={address}
+						method="getClaimStatuses"
+						key={index}
+						callback={data => {
+							return getClaims(data).map(claim => {
+								return (
+									<li key={`${claim.tokenAddress}-${claim.id}`}>
+										{claim.tokenName} [{claim.tokenSymbol}] ({claim.quantity}),{' '}
+										{!claim.isApproved ? (
+											<a
+												href={`/proof?tokenAddress=${claim.tokenAddress}&claimId=${claim.id}`}>
+												submit proof
+											</a>
+										) : (
+											''
+										)}
+									</li>
+								);
+							});
+						}}
+					/>
 				);
 		  })
 		: [];
-	return <ul>{listItems}</ul>;
+	return <ul>{claims}</ul>;
 };
 
 class ActionClaimSubmission extends Component {
@@ -96,7 +93,7 @@ class ActionClaimSubmission extends Component {
 					<ContractData
 						contractName="Fin4Main"
 						method="getActionsWhereUserHasClaims"
-						callback={actionsWhereUserHasClaims}
+						callback={showClaimByActionTypes}
 					/>
 				</Box>
 			</Container>
