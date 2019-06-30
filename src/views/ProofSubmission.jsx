@@ -4,16 +4,16 @@ import ContractData from '../ContractData';
 import ContractForm from '../ContractForm';
 
 class ProofSubmission extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
-        this.state = {};
+		this.state = {};
 
-        // TODO make this parsing more robust with errors if wrong etc.
-        var url = window.location.href;
-        var params = url.split('?')[1].split('&');
-        this.tokenAddress = params[0].split('=')[1];
-        this.claimId = Number(params[1].split('=')[1]);
-    }
+		// TODO make this parsing more robust with errors if wrong etc.
+		var url = window.location.href;
+		var params = url.split('?')[1].split('&');
+		this.tokenAddress = params[0].split('=')[1];
+		this.claimId = Number(params[1].split('=')[1]);
+	}
 
     requiredProofTypeAddresses = data => {
         var tokenName = data[0];
@@ -70,14 +70,14 @@ class ProofSubmission extends Component {
 	render() {
 		return (
 			<Container>
-                <ContractData
-                    contractAddress={this.tokenAddress}
-                    method="getClaim"
-                    methodArgs={[this.claimId]}
-					callback={this.requiredProofTypeAddresses}
-				/>
+          <ContractData
+              contractAddress={this.tokenAddress}
+              method="getClaim"
+              methodArgs={[this.claimId]}
+					    callback={this.requiredProofTypeAddresses}
+				  />
 			</Container>
-		)
+		);
 	}
 }
 
