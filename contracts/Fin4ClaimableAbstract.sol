@@ -48,6 +48,20 @@ contract Fin4ClaimableAbstract { // abstract class
 
   function getRequiredProofTypes() public view returns(address[] memory);
 
+  function getClaim(uint claimId) public view returns(string memory, string memory, address, bool, uint, uint, string memory, address[] memory, bool[] memory) {
+    // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
+
+    Claim storage claim = claims[claimId];
+    // this assumes these are still the same as when the claim was submitted, should we support an evolving set of proof types though? TODO
+    address[] memory requiredProofTypes = getRequiredProofTypes();
+    bool[] memory proofTypeStatuses = new bool[](requiredProofTypes.length);
+    for (uint i = 0; i < requiredProofTypes.length; i ++) {
+      proofTypeStatuses[i] = claim.proof_statuses[requiredProofTypes[i]];
+    }
+
+    return (getName(), getSymbol(), claim.claimer, claim.isApproved, claim.quantity, claim.date, claim.comment, requiredProofTypes, proofTypeStatuses);
+  }
+
   function getClaimStatuses() public view returns(address, string memory, string memory, uint[] memory, bool[] memory, uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {

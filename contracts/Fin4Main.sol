@@ -2,6 +2,7 @@ pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 
 import 'contracts/Fin4Token.sol';
+import 'contracts/proof/Fin4BaseProofType.sol';
 
 contract Fin4Main {
 
@@ -11,9 +12,10 @@ contract Fin4Main {
     Fin4Token newToken = new Fin4Token(name, symbol, decimals, address(this));
 
     // TODO this has to come in as argument, make the ContractForm support an int-array field... or even better a tag-search kinda field for ProofTypes by their name
-    uint[] memory requiredProofTypeIndices = new uint[](2);
+    uint[] memory requiredProofTypeIndices = new uint[](3);
     requiredProofTypeIndices[0] = 0;
     requiredProofTypeIndices[1] = 1;
+    requiredProofTypeIndices[2] = 2;
     for (uint i = 0; i < requiredProofTypeIndices.length; i++) {
       newToken.addRequiredProofType(proofTypes[requiredProofTypeIndices[i]]);
     }
@@ -123,6 +125,11 @@ contract Fin4Main {
 
   function getProofTypes() public view returns(address[] memory) {
     return proofTypes;
+  }
+
+  function getProofTypeInfo(address proofType) public view returns(address, string memory, string memory) {
+      // TODO require
+      return (proofType, Fin4BaseProofType(proofType).getName(), Fin4BaseProofType(proofType).getDescription());
   }
 
   // called from Fin4Token instances to ensure the required proof types there are a subset of the proofTypes here

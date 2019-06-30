@@ -14,12 +14,18 @@ class ContractData extends Component {
 
 		if (this.props.contractAddress) {
 			const web3 = new Web3(window.web3.currentProvider);
-			var Fin4TokenJson = require('./build/contracts/Fin4Token.json');
+
+			var contractJson = 'Fin4Token.json';
+			if (this.props.contractJson) {
+				contractJson = this.props.contractJson;
+			}
+
+			var tokenJson = require('./build/contracts/' + contractJson);
 
 			// needs time and has no callback -> timout below
 			context.drizzle.addContract({
 				contractName: this.props.contractAddress,
-				web3Contract: new web3.eth.Contract(Fin4TokenJson.abi, this.props.contractAddress)
+				web3Contract: new web3.eth.Contract(tokenJson.abi, this.props.contractAddress)
 			});
 
 			this.contractIdentifier = this.props.contractAddress;
