@@ -49,6 +49,9 @@ class ProofSubmission extends Component {
 		};
 
 		this.proofTypes = requiredProofTypes.map((address, index) => {
+            if (proofTypeStatuses[index]) {
+                return <font color="green"><b>Proof type approved</b></font>;
+            }
 			return (
 				<div key={'div_' + index}>
 					<hr></hr>
@@ -60,7 +63,7 @@ class ProofSubmission extends Component {
 							callback={this.getProofTypeInfoAndShowForm}
 						/>
 						<br></br>
-						{proofTypeStatuses[index] + ''}
+						<font color="red"><b>Proof type not approved yet</b></font>
 						<br></br>
 						<br></br>
 					</span>
@@ -71,7 +74,7 @@ class ProofSubmission extends Component {
 		return (
 			<div>
 				Claim <i>{this.claimId}</i> on action type <b>{tokenName}</b> [
-				{tokenSymbol}]<br></br>
+				{tokenSymbol}] <i>{this.tokenAddress}</i><br></br>
 				<br></br>
 				isApproved: <i>{isApproved + ''}</i>, quantity: <i>{quantity}</i>, date:{' '}
 				<i>{date}</i>, comment: <i>{comment}</i>
