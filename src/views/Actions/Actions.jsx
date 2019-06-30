@@ -5,6 +5,7 @@ import ContractData from '../../ContractData';
 import PreviousClaims from './PreviousClaims';
 import { Select, MenuItem } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
 
 class Actions extends Component {
 	constructor(props) {
@@ -16,7 +17,7 @@ class Actions extends Component {
 	}
 
 	handleChange = event => {
-		this.setState({ 
+		this.setState({
 			selected: event.target.value,
 			selectedActionTypeAddress: event.target.value
 		});
@@ -27,28 +28,20 @@ class Actions extends Component {
 		var symbol = data[1];
 		return (
 			<>
-				<span style={{ fontWeight: 'bold' }}>
-					{name}
-				</span>
+				<span style={{ fontWeight: 'bold' }}>{name}</span>
 				&nbsp;
-				<span>
-					[{symbol}]
-				</span>
+				<span>[{symbol}]</span>
 			</>
 		);
-	}	
+	};
 
 	mapChildrenToSelector = data => {
 		var menuItems = data.map((address, index) => {
 			return (
 				<MenuItem key={index} value={address}>
-					<ContractData key={index}
-						contractAddress={address}
-						method="getInfo"
-						callback={this.addressToTokenInfo}
-					/>
+					<ContractData key={index} contractAddress={address} method="getInfo" callback={this.addressToTokenInfo} />
 				</MenuItem>
-			)
+			);
 		});
 		return (
 			<>
@@ -58,6 +51,7 @@ class Actions extends Component {
 				<Select
 					displayEmpty
 					key="select"
+					input={<Input name="action" id="select-action" />}
 					inputProps={{
 						name: 'action',
 						id: 'select-action'
@@ -68,22 +62,21 @@ class Actions extends Component {
 					}}
 					value={this.state.selected}
 					onChange={this.handleChange}>
+					<MenuItem value="None">
+						<em>None</em>
+					</MenuItem>
 					{menuItems}
 				</Select>
 			</>
 		);
-	}
+	};
 
 	render() {
 		return (
 			<Container>
 				<div>
 					<Box title={'Claim an Action'}>
-						<ContractData
-							contractName="Fin4Main"
-							method="getChildren"
-							callback={this.mapChildrenToSelector}
-						/>
+						<ContractData contractName="Fin4Main" method="getChildren" callback={this.mapChildrenToSelector} />
 						{this.state.selectedActionTypeAddress && (
 							<ContractForm contractAddress={this.state.selectedActionTypeAddress} method="submit" />
 						)}
