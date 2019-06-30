@@ -5,6 +5,7 @@ import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
 
 import 'contracts/Fin4ClaimableAbstract.sol';
 import 'contracts/Fin4MainStrut.sol';
+import "contracts/proof/Fin4BaseProofType.sol";
 
 contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
 
@@ -58,6 +59,7 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
     // bool isRegistered = Fin4Main_adr.call(bytes4(sha3("proofTypeIsRegistered(address)")), proofType);
     require(Fin4MainStrut(Fin4Main_adr).proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
+    Fin4BaseProofType(proofType).registerTokenUsingThisProofType(address(this));
     return true;
   }
 

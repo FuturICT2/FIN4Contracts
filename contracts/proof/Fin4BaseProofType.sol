@@ -1,11 +1,12 @@
 pragma solidity ^0.5.0;
 
-import "contracts/Fin4Token.sol";
+import "contracts/Fin4TokenStrut.sol";
 
 contract Fin4BaseProofType {
 
   string private name;
   string private description;
+  address[] public tokensUsingThisProofType;
 
   constructor(string memory _name, string memory _description) public {
       name = _name;
@@ -22,7 +23,12 @@ contract Fin4BaseProofType {
 
   function _sendApproval(address tokenAdrToReceiveProof, uint claimId) internal returns(bool) {
     // private ensures it can only be called from within this SC?
-    Fin4Token(tokenAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
+    Fin4TokenStrut(tokenAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
+    return true;
+  }
+
+  function registerTokenUsingThisProofType(address token) public returns(bool) {
+    tokensUsingThisProofType.push(token);
     return true;
   }
 
