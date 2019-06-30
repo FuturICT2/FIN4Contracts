@@ -55,7 +55,7 @@ const MenuContainer = styled(BottomNavigation)`
 const MenuItem = styled(BottomNavigationAction)`
 	&& {
 		color: ${colors.main2};
-		maxwidth: none;
+		max-width: none;
 		width: 100%;
 	}
 `;
