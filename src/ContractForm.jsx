@@ -163,6 +163,11 @@ class ContractForm extends Component {
 		return (
 			<form onSubmit={this.handleSubmit}>
 				{this.inputs.map((input, index) => {
+					
+					if (this.props.fixArgs && this.props.fixArgs[input.name]) {
+						return "";
+					}
+
 					var inputType = translateType(input.type);
 					var inputLabel = this.props.labels
 						? this.props.labels[index]
