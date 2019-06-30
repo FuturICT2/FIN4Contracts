@@ -1,11 +1,13 @@
+// heavily adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
+
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
-
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import DateFnsUtils from '@date-io/moment';
+import moment from 'moment';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Web3 from 'web3';
 
@@ -28,6 +30,7 @@ class ContractForm extends Component {
 		this.context = context;
 
 		this.state = {};
+		this.inputs = [];
 		this.rebuild();
 	}
 
@@ -64,18 +67,15 @@ class ContractForm extends Component {
 			const abi = self.contracts[self.contractIdentifier].abi;
 
 			this.inputs = [];
-			var initialState = {
-				dates: self.inputs
-					.filter((input, index) => self.props.labels[index] === 'date')
-					.map(input => new Date())
-			};
+			var initialState = {};
 
 			// Iterate over abi for correct function.
 			for (var i = 0; i < abi.length; i++) {
 				if (abi[i].name === self.props.method) {
 					self.inputs = abi[i].inputs;
 					for (var j = 0; j < self.inputs.length; j++) {
-						initialState[self.inputs[j].name] = '';
+						initialState[self.inputs[j].name] =
+							self.inputs[j].name === 'date' ? moment().valueOf() : '';
 					}
 					break;
 				}
@@ -145,23 +145,22 @@ class ContractForm extends Component {
 	};
 
 	handleInputChange = event => {
-		const value =
-			event.target.type === 'checkbox'
-				? event.target.checked
-				: event.target.value;
+		let value;
+
+		if (event.target.type === 'checkbox') {
+			value = event.target.checked;
+		} else if (event.target.type === 'date') {
+			value = moment(event.target.value).valueOf();
+		} else {
+			value = event.target.value;
+		}
+
 		this.setState({ [event.target.name]: value });
 	};
 
 	render() {
-		if (!this.state.dates) {
-			// better identifier then dates? TODO
-			return '';
-		}
-
 		return (
-			<form
-				className="pure-form pure-form-stacked"
-				onSubmit={this.handleSubmit}>
+			<form onSubmit={this.handleSubmit}>
 				{this.inputs.map((input, index) => {
 					
 					if (this.props.fixArgs && this.props.fixArgs[input.name]) {
@@ -178,13 +177,18 @@ class ContractForm extends Component {
 							<MuiPickersUtilsProvider key={input.name} utils={DateFnsUtils}>
 								<DatePicker
 									key={input.name}
-									name={input.name}
 									label={inputLabel}
-									value={this.state.dates[index]}
-									onChange={x => {
-										console.log('coming soon');
-										// return this.handleInputChange(x)
-									}}
+									format="YYYY-MM-DD"
+									value={moment(this.state[input.name]).format('YYYY-MM-DD')}
+									onChange={moment =>
+										this.handleInputChange({
+											target: {
+												name: input.name,
+												value: moment,
+												type: 'date'
+											}
+										})
+									}
 									style={inputFieldStyle}
 								/>
 							</MuiPickersUtilsProvider>

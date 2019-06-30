@@ -1,4 +1,4 @@
-// adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractData.js
+// heavily adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractData.js
 
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
@@ -25,7 +25,10 @@ class ContractData extends Component {
 			// needs time and has no callback -> timout below
 			context.drizzle.addContract({
 				contractName: this.props.contractAddress,
-				web3Contract: new web3.eth.Contract(tokenJson.abi, this.props.contractAddress)
+				web3Contract: new web3.eth.Contract(
+					tokenJson.abi,
+					this.props.contractAddress
+				)
 			});
 
 			this.contractIdentifier = this.props.contractAddress;
@@ -44,11 +47,13 @@ class ContractData extends Component {
 			}
 			try {
 				this.setState({
-					dataKey: this.contracts[this.contractIdentifier].methods[this.props.method].cacheCall(...methodArgs)
+					dataKey: this.contracts[this.contractIdentifier].methods[
+						this.props.method
+					].cacheCall(...methodArgs)
 				});
 				clearInterval(setDataKey);
-			} catch (e) { }
-		}, 10)
+			} catch (e) {}
+		}, 10);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -70,9 +75,11 @@ class ContractData extends Component {
 
 	render() {
 		// Contract is not yet intialized.
-		if (this.state.dataKey === undefined
-			|| !this.contracts[this.contractIdentifier]
-			|| !this.props.contracts[this.contractIdentifier].initialized) {
+		if (
+			this.state.dataKey === undefined ||
+			!this.contracts[this.contractIdentifier] ||
+			!this.props.contracts[this.contractIdentifier].initialized
+		) {
 			return <span>Initializing...</span>;
 		}
 
@@ -86,7 +93,9 @@ class ContractData extends Component {
 			return <span>Fetching...</span>;
 		}
 
-		var displayData = this.props.contracts[this.contractIdentifier][this.props.method][this.state.dataKey].value;
+		var displayData = this.props.contracts[this.contractIdentifier][
+			this.props.method
+		][this.state.dataKey].value;
 
 		if (this.props.callback) {
 			return this.props.callback(displayData);
