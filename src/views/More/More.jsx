@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container } from '../Styles';
-import ContractData from '../ContractData';
-import Card from '../Card';
+import { Container } from '../../Styles';
+import ContractData from '../../ContractData';
+import Card from '../../Card';
 import styled from 'styled-components';
-import dummyData from '../config/dummy-data';
+import dummyData from '../../config/dummy-data';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
