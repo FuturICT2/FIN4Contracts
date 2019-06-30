@@ -36,11 +36,15 @@ class ContractRetriever extends Component {
 		const symbols = [];
 		const balances = [];
 
-		tokenAddressArr.forEach(t => {
-			names.push(<StringRetriever tokenAdr={t} attribute={'name'} />);
-			symbols.push(<StringRetriever tokenAdr={t} attribute={'symbol'} />);
-			balances.push(<StringRetriever tokenAdr={t} attribute={'balanceOfMe'} />);
-		});
+		if (tokenAddressArr) {
+			tokenAddressArr.forEach(t => {
+				names.push(<StringRetriever tokenAdr={t} attribute={'name'} />);
+				symbols.push(<StringRetriever tokenAdr={t} attribute={'symbol'} />);
+				balances.push(
+					<StringRetriever tokenAdr={t} attribute={'balanceOfMe'} />
+				);
+			});
+		}
 
 		return (
 			<Paper>

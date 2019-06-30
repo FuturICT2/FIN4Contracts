@@ -11,20 +11,22 @@ const renderClaimStatusesPerActionContract = data => {
 	var ids = data[3];
 	var states = data[4];
 	var quantities = data[5];
-	const listItems = ids.map((id, index) => {
-		var linkToProofSubmission = '';
-		if (states[index] === false) {
-			var url =
-				'/proof?tokenAddress=' + tokenAddress + '&claimId=' + ids[index];
-			linkToProofSubmission = <a href={url}>submit proof</a>;
-		}
-		return (
-			<li key={index}>
-				claimId: <b>{id}</b>, approved: <b>{states[index] + ''}</b>, quantity:{' '}
-				<b>{quantities[index]}</b> {linkToProofSubmission}
-			</li>
-		);
-	});
+	const listItems = ids
+		? ids.map((id, index) => {
+				var linkToProofSubmission = '';
+				if (states[index] === false) {
+					var url =
+						'/proof?tokenAddress=' + tokenAddress + '&claimId=' + ids[index];
+					linkToProofSubmission = <a href={url}>submit proof</a>;
+				}
+				return (
+					<li key={index}>
+						claimId: <b>{id}</b>, approved: <b>{states[index] + ''}</b>,
+						quantity: <b>{quantities[index]}</b> {linkToProofSubmission}
+					</li>
+				);
+		  })
+		: [];
 	return (
 		<div>
 			<b>{tokenName}</b> [{tokenSymbol}] {tokenAddress}
@@ -34,17 +36,19 @@ const renderClaimStatusesPerActionContract = data => {
 };
 
 const actionsWhereUserHasClaims = data => {
-	const listItems = data.map((address, index) => {
-		return (
-			<li key={index}>
-				<ContractData
-					contractAddress={address}
-					method="getClaimStatuses"
-					callback={renderClaimStatusesPerActionContract}
-				/>
-			</li>
-		);
-	});
+	const listItems = data
+		? data.map((address, index) => {
+				return (
+					<li key={index}>
+						<ContractData
+							contractAddress={address}
+							method="getClaimStatuses"
+							callback={renderClaimStatusesPerActionContract}
+						/>
+					</li>
+				);
+		  })
+		: [];
 	return <ul>{listItems}</ul>;
 };
 

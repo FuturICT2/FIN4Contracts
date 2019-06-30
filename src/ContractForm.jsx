@@ -28,6 +28,7 @@ class ContractForm extends Component {
 		this.context = context;
 
 		this.state = {};
+		this.inputs = [];
 		this.rebuild();
 	}
 
