@@ -66,4 +66,8 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
   function balanceOfMe() public view returns(uint256) {
     return balanceOf(msg.sender);
   }
+
+  function getInfoAndBalance() public view returns(string memory, string memory, uint256) {
+    return (name(), symbol(), balanceOf(msg.sender));
+  }
 }
