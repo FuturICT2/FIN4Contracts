@@ -25,18 +25,39 @@ class ProofSubmission extends Component {
 		var comment = data[6];
 		var requiredProofTypes = data[7];
 		var proofTypeStatuses = data[8];
+		this.proofTypeStatusesObj = {};
+        for (var i = 0; i < requiredProofTypes.length; i ++) {
+            this.proofTypeStatusesObj[requiredProofTypes[i]] = {};
+            this.proofTypeStatusesObj[requiredProofTypes[i]].approved = proofTypeStatuses[i];
+        }
 
 		this.getProofTypeInfoAndShowForm = data => {
 			var address = data[0];
 			var name = data[1];
-			var description = data[2];
+            var description = data[2];
+            
+            var info = 
+                <span>
+                    <b>{name}</b>: {description}
+                    <br></br>
+                    <i>{address}</i>
+                </span>
+
+            if (this.proofTypeStatusesObj[address].approved) {
+                return (
+                    <div>
+                        {info}
+                        <br></br><br></br>
+                        <font color="green"><b>Proof type approved</b></font>
+                    </div>
+                );
+            }
+
 			return (
 				<div>
-					<span>
-						<b>{name}</b>: {description}
-						<br></br>
-					</span>
-					<i>{address}</i>
+                    {info}
+                    <br></br><br></br>
+                    <font color="red"><b>Proof type not approved yet</b></font>
 					<Box title={'Initiate proof for ' + name}>
 						<ContractForm
 							contractAddress={address}
@@ -53,9 +74,6 @@ class ProofSubmission extends Component {
 		};
 
 		this.proofTypes = requiredProofTypes.map((address, index) => {
-            if (proofTypeStatuses[index]) {
-                return <font color="green"><b>Proof type approved</b></font>;
-            }
 			return (
 				<div key={'div_' + index}>
 					<hr></hr>
@@ -66,8 +84,6 @@ class ProofSubmission extends Component {
 							methodArgs={[address]}
 							callback={this.getProofTypeInfoAndShowForm}
 						/>
-						<br></br>
-						<font color="red"><b>Proof type not approved yet</b></font>
 						<br></br>
 						<br></br>
 					</span>
