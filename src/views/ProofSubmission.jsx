@@ -10,6 +10,11 @@ class ProofSubmission extends Component {
 
 		// TODO make this parsing more robust with errors if wrong etc. REMARK: not needed necessarily, we could render this as a popup and transfer the params as props
 		var url = window.location.href;
+
+		if (url.split('?').length < 2) {
+			return;
+		}
+
 		var params = url.split('?')[1].split('&');
 		this.tokenAddress = params[0].split('=')[1];
 		this.claimId = Number(params[1].split('=')[1]);
@@ -106,6 +111,9 @@ class ProofSubmission extends Component {
 	};
 
 	render() {
+		if (this.tokenAddress === undefined) {
+			return "URL must contain parameters for tokenAddress and claimId";
+		}
 		return (
 			<Container>
 				<ContractData
