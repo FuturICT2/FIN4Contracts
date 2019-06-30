@@ -64,11 +64,7 @@ class ContractForm extends Component {
 			const abi = self.contracts[self.contractIdentifier].abi;
 
 			this.inputs = [];
-			var initialState = {
-				dates: self.inputs
-					.filter((input, index) => self.props.labels[index] === 'date')
-					.map(input => new Date())
-			};
+			var initialState = {};
 
 			// Iterate over abi for correct function.
 			for (var i = 0; i < abi.length; i++) {
@@ -150,11 +146,6 @@ class ContractForm extends Component {
 	};
 
 	render() {
-		if (!this.state.dates) {
-			// better identifier then dates? TODO
-			return '';
-		}
-
 		return (
 			<form
 				className="pure-form pure-form-stacked"
@@ -172,7 +163,7 @@ class ContractForm extends Component {
 									key={input.name}
 									name={input.name}
 									label={inputLabel}
-									value={this.state.dates[index]}
+									value={new Date()}
 									onChange={x => {
 										console.log('coming soon');
 										// return this.handleInputChange(x)

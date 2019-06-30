@@ -4,13 +4,13 @@ import { Container, Box } from '../Styles';
 import ContractData from '../ContractData';
 import ActionTypeSelector from '../ActionTypeSelector';
 
-const renderClaimStatusesPerActionContract = displayData => {
-	var tokenAddress = displayData[0];
-	var tokenName = displayData[1];
-	var tokenSymbol = displayData[2];
-	var ids = displayData[3];
-	var states = displayData[4];
-	var quantities = displayData[5];
+const renderClaimStatusesPerActionContract = data => {
+	var tokenAddress = data[0];
+	var tokenName = data[1];
+	var tokenSymbol = data[2];
+	var ids = data[3];
+	var states = data[4];
+	var quantities = data[5];
 	const listItems = ids.map((id, index) => {
 		var linkToProofSubmission = '';
 		if (states[index] === false) {
@@ -33,8 +33,8 @@ const renderClaimStatusesPerActionContract = displayData => {
 	);
 };
 
-const actionsWhereUserHasClaims = displayData => {
-	const listItems = displayData.map((address, index) => {
+const actionsWhereUserHasClaims = data => {
+	const listItems = data.map((address, index) => {
 		return (
 			<li key={index}>
 				<ContractData
@@ -49,9 +49,8 @@ const actionsWhereUserHasClaims = displayData => {
 };
 
 class ActionClaimSubmission extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
-		this.handleActionTypeChange = this.handleActionTypeChange.bind(this);
 		this.state = {
 			selectedActionTypeAddress: null,
 			selectedActionTypeName: '',
@@ -59,13 +58,13 @@ class ActionClaimSubmission extends Component {
 		};
 	}
 
-	handleActionTypeChange(event, contractInfoObj) {
+	handleActionTypeChange = (event, contractInfoObj) => {
 		this.setState({
 			selectedActionTypeAddress: event.target.value,
 			selectedActionTypeName: contractInfoObj.name,
 			selectedActionTypeSymbol: contractInfoObj.symbol
 		});
-	}
+	};
 
 	render() {
 		return (
