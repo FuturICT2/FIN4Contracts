@@ -4,7 +4,7 @@ import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
 
 import 'contracts/Fin4ClaimableAbstract.sol';
-import 'contracts/Fin4MainAbstract.sol';
+import 'contracts/Fin4MainStrut.sol';
 
 contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
 
@@ -28,7 +28,7 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
   address[] public requiredProofTypes;
 
   function pingbackClaimSubmissionToMain() public returns(bool) {
-    Fin4MainAbstract(Fin4Main_adr).claimSubmissionPingback(msg.sender);
+    Fin4MainStrut(Fin4Main_adr).claimSubmissionPingback(msg.sender);
     return true;
   }
 
@@ -56,7 +56,7 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
 
   function addRequiredProofType(address proofType) public returns(bool) {
     // bool isRegistered = Fin4Main_adr.call(bytes4(sha3("proofTypeIsRegistered(address)")), proofType);
-    require(Fin4MainAbstract(Fin4Main_adr).proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Main");
+    require(Fin4MainStrut(Fin4Main_adr).proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
     return true;
   }
