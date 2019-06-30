@@ -8,17 +8,13 @@ class Actions extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedActionTypeAddress: null,
-			selectedActionTypeName: '',
-			selectedActionTypeSymbol: ''
+			selectedActionTypeAddress: null
 		};
 	}
 
 	handleActionTypeChange = (event, contractInfoObj) => {
 		this.setState({
-			selectedActionTypeAddress: event.target.value,
-			selectedActionTypeName: contractInfoObj.name,
-			selectedActionTypeSymbol: contractInfoObj.symbol
+			selectedActionTypeAddress: event.target.value
 		});
 	};
 
