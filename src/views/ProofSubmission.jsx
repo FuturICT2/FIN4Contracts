@@ -8,7 +8,7 @@ class ProofSubmission extends Component {
 		super(props);
 		this.state = {};
 
-		// TODO make this parsing more robust with errors if wrong etc.
+		// TODO make this parsing more robust with errors if wrong etc. REMARK: not needed necessarily, we could render this as a popup and transfer the params as props
 		var url = window.location.href;
 		var params = url.split('?')[1].split('&');
 		this.tokenAddress = params[0].split('=')[1];
