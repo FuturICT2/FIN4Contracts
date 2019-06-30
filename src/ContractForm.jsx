@@ -74,6 +74,7 @@ class ContractForm extends Component {
 				if (abi[i].name === self.props.method) {
 					self.inputs = abi[i].inputs;
 					for (var j = 0; j < self.inputs.length; j++) {
+						// set default date to today for date inputs
 						initialState[self.inputs[j].name] =
 							self.inputs[j].name === 'date' ? moment().valueOf() : '';
 					}
