@@ -2,6 +2,7 @@ pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 
 import 'contracts/Fin4Token.sol';
+import 'contracts/proof/Fin4BaseProofType.sol';
 
 contract Fin4Main {
 
@@ -124,6 +125,11 @@ contract Fin4Main {
 
   function getProofTypes() public view returns(address[] memory) {
     return proofTypes;
+  }
+
+  function getProofTypeInfo(address proofType) public view returns(address, string memory, string memory) {
+      // TODO require
+      return (proofType, Fin4BaseProofType(proofType).getName(), Fin4BaseProofType(proofType).getDescription());
   }
 
   // called from Fin4Token instances to ensure the required proof types there are a subset of the proofTypes here

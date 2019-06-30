@@ -50,9 +50,9 @@ class ProofSubmission extends Component {
                     <hr></hr>
                     <span key={index}>
                         <ContractData
-                            contractAddress={address}
-                            contractJson="Fin4BaseProofType.json"
-                            method="getInfo"
+                            contractName="Fin4Main"
+                            method="getProofTypeInfo"
+                            methodArgs={[address]}
                             callback={this.getProofTypeInfoAndShowForm}
                         />
                         <br></br>{proofTypeStatuses[index] + ""}<br></br><br></br>
