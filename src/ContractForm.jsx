@@ -34,7 +34,30 @@ class ContractForm extends Component {
 		this.rebuild();
 	}
 
-	rebuild() {
+	initState = self => {
+		// Get the contract ABI
+		const abi = self.contracts[self.contractIdentifier].abi;
+
+		this.inputs = [];
+		var initialState = {};
+
+		// Iterate over abi for correct function.
+		for (var i = 0; i < abi.length; i++) {
+			if (abi[i].name === self.props.method) {
+				self.inputs = abi[i].inputs;
+				for (var j = 0; j < self.inputs.length; j++) {
+					// set default date to today for date inputs
+					initialState[self.inputs[j].name] =
+						self.inputs[j].name === 'date' ? moment().valueOf() : '';
+				}
+				break;
+			}
+		}
+
+		self.setState(initialState);
+	};
+
+	rebuild = () => {
 		this.contracts = this.context.drizzle.contracts;
 		this.utils = this.context.drizzle.web3.utils;
 
@@ -62,53 +85,25 @@ class ContractForm extends Component {
 			this.contractIdentifier = this.props.contractName;
 		}
 
-		var initState = self => {
-			// Get the contract ABI
-			const abi = self.contracts[self.contractIdentifier].abi;
-
-			this.inputs = [];
-			var initialState = {};
-
-			// Iterate over abi for correct function.
-			for (var i = 0; i < abi.length; i++) {
-				if (abi[i].name === self.props.method) {
-					self.inputs = abi[i].inputs;
-					for (var j = 0; j < self.inputs.length; j++) {
-						// set default date to today for date inputs
-						initialState[self.inputs[j].name] =
-							self.inputs[j].name === 'date' ? moment().valueOf() : '';
-					}
-					break;
-				}
-			}
-
-			self.setState(initialState);
-		};
-
-		var init = () => {
-			if (this.props.contractAddress) {
-				var self = this;
-				new Web3(window.web3.currentProvider).eth.getAccounts(function(
-					error,
-					result
-				) {
-					if (error != null) console.log("Couldn't get accounts");
-					self.contracts[self.contractIdentifier].options.from = result[0];
-					initState(self);
-				});
-			} else {
-				initState(this);
-			}
-		};
-
 		// conditional timout if addContract was called above
 		var setDataKey = setInterval(() => {
 			try {
-				init();
+				if (this.props.contractAddress) {
+					var self = this;
+					new Web3(window.web3.currentProvider).eth.getAccounts(
+						(error, result) => {
+							if (!error) console.log("Couldn't get accounts");
+							self.contracts[self.contractIdentifier].options.from = result[0];
+							this.initState(self);
+						}
+					);
+				} else {
+					this.initState(this);
+				}
 				clearInterval(setDataKey);
 			} catch (e) {}
 		}, 10);
-	}
+	};
 
 	componentDidUpdate = previousProps => {
 		if (this.props.contractName) {
