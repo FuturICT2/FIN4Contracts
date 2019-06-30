@@ -42,6 +42,10 @@ class ProofSubmission extends Component {
 							contractAddress={address}
 							contractJson={name + '.json'}
 							method="submitProof"
+							fixArgs={{
+                                tokenAdrToReceiveProof: this.tokenAddress, 
+                                claimId: this.claimId + ""
+                            }}
 						/>
 					</Box>
 				</div>

@@ -124,6 +124,9 @@ class ContractForm extends Component {
 		event.preventDefault();
 
 		const convertedInputs = this.inputs.map(input => {
+			if (this.props.fixArgs && this.props.fixArgs[input.name]) {
+				return this.props.fixArgs[input.name];
+			}
 			if (input.type === 'bytes32') {
 				return this.utils.toHex(this.state[input.name]);
 			}
