@@ -45,7 +45,7 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
 
   function addRequiredProofType(address proofType) public returns(bool) {
     // bool isRegistered = Fin4Main_adr.call(bytes4(sha3("proofTypeIsRegistered(address)")), proofType);
-    // require(Fin4MainAbstract(Fin4Main_adr).proofTypeIsRegistered(proofType), "Proof type is not registered in Fin4Main");
+    require(Fin4MainAbstract(Fin4Main_adr).proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
     return true;
   }
