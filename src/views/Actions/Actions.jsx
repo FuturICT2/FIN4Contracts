@@ -1,33 +1,89 @@
 import React, { Component } from 'react';
 import ContractForm from '../../ContractForm';
 import { Container, Box } from '../../Styles';
-import ActionTypeSelector from './ActionTypeSelector';
+import ContractData from '../../ContractData';
 import PreviousClaims from './PreviousClaims';
+import { Select, MenuItem } from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
 
 class Actions extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedActionTypeAddress: null,
-			selectedActionTypeName: '',
-			selectedActionTypeSymbol: ''
+			selected: 'None',
+			selectedActionTypeAddress: null
 		};
 	}
 
-	handleActionTypeChange = (event, contractInfoObj) => {
-		this.setState({
-			selectedActionTypeAddress: event.target.value,
-			selectedActionTypeName: contractInfoObj.name,
-			selectedActionTypeSymbol: contractInfoObj.symbol
+	handleChange = event => {
+		this.setState({ 
+			selected: event.target.value,
+			selectedActionTypeAddress: event.target.value
 		});
 	};
+
+	addressToTokenInfo = data => {
+		var name = data[0];
+		var symbol = data[1];
+		return (
+			<>
+				<span style={{ fontWeight: 'bold' }}>
+					{name}
+				</span>
+				&nbsp;
+				<span>
+					[{symbol}]
+				</span>
+			</>
+		);
+	}	
+
+	mapChildrenToSelector = data => {
+		var menuItems = data.map((address, index) => {
+			return (
+				<MenuItem key={index} value={address}>
+					<ContractData key={index}
+						contractAddress={address}
+						method="getInfo"
+						callback={this.addressToTokenInfo}
+					/>
+				</MenuItem>
+			)
+		});
+		return (
+			<>
+				<InputLabel shrink htmlFor="select-action">
+					action
+				</InputLabel>
+				<Select
+					displayEmpty
+					key="select"
+					inputProps={{
+						name: 'action',
+						id: 'select-action'
+					}}
+					style={{
+						width: '100%',
+						marginBottom: '15px'
+					}}
+					value={this.state.selected}
+					onChange={this.handleChange}>
+					{menuItems}
+				</Select>
+			</>
+		);
+	}
 
 	render() {
 		return (
 			<Container>
 				<div>
 					<Box title={'Claim an Action'}>
-						<ActionTypeSelector key="tsc" onChange={this.handleActionTypeChange} />
+						<ContractData
+							contractName="Fin4Main"
+							method="getChildren"
+							callback={this.mapChildrenToSelector}
+						/>
 						{this.state.selectedActionTypeAddress && (
 							<ContractForm contractAddress={this.state.selectedActionTypeAddress} method="submit" />
 						)}

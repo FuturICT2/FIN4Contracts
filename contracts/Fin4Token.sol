@@ -25,6 +25,10 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
     return symbol();
   }
 
+  function getInfo() public view returns(string memory, string memory) {
+    return (name(), symbol());
+  }
+
   address public Fin4Main_adr;
   address[] public requiredProofTypes;
 
