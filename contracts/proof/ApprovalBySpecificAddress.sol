@@ -8,7 +8,7 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType {
     Fin4BaseProofType("ApprovalBySpecificAddress", "The specified address has to approve")
     public {}
 
-    function submitProof(address approver) public returns(bool) {
+    function submitProof(address tokenAdrToReceiveProof, uint claimId, address approver) public returns(bool) {
       return true;
     }
 
