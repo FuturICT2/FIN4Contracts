@@ -2,12 +2,12 @@ import Home from '@material-ui/icons/DirectionsRun';
 import StarIcon from '@material-ui/icons/StarRate';
 
 import More from '../views/More';
-import ActionClaimSubmission from '../views/ActionClaimSubmission';
+import Actions from '../views/Actions/Actions';
 import ProofSubmission from '../views/ProofSubmission';
 
 const menu = [
 	{
-		component: ActionClaimSubmission,
+		component: Actions,
 		path: '/',
 		label: 'Actions',
 		icon: Home
