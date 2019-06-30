@@ -8,11 +8,6 @@ contract ApprovalByTokenCreator is Fin4BaseProofType {
     Fin4BaseProofType("ApprovalByTokenCreator", "The token creator has to approve")
     public {}
 
-    function initProofSubmission(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
-        // _sendApproval(tokenAdrToReceiveProof, msg.sender);
-        return true;
-    }
-
     function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
       return true;
     }

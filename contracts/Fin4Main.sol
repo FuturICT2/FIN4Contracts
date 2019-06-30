@@ -33,15 +33,6 @@ contract Fin4Main {
       token.transfer(accountAddress,1);
   }
 
-  function getActionNames() public view returns(address[] memory) { // string[] memory
-    //string[] memory actionNames = new string[](children.length);
-    //for (uint i = 0; i < children.length; i++){
-    //    actionNames[i] = Fin4Token(children[i]).name();
-    //}
-    //return (actionNames, children);
-    return children;
-  }
-
   function mintToken(address tokenAddress,uint256 amount) public {
       Fin4Token token = Fin4Token(tokenAddress);
       token.mint(msg.sender,amount);
@@ -54,9 +45,9 @@ contract Fin4Main {
   function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
     uint count = 0;
     for (uint i = 0; i < children.length; i ++) {
-      //if (Fin4Token(children[i]).balanceOf(msg.sender) != 0) {
+      // if (Fin4Token(children[i]).balanceOf(msg.sender) != 0) {
           count ++;
-      //}
+      // }
     }
     uint[] memory balances = new uint[](count);
     address[] memory addresses = new address[](count);
@@ -64,12 +55,12 @@ contract Fin4Main {
     uint256 j = 0;
     for (uint i = 0; i < children.length; i++) {
       Fin4Token tok = Fin4Token(children[i]);
-      //uint256 bal = tok.balanceOf(msg.sender);
-      //if (bal != 0) {
+      // uint256 bal = tok.balanceOf(msg.sender);
+      // if (bal != 0) {
       balances[j] = tok.balanceOf(msg.sender);
       addresses[j] = address(tok);
       j++;
-      //}
+      // }
     }
 
     return (addresses, balances);
@@ -93,15 +84,6 @@ contract Fin4Main {
     return false;
   }
 
-  /*function submit(address action, uint quantity, uint date, string memory comment) public returns (bool) {
-    require(_hasChild(action), "An action type with that address is not registered in Fin4Main");
-    Fin4Token(action).submit(quantity, date, comment);
-    if (!_userClaimedOnThisActionAlready(msg.sender, action)) {
-      actionsWhereUserHasClaims[msg.sender].push(action);
-    }
-    return true;
-  }*/
-
   function getActionsWhereUserHasClaims() public view returns(address[] memory) {
     return actionsWhereUserHasClaims[msg.sender];
   }
@@ -113,8 +95,6 @@ contract Fin4Main {
   }
 
   mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
-
-  // TODO: Mintable Role for other contracts trying to run the mintToken funtion.
 
   address[] public proofTypes;
 
@@ -128,7 +108,7 @@ contract Fin4Main {
   }
 
   function getProofTypeInfo(address proofType) public view returns(address, string memory, string memory) {
-      // TODO require
+      require(proofTypeIsRegistered(proofType), "Address is not registered as proof type on Fin4Main");
       return (proofType, Fin4BaseProofType(proofType).getName(), Fin4BaseProofType(proofType).getDescription());
   }
 
