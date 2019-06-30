@@ -1,6 +1,7 @@
+// heavily adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
+
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
-
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
