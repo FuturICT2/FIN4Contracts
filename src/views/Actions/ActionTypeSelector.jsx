@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Select, MenuItem } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
-import StringRetriever from './StringRetriever';
+import StringRetriever from '../../StringRetriever';
 
 class ActionTypeSelector extends Component {
 	constructor(props, context) {
@@ -37,30 +37,19 @@ class ActionTypeSelector extends Component {
 			return <span>Fetching...</span>;
 		}
 
-		var tokenAddressArr = this.props.contracts.Fin4Main.getChildren[
-			this.state.dataKey
-		].value;
+		var tokenAddressArr = this.props.contracts.Fin4Main.getChildren[this.state.dataKey].value;
 
 		const menuItems = tokenAddressArr
 			? tokenAddressArr.map((tokenAdr, i) => {
 					return (
 						<MenuItem key={i} value={tokenAdr}>
 							<span style={{ fontWeight: 'bold' }}>
-								<StringRetriever
-									tokenAdr={tokenAdr}
-									attribute="name"
-									callback={this.storeAttribute}
-								/>
+								<StringRetriever tokenAdr={tokenAdr} attribute="name" callback={this.storeAttribute} />
 							</span>
 							&nbsp;
 							<span>
 								[
-								<StringRetriever
-									tokenAdr={tokenAdr}
-									attribute="symbol"
-									callback={this.storeAttribute}
-								/>
-								]
+								<StringRetriever tokenAdr={tokenAdr} attribute="symbol" callback={this.storeAttribute} />]
 							</span>
 						</MenuItem>
 					);

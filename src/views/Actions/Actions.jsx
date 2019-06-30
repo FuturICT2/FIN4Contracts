@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ContractForm from '../../ContractForm';
 import { Container, Box } from '../../Styles';
-import ActionTypeSelector from '../../ActionTypeSelector';
+import ActionTypeSelector from './ActionTypeSelector';
 import PreviousClaims from './PreviousClaims';
 
 class Actions extends Component {
