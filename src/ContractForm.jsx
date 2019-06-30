@@ -161,11 +161,10 @@ class ContractForm extends Component {
 
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit}>
+			<form onSubmit={this.handleSubmit} autoComplete="off">
 				{this.inputs.map((input, index) => {
-					
 					if (this.props.fixArgs && this.props.fixArgs[input.name]) {
-						return "";
+						return '';
 					}
 
 					var inputType = translateType(input.type);
