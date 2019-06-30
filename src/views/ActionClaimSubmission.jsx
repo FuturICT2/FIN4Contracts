@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ContractForm from '../ContractForm';
-import Container from '../Styles';
+import { Container, Box } from '../Styles';
 import ContractData from '../ContractData';
 import ActionTypeSelector from '../ActionTypeSelector';
 
@@ -12,19 +12,26 @@ const renderClaimStatusesPerActionContract = displayData => {
 	var states = displayData[4];
 	var quantities = displayData[5];
 	const listItems = ids.map((id, index) => {
-		var linkToProofSubmission = "";
+		var linkToProofSubmission = '';
 		if (states[index] === false) {
-			var url = "/proof?tokenAddress=" + tokenAddress + "&claimId=" + ids[index];
-			linkToProofSubmission = (<a href={url}>submit proof</a>);
+			var url =
+				'/proof?tokenAddress=' + tokenAddress + '&claimId=' + ids[index];
+			linkToProofSubmission = <a href={url}>submit proof</a>;
 		}
 		return (
 			<li key={index}>
-				claimId: <b>{id}</b>, approved: <b>{states[index] + ""}</b>, quantity: <b>{quantities[index]}</b> {linkToProofSubmission}
+				claimId: <b>{id}</b>, approved: <b>{states[index] + ''}</b>, quantity:{' '}
+				<b>{quantities[index]}</b> {linkToProofSubmission}
 			</li>
 		);
 	});
-	return <div><b>{tokenName}</b> [{tokenSymbol}] {tokenAddress}<ul>{listItems}</ul></div>;
-}
+	return (
+		<div>
+			<b>{tokenName}</b> [{tokenSymbol}] {tokenAddress}
+			<ul>{listItems}</ul>
+		</div>
+	);
+};
 
 const actionsWhereUserHasClaims = displayData => {
 	const listItems = displayData.map((address, index) => {
@@ -39,7 +46,7 @@ const actionsWhereUserHasClaims = displayData => {
 		);
 	});
 	return <ul>{listItems}</ul>;
-}
+};
 
 class ActionClaimSubmission extends Component {
 	constructor(props, context) {
@@ -47,10 +54,10 @@ class ActionClaimSubmission extends Component {
 		this.handleActionTypeChange = this.handleActionTypeChange.bind(this);
 		this.state = {
 			selectedActionTypeAddress: null,
-			selectedActionTypeName: "",
-			selectedActionTypeSymbol: ""
-        };
-    }
+			selectedActionTypeName: '',
+			selectedActionTypeSymbol: ''
+		};
+	}
 
 	handleActionTypeChange(event, contractInfoObj) {
 		this.setState({
@@ -61,36 +68,36 @@ class ActionClaimSubmission extends Component {
 	}
 
 	render() {
-		var claimForm = "";
-		if (this.state.selectedActionTypeAddress != null) {
-			claimForm = <ContractForm
-				contractAddress={this.state.selectedActionTypeAddress}
-				method="submit"
-				title={"Claim a " + this.state.selectedActionTypeName + "-Action"}
-			/>
-		  }
-
 		return (
 			<Container>
 				<div>
-					<ActionTypeSelector key="tsc" onChange={this.handleActionTypeChange} />
+					<Box title={'Claim an Action'}>
+						<ActionTypeSelector
+							key="tsc"
+							onChange={this.handleActionTypeChange}
+						/>
+						{this.state.selectedActionTypeAddress && (
+							<ContractForm
+								contractAddress={this.state.selectedActionTypeAddress}
+								method="submit"
+							/>
+						)}
+					</Box>
 
-					{claimForm}					
-
-					<ContractForm
-						contractName="Fin4Main"
-						method="createNewToken"
-						title="Create a New Action Type"
-					/>
+					<Box title="Create a New Action Type">
+						<ContractForm contractName="Fin4Main" method="createNewToken" />
+					</Box>
 				</div>
 
-				<ContractData
-					contractName="Fin4Main"
-					method="getActionsWhereUserHasClaims"
-					callback={actionsWhereUserHasClaims}
-				/>
+				<Box title="My Previous Claims">
+					<ContractData
+						contractName="Fin4Main"
+						method="getActionsWhereUserHasClaims"
+						callback={actionsWhereUserHasClaims}
+					/>
+				</Box>
 			</Container>
-		)
+		);
 	}
 }
 

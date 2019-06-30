@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Container from '../Styles';
+import { Container, Box } from '../Styles';
 import ContractData from '../ContractData';
 import ContractForm from '../ContractForm';
 
@@ -15,67 +15,82 @@ class ProofSubmission extends Component {
 		this.claimId = Number(params[1].split('=')[1]);
 	}
 
-    requiredProofTypeAddresses = data => {
-        var tokenName = data[0];
-        var tokenSymbol = data[1];
-        var claimer = data[2];
-        var isApproved = data[3];
-        var quantity = Number(data[4]);
-        var date = Number(data[5]);
-        var comment = data[6];
-        var requiredProofTypes = data[7];
-        var proofTypeStatuses = data[8];
+	requiredProofTypeAddresses = data => {
+		var tokenName = data[0];
+		var tokenSymbol = data[1];
+		// var claimer = data[2];
+		var isApproved = data[3];
+		var quantity = Number(data[4]);
+		var date = Number(data[5]);
+		var comment = data[6];
+		var requiredProofTypes = data[7];
+		var proofTypeStatuses = data[8];
 
-        this.getProofTypeInfoAndShowForm = data => {
-            var address = data[0];
-            var name = data[1];
-            var description = data[2];
-            return (
-                <div>
-                <span><b>{name}</b>: {description}<br></br></span>
-                <i>{address}</i>
-                <ContractForm
-                    contractAddress={address}
-                    contractJson={name + ".json"}
-                    method="submitProof"
-                    title={"Initiate proof for " + name}
-                />
-            </div>
-            )
-        };
+		this.getProofTypeInfoAndShowForm = data => {
+			var address = data[0];
+			var name = data[1];
+			var description = data[2];
+			return (
+				<div>
+					<span>
+						<b>{name}</b>: {description}
+						<br></br>
+					</span>
+					<i>{address}</i>
+					<Box title={'Initiate proof for ' + name}>
+						<ContractForm
+							contractAddress={address}
+							contractJson={name + '.json'}
+							method="submitProof"
+						/>
+					</Box>
+				</div>
+			);
+		};
 
-        this.proofTypes = requiredProofTypes.map((address, index) => {
-            return (
-                <div key={"div_" + index}>
-                    <hr></hr>
-                    <span key={index}>
-                        <ContractData
-                            contractName="Fin4Main"
-                            method="getProofTypeInfo"
-                            methodArgs={[address]}
-                            callback={this.getProofTypeInfoAndShowForm}
-                        />
-                        <br></br>{proofTypeStatuses[index] + ""}<br></br><br></br>
-                    </span>
-                </div>
-            );
-        });
+		this.proofTypes = requiredProofTypes.map((address, index) => {
+			return (
+				<div key={'div_' + index}>
+					<hr></hr>
+					<span key={index}>
+						<ContractData
+							contractName="Fin4Main"
+							method="getProofTypeInfo"
+							methodArgs={[address]}
+							callback={this.getProofTypeInfoAndShowForm}
+						/>
+						<br></br>
+						{proofTypeStatuses[index] + ''}
+						<br></br>
+						<br></br>
+					</span>
+				</div>
+			);
+		});
 
-        return (<div>Claim <i>{this.claimId}</i> on action type <b>{tokenName}</b> [{tokenSymbol}]<br></br><br></br>
-        isApproved: <i>{isApproved + ""}</i>, quantity: <i>{quantity}</i>, date: <i>{date}</i>, comment: <i>{comment}</i><br></br><br></br>
-        {this.proofTypes}
-        </div>);
-    }
+		return (
+			<div>
+				Claim <i>{this.claimId}</i> on action type <b>{tokenName}</b> [
+				{tokenSymbol}]<br></br>
+				<br></br>
+				isApproved: <i>{isApproved + ''}</i>, quantity: <i>{quantity}</i>, date:{' '}
+				<i>{date}</i>, comment: <i>{comment}</i>
+				<br></br>
+				<br></br>
+				{this.proofTypes}
+			</div>
+		);
+	};
 
 	render() {
 		return (
 			<Container>
-          <ContractData
-              contractAddress={this.tokenAddress}
-              method="getClaim"
-              methodArgs={[this.claimId]}
-					    callback={this.requiredProofTypeAddresses}
-				  />
+				<ContractData
+					contractAddress={this.tokenAddress}
+					method="getClaim"
+					methodArgs={[this.claimId]}
+					callback={this.requiredProofTypeAddresses}
+				/>
 			</Container>
 		);
 	}
