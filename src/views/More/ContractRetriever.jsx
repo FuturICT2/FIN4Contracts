@@ -1,7 +1,7 @@
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import StringRetriever from './StringRetriever';
+import StringRetriever from '../../StringRetriever';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -28,9 +28,7 @@ class ContractRetriever extends Component {
 			return <span>Fetching...</span>;
 		}
 
-		var tokenAddressArr = this.props.contracts.Fin4Main.getChildren[
-			this.state.dataKey
-		].value;
+		var tokenAddressArr = this.props.contracts.Fin4Main.getChildren[this.state.dataKey].value;
 
 		const names = [];
 		const symbols = [];
@@ -40,9 +38,7 @@ class ContractRetriever extends Component {
 			tokenAddressArr.forEach(t => {
 				names.push(<StringRetriever tokenAdr={t} attribute={'name'} />);
 				symbols.push(<StringRetriever tokenAdr={t} attribute={'symbol'} />);
-				balances.push(
-					<StringRetriever tokenAdr={t} attribute={'balanceOfMe'} />
-				);
+				balances.push(<StringRetriever tokenAdr={t} attribute={'balanceOfMe'} />);
 			});
 		}
 

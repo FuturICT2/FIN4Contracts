@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container } from '../Styles';
-import ContractRetriever from '../ContractRetriever';
-import Card from '../Card';
+import { Container } from '../../Styles';
+import ContractRetriever from './ContractRetriever';
+import Card from '../../Card';
 import styled from 'styled-components';
-import dummyData from '../config/dummy-data';
+import dummyData from '../../config/dummy-data';
 
 class More extends React.Component {
 	render() {

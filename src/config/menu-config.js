@@ -1,7 +1,7 @@
 import Home from '@material-ui/icons/DirectionsRun';
 import StarIcon from '@material-ui/icons/StarRate';
 
-import More from '../views/More';
+import More from '../views/More/More';
 import Actions from '../views/Actions/Actions';
 import ProofSubmission from '../views/ProofSubmission';
 
