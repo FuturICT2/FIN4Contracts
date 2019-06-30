@@ -28,9 +28,13 @@ contract Fin4Main {
     return children;
   }
 
-  function transferTokens(address tokenAddress, address accountAddress) public {
+  function getSender() public view returns(address){
+    return msg.sender;
+  }
+
+  function transferTokens(address tokenAddress, address recepient) public {
       Fin4Token token = Fin4Token(tokenAddress);
-      token.transfer(accountAddress,1);
+      token.transferFrom(msg.sender,recepient,1);
   }
 
   function mintToken(address tokenAddress,uint256 amount) public {
