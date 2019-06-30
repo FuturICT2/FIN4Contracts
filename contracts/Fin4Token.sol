@@ -34,7 +34,7 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
 
   // called from ProofDummy, therefore msg.sender is the address of that SC
   function receiveProofApproval(address claimer, uint claimId) public returns(bool) {
-    // claims[claimId].proof_statuses[msg.sender] = true;
+    claims[claimId].proof_statuses[msg.sender] = true;
     // TODO if all required proofs are true, switch isApproved to true
     return true;
   }

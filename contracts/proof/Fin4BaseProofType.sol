@@ -30,7 +30,7 @@ contract Fin4BaseProofType {
     return requirements;
   }
 
-  function _sendApproval(address tokenAdrToReceiveProof, address claimer, uint claimId) private returns(bool) {
+  function _sendApproval(address tokenAdrToReceiveProof, uint claimId) internal returns(bool) {
     // private ensures it can only be called from within this SC?
     Fin4Token(tokenAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
     return true;
