@@ -25,6 +25,8 @@ contract Fin4Main {
     return children;
   }
 
+  // ------------------------- MINT, TRANSFER, BALANCE -------------------------
+
   function transferTokens(address tokenAddress, address recepient) public {
       Fin4Token token = Fin4Token(tokenAddress);
       token.transferFrom(msg.sender,recepient,1);
@@ -42,35 +44,23 @@ contract Fin4Main {
   function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
     uint count = 0;
     for (uint i = 0; i < children.length; i ++) {
-      // if (Fin4Token(children[i]).balanceOf(msg.sender) != 0) {
-          count ++;
-      // }
+        count ++;
     }
     uint[] memory balances = new uint[](count);
     address[] memory addresses = new address[](count);
-
     uint256 j = 0;
     for (uint i = 0; i < children.length; i++) {
       Fin4Token tok = Fin4Token(children[i]);
-      // uint256 bal = tok.balanceOf(msg.sender);
-      // if (bal != 0) {
       balances[j] = tok.balanceOf(msg.sender);
       addresses[j] = address(tok);
       j++;
-      // }
     }
-
     return (addresses, balances);
   }
 
-  /*function _hasChild(address child) private returns (bool) {
-    for (uint i = 0; i < children.length; i++) {
-      if (children[i] == child) {
-        return true;
-      }
-    }
-    return false;
-  }*/
+  // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
+
+  mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
 
   function _userClaimedOnThisActionAlready(address user, address action) private returns (bool) {
     for (uint i = 0; i < actionsWhereUserHasClaims[user].length; i++) {
@@ -90,8 +80,8 @@ contract Fin4Main {
       actionsWhereUserHasClaims[claimer].push(msg.sender);
     }
   }
-
-  mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
+ 
+  // ------------------------- PROOF TYPES -------------------------
 
   address[] public proofTypes;
 
