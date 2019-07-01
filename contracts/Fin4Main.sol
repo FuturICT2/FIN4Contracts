@@ -9,7 +9,7 @@ contract Fin4Main {
   address[] public children;
 
 	function createNewToken(string memory name, string memory symbol, uint8 decimals) public returns(address) {
-    Fin4Token newToken = new Fin4Token(name, symbol, decimals, address(this));
+    Fin4Token newToken = new Fin4Token(name, symbol, decimals, address(this), msg.sender);
 
     // TODO use a "address[] memory requiredProofTypes" argument instead
 
@@ -23,10 +23,6 @@ contract Fin4Main {
 
   function getChildren() public view returns(address[] memory) {
     return children;
-  }
-
-  function getSender() public view returns(address){
-    return msg.sender;
   }
 
   function transferTokens(address tokenAddress, address recepient) public {

@@ -9,13 +9,17 @@ import "contracts/proof/Fin4BaseProofType.sol";
 
 contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
 
-  constructor(string memory name, string memory symbol, uint8 decimals, address Fin4MainAdr)
+  constructor(string memory name, string memory symbol, uint8 decimals, address Fin4MainAddress, address tokenCreatorAddress)
     ERC20Detailed(name, symbol, decimals)
     ERC20Mintable()
     ERC20()
     public {
-      Fin4Main_adr = Fin4MainAdr;
+      Fin4Main = Fin4MainAddress;
+      tokenCreator = tokenCreatorAddress;
     }
+
+  address public Fin4Main;
+  address public tokenCreator;
 
   function getName() public view returns(string memory) {
     return name();
@@ -29,11 +33,10 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
     return (name(), symbol());
   }
 
-  address public Fin4Main_adr;
   address[] public requiredProofTypes;
 
   function pingbackClaimSubmissionToMain() public returns(bool) {
-    Fin4MainStrut(Fin4Main_adr).claimSubmissionPingback(msg.sender);
+    Fin4MainStrut(Fin4Main).claimSubmissionPingback(msg.sender);
     return true;
   }
 
@@ -61,8 +64,8 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
   }
 
   function addRequiredProofType(address proofType) public returns(bool) {
-    // bool isRegistered = Fin4Main_adr.call(bytes4(sha3("proofTypeIsRegistered(address)")), proofType);
-    require(Fin4MainStrut(Fin4Main_adr).proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Main");
+    // bool isRegistered = Fin4Main.call(bytes4(sha3("proofTypeIsRegistered(address)")), proofType);
+    require(Fin4MainStrut(Fin4Main).proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
     Fin4BaseProofType(proofType).registerTokenUsingThisProofType(address(this));
     return true;
