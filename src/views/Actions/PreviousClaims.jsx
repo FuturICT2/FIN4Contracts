@@ -3,19 +3,23 @@ import { Box } from '../../Styles';
 import ContractData from '../../ContractData';
 
 class PreviousClaims extends Component {
-	showClaim = (data, info) => {
+	showClaim = (data, args) => {
+		const tokenAddress = args[0];
+		const tokenName = args[1];
+		const tokenSymbol = args[2];
+		const claimId = args[3];
 		// var claimer = data[0];
-		var isApproved = data[1];
-		var quantity = data[2];
-		var date = data[3];
-		var comment = data[4];
+		const isApproved = data[1];
+		const quantity = data[2];
+		const date = data[3];
+		const comment = data[4];
 		return (
-			<li key={`${info.tokenAddress}-${info.claimId}`}>
+			<li key={`${tokenAddress}-${claimId}`}>
 				<font color="gray">{date}</font>&nbsp;
-				<b>{info.tokenName}</b> [{info.tokenSymbol}] ({quantity}), {comment}
+				<b>{tokenName}</b> [{tokenSymbol}] ({quantity}), {comment}
 				{!isApproved ? (
 					<span>
-						&nbsp;>> <a href={`/proof?tokenAddress=${info.tokenAddress}&claimId=${info.claimId}`}>submit proof</a>
+						&nbsp;>> <a href={`/proof?tokenAddress=${tokenAddress}&claimId=${claimId}`}>submit proof</a>
 					</span>
 				) : (
 					''
@@ -38,13 +42,8 @@ class PreviousClaims extends Component {
 						contractAddress={tokenAddress}
 						method="getClaimInfo"
 						methodArgs={[claimId]}
-						callback={this.showClaim}
-						passToCallback={{
-							tokenAddress: tokenAddress,
-							tokenName: tokenName,
-							tokenSymbol: tokenSymbol,
-							claimId: claimId
-						}}
+						callback={this.getClaimInfo}
+						callbackArgs={[tokenAddress, tokenName, tokenSymbol, claimId]}
 					/>
 				);
 			})

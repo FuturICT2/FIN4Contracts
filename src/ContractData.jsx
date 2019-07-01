@@ -25,10 +25,7 @@ class ContractData extends Component {
 			// needs time and has no callback -> timout below
 			context.drizzle.addContract({
 				contractName: this.props.contractAddress,
-				web3Contract: new web3.eth.Contract(
-					tokenJson.abi,
-					this.props.contractAddress
-				)
+				web3Contract: new web3.eth.Contract(tokenJson.abi, this.props.contractAddress)
 			});
 
 			this.contractIdentifier = this.props.contractAddress;
@@ -47,9 +44,7 @@ class ContractData extends Component {
 			}
 			try {
 				this.setState({
-					dataKey: this.contracts[this.contractIdentifier].methods[
-						this.props.method
-					].cacheCall(...methodArgs)
+					dataKey: this.contracts[this.contractIdentifier].methods[this.props.method].cacheCall(...methodArgs)
 				});
 				clearInterval(setDataKey);
 			} catch (e) {}
@@ -61,14 +56,11 @@ class ContractData extends Component {
 
 		const didContractChange = contractName !== nextProps.contractName;
 		const didMethodChange = method !== nextProps.method;
-		const didArgsChange =
-			JSON.stringify(methodArgs) !== JSON.stringify(nextProps.methodArgs);
+		const didArgsChange = JSON.stringify(methodArgs) !== JSON.stringify(nextProps.methodArgs);
 
 		if (didContractChange || didMethodChange || didArgsChange) {
 			this.setState({
-				dataKey: this.contracts[nextProps.contractName].methods[
-					nextProps.method
-				].cacheCall(...nextProps.methodArgs)
+				dataKey: this.contracts[nextProps.contractName].methods[nextProps.method].cacheCall(...nextProps.methodArgs)
 			});
 		}
 	}
@@ -84,22 +76,15 @@ class ContractData extends Component {
 		}
 
 		// If the cache key we received earlier isn't in the store yet; the initial value is still being fetched.
-		if (
-			!(
-				this.state.dataKey in
-				this.props.contracts[this.contractIdentifier][this.props.method]
-			)
-		) {
+		if (!(this.state.dataKey in this.props.contracts[this.contractIdentifier][this.props.method])) {
 			return <span>Fetching...</span>;
 		}
 
-		var displayData = this.props.contracts[this.contractIdentifier][
-			this.props.method
-		][this.state.dataKey].value;
+		var displayData = this.props.contracts[this.contractIdentifier][this.props.method][this.state.dataKey].value;
 
 		if (this.props.callback) {
-			if (this.props.passToCallback) {
-				return this.props.callback(displayData, this.props.passToCallback);
+			if (this.props.callbackArgs) {
+				return this.props.callback(displayData, this.props.callbackArgs);
 			}
 			return this.props.callback(displayData);
 		}
