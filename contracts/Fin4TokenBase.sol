@@ -47,14 +47,7 @@ contract Fin4TokenBase { // abstract class
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
-    // TODO: Need to be always set to false
-    // We set it to true just for the Demo to show the transfer to token to the user
-    if (nextClaimId % 2 == 0) {
-        claim.isApproved = false;
-    } else {
-      claim.isApproved = true;
-      // TODO mintToken(action, quantity);
-    }
+    claim.isApproved = false;
     nextClaimId ++;
     pingbackClaimSubmissionToMain();
     return nextClaimId - 1;
