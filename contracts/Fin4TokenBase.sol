@@ -126,11 +126,9 @@ contract Fin4TokenBase { // abstract class
   }
 
   function addRequiredProofType(address proofType) public returns(bool) {
-    // bool isRegistered = Fin4Main.call(bytes4(sha3("proofTypeIsRegistered(address)")), proofType);
     require(Fin4MainStrut(Fin4Main).proofTypeIsRegistered(proofType),
       "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
-    Fin4BaseProofType(proofType).registerTokenUsingThisProofType(address(this));
     return true;
   }
 
