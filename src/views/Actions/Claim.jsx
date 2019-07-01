@@ -29,12 +29,12 @@ class ActionClaim extends Component {
 						<ContractData
 							contractAddress={address}
 							method="getInfo"
-							callback={data => {
+							callback={({ 0: name, 1: symbol }) => {
 								return (
 									<>
-										<span style={{ fontWeight: 'bold' }}>{data[0]}</span> {/* name */}
+										<span style={{ fontWeight: 'bold' }}>{name}</span>
 										&nbsp;
-										<span>[{data[1]}]</span> {/* symbol */}
+										<span>[{symbol}]</span>
 									</>
 								);
 							}}
