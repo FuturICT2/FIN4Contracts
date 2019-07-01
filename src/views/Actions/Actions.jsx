@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import ContractForm from '../../ContractForm';
-import { Container, Box } from '../../Styles';
+import { Container } from '../../Styles';
 import PreviousClaims from './PreviousClaims';
 import ActionClaim from './ActionClaim';
+import ActionTypeCreation from './ActionTypeCreation';
 
 class Actions extends Component {
 	render() {
@@ -10,10 +10,7 @@ class Actions extends Component {
 			<Container>
 				<div>
 					<ActionClaim />
-
-					<Box title="Create a New Action Type">
-						<ContractForm contractName="Fin4Main" method="createNewToken" />
-					</Box>
+					<ActionTypeCreation />
 				</div>
 
 				<PreviousClaims />
