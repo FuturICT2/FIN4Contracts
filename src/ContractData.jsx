@@ -103,6 +103,8 @@ class ContractData extends Component {
 			}
 			return this.props.callback(displayData);
 		}
+
+		return displayData;
 	}
 }
 
