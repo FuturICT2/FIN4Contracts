@@ -3,36 +3,24 @@ import { Box } from '../../Styles';
 import ContractData from '../../ContractData';
 
 class PreviousClaims extends Component {
-	showClaim = (data, args) => {
-		const tokenAddress = args[0];
-		const tokenName = args[1];
-		const tokenSymbol = args[2];
-		const claimId = args[3];
-		// var claimer = data[0];
-		const isApproved = data[1];
-		const quantity = data[2];
-		const date = data[3];
-		const comment = data[4];
+	showClaim = (
+		{ 0: claimer, 1: isApproved, 2: quantity, 3: date, 4: comment },
+		[tokenAddress, tokenName, tokenSymbol, claimId]
+	) => {
 		return (
 			<li key={`${tokenAddress}-${claimId}`}>
 				<font color="gray">{date}</font>&nbsp;
 				<b>{tokenName}</b> [{tokenSymbol}] ({quantity}), {comment}
-				{!isApproved ? (
+				{!isApproved && (
 					<span>
 						&nbsp;>> <a href={`/proof?tokenAddress=${tokenAddress}&claimId=${claimId}`}>submit proof</a>
 					</span>
-				) : (
-					''
 				)}
 			</li>
 		);
 	};
 
-	getMyClaimIds = data => {
-		var tokenAddress = data[0];
-		var tokenName = data[1];
-		var tokenSymbol = data[2];
-		var claimIds = data[3];
+	getMyClaimIds = ({ 0: tokenAddress, 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
 		return (
 			claimIds &&
 			claimIds.map((claimId, index) => {
@@ -42,7 +30,7 @@ class PreviousClaims extends Component {
 						contractAddress={tokenAddress}
 						method="getClaimInfo"
 						methodArgs={[claimId]}
-						callback={this.getClaimInfo}
+						callback={this.showClaim}
 						callbackArgs={[tokenAddress, tokenName, tokenSymbol, claimId]}
 					/>
 				);
@@ -51,13 +39,13 @@ class PreviousClaims extends Component {
 	};
 
 	getActionsWhereUserHasClaims = data => {
-		const claims = data
-			? data.map((address, index) => {
-					return (
-						<ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.getMyClaimIds} />
-					);
-			  })
-			: [];
+		const claims =
+			data &&
+			data.map((address, index) => {
+				return (
+					<ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.getMyClaimIds} />
+				);
+			});
 		return <ul>{claims}</ul>;
 	};
 

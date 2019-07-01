@@ -12,10 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-const renderInfoAndBalancePerChild = data => {
-	var name = data[0];
-	var symbol = data[1];
-	var balance = data[2];
+const showRow = ({ 0: name, 1: symbol, 2: balance }) => {
 	return (
 		<TableRow key={symbol}>
 			<TableCell key="1">{name}</TableCell>
@@ -41,14 +38,7 @@ const showBalanceByActionType = data => {
 				</TableHead>
 				<TableBody>
 					{data.map((address, index) => {
-						return (
-							<ContractData
-								key={index}
-								contractAddress={address}
-								method="getInfoAndBalance"
-								callback={renderInfoAndBalancePerChild}
-							/>
-						);
+						return <ContractData key={index} contractAddress={address} method="getInfoAndBalance" callback={showRow} />;
 					})}
 				</TableBody>
 			</Table>
