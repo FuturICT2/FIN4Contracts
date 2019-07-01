@@ -38,6 +38,7 @@ contract Fin4Token is Fin4ClaimableAbstract, ERC20Detailed, ERC20Mintable {
     claims[claimId].proof_statuses[msg.sender] = true;
     if (_allProofTypesApprovedOnClaim(claimId)) {
       claims[claimId].isApproved = true;
+      // TODO mint
     }
     return true;
   }
