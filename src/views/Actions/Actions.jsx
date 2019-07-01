@@ -10,38 +10,39 @@ class Actions extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selected: 'None',
-			selectedActionTypeAddress: null
+			selectedActionTypeAddress: 'None'
 		};
 	}
 
 	handleChange = event => {
 		this.setState({
-			selected: event.target.value,
 			selectedActionTypeAddress: event.target.value
 		});
 	};
 
-	addressToTokenInfo = data => {
-		var name = data[0];
-		var symbol = data[1];
-		return (
-			<>
-				<span style={{ fontWeight: 'bold' }}>{name}</span>
-				&nbsp;
-				<span>[{symbol}]</span>
-			</>
-		);
-	};
-
-	mapChildrenToSelector = data => {
-		var menuItems = data.map((address, index) => {
-			return (
-				<MenuItem key={index} value={address}>
-					<ContractData key={index} contractAddress={address} method="getInfo" callback={this.addressToTokenInfo} />
-				</MenuItem>
-			);
-		});
+	showActionTypes = data => {
+		var menuItems = data
+			? data.map((address, index) => {
+					return (
+						<MenuItem key={index} value={address}>
+							<ContractData
+								key={index}
+								contractAddress={address}
+								method="getInfo"
+								callback={data => {
+									return (
+										<>
+											<span style={{ fontWeight: 'bold' }}>{data[0]}</span> {/* name */}
+											&nbsp;
+											<span>[{data[1]}]</span> {/* symbol */}
+										</>
+									);
+								}}
+							/>
+						</MenuItem>
+					);
+			  })
+			: [];
 
 		return (
 			<>
@@ -49,6 +50,7 @@ class Actions extends Component {
 					action
 				</InputLabel>
 				<Select
+					value={this.state.selectedActionTypeAddress}
 					displayEmpty
 					key="select"
 					inputProps={{
@@ -58,7 +60,6 @@ class Actions extends Component {
 						width: '100%',
 						marginBottom: '15px'
 					}}
-					value={this.state.selected}
 					onChange={this.handleChange}>
 					<MenuItem value="None">
 						<em>None</em>
@@ -74,7 +75,7 @@ class Actions extends Component {
 			<Container>
 				<div>
 					<Box title={'Claim an Action'}>
-						<ContractData contractName="Fin4Main" method="getChildren" callback={this.mapChildrenToSelector} />
+						<ContractData contractName="Fin4Main" method="getChildren" callback={this.showActionTypes} />
 						{this.state.selectedActionTypeAddress !== 'None' && (
 							<ContractForm contractAddress={this.state.selectedActionTypeAddress} method="submit" />
 						)}
