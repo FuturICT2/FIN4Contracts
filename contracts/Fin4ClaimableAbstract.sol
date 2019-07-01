@@ -62,8 +62,8 @@ contract Fin4ClaimableAbstract { // abstract class
     return (getName(), getSymbol(), claim.claimer, claim.isApproved, claim.quantity, claim.date, claim.comment, requiredProofTypes, proofTypeStatuses);
   }
 
-  function getClaimInfo(uint claimId) public view returns(uint, bool, uint, uint, string memory) {
-    return (claimId, claims[claimId].isApproved, claims[claimId].quantity, claims[claimId].date, claims[claimId].comment);
+  function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory) {
+    return (claims[claimId].claimer, claims[claimId].isApproved, claims[claimId].quantity, claims[claimId].date, claims[claimId].comment);
   }
 
   function getMyClaimIds() public view returns(address, string memory, string memory, uint[] memory) {

@@ -5,7 +5,7 @@ import ContractData from '../../ContractData';
 class PreviousClaims extends Component {
 
 	getClaimInfo = (data, info) => {
-		var claimId = data[0];
+		// var claimer = data[0];
 		var isApproved = data[1];
 		var quantity = data[2];
 		var date = data[3];
