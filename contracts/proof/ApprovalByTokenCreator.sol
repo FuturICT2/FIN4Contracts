@@ -5,8 +5,8 @@ import "contracts/proof/modules/ApprovalByOneAddress.sol";
 
 contract ApprovalByTokenCreator is Fin4BaseProofType, ApprovalByOneAddress {
 
-  constructor()
-    Fin4BaseProofType("ApprovalByTokenCreator", "The token creator has to approve")
+  constructor(address Fin4MainAddress)
+    Fin4BaseProofType("ApprovalByTokenCreator", "The token creator has to approve", Fin4MainAddress)
     public {}
 
   function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
