@@ -3,7 +3,7 @@ import { Box } from '../../Styles';
 import ContractData from '../../ContractData';
 
 class PreviousClaims extends Component {
-	getClaim = (data, info) => {
+	showClaim = (data, info) => {
 		// var claimer = data[0];
 		var isApproved = data[1];
 		var quantity = data[2];
@@ -38,7 +38,7 @@ class PreviousClaims extends Component {
 						contractAddress={tokenAddress}
 						method="getClaimInfo"
 						methodArgs={[claimId]}
-						callback={this.getClaim}
+						callback={this.showClaim}
 						passToCallback={{
 							tokenAddress: tokenAddress,
 							tokenName: tokenName,
