@@ -3,6 +3,7 @@ import { Container } from '../../Styles';
 import PreviousClaims from './PreviousClaims';
 import Claim from './Claim';
 import TypeCreation from './TypeCreation';
+import Messages from '../Messages';
 
 class Actions extends Component {
 	render() {
@@ -12,8 +13,10 @@ class Actions extends Component {
 					<Claim />
 					<TypeCreation />
 				</div>
-
-				<PreviousClaims />
+				<div>
+					<PreviousClaims />
+					<Messages />
+				</div>
 			</Container>
 		);
 	}
