@@ -3,6 +3,14 @@ pragma experimental ABIEncoderV2;
 
 contract Fin4TokenBase { // abstract class
 
+  address public Fin4Main;
+  address public tokenCreator;
+
+  constructor(address Fin4MainAddress, address tokenCreatorAddress) public {
+    Fin4Main = Fin4MainAddress;
+    tokenCreator = tokenCreatorAddress;
+  }
+
   uint nextClaimId = 0;
 
 	struct Claim {

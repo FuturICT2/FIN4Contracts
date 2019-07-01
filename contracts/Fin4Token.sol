@@ -13,13 +13,8 @@ contract Fin4Token is Fin4TokenBase, ERC20Detailed, ERC20Mintable {
     ERC20Detailed(name, symbol, decimals)
     ERC20Mintable()
     ERC20()
-    public {
-      Fin4Main = Fin4MainAddress;
-      tokenCreator = tokenCreatorAddress;
-    }
-
-  address public Fin4Main;
-  address public tokenCreator;
+    Fin4TokenBase(Fin4MainAddress, tokenCreatorAddress)
+    public {}
 
   function getName() public view returns(string memory) {
     return name();
