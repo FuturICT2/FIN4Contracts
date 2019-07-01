@@ -51,10 +51,12 @@ class ContractData extends Component {
 		}, 10);
 	}
 
-	componentWillReceiveProps({ methodArgsNext, contractNameNext, methodNext }) {
-		const didContractChange = contractName !== contractNameNext;
-		const didMethodChange = method !== methodNext;
-		const didArgsChange = JSON.stringify(methodArgs) !== JSON.stringify(methodArgsNext);
+	componentWillReceiveProps(nextProps) {
+		const { methodArgs, contractName, method } = this.props;
+
+		const didContractChange = contractName !== nextProps.contractName;
+		const didMethodChange = method !== nextProps.method;
+		const didArgsChange = JSON.stringify(methodArgs) !== JSON.stringify(nextProps.methodArgs);
 
 		if (didContractChange || didMethodChange || didArgsChange) {
 			this.setState({
