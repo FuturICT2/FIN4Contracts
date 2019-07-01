@@ -13,7 +13,7 @@ contract Fin4Main {
 
     // TODO use a "address[] memory requiredProofTypes" argument instead
 
-    for (uint i = 0; i < 2; i++) {
+    for (uint i = 0; i < 3; i++) {
       newToken.addRequiredProofType(proofTypes[i]);
     }
 
@@ -29,12 +29,12 @@ contract Fin4Main {
 
   function transferTokens(address tokenAddress, address recepient) public {
       Fin4Token token = Fin4Token(tokenAddress);
-      token.transferFrom(msg.sender,recepient,1);
+      token.transferFrom(msg.sender, recepient, 1);
   }
 
   function mintToken(address tokenAddress,uint256 amount) public {
       Fin4Token token = Fin4Token(tokenAddress);
-      token.mint(msg.sender,amount);
+      token.mint(msg.sender, amount);
   }
 
   function getBalance(address tokenAddress) public view returns(uint256) {
@@ -62,7 +62,7 @@ contract Fin4Main {
 
   mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
 
-  function _userClaimedOnThisActionAlready(address user, address action) private returns (bool) {
+  function _userClaimedOnThisActionAlready(address user, address action) private view returns (bool) {
     for (uint i = 0; i < actionsWhereUserHasClaims[user].length; i++) {
       if (actionsWhereUserHasClaims[user][i] == action) {
         return true;
