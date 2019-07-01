@@ -16,6 +16,7 @@ contract ApprovalByTokenCreator is Fin4BaseProofType, ApprovalByOneAddress {
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
     pa.approver = tokenCreator;
+    Fin4MainStrut(Fin4Main).addMessage(msg.sender, tokenCreator, "You were requested to approve a proof type", address(this));
     return true;
   }
 

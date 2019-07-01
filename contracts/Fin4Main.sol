@@ -109,4 +109,30 @@ contract Fin4Main {
     return false;
   }
 
+  // ------------------------- MESSAGES -------------------------
+
+  struct Message {
+    address sender;
+    address receiver;
+    string message;
+    address fulfillmentAddress; // where to go and do something
+    address messageOriginAddress;
+  }
+
+  mapping (address => Message[]) public messages;
+
+  function addMessage(address sender, address receiver, string memory message, address fulfillmentAddress) public returns(bool) {
+    Message memory m = Message(sender, receiver, message, fulfillmentAddress, msg.sender);
+    messages[receiver].push(m);
+    return true;
+  }
+
+  function getMyMessagesCount() public view returns(uint) {
+    return messages[msg.sender].length;
+  }
+
+  function getMyMessage(uint index) public view returns(address sender, string memory) {
+    return (messages[msg.sender][index].sender, messages[msg.sender][index].message);
+  }
+
 }

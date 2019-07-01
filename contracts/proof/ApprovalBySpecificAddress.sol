@@ -15,6 +15,7 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType, ApprovalByOneAddress {
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
     pa.approver = approver;
+    Fin4MainStrut(Fin4Main).addMessage(msg.sender, approver, "You were requested to approve a proof type", address(this));
     return true;
   }
 
