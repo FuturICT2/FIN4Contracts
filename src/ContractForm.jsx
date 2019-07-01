@@ -87,7 +87,7 @@ class ContractForm extends Component {
 				if (this.props.contractAddress) {
 					var self = this;
 					new Web3(window.web3.currentProvider).eth.getAccounts((error, result) => {
-						if (!error) console.log("Couldn't get accounts");
+						if (error) console.log("Couldn't get accounts");
 						self.contracts[self.contractIdentifier].options.from = result[0];
 						this.initState(self);
 					});
