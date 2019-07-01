@@ -14,7 +14,6 @@ class Claim extends Component {
 	}
 
 	handleChange = event => {
-		console.log(event);
 		this.setState({
 			selectedActionTypeAddress: event.target.value
 		});
