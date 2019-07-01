@@ -87,13 +87,4 @@ contract Fin4ClaimableAbstract { // abstract class
     return (address(this), getName(), getSymbol(), ids, states, quantity, dates);
   }
 
-  function getComment(uint claimID) public view returns(string memory) {
-    return claims[claimID].comment;
-  }
-
-  // for dev purposes only, this is NOT the normal flow
-  function approveClaim(uint claimId) public returns(bool) {
-    claims[claimId].isApproved = true;
-    return true;
-  }
 }
