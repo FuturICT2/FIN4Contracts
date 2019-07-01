@@ -21,27 +21,27 @@ class ActionClaim extends Component {
 	};
 
 	showActionTypes = data => {
-		var menuItems = data
-			? data.map((address, index) => {
-					return (
-						<MenuItem key={index} value={address}>
-							<ContractData
-								contractAddress={address}
-								method="getInfo"
-								callback={data => {
-									return (
-										<>
-											<span style={{ fontWeight: 'bold' }}>{data[0]}</span> {/* name */}
-											&nbsp;
-											<span>[{data[1]}]</span> {/* symbol */}
-										</>
-									);
-								}}
-							/>
-						</MenuItem>
-					);
-			  })
-			: [];
+		const menuItems =
+			data &&
+			data.map((address, index) => {
+				return (
+					<MenuItem key={index} value={address}>
+						<ContractData
+							contractAddress={address}
+							method="getInfo"
+							callback={data => {
+								return (
+									<>
+										<span style={{ fontWeight: 'bold' }}>{data[0]}</span> {/* name */}
+										&nbsp;
+										<span>[{data[1]}]</span> {/* symbol */}
+									</>
+								);
+							}}
+						/>
+					</MenuItem>
+				);
+			});
 
 		return (
 			<>

@@ -17,31 +17,27 @@ class PreviousClaims extends Component {
 	};
 
 	showClaimByActionTypes = data => {
-		const claims = data
-			? data.map((address, index) => {
-					return (
-						<ContractData
-							contractAddress={address}
-							method="getClaimStatuses"
-							key={index}
-							callback={data => {
-								return this.getClaims(data).map(claim => {
-									return (
-										<li key={`${claim.tokenAddress}-${claim.id}`}>
-											{claim.tokenName} [{claim.tokenSymbol}] ({claim.quantity}),{' '}
-											{!claim.isApproved ? (
-												<a href={`/proof?tokenAddress=${claim.tokenAddress}&claimId=${claim.id}`}>submit proof</a>
-											) : (
-												''
-											)}
-										</li>
-									);
-								});
-							}}
-						/>
-					);
-			  })
-			: [];
+		const claims =
+			data &&
+			data.map((address, index) => {
+				return (
+					<ContractData
+						contractAddress={address}
+						method="getClaimStatuses"
+						key={index}
+						callback={data => {
+							return this.getClaims(data).map(({ id, tokenName, tokenSymbol, tokenAddress, isApproved, quantity }) => {
+								return (
+									<li key={`${tokenAddress}-${id}`}>
+										{tokenName} [{tokenSymbol}] ({quantity}),{' '}
+										{!isApproved && <a href={`/proof?tokenAddress=${tokenAddress}&claimId=${id}`}>submit proof</a>}
+									</li>
+								);
+							});
+						}}
+					/>
+				);
+			});
 		return <ul>{claims}</ul>;
 	};
 

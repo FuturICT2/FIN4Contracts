@@ -47,8 +47,7 @@ class ContractForm extends Component {
 				self.inputs = abi[i].inputs;
 				for (var j = 0; j < self.inputs.length; j++) {
 					// set default date to today for date inputs
-					initialState[self.inputs[j].name] =
-						self.inputs[j].name === 'date' ? moment().valueOf() : '';
+					initialState[self.inputs[j].name] = self.inputs[j].name === 'date' ? moment().valueOf() : '';
 				}
 				break;
 			}
@@ -74,10 +73,7 @@ class ContractForm extends Component {
 			// needs time and has no callback -> timout below
 			this.context.drizzle.addContract({
 				contractName: this.props.contractAddress,
-				web3Contract: new web3.eth.Contract(
-					tokenJson.abi,
-					this.props.contractAddress
-				)
+				web3Contract: new web3.eth.Contract(tokenJson.abi, this.props.contractAddress)
 			});
 
 			this.contractIdentifier = this.props.contractAddress;
@@ -90,13 +86,11 @@ class ContractForm extends Component {
 			try {
 				if (this.props.contractAddress) {
 					var self = this;
-					new Web3(window.web3.currentProvider).eth.getAccounts(
-						(error, result) => {
-							if (!error) console.log("Couldn't get accounts");
-							self.contracts[self.contractIdentifier].options.from = result[0];
-							this.initState(self);
-						}
-					);
+					new Web3(window.web3.currentProvider).eth.getAccounts((error, result) => {
+						if (!error) console.log("Couldn't get accounts");
+						self.contracts[self.contractIdentifier].options.from = result[0];
+						this.initState(self);
+					});
 				} else {
 					this.initState(this);
 				}
@@ -109,8 +103,7 @@ class ContractForm extends Component {
 		if (this.props.contractName) {
 			return;
 		}
-		const didContractChange =
-			this.props.contractAddress !== previousProps.contractAddress;
+		const didContractChange = this.props.contractAddress !== previousProps.contractAddress;
 		if (didContractChange) {
 			this.rebuild();
 		}
@@ -130,14 +123,13 @@ class ContractForm extends Component {
 		});
 
 		if (this.props.sendArgs) {
-			return this.contracts[this.contractIdentifier].methods[
-				this.props.method
-			].cacheSend(...convertedInputs, this.props.sendArgs);
+			return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(
+				...convertedInputs,
+				this.props.sendArgs
+			);
 		}
 
-		return this.contracts[this.contractIdentifier].methods[
-			this.props.method
-		].cacheSend(...convertedInputs);
+		return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(...convertedInputs);
 	};
 
 	handleInputChange = event => {
@@ -163,18 +155,17 @@ class ContractForm extends Component {
 					}
 
 					var inputType = translateType(input.type);
-					var inputLabel = this.props.labels
-						? this.props.labels[index]
-						: input.name;
+					var inputLabel = this.props.labels ? this.props.labels[index] : input.name;
 
 					if (inputLabel === 'date') {
+						const dateFormat = 'YYYY-MM-DD';
 						return (
 							<MuiPickersUtilsProvider key={input.name} utils={DateFnsUtils}>
 								<DatePicker
 									key={input.name}
 									label={inputLabel}
-									format="YYYY-MM-DD"
-									value={moment(this.state[input.name]).format('YYYY-MM-DD')}
+									format={dateFormat}
+									value={moment(this.state[input.name]).format(dateFormat)}
 									onChange={moment =>
 										this.handleInputChange({
 											target: {
@@ -203,11 +194,7 @@ class ContractForm extends Component {
 					);
 				})}
 				<p style={{ textAlign: 'center' }}>
-					<Button
-						key="submit"
-						variant="contained"
-						color="primary"
-						onClick={this.handleSubmit}>
+					<Button key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
 						<AddIcon /> &nbsp;Submit
 					</Button>
 				</p>
