@@ -12,9 +12,10 @@ class PreviousClaims extends Component {
 		var comment = data[4];
 		return (
 			<li key={`${info.tokenAddress}-${info.claimId}`}>
-				{info.tokenName} [{info.tokenSymbol}] ({quantity}),{' '}
+				<font color="gray">{date}</font>&nbsp;
+				<b>{info.tokenName}</b> [{info.tokenSymbol}] ({quantity}), {comment}
 				{!isApproved ? (
-					<a href={`/proof?tokenAddress=${info.tokenAddress}&claimId=${info.claimId}`}>submit proof</a>
+					<span>&nbsp;>> <a href={`/proof?tokenAddress=${info.tokenAddress}&claimId=${info.claimId}`}>submit proof</a></span>
 				) : (
 					''
 				)}
