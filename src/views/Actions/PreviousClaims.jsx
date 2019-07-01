@@ -26,14 +26,16 @@ class PreviousClaims extends Component {
 						method="getClaimStatuses"
 						key={index}
 						callback={data => {
-							return this.getClaims(data).map(({ id, tokenName, tokenSymbol, tokenAddress, isApproved, quantity }) => {
-								return (
-									<li key={`${tokenAddress}-${id}`}>
-										{tokenName} [{tokenSymbol}] ({quantity}),{' '}
-										{!isApproved && <a href={`/proof?tokenAddress=${tokenAddress}&claimId=${id}`}>submit proof</a>}
-									</li>
-								);
-							});
+							return this.getClaims(data).map(
+								({ id, tokenName, tokenSymbol, tokenAddress, isApproved, quantity }, index) => {
+									return (
+										<li key={index}>
+											{tokenName} [{tokenSymbol}] ({quantity}),{' '}
+											{!isApproved && <a href={`/proof?tokenAddress=${tokenAddress}&claimId=${id}`}>submit proof</a>}
+										</li>
+									);
+								}
+							);
 						}}
 					/>
 				);
