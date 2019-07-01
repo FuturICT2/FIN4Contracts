@@ -131,7 +131,7 @@ contract Fin4Main {
     return messages[msg.sender].length;
   }
 
-  function getMyMessage(uint index) public view returns(address sender, string memory) {
+  function getMyMessage(uint index) public view returns(address, string memory) {
     return (messages[msg.sender][index].sender, messages[msg.sender][index].message);
   }
 

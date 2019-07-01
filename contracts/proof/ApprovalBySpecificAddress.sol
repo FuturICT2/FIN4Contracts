@@ -2,8 +2,10 @@ pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
 import "contracts/proof/modules/ApprovalByOneAddress.sol";
+import "contracts/Fin4TokenBase.sol";
+import "contracts/utils.sol";
 
-contract ApprovalBySpecificAddress is Fin4BaseProofType, ApprovalByOneAddress {
+contract ApprovalBySpecificAddress is Fin4BaseProofType, ApprovalByOneAddress, utils {
 
   constructor(address Fin4MainAddress)
     Fin4BaseProofType("ApprovalBySpecificAddress", "The specified address has to approve", Fin4MainAddress)
@@ -15,7 +17,10 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType, ApprovalByOneAddress {
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
     pa.approver = approver;
-    Fin4MainStrut(Fin4Main).addMessage(msg.sender, approver, "You were requested to approve a proof type", address(this));
+    string memory message = string(abi.encodePacked(
+      "You were requested to approve the proof type ApprovalBySpecificAddress on the action type ",
+      Fin4TokenBase(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId)));
+    Fin4MainStrut(Fin4Main).addMessage(msg.sender, approver, message, address(this));
     return true;
   }
 
