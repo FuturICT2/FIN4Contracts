@@ -18,4 +18,10 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType, ApprovalByOneAddress {
     return true;
   }
 
+  function receiveApprovalFromSpecificAddress() public returns(bool) {
+    require(pendingApprovals[msg.sender].approver == msg.sender, "This address is not registered as approver for any pending approval");
+    _sendApproval(pendingApprovals[msg.sender].tokenAdrToReceiveProof, pendingApprovals[msg.sender].claimIdOnTokenToReceiveProof);
+    return true;
+  }
+
 }
