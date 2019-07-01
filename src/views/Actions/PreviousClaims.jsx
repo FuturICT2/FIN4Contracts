@@ -20,7 +20,7 @@ class PreviousClaims extends Component {
 		);
 	};
 
-	getMyClaimIds = ({ 0: tokenAddress, 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
+	showClaims = ({ 0: tokenAddress, 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
 		return (
 			claimIds &&
 			claimIds.map((claimId, index) => {
@@ -42,9 +42,7 @@ class PreviousClaims extends Component {
 		const claims =
 			data &&
 			data.map((address, index) => {
-				return (
-					<ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.getMyClaimIds} />
-				);
+				return <ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.showClaims} />;
 			});
 		return <ul>{claims}</ul>;
 	};
