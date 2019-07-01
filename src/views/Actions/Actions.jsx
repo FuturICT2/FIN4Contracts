@@ -5,7 +5,6 @@ import ContractData from '../../ContractData';
 import PreviousClaims from './PreviousClaims';
 import { Select, MenuItem } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
 
 class Actions extends Component {
 	constructor(props) {
@@ -43,6 +42,7 @@ class Actions extends Component {
 				</MenuItem>
 			);
 		});
+
 		return (
 			<>
 				<InputLabel shrink htmlFor="select-action">
@@ -51,9 +51,7 @@ class Actions extends Component {
 				<Select
 					displayEmpty
 					key="select"
-					input={<Input name="action" id="select-action" />}
 					inputProps={{
-						name: 'action',
 						id: 'select-action'
 					}}
 					style={{
@@ -77,7 +75,7 @@ class Actions extends Component {
 				<div>
 					<Box title={'Claim an Action'}>
 						<ContractData contractName="Fin4Main" method="getChildren" callback={this.mapChildrenToSelector} />
-						{this.state.selectedActionTypeAddress && (
+						{this.state.selectedActionTypeAddress !== 'None' && (
 							<ContractForm contractAddress={this.state.selectedActionTypeAddress} method="submit" />
 						)}
 					</Box>
