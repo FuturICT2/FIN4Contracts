@@ -213,7 +213,7 @@ ContractForm.contextTypes = {
 };
 
 ContractForm.propTypes = {
-	// contract: PropTypes.string.isRequired,
+	contract: PropTypes.string,
 	method: PropTypes.string.isRequired,
 	sendArgs: PropTypes.object,
 	labels: PropTypes.arrayOf(PropTypes.string)

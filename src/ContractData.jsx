@@ -102,7 +102,9 @@ ContractData.propTypes = {
 	contractName: PropTypes.string,
 	contractAddress: PropTypes.string,
 	method: PropTypes.string.isRequired,
-	methodArgs: PropTypes.array
+	methodArgs: PropTypes.array,
+	callback: PropTypes.func,
+	callbackArgs: PropTypes.array
 };
 
 /*
