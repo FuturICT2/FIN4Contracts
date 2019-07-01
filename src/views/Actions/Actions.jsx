@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Container } from '../../Styles';
 import PreviousClaims from './PreviousClaims';
-import ActionClaim from './ActionClaim';
-import ActionTypeCreation from './ActionTypeCreation';
+import Claim from './Claim';
+import TypeCreation from './TypeCreation';
 
 class Actions extends Component {
 	render() {
 		return (
 			<Container>
 				<div>
-					<ActionClaim />
-					<ActionTypeCreation />
+					<Claim />
+					<TypeCreation />
 				</div>
 
 				<PreviousClaims />
