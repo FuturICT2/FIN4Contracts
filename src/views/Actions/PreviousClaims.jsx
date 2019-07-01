@@ -3,8 +3,7 @@ import { Box } from '../../Styles';
 import ContractData from '../../ContractData';
 
 class PreviousClaims extends Component {
-
-	getClaimInfo = (data, info) => {
+	getClaim = (data, info) => {
 		// var claimer = data[0];
 		var isApproved = data[1];
 		var quantity = data[2];
@@ -15,47 +14,48 @@ class PreviousClaims extends Component {
 				<font color="gray">{date}</font>&nbsp;
 				<b>{info.tokenName}</b> [{info.tokenSymbol}] ({quantity}), {comment}
 				{!isApproved ? (
-					<span>&nbsp;>> <a href={`/proof?tokenAddress=${info.tokenAddress}&claimId=${info.claimId}`}>submit proof</a></span>
+					<span>
+						&nbsp;>> <a href={`/proof?tokenAddress=${info.tokenAddress}&claimId=${info.claimId}`}>submit proof</a>
+					</span>
 				) : (
 					''
 				)}
 			</li>
 		);
-	}
+	};
 
 	getMyClaimIds = data => {
 		var tokenAddress = data[0];
 		var tokenName = data[1];
 		var tokenSymbol = data[2];
 		var claimIds = data[3];
-		return claimIds.map((claimId, index) => {
-			return (
-				<ContractData
-					key={index}
-					contractAddress={tokenAddress}
-					method="getClaimInfo"
-					methodArgs={[claimId]}
-					callback={this.getClaimInfo}
-					passToCallback={{
-						tokenAddress: tokenAddress,
-						tokenName: tokenName,
-						tokenSymbol: tokenSymbol,
-						claimId: claimId
-					}}
-				/>)
-		});
-	}
+		return (
+			claimIds &&
+			claimIds.map((claimId, index) => {
+				return (
+					<ContractData
+						key={index}
+						contractAddress={tokenAddress}
+						method="getClaimInfo"
+						methodArgs={[claimId]}
+						callback={this.getClaim}
+						passToCallback={{
+							tokenAddress: tokenAddress,
+							tokenName: tokenName,
+							tokenSymbol: tokenSymbol,
+							claimId: claimId
+						}}
+					/>
+				);
+			})
+		);
+	};
 
 	getActionsWhereUserHasClaims = data => {
 		const claims = data
 			? data.map((address, index) => {
 					return (
-						<ContractData
-							key={index}
-							contractAddress={address}
-							method="getMyClaimIds"
-							callback={this.getMyClaimIds}
-						/>
+						<ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.getMyClaimIds} />
 					);
 			  })
 			: [];
