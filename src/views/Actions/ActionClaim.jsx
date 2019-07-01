@@ -61,7 +61,7 @@ class ActionClaim extends Component {
 					}}
 					onChange={this.handleChange}>
 					<MenuItem value="None" key="None">
-						<em>None</em>
+						<em>Please Select</em>
 					</MenuItem>
 					{menuItems}
 				</Select>
