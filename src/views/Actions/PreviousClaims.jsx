@@ -11,7 +11,8 @@ class PreviousClaims extends Component {
 				tokenSymbol: data[2],
 				tokenAddress: data[0],
 				isApproved: data[4][index],
-				quantity: data[5][index]
+				quantity: data[5][index],
+				date: data[6][index]
 			};
 		});
 	};
