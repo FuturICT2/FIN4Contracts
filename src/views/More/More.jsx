@@ -51,14 +51,14 @@ class More extends React.Component {
 		return (
 			<Wrapper>
 				<div>
-					{dummyData.spendingOffers.map((s, i) => {
+					{dummyData.spendingOffers.map(({ title, imagePath, description, readMore }, index) => {
 						return (
 							<Card
-								key={i}
-								title={s.title}
-								imagePath={s.imagePath}
-								description={s.description}
-								readMore={s.readMore}
+								key={index}
+								title={title}
+								imagePath={imagePath}
+								description={description}
+								readMore={readMore}
 								actionButtonText="redeem now"
 							/>
 						);
@@ -68,14 +68,14 @@ class More extends React.Component {
 					<ContractData contractName="Fin4Main" method="getChildren" callback={showBalanceByActionType} />
 				</Container>
 				<div>
-					{dummyData.donationReceivers.map((d, i) => {
+					{dummyData.donationReceivers.map(({ title, imagePath, description, readMore }, index) => {
 						return (
 							<Card
-								key={i}
-								title={d.title}
-								imagePath={d.imagePath}
-								description={d.description}
-								readMore={d.readMore}
+								key={index}
+								title={title}
+								imagePath={imagePath}
+								description={description}
+								readMore={readMore}
 								actionButtonText="donate"
 							/>
 						);

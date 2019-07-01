@@ -51,16 +51,14 @@ class ContractData extends Component {
 		}, 10);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		const { methodArgs, contractName, method } = this.props;
-
-		const didContractChange = contractName !== nextProps.contractName;
-		const didMethodChange = method !== nextProps.method;
-		const didArgsChange = JSON.stringify(methodArgs) !== JSON.stringify(nextProps.methodArgs);
+	componentWillReceiveProps({ contractName, method, methodArgs }) {
+		const didContractChange = contractName !== contractName;
+		const didMethodChange = method !== method;
+		const didArgsChange = JSON.stringify(methodArgs) !== JSON.stringify(methodArgs);
 
 		if (didContractChange || didMethodChange || didArgsChange) {
 			this.setState({
-				dataKey: this.contracts[nextProps.contractName].methods[nextProps.method].cacheCall(...nextProps.methodArgs)
+				dataKey: this.contracts[contractName].methods[method].cacheCall(...methodArgs)
 			});
 		}
 	}

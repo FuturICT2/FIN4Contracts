@@ -149,27 +149,27 @@ class ContractForm extends Component {
 	render() {
 		return (
 			<form onSubmit={this.handleSubmit} autoComplete="off">
-				{this.inputs.map((input, index) => {
-					if (this.props.fixArgs && this.props.fixArgs[input.name]) {
+				{this.inputs.map(({ name, type }, index) => {
+					if (this.props.fixArgs && this.props.fixArgs[name]) {
 						return '';
 					}
 
-					var inputType = translateType(input.type);
-					var inputLabel = this.props.labels ? this.props.labels[index] : input.name;
+					var inputType = translateType(type);
+					var inputLabel = this.props.labels ? this.props.labels[index] : name;
 
 					if (inputLabel === 'date') {
 						const dateFormat = 'YYYY-MM-DD';
 						return (
-							<MuiPickersUtilsProvider key={input.name} utils={DateFnsUtils}>
+							<MuiPickersUtilsProvider key={name} utils={DateFnsUtils}>
 								<DatePicker
-									key={input.name}
+									key={name}
 									label={inputLabel}
 									format={dateFormat}
-									value={moment(this.state[input.name]).format(dateFormat)}
+									value={moment(this.state[name]).format(dateFormat)}
 									onChange={moment =>
 										this.handleInputChange({
 											target: {
-												name: input.name,
+												name: name,
 												value: moment,
 												type: 'date'
 											}
@@ -183,8 +183,8 @@ class ContractForm extends Component {
 
 					return (
 						<TextField // renders the number field automatically by detecting the inputType
-							key={input.name}
-							name={input.name}
+							key={name}
+							name={name}
 							multiline={inputLabel === 'comment'}
 							type={inputType}
 							label={inputLabel}
