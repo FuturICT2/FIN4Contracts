@@ -3,42 +3,57 @@ import { Box } from '../../Styles';
 import ContractData from '../../ContractData';
 
 class PreviousClaims extends Component {
-	getClaims = data => {
-		return data[3].map((id, index) => {
-			return {
-				id: id,
-				tokenName: data[1],
-				tokenSymbol: data[2],
-				tokenAddress: data[0],
-				isApproved: data[4][index],
-				quantity: data[5][index],
-				date: data[6][index]
-			};
-		});
-	};
 
-	showClaimByActionTypes = data => {
+	getClaimInfo = (data, info) => {
+		var claimId = data[0];
+		var isApproved = data[1];
+		var quantity = data[2];
+		var date = data[3];
+		var comment = data[4];
+		return (
+			<li key={`${info.tokenAddress}-${info.claimId}`}>
+				{info.tokenName} [{info.tokenSymbol}] ({quantity}),{' '}
+				{!isApproved ? (
+					<a href={`/proof?tokenAddress=${info.tokenAddress}&claimId=${info.claimId}`}>submit proof</a>
+				) : (
+					''
+				)}
+			</li>
+		);
+	}
+
+	getMyClaimIds = data => {
+		var tokenAddress = data[0];
+		var tokenName = data[1];
+		var tokenSymbol = data[2];
+		var claimIds = data[3];
+		return claimIds.map((claimId, index) => {
+			return (
+				<ContractData
+					key={index}
+					contractAddress={tokenAddress}
+					method="getClaimInfo"
+					methodArgs={[claimId]}
+					callback={this.getClaimInfo}
+					passToCallback={{
+						tokenAddress: tokenAddress,
+						tokenName: tokenName,
+						tokenSymbol: tokenSymbol,
+						claimId: claimId
+					}}
+				/>)
+		});
+	}
+
+	getActionsWhereUserHasClaims = data => {
 		const claims = data
 			? data.map((address, index) => {
 					return (
 						<ContractData
-							contractAddress={address}
-							method="getClaimStatuses"
 							key={index}
-							callback={data => {
-								return this.getClaims(data).map(claim => {
-									return (
-										<li key={`${claim.tokenAddress}-${claim.id}`}>
-											{claim.tokenName} [{claim.tokenSymbol}] ({claim.quantity}),{' '}
-											{!claim.isApproved ? (
-												<a href={`/proof?tokenAddress=${claim.tokenAddress}&claimId=${claim.id}`}>submit proof</a>
-											) : (
-												''
-											)}
-										</li>
-									);
-								});
-							}}
+							contractAddress={address}
+							method="getMyClaimIds"
+							callback={this.getMyClaimIds}
 						/>
 					);
 			  })
@@ -52,7 +67,7 @@ class PreviousClaims extends Component {
 				<ContractData
 					contractName="Fin4Main"
 					method="getActionsWhereUserHasClaims"
-					callback={this.showClaimByActionTypes}
+					callback={this.getActionsWhereUserHasClaims}
 				/>
 			</Box>
 		);

@@ -62,7 +62,11 @@ contract Fin4ClaimableAbstract { // abstract class
     return (getName(), getSymbol(), claim.claimer, claim.isApproved, claim.quantity, claim.date, claim.comment, requiredProofTypes, proofTypeStatuses);
   }
 
-  function getMyClaimIds() public view returns(address, uint[] memory) {
+  function getClaimInfo(uint claimId) public view returns(uint, bool, uint, uint, string memory) {
+    return (claimId, claims[claimId].isApproved, claims[claimId].quantity, claims[claimId].date, claims[claimId].comment);
+  }
+
+  function getMyClaimIds() public view returns(address, string memory, string memory, uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
       if (claims[i].claimer == msg.sender) {
@@ -77,7 +81,7 @@ contract Fin4ClaimableAbstract { // abstract class
           count ++;
       }
     }
-    return (address(this), ids);
+    return (address(this), getName(), getSymbol(), ids);
   }
 
 }

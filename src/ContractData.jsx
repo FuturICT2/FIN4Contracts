@@ -98,6 +98,9 @@ class ContractData extends Component {
 		][this.state.dataKey].value;
 
 		if (this.props.callback) {
+			if (this.props.passToCallback) {
+				return this.props.callback(displayData, this.props.passToCallback);
+			}
 			return this.props.callback(displayData);
 		}
 	}
