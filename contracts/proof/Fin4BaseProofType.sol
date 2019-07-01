@@ -7,6 +7,8 @@ contract Fin4BaseProofType {
   string private name;
   string private description;
 
+  mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
+
   constructor(string memory _name, string memory _description) public {
     name = _name;
     description = _description;
@@ -28,6 +30,15 @@ contract Fin4BaseProofType {
     // private ensures it can only be called from within this SC?
     Fin4TokenStrut(tokenAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
     return true;
+  }
+
+  function registerTokenCreator(address tokenCreator) public returns(bool) {
+    fin4TokenToItsCreator[msg.sender] = tokenCreator;
+    return true;
+  }
+
+  function getCreatorOfToken(address tokenAddress) public view returns(address) {
+    return fin4TokenToItsCreator[tokenAddress];
   }
 
 }

@@ -129,6 +129,7 @@ contract Fin4TokenBase { // abstract class
     require(Fin4MainStrut(Fin4Main).proofTypeIsRegistered(proofType),
       "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
+    Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
     return true;
   }
 
