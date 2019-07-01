@@ -5,7 +5,7 @@ import ContractData from '../../ContractData';
 import { Select, MenuItem } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 
-class ActionClaim extends Component {
+class Claim extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -81,4 +81,4 @@ class ActionClaim extends Component {
 	}
 }
 
-export default ActionClaim;
+export default Claim;

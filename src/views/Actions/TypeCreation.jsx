@@ -3,8 +3,7 @@ import ContractForm from '../../ContractForm';
 import ContractData from '../../ContractData';
 import { Box } from '../../Styles';
 
-class ActionTypeCreation extends Component {
-
+class TypeCreation extends Component {
 	getProofTypes = data => {
 		const proofTypes =
 			data &&
@@ -16,7 +15,9 @@ class ActionTypeCreation extends Component {
 						method="getInfo"
 						callback={({ 0: name, 1: description }) => {
 							return (
-								<li key={name}><b>{name}</b>: {description}</li>
+								<li key={name}>
+									<b>{name}</b>: {description}
+								</li>
 							);
 						}}
 					/>
@@ -35,14 +36,8 @@ class ActionTypeCreation extends Component {
 	};
 
 	render() {
-		return (
-			<ContractData
-				contractName="Fin4Main"
-				method="getProofTypes"
-				callback={this.getProofTypes}
-			/>
-		);
+		return <ContractData contractName="Fin4Main" method="getProofTypes" callback={this.getProofTypes} />;
 	}
 }
 
-export default ActionTypeCreation;
+export default TypeCreation;
