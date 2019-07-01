@@ -1,7 +1,7 @@
 const Fin4Main = artifacts.require('Fin4Main');
 const ImmediateAutoApproval = artifacts.require('ImmediateAutoApproval');
-const ApprovalByTokenCreator = artifacts.require('ApprovalByTokenCreator');
 const ApprovalBySpecificAddress = artifacts.require('ApprovalBySpecificAddress');
+const ApprovalByTokenCreator = artifacts.require('ApprovalByTokenCreator');
 
 module.exports = async function (deployer) {
 
@@ -11,15 +11,15 @@ module.exports = async function (deployer) {
 
 	await Promise.all([
 		deployer.deploy(ImmediateAutoApproval),
-		deployer.deploy(ApprovalByTokenCreator),
 		deployer.deploy(ApprovalBySpecificAddress),
+		deployer.deploy(ApprovalByTokenCreator),
 		deployer.deploy(Fin4Main)
 	  ]);
 
 	var instances = await Promise.all([
 		ImmediateAutoApproval.deployed(),
-		ApprovalByTokenCreator.deployed(),
 		ApprovalBySpecificAddress.deployed(),
+		ApprovalByTokenCreator.deployed(),
 		Fin4Main.deployed()
 	])
 

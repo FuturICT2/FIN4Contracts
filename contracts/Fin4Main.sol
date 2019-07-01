@@ -11,13 +11,10 @@ contract Fin4Main {
 	function createNewToken(string memory name, string memory symbol, uint8 decimals) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, decimals, address(this));
 
-    // TODO this has to come in as argument, make the ContractForm support an int-array field... or even better a tag-search kinda field for ProofTypes by their name
-    uint[] memory requiredProofTypeIndices = new uint[](2);
-    requiredProofTypeIndices[0] = 0;
-    requiredProofTypeIndices[1] = 2;
-    //requiredProofTypeIndices[2] = 2;
-    for (uint i = 0; i < requiredProofTypeIndices.length; i++) {
-      newToken.addRequiredProofType(proofTypes[requiredProofTypeIndices[i]]);
+    // TODO use a "address[] memory requiredProofTypes" argument instead
+
+    for (uint i = 0; i < 2; i++) {
+      newToken.addRequiredProofType(proofTypes[i]);
     }
 
     children.push(address(newToken));
