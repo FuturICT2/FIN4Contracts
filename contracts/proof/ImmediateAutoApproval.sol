@@ -16,4 +16,9 @@ contract ImmediateAutoApproval is Fin4BaseProofType {
       return true;
     }
 
+    // @Override
+    function getSubmitProofMethodArgsCount() public view returns(uint) {
+      return 2;
+    }
+
 }

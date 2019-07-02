@@ -94,9 +94,10 @@ contract Fin4Main {
     return proofTypes;
   }
 
-  function getProofTypeInfo(address proofType) public view returns(address, string memory, string memory) {
+  function getProofTypeInfo(address proofType) public view returns(address, string memory, string memory, uint) {
       require(proofTypeIsRegistered(proofType), "Address is not registered as proof type on Fin4Main");
-      return (proofType, Fin4BaseProofType(proofType).getName(), Fin4BaseProofType(proofType).getDescription());
+      return (proofType, Fin4BaseProofType(proofType).getName(), Fin4BaseProofType(proofType).getDescription(),
+        Fin4BaseProofType(proofType).getSubmitProofMethodArgsCount());
   }
 
   // called from Fin4Token instances to ensure the required proof types there are a subset of the proofTypes here

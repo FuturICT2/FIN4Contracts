@@ -39,6 +39,10 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType, utils {
     return true;
   }
 
+  function getSubmitProofMethodArgsCount() public view returns(uint) {
+    return 3;
+  }
+
   function getMessageText() public pure returns(string memory) {
     return "You were requested to approve the proof type ApprovalBySpecificAddress on the action type ";
   }

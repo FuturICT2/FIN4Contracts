@@ -44,6 +44,10 @@ class ContractForm extends Component {
 		// Iterate over abi for correct function.
 		for (var i = 0; i < abi.length; i++) {
 			if (abi[i].name === self.props.method) {
+				if (self.props.methodArgsCount && abi[i].inputs.length !== Number(self.props.methodArgsCount)) {
+					continue;
+				}
+
 				self.inputs = abi[i].inputs;
 				for (var j = 0; j < self.inputs.length; j++) {
 					// set default date to today for date inputs
@@ -216,6 +220,7 @@ ContractForm.propTypes = {
 	contractName: PropTypes.string,
 	contractAddress: PropTypes.string,
 	method: PropTypes.string.isRequired,
+	methodArgsCount: PropTypes.string,
 	sendArgs: PropTypes.object,
 	labels: PropTypes.arrayOf(PropTypes.string)
 };

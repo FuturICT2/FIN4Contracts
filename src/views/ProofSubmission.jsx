@@ -39,7 +39,8 @@ class ProofSubmission extends Component {
 		this.getProofTypeInfoAndShowForm = data => {
 			var address = data[0];
 			var name = data[1];
-            var description = data[2];
+			var description = data[2];
+			var submitProofMethodArgsCount = data[3];
             
             var info = 
                 <span>
@@ -68,6 +69,10 @@ class ProofSubmission extends Component {
 							contractAddress={address}
 							contractJson={name + '.json'}
 							method="submitProof"
+							// submitProof() occurs multiple times with different args in ProofTypes that inherit from each other.
+							// ContractForm would just take the first one in the abi that matches the method-name. Thats why another
+							// identifier is necessary to pick the right method. Probably by specific types would be even better.
+							methodArgsCount={submitProofMethodArgsCount}
 							fixArgs={{
                                 tokenAdrToReceiveProof: this.tokenAddress, 
                                 claimId: this.claimId + ""

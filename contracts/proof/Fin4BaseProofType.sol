@@ -27,6 +27,8 @@ contract Fin4BaseProofType {
     return (name, description);
   }
 
+  function getSubmitProofMethodArgsCount() public view returns(uint);
+
   function _sendApproval(address tokenAdrToReceiveProof, uint claimId) internal returns(bool) {
     // private ensures it can only be called from within this SC?
     Fin4TokenStrut(tokenAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
