@@ -1,18 +1,31 @@
 import React, { Component } from 'react';
 import ContractForm from '../../ContractForm';
 import ContractData from '../../ContractData';
-import { Box } from '../../Styles';
+import { Box, Popup } from '../../Elements';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
+import { IconButton } from '@material-ui/core';
+import InfoIcon from '@material-ui/icons/Info';
 
 class TypeCreation extends Component {
 	constructor(props, context) {
 		super(props);
 		// For more stages other than "then", see https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html
-		context.drizzle.contracts.Fin4Main.methods.getProofTypes().call().then((data) => { 
-			console.log("ProofTypes on Fin4Main: ", data);
-		});
+		context.drizzle.contracts.Fin4Main.methods
+			.getProofTypes()
+			.call()
+			.then(data => {
+				console.log('ProofTypes on Fin4Main: ', data);
+			});
+
+		this.state = {
+			isPopupOpen: false
+		};
 	}
+
+	togglePopup = () => {
+		this.setState({ isPopupOpen: !this.state.isPopupOpen });
+	};
 
 	getProofTypes = data => {
 		const proofTypes =
@@ -33,20 +46,28 @@ class TypeCreation extends Component {
 					/>
 				);
 			});
-		return (
-			<>
-				<Box title="Create a New Action Type">
-					<ContractForm contractName="Fin4Main" method="createNewToken" />
-				</Box>
-				<Box title="Available proof types">
-					<ul>{proofTypes}</ul>
-				</Box>
-			</>
-		);
+		return <ul>{proofTypes}</ul>;
 	};
 
 	render() {
-		return <ContractData contractName="Fin4Main" method="getProofTypes" callback={this.getProofTypes} />;
+		const title = (
+			<>
+				<span>Create a New Action Type </span>
+				<IconButton onClick={this.togglePopup}>
+					<InfoIcon fontSize="small" />
+				</IconButton>
+			</>
+		);
+		return (
+			<>
+				<Box title={title}>
+					<ContractForm contractName="Fin4Main" method="createNewToken" />
+				</Box>
+				<Popup isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
+					<ContractData contractName="Fin4Main" method="getProofTypes" callback={this.getProofTypes} />
+				</Popup>
+			</>
+		);
 	}
 }
 
