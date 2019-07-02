@@ -5,15 +5,13 @@ import 'contracts/Fin4MainStrut.sol';
 
 contract Fin4BaseProofType {
 
-  string private name;
-  string private description;
+  string public name;
+  string public description;
   address public Fin4Main;
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
 
-  constructor(string memory _name, string memory _description, address Fin4MainAddress) public {
-    name = _name;
-    description = _description;
+  constructor(address Fin4MainAddress) public {
     Fin4Main = Fin4MainAddress;
   }
 
@@ -28,6 +26,8 @@ contract Fin4BaseProofType {
   function getInfo() public view returns(string memory, string memory) {
     return (name, description);
   }
+
+  function getSubmitProofMethodArgsCount() public view returns(uint);
 
   function _sendApproval(address tokenAdrToReceiveProof, uint claimId) internal returns(bool) {
     // private ensures it can only be called from within this SC?

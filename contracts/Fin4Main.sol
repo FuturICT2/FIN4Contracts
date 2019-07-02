@@ -94,9 +94,10 @@ contract Fin4Main {
     return proofTypes;
   }
 
-  function getProofTypeInfo(address proofType) public view returns(address, string memory, string memory) {
+  function getProofTypeInfo(address proofType) public view returns(address, string memory, string memory, uint) {
       require(proofTypeIsRegistered(proofType), "Address is not registered as proof type on Fin4Main");
-      return (proofType, Fin4BaseProofType(proofType).getName(), Fin4BaseProofType(proofType).getDescription());
+      return (proofType, Fin4BaseProofType(proofType).getName(), Fin4BaseProofType(proofType).getDescription(),
+        Fin4BaseProofType(proofType).getSubmitProofMethodArgsCount());
   }
 
   // called from Fin4Token instances to ensure the required proof types there are a subset of the proofTypes here
@@ -116,13 +117,12 @@ contract Fin4Main {
     address receiver;
     string message;
     address fulfillmentAddress; // where to go and do something
-    address messageOriginAddress;
   }
 
   mapping (address => Message[]) public messages;
 
   function addMessage(address sender, address receiver, string memory message, address fulfillmentAddress) public returns(bool) {
-    Message memory m = Message(sender, receiver, message, fulfillmentAddress, msg.sender);
+    Message memory m = Message(sender, receiver, message, fulfillmentAddress);
     messages[receiver].push(m);
     return true;
   }
@@ -131,8 +131,9 @@ contract Fin4Main {
     return messages[msg.sender].length;
   }
 
-  function getMyMessage(uint index) public view returns(address, string memory) {
-    return (messages[msg.sender][index].sender, messages[msg.sender][index].message);
+  function getMyMessage(uint index) public view returns(address, string memory, address, string memory) {
+    Message memory m = messages[msg.sender][index];
+    return (m.sender, m.message, m.fulfillmentAddress, Fin4BaseProofType(m.fulfillmentAddress).getName());
   }
 
 }

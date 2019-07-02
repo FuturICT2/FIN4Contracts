@@ -6,9 +6,7 @@ class Messages extends Component {
 	getMyMessage = ({ 0: sender, 1: message }) => {
 		return (
 			<li>
-				<div>
-					{message} <i>{sender}</i>
-				</div>
+				{message} <i>{sender}</i>
 			</li>
 		);
 	};

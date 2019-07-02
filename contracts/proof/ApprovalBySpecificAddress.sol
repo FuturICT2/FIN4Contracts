@@ -1,15 +1,31 @@
 pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
-import "contracts/proof/modules/ApprovalByOneAddress.sol";
 import "contracts/Fin4TokenBase.sol";
 import "contracts/utils.sol";
 
-contract ApprovalBySpecificAddress is Fin4BaseProofType, ApprovalByOneAddress, utils {
+contract ApprovalBySpecificAddress is Fin4BaseProofType, utils {
 
   constructor(address Fin4MainAddress)
-    Fin4BaseProofType("ApprovalBySpecificAddress", "The specified address has to approve", Fin4MainAddress)
-    public {}
+    Fin4BaseProofType(Fin4MainAddress)
+    public {
+      setNameAndDescription();
+    }
+
+  function setNameAndDescription() public returns(bool) {
+    name = "ApprovalBySpecificAddress";
+    description = "The specified address has to approve";
+  }
+
+  struct PendingApproval {
+    address tokenAdrToReceiveProof;
+    uint claimIdOnTokenToReceiveProof;
+    address requester;
+    address approver;
+  }
+
+  // this assumes only one pending approval per address, TODO value must be an array
+  mapping (address => PendingApproval) public pendingApprovals;
 
   function submitProof(address tokenAdrToReceiveProof, uint claimId, address approver) public returns(bool) {
     PendingApproval storage pa = pendingApprovals[approver];
@@ -17,11 +33,18 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType, ApprovalByOneAddress, u
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
     pa.approver = approver;
-    string memory message = string(abi.encodePacked(
-      "You were requested to approve the proof type ApprovalBySpecificAddress on the action type ",
+    string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId)));
     Fin4MainStrut(Fin4Main).addMessage(msg.sender, approver, message, address(this));
     return true;
+  }
+
+  function getSubmitProofMethodArgsCount() public view returns(uint) {
+    return 3;
+  }
+
+  function getMessageText() public pure returns(string memory) {
+    return "You were requested to approve the proof type ApprovalBySpecificAddress on the action type ";
   }
 
   function receiveApprovalFromSpecificAddress() public returns(bool) {
