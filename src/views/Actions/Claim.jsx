@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import ContractForm from '../../ContractForm';
-import { Box } from '../../Styles';
+import { Box } from '../../Elements';
 import ContractData from '../../ContractData';
-import { Select, MenuItem } from '@material-ui/core';
-import InputLabel from '@material-ui/core/InputLabel';
+import { Select, MenuItem, InputLabel } from '@material-ui/core';
 
 class Claim extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedActionTypeAddress: 'None'
+			selectedActionTypeAddress: ''
 		};
 	}
 
@@ -50,7 +49,6 @@ class Claim extends Component {
 				<Select
 					value={this.state.selectedActionTypeAddress}
 					displayEmpty
-					key="select"
 					inputProps={{
 						id: 'select-action'
 					}}
@@ -59,7 +57,7 @@ class Claim extends Component {
 						marginBottom: '15px'
 					}}
 					onChange={this.handleChange}>
-					<MenuItem value="None" key="None">
+					<MenuItem value="" key={-1}>
 						<em>Please Select</em>
 					</MenuItem>
 					{menuItems}
@@ -72,7 +70,7 @@ class Claim extends Component {
 		return (
 			<Box title={'Claim an Action'}>
 				<ContractData contractName="Fin4Main" method="getChildren" callback={this.showActionTypes} />
-				{this.state.selectedActionTypeAddress !== 'None' && (
+				{this.state.selectedActionTypeAddress !== '' && (
 					<ContractForm contractAddress={this.state.selectedActionTypeAddress} method="submit" />
 				)}
 			</Box>
