@@ -1,7 +1,7 @@
 // heavily adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractData.js
 
 import { drizzleConnect } from 'drizzle-react';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
 
@@ -72,12 +72,12 @@ class ContractData extends Component {
 			!this.contracts[this.contractIdentifier] ||
 			!this.props.contracts[this.contractIdentifier].initialized
 		) {
-			return <span>Initializing...</span>;
+			return 'Initializing...';
 		}
 
 		// If the cache key we received earlier isn't in the store yet; the initial value is still being fetched.
 		if (!(this.state.dataKey in this.props.contracts[this.contractIdentifier][this.props.method])) {
-			return <span>Fetching...</span>;
+			return 'Fetching...';
 		}
 
 		var displayData = this.props.contracts[this.contractIdentifier][this.props.method][this.state.dataKey].value;
