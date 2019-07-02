@@ -4,8 +4,13 @@ import ContractData from '../ContractData';
 
 class Messages extends Component {
 
-    getMyMessage = ({ 0: sender, 1: message }) => {
-        return <li><div>{message} <i>{sender}</i></div></li>
+    getMyMessage = ({ 0: sender, 1: message, 2: fulfillmentAddress, 3: proofTypeName }) => {
+        return <li>
+                <div>
+                    {message}<br></br>Requested by: <i>{sender}</i><br></br>
+                    <b><a href={`/approving?fulfillmentAddress=${fulfillmentAddress}&proofTypeName=${proofTypeName}`}>Go to approval page</a></b>
+                </div>
+            </li>
     };
 
 	getMyMessagesCount = data => {

@@ -117,13 +117,12 @@ contract Fin4Main {
     address receiver;
     string message;
     address fulfillmentAddress; // where to go and do something
-    address messageOriginAddress;
   }
 
   mapping (address => Message[]) public messages;
 
   function addMessage(address sender, address receiver, string memory message, address fulfillmentAddress) public returns(bool) {
-    Message memory m = Message(sender, receiver, message, fulfillmentAddress, msg.sender);
+    Message memory m = Message(sender, receiver, message, fulfillmentAddress);
     messages[receiver].push(m);
     return true;
   }
@@ -132,8 +131,9 @@ contract Fin4Main {
     return messages[msg.sender].length;
   }
 
-  function getMyMessage(uint index) public view returns(address, string memory) {
-    return (messages[msg.sender][index].sender, messages[msg.sender][index].message);
+  function getMyMessage(uint index) public view returns(address, string memory, address, string memory) {
+    Message memory m = messages[msg.sender][index];
+    return (m.sender, m.message, m.fulfillmentAddress, Fin4BaseProofType(m.fulfillmentAddress).getName());
   }
 
 }
