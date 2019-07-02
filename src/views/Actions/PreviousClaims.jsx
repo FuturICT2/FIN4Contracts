@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box } from '../../Styles';
+import { Box } from '../../Elements';
 import ContractData from '../../ContractData';
 
 class PreviousClaims extends Component {

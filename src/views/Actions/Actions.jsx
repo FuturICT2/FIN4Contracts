@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from '../../Styles';
+import { Container } from '../../Elements';
 import PreviousClaims from './PreviousClaims';
 import Claim from './Claim';
 import TypeCreation from './TypeCreation';

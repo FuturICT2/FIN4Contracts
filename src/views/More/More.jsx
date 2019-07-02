@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from '../../Styles';
+import { Container } from '../../Elements';
 import ContractData from '../../ContractData';
 import Card from '../../Card';
 import styled from 'styled-components';
@@ -37,9 +37,12 @@ const showBalanceByActionType = data => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{data.map((address, index) => {
-						return <ContractData key={index} contractAddress={address} method="getInfoAndBalance" callback={showRow} />;
-					})}
+					{data &&
+						data.map((address, index) => {
+							return (
+								<ContractData key={index} contractAddress={address} method="getInfoAndBalance" callback={showRow} />
+							);
+						})}
 				</TableBody>
 			</Table>
 		</Paper>

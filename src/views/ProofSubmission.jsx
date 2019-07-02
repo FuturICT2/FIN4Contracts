@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Box } from '../Styles';
+import { Container, Box } from '../Elements';
 import ContractData from '../ContractData';
 import ContractForm from '../ContractForm';
 
@@ -31,47 +31,54 @@ class ProofSubmission extends Component {
 		var requiredProofTypes = data[7];
 		var proofTypeStatuses = data[8];
 		this.proofTypeStatusesObj = {};
-        for (var i = 0; i < requiredProofTypes.length; i ++) {
-            this.proofTypeStatusesObj[requiredProofTypes[i]] = {};
-            this.proofTypeStatusesObj[requiredProofTypes[i]].approved = proofTypeStatuses[i];
-        }
+		for (var i = 0; i < requiredProofTypes.length; i++) {
+			this.proofTypeStatusesObj[requiredProofTypes[i]] = {};
+			this.proofTypeStatusesObj[requiredProofTypes[i]].approved = proofTypeStatuses[i];
+		}
 
 		this.getProofTypeInfoAndShowForm = data => {
 			var address = data[0];
 			var name = data[1];
-            var description = data[2];
-            
-            var info = 
-                <span>
-                    <b>{name}</b>: {description}
-                    <br></br>
-                    <i>{address}</i>
-                </span>
+			var description = data[2];
 
-            if (this.proofTypeStatusesObj[address].approved) {
-                return (
-                    <div>
-                        {info}
-                        <br></br><br></br>
-                        <font color="green"><b>Proof type approved</b></font>
-                    </div>
-                );
-            }
+			var info = (
+				<span>
+					<b>{name}</b>: {description}
+					<br></br>
+					<i>{address}</i>
+				</span>
+			);
+
+			if (this.proofTypeStatusesObj[address].approved) {
+				return (
+					<div>
+						{info}
+						<br></br>
+						<br></br>
+						<font color="green">
+							<b>Proof type approved</b>
+						</font>
+					</div>
+				);
+			}
 
 			return (
 				<div>
-                    {info}
-                    <br></br><br></br>
-                    <font color="red"><b>Proof type not approved yet</b></font>
+					{info}
+					<br></br>
+					<br></br>
+					<font color="red">
+						<b>Proof type not approved yet</b>
+					</font>
 					<Box title={'Initiate proof for ' + name}>
 						<ContractForm
 							contractAddress={address}
 							contractJson={name + '.json'}
 							method="submitProof"
 							fixArgs={{
-                                tokenAdrToReceiveProof: this.tokenAddress, 
-                                claimId: this.claimId + ""
-                            }}
+								tokenAdrToReceiveProof: this.tokenAddress,
+								claimId: this.claimId + ''
+							}}
 						/>
 					</Box>
 				</div>
@@ -98,11 +105,11 @@ class ProofSubmission extends Component {
 
 		return (
 			<div>
-				Claim <i>{this.claimId}</i> on action type <b>{tokenName}</b> [
-				{tokenSymbol}] <i>{this.tokenAddress}</i><br></br>
+				Claim <i>{this.claimId}</i> on action type <b>{tokenName}</b> [{tokenSymbol}] <i>{this.tokenAddress}</i>
 				<br></br>
-				isApproved: <i>{isApproved + ''}</i>, quantity: <i>{quantity}</i>, date:{' '}
-				<i>{date}</i>, comment: <i>{comment}</i>
+				<br></br>
+				isApproved: <i>{isApproved + ''}</i>, quantity: <i>{quantity}</i>, date: <i>{date}</i>, comment:{' '}
+				<i>{comment}</i>
 				<br></br>
 				<br></br>
 				{this.proofTypes}
@@ -112,7 +119,7 @@ class ProofSubmission extends Component {
 
 	render() {
 		if (this.tokenAddress === undefined) {
-			return "URL must contain parameters for tokenAddress and claimId";
+			return 'URL must contain parameters for tokenAddress and claimId';
 		}
 		return (
 			<Container>
