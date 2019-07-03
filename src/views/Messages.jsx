@@ -33,13 +33,16 @@ class Messages extends Component {
 				<Fin4Box title="Messages">
 					{messageIndices.map(index => {
 						return (
-							<ContractData
-								key={index}
-								contractName="Fin4Main"
-								method="getMyMessage"
-								methodArgs={[index]}
-								callback={this.getMyMessage}
-							/>
+							<div>
+								<ContractData
+									key={index}
+									contractName="Fin4Main"
+									method="getMyMessage"
+									methodArgs={[index]}
+									callback={this.getMyMessage}
+								/>
+								<hr></hr>
+							</div>
 						);
 					})}
 				</Fin4Box>
