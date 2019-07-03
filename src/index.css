@@ -26,3 +26,7 @@ body,
 	background: #84aede;
 	color: white;
 }
+
+table {
+	table-layout: fixed;
+}
