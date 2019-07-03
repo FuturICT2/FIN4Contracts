@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Box } from '../Elements';
+import { Fin4Container, Fin4Box } from '../Elements';
 import ContractForm from '../ContractForm';
 
 class Approving extends Component {
@@ -24,16 +24,16 @@ class Approving extends Component {
 			return 'URL must contain parameters for fulfillmentAddress';
 		}
 		return (
-			<Container>
-				<Box title="Approve">
+			<Fin4Container>
+				<Fin4Box title="Approve">
 					<ContractForm
 						contractAddress={this.fulfillmentAddress}
 						// instead of passing the proofTypeName, make an extra getName() call for that?
 						contractJson={this.proofTypeName + '.json'}
 						method="receiveApprovalFromSpecificAddress"
 					/>
-				</Box>
-			</Container>
+				</Fin4Box>
+			</Fin4Container>
 		);
 	}
 }

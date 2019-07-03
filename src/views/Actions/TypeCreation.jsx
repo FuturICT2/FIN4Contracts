@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ContractForm from '../../ContractForm';
 import ContractData from '../../ContractData';
-import { Box, Popup } from '../../Elements';
+import { Fin4Box, Fin4Modal } from '../../Elements';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { IconButton } from '@material-ui/core';
@@ -60,12 +60,12 @@ class TypeCreation extends Component {
 		);
 		return (
 			<>
-				<Box title={title}>
+				<Fin4Box title={title}>
 					<ContractForm contractName="Fin4Main" method="createNewToken" />
-				</Box>
-				<Popup isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
+				</Fin4Box>
+				<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
 					<ContractData contractName="Fin4Main" method="getProofTypes" callback={this.getProofTypes} />
-				</Popup>
+				</Fin4Modal>
 			</>
 		);
 	}

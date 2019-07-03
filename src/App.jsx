@@ -12,7 +12,7 @@ class App extends Component {
 	render() {
 		return (
 			<Router>
-				<Container>
+				<Fin4Container>
 					<TopBar />
 
 					<DrizzleProvider options={drizzleConfig}>
@@ -20,18 +20,13 @@ class App extends Component {
 							<>
 								{/* register menu routes */}
 								{menuItems.map((route, i) => (
-									<Route
-										exact
-										key={i}
-										render={() => <route.component />}
-										path={route.path}
-									/>
+									<Route exact key={i} render={() => <route.component />} path={route.path} />
 								))}
 							</>
 						</LoadingContainer>
 					</DrizzleProvider>
 					<Spacer />
-				</Container>
+				</Fin4Container>
 
 				<NavigationBar />
 			</Router>
@@ -39,15 +34,15 @@ class App extends Component {
 	}
 }
 
-const Container = styled.div`
+const Fin4Container = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	min-height: 100%;
-`
+`;
 
 const Spacer = styled.div`
 	margin-top: 100px;
-`
+`;
 
 export default App;

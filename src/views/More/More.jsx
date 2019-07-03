@@ -1,7 +1,6 @@
 import React from 'react';
-import { Container } from '../../Elements';
+import { Fin4Container, Fin4Card } from '../../Elements';
 import ContractData from '../../ContractData';
-import Card from '../../Card';
 import styled from 'styled-components';
 import dummyData from '../../config/dummy-data';
 import Table from '@material-ui/core/Table';
@@ -56,7 +55,7 @@ class More extends React.Component {
 				<div>
 					{dummyData.spendingOffers.map(({ title, imagePath, description, readMore }, index) => {
 						return (
-							<Card
+							<Fin4Card
 								key={index}
 								title={title}
 								imagePath={imagePath}
@@ -67,13 +66,13 @@ class More extends React.Component {
 						);
 					})}
 				</div>
-				<Container>
+				<Fin4Container>
 					<ContractData contractName="Fin4Main" method="getChildren" callback={showBalanceByActionType} />
-				</Container>
+				</Fin4Container>
 				<div>
 					{dummyData.donationReceivers.map(({ title, imagePath, description, readMore }, index) => {
 						return (
-							<Card
+							<Fin4Card
 								key={index}
 								title={title}
 								imagePath={imagePath}

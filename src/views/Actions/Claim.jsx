@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ContractForm from '../../ContractForm';
-import { Box } from '../../Elements';
+import { Fin4Box } from '../../Elements';
 import ContractData from '../../ContractData';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
 
@@ -68,12 +68,12 @@ class Claim extends Component {
 
 	render() {
 		return (
-			<Box title={'Claim an Action'}>
+			<Fin4Box title={'Claim an Action'}>
 				<ContractData contractName="Fin4Main" method="getChildren" callback={this.showActionTypes} />
 				{this.state.selectedActionTypeAddress !== '' && (
 					<ContractForm contractAddress={this.state.selectedActionTypeAddress} method="submit" />
 				)}
-			</Box>
+			</Fin4Box>
 		);
 	}
 }

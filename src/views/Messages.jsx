@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box } from '../Elements';
+import { Fin4Box } from '../Elements';
 import ContractData from '../ContractData';
 
 class Messages extends Component {
@@ -36,9 +36,9 @@ class Messages extends Component {
 
 	render() {
 		return (
-			<Box title="Messages">
+			<Fin4Box title="Messages">
 				<ContractData contractName="Fin4Main" method="getMyMessagesCount" callback={this.getMyMessagesCount} />
-			</Box>
+			</Fin4Box>
 		);
 	}
 }

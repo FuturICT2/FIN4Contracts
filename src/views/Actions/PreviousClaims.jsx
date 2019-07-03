@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box } from '../../Elements';
+import { Fin4Box } from '../../Elements';
 import ContractData from '../../ContractData';
 
 class PreviousClaims extends Component {
@@ -49,13 +49,13 @@ class PreviousClaims extends Component {
 
 	render() {
 		return (
-			<Box title="My Previous Claims">
+			<Fin4Box title="My Previous Claims">
 				<ContractData
 					contractName="Fin4Main"
 					method="getActionsWhereUserHasClaims"
 					callback={this.getActionsWhereUserHasClaims}
 				/>
-			</Box>
+			</Fin4Box>
 		);
 	}
 }

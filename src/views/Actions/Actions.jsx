@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from '../../Elements';
+import { Fin4Container } from '../../Elements';
 import PreviousClaims from './PreviousClaims';
 import Claim from './Claim';
 import TypeCreation from './TypeCreation';
@@ -8,7 +8,7 @@ import Messages from '../Messages';
 class Actions extends Component {
 	render() {
 		return (
-			<Container>
+			<Fin4Container>
 				<div>
 					<Claim />
 					<TypeCreation />
@@ -17,7 +17,7 @@ class Actions extends Component {
 					<PreviousClaims />
 					<Messages />
 				</div>
-			</Container>
+			</Fin4Container>
 		);
 	}
 }

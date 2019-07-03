@@ -1,11 +1,22 @@
 import React from 'react';
-import { Paper, Typography, Modal, IconButton } from '@material-ui/core';
+import {
+	Paper,
+	Typography,
+	Modal,
+	Button,
+	IconButton,
+	Card,
+	CardActionArea,
+	CardActions,
+	CardContent,
+	CardMedia
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import styled from 'styled-components';
 import colors from './config/colors-config';
 
-const Container = styled.div`
+const Fin4Container = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -25,7 +36,7 @@ const Container = styled.div`
 	}
 `;
 
-const Box = props => {
+const Fin4Box = props => {
 	return (
 		<Paper style={{ position: 'relative' }}>
 			<Typography variant="h5" component="h3">
@@ -36,8 +47,45 @@ const Box = props => {
 	);
 };
 
-const Popup = props => {
-	const PopupContainer = styled(Container)`
+const Fin4Card = ({ imagePath, title, description, readMore, actionButtonText }) => {
+	const CardStyle = styled(Card)`
+		max-width: 245px;
+		margin: 15px;
+	`;
+
+	const Image = styled(CardMedia)`
+		height: 140px;
+	`;
+
+	return (
+		<CardStyle>
+			<CardActionArea>
+				<Image image={imagePath} title={title} />
+				<CardContent>
+					<Typography gutterBottom variant="h5" component="h2">
+						{title}
+					</Typography>
+					<Typography variant="body2" color="textSecondary" component="p">
+						{description}
+					</Typography>
+				</CardContent>
+			</CardActionArea>
+			<CardActions>
+				<Button size="small" color="secondary">
+					{actionButtonText}
+				</Button>
+				<a href={readMore} rel="noopener noreferrer" target="_blank">
+					<Button size="small" color="primary">
+						Learn More
+					</Button>
+				</a>
+			</CardActions>
+		</CardStyle>
+	);
+};
+
+const Fin4Modal = props => {
+	const Fin4ModalContainer = styled(Fin4Container)`
 		height: 100%;
 		align-items: center;
 	`;
@@ -50,16 +98,16 @@ const Popup = props => {
 
 	return (
 		<Modal open={props.isOpen} onClose={props.handleClose}>
-			<PopupContainer>
-				<Box title={props.title}>
+			<Fin4ModalContainer>
+				<Fin4Box title={props.title}>
 					<CloseButton onClick={props.handleClose}>
 						<CloseIcon fontSize="small" />
 					</CloseButton>
 					{props.children}
-				</Box>
-			</PopupContainer>
+				</Fin4Box>
+			</Fin4ModalContainer>
 		</Modal>
 	);
 };
 
-export { Container, Box, Popup };
+export { Fin4Container, Fin4Box, Fin4Modal, Fin4Card };

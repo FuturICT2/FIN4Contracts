@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Box } from '../Elements';
+import { Fin4Container, Fin4Box } from '../Elements';
 import ContractData from '../ContractData';
 import ContractForm from '../ContractForm';
 
@@ -71,7 +71,7 @@ class ProofSubmission extends Component {
 					<font color="red">
 						<b>Proof type not approved yet</b>
 					</font>
-					<Box title={'Initiate proof for ' + name}>
+					<Fin4Box title={'Initiate proof for ' + name}>
 						<ContractForm
 							contractAddress={address}
 							contractJson={name + '.json'}
@@ -85,7 +85,7 @@ class ProofSubmission extends Component {
 								claimId: this.claimId + ''
 							}}
 						/>
-					</Box>
+					</Fin4Box>
 				</div>
 			);
 		};
@@ -127,14 +127,14 @@ class ProofSubmission extends Component {
 			return 'URL must contain parameters for tokenAddress and claimId';
 		}
 		return (
-			<Container>
+			<Fin4Container>
 				<ContractData
 					contractAddress={this.tokenAddress}
 					method="getClaim"
 					methodArgs={[this.claimId]}
 					callback={this.requiredProofTypeAddresses}
 				/>
-			</Container>
+			</Fin4Container>
 		);
 	}
 }
