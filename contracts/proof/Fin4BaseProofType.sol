@@ -2,8 +2,9 @@ pragma solidity ^0.5.0;
 
 import "contracts/Fin4TokenStrut.sol";
 import 'contracts/Fin4MainStrut.sol';
+import "contracts/utils.sol";
 
-contract Fin4BaseProofType {
+contract Fin4BaseProofType is utils {
 
   string public name;
   string public description;

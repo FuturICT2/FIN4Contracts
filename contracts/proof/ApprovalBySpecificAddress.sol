@@ -2,9 +2,8 @@ pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
 import "contracts/Fin4TokenBase.sol";
-import "contracts/utils.sol";
 
-contract ApprovalBySpecificAddress is Fin4BaseProofType, utils {
+contract ApprovalBySpecificAddress is Fin4BaseProofType {
 
   constructor(address Fin4MainAddress)
     Fin4BaseProofType(Fin4MainAddress)
