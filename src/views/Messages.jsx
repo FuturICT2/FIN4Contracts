@@ -26,19 +26,21 @@ class Messages extends Component {
 			messageIndices.push(i);
 		}
 		return (
-			<Fin4Box title="Messages">
-				{messageIndices.map(index => {
-					return (
-						<ContractData
-							key={index}
-							contractName="Fin4Main"
-							method="getMyMessage"
-							methodArgs={[index]}
-							callback={this.getMyMessage}
-						/>
-					);
-				})}
-			</Fin4Box>
+			messageIndices.length > 0 && (
+				<Fin4Box title="Messages">
+					{messageIndices.map(index => {
+						return (
+							<ContractData
+								key={index}
+								contractName="Fin4Main"
+								method="getMyMessage"
+								methodArgs={[index]}
+								callback={this.getMyMessage}
+							/>
+						);
+					})}
+				</Fin4Box>
+			)
 		);
 	};
 

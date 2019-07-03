@@ -46,26 +46,27 @@ class PreviousClaims extends Component {
 
 	showClaimsByActionType = data => {
 		return (
-			<Fin4Table headers={['Date', 'Action', 'Quantity', 'Comment', 'Proof']} size="small">
-				{data &&
-					data.map((address, index) => {
-						return (
-							<ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.showClaims} />
-						);
-					})}
-			</Fin4Table>
+			data.length > 0 && (
+				<Fin4Box title="My Previous Claims">
+					<Fin4Table headers={['Date', 'Action', 'Quantity', 'Comment', 'Proof']} size="small">
+						{data.map((address, index) => {
+							return (
+								<ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.showClaims} />
+							);
+						})}
+					</Fin4Table>
+				</Fin4Box>
+			)
 		);
 	};
 
 	render() {
 		return (
-			<Fin4Box title="My Previous Claims">
-				<ContractData
-					contractName="Fin4Main"
-					method="getActionsWhereUserHasClaims"
-					callback={this.showClaimsByActionType}
-				/>
-			</Fin4Box>
+			<ContractData
+				contractName="Fin4Main"
+				method="getActionsWhereUserHasClaims"
+				callback={this.showClaimsByActionType}
+			/>
 		);
 	}
 }
