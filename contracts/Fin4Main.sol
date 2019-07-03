@@ -13,7 +13,7 @@ contract Fin4Main {
 
     // TODO use a "address[] memory requiredProofTypes" argument instead
 
-    for (uint i = 0; i < 3; i++) {
+    for (uint i = 0; i < 4; i++) {
       newToken.addRequiredProofType(proofTypes[i]);
     }
 
