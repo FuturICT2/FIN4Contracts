@@ -1,50 +1,50 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import colors from './config/colors-config';
 import menuItems from './config/menu-config';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import { createMuiTheme, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import ThemeProvider from '@material-ui/styles/ThemeProvider';
+import colors from './config/colors-config';
 import styled from 'styled-components';
 
 class NavigationBar extends Component {
 	constructor(props) {
 		super(props);
 		// get currently active url... if it doesnt't find it in the menu, it's -1.
-		const activeElement = menuItems
-			.map(menuItem => menuItem.path)
-			.indexOf(window.location.pathname);
+		const activeElement = menuItems.map(menuItem => menuItem.path).indexOf(window.location.pathname);
 		this.state = {
 			value: Math.max(0, activeElement)
 		};
 	}
 
+	navBarTheme = createMuiTheme({
+		palette: {
+			primary: {
+				main: colors.dark
+			}
+		}
+	});
+
 	render() {
 		return (
-			<MenuContainer
-				value={this.state.value}
-				onChange={(event, newValue) => {
-					this.setState({ value: newValue });
-				}}
-				showLabels>
-				{menuItems.map((route, i) => {
-					return (
-						<MenuItem
-							key={i}
-							component={Link}
-							to={route.path}
-							label={route.label}
-							icon={<route.icon />}
-						/>
-					);
-				})}
-			</MenuContainer>
+			<ThemeProvider theme={this.navBarTheme}>
+				<MenuContainer
+					value={this.state.value}
+					onChange={(event, newValue) => {
+						this.setState({ value: newValue });
+					}}
+					showLabels>
+					{menuItems.map((route, i) => {
+						return <MenuItem key={i} component={Link} to={route.path} label={route.label} icon={<route.icon />} />;
+					})}
+				</MenuContainer>
+			</ThemeProvider>
 		);
 	}
 }
 
 const MenuContainer = styled(BottomNavigation)`
 	&& {
-		background: ${colors.main};
+		background: ${colors.main} !important;
 		position: fixed;
 		bottom: 0;
 		left: 0;
@@ -54,7 +54,7 @@ const MenuContainer = styled(BottomNavigation)`
 
 const MenuItem = styled(BottomNavigationAction)`
 	&& {
-		color: ${colors.main2};
+		color: ${colors.light};
 		max-width: none;
 		width: 100%;
 	}

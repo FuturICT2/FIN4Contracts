@@ -30,7 +30,8 @@ const Fin4Container = styled.div`
 	.MuiPaper-root {
 		padding: 1em;
 		width: 400px;
-		margin: 25px;
+		margin: 20px;
+		overflow: hidden;
 		${props =>
 			props.isModalContainer
 				? `box-sizing: border-box;
@@ -39,22 +40,30 @@ const Fin4Container = styled.div`
 			box-shadow: 0 0 100px 1px rgba(0,0,0,.7)`
 				: `opacity: 0.9;`}
 	}
-
-	h3 {
-		text-align: center;
-		color: ${colors.main};
-		margin-bottom: 25px;
-	}
 `;
 
 const Fin4Box = props => {
+	const PaperStyle = styled(Paper)`
+		position: relative;
+		h3 {
+			text-align: center;
+			background: ${colors.main};
+			color: ${colors.light};
+			margin: -16px -16px 20px;
+			padding: 10px;
+		}
+	`;
+
 	return (
-		<Paper style={{ position: 'relative' }}>
-			<Typography variant="h5" component="h3">
-				{props.title}
-			</Typography>
-			{props.children}
-		</Paper>
+		<>
+			<PaperStyle>
+				<Typography variant="h5" component="h3">
+					{props.title}
+				</Typography>
+				{props.children}
+			</PaperStyle>
+			<div id="collapsing-margin-obstacle" style={{ padding: '1px' }}></div>
+		</>
 	);
 };
 

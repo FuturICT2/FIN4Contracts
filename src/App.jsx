@@ -7,28 +7,50 @@ import drizzleConfig from './config/drizzle-config';
 import menuItems from './config/menu-config';
 import TopBar from './TopBar';
 import NavigationBar from './NavigationBar';
+import { createMuiTheme } from '@material-ui/core';
+import ThemeProvider from '@material-ui/styles/ThemeProvider';
+import colors from './config/colors-config';
 
 class App extends Component {
+	globalTheme = createMuiTheme({
+		palette: {
+			primary: {
+				light: colors.light,
+				main: colors.main,
+				dark: colors.main,
+				contrastText: colors.light
+			},
+			secondary: {
+				main: colors.dark,
+				light: colors.light,
+				dark: colors.dark,
+				contrastText: colors.light
+			}
+		}
+	});
+
 	render() {
 		return (
 			<Router>
-				<Fin4Container>
-					<TopBar />
+				<ThemeProvider theme={this.globalTheme}>
+					<Fin4Container>
+						<TopBar />
 
-					<DrizzleProvider options={drizzleConfig}>
-						<LoadingContainer>
-							<>
-								{/* register menu routes */}
-								{menuItems.map((route, i) => (
-									<Route exact key={i} render={() => <route.component />} path={route.path} />
-								))}
-							</>
-						</LoadingContainer>
-					</DrizzleProvider>
-					<Spacer />
-				</Fin4Container>
+						<DrizzleProvider options={drizzleConfig}>
+							<LoadingContainer>
+								<>
+									{/* register menu routes */}
+									{menuItems.map((route, i) => (
+										<Route exact key={i} render={() => <route.component />} path={route.path} />
+									))}
+								</>
+							</LoadingContainer>
+						</DrizzleProvider>
+						<Spacer />
+					</Fin4Container>
 
-				<NavigationBar />
+					<NavigationBar />
+				</ThemeProvider>
 			</Router>
 		);
 	}
