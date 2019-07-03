@@ -134,7 +134,7 @@ const Fin4TableRow = props => {
 	const keys = Object.keys(props.data);
 	const values = Object.values(props.data);
 	return (
-		<TableRow key={props.index}>
+		<TableRow>
 			{keys.map((key, index) => {
 				return <TableCell key={key}>{values[index]}</TableCell>;
 			})}

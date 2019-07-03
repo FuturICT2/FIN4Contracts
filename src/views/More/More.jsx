@@ -15,7 +15,7 @@ const showBalanceByActionType = data => {
 								key={index}
 								contractAddress={address}
 								method="getInfoAndBalance"
-								callback={data => <Fin4TableRow index={index} data={data} />}
+								callback={data => <Fin4TableRow data={data} />}
 							/>
 						);
 					})}
