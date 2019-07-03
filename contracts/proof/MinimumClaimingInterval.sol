@@ -10,6 +10,7 @@ contract MinimumClaimingInterval is Fin4BaseProofType {
       name = "MinimumClaimingInterval";
       description = "Defines a minimum time that has to pass between claims.";
       minimumInterval = 5 * 60 * 1000; // 5min for testing
+      messageType = MessageType.INFO;
     }
 
     function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {

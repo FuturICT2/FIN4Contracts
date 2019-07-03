@@ -3,8 +3,11 @@ import ContractData from '../ContractData';
 import { Fin4Box } from '../Elements';
 
 class Messages extends Component {
-	getMyMessage = ({ 0: sender, 1: message, 2: fulfillmentAddress, 3: proofTypeName }) => {
-		return (
+	getMyMessage = ({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName }) => {
+		if (messageType === "1") { // INFO
+			return <p>{message}</p>
+		}
+		return ( // messageType === 0: APPROVE
 			<p>
 				{message}
 				<br></br>Requested by: <i>{sender}</i>

@@ -6,6 +6,7 @@ contract Fin4MainStrut {
 
   function claimSubmissionPingback(address claimer) public returns(bool);
 
-  function addMessage(address sender, address receiver, string memory message, address fulfillmentAddress) public returns(bool);
+  function addMessage(uint messageType, address sender, address receiver,
+    string memory message, address fulfillmentAddress) public returns(bool);
 
 }

@@ -9,6 +9,9 @@ contract Fin4BaseProofType {
   string public description;
   address public Fin4Main;
 
+  enum MessageType { APPROVAL, INFO }
+  MessageType public messageType;
+
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
 
   constructor(address Fin4MainAddress) public {

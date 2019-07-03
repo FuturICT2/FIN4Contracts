@@ -10,6 +10,7 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType, utils {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       setNameAndDescription();
+      messageType = MessageType.APPROVAL;
     }
 
   function setNameAndDescription() public returns(bool) {
@@ -35,7 +36,7 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType, utils {
     pa.approver = approver;
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId)));
-    Fin4MainStrut(Fin4Main).addMessage(msg.sender, approver, message, address(this));
+    Fin4MainStrut(Fin4Main).addMessage(uint(messageType), msg.sender, approver, message, address(this));
     return true;
   }
 
