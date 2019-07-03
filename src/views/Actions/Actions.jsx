@@ -14,8 +14,8 @@ class Actions extends Component {
 					<TypeCreation />
 				</div>
 				<div>
-					<PreviousClaims />
 					<Messages />
+					<PreviousClaims />
 				</div>
 			</Fin4Container>
 		);
