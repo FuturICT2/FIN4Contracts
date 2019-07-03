@@ -116,7 +116,7 @@ const Fin4Modal = props => {
 };
 
 const Fin4Table = props => {
-	const size = props.size ? props.size : '';
+	const size = props.size ? props.size : 'medium';
 	return (
 		<Table size={size}>
 			<TableHead>
