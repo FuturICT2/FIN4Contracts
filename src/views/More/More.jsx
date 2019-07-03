@@ -66,7 +66,7 @@ class More extends React.Component {
 
 const Wrapper = styled.div`
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-evenly;
 	align-items: center;
 `;
 
