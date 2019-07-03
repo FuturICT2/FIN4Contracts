@@ -29,9 +29,14 @@ const Fin4Container = styled.div`
 
 	.MuiPaper-root {
 		padding: 1em;
-		margin: 25px;
 		width: 400px;
-		opacity: 0.85;
+		margin: 25px;
+		${props =>
+			props.isModalContainer
+				? `box-sizing: border-box;
+			max-height: calc(100% - 50px);
+			overflow-y: auto;`
+				: `opacity: 0.9;`}
 	}
 
 	h3 {
@@ -103,7 +108,7 @@ const Fin4Modal = props => {
 
 	return (
 		<Modal open={props.isOpen} onClose={props.handleClose}>
-			<Fin4ModalContainer>
+			<Fin4ModalContainer isModalContainer={true}>
 				<Fin4Box title={props.title}>
 					<CloseButton onClick={props.handleClose}>
 						<CloseIcon fontSize="small" />
@@ -116,7 +121,7 @@ const Fin4Modal = props => {
 };
 
 const Fin4Table = props => {
-	const size = props.size ? props.size : 'medium';
+	const size = props.size || 'medium';
 	return (
 		<Table size={size}>
 			<TableHead>
