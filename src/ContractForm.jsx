@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Web3 from 'web3';
 
 const translateType = type => {
@@ -162,10 +162,13 @@ class ContractForm extends Component {
 					var inputLabel = this.props.labels ? this.props.labels[index] : name;
 
 					if (inputLabel === 'date') {
-						const dateFormat = 'YYYY-MM-DD';
+						const dateFormat = 'YYYY-MM-DD HH:mm';
 						return (
 							<MuiPickersUtilsProvider key={name} utils={DateFnsUtils}>
-								<DatePicker
+								<DateTimePicker
+									ampm={false}
+									disableFuture
+									showTodayButton
 									key={name}
 									label={inputLabel}
 									format={dateFormat}
