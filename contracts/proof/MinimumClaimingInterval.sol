@@ -9,19 +9,19 @@ contract MinimumClaimingInterval is Fin4BaseProofType {
     public {
       name = "MinimumClaimingInterval";
       description = "Defines a minimum time that has to pass between claims.";
+      minimumInterval = 5 * 60 * 1000; // 5min for testing
     }
 
     function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
-      require(minimumIntervalRequirementMet(), "The required minimum time between two claim submissions hasn't passed yet.");
+      require(minimumIntervalRequirementMet(tokenAdrToReceiveProof, msg.sender, claimId),
+        "The time between your previous claim and this one, is shorter than the minimum required timespan.");
       _sendApproval(tokenAdrToReceiveProof, claimId);
       return true;
     }
 
-    function minimumIntervalRequirementMet() private view returns(bool) {
-
-        // TODO
-
-        return true;
+    function minimumIntervalRequirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
+        uint timeBetween = Fin4TokenStrut(tokenAddressUsingThisProofType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
+        return timeBetween <= minimumInterval;
     }
 
     // @Override
@@ -29,7 +29,7 @@ contract MinimumClaimingInterval is Fin4BaseProofType {
       return 2;
     }
 
-    uint minimumInterval = 0; // in ms
+    uint public minimumInterval = 0; // in ms
 
     function setMinimumInterval(address tokenAddressUsingThisProofType, uint _minimumInterval) public returns(bool) {
         require(fin4TokenToItsCreator[tokenAddressUsingThisProofType] == msg.sender, "Only the token creator can set this value.");

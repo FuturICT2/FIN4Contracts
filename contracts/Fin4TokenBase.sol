@@ -76,21 +76,39 @@ contract Fin4TokenBase { // abstract class
   }
 
   function getMyClaimIds() public view returns(address, string memory, string memory, uint[] memory) {
+    return (address(this), name(), symbol(), _getMyClaimIds(msg.sender));
+  }
+
+  function _getMyClaimIds(address claimer) private view returns(uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
-      if (claims[i].claimer == msg.sender) {
+      if (claims[i].claimer == claimer) {
           count ++;
       }
     }
     uint[] memory ids = new uint[](count);
     count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
-      if (claims[i].claimer == msg.sender) {
+      if (claims[i].claimer == claimer) {
           ids[count] = i;
           count ++;
       }
     }
-    return (address(this), name(), symbol(), ids);
+    return ids;
+  }
+
+  function getTimeBetweenThisClaimAndThatClaimersPreviousOne(address claimer, uint claimId) public view returns(uint) {
+    uint[] memory ids = _getMyClaimIds(claimer);
+    if (ids.length < 2) {
+      return 365 * 24 * 60 * 60 * 1000; // a year as indicator that it's not applicable (can't do -1 unfortunately)
+    }
+    uint previousId;
+    for (uint i = 0; i < ids.length; i ++) {
+      if(ids[i] == claimId) {
+          return claims[claimId].date - claims[previousId].date;
+      }
+      previousId = ids[i];
+    }
   }
 
   // ------------------------- PROOF TYPES -------------------------
