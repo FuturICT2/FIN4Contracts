@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Fin4Box } from '../../Elements';
+import { Fin4Box, Fin4Table } from '../../Elements';
 import ContractData from '../../ContractData';
+import { TableCell, TableRow } from '@material-ui/core';
+import moment from 'moment';
 
 class PreviousClaims extends Component {
 	showClaim = (
@@ -8,15 +10,19 @@ class PreviousClaims extends Component {
 		[tokenAddress, tokenName, tokenSymbol, claimId]
 	) => {
 		return (
-			<li key={`${tokenAddress}-${claimId}`}>
-				<font color="gray">{date}</font>&nbsp;
-				<b>{tokenName}</b> [{tokenSymbol}] ({quantity}), {comment}
+			<TableRow>
+				<TableCell key="0">{moment.unix(Number(date.substring(0, date.length - 3))).calendar()}</TableCell>
+				<TableCell key="1">
+					{tokenName} [{tokenSymbol}]
+				</TableCell>
+				<TableCell key="2">{quantity}</TableCell>
+				<TableCell key="3">{comment}</TableCell>
 				{!isApproved && (
-					<span>
-						&nbsp;>> <a href={`/proof?tokenAddress=${tokenAddress}&claimId=${claimId}`}>submit proof</a>
-					</span>
+					<TableCell key="4">
+						<a href={`/proof?tokenAddress=${tokenAddress}&claimId=${claimId}`}>submit</a>
+					</TableCell>
 				)}
-			</li>
+			</TableRow>
 		);
 	};
 
@@ -38,13 +44,17 @@ class PreviousClaims extends Component {
 		);
 	};
 
-	getActionsWhereUserHasClaims = data => {
-		const claims =
-			data &&
-			data.map((address, index) => {
-				return <ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.showClaims} />;
-			});
-		return <ul>{claims}</ul>;
+	showClaimsByActionType = data => {
+		return (
+			<Fin4Table headers={['Date', 'Action', 'Quantity', 'Comment', 'Proof']} size="small">
+				{data &&
+					data.map((address, index) => {
+						return (
+							<ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.showClaims} />
+						);
+					})}
+			</Fin4Table>
+		);
 	};
 
 	render() {
@@ -53,7 +63,7 @@ class PreviousClaims extends Component {
 				<ContractData
 					contractName="Fin4Main"
 					method="getActionsWhereUserHasClaims"
-					callback={this.getActionsWhereUserHasClaims}
+					callback={this.showClaimsByActionType}
 				/>
 			</Fin4Box>
 		);
