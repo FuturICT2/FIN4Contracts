@@ -51,7 +51,7 @@ yarn install
 #### Compile and migrate the smart contracts
 
 1. `truffle compile`
-2. Start [Ganache](https://truffleframework.com/ganache) and use *Quickstart*.
+2. `ganache-cli --port=7545 --allowUnlimitedContractSize`
 3. `truffle migrate` to place the smart contract on the local blockchain
 4. install the [Metamask](https://metamask.io/) browser extension, paste `MNEMONIC` from Ganache into the `seed` input and `http://127.0.0.1:7545` into `custom RPC` input
 
