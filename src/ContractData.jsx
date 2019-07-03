@@ -72,13 +72,13 @@ class ContractData extends Component {
 			!this.contracts[this.contractIdentifier] ||
 			!this.props.contracts[this.contractIdentifier].initialized
 		) {
-			console.log('Initializing...');
+			// console.log('Initializing...');
 			return <></>;
 		}
 
 		// If the cache key we received earlier isn't in the store yet; the initial value is still being fetched.
 		if (!(this.state.dataKey in this.props.contracts[this.contractIdentifier][this.props.method])) {
-			console.log('Fetching...');
+			// console.log('Fetching...');
 			return <></>;
 		}
 
