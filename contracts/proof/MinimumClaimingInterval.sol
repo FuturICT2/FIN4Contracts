@@ -14,15 +14,18 @@ contract MinimumClaimingInterval is Fin4BaseProofType {
     }
 
     function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
-      require(minimumIntervalRequirementMet(tokenAdrToReceiveProof, msg.sender, claimId),
-        "The time between your previous claim and this one, is shorter than the minimum required timespan.");
-      _sendApproval(tokenAdrToReceiveProof, claimId);
+      if (minimumIntervalRequirementMet(tokenAdrToReceiveProof, msg.sender, claimId)) {
+        _sendApproval(tokenAdrToReceiveProof, claimId);
+      } else {
+        string memory message = "The time between your previous claim and this one, is shorter than the minimum required timespan.";
+        Fin4MainStrut(Fin4Main).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
+      }
       return true;
     }
 
     function minimumIntervalRequirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
-        uint timeBetween = Fin4TokenStrut(tokenAddressUsingThisProofType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
-        return timeBetween <= minimumInterval;
+      uint timeBetween = Fin4TokenStrut(tokenAddressUsingThisProofType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
+      return timeBetween >= minimumInterval;
     }
 
     // @Override
