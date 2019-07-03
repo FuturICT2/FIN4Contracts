@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ContractForm from '../../ContractForm';
 import ContractData from '../../ContractData';
-import { Fin4Box, Fin4Modal } from '../../Elements';
+import { Fin4Box, Fin4Modal, Fin4Table, Fin4TableRow } from '../../Elements';
 // import { drizzleConnect } from 'drizzle-react';
 // import PropTypes from 'prop-types';
 import { IconButton } from '@material-ui/core';
@@ -27,26 +27,22 @@ class TypeCreation extends Component {
 		this.setState({ isPopupOpen: !this.state.isPopupOpen });
 	};
 
-	getProofTypes = data => {
-		const proofTypes =
-			data &&
-			data.map((address, index) => {
-				return (
-					<ContractData
-						key={index}
-						contractAddress={address}
-						method="getInfo"
-						callback={({ 0: name, 1: description }) => {
-							return (
-								<li key={name}>
-									<b>{name}</b>: {description}
-								</li>
-							);
-						}}
-					/>
-				);
-			});
-		return <ul>{proofTypes}</ul>;
+	showProofTypeSpecification = data => {
+		return (
+			<Fin4Table headers={['Name', 'Description']}>
+				{data &&
+					data.map((address, index) => {
+						return (
+							<ContractData
+								key={index}
+								contractAddress={address}
+								method="getInfo"
+								callback={data => <Fin4TableRow data={data} />}
+							/>
+						);
+					})}
+			</Fin4Table>
+		);
 	};
 
 	render() {
@@ -64,7 +60,7 @@ class TypeCreation extends Component {
 					<ContractForm contractName="Fin4Main" method="createNewToken" />
 				</Fin4Box>
 				<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
-					<ContractData contractName="Fin4Main" method="getProofTypes" callback={this.getProofTypes} />
+					<ContractData contractName="Fin4Main" method="getProofTypes" callback={this.showProofTypeSpecification} />
 				</Fin4Modal>
 			</>
 		);
