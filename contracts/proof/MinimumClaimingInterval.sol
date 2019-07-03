@@ -32,7 +32,7 @@ contract MinimumClaimingInterval is Fin4BaseProofType {
     uint public minimumInterval = 0; // in ms
 
     function setMinimumInterval(address tokenAddressUsingThisProofType, uint _minimumInterval) public returns(bool) {
-        require(fin4TokenToItsCreator[tokenAddressUsingThisProofType] == msg.sender, "Only the token creator can set this value.");
+        require(fin4TokenToItsCreator[tokenAddressUsingThisProofType] == msg.sender, "Only the action type creator can set this value.");
         minimumInterval = _minimumInterval;
         return true;
     }

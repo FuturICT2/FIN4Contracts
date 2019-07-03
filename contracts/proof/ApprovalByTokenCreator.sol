@@ -11,7 +11,7 @@ contract ApprovalByTokenCreator is ApprovalBySpecificAddress {
   // @Override
   function setNameAndDescription() public returns(bool) {
     name = "ApprovalByTokenCreator";
-    description = "The token creator has to approve";
+    description = "The action type creator has to approve";
   }
 
   function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
