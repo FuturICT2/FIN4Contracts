@@ -35,7 +35,8 @@ const Fin4Container = styled.div`
 			props.isModalContainer
 				? `box-sizing: border-box;
 			max-height: calc(100% - 50px);
-			overflow-y: auto;`
+			overflow-y: auto;
+			box-shadow: 0 0 100px 1px rgba(0,0,0,.7)`
 				: `opacity: 0.9;`}
 	}
 
