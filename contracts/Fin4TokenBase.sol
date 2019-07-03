@@ -99,7 +99,7 @@ contract Fin4TokenBase { // abstract class
 
   function getTimeBetweenThisClaimAndThatClaimersPreviousOne(address claimer, uint claimId) public view returns(uint) {
     uint[] memory ids = _getMyClaimIds(claimer);
-    if (ids.length < 2) {
+    if (ids.length < 2 || ids[0] == claimId) {
       return 365 * 24 * 60 * 60 * 1000; // a year as indicator that it's not applicable (can't do -1 unfortunately)
     }
     uint previousId;
