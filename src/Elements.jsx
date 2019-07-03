@@ -9,7 +9,12 @@ import {
 	CardActionArea,
 	CardActions,
 	CardContent,
-	CardMedia
+	CardMedia,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableRow
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -110,4 +115,31 @@ const Fin4Modal = props => {
 	);
 };
 
-export { Fin4Container, Fin4Box, Fin4Modal, Fin4Card };
+const Fin4Table = props => {
+	return (
+		<Table>
+			<TableHead>
+				<TableRow>
+					{props.headers.map((key, index) => {
+						return <TableCell key={index}>{key}</TableCell>;
+					})}
+				</TableRow>
+			</TableHead>
+			<TableBody>{props.children}</TableBody>
+		</Table>
+	);
+};
+
+const Fin4TableRow = props => {
+	const keys = Object.keys(props.data);
+	const values = Object.values(props.data);
+	return (
+		<TableRow key={props.index}>
+			{keys.map((key, index) => {
+				return <TableCell key={key}>{values[index]}</TableCell>;
+			})}
+		</TableRow>
+	);
+};
+
+export { Fin4Container, Fin4Box, Fin4Modal, Fin4Card, Fin4Table, Fin4TableRow };
