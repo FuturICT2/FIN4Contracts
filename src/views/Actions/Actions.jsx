@@ -9,7 +9,7 @@ class Actions extends Component {
 	render() {
 		return (
 			<Fin4Container>
-				<div>
+				<div style={{ position: 'sticky', top: '20px' }}>
 					<Claim />
 					<TypeCreation />
 				</div>
