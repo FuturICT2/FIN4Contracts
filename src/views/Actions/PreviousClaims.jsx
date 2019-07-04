@@ -1,28 +1,54 @@
 import React, { Component } from 'react';
-import { Fin4Box, Fin4Table } from '../../Elements';
+import { Fin4Box } from '../../Elements';
 import ContractData from '../../ContractData';
-import { TableCell, TableRow } from '@material-ui/core';
+import { Chip, Typography, Divider, Grid, Paper } from '@material-ui/core';
+import DateIcon from '@material-ui/icons/AccessTime';
 import moment from 'moment';
+import styled from 'styled-components';
 
 class PreviousClaims extends Component {
 	showClaim = (
 		{ 0: claimer, 1: isApproved, 2: quantity, 3: date, 4: comment },
 		[tokenAddress, tokenName, tokenSymbol, claimId]
 	) => {
+		// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
+		date = moment.unix(Number(date.substring(0, date.length - 3))).calendar();
 		return (
-			<TableRow>
-				<TableCell key="0">{moment.unix(Number(date.substring(0, date.length - 3))).calendar()}</TableCell>
-				<TableCell key="1">
-					{tokenName} [{tokenSymbol}]
-				</TableCell>
-				<TableCell key="2">{quantity}</TableCell>
-				<TableCell key="3">{comment}</TableCell>
-				{!isApproved && (
-					<TableCell key="4">
-						<a href={`/proof?tokenAddress=${tokenAddress}&claimId=${claimId}`}>submit</a>
-					</TableCell>
-				)}
-			</TableRow>
+			<Claim isapproved={isApproved.toString()}>
+				<div>
+					<Grid container alignItems="center">
+						<Grid item xs>
+							<Typography gutterBottom variant="h5">
+								{tokenName}
+							</Typography>
+						</Grid>
+						<Grid item>
+							<Typography gutterBottom variant="h6">
+								{quantity} <Currency>{tokenSymbol}</Currency>
+							</Typography>
+						</Grid>
+					</Grid>
+					{comment && (
+						<Typography color="textSecondary" variant="body2">
+							{comment}
+						</Typography>
+					)}
+				</div>
+				<Divider style={{ margin: '10px 0' }} variant="middle" />
+				<div>
+					<Chip key="0" icon={<DateIcon />} label={date} style={{ marginRight: '20px' }} />
+					<Chip
+						key="1"
+						label={
+							isApproved ? (
+								'approved'
+							) : (
+								<a href={`/proof?tokenAddress=${tokenAddress}&claimId=${claimId}`}>submit proof</a>
+							)
+						}
+					/>
+				</div>
+			</Claim>
 		);
 	};
 
@@ -48,13 +74,11 @@ class PreviousClaims extends Component {
 		return (
 			data.length > 0 && (
 				<Fin4Box title="My Previous Claims">
-					<Fin4Table headers={['Date', 'Action', 'Quantity', 'Comment', 'Proof']} size="small">
-						{data.map((address, index) => {
-							return (
-								<ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.showClaims} />
-							);
-						})}
-					</Fin4Table>
+					{data.map((address, index) => {
+						return (
+							<ContractData key={index} contractAddress={address} method="getMyClaimIds" callback={this.showClaims} />
+						);
+					})}
 				</Fin4Box>
 			)
 		);
@@ -70,5 +94,21 @@ class PreviousClaims extends Component {
 		);
 	}
 }
+
+const Claim = styled(Paper)`
+	&& {
+		box-sizing: border-box;
+		margin-left: 0;
+		margin-right: 0;
+		background: ${props => (props.isapproved === 'true' ? `rgba(61, 219, 81, 0.15)` : `rgba(248, 57, 48, 0.15)`)};
+	}
+`;
+
+const Currency = styled.span`
+	text-transform: uppercase;
+	border: 1px solid grey;
+	border-radius: 4px;
+	padding: 0 3px;
+`;
 
 export default PreviousClaims;
