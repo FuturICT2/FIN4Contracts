@@ -158,4 +158,11 @@ const Fin4TableRow = props => {
 	);
 };
 
-export { Fin4Container, Fin4Box, Fin4Modal, Fin4Card, Fin4Table, Fin4TableRow };
+const Currency = styled.span`
+	text-transform: uppercase;
+	border: 1px solid grey;
+	border-radius: 4px;
+	padding: 0 3px;
+`;
+
+export { Fin4Container, Fin4Box, Fin4Modal, Fin4Card, Fin4Table, Fin4TableRow, Currency };
