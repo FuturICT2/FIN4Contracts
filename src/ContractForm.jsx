@@ -142,14 +142,15 @@ class ContractForm extends Component {
 	handleInputChange = event => {
 		let value;
 
-		if (!event.target && this.props.multiSelectOptions) { // indicator for react-select
+		if (!event.target && this.props.multiSelectOptions) {
+			// indicator for react-select
 			var values = [];
-			for (var i = 0; i < event.length; i ++) {
+			for (var i = 0; i < event.length; i++) {
 				values.push(event[i].value);
 			}
 			this.setState({ ['requiredProofTypes']: values }); // TODO make it general
 			return;
-		} 
+		}
 
 		if (event.target.type === 'checkbox') {
 			value = event.target.checked;
@@ -181,7 +182,7 @@ class ContractForm extends Component {
 								defaultValue={[]}
 								options={this.props.multiSelectOptions}
 								components={animatedComponents}
-						  	/>
+							/>
 						);
 					}
 

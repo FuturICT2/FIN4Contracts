@@ -4,10 +4,12 @@ import { Fin4Box } from '../Elements';
 
 class Messages extends Component {
 	getMyMessage = ({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName }) => {
-		if (messageType === "1") { // INFO
-			return <p>{message}</p>
+		if (messageType === '1') {
+			// INFO
+			return <p>{message}</p>;
 		}
-		return ( // messageType === 0: APPROVE
+		return (
+			// messageType === 0: APPROVE
 			<p>
 				{message}
 				<br></br>Requested by: <i>{sender}</i>
@@ -29,7 +31,7 @@ class Messages extends Component {
 			messageIndices.push(i);
 		}
 		return (
-			messageIndices.length > 0 && (
+			messageIndices.length && (
 				<Fin4Box title="Messages">
 					{messageIndices.map(index => {
 						return (

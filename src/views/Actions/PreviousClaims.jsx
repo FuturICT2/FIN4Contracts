@@ -15,9 +15,8 @@ class PreviousClaims extends Component {
 		super(props);
 
 		this.state = {
-			claims: [],
+			claims: []
 			// drizzleState: context.drizzle.store.getState()
-			contracts: context.drizzle.contracts
 		};
 
 		getContractData('Fin4Main', 'getActionsWhereUserHasClaims', [], context.drizzle)
@@ -40,7 +39,7 @@ class PreviousClaims extends Component {
 							return claims.map(({ claimId, actionTypeAddress, tokenName, tokenSymbol }) => {
 								return getContractData(actionTypeAddress, 'getClaimInfo', [claimId], context.drizzle).then(
 									({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
-										// claims per claim ids per action type
+										// claims per claim id per action type
 										return {
 											claimId: claimId,
 											actionTypeAddress: actionTypeAddress,
@@ -68,7 +67,7 @@ class PreviousClaims extends Component {
 
 	render() {
 		return (
-			this.state.claims && (
+			this.state.claims.length && (
 				<Fin4Box title="My Previous Claims">
 					{this.state.claims.map(
 						({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment }) => {
