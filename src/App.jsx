@@ -12,27 +12,10 @@ import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from './config/colors-config';
 
 class App extends Component {
-	globalTheme = createMuiTheme({
-		palette: {
-			primary: {
-				light: colors.light,
-				main: colors.main,
-				dark: colors.main,
-				contrastText: colors.light
-			},
-			secondary: {
-				main: colors.dark,
-				light: colors.light,
-				dark: colors.dark,
-				contrastText: colors.light
-			}
-		}
-	});
-
 	render() {
 		return (
 			<Router>
-				<ThemeProvider theme={this.globalTheme}>
+				<ThemeProvider theme={globalTheme}>
 					<Fin4Container>
 						<TopBar />
 
@@ -55,6 +38,23 @@ class App extends Component {
 		);
 	}
 }
+
+const globalTheme = createMuiTheme({
+	palette: {
+		primary: {
+			light: colors.light,
+			main: colors.main,
+			dark: colors.main,
+			contrastText: colors.light
+		},
+		secondary: {
+			main: colors.dark,
+			light: colors.light,
+			dark: colors.dark,
+			contrastText: colors.light
+		}
+	}
+});
 
 const Fin4Container = styled.div`
 	display: flex;
