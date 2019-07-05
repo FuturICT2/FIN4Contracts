@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
 import { Fin4Box } from '../../Elements';
 import ContractData from '../../ContractData';
-import { Chip, Typography, Divider, Grid, Paper } from '@material-ui/core';
+import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
+import ThemeProvider from '@material-ui/styles/ThemeProvider';
+import colors from '../../config/colors-config';
 import DateIcon from '@material-ui/icons/AccessTime';
 import moment from 'moment';
 import styled from 'styled-components';
 
 class PreviousClaims extends Component {
+	chipTheme = createMuiTheme({
+		palette: {
+			primary: {
+				main: colors.light,
+				contrastText: colors.main
+			},
+			secondary: {
+				main: 'rgba(248, 57, 48, 0.5)',
+				contrastText: colors.light
+			}
+		}
+	});
 	showClaim = (
 		{ 0: claimer, 1: isApproved, 2: quantity, 3: date, 4: comment },
 		[tokenAddress, tokenName, tokenSymbol, claimId]
@@ -35,19 +49,17 @@ class PreviousClaims extends Component {
 					)}
 				</div>
 				<Divider style={{ margin: '10px 0' }} variant="middle" />
-				<div>
-					<Chip key="0" icon={<DateIcon />} label={date} style={{ marginRight: '20px' }} />
+				<ThemeProvider theme={this.chipTheme}>
+					<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ marginRight: '20px' }} />
 					<Chip
 						key="1"
-						label={
-							isApproved ? (
-								'approved'
-							) : (
-								<a href={`/proof?tokenAddress=${tokenAddress}&claimId=${claimId}`}>submit proof</a>
-							)
-						}
+						color={isApproved ? 'primary' : 'secondary'}
+						component={isApproved ? 'span' : 'a'}
+						clickable={!isApproved}
+						href={isApproved ? '' : `/proof?tokenAddress=${tokenAddress}&claimId=${claimId}`}
+						label={isApproved ? 'approved' : 'submit proof'}
 					/>
-				</div>
+				</ThemeProvider>
 			</Claim>
 		);
 	};
