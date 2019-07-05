@@ -122,6 +122,7 @@ const mapStateToProps = state => {
 const getContractData = (contract, method, methodArgs, drizzle) => {
 	// add contract if not yet added
 	if (!Object.keys(drizzle.contracts).includes(contract)) {
+		console.log(`adding contract ${contract}`);
 		const tokenJson = require('./build/contracts/Fin4Token.json');
 		const web3 = new Web3(window.web3.currentProvider);
 		drizzle.addContract({
@@ -138,7 +139,7 @@ const getContractData = (contract, method, methodArgs, drizzle) => {
 				// apply method
 				resolve(drizzle.contracts[contract].methods[method](...methodArgs).call());
 			} else {
-				console.log(`try to find contract ${contract}`);
+				console.log(`trying to find contract ${contract}`);
 			}
 		}, 1);
 	});
