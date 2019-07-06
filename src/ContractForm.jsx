@@ -154,6 +154,18 @@ class ContractForm extends Component {
 			for (var i = 0; i < event.length; i++) {
 				values.push(event[i].value);
 			}
+
+			var newValue;
+			if (this.state.requiredProofTypes.length == 0) { // first tag was added
+				newValue = values[0];
+			} else if (values.length < this.state.requiredProofTypes.length) { // a tag was removed
+				newValue = null;
+			} else {
+				newValue = values[values.length - 1];
+			}
+
+			// TODO
+
 			this.setState({ ['requiredProofTypes']: values }); // TODO make it general
 			return;
 		}
