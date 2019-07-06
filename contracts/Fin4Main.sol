@@ -39,7 +39,7 @@ contract Fin4Main {
       return Fin4Token(tokenAddress).balanceOf(msg.sender);
   }
 
-  function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
+   /*function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
     uint count = 0;
     for (uint i = 0; i < children.length; i ++) {
         count ++;
@@ -54,7 +54,7 @@ contract Fin4Main {
       j++;
     }
     return (addresses, balances);
-  }
+  }*/
 
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
 
@@ -78,7 +78,7 @@ contract Fin4Main {
       actionsWhereUserHasClaims[claimer].push(msg.sender);
     }
   }
- 
+
   // ------------------------- PROOF TYPES -------------------------
 
   address[] public proofTypes;
