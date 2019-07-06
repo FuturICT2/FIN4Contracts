@@ -18,7 +18,6 @@ class App extends Component {
 				<ThemeProvider theme={globalTheme}>
 					<Fin4Container>
 						<TopBar />
-
 						<DrizzleProvider options={drizzleConfig}>
 							<LoadingContainer>
 								<>
@@ -31,7 +30,6 @@ class App extends Component {
 						</DrizzleProvider>
 						<Spacer />
 					</Fin4Container>
-
 					<NavigationBar />
 				</ThemeProvider>
 			</Router>
