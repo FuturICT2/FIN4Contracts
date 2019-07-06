@@ -12,6 +12,8 @@ import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Web3 from 'web3';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { Fin4Modal } from './Elements';
+
 const animatedComponents = makeAnimated();
 
 const translateType = type => {
@@ -34,6 +36,7 @@ class ContractForm extends Component {
 
 		this.state = {};
 		this.inputs = [];
+		this.newValue = null;
 		this.rebuild();
 	}
 
@@ -42,7 +45,9 @@ class ContractForm extends Component {
 		const abi = self.contracts[self.contractIdentifier].abi;
 
 		this.inputs = [];
-		var initialState = {};
+		var initialState = {
+			isPopupOpen: false,
+		};
 
 		// Iterate over abi for correct function.
 		for (var i = 0; i < abi.length; i++) {
@@ -155,18 +160,19 @@ class ContractForm extends Component {
 				values.push(event[i].value);
 			}
 
-			var newValue;
 			if (this.state.requiredProofTypes.length == 0) { // first tag was added
-				newValue = values[0];
+				this.newValue = values[0];
 			} else if (values.length < this.state.requiredProofTypes.length) { // a tag was removed
-				newValue = null;
+				this.newValue = null;
 			} else {
-				newValue = values[values.length - 1];
+				this.newValue = values[values.length - 1];
 			}
 
-			// TODO
-
 			this.setState({ ['requiredProofTypes']: values }); // TODO make it general
+			
+			if (this.newValue != null) {
+				this.togglePopup();
+			}
 			return;
 		}
 
@@ -181,8 +187,17 @@ class ContractForm extends Component {
 		this.setState({ [event.target.name]: value });
 	};
 
+	togglePopup = () => {
+		this.newValue = null;
+		this.setState({ isPopupOpen: !this.state.isPopupOpen });
+	};
+
 	render() {
 		return (
+			<>
+			<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Set parameters">
+				TODO
+			</Fin4Modal>
 			<form onSubmit={this.handleSubmit} autoComplete="off">
 				{this.inputs.map(({ name, type }, index) => {
 					if (this.props.fixArgs && this.props.fixArgs[name]) {
@@ -249,6 +264,7 @@ class ContractForm extends Component {
 					</Button>
 				</p>
 			</form>
+			</>
 		);
 	}
 }
