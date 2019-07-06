@@ -26,25 +26,21 @@ const Fin4Container = styled.div`
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: flex-start;
-
-	.MuiPaper-root {
-		padding: 1em;
-		width: 400px;
-		margin: 20px;
-		overflow: hidden;
-		${props =>
-			props.isModalContainer
-				? `box-sizing: border-box;
-			max-height: calc(100% - 50px);
-			overflow-y: auto;
-			box-shadow: 0 0 100px 1px rgba(0,0,0,.7)`
-				: `opacity: 0.9;`}
-	}
 `;
 
 const Fin4Box = props => {
 	const PaperStyle = styled(Paper)`
+		${props.maxWidth ? `max-width: ${props.maxWidth}` : 'width: 400px'};
 		position: relative;
+		padding: 1em;
+		margin: 20px;
+		overflow: hidden;
+		${props.isModal
+			? `box-sizing: border-box;
+			max-height: calc(100% - 50px);
+			overflow-y: auto;
+			box-shadow: 0 0 100px 1px rgba(0,0,0,.7) !important`
+			: `opacity: 0.9;`};
 		h3 {
 			text-align: center;
 			background: ${colors.main};
@@ -118,8 +114,8 @@ const Fin4Modal = props => {
 
 	return (
 		<Modal open={props.isOpen} onClose={props.handleClose}>
-			<Fin4ModalContainer isModalContainer={true}>
-				<Fin4Box title={props.title}>
+			<Fin4ModalContainer>
+				<Fin4Box title={props.title} isModal={true} maxWidth="80%">
 					<CloseButton onClick={props.handleClose}>
 						<CloseIcon fontSize="small" />
 					</CloseButton>
