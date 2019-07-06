@@ -8,7 +8,7 @@ contract LocationAtProofSubmission is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "LocationAtProofSubmission";
-      description = "To be approved automatically, the user needs to provide location data (latitude/longitude) that is within a radius of a location the token creator defines.";
+      description = "To be approved automatically, the user needs to provide location data (latitude/longitude) that is within a radius of a location the token creator defines";
       messageType = MessageType.INFO;
       _Latitude = 0;
       _Longitude = 0;

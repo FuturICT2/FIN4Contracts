@@ -8,7 +8,7 @@ contract MinimumClaimingInterval is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "MinimumClaimingInterval";
-      description = "Defines a minimum time that has to pass between claims.";
+      description = "Defines a minimum time that has to pass between claims";
       minimumInterval = 1 * 24 * 60 * 60 * 1000; // 1 day
       messageType = MessageType.INFO;
     }

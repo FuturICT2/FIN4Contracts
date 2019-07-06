@@ -3,7 +3,7 @@ const ImmediateAutoApproval = artifacts.require('ImmediateAutoApproval');
 const ApprovalBySpecificAddress = artifacts.require('ApprovalBySpecificAddress');
 const ApprovalByTokenCreator = artifacts.require('ApprovalByTokenCreator');
 const MinimumClaimingInterval = artifacts.require('MinimumClaimingInterval');
-const KnowPassword = artifacts.require('KnowPassword');
+const Password = artifacts.require('Password');
 const MaximumQuantityPerInterval = artifacts.require('MaximumQuantityPerInterval');
 
 module.exports = async function (deployer) {
@@ -19,7 +19,7 @@ module.exports = async function (deployer) {
 		deployer.deploy(ApprovalBySpecificAddress, Fin4MainInstance.address),
 		deployer.deploy(ApprovalByTokenCreator, Fin4MainInstance.address),
 		deployer.deploy(MinimumClaimingInterval, Fin4MainInstance.address),
-		deployer.deploy(KnowPassword, Fin4MainInstance.address),
+		deployer.deploy(Password, Fin4MainInstance.address),
 		deployer.deploy(MaximumQuantityPerInterval, Fin4MainInstance.address)
 	]);
 
@@ -28,7 +28,7 @@ module.exports = async function (deployer) {
 		ApprovalBySpecificAddress.deployed(),
 		ApprovalByTokenCreator.deployed(),
 		MinimumClaimingInterval.deployed(),
-		KnowPassword.deployed(),
+		Password.deployed(),
 		MaximumQuantityPerInterval.deployed()
 	]);
 

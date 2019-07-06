@@ -2,13 +2,13 @@ pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
 
-contract KnowPassword is Fin4BaseProofType {
+contract Password is Fin4BaseProofType {
 
   constructor(address Fin4MainAddress)
     Fin4BaseProofType(Fin4MainAddress)
     public {
-      name = "KnowPassword";
-      description = "To be approved automatically, the user needs to provide a password that the token creator sets once.";
+      name = "Password";
+      description = "To be approved automatically, the user needs to provide a password that the token creator sets once";
       _password = "test123";
       messageType = MessageType.INFO;
     }

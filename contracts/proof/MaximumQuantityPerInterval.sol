@@ -8,7 +8,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "MaximumQuantityPerInterval";
-      description = "Defines the maximum quantity a user can claim within a specified time interval.";
+      description = "Defines the maximum quantity a user can claim within a specified time interval";
       interval = 1 * 24 * 60 * 60 * 1000; // 1 day
       maxQuantity = 10;
       messageType = MessageType.INFO;
