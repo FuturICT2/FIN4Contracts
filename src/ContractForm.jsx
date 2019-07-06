@@ -173,8 +173,8 @@ class ContractForm extends Component {
 			this.setState({ 
 				['requiredProofTypes']: values,
 				newValue: newValue
-			 });
-			
+			});
+
 			if (newValue != null) {
 				this.openPopup();
 			}
@@ -192,6 +192,18 @@ class ContractForm extends Component {
 		this.setState({ [event.target.name]: value });
 	};
 
+	getProofTypeObj(address) {
+		if (!this.props.multiSelectOptions) {
+			return "";
+		}
+		for (var i = 0; i < this.props.multiSelectOptions.length; i ++) {
+			if (this.props.multiSelectOptions[i].value == address) {
+				return this.props.multiSelectOptions[i];
+			}
+		}
+		return "";
+	};
+
 	openPopup = () => {
 		this.setState({ isPopupOpen: true });
 	};
@@ -206,8 +218,8 @@ class ContractForm extends Component {
 	render() {
 		return (
 			<>
-			<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup} title="Set parameters">
-				TODO {this.state.newValue}
+			<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup} title={"Set parameters for " + this.getProofTypeObj(this.state.newValue).label}>
+				<ContractForm contractName="Fin4Main" method="createNewToken"/>
 			</Fin4Modal>
 			<form onSubmit={this.handleSubmit} autoComplete="off">
 				{this.inputs.map(({ name, type }, index) => {
