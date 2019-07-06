@@ -2,12 +2,12 @@ pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
 
-contract MinimumClaimingInterval is Fin4BaseProofType {
+contract MinimumInterval is Fin4BaseProofType {
 
   constructor(address Fin4MainAddress)
     Fin4BaseProofType(Fin4MainAddress)
     public {
-      name = "MinimumClaimingInterval";
+      name = "MinimumInterval";
       description = "Defines a minimum time that has to pass between claims";
       minimumInterval = 1 * 24 * 60 * 60 * 1000; // 1 day
       messageType = MessageType.INFO;

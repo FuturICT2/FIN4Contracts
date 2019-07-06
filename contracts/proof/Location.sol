@@ -2,12 +2,12 @@ pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
 
-contract LocationAtProofSubmission is Fin4BaseProofType {
+contract Location is Fin4BaseProofType {
 
   constructor(address Fin4MainAddress)
     Fin4BaseProofType(Fin4MainAddress)
     public {
-      name = "LocationAtProofSubmission";
+      name = "Location";
       description = "To be approved automatically, the user needs to provide location data (latitude/longitude) that is within a radius of a location the token creator defines";
       messageType = MessageType.INFO;
       _Latitude = 0;

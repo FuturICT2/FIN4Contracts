@@ -151,7 +151,7 @@ class ContractForm extends Component {
 			this.setState({ ['requiredProofTypes']: [] });
 			return;
 		}
-		
+
 		let value;
 
 		if (!event.target && this.props.multiSelectOptions) {
@@ -162,20 +162,23 @@ class ContractForm extends Component {
 			}
 
 			var newValue;
-			if (this.state.requiredProofTypes.length == 0) { // first tag was added
+			if (this.state.requiredProofTypes.length == 0) {
+				// first tag was added
 				newValue = values[0];
-			} else if (values.length < this.state.requiredProofTypes.length) { // a tag was removed
+			} else if (values.length < this.state.requiredProofTypes.length) {
+				// a tag was removed
 				newValue = null;
 			} else {
 				newValue = values[values.length - 1];
 			}
 
-			this.setState({ 
+			this.setState({
 				['requiredProofTypes']: values,
 				newValue: newValue
 			});
 
-			if (newValue != null) { // this.getProofTypeObj(newValue).label == "MinimumClaimingInterval"
+			if (newValue != null) {
+				// this.getProofTypeObj(newValue).label == "MinimumInterval"
 				this.openPopup();
 			}
 			return;
@@ -194,106 +197,109 @@ class ContractForm extends Component {
 
 	getProofTypeObj(address) {
 		if (!this.props.multiSelectOptions) {
-			return "";
+			return '';
 		}
-		for (var i = 0; i < this.props.multiSelectOptions.length; i ++) {
+		for (var i = 0; i < this.props.multiSelectOptions.length; i++) {
 			if (this.props.multiSelectOptions[i].value == address) {
 				return this.props.multiSelectOptions[i];
 			}
 		}
-		return "";
-	};
+		return '';
+	}
 
 	openPopup = () => {
 		this.setState({ isPopupOpen: true });
 	};
 
 	closePopup = () => {
-		this.setState({ 
+		this.setState({
 			isPopupOpen: false,
 			newValue: null
 		});
-	}
+	};
 
 	render() {
 		return (
 			<>
-			<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup} title={"Set parameters for " + this.getProofTypeObj(this.state.newValue).label}>
-				<ContractForm
-					contractAddress={this.state.newValue}
-					contractJson={this.getProofTypeObj(this.state.newValue).label + ".json"}
-					method="setParameters"
-					//fixArgs={{
-					//	tokenAddressUsingThisProofType: this.state.newValue
-					//}}
-				/>
-			</Fin4Modal>
-			<form onSubmit={this.handleSubmit} autoComplete="off">
-				{this.inputs.map(({ name, type }, index) => {
-					if (this.props.fixArgs && this.props.fixArgs[name]) {
-						return '';
-					}
+				<Fin4Modal
+					isOpen={this.state.isPopupOpen}
+					handleClose={this.closePopup}
+					title={'Set parameters for ' + this.getProofTypeObj(this.state.newValue).label}>
+					<ContractForm
+						contractAddress={this.state.newValue}
+						contractJson={this.getProofTypeObj(this.state.newValue).label + '.json'}
+						method="setParameters"
+						//fixArgs={{
+						//	tokenAddressUsingThisProofType: this.state.newValue
+						//}}
+					/>
+				</Fin4Modal>
+				<form onSubmit={this.handleSubmit} autoComplete="off">
+					{this.inputs.map(({ name, type }, index) => {
+						if (this.props.fixArgs && this.props.fixArgs[name]) {
+							return '';
+						}
 
-					var inputType = translateType(type);
-					var inputLabel = this.props.labels ? this.props.labels[index] : name;
+						var inputType = translateType(type);
+						var inputLabel = this.props.labels ? this.props.labels[index] : name;
 
-					if (inputLabel === 'requiredProofTypes' && this.props.multiSelectOptions) {
+						if (inputLabel === 'requiredProofTypes' && this.props.multiSelectOptions) {
+							return (
+								<Select
+									isMulti
+									onChange={this.handleInputChange}
+									defaultValue={[]}
+									options={this.props.multiSelectOptions}
+									components={animatedComponents}
+								/>
+							);
+						}
+
+						if (inputLabel === 'date') {
+							const dateFormat = 'YYYY-MM-DD HH:mm';
+							return (
+								<MuiPickersUtilsProvider key={name} utils={DateFnsUtils}>
+									<DateTimePicker
+										ampm={false}
+										disableFuture
+										showTodayButton
+										key={name}
+										label={inputLabel}
+										format={dateFormat}
+										value={moment(this.state[name]).format(dateFormat)}
+										onChange={moment =>
+											this.handleInputChange({
+												target: {
+													name: name,
+													value: moment,
+													type: 'date'
+												}
+											})
+										}
+										style={inputFieldStyle}
+									/>
+								</MuiPickersUtilsProvider>
+							);
+						}
+
 						return (
-							<Select
-								isMulti
+							<TextField // renders the number field automatically by detecting the inputType
+								key={name}
+								name={name}
+								multiline={inputLabel === 'comment'}
+								type={inputType}
+								label={inputLabel}
 								onChange={this.handleInputChange}
-								defaultValue={[]}
-								options={this.props.multiSelectOptions}
-								components={animatedComponents}
+								style={inputFieldStyle}
 							/>
 						);
-					}
-
-					if (inputLabel === 'date') {
-						const dateFormat = 'YYYY-MM-DD HH:mm';
-						return (
-							<MuiPickersUtilsProvider key={name} utils={DateFnsUtils}>
-								<DateTimePicker
-									ampm={false}
-									disableFuture
-									showTodayButton
-									key={name}
-									label={inputLabel}
-									format={dateFormat}
-									value={moment(this.state[name]).format(dateFormat)}
-									onChange={moment =>
-										this.handleInputChange({
-											target: {
-												name: name,
-												value: moment,
-												type: 'date'
-											}
-										})
-									}
-									style={inputFieldStyle}
-								/>
-							</MuiPickersUtilsProvider>
-						);
-					}
-
-					return (
-						<TextField // renders the number field automatically by detecting the inputType
-							key={name}
-							name={name}
-							multiline={inputLabel === 'comment'}
-							type={inputType}
-							label={inputLabel}
-							onChange={this.handleInputChange}
-							style={inputFieldStyle}
-						/>
-					);
-				})}
-				<p style={{ textAlign: 'center' }}>
-					<Button key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
-						<AddIcon /> &nbsp;Submit
-					</Button>
-				</p>
-			</form>
+					})}
+					<p style={{ textAlign: 'center' }}>
+						<Button key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
+							<AddIcon /> &nbsp;Submit
+						</Button>
+					</p>
+				</form>
 			</>
 		);
 	}

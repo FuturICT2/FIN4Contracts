@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "contracts/proof/Fin4BaseProofType.sol";
 import "contracts/Fin4TokenBase.sol";
 
-contract ApprovalBySpecificAddress is Fin4BaseProofType {
+contract SpecificAddress is Fin4BaseProofType {
 
   constructor(address Fin4MainAddress)
     Fin4BaseProofType(Fin4MainAddress)
@@ -13,7 +13,7 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType {
     }
 
   function setNameAndDescription() public returns(bool) {
-    name = "ApprovalBySpecificAddress";
+    name = "SpecificAddress";
     description = "The specified address has to approve";
   }
 
@@ -44,7 +44,7 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType {
   }
 
   function getMessageText() public pure returns(string memory) {
-    return "You were requested to approve the proof type ApprovalBySpecificAddress on the action type ";
+    return "You were requested to approve the proof type SpecificAddress on the action type ";
   }
 
   function receiveApprovalFromSpecificAddress() public returns(bool) {

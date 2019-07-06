@@ -1,8 +1,8 @@
 const Fin4Main = artifacts.require('Fin4Main');
-const ImmediateAutoApproval = artifacts.require('ImmediateAutoApproval');
-const ApprovalBySpecificAddress = artifacts.require('ApprovalBySpecificAddress');
-const ApprovalByTokenCreator = artifacts.require('ApprovalByTokenCreator');
-const MinimumClaimingInterval = artifacts.require('MinimumClaimingInterval');
+const ImmediateAuto = artifacts.require('ImmediateAuto');
+const SpecificAddress = artifacts.require('SpecificAddress');
+const TokenCreator = artifacts.require('TokenCreator');
+const MinimumInterval = artifacts.require('MinimumInterval');
 const Password = artifacts.require('Password');
 const MaximumQuantityPerInterval = artifacts.require('MaximumQuantityPerInterval');
 
@@ -15,10 +15,10 @@ module.exports = async function(deployer) {
 	const Fin4MainInstance = await Fin4Main.deployed();
 
 	const contracts = [
-		ImmediateAutoApproval,
-		ApprovalBySpecificAddress,
-		ApprovalByTokenCreator,
-		MinimumClaimingInterval,
+		ImmediateAuto,
+		SpecificAddress,
+		TokenCreator,
+		MinimumInterval,
 		Password,
 		MaximumQuantityPerInterval
 	];
