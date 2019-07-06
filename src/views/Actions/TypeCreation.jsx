@@ -43,7 +43,11 @@ class TypeCreation extends Component {
 		.then(data => Promise.all(data))
 		.then(data => {
 			for (var i = 0; i < data.length; i ++) {
-				this.proofTypes.push(data[i]);
+				this.proofTypes.push({
+					value: data[i].proofTypeAddress,
+					label: data[i].name,
+					description: data[i].description
+				});
 			}
 		});
 	}
@@ -64,7 +68,7 @@ class TypeCreation extends Component {
 		return (
 			<>
 				<Fin4Box title={title}>
-					<ContractForm contractName="Fin4Main" method="createNewToken" />
+					<ContractForm contractName="Fin4Main" method="createNewToken" multiSelectOptions={this.proofTypes} />
 				</Fin4Box>
 				<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
 					<Fin4Table headers={['Name', 'Description']}>
@@ -73,7 +77,7 @@ class TypeCreation extends Component {
 								{this.proofTypes.map((item, index) => {
 										return (
 											<Fin4TableRow data={{
-												name: item.name,
+												name: item.label,
 												description: item.description
 											}} />
 										);
