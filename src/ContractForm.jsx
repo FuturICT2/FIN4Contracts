@@ -175,7 +175,7 @@ class ContractForm extends Component {
 				newValue: newValue
 			});
 
-			if (newValue != null) {
+			if (newValue != null) { // this.getProofTypeObj(newValue).label == "MinimumClaimingInterval"
 				this.openPopup();
 			}
 			return;
@@ -219,7 +219,14 @@ class ContractForm extends Component {
 		return (
 			<>
 			<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup} title={"Set parameters for " + this.getProofTypeObj(this.state.newValue).label}>
-				<ContractForm contractName="Fin4Main" method="createNewToken"/>
+				<ContractForm
+					contractAddress={this.state.newValue}
+					contractJson={this.getProofTypeObj(this.state.newValue).label + ".json"}
+					method="setParameters"
+					//fixArgs={{
+					//	tokenAddressUsingThisProofType: this.state.newValue
+					//}}
+				/>
 			</Fin4Modal>
 			<form onSubmit={this.handleSubmit} autoComplete="off">
 				{this.inputs.map(({ name, type }, index) => {

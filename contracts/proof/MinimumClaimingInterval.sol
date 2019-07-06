@@ -44,4 +44,9 @@ contract MinimumClaimingInterval is Fin4BaseProofType {
         return true;
     }
 
+    function setParameters(address tokenAddressUsingThisProofType, uint paramValue) public returns(bool) {
+      setMinimumInterval(tokenAddressUsingThisProofType, paramValue);
+      return true;
+    }
+
 }
