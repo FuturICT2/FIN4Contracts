@@ -140,6 +140,12 @@ class ContractForm extends Component {
 	};
 
 	handleInputChange = event => {
+		// removing the last tag in the multiselect field fires a null-event
+		if (event === null && this.props.multiSelectOptions) {
+			this.setState({ ['requiredProofTypes']: [] });
+			return;
+		}
+		
 		let value;
 
 		if (!event.target && this.props.multiSelectOptions) {
