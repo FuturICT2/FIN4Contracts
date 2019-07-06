@@ -24,6 +24,8 @@ class TypeCreation extends Component {
 			proofTypes: []
 		};
 
+		this.proofTypes = [];
+
 		const proofTypes = getContractData('Fin4Main', 'getProofTypes', [], context.drizzle)
 		.then(proofTypeAddresses => {
 			return proofTypeAddresses.map(proofTypeAddress => {
@@ -40,11 +42,9 @@ class TypeCreation extends Component {
 		})
 		.then(data => Promise.all(data))
 		.then(data => {
-			var proofTypeArr = [];
 			for (var i = 0; i < data.length; i ++) {
-				proofTypeArr.push(data[i]);
+				this.proofTypes.push(data[i]);
 			}
-			this.setState({ proofTypes: proofTypeArr });
 		});
 	}
 
@@ -53,9 +53,6 @@ class TypeCreation extends Component {
 	};
 
 	render() {
-		if (this.state.proofTypes.length < 1) {
-			return "Loading proof types...";
-		}
 		const title = (
 			<>
 				<span>Create a New Action Type </span>
@@ -71,9 +68,9 @@ class TypeCreation extends Component {
 				</Fin4Box>
 				<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
 					<Fin4Table headers={['Name', 'Description']}>
-						{this.state.proofTypes.length > 0 && (
+						{this.proofTypes.length > 0 && (
 							<>
-								{this.state.proofTypes.map((item, index) => {
+								{this.proofTypes.map((item, index) => {
 										return (
 											<Fin4TableRow data={{
 												name: item.name,
