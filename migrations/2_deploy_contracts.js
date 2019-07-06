@@ -3,6 +3,7 @@ const ImmediateAutoApproval = artifacts.require('ImmediateAutoApproval');
 const ApprovalBySpecificAddress = artifacts.require('ApprovalBySpecificAddress');
 const ApprovalByTokenCreator = artifacts.require('ApprovalByTokenCreator');
 const MinimumClaimingInterval = artifacts.require('MinimumClaimingInterval');
+const KnowPassword = artifacts.require('KnowPassword');
 
 module.exports = async function (deployer) {
 
@@ -16,20 +17,23 @@ module.exports = async function (deployer) {
 		deployer.deploy(ImmediateAutoApproval, Fin4MainInstance.address),
 		deployer.deploy(ApprovalBySpecificAddress, Fin4MainInstance.address),
 		deployer.deploy(ApprovalByTokenCreator, Fin4MainInstance.address),
-		deployer.deploy(MinimumClaimingInterval, Fin4MainInstance.address)
+		deployer.deploy(MinimumClaimingInterval, Fin4MainInstance.address),
+		deployer.deploy(KnowPassword, Fin4MainInstance.address)
 	]);
 
 	var proofTypeInstances = await Promise.all([
 		ImmediateAutoApproval.deployed(),
 		ApprovalBySpecificAddress.deployed(),
 		ApprovalByTokenCreator.deployed(),
-		MinimumClaimingInterval.deployed()
+		MinimumClaimingInterval.deployed(),
+		KnowPassword.deployed()
 	]);
 
 	await Promise.all([
 		Fin4MainInstance.addProofType(proofTypeInstances[0].address),
 		Fin4MainInstance.addProofType(proofTypeInstances[1].address),
 		Fin4MainInstance.addProofType(proofTypeInstances[2].address),
-		Fin4MainInstance.addProofType(proofTypeInstances[3].address)
+		Fin4MainInstance.addProofType(proofTypeInstances[3].address),
+		Fin4MainInstance.addProofType(proofTypeInstances[4].address)
 	]);
 };
