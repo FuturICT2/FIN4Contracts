@@ -4,6 +4,7 @@ const ApprovalBySpecificAddress = artifacts.require('ApprovalBySpecificAddress')
 const ApprovalByTokenCreator = artifacts.require('ApprovalByTokenCreator');
 const MinimumClaimingInterval = artifacts.require('MinimumClaimingInterval');
 const KnowPassword = artifacts.require('KnowPassword');
+const MaximumQuantityPerInterval = artifacts.require('MaximumQuantityPerInterval');
 
 module.exports = async function (deployer) {
 
@@ -18,7 +19,8 @@ module.exports = async function (deployer) {
 		deployer.deploy(ApprovalBySpecificAddress, Fin4MainInstance.address),
 		deployer.deploy(ApprovalByTokenCreator, Fin4MainInstance.address),
 		deployer.deploy(MinimumClaimingInterval, Fin4MainInstance.address),
-		deployer.deploy(KnowPassword, Fin4MainInstance.address)
+		deployer.deploy(KnowPassword, Fin4MainInstance.address),
+		deployer.deploy(MaximumQuantityPerInterval, Fin4MainInstance.address)
 	]);
 
 	var proofTypeInstances = await Promise.all([
@@ -26,7 +28,8 @@ module.exports = async function (deployer) {
 		ApprovalBySpecificAddress.deployed(),
 		ApprovalByTokenCreator.deployed(),
 		MinimumClaimingInterval.deployed(),
-		KnowPassword.deployed()
+		KnowPassword.deployed(),
+		MaximumQuantityPerInterval.deployed()
 	]);
 
 	await Promise.all([
@@ -34,6 +37,7 @@ module.exports = async function (deployer) {
 		Fin4MainInstance.addProofType(proofTypeInstances[1].address),
 		Fin4MainInstance.addProofType(proofTypeInstances[2].address),
 		Fin4MainInstance.addProofType(proofTypeInstances[3].address),
-		Fin4MainInstance.addProofType(proofTypeInstances[4].address)
+		Fin4MainInstance.addProofType(proofTypeInstances[4].address),
+		Fin4MainInstance.addProofType(proofTypeInstances[5].address)
 	]);
 };
