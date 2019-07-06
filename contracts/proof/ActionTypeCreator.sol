@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 import "contracts/proof/SpecificAddress.sol";
 
-contract TokenCreator is SpecificAddress {
+contract ActionTypeCreator is SpecificAddress {
 
   constructor(address Fin4MainAddress)
     SpecificAddress(Fin4MainAddress)
@@ -10,7 +10,7 @@ contract TokenCreator is SpecificAddress {
 
   // @Override
   function setNameAndDescription() public returns(bool) {
-    name = "TokenCreator";
+    name = "ActionTypeCreator";
     description = "The action type creator has to approve";
   }
 
@@ -25,7 +25,7 @@ contract TokenCreator is SpecificAddress {
 
   // @Override
   function getMessageText() public pure returns(string memory) {
-    return "You as action type creator were requested to approve the proof type TokenCreator on the action type ";
+    return "You as action type creator were requested to approve the proof type ActionTypeCreator on the action type ";
   }
 
 }

@@ -7,11 +7,11 @@ import "contracts/proof/Fin4BaseProofType.sol";
 contract Fin4TokenBase { // abstract class
 
   address public Fin4Main;
-  address public tokenCreator;
+  address public actionTypeCreator;
 
-  constructor(address Fin4MainAddress, address tokenCreatorAddress) public {
+  constructor(address Fin4MainAddress, address actionTypeCreatorAddress) public {
     Fin4Main = Fin4MainAddress;
-    tokenCreator = tokenCreatorAddress;
+    actionTypeCreator = actionTypeCreatorAddress;
   }
 
   function name() public view returns(string memory);
@@ -165,7 +165,7 @@ contract Fin4TokenBase { // abstract class
     require(Fin4MainStrut(Fin4Main).proofTypeIsRegistered(proofType),
       "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
-    Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
+    Fin4BaseProofType(proofType).registerActionTypeCreator(actionTypeCreator);
     return true;
   }
 

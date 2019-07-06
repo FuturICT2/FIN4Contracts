@@ -39,8 +39,8 @@ contract Fin4BaseProofType is utils {
     return true;
   }
 
-  function registerTokenCreator(address tokenCreator) public returns(bool) {
-    fin4TokenToItsCreator[msg.sender] = tokenCreator;
+  function registerActionTypeCreator(address actionTypeCreator) public returns(bool) {
+    fin4TokenToItsCreator[msg.sender] = actionTypeCreator;
     return true;
   }
 

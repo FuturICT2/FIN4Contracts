@@ -2,7 +2,7 @@ const Fin4Main = artifacts.require('Fin4Main');
 const contracts = [
 	artifacts.require('ImmediateAuto'),
 	artifacts.require('SpecificAddress'),
-	artifacts.require('TokenCreator'),
+	artifacts.require('ActionTypeCreator'),
 	artifacts.require('MinimumInterval'),
 	artifacts.require('MaximumQuantityPerInterval'),
 	artifacts.require('Password'),
