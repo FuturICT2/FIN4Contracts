@@ -21,7 +21,8 @@ module.exports = async function(deployer) {
 		ApprovalByTokenCreator,
 		MinimumClaimingInterval,
 		Password,
-		MaximumQuantityPerInterval
+		MaximumQuantityPerInterval,
+		PictureApprovalBySpecificAddress
 	];
 
 	await Promise.all(contracts.map(contract => deployer.deploy(contract, Fin4MainInstance.address)));
