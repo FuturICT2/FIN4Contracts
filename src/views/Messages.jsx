@@ -31,7 +31,7 @@ class Messages extends Component {
 			messageIndices.push(i);
 		}
 		return (
-			messageIndices.length && (
+			messageIndices.length > 0 && (
 				<Fin4Box title="Messages">
 					{messageIndices.map(index => {
 						return (

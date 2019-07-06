@@ -16,7 +16,6 @@ class PreviousClaims extends Component {
 
 		this.state = {
 			claims: []
-			// drizzleState: context.drizzle.store.getState()
 		};
 
 		getContractData('Fin4Main', 'getActionsWhereUserHasClaims', [], context.drizzle)
@@ -67,7 +66,7 @@ class PreviousClaims extends Component {
 
 	render() {
 		return (
-			this.state.claims.length && (
+			this.state.claims.length > 0 && (
 				<Fin4Box title="My Previous Claims">
 					{this.state.claims.map(
 						({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment }) => {
