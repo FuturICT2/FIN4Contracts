@@ -111,6 +111,24 @@ contract Fin4TokenBase { // abstract class
     }
   }
 
+  function sumUpQuantitiesWithinIntervalBeforeThisClaim(address claimer, uint claimId, uint interval) public view returns(uint, uint) {
+    uint[] memory ids = _getMyClaimIds(claimer);
+    if (ids.length < 2 || ids[0] == claimId) {
+      return (0, claims[claimId].quantity);
+    }
+
+    uint dateOfRequestingClaim = claims[claimId].date; // TODO check if that's actually the claimers
+    uint sum = 0;
+
+    for (uint i = 0; i < ids.length; i ++) {
+      if (ids[i] != claimId && dateOfRequestingClaim - claims[ids[i]].date <= interval) {
+          sum = sum + claims[ids[i]].quantity;
+      }
+    }
+
+    return (sum, claims[claimId].quantity);
+  }
+
   // ------------------------- PROOF TYPES -------------------------
 
   address[] public requiredProofTypes;

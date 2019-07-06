@@ -8,4 +8,6 @@ contract Fin4TokenStrut {
 
   function getTimeBetweenThisClaimAndThatClaimersPreviousOne(address claimer, uint claimId) public view returns(uint);
 
+  function sumUpQuantitiesWithinIntervalBeforeThisClaim(address claimer, uint claimId, uint interval) public view returns(uint, uint);
+
 }
