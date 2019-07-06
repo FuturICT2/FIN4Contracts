@@ -22,6 +22,7 @@ contract ApprovalBySpecificAddress is Fin4BaseProofType {
     uint claimIdOnTokenToReceiveProof;
     address requester;
     address approver;
+    string attachment;
   }
 
   // this assumes only one pending approval per address, TODO value must be an array
