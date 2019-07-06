@@ -5,6 +5,7 @@ const TokenCreator = artifacts.require('TokenCreator');
 const MinimumInterval = artifacts.require('MinimumInterval');
 const Password = artifacts.require('Password');
 const MaximumQuantityPerInterval = artifacts.require('MaximumQuantityPerInterval');
+const PictureApprovalBySpecificAddress = artifacts.require('PictureApprovalBySpecificAddress');
 
 module.exports = async function(deployer) {
 	// via https://ethereum.stackexchange.com/a/30579
@@ -20,7 +21,8 @@ module.exports = async function(deployer) {
 		TokenCreator,
 		MinimumInterval,
 		Password,
-		MaximumQuantityPerInterval
+		MaximumQuantityPerInterval,
+		PictureApprovalBySpecificAddress
 	];
 
 	await Promise.all(contracts.map(contract => deployer.deploy(contract, Fin4MainInstance.address)));
