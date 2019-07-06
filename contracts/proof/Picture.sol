@@ -1,16 +1,16 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/ApprovalBySpecificAddress.sol";
+import "contracts/proof/SpecificAddress.sol";
 
-contract PictureApprovalBySpecificAddress is ApprovalBySpecificAddress {
+contract Picture is SpecificAddress {
 
   constructor(address Fin4MainAddress)
-    ApprovalBySpecificAddress(Fin4MainAddress)
+    SpecificAddress(Fin4MainAddress)
     public {}
 
   // @Override
   function setNameAndDescription() public returns(bool) {
-    name = "PictureApprovalBySpecificAddress";
+    name = "Picture";
     description = "The claimer has to supply a picture proofing the action done. Based on that the approver will decide on the claim";
   }
 
@@ -26,7 +26,7 @@ contract PictureApprovalBySpecificAddress is ApprovalBySpecificAddress {
 
   // @Override
   function getMessageText() public pure returns(string memory) {
-    return "You were requested to approve the proof type PictureApprovalBySpecificAddress on the action type  ";
+    return "You were requested to approve the proof type Picture on the action type  ";
   }
 
   function getAttachment() public view returns(string memory) {
