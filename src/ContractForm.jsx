@@ -47,6 +47,7 @@ class ContractForm extends Component {
 		this.inputs = [];
 		var initialState = {
 			isPopupOpen: false,
+			newValue: null
 		};
 
 		// Iterate over abi for correct function.
@@ -160,18 +161,22 @@ class ContractForm extends Component {
 				values.push(event[i].value);
 			}
 
+			var newValue;
 			if (this.state.requiredProofTypes.length == 0) { // first tag was added
-				this.newValue = values[0];
+				newValue = values[0];
 			} else if (values.length < this.state.requiredProofTypes.length) { // a tag was removed
-				this.newValue = null;
+				newValue = null;
 			} else {
-				this.newValue = values[values.length - 1];
+				newValue = values[values.length - 1];
 			}
 
-			this.setState({ ['requiredProofTypes']: values }); // TODO make it general
+			this.setState({ 
+				['requiredProofTypes']: values,
+				newValue: newValue
+			 });
 			
-			if (this.newValue != null) {
-				this.togglePopup();
+			if (newValue != null) {
+				this.openPopup();
 			}
 			return;
 		}
@@ -187,16 +192,22 @@ class ContractForm extends Component {
 		this.setState({ [event.target.name]: value });
 	};
 
-	togglePopup = () => {
-		this.newValue = null;
-		this.setState({ isPopupOpen: !this.state.isPopupOpen });
+	openPopup = () => {
+		this.setState({ isPopupOpen: true });
 	};
+
+	closePopup = () => {
+		this.setState({ 
+			isPopupOpen: false,
+			newValue: null
+		});
+	}
 
 	render() {
 		return (
 			<>
-			<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Set parameters">
-				TODO
+			<Fin4Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup} title="Set parameters">
+				TODO {this.state.newValue}
 			</Fin4Modal>
 			<form onSubmit={this.handleSubmit} autoComplete="off">
 				{this.inputs.map(({ name, type }, index) => {
