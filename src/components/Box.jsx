@@ -5,7 +5,7 @@ import colors from '../config/colors-config';
 
 const Fin4Box = props => {
 	const PaperStyle = styled(Paper)`
-		${props.maxWidth ? `max-width: ${props.maxWidth}` : 'width: 400px'};
+		width: ${props.width || '400px'};
 		position: relative;
 		padding: 1em;
 		margin: 20px;

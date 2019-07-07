@@ -53,7 +53,12 @@ class TypeCreation extends Component {
 		return (
 			<>
 				<Box title={title}>
-					<ContractForm contractName="Fin4Main" method="createNewToken" multiSelectOptions={this.state.proofTypes} />
+					<ContractForm
+						contractName="Fin4Main"
+						method="createNewToken"
+						multiSelectOptions={this.state.proofTypes}
+						labels={['Name', 'Symbol', 'Proof Types', 'Decimals']}
+					/>
 				</Box>
 				<Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
 					<Table headers={['Name', 'Description']}>

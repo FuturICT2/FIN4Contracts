@@ -217,17 +217,11 @@ class ContractForm extends Component {
 	render() {
 		return (
 			<>
-				<Modal
-					isOpen={this.state.isPopupOpen}
-					handleClose={this.closePopup}
-					title={'Set parameters for ' + this.getProofTypeObj(this.state.newValue).label}>
+				<Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup} title="Set Parameters" width="400px">
 					<ContractForm
 						contractAddress={this.state.newValue}
 						contractJson={this.getProofTypeObj(this.state.newValue).label + '.json'}
 						method="setParameters"
-						//fixArgs={{
-						//	tokenAddressUsingThisProofType: this.state.newValue
-						//}}
 					/>
 				</Modal>
 				<form onSubmit={this.handleSubmit} autoComplete="off">
@@ -239,7 +233,7 @@ class ContractForm extends Component {
 						var inputType = translateType(type);
 						var inputLabel = this.props.labels ? this.props.labels[index] : name;
 
-						if (inputLabel === 'requiredProofTypes' && this.props.multiSelectOptions) {
+						if (name === 'requiredProofTypes' && this.props.multiSelectOptions) {
 							return (
 								<Dropdown
 									multipleChoice
