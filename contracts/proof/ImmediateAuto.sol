@@ -21,4 +21,9 @@ contract ImmediateAuto is Fin4BaseProofType {
       return 2;
     }
 
+    // @Override
+    function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
+      return "";
+    }
+
 }

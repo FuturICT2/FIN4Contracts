@@ -36,17 +36,17 @@ contract MinimumInterval is Fin4BaseProofType {
       return 2;
     }
 
+    // @Override
+    function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
+      return "uint:minimumInterval";
+    }
+
     uint public minimumInterval = 0; // in ms
 
     function setMinimumInterval(address tokenAddressUsingThisProofType, uint _minimumInterval) public returns(bool) {
         require(fin4TokenToItsCreator[tokenAddressUsingThisProofType] == msg.sender, "Only the action type creator can set this value.");
         minimumInterval = _minimumInterval;
         return true;
-    }
-
-    function setParameters(address tokenAddressUsingThisProofType, uint paramValue) public returns(bool) {
-      setMinimumInterval(tokenAddressUsingThisProofType, paramValue);
-      return true;
     }
 
 }

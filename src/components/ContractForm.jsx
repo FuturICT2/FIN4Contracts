@@ -125,6 +125,23 @@ class ContractForm extends Component {
 			if (this.props.fixArgs && this.props.fixArgs[input.name]) {
 				return this.props.fixArgs[input.name];
 			}
+
+			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) { // proofTypeParams
+				var encodedStrings = [];
+				for (var i = 0; i < this.state.requiredProofTypes.length; i ++) {
+					var proofTypeObj = 	this.getProofTypeObj(this.state.requiredProofTypes[i]);
+					var paramValues = proofTypeObj.paramValues;
+					var encodedStr = "";
+					for (var key in paramValues) {
+						if (paramValues.hasOwnProperty(key)) {
+							encodedStr += paramValues[key] + ",";
+						}
+					}
+					encodedStrings.push(encodedStr.substring(0, encodedStr.length - 1));
+				}
+				return encodedStrings;
+			}
+
 			if (input.type === 'bytes32') {
 				return this.utils.toHex(this.state[input.name]);
 			}
@@ -173,7 +190,7 @@ class ContractForm extends Component {
 				newValue: newValue
 			});
 
-			if (newValue != null) {
+			if (newValue != null && this.getProofTypeObj(newValue).params.length > 0) {
 				// this.getProofTypeObj(newValue).label == "MinimumClaimingInterval"
 				this.openPopup();
 			}
@@ -214,19 +231,37 @@ class ContractForm extends Component {
 		});
 	};
 
+	handleParamChange = (proofTypeObj, event) => {
+		proofTypeObj.paramValues[event.target.name] = event.target.type + ":" + event.target.name + "=" + event.target.value;
+	};
+
 	render() {
 		return (
 			<>
-				<Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup} title="Set Parameters" width="400px">
-					<ContractForm
-						contractAddress={this.state.newValue}
-						contractJson={this.getProofTypeObj(this.state.newValue).label + '.json'}
-						method="setParameters"
-					/>
+				<Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup}
+					title={"Set Parameters for " + this.getProofTypeObj(this.state.newValue).label} width="400px">
+					{this.state.newValue && this.getProofTypeObj(this.state.newValue).params.split(',').map(part => {
+						var paramType = part.split(':')[0];
+						var paramName = part.split(':')[1];
+						return (							
+							<TextField
+								key={paramName}
+								name={paramName}
+								type={translateType(paramType)}
+								label={paramName}
+								onChange={(e) => this.handleParamChange(this.getProofTypeObj(this.state.newValue), e)}
+								style={inputFieldStyle}
+							/>)
+					})}
+					<p style={{ textAlign: 'center' }}>
+						<Button key="submit" variant="contained" color="primary" onClick={this.closePopup}>
+							<AddIcon /> &nbsp;Submit
+						</Button>
+					</p>
 				</Modal>
 				<form onSubmit={this.handleSubmit} autoComplete="off">
 					{this.inputs.map(({ name, type }, index) => {
-						if (this.props.fixArgs && this.props.fixArgs[name]) {
+						if ((this.props.fixArgs && this.props.fixArgs[name]) || (this.props.hideArgs && this.props.hideArgs[name])) {
 							return '';
 						}
 

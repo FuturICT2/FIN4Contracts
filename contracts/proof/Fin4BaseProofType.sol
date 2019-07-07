@@ -27,11 +27,13 @@ contract Fin4BaseProofType is utils {
     return description;
   }
 
-  function getInfo() public view returns(string memory, string memory) {
-    return (name, description);
+  function getInfo() public view returns(string memory, string memory, string memory) {
+    return (name, description, getParameterForActionTypeCreatorToSetEncoded());
   }
 
   function getSubmitProofMethodArgsCount() public view returns(uint);
+
+  function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory);
 
   function _sendApproval(address tokenAdrToReceiveProof, uint claimId) internal returns(bool) {
     // private ensures it can only be called from within this SC?

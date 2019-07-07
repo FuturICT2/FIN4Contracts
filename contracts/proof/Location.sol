@@ -41,4 +41,9 @@ contract Location is Fin4BaseProofType {
       return 4;
     }
 
+    // @Override
+    function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
+      return "uint:latitude,uint:longitude,uint:maxDistance";
+    }
+
 }

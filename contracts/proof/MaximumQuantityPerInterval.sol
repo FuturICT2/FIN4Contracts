@@ -40,6 +40,11 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       return 2;
     }
 
+    // @Override
+    function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
+      return "uint:interval,uint:maxQuantity";
+    }
+
     uint public interval = 0; // in ms
     uint public maxQuantity = 0;
 

@@ -30,11 +30,13 @@ class TypeCreation extends Component {
 						context.drizzle
 					).then(proofTypeName => {
 						return getContractData(proofTypeAddress, proofTypeName + '.json', 'getInfo', [], context.drizzle).then(
-							({ 0: name, 1: description }) => {
+							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
 								return {
 									value: proofTypeAddress,
 									label: name,
-									description: description
+									description: description,
+                  params: parameterForActionTypeCreatorToSetEncoded,
+									paramValues: {}
 								};
 							}
 						);
@@ -70,6 +72,9 @@ class TypeCreation extends Component {
 						method="createNewToken"
 						multiSelectOptions={this.state.proofTypes}
 						labels={['Name', 'Symbol', 'Proof Types', 'Decimals']}
+						hideArgs={{
+							proofTypeParams: "proofTypeParams"
+						}}
 					/>
 				</Box>
 				<Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
