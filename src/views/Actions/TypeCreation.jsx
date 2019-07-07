@@ -21,22 +21,32 @@ class TypeCreation extends Component {
 
 		getContractData('Fin4Main', 'Fin4Main.json', 'getProofTypes', [], context.drizzle)
 			.then(proofTypeAddresses => {
-				proofTypeAddresses.map(proofTypeAddress => {
-					getContractData('Fin4Main', 'Fin4Main.json', 'getProofTypeName', [proofTypeAddress], context.drizzle).then(proofTypeName => {
-						getContractData(proofTypeAddress, proofTypeName + '.json', 'getInfo', [], context.drizzle).then(
+				return proofTypeAddresses.map(proofTypeAddress => {
+					return getContractData(
+						'Fin4Main',
+						'Fin4Main.json',
+						'getProofTypeName',
+						[proofTypeAddress],
+						context.drizzle
+					).then(proofTypeName => {
+						return getContractData(proofTypeAddress, proofTypeName + '.json', 'getInfo', [], context.drizzle).then(
 							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
-								this.setState({ // via https://stackoverflow.com/a/26254086
-									proofTypes: [...this.state.proofTypes, {
-										value: proofTypeAddress,
-										label: name,
-										description: description,
-										params: parameterForActionTypeCreatorToSetEncoded,
-										paramValues: {}
-									}]
-								  })
+								return {
+									value: proofTypeAddress,
+									label: name,
+									description: description,
+                  params: parameterForActionTypeCreatorToSetEncoded,
+									paramValues: {}
+								};
 							}
-						)
+						);
 					});
+				});
+			})
+			.then(data => Promise.all(data))
+			.then(data => {
+				this.setState({
+					proofTypes: data
 				});
 			});
 	}
