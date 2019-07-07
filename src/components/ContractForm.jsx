@@ -214,13 +214,33 @@ class ContractForm extends Component {
 		});
 	};
 
+	handleParamChange = (proofTypeObj, event) => {
+		proofTypeObj.paramValues[event.target.name] = event.target.value;
+	};
+
 	render() {
 		return (
 			<>
-				<Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup} title="Set Parameters" width="400px">
-					
-					{this.getProofTypeObj(this.state.newValue).label + ": " + this.getProofTypeObj(this.state.newValue).params}
-		
+				<Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup}
+					title={"Set Parameters for " + this.getProofTypeObj(this.state.newValue).label} width="400px">
+					{this.state.newValue && this.getProofTypeObj(this.state.newValue).params.split(',').map(part => {
+						var paramType = part.split(':')[0];
+						var paramName = part.split(':')[1];
+						return (							
+							<TextField
+								key={paramName}
+								name={paramName}
+								type={translateType(paramType)}
+								label={paramName}
+								onChange={(e) => this.handleParamChange(this.getProofTypeObj(this.state.newValue), e)}
+								style={inputFieldStyle}
+							/>)
+					})}
+					<p style={{ textAlign: 'center' }}>
+						<Button key="submit" variant="contained" color="primary" onClick={this.closePopup}>
+							<AddIcon /> &nbsp;Submit
+						</Button>
+					</p>
 				</Modal>
 				<form onSubmit={this.handleSubmit} autoComplete="off">
 					{this.inputs.map(({ name, type }, index) => {

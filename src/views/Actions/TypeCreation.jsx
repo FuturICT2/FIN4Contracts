@@ -30,7 +30,8 @@ class TypeCreation extends Component {
 										value: proofTypeAddress,
 										label: name,
 										description: description,
-										params: parameterForActionTypeCreatorToSetEncoded
+										params: parameterForActionTypeCreatorToSetEncoded,
+										paramValues: {}
 									}]
 								  })
 							}
