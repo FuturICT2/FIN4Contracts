@@ -92,6 +92,11 @@ contract Fin4Main {
     return proofTypes;
   }
 
+  function getProofTypeName(address proofType) public view returns(string memory) {
+    require(proofTypeIsRegistered(proofType), "Address is not registered as proof type on Fin4Main");
+    return Fin4BaseProofType(proofType).getName();
+  }
+
   function getProofTypeInfo(address proofType) public view returns(address, string memory, string memory, uint) {
       require(proofTypeIsRegistered(proofType), "Address is not registered as proof type on Fin4Main");
       return (proofType, Fin4BaseProofType(proofType).getName(), Fin4BaseProofType(proofType).getDescription(),

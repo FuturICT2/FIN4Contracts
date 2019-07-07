@@ -23,11 +23,11 @@ class PreviousClaims extends Component {
 			claimIdForProofModal: ''
 		};
 
-		getContractData('Fin4Main', 'getActionsWhereUserHasClaims', [], context.drizzle)
+		getContractData('Fin4Main', 'Fin4Main.json', 'getActionsWhereUserHasClaims', [], context.drizzle)
 			.then(actionTypeAddresses => {
 				// action types
 				return actionTypeAddresses.map(actionTypeAddress => {
-					return getContractData(actionTypeAddress, 'getMyClaimIds', [], context.drizzle)
+					return getContractData(actionTypeAddress, 'Fin4Token.json', 'getMyClaimIds', [], context.drizzle)
 						.then(({ 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
 							// claim ids per action type
 							return claimIds.map(claimId => {
@@ -41,7 +41,7 @@ class PreviousClaims extends Component {
 						})
 						.then(claims => {
 							return claims.map(({ claimId, actionTypeAddress, tokenName, tokenSymbol }) => {
-								return getContractData(actionTypeAddress, 'getClaimInfo', [claimId], context.drizzle).then(
+								return getContractData(actionTypeAddress, 'Fin4Token.json', 'getClaimInfo', [claimId], context.drizzle).then(
 									({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
 										// claims per claim id per action type
 										return {
