@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
 import Box from '../../components/Box';
 import Currency from '../../components/Currency';
+import Modal from '../../components/Modal';
+import ProofSubmission from './ProofSubmission';
 import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../config/colors-config';
@@ -16,14 +18,16 @@ class PreviousClaims extends Component {
 		super(props);
 
 		this.state = {
-			claims: []
+			claims: [],
+			actionTypeAddressForProofModal: '',
+			claimIdForProofModal: ''
 		};
 
-		getContractData('Fin4Main', 'getActionsWhereUserHasClaims', [], context.drizzle)
+		getContractData('Fin4Main', 'Fin4Main.json', 'getActionsWhereUserHasClaims', [], context.drizzle)
 			.then(actionTypeAddresses => {
 				// action types
 				return actionTypeAddresses.map(actionTypeAddress => {
-					return getContractData(actionTypeAddress, 'getMyClaimIds', [], context.drizzle)
+					return getContractData(actionTypeAddress, 'Fin4Token.json', 'getMyClaimIds', [], context.drizzle)
 						.then(({ 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
 							// claim ids per action type
 							return claimIds.map(claimId => {
@@ -37,7 +41,7 @@ class PreviousClaims extends Component {
 						})
 						.then(claims => {
 							return claims.map(({ claimId, actionTypeAddress, tokenName, tokenSymbol }) => {
-								return getContractData(actionTypeAddress, 'getClaimInfo', [claimId], context.drizzle).then(
+								return getContractData(actionTypeAddress, 'Fin4Token.json', 'getClaimInfo', [claimId], context.drizzle).then(
 									({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
 										// claims per claim id per action type
 										return {
@@ -65,52 +69,73 @@ class PreviousClaims extends Component {
 			});
 	}
 
+	isProofModalOpen = () => {
+		return !!this.state.actionTypeAddressForProofModal && !!this.state.claimIdForProofModal;
+	};
+
+	closeProofModal = () => {
+		this.setState({ actionTypeAddressForProofModal: '', claimIdForProofModal: '' });
+	};
+
 	render() {
 		return (
 			this.state.claims.length > 0 && (
-				<Box title="My Previous Claims">
-					{this.state.claims.map(
-						({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment }) => {
-							// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
-							date = moment.unix(Number(date.substring(0, date.length - 3))).calendar();
-							return (
-								<Claim isapproved={isApproved.toString()} key={`${actionTypeAddress}${claimId}`}>
-									<div>
-										<Grid container alignItems="center">
-											<Grid item xs>
-												<Typography gutterBottom variant="h5">
-													{tokenName}
-												</Typography>
+				<>
+					<Box title="My Previous Claims">
+						{this.state.claims.map(
+							({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment }) => {
+								// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
+								date = moment.unix(Number(date.substring(0, date.length - 3))).calendar();
+								return (
+									<Claim isapproved={isApproved.toString()} key={`${actionTypeAddress}${claimId}`}>
+										<div>
+											<Grid container alignItems="center">
+												<Grid item xs>
+													<Typography gutterBottom variant="h5">
+														{tokenName}
+													</Typography>
+												</Grid>
+												<Grid item>
+													<Typography gutterBottom variant="h6">
+														{quantity} <Currency>{tokenSymbol}</Currency>
+													</Typography>
+												</Grid>
 											</Grid>
-											<Grid item>
-												<Typography gutterBottom variant="h6">
-													{quantity} <Currency>{tokenSymbol}</Currency>
+											{comment && (
+												<Typography color="textSecondary" variant="body2">
+													{comment}
 												</Typography>
-											</Grid>
-										</Grid>
-										{comment && (
-											<Typography color="textSecondary" variant="body2">
-												{comment}
-											</Typography>
-										)}
-									</div>
-									<Divider style={{ margin: '10px 0' }} variant="middle" />
-									<ThemeProvider theme={chipTheme}>
-										<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ marginRight: '20px' }} />
-										<Chip
-											key="1"
-											color={isApproved ? 'primary' : 'secondary'}
-											component={isApproved ? 'span' : 'a'}
-											clickable={!isApproved}
-											href={isApproved ? '' : `/proof?tokenAddress=${actionTypeAddress}&claimId=${claimId}`}
-											label={isApproved ? 'approved' : 'submit proof'}
-										/>
-									</ThemeProvider>
-								</Claim>
-							);
-						}
-					)}
-				</Box>
+											)}
+										</div>
+										<Divider style={{ margin: '10px 0' }} variant="middle" />
+										<ThemeProvider theme={chipTheme}>
+											<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ marginRight: '20px' }} />
+											<Chip
+												key="1"
+												color={isApproved ? 'primary' : 'secondary'}
+												component={isApproved ? 'span' : 'a'}
+												clickable={!isApproved}
+												onClick={() => {
+													this.setState({
+														actionTypeAddressForProofModal: actionTypeAddress,
+														claimIdForProofModal: claimId
+													});
+												}}
+												label={isApproved ? 'approved' : 'submit proof'}
+											/>
+										</ThemeProvider>
+									</Claim>
+								);
+							}
+						)}
+					</Box>
+					<Modal isOpen={this.isProofModalOpen()} handleClose={this.closeProofModal} title="Submit Proofs">
+						<ProofSubmission
+							tokenAddress={this.state.actionTypeAddressForProofModal}
+							claimId={this.state.claimIdForProofModal}
+						/>
+					</Modal>
+				</>
 			)
 		);
 	}

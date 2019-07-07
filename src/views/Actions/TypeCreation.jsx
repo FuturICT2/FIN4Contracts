@@ -19,22 +19,24 @@ class TypeCreation extends Component {
 			proofTypes: []
 		};
 
-		getContractData('Fin4Main', 'getProofTypes', [], context.drizzle)
+		getContractData('Fin4Main', 'Fin4Main.json', 'getProofTypes', [], context.drizzle)
 			.then(proofTypeAddresses => {
-				return proofTypeAddresses.map(proofTypeAddress => {
-					return getContractData(proofTypeAddress, 'getInfo', [], context.drizzle).then(
-						({ 0: name, 1: description }) => {
-							return {
-								value: proofTypeAddress,
-								label: name,
-								description: description
-							};
-						}
-					);
+				proofTypeAddresses.map(proofTypeAddress => {
+					getContractData('Fin4Main', 'Fin4Main.json', 'getProofTypeName', [proofTypeAddress], context.drizzle).then(proofTypeName => {
+						getContractData(proofTypeAddress, proofTypeName + '.json', 'getInfo', [], context.drizzle).then(
+							({ 0: name, 1: description }) => {
+								this.setState({ // via https://stackoverflow.com/a/26254086
+									proofTypes: [...this.state.proofTypes, {
+										value: proofTypeAddress,
+										label: name,
+										description: description
+									}]
+								  })
+							}
+						)
+					});
 				});
-			})
-			.then(data => Promise.all(data))
-			.then(data => this.setState({ proofTypes: data }));
+			});
 	}
 
 	togglePopup = () => {

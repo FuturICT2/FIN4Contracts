@@ -1,48 +1,26 @@
 import React, { Component } from 'react';
-import Container from '../components/Container';
-import Box from '../components/Box';
-import ContractData from '../components/ContractData';
-import ContractForm from '../components/ContractForm';
+import Box from '../../components/Box';
+import ContractData from '../../components/ContractData';
+import ContractForm from '../../components/ContractForm';
 
 class ProofSubmission extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-
-		// TODO make this parsing more robust with errors if wrong etc. REMARK: not needed necessarily, we could render this as a popup and transfer the params as props
-		var url = window.location.href;
-
-		if (url.split('?').length < 2) {
-			return;
-		}
-
-		var params = url.split('?')[1].split('&');
-		this.tokenAddress = params[0].split('=')[1];
-		this.claimId = Number(params[1].split('=')[1]);
-	}
-
-	requiredProofTypeAddresses = data => {
-		var tokenName = data[0];
-		var tokenSymbol = data[1];
-		// var claimer = data[2];
-		var isApproved = data[3];
-		var quantity = Number(data[4]);
-		var date = Number(data[5]);
-		var comment = data[6];
-		var requiredProofTypes = data[7];
-		var proofTypeStatuses = data[8];
+	requiredProofTypeAddresses = ({
+		0: tokenName,
+		1: tokenSymbol,
+		3: isApproved,
+		4: quantity,
+		5: date,
+		6: comment,
+		7: requiredProofTypes,
+		8: proofTypeStatuses
+	}) => {
 		this.proofTypeStatusesObj = {};
 		for (var i = 0; i < requiredProofTypes.length; i++) {
 			this.proofTypeStatusesObj[requiredProofTypes[i]] = {};
 			this.proofTypeStatusesObj[requiredProofTypes[i]].approved = proofTypeStatuses[i];
 		}
 
-		this.getProofTypeInfoAndShowForm = data => {
-			var address = data[0];
-			var name = data[1];
-			var description = data[2];
-			var submitProofMethodArgsCount = data[3];
-
+		this.getProofTypeInfoAndShowForm = ({ 0: address, 1: name, 2: description, 3: submitProofMethodArgsCount }) => {
 			var info = (
 				<span>
 					<b>{name}</b>: {description}
@@ -82,8 +60,8 @@ class ProofSubmission extends Component {
 							// identifier is necessary to pick the right method. Probably by specific types would be even better.
 							methodArgsCount={submitProofMethodArgsCount}
 							fixArgs={{
-								tokenAdrToReceiveProof: this.tokenAddress,
-								claimId: this.claimId + ''
+								tokenAdrToReceiveProof: this.props.tokenAddress,
+								claimId: this.props.claimId + ''
 							}}
 						/>
 					</Box>
@@ -111,7 +89,8 @@ class ProofSubmission extends Component {
 
 		return (
 			<div>
-				Claim <i>{this.claimId}</i> on action type <b>{tokenName}</b> [{tokenSymbol}] <i>{this.tokenAddress}</i>
+				Claim <i>{this.props.claimId}</i> on action type <b>{tokenName}</b> [{tokenSymbol}]{' '}
+				<i>{this.props.tokenAddress}</i>
 				<br></br>
 				<br></br>
 				isApproved: <i>{isApproved + ''}</i>, quantity: <i>{quantity}</i>, date: <i>{date}</i>, comment:{' '}
@@ -124,18 +103,13 @@ class ProofSubmission extends Component {
 	};
 
 	render() {
-		if (this.tokenAddress === undefined) {
-			return 'URL must contain parameters for tokenAddress and claimId';
-		}
 		return (
-			<Container>
-				<ContractData
-					contractAddress={this.tokenAddress}
-					method="getClaim"
-					methodArgs={[this.claimId]}
-					callback={this.requiredProofTypeAddresses}
-				/>
-			</Container>
+			<ContractData
+				contractAddress={this.props.tokenAddress}
+				method="getClaim"
+				methodArgs={[this.props.claimId]}
+				callback={this.requiredProofTypeAddresses}
+			/>
 		);
 	}
 }

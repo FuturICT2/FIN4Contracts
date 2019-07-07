@@ -11,7 +11,7 @@ contract ActionTypeCreator is SpecificAddress {
   // @Override
   function setNameAndDescription() public returns(bool) {
     name = "ActionTypeCreator";
-    description = "The action type creator has to approve";
+    description = "The action type creator (you) has to approve";
   }
 
   function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {

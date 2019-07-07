@@ -236,6 +236,7 @@ class ContractForm extends Component {
 						if (name === 'requiredProofTypes' && this.props.multiSelectOptions) {
 							return (
 								<Dropdown
+									key={name}
 									multipleChoice
 									onChange={this.handleInputChange}
 									options={this.props.multiSelectOptions}
