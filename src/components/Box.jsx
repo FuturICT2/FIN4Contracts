@@ -9,7 +9,6 @@ const Fin4Box = props => {
 		position: relative;
 		padding: 1em;
 		margin: 20px;
-		overflow: hidden;
 		${props.isModal
 			? `box-sizing: border-box;
 			max-height: calc(100% - 50px);
@@ -22,6 +21,7 @@ const Fin4Box = props => {
 			color: ${colors.light};
 			margin: -16px -16px 20px;
 			padding: 10px;
+			border-radius: 4px 4px 0 0;
 		}
 	`;
 

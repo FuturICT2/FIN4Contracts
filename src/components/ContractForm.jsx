@@ -3,18 +3,14 @@
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { Button, TextField } from '@material-ui/core';
+import Modal from './Modal';
+import Dropdown from './Dropdown';
 import AddIcon from '@material-ui/icons/Add';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Web3 from 'web3';
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
-import Modal from './Modal';
-
-const animatedComponents = makeAnimated();
 
 const translateType = type => {
 	switch (true) {
@@ -243,17 +239,17 @@ class ContractForm extends Component {
 						var inputType = translateType(type);
 						var inputLabel = this.props.labels ? this.props.labels[index] : name;
 
-						// if (inputLabel === 'requiredProofTypes' && this.props.multiSelectOptions) {
-						// 	return (
-						// 		<Select
-						// 			isMulti
-						// 			onChange={this.handleInputChange}
-						// 			defaultValue={[]}
-						// 			options={this.props.multiSelectOptions}
-						// 			components={animatedComponents}
-						// 		/>
-						// 	);
-						// }
+						if (inputLabel === 'requiredProofTypes' && this.props.multiSelectOptions) {
+							return (
+								<Dropdown
+									multipleChoice
+									onChange={this.handleInputChange}
+									options={this.props.multiSelectOptions}
+									label={inputLabel}
+									placeholder="test"
+								/>
+							);
+						}
 
 						if (inputLabel === 'date') {
 							const dateFormat = 'YYYY-MM-DD HH:mm';

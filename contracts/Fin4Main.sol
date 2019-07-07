@@ -8,7 +8,7 @@ contract Fin4Main {
 
   address[] public children;
 
-	function createNewToken(string memory name, string memory symbol, uint8 decimals, address[] memory requiredProofTypes) public returns(address) {
+	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes, uint8 decimals) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, decimals, address(this), msg.sender);
 
     for (uint i = 0; i < requiredProofTypes.length; i++) {
