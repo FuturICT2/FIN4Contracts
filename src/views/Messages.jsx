@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ContractData from '../ContractData';
-import { Fin4Box } from '../Elements';
+import ContractData from '../components/ContractData';
+import Box from '../components/Box';
 
 class Messages extends Component {
 	getMyMessage = ({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName }) => {
@@ -32,7 +32,7 @@ class Messages extends Component {
 		}
 		return (
 			messageIndices.length > 0 && (
-				<Fin4Box title="Messages">
+				<Box title="Messages">
 					{messageIndices.map(index => {
 						return (
 							<div>
@@ -47,7 +47,7 @@ class Messages extends Component {
 							</div>
 						);
 					})}
-				</Fin4Box>
+				</Box>
 			)
 		);
 	};

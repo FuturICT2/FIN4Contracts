@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Fin4Container, Fin4Box } from '../Elements';
-import ContractForm from '../ContractForm';
+import Container from '../components/Container';
+import Box from '../components/Box';
+import ContractForm from '../components/ContractForm';
 
 class Approving extends Component {
 	constructor(props) {
@@ -24,16 +25,16 @@ class Approving extends Component {
 			return 'URL must contain parameters for fulfillmentAddress';
 		}
 		return (
-			<Fin4Container>
-				<Fin4Box title="Approve">
+			<Container>
+				<Box title="Approve">
 					<ContractForm
 						contractAddress={this.fulfillmentAddress}
 						// instead of passing the proofTypeName, make an extra getName() call for that?
 						contractJson={this.proofTypeName + '.json'}
 						method="receiveApprovalFromSpecificAddress"
 					/>
-				</Fin4Box>
-			</Fin4Container>
+				</Box>
+			</Container>
 		);
 	}
 }

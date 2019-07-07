@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import ContractForm from '../../ContractForm';
-import { Fin4Box } from '../../Elements';
-import ContractData from '../../ContractData';
+import ContractForm from '../../components/ContractForm';
+import Box from '../../components/Box';
+import ContractData from '../../components/ContractData';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
 
 class Claim extends Component {
@@ -68,12 +68,12 @@ class Claim extends Component {
 
 	render() {
 		return (
-			<Fin4Box title={'Claim an Action'}>
+			<Box title={'Claim an Action'}>
 				<ContractData contractName="Fin4Main" method="getChildren" callback={this.showActionTypes} />
 				{this.state.selectedActionTypeAddress !== '' && (
 					<ContractForm contractAddress={this.state.selectedActionTypeAddress} method="submit" />
 				)}
-			</Fin4Box>
+			</Box>
 		);
 	}
 }

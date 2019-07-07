@@ -16,7 +16,7 @@ class App extends Component {
 		return (
 			<Router>
 				<ThemeProvider theme={globalTheme}>
-					<Fin4Container>
+					<Container>
 						<TopBar />
 						<DrizzleProvider options={drizzleConfig}>
 							<LoadingContainer>
@@ -29,7 +29,7 @@ class App extends Component {
 							</LoadingContainer>
 						</DrizzleProvider>
 						<Spacer />
-					</Fin4Container>
+					</Container>
 					<NavigationBar />
 				</ThemeProvider>
 			</Router>
@@ -54,7 +54,7 @@ const globalTheme = createMuiTheme({
 	}
 });
 
-const Fin4Container = styled.div`
+const Container = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;

@@ -20,7 +20,7 @@ class ContractData extends Component {
 				contractJson = this.props.contractJson;
 			}
 
-			var tokenJson = require('./build/contracts/' + contractJson);
+			var tokenJson = require('../build/contracts/' + contractJson);
 
 			// needs time and has no callback -> timout below
 			context.drizzle.addContract({
@@ -123,7 +123,7 @@ const getContractData = (contract, method, methodArgs, drizzle) => {
 	// add contract if not yet added
 	if (!Object.keys(drizzle.contracts).includes(contract)) {
 		console.log(`adding contract ${contract}`);
-		const tokenJson = require('./build/contracts/Fin4Token.json');
+		const tokenJson = require('../build/contracts/Fin4Token.json');
 		const web3 = new Web3(window.web3.currentProvider);
 		drizzle.addContract({
 			contractName: contract,

@@ -12,7 +12,7 @@ import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Web3 from 'web3';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import { Fin4Modal } from './Elements';
+import Modal from './Modal';
 
 const animatedComponents = makeAnimated();
 
@@ -81,7 +81,7 @@ class ContractForm extends Component {
 				contractJson = this.props.contractJson;
 			}
 
-			var tokenJson = require('./build/contracts/' + contractJson);
+			var tokenJson = require('../build/contracts/' + contractJson);
 
 			// needs time and has no callback -> timout below
 			this.context.drizzle.addContract({
@@ -178,7 +178,7 @@ class ContractForm extends Component {
 			});
 
 			if (newValue != null) {
-				// this.getProofTypeObj(newValue).label == "MinimumInterval"
+				// this.getProofTypeObj(newValue).label == "MinimumClaimingInterval"
 				this.openPopup();
 			}
 			return;
@@ -221,7 +221,7 @@ class ContractForm extends Component {
 	render() {
 		return (
 			<>
-				<Fin4Modal
+				<Modal
 					isOpen={this.state.isPopupOpen}
 					handleClose={this.closePopup}
 					title={'Set parameters for ' + this.getProofTypeObj(this.state.newValue).label}>
@@ -233,7 +233,7 @@ class ContractForm extends Component {
 						//	tokenAddressUsingThisProofType: this.state.newValue
 						//}}
 					/>
-				</Fin4Modal>
+				</Modal>
 				<form onSubmit={this.handleSubmit} autoComplete="off">
 					{this.inputs.map(({ name, type }, index) => {
 						if (this.props.fixArgs && this.props.fixArgs[name]) {
@@ -243,17 +243,17 @@ class ContractForm extends Component {
 						var inputType = translateType(type);
 						var inputLabel = this.props.labels ? this.props.labels[index] : name;
 
-						if (inputLabel === 'requiredProofTypes' && this.props.multiSelectOptions) {
-							return (
-								<Select
-									isMulti
-									onChange={this.handleInputChange}
-									defaultValue={[]}
-									options={this.props.multiSelectOptions}
-									components={animatedComponents}
-								/>
-							);
-						}
+						// if (inputLabel === 'requiredProofTypes' && this.props.multiSelectOptions) {
+						// 	return (
+						// 		<Select
+						// 			isMulti
+						// 			onChange={this.handleInputChange}
+						// 			defaultValue={[]}
+						// 			options={this.props.multiSelectOptions}
+						// 			components={animatedComponents}
+						// 		/>
+						// 	);
+						// }
 
 						if (inputLabel === 'date') {
 							const dateFormat = 'YYYY-MM-DD HH:mm';

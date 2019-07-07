@@ -1,13 +1,17 @@
 import React from 'react';
-import { Fin4Container, Fin4Card, Fin4Box, Fin4Table, Fin4TableRow } from '../../Elements';
-import ContractData from '../../ContractData';
+import Container from '../../components/Container';
+import Card from '../../components/Card';
+import Box from '../../components/Box';
+import Table from '../../components/Table';
+import TableRow from '../../components/TableRow';
+import ContractData from '../../components/ContractData';
 import styled from 'styled-components';
 import dummyData from '../../config/dummy-data';
 
 const showBalanceByActionType = data => {
 	return (
-		<Fin4Box title="My Action Tokens">
-			<Fin4Table headers={['Name', 'Symbol', 'Balance']}>
+		<Box title="My Action Tokens">
+			<Table headers={['Name', 'Symbol', 'Balance']}>
 				{data &&
 					data.map((address, index) => {
 						return (
@@ -15,12 +19,12 @@ const showBalanceByActionType = data => {
 								key={index}
 								contractAddress={address}
 								method="getInfoAndBalance"
-								callback={data => <Fin4TableRow data={data} />}
+								callback={data => <TableRow data={data} />}
 							/>
 						);
 					})}
-			</Fin4Table>
-		</Fin4Box>
+			</Table>
+		</Box>
 	);
 };
 
@@ -31,7 +35,7 @@ class More extends React.Component {
 				<div>
 					{dummyData.spendingOffers.map(({ title, imagePath, description, readMore }, index) => {
 						return (
-							<Fin4Card
+							<Card
 								key={index}
 								title={title}
 								imagePath={imagePath}
@@ -42,13 +46,13 @@ class More extends React.Component {
 						);
 					})}
 				</div>
-				<Fin4Container>
+				<Container>
 					<ContractData contractName="Fin4Main" method="getChildren" callback={showBalanceByActionType} />
-				</Fin4Container>
+				</Container>
 				<div>
 					{dummyData.donationReceivers.map(({ title, imagePath, description, readMore }, index) => {
 						return (
-							<Fin4Card
+							<Card
 								key={index}
 								title={title}
 								imagePath={imagePath}

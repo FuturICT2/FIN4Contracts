@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../ContractData';
-import { Fin4Box, Currency } from '../../Elements';
+import { getContractData } from '../../components/ContractData';
+import Box from '../../components/Box';
+import Currency from '../../components/Currency';
 import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../config/colors-config';
@@ -67,7 +68,7 @@ class PreviousClaims extends Component {
 	render() {
 		return (
 			this.state.claims.length > 0 && (
-				<Fin4Box title="My Previous Claims">
+				<Box title="My Previous Claims">
 					{this.state.claims.map(
 						({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment }) => {
 							// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
@@ -109,7 +110,7 @@ class PreviousClaims extends Component {
 							);
 						}
 					)}
-				</Fin4Box>
+				</Box>
 			)
 		);
 	}

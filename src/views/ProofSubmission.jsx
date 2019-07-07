@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Fin4Container, Fin4Box } from '../Elements';
-import ContractData from '../ContractData';
-import ContractForm from '../ContractForm';
+import Container from '../components/Container';
+import Box from '../components/Box';
+import ContractData from '../components/ContractData';
+import ContractForm from '../components/ContractForm';
 
 class ProofSubmission extends Component {
 	constructor(props) {
@@ -71,7 +72,7 @@ class ProofSubmission extends Component {
 					<font color="red">
 						<b>Proof type not approved yet</b>
 					</font>
-					<Fin4Box title={'Initiate proof for ' + name}>
+					<Box title={'Initiate proof for ' + name}>
 						<ContractForm
 							contractAddress={address}
 							contractJson={name + '.json'}
@@ -85,7 +86,7 @@ class ProofSubmission extends Component {
 								claimId: this.claimId + ''
 							}}
 						/>
-					</Fin4Box>
+					</Box>
 				</div>
 			);
 		};
@@ -127,14 +128,14 @@ class ProofSubmission extends Component {
 			return 'URL must contain parameters for tokenAddress and claimId';
 		}
 		return (
-			<Fin4Container>
+			<Container>
 				<ContractData
 					contractAddress={this.tokenAddress}
 					method="getClaim"
 					methodArgs={[this.claimId]}
 					callback={this.requiredProofTypeAddresses}
 				/>
-			</Fin4Container>
+			</Container>
 		);
 	}
 }
