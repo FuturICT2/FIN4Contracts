@@ -62,6 +62,9 @@ class TypeCreation extends Component {
 						method="createNewToken"
 						multiSelectOptions={this.state.proofTypes}
 						labels={['Name', 'Symbol', 'Proof Types', 'Decimals']}
+						hideArgs={{
+							proofTypeParams: "proofTypeParams"
+						}}
 					/>
 				</Box>
 				<Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">

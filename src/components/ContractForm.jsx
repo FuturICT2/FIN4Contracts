@@ -125,6 +125,23 @@ class ContractForm extends Component {
 			if (this.props.fixArgs && this.props.fixArgs[input.name]) {
 				return this.props.fixArgs[input.name];
 			}
+
+			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) { // proofTypeParams
+				var encodedStrings = [];
+				for (var i = 0; i < this.state.requiredProofTypes.length; i ++) {
+					var proofTypeObj = 	this.getProofTypeObj(this.state.requiredProofTypes[i]);
+					var paramValues = proofTypeObj.paramValues;
+					var encodedStr = "";
+					for (var key in paramValues) {
+						if (paramValues.hasOwnProperty(key)) {
+							encodedStr += paramValues[key] + ",";
+						}
+					}
+					encodedStrings.push(encodedStr.substring(0, encodedStr.length - 1));
+				}
+				return encodedStrings;
+			}
+
 			if (input.type === 'bytes32') {
 				return this.utils.toHex(this.state[input.name]);
 			}
@@ -215,7 +232,7 @@ class ContractForm extends Component {
 	};
 
 	handleParamChange = (proofTypeObj, event) => {
-		proofTypeObj.paramValues[event.target.name] = event.target.value;
+		proofTypeObj.paramValues[event.target.name] = event.target.type + ":" + event.target.name + "=" + event.target.value;
 	};
 
 	render() {
@@ -244,7 +261,7 @@ class ContractForm extends Component {
 				</Modal>
 				<form onSubmit={this.handleSubmit} autoComplete="off">
 					{this.inputs.map(({ name, type }, index) => {
-						if (this.props.fixArgs && this.props.fixArgs[name]) {
+						if ((this.props.fixArgs && this.props.fixArgs[name]) || (this.props.hideArgs && this.props.hideArgs[name])) {
 							return '';
 						}
 
