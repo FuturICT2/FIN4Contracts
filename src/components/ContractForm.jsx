@@ -173,7 +173,7 @@ class ContractForm extends Component {
 				newValue: newValue
 			});
 
-			if (newValue != null) {
+			if (newValue != null && this.getProofTypeObj(newValue).params.length > 0) {
 				// this.getProofTypeObj(newValue).label == "MinimumClaimingInterval"
 				this.openPopup();
 			}
@@ -218,11 +218,9 @@ class ContractForm extends Component {
 		return (
 			<>
 				<Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup} title="Set Parameters" width="400px">
-					<ContractForm
-						contractAddress={this.state.newValue}
-						contractJson={this.getProofTypeObj(this.state.newValue).label + '.json'}
-						method="setParameters"
-					/>
+					
+					{this.getProofTypeObj(this.state.newValue).label + ": " + this.getProofTypeObj(this.state.newValue).params}
+		
 				</Modal>
 				<form onSubmit={this.handleSubmit} autoComplete="off">
 					{this.inputs.map(({ name, type }, index) => {
