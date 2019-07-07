@@ -134,6 +134,7 @@ const Claim = styled(Paper)`
 		box-sizing: border-box;
 		margin-left: 0;
 		margin-right: 0;
+		padding: 15px;
 		background: ${props => (props.isapproved === 'true' ? `rgba(61, 219, 81, 0.15)` : `rgba(248, 57, 48, 0.15)`)};
 	}
 `;
