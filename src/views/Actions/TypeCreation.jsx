@@ -64,6 +64,11 @@ class TypeCreation extends Component {
 				</IconButton>
 			</>
 		);
+
+		if (this.state.proofTypes.length < 1) {
+			return "";
+		}
+
 		return (
 			<>
 				<Box title={title}>
