@@ -36,6 +36,11 @@ contract MinimumInterval is Fin4BaseProofType {
       return 2;
     }
 
+    // @Override
+    function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
+      return "uint:minimumInterval";
+    }
+
     uint public minimumInterval = 0; // in ms
 
     function setMinimumInterval(address tokenAddressUsingThisProofType, uint _minimumInterval) public returns(bool) {

@@ -24,12 +24,13 @@ class TypeCreation extends Component {
 				proofTypeAddresses.map(proofTypeAddress => {
 					getContractData('Fin4Main', 'Fin4Main.json', 'getProofTypeName', [proofTypeAddress], context.drizzle).then(proofTypeName => {
 						getContractData(proofTypeAddress, proofTypeName + '.json', 'getInfo', [], context.drizzle).then(
-							({ 0: name, 1: description }) => {
+							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
 								this.setState({ // via https://stackoverflow.com/a/26254086
 									proofTypes: [...this.state.proofTypes, {
 										value: proofTypeAddress,
 										label: name,
-										description: description
+										description: description,
+										parameterForActionTypeCreatorToSetEncoded: parameterForActionTypeCreatorToSetEncoded
 									}]
 								  })
 							}

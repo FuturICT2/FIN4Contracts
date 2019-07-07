@@ -33,4 +33,9 @@ contract Password is Fin4BaseProofType {
       return 3;
     }
 
+    // @Override
+    function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
+      return "string:password";
+    }
+
 }

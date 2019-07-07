@@ -25,6 +25,11 @@ contract Picture is SpecificAddress {
   }
 
   // @Override
+  function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
+    return "";
+  }
+
+  // @Override
   function getMessageText() public pure returns(string memory) {
     return "You were requested to approve the proof type Picture on the action type  ";
   }
