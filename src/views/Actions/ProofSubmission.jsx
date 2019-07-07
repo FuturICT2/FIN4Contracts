@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Container from '../../components/Container';
 import Box from '../../components/Box';
 import ContractData from '../../components/ContractData';
 import ContractForm from '../../components/ContractForm';
@@ -105,14 +104,12 @@ class ProofSubmission extends Component {
 
 	render() {
 		return (
-			<Container>
-				<ContractData
-					contractAddress={this.props.tokenAddress}
-					method="getClaim"
-					methodArgs={[this.props.claimId]}
-					callback={this.requiredProofTypeAddresses}
-				/>
-			</Container>
+			<ContractData
+				contractAddress={this.props.tokenAddress}
+				method="getClaim"
+				methodArgs={[this.props.claimId]}
+				callback={this.requiredProofTypeAddresses}
+			/>
 		);
 	}
 }
