@@ -44,7 +44,7 @@ class Claim extends Component {
 		return (
 			<>
 				<InputLabel shrink htmlFor="select-action">
-					action
+					Action Type
 				</InputLabel>
 				<Select
 					value={this.state.selectedActionTypeAddress}
@@ -71,7 +71,11 @@ class Claim extends Component {
 			<Box title={'Claim an Action'}>
 				<ContractData contractName="Fin4Main" method="getChildren" callback={this.showActionTypes} />
 				{this.state.selectedActionTypeAddress !== '' && (
-					<ContractForm contractAddress={this.state.selectedActionTypeAddress} method="submit" />
+					<ContractForm
+						contractAddress={this.state.selectedActionTypeAddress}
+						method="submit"
+						labels={['Quantity', 'Date', 'Comment']}
+					/>
 				)}
 			</Box>
 		);
