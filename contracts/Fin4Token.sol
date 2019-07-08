@@ -7,8 +7,11 @@ import 'contracts/Fin4TokenBase.sol';
 
 contract Fin4Token is Fin4TokenBase, ERC20Detailed, ERC20Mintable {
 
-  constructor(string memory name, string memory symbol, uint8 decimals, address Fin4MainAddress, address actionTypeCreatorAddress)
-    ERC20Detailed(name, symbol, decimals)
+  uint8 d = 0;
+
+  constructor(string memory name, string memory symbol, address Fin4MainAddress, address actionTypeCreatorAddress)
+    // default decimals to 0
+    ERC20Detailed(name, symbol, d)
     ERC20Mintable()
     ERC20()
     Fin4TokenBase(Fin4MainAddress, actionTypeCreatorAddress)

@@ -271,8 +271,7 @@ class ContractForm extends Component {
 						this.getProofTypeObj(this.state.newValue)
 							.params.split(',')
 							.map(part => {
-								var paramType = part.split(':')[0];
-								var paramName = part.split(':')[1];
+								const [paramType, paramName] = part.split(':');
 								return (
 									<TextField
 										key={paramName}

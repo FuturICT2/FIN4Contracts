@@ -7,10 +7,11 @@ import 'contracts/proof/Fin4BaseProofType.sol';
 contract Fin4Main {
 
   address[] public children;
+  // mapping (address => bool) public officialChildren; // TODO for Sergiu's TCR
 
 	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes,
-    uint8 decimals, uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
-    Fin4Token newToken = new Fin4Token(name, symbol, decimals, address(this), msg.sender);
+    uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
+    Fin4Token newToken = new Fin4Token(name, symbol, address(this), msg.sender);
 
     for (uint i = 0; i < requiredProofTypes.length; i++) {
       newToken.addRequiredProofType(requiredProofTypes[i]);
