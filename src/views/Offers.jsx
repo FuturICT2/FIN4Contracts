@@ -5,6 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ContractData from '../components/ContractData';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
 import Database from '../components/Database';
+import ActionTokenSelectMenu from '../components/ActionTokenSelectMenu';
 
 class Offers extends Component {
 	constructor(props) {
@@ -16,12 +17,15 @@ class Offers extends Component {
 			tokenAddress: '',
 			receiverAddress: '',
 			offerUrl: '',
-			imagePath: ''
+			imagePath: '',
+			type: props.offerType
 		};
+
 		this.database = new Database();
 		this.handleChange = this.handleChange.bind(this);
 	}
 	handleChange(event) {
+		console.log(event.target.value);
 		if (event.target.name == 'tokenAddress') {
 			this.setState({ selectedActionTypeAddress: event.target.value });
 		}
@@ -29,15 +33,13 @@ class Offers extends Component {
 	}
 
 	render() {
-		const title = (
-			<>
-				<span>Create a New Offer </span>
-			</>
-		);
 		return (
-			<Box title={title}>
+			<Box>
 				<form>
-					<ContractData contractName="Fin4Main" method="getChildren" callback={this.showActionTypes} />
+					<ActionTokenSelectMenu
+						handleChange={this.handleChange.bind(this)}
+						value={this.state.selectedActionTypeAddress}
+					/>
 					<TextField
 						name="name"
 						label="Name"
@@ -92,7 +94,9 @@ class Offers extends Component {
 								this.state.tokenAddress,
 								this.state.receiverAddress,
 								this.state.imagePath,
-								this.state.offerUrl
+								this.state.offerUrl,
+								this.state.quantity,
+								this.state.type
 							)}>
 							<AddIcon /> &nbsp;Submit
 						</Button>
@@ -101,50 +105,6 @@ class Offers extends Component {
 			</Box>
 		);
 	}
-
-	showActionTypes = data => {
-		const menuItems =
-			data &&
-			data.map((address, index) => {
-				return (
-					<MenuItem key={index} value={address}>
-						<ContractData
-							contractAddress={address}
-							method="getInfo"
-							callback={({ 0: name, 1: symbol }) => {
-								return (
-									<>
-										<span style={{ fontWeight: 'bold' }}>{name}</span>
-										&nbsp;
-										<span>[{symbol}]</span>
-									</>
-								);
-							}}
-						/>
-					</MenuItem>
-				);
-			});
-
-		return (
-			<>
-				<InputLabel htmlFor="select-action">Token Type</InputLabel>
-				<Select
-					name="tokenAddress"
-					style={inputFieldStyle}
-					value={this.state.selectedActionTypeAddress}
-					displayEmpty
-					inputProps={{
-						id: 'select-action'
-					}}
-					onChange={this.handleChange}>
-					<MenuItem value="" key={-1}>
-						<em>Please Select</em>
-					</MenuItem>
-					{menuItems}
-				</Select>
-			</>
-		);
-	};
 }
 const inputFieldStyle = {
 	width: '100%',
