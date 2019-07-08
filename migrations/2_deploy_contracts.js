@@ -1,5 +1,7 @@
 const Fin4Main = artifacts.require('Fin4Main');
+const Fin4Messages = artifacts.require('Fin4Messages');
 const contracts = [
+	artifacts.require('ImmediateAuto'),
 	artifacts.require('ImmediateAuto'),
 	artifacts.require('SpecificAddress'),
 	artifacts.require('ActionTypeCreator'),
@@ -15,8 +17,11 @@ module.exports = async function(deployer) {
 	// TODO make a nice loop here through all ProofTypes in /contracts/proof without having to list them specifically?
 
 	await deployer.deploy(Fin4Main);
+	await deployer.deploy(Fin4Messages);
 
 	const Fin4MainInstance = await Fin4Main.deployed();
+	const Fin4MessagesInstance = await Fin4Messages.deployed();
+	await Fin4MainInstance.setFin4Messages(Fin4MessagesInstance.address);
 
 	await Promise.all(contracts.map(contract => deployer.deploy(contract, Fin4MainInstance.address)));
 

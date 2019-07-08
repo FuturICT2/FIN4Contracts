@@ -22,7 +22,7 @@ contract Password is Fin4BaseProofType {
           Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
           ": The password you provided is not matching the one set by the action type creator"
         ));
-        Fin4MainStrut(Fin4Main).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
+        Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
       }
       return true;
     }

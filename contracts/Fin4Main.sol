@@ -133,27 +133,14 @@ contract Fin4Main {
 
   // ------------------------- MESSAGES -------------------------
 
-  struct Message {
-    uint messageType; // is an Enum in Fin4BaseProofType
-    address sender;
-    address receiver;
-    string message;
-    address fulfillmentAddress; // where to go and do something
-  }
-  mapping (address => Message[]) public messages;
+  address public Fin4Messages;
 
-  function addMessage(uint messageType, address sender, address receiver,
-    string memory message, address fulfillmentAddress) public returns(bool) {
-    Message memory m = Message(messageType, sender, receiver, message, fulfillmentAddress);
-    messages[receiver].push(m);
-    return true;
+  function setFin4Messages(address addr) public {
+    Fin4Messages = addr;
   }
-  function getMyMessagesCount() public view returns(uint) {
-    return messages[msg.sender].length;
-  }
-  function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory) {
-    Message memory m = messages[msg.sender][index];
-    return (m.messageType, m.sender, m.message, m.fulfillmentAddress, Fin4BaseProofType(m.fulfillmentAddress).getName());
+
+  function getFin4Messages() public view returns(address) {
+    return Fin4Messages;
   }
 
 }

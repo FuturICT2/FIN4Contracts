@@ -2,6 +2,7 @@ pragma solidity ^0.5.0;
 
 import "contracts/Fin4TokenStrut.sol";
 import 'contracts/Fin4MainStrut.sol';
+import "contracts/Fin4Messages.sol";
 import "contracts/utils.sol";
 
 contract Fin4BaseProofType is utils {
@@ -18,6 +19,10 @@ contract Fin4BaseProofType is utils {
 
   constructor(address Fin4MainAddress) public {
     Fin4Main = Fin4MainAddress;
+  }
+
+  function _Fin4MessagesAddr() public view returns(address) {
+    return Fin4MainStrut(Fin4Main).getFin4Messages();
   }
 
   function getName() public view returns(string memory) {

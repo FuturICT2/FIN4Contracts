@@ -36,7 +36,7 @@ contract SpecificAddress is Fin4BaseProofType {
     pa.approver = approver;
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId)));
-    Fin4MainStrut(Fin4Main).addMessage(uint(messageType), msg.sender, approver, message, address(this));
+    Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, approver, message, address(this));
     return true;
   }
 
