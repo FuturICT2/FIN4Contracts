@@ -9,12 +9,22 @@ contract Fin4Main {
   address[] public children;
   // mapping (address => bool) public officialChildren; // TODO for Sergiu's TCR
 
-	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes, 
-  string[] memory proofTypeParams) public returns(address) {
+	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes,
+    uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, address(this), msg.sender);
 
     for (uint i = 0; i < requiredProofTypes.length; i++) {
       newToken.addRequiredProofType(requiredProofTypes[i]);
+      uint indexStart = paramValuesIndices[i * 2];
+      uint indexEnd = paramValuesIndices[i * 2 + 1];
+      if (indexStart != 99) {
+        uint paramsCount = indexEnd - indexStart + 1;
+        uint[] memory params = new uint[](paramsCount);
+        for (uint j = indexStart; j <= indexEnd; j ++) {
+            params[j - indexStart] = paramValues[j];
+        }
+        Fin4BaseProofType(requiredProofTypes[i]).setParameters(address(newToken), params);
+      }
     }
 
     children.push(address(newToken));
@@ -32,7 +42,7 @@ contract Fin4Main {
       token.transferFrom(msg.sender, recepient, 1);
   }
 
-  function mintToken(address tokenAddress,uint256 amount) public {
+  /*function mintToken(address tokenAddress,uint256 amount) public {
       Fin4Token token = Fin4Token(tokenAddress);
       token.mint(msg.sender, amount);
   }
@@ -41,7 +51,7 @@ contract Fin4Main {
       return Fin4Token(tokenAddress).balanceOf(msg.sender);
   }
 
-   /*function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
+  function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
     uint count = 0;
     for (uint i = 0; i < children.length; i ++) {
         count ++;
