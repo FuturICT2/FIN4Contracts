@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Box from '../components/Box';
 import { Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import ContractData from '../components/ContractData';
-import { Select, MenuItem, InputLabel } from '@material-ui/core';
 import Database from '../components/Database';
 import ActionTokenSelectMenu from '../components/ActionTokenSelectMenu';
 
@@ -23,13 +21,29 @@ class Offers extends Component {
 
 		this.database = new Database();
 		this.handleChange = this.handleChange.bind(this);
+		this.onclickSubmit = this.onclickSubmit.bind(this);
 	}
 	handleChange(event) {
-		console.log(event.target.value);
-		if (event.target.name == 'tokenAddress') {
+		if (event.target.name === 'tokenAddress') {
 			this.setState({ selectedActionTypeAddress: event.target.value });
 		}
 		this.setState({ [event.target.name]: event.target.value });
+	}
+
+	onclickSubmit() {
+		console.log('OnClick Submit');
+		this.props.togglePopup();
+		console.log(this.state.name);
+		new Database().saveOfferDetails(
+			this.state.name,
+			this.state.description,
+			this.state.tokenAddress,
+			this.state.receiverAddress,
+			this.state.imagePath,
+			this.state.offerUrl,
+			this.state.quantity,
+			this.state.type
+		);
 	}
 
 	render() {
@@ -84,20 +98,7 @@ class Offers extends Component {
 						onChange={this.handleChange}
 					/>
 					<p style={{ textAlign: 'center' }}>
-						<Button
-							key="submit"
-							variant="contained"
-							color="primary"
-							onClick={this.database.saveOfferDetails(
-								this.state.name,
-								this.state.description,
-								this.state.tokenAddress,
-								this.state.receiverAddress,
-								this.state.imagePath,
-								this.state.offerUrl,
-								this.state.quantity,
-								this.state.type
-							)}>
+						<Button key="submit" variant="contained" color="primary" onClick={this.onclickSubmit}>
 							<AddIcon /> &nbsp;Submit
 						</Button>
 					</p>
