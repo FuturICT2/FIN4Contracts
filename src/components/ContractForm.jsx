@@ -30,6 +30,7 @@ class ContractForm extends Component {
 		super(props);
 		this.context = context;
 
+		this.hasInit = false;
 		this.state = {};
 		this.inputs = [];
 		this.newValue = null;
@@ -62,6 +63,7 @@ class ContractForm extends Component {
 			}
 		}
 
+		self.hasInit = true;
 		self.setState(initialState);
 	};
 
@@ -236,6 +238,10 @@ class ContractForm extends Component {
 	};
 
 	render() {
+		if (!this.hasInit) {
+			return "";
+		}
+
 		return (
 			<>
 				<Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup}
