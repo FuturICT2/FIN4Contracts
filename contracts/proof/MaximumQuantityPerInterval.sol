@@ -9,8 +9,8 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
     public {
       name = "MaximumQuantityPerInterval";
       description = "Defines the maximum quantity a user can claim within a specified time interval";
-      interval = 1 * 24 * 60 * 60 * 1000; // 1 day
-      maxQuantity = 10;
+      // interval = 1 * 24 * 60 * 60 * 1000; // 1 day
+      // maxQuantity = 10;
       messageType = MessageType.INFO;
     }
 
@@ -19,9 +19,11 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-        Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
-        ": The quantity you are claiming would take you beyond the allowed amount for the given interval. Interval: ",
-        uint2str(interval / 1000), "s, max. quantity: ", uint2str(maxQuantity)));
+          Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
+          ": The quantity you are claiming would take you beyond the allowed amount for the given interval. Interval: ",
+          uint2str(_getInterval(tokenAdrToReceiveProof) / 1000), "s, max. quantity: ",
+          uint2str(_getMaxQuantity(tokenAdrToReceiveProof))
+        ));
         Fin4MainStrut(Fin4Main).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
       }
       return true;
@@ -31,8 +33,8 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       uint sum;
       uint requestedQuantity;
       (sum, requestedQuantity) = Fin4TokenStrut(tokenAddressUsingThisProofType)
-        .sumUpQuantitiesWithinIntervalBeforeThisClaim(claimer, claimId, interval);
-      return sum + requestedQuantity <= maxQuantity;
+        .sumUpQuantitiesWithinIntervalBeforeThisClaim(claimer, claimId, _getInterval(tokenAddressUsingThisProofType));
+      return sum + requestedQuantity <= _getMaxQuantity(tokenAddressUsingThisProofType);
     }
 
     // @Override
@@ -45,13 +47,11 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       return "uint:interval,uint:maxQuantity";
     }
 
-    // @Override
-    function setParameters(address token, uint[] memory params) public returns(bool) {
-      interval = params[0];
-      maxQuantity = params[1];
+    function _getInterval(address token) private view returns(uint) {
+      return fin4TokenToParametersSetOnThisProofType[token][0];
     }
 
-    uint public interval = 0; // in ms
-    uint public maxQuantity = 0;
-
+    function _getMaxQuantity(address token) private view returns(uint) {
+      return fin4TokenToParametersSetOnThisProofType[token][1];
+    }
 }

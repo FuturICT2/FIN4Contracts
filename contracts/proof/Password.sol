@@ -9,20 +9,19 @@ contract Password is Fin4BaseProofType {
     public {
       name = "Password";
       description = "A numeric password (PIN), which the token creator set, needs to be provided";
-      _password = 1234;
+      // _password = 1234;
       messageType = MessageType.INFO;
     }
 
-    uint public _password;
-
     function submitProof(address tokenAdrToReceiveProof, uint claimId, uint password) public returns(bool) {
       //if (keccak256(abi.encodePacked((_password))) == keccak256(abi.encodePacked((password)))) { // via https://ethereum.stackexchange.com/a/30914
-      if (password == _password) {
+      if (password == _getPassword(tokenAdrToReceiveProof)) {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-        Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
-        ": The password you provided was not correct"));
+          Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
+          ": The password you provided is not matching the one set by the action type creator"
+        ));
         Fin4MainStrut(Fin4Main).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
       }
       return true;
@@ -38,9 +37,8 @@ contract Password is Fin4BaseProofType {
       return "uint:password";
     }
 
-    // @Override
-    function setParameters(address token, uint[] memory params) public returns(bool) {
-      _password = params[0];
+    function _getPassword(address token) private view returns(uint) {
+      return fin4TokenToParametersSetOnThisProofType[token][0];
     }
 
 }

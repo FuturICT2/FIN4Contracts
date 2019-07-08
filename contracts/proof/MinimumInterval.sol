@@ -9,7 +9,7 @@ contract MinimumInterval is Fin4BaseProofType {
     public {
       name = "MinimumInterval";
       description = "Defines a minimum time that has to pass between claims";
-      minimumInterval = 1 * 24 * 60 * 60 * 1000; // 1 day
+      // minimumInterval = 1 * 24 * 60 * 60 * 1000; // 1 day
       messageType = MessageType.INFO;
     }
 
@@ -18,9 +18,10 @@ contract MinimumInterval is Fin4BaseProofType {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-        Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
-        ": The time between your previous claim and this one is shorter than the minimum required timespan of ",
-        uint2str(minimumInterval / 1000), "s."));
+          Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
+          ": The time between your previous claim and this one is shorter than the minimum required timespan of ",
+          uint2str(_getMinimumInterval(tokenAdrToReceiveProof) / 1000), "s."
+        ));
         Fin4MainStrut(Fin4Main).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
       }
       return true;
@@ -28,7 +29,7 @@ contract MinimumInterval is Fin4BaseProofType {
 
     function minimumIntervalRequirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
       uint timeBetween = Fin4TokenStrut(tokenAddressUsingThisProofType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
-      return timeBetween >= minimumInterval;
+      return timeBetween >= _getMinimumInterval(tokenAddressUsingThisProofType);
     }
 
     // @Override
@@ -41,17 +42,8 @@ contract MinimumInterval is Fin4BaseProofType {
       return "uint:minimumInterval";
     }
 
-    uint public minimumInterval = 0; // in ms
-
-    function setMinimumInterval(address tokenAddressUsingThisProofType, uint _minimumInterval) public returns(bool) {
-        require(fin4TokenToItsCreator[tokenAddressUsingThisProofType] == msg.sender, "Only the action type creator can set this value.");
-        minimumInterval = _minimumInterval;
-        return true;
-    }
-
-    // @Override
-    function setParameters(address token, uint[] memory params) public returns(bool) {
-      minimumInterval = params[0];
+    function _getMinimumInterval(address token) private view returns(uint) {
+      return fin4TokenToParametersSetOnThisProofType[token][0];
     }
 
 }

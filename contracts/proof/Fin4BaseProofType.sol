@@ -14,6 +14,7 @@ contract Fin4BaseProofType is utils {
   MessageType public messageType;
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
+  mapping (address => uint[]) public fin4TokenToParametersSetOnThisProofType;
 
   constructor(address Fin4MainAddress) public {
     Fin4Main = Fin4MainAddress;
@@ -35,7 +36,10 @@ contract Fin4BaseProofType is utils {
 
   function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory);
 
-  function setParameters(address token, uint[] memory params) public returns(bool) {}
+  function setParameters(address token, uint[] memory params) public returns(bool) {
+    // TODO require only token creator can set this
+    fin4TokenToParametersSetOnThisProofType[token] = params;
+  }
 
   function _sendApproval(address tokenAdrToReceiveProof, uint claimId) internal returns(bool) {
     // private ensures it can only be called from within this SC?
