@@ -23,7 +23,7 @@ contract Fin4Main {
         for (uint j = indexStart; j <= indexEnd; j ++) {
             params[j - indexStart] = paramValues[j];
         }
-        Fin4BaseProofType(requiredProofTypes[i]).setParameters(params);
+        Fin4BaseProofType(requiredProofTypes[i]).setParameters(address(newToken), params);
       }
     }
 

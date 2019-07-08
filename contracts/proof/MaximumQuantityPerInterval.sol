@@ -46,7 +46,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
     }
 
     // @Override
-    function setParameters(uint[] memory params) public returns(bool) {
+    function setParameters(address token, uint[] memory params) public returns(bool) {
       interval = params[0];
       maxQuantity = params[1];
     }

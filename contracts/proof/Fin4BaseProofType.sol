@@ -35,7 +35,7 @@ contract Fin4BaseProofType is utils {
 
   function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory);
 
-  function setParameters(uint[] memory params) public returns(bool) {}
+  function setParameters(address token, uint[] memory params) public returns(bool) {}
 
   function _sendApproval(address tokenAdrToReceiveProof, uint claimId) internal returns(bool) {
     // private ensures it can only be called from within this SC?

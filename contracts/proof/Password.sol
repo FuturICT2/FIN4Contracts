@@ -39,7 +39,7 @@ contract Password is Fin4BaseProofType {
     }
 
     // @Override
-    function setParameters(uint[] memory params) public returns(bool) {
+    function setParameters(address token, uint[] memory params) public returns(bool) {
       _password = params[0];
     }
 
