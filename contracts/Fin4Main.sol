@@ -41,7 +41,7 @@ contract Fin4Main {
       token.transferFrom(msg.sender, recepient, 1);
   }
 
-  function mintToken(address tokenAddress,uint256 amount) public {
+  /*function mintToken(address tokenAddress,uint256 amount) public {
       Fin4Token token = Fin4Token(tokenAddress);
       token.mint(msg.sender, amount);
   }
@@ -50,7 +50,7 @@ contract Fin4Main {
       return Fin4Token(tokenAddress).balanceOf(msg.sender);
   }
 
-   /*function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
+  function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
     uint count = 0;
     for (uint i = 0; i < children.length; i ++) {
         count ++;
