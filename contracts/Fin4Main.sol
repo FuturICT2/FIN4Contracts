@@ -7,6 +7,7 @@ import 'contracts/proof/Fin4BaseProofType.sol';
 contract Fin4Main {
 
   address[] public children;
+  // mapping (address => bool) public officialChildren; // TODO for Sergiu's TCR
 
 	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes, 
   string[] memory proofTypeParams) public returns(address) {
