@@ -6,8 +6,6 @@ import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { IconButton } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
 import { getContractData } from '../../components/ContractData';
 
 class TypeCreation extends Component {
