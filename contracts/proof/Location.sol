@@ -8,7 +8,7 @@ contract Location is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "Location";
-      description = "To be approved automatically, the user needs to provide location data (latitude/longitude) that is within a radius of a location the token creator defines";
+      description = "A location, which is within a radius of a location the token creator defines, needs to be provided";
       messageType = MessageType.INFO;
       _Latitude = 0;
       _Longitude = 0;
