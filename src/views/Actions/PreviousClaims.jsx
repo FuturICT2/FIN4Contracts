@@ -41,21 +41,25 @@ class PreviousClaims extends Component {
 						})
 						.then(claims => {
 							return claims.map(({ claimId, actionTypeAddress, tokenName, tokenSymbol }) => {
-								return getContractData(actionTypeAddress, 'Fin4Token.json', 'getClaimInfo', [claimId], context.drizzle).then(
-									({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
-										// claims per claim id per action type
-										return {
-											claimId: claimId,
-											actionTypeAddress: actionTypeAddress,
-											tokenName: tokenName,
-											tokenSymbol: tokenSymbol,
-											isApproved: isApproved,
-											quantity: quantity,
-											date: date,
-											comment: comment
-										};
-									}
-								);
+								return getContractData(
+									actionTypeAddress,
+									'Fin4Token.json',
+									'getClaimInfo',
+									[claimId],
+									context.drizzle
+								).then(({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
+									// claims per claim id per action type
+									return {
+										claimId: claimId,
+										actionTypeAddress: actionTypeAddress,
+										tokenName: tokenName,
+										tokenSymbol: tokenSymbol,
+										isApproved: isApproved,
+										quantity: quantity,
+										date: date,
+										comment: comment
+									};
+								});
 							});
 						});
 				});
@@ -87,7 +91,7 @@ class PreviousClaims extends Component {
 								// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
 								date = moment.unix(Number(date.substring(0, date.length - 3))).calendar();
 								return (
-									<Claim isapproved={isApproved.toString()} key={`${actionTypeAddress}${claimId}`}>
+									<Claim isapproved={isApproved} key={`${actionTypeAddress}${claimId}`}>
 										<div>
 											<Grid container alignItems="center">
 												<Grid item xs>
@@ -129,7 +133,11 @@ class PreviousClaims extends Component {
 							}
 						)}
 					</Box>
-					<Modal isOpen={this.isProofModalOpen()} handleClose={this.closeProofModal} title="Submit Proofs">
+					<Modal
+						isOpen={this.isProofModalOpen()}
+						handleClose={this.closeProofModal}
+						title="Submit Proofs"
+						width="450px">
 						<ProofSubmission
 							tokenAddress={this.state.actionTypeAddressForProofModal}
 							claimId={this.state.claimIdForProofModal}
@@ -159,7 +167,7 @@ const Claim = styled(Paper)`
 		box-sizing: border-box;
 		margin: 15px 0;
 		padding: 15px;
-		background: ${props => (props.isapproved === 'true' ? `rgba(61, 219, 81, 0.15)` : `rgba(248, 57, 48, 0.15)`)};
+		background: ${props => (props.isapproved ? colors.true : colors.wrong)};
 	}
 `;
 

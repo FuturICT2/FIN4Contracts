@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import Box from '../../components/Box';
+import { Typography, Divider } from '@material-ui/core';
 import ContractData from '../../components/ContractData';
 import ContractForm from '../../components/ContractForm';
+import styled from 'styled-components';
+import colors from '../../config/colors-config';
 
 class ProofSubmission extends Component {
-	requiredProofTypeAddresses = ({
-		0: tokenName,
-		1: tokenSymbol,
-		3: isApproved,
-		4: quantity,
-		5: date,
-		6: comment,
-		7: requiredProofTypes,
-		8: proofTypeStatuses
-	}) => {
+	requiredProofTypeAddresses = ({ 7: requiredProofTypes, 8: proofTypeStatuses }) => {
 		this.proofTypeStatusesObj = {};
 		for (var i = 0; i < requiredProofTypes.length; i++) {
 			this.proofTypeStatusesObj[requiredProofTypes[i]] = {};
@@ -21,36 +14,16 @@ class ProofSubmission extends Component {
 		}
 
 		this.getProofTypeInfoAndShowForm = ({ 0: address, 1: name, 2: description, 3: submitProofMethodArgsCount }) => {
-			var info = (
-				<span>
-					<b>{name}</b>: {description}
-					<br></br>
-					<i>{address}</i>
-				</span>
-			);
-
-			if (this.proofTypeStatusesObj[address].approved) {
-				return (
-					<div>
-						{info}
-						<br></br>
-						<br></br>
-						<font color="green">
-							<b>Proof type approved</b>
-						</font>
-					</div>
-				);
-			}
+			const isApproved = this.proofTypeStatusesObj[address].approved;
 
 			return (
-				<div>
-					{info}
-					<br></br>
-					<br></br>
-					<font color="red">
-						<b>Proof type not approved yet</b>
-					</font>
-					<Box title={'Initiate proof for ' + name}>
+				<>
+					<Status isApproved={isApproved}>
+						{isApproved
+							? `The proof "${name}" was submitted successfully.`
+							: `Your claim requires you to fill out the following form: ${description}.`}
+					</Status>
+					{!isApproved && (
 						<ContractForm
 							contractAddress={address}
 							contractJson={name + '.json'}
@@ -64,41 +37,28 @@ class ProofSubmission extends Component {
 								claimId: this.props.claimId + ''
 							}}
 						/>
-					</Box>
-				</div>
+					)}
+				</>
 			);
 		};
 
-		this.proofTypes = requiredProofTypes.map((address, index) => {
-			return (
-				<div key={'div_' + index}>
-					<hr></hr>
-					<span key={index}>
-						<ContractData
-							contractName="Fin4Main"
-							method="getProofTypeInfo"
-							methodArgs={[address]}
-							callback={this.getProofTypeInfoAndShowForm}
-						/>
-						<br></br>
-						<br></br>
-					</span>
-				</div>
-			);
-		});
-
 		return (
-			<div>
-				Claim <i>{this.props.claimId}</i> on action type <b>{tokenName}</b> [{tokenSymbol}]{' '}
-				<i>{this.props.tokenAddress}</i>
-				<br></br>
-				<br></br>
-				isApproved: <i>{isApproved + ''}</i>, quantity: <i>{quantity}</i>, date: <i>{date}</i>, comment:{' '}
-				<i>{comment}</i>
-				<br></br>
-				<br></br>
-				{this.proofTypes}
-			</div>
+			<>
+				{requiredProofTypes.map((address, index) => {
+					return (
+						<>
+							{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
+							<ContractData
+								key={index}
+								contractName="Fin4Main"
+								method="getProofTypeInfo"
+								methodArgs={[address]}
+								callback={this.getProofTypeInfoAndShowForm}
+							/>
+						</>
+					);
+				})}
+			</>
 		);
 	};
 
@@ -113,5 +73,15 @@ class ProofSubmission extends Component {
 		);
 	}
 }
+
+const Status = styled(Typography)`
+	&& {
+		background: ${props => (props.isApproved ? colors.true : colors.wrong)};
+		padding: 10px;
+		margin: 20px 0;
+		box-sizing: border-box;
+		border-radius: 4px;
+	}
+`;
 
 export default ProofSubmission;
