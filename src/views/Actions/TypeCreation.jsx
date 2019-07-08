@@ -66,7 +66,8 @@ class TypeCreation extends Component {
 							multiSelectOptions={this.state.proofTypes}
 							labels={['Name', 'Symbol', 'Proof Types', 'Decimals']}
 							hideArgs={{
-								proofTypeParams: 'proofTypeParams'
+								paramValues: 'paramValues',
+								paramValuesIndices: 'paramValuesIndices'
 							}}
 							helperModalTriggers={[, , this.togglePopup]}
 						/>
