@@ -1,7 +1,3 @@
-import Web3 from 'web3';
-import Offer from '../build/contracts/MarketOffers.json';
-import contract from 'truffle-contract';
-
 const BigchainDB = require('bigchaindb-driver');
 const bip39 = require('bip39');
 const API_PATH = 'http://localhost:9984/api/v1/';
@@ -11,13 +7,9 @@ class Database {
 		this.conn = new BigchainDB.Connection(API_PATH);
 		var seed = bip39.mnemonicToSeedSync('fantasticFin4 seedPhrase').slice(0, 32);
 		this.user = new BigchainDB.Ed25519Keypair(seed);
-
-		this.web3 = new Web3(window.web3.currentProvider);
-		this.contract = contract(Offer);
-		this.contract.setProvider(this.web3.currentProvider);
 	}
 
-	saveOfferDetails = (name, description, tokenAddress, receiverAddress, imagePath, offerUrl, quantity, type) => e => {
+	saveOfferDetails(name, description, tokenAddress, receiverAddress, imagePath, offerUrl, quantity, type) {
 		console.log(type);
 		const offerData = {
 			name: name,
@@ -46,6 +38,6 @@ class Database {
 			console.log(txSigned.id);
 			return txSigned.id;
 		});
-	};
+	}
 }
 export default Database;

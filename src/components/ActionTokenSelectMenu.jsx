@@ -3,10 +3,6 @@ import ContractData from '../components/ContractData';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
 
 class ActionTokenSelectMenu extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	showActionTypes = data => {
 		const menuItems =
 			data &&
