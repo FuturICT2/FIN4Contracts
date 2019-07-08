@@ -132,7 +132,7 @@ class ContractForm extends Component {
 			}
 
 			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) {
-				if (input.name == 'paramValues') {
+				if (input.name === 'paramValues') {
 					// expected to happen before paramValuesIndices
 					var allParamValuesArr = [];
 					for (var i = 0; i < this.state.requiredProofTypes.length; i++) {
@@ -155,7 +155,7 @@ class ContractForm extends Component {
 					return allParamValuesArr;
 				}
 
-				if (input.name == 'paramValuesIndices') {
+				if (input.name === 'paramValuesIndices') {
 					return paramValuesIndicesArr;
 				}
 
@@ -195,7 +195,7 @@ class ContractForm extends Component {
 			}
 
 			var newValue;
-			if (this.state.requiredProofTypes.length == 0) {
+			if (this.state.requiredProofTypes.length === 0) {
 				// first tag was added
 				newValue = values[0];
 			} else if (values.length < this.state.requiredProofTypes.length) {
@@ -211,7 +211,7 @@ class ContractForm extends Component {
 			});
 
 			if (newValue != null && this.getProofTypeObj(newValue).paramsEncoded.length > 0) {
-				// this.getProofTypeObj(newValue).label == "MinimumClaimingInterval"
+				// this.getProofTypeObj(newValue).label === "MinimumClaimingInterval"
 				this.openModal();
 			}
 			return;
@@ -230,7 +230,7 @@ class ContractForm extends Component {
 
 	getProofTypeObj(address) {
 		for (var i = 0; this.props.multiSelectOptions && i < this.props.multiSelectOptions.length; i++) {
-			if (this.props.multiSelectOptions[i].value == address) {
+			if (this.props.multiSelectOptions[i].value === address) {
 				return this.props.multiSelectOptions[i];
 			}
 		}
