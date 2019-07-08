@@ -8,7 +8,7 @@ contract Password is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "Password";
-      description = "To be approved automatically, the user needs to provide a password that the token creator sets once";
+      description = "A password, which the token creator set, needs to be provided";
       _password = "test123";
       messageType = MessageType.INFO;
     }

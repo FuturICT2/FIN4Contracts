@@ -14,7 +14,7 @@ contract SpecificAddress is Fin4BaseProofType {
 
   function setNameAndDescription() public returns(bool) {
     name = "SpecificAddress";
-    description = "The claimer specifies and address, which has to approve";
+    description = "The claimer specifies an address, which has to approve";
   }
 
   struct PendingApproval {
