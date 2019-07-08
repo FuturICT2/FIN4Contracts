@@ -128,15 +128,16 @@ class ContractForm extends Component {
 				return this.props.fixArgs[input.name];
 			}
 
-			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) { // proofTypeParams
+			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) {
+				// proofTypeParams
 				var encodedStrings = [];
-				for (var i = 0; i < this.state.requiredProofTypes.length; i ++) {
-					var proofTypeObj = 	this.getProofTypeObj(this.state.requiredProofTypes[i]);
+				for (var i = 0; i < this.state.requiredProofTypes.length; i++) {
+					var proofTypeObj = this.getProofTypeObj(this.state.requiredProofTypes[i]);
 					var paramValues = proofTypeObj.paramValues;
-					var encodedStr = "";
+					var encodedStr = '';
 					for (var key in paramValues) {
 						if (paramValues.hasOwnProperty(key)) {
-							encodedStr += paramValues[key] + ",";
+							encodedStr += paramValues[key] + ',';
 						}
 					}
 					encodedStrings.push(encodedStr.substring(0, encodedStr.length - 1));
@@ -211,10 +212,7 @@ class ContractForm extends Component {
 	};
 
 	getProofTypeObj(address) {
-		if (!this.props.multiSelectOptions) {
-			return '';
-		}
-		for (var i = 0; i < this.props.multiSelectOptions.length; i++) {
+		for (var i = 0; this.props.multiSelectOptions && i < this.props.multiSelectOptions.length; i++) {
 			if (this.props.multiSelectOptions[i].value == address) {
 				return this.props.multiSelectOptions[i];
 			}
@@ -234,31 +232,39 @@ class ContractForm extends Component {
 	};
 
 	handleParamChange = (proofTypeObj, event) => {
-		proofTypeObj.paramValues[event.target.name] = event.target.type + ":" + event.target.name + "=" + event.target.value;
+		proofTypeObj.paramValues[event.target.name] =
+			event.target.type + ':' + event.target.name + '=' + event.target.value;
 	};
 
 	render() {
 		if (!this.hasInit) {
-			return "";
+			return '';
 		}
 
 		return (
 			<>
-				<Modal isOpen={this.state.isPopupOpen} handleClose={this.closePopup}
-					title={"Set Parameters for " + this.getProofTypeObj(this.state.newValue).label} width="400px">
-					{this.state.newValue && this.getProofTypeObj(this.state.newValue).params.split(',').map(part => {
-						var paramType = part.split(':')[0];
-						var paramName = part.split(':')[1];
-						return (							
-							<TextField
-								key={paramName}
-								name={paramName}
-								type={translateType(paramType)}
-								label={paramName}
-								onChange={(e) => this.handleParamChange(this.getProofTypeObj(this.state.newValue), e)}
-								style={inputFieldStyle}
-							/>)
-					})}
+				<Modal
+					isOpen={this.state.isPopupOpen}
+					handleClose={this.closePopup}
+					title={'Set Parameters for ' + this.getProofTypeObj(this.state.newValue).label}
+					width="400px">
+					{this.state.newValue &&
+						this.getProofTypeObj(this.state.newValue)
+							.params.split(',')
+							.map(part => {
+								var paramType = part.split(':')[0];
+								var paramName = part.split(':')[1];
+								return (
+									<TextField
+										key={paramName}
+										name={paramName}
+										type={translateType(paramType)}
+										label={paramName}
+										onChange={e => this.handleParamChange(this.getProofTypeObj(this.state.newValue), e)}
+										style={inputFieldStyle}
+									/>
+								);
+							})}
 					<p style={{ textAlign: 'center' }}>
 						<Button key="submit" variant="contained" color="primary" onClick={this.closePopup}>
 							<AddIcon /> &nbsp;Submit
@@ -267,7 +273,10 @@ class ContractForm extends Component {
 				</Modal>
 				<form onSubmit={this.handleSubmit} autoComplete="off">
 					{this.inputs.map(({ name, type }, index) => {
-						if ((this.props.fixArgs && this.props.fixArgs[name]) || (this.props.hideArgs && this.props.hideArgs[name])) {
+						if (
+							(this.props.fixArgs && this.props.fixArgs[name]) ||
+							(this.props.hideArgs && this.props.hideArgs[name])
+						) {
 							return '';
 						}
 

@@ -35,7 +35,7 @@ class TypeCreation extends Component {
 									value: proofTypeAddress,
 									label: name,
 									description: description,
-                  					params: parameterForActionTypeCreatorToSetEncoded,
+									params: parameterForActionTypeCreatorToSetEncoded,
 									paramValues: {}
 								};
 							}
@@ -65,43 +65,41 @@ class TypeCreation extends Component {
 			</>
 		);
 
-		if (this.state.proofTypes.length < 1) {
-			return "";
-		}
-
 		return (
-			<>
-				<Box title={title}>
-					<ContractForm
-						contractName="Fin4Main"
-						method="createNewToken"
-						multiSelectOptions={this.state.proofTypes}
-						labels={['Name', 'Symbol', 'Proof Types', 'Decimals']}
-						hideArgs={{
-							proofTypeParams: "proofTypeParams"
-						}}
-					/>
-				</Box>
-				<Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
-					<Table headers={['Name', 'Description']}>
-						{this.state.proofTypes.length > 0 && (
-							<>
-								{this.state.proofTypes.map((item, index) => {
-									return (
-										<TableRow
-											key={index}
-											data={{
-												name: item.label,
-												description: item.description
-											}}
-										/>
-									);
-								})}
-							</>
-						)}
-					</Table>
-				</Modal>
-			</>
+			this.state.proofTypes.length > 0 && (
+				<>
+					<Box title={title}>
+						<ContractForm
+							contractName="Fin4Main"
+							method="createNewToken"
+							multiSelectOptions={this.state.proofTypes}
+							labels={['Name', 'Symbol', 'Proof Types', 'Decimals']}
+							hideArgs={{
+								proofTypeParams: 'proofTypeParams'
+							}}
+						/>
+					</Box>
+					<Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
+						<Table headers={['Name', 'Description']}>
+							{this.state.proofTypes.length > 0 && (
+								<>
+									{this.state.proofTypes.map((item, index) => {
+										return (
+											<TableRow
+												key={index}
+												data={{
+													name: item.label,
+													description: item.description
+												}}
+											/>
+										);
+									})}
+								</>
+							)}
+						</Table>
+					</Modal>
+				</>
+			)
 		);
 	}
 }

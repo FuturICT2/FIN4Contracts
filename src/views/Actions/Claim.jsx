@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
+import Currency from '../../components/Currency';
 import ContractData from '../../components/ContractData';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
 
@@ -30,9 +31,8 @@ class Claim extends Component {
 							callback={({ 0: name, 1: symbol }) => {
 								return (
 									<>
-										<span style={{ fontWeight: 'bold' }}>{name}</span>
-										&nbsp;
-										<span>[{symbol}]</span>
+										<span>{name}</span>&nbsp;
+										<Currency>{symbol}</Currency>
 									</>
 								);
 							}}
