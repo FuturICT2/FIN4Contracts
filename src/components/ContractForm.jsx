@@ -132,7 +132,7 @@ class ContractForm extends Component {
 			}
 
 			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) {
-				if (input.name === 'paramValues') {
+				if (input.name == 'paramValues') {
 					// expected to happen before paramValuesIndices
 					var allParamValuesArr = [];
 					for (var i = 0; i < this.state.requiredProofTypes.length; i++) {
@@ -155,7 +155,7 @@ class ContractForm extends Component {
 					return allParamValuesArr;
 				}
 
-				if (input.name === 'paramValuesIndices') {
+				if (input.name == 'paramValuesIndices') {
 					return paramValuesIndicesArr;
 				}
 
@@ -189,27 +189,35 @@ class ContractForm extends Component {
 
 		if (!event.target && this.props.multiSelectOptions) {
 			// indicator for react-select
-			value = event.map(e => e.value);
+			var values = [];
+			for (var i = 0; i < event.length; i++) {
+				values.push(event[i].value);
+			}
 
-			let newValue;
-			if (this.state.requiredProofTypes.length === 0) {
+			var newValue;
+			if (this.state.requiredProofTypes.length == 0) {
 				// first tag was added
-				newValue = value[0];
-			} else if (value.length < this.state.requiredProofTypes.length) {
+				newValue = values[0];
+			} else if (values.length < this.state.requiredProofTypes.length) {
 				// a tag was removed
 				newValue = null;
 			} else {
-				newValue = value[value.length - 1];
+				newValue = values[values.length - 1];
 			}
 
 			this.setState({
+				['requiredProofTypes']: values,
 				newValue: newValue
 			});
 
 			if (newValue != null && this.getProofTypeObj(newValue).paramsEncoded.length > 0) {
+				// this.getProofTypeObj(newValue).label == "MinimumClaimingInterval"
 				this.openModal();
 			}
-		} else if (event.target.type === 'checkbox') {
+			return;
+		}
+
+		if (event.target.type === 'checkbox') {
 			value = event.target.checked;
 		} else if (event.target.type === 'date') {
 			value = moment(event.target.value).valueOf();
@@ -222,7 +230,7 @@ class ContractForm extends Component {
 
 	getProofTypeObj(address) {
 		for (var i = 0; this.props.multiSelectOptions && i < this.props.multiSelectOptions.length; i++) {
-			if (this.props.multiSelectOptions[i].value === address) {
+			if (this.props.multiSelectOptions[i].value == address) {
 				return this.props.multiSelectOptions[i];
 			}
 		}
