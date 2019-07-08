@@ -1,5 +1,7 @@
 pragma solidity ^0.5.0;
 
+import 'contracts/proof/Fin4BaseProofTypeStrut.sol';
+
 contract Fin4Messages {
 
   constructor() public {
@@ -29,7 +31,7 @@ contract Fin4Messages {
 
   function getMyMessage(address sender, uint index) public view returns(uint, address, string memory, address, string memory) {
     Message memory m = messages[sender][index];
-    return (m.messageType, m.sender, m.message, m.fulfillmentAddress, "TODO");
+    return (m.messageType, m.sender, m.message, m.fulfillmentAddress, Fin4BaseProofTypeStrut(m.fulfillmentAddress).getName());
   }
 
 }
