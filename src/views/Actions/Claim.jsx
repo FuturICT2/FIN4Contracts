@@ -4,6 +4,7 @@ import Box from '../../components/Box';
 import Currency from '../../components/Currency';
 import ContractData from '../../components/ContractData';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
+import ActionTokenSelectMenu from '../../components/ActionTokenSelectMenu';
 
 class Claim extends Component {
 	constructor(props) {
@@ -19,57 +20,13 @@ class Claim extends Component {
 		});
 	};
 
-	showActionTypes = data => {
-		const menuItems =
-			data &&
-			data.map((address, index) => {
-				return (
-					<MenuItem key={index} value={address}>
-						<ContractData
-							contractAddress={address}
-							method="getInfo"
-							callback={({ 0: name, 1: symbol }) => {
-								return (
-									<>
-										<span>{name}</span>&nbsp;
-										<Currency>{symbol}</Currency>
-									</>
-								);
-							}}
-						/>
-					</MenuItem>
-				);
-			});
-
-		return (
-			<>
-				<InputLabel shrink htmlFor="select-action">
-					Action Type
-				</InputLabel>
-				<Select
-					value={this.state.selectedActionTypeAddress}
-					displayEmpty
-					inputProps={{
-						id: 'select-action'
-					}}
-					style={{
-						width: '100%',
-						marginBottom: '15px'
-					}}
-					onChange={this.handleChange}>
-					<MenuItem value="" key={-1}>
-						<em>Please Select</em>
-					</MenuItem>
-					{menuItems}
-				</Select>
-			</>
-		);
-	};
-
 	render() {
 		return (
 			<Box title={'Claim an Action'}>
-				<ContractData contractName="Fin4Main" method="getChildren" callback={this.showActionTypes} />
+				<ActionTokenSelectMenu
+					handleChange={this.handleChange.bind(this)}
+					value={this.state.selectedActionTypeAddress}
+				/>
 				{this.state.selectedActionTypeAddress !== '' && (
 					<ContractForm
 						contractAddress={this.state.selectedActionTypeAddress}

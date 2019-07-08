@@ -195,7 +195,7 @@ class ContractForm extends Component {
 			}
 
 			var newValue;
-			if (this.state.requiredProofTypes.length == 0) {
+			if (this.state.requiredProofTypes.length === 0) {
 				// first tag was added
 				newValue = values[0];
 			} else if (values.length < this.state.requiredProofTypes.length) {
