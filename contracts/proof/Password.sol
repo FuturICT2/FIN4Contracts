@@ -8,16 +8,16 @@ contract Password is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "Password";
-      description = "A password, which the token creator set, needs to be provided";
-      _password = "test123";
+      description = "A numeric password (PIN), which the token creator set, needs to be provided";
+      _password = 1234;
       messageType = MessageType.INFO;
     }
 
-    string public _password;
+    uint public _password;
 
-    function submitProof(address tokenAdrToReceiveProof, uint claimId, string memory password) public returns(bool) {
-      // via https://ethereum.stackexchange.com/a/30914
-      if (keccak256(abi.encodePacked((_password))) == keccak256(abi.encodePacked((password)))) {
+    function submitProof(address tokenAdrToReceiveProof, uint claimId, uint password) public returns(bool) {
+      //if (keccak256(abi.encodePacked((_password))) == keccak256(abi.encodePacked((password)))) { // via https://ethereum.stackexchange.com/a/30914
+      if (password == _password) {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
@@ -35,7 +35,12 @@ contract Password is Fin4BaseProofType {
 
     // @Override
     function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
-      return "string:password";
+      return "uint:password";
+    }
+
+    // @Override
+    function setParameters(uint[] memory params) public returns(bool) {
+      _password = params[0];
     }
 
 }
