@@ -39,11 +39,11 @@ contract MinimumInterval is Fin4BaseProofType {
 
     // @Override
     function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
-      return "uint:minimumInterval";
+      return "uint:minimumInterval:days";
     }
 
     function _getMinimumInterval(address token) private view returns(uint) {
-      return fin4TokenToParametersSetOnThisProofType[token][0];
+      return fin4TokenToParametersSetOnThisProofType[token][0] * 24 * 60 * 60 * 1000; // from days to miliseconds
     }
 
 }

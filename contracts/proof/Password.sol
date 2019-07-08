@@ -34,7 +34,7 @@ contract Password is Fin4BaseProofType {
 
     // @Override
     function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
-      return "uint:password";
+      return "uint:password:numeric PIN";
     }
 
     function _getPassword(address token) private view returns(uint) {

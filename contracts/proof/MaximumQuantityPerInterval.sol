@@ -44,11 +44,11 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
 
     // @Override
     function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
-      return "uint:interval,uint:maxQuantity";
+      return "uint:interval:days,uint:maxQuantity:quantity";
     }
 
     function _getInterval(address token) private view returns(uint) {
-      return fin4TokenToParametersSetOnThisProofType[token][0];
+      return fin4TokenToParametersSetOnThisProofType[token][0] * 24 * 60 * 60 * 1000; // from days to miliseconds
     }
 
     function _getMaxQuantity(address token) private view returns(uint) {

@@ -210,7 +210,7 @@ class ContractForm extends Component {
 				newValue: newValue
 			});
 
-			if (newValue != null && this.getProofTypeObj(newValue).params.length > 0) {
+			if (newValue != null && this.getProofTypeObj(newValue).paramsEncoded.length > 0) {
 				// this.getProofTypeObj(newValue).label == "MinimumClaimingInterval"
 				this.openPopup();
 			}
@@ -267,15 +267,15 @@ class ContractForm extends Component {
 					width="400px">
 					{this.state.newValue &&
 						this.getProofTypeObj(this.state.newValue)
-							.params.split(',')
+							.paramsEncoded.split(',')
 							.map(part => {
-								const [paramType, paramName] = part.split(':');
+								const [paramType, paramName, unit] = part.split(':');
 								return (
 									<TextField
 										key={paramName}
 										name={paramName}
 										type={translateType(paramType)}
-										label={paramName}
+										label={paramName + " (" + unit + ")"}
 										onChange={e => this.handleParamChange(this.getProofTypeObj(this.state.newValue), e)}
 										style={inputFieldStyle}
 									/>
