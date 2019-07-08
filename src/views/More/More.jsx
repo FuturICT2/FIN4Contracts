@@ -11,6 +11,8 @@ import axios from 'axios';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
+import Offers from '../Offers';
+import Modal from '../../components/Modal';
 
 const showBalanceByActionType = data => {
 	return (
@@ -35,33 +37,53 @@ const showBalanceByActionType = data => {
 class More extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { offers: [] };
-		this.getOffers();
+		this.state = { spendingOffers: [], donationOffers: [], isOfferPopupOpen: false, isDoantionPopupOpen: false };
+		this.getSpendingOffers();
+		this.getDonationOffers();
 	}
 
-	getOffers() {
-		var PATH = 'http://localhost:9984/api/v1/assets?search=offer';
+	getSpendingOffers() {
+		var PATH = 'http://localhost:9984/api/v1/assets?search=spendingOffers&limit=2';
 		axios.get(PATH).then(res => {
-			const offers = res.data;
-			this.setState({ offers });
+			const spendingOffers = res.data;
+			this.setState({ spendingOffers });
+		});
+	}
+	getDonationOffers() {
+		var PATH = 'http://localhost:9984/api/v1/assets?search=donationOffers&limit=2';
+		axios.get(PATH).then(res => {
+			const donationOffers = res.data;
+			this.setState({ donationOffers });
 		});
 	}
 
-	render() {
-		const useStyles = makeStyles(theme => ({
-			fab: {
-				margin: theme.spacing(1)
-			}
-		}));
+	toggleOfferPopup = () => {
+		console.log(this.state.isOfferPopupOpen);
+		this.setState({ isOfferPopupOpen: !this.state.isOfferPopupOpen });
+	};
 
+	toggleDonationPopup = () => {
+		console.log(this.state.isDoantionPopupOpen);
+		this.setState({ isDoantionPopupOpen: !this.state.isDoantionPopupOpen });
+	};
+
+	render() {
 		return (
 			<Wrapper>
 				<div>
-					<Fab color="primary" aria-label="Add">
+					<Fab color="primary" aria-label="Add" onClick={this.toggleOfferPopup}>
 						<AddIcon />
 					</Fab>
-					{this.state.offers.map(({ data }, index) => {
-						console.log(this.state.offers);
+					<Modal
+						isOpen={this.state.isOfferPopupOpen}
+						handleClose={this.toggleOfferPopup}
+						title="Create a new Offer"
+						width="500px">
+						<Offers offerType="spendingOffers" />
+					</Modal>
+
+					{this.state.spendingOffers.map(({ data }, index) => {
+						console.log(this.state.spendingOffers);
 						return (
 							<Card
 								key={index}
@@ -78,14 +100,26 @@ class More extends React.Component {
 					<ContractData contractName="Fin4Main" method="getChildren" callback={showBalanceByActionType} />
 				</Container>
 				<div>
-					{dummyData.donationReceivers.map(({ title, imagePath, description, readMore }, index) => {
+					<Fab color="primary" aria-label="Add" onClick={this.toggleDonationPopup}>
+						<AddIcon />
+					</Fab>
+
+					<Modal
+						isOpen={this.state.isDoantionPopupOpen}
+						handleClose={this.toggleDonationPopup}
+						title="Create a new Donation Offer"
+						width="500px">
+						<Offers offerType="donationOffers" />
+					</Modal>
+
+					{this.state.donationOffers.map(({ data }, index) => {
 						return (
 							<Card
 								key={index}
-								title={title}
-								imagePath={imagePath}
-								description={description}
-								readMore={readMore}
+								title={data.offerData.name}
+								imagePath={data.offerData.imagePath}
+								description={data.offerData.description}
+								readMore={data.offerData.offerUrl}
 								actionButtonText="donate"
 							/>
 						);

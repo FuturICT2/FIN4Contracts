@@ -1,18 +1,13 @@
-import React, { Component } from 'react';
 import Web3 from 'web3';
 import Offer from '../build/contracts/MarketOffers.json';
 import contract from 'truffle-contract';
-import ContractData from '../components/ContractData';
-import axios from 'axios';
 
 const BigchainDB = require('bigchaindb-driver');
 const bip39 = require('bip39');
 const API_PATH = 'http://localhost:9984/api/v1/';
 
-class Database extends Component {
-	constructor(props) {
-		super(props);
-
+class Database {
+	constructor() {
 		this.conn = new BigchainDB.Connection(API_PATH);
 		var seed = bip39.mnemonicToSeedSync('fantasticFin4 seedPhrase').slice(0, 32);
 		this.user = new BigchainDB.Ed25519Keypair(seed);
@@ -22,11 +17,8 @@ class Database extends Component {
 		this.contract.setProvider(this.web3.currentProvider);
 	}
 
-	a() {
-		console.log('Ooooooooooo');
-	}
-
-	saveOfferDetails = (name, description, tokenAddress, receiverAddress, imagePath, offerUrl, quantity) => e => {
+	saveOfferDetails = (name, description, tokenAddress, receiverAddress, imagePath, offerUrl, quantity, type) => e => {
+		console.log(type);
 		const offerData = {
 			name: name,
 			description: description,
@@ -35,7 +27,7 @@ class Database extends Component {
 			receiverAddress: receiverAddress,
 			offerUrl: offerUrl,
 			quantity: quantity,
-			type: 'offer'
+			type: type
 		};
 		//CREATE
 		const txCreatePaint = BigchainDB.Transaction.makeCreateTransaction(
@@ -55,12 +47,5 @@ class Database extends Component {
 			return txSigned.id;
 		});
 	};
-
-	async getOfferDetails() {
-		var PATH = API_PATH + 'assets?search=offer';
-		axios.get(PATH).then(response => {
-			return response.data;
-		});
-	}
 }
 export default Database;
