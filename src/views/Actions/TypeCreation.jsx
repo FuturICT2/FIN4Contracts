@@ -56,19 +56,10 @@ class TypeCreation extends Component {
 	};
 
 	render() {
-		const title = (
-			<>
-				<span>Create a New Action Type </span>
-				<IconButton onClick={this.togglePopup}>
-					<InfoIcon fontSize="small" />
-				</IconButton>
-			</>
-		);
-
 		return (
 			this.state.proofTypes.length > 0 && (
 				<>
-					<Box title={title}>
+					<Box title="Create a New Action Type">
 						<ContractForm
 							contractName="Fin4Main"
 							method="createNewToken"
@@ -77,9 +68,10 @@ class TypeCreation extends Component {
 							hideArgs={{
 								proofTypeParams: 'proofTypeParams'
 							}}
+							helperModalTriggers={[, , this.togglePopup]}
 						/>
 					</Box>
-					<Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types Specification">
+					<Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types">
 						<Table headers={['Name', 'Description']}>
 							{this.state.proofTypes.length > 0 && (
 								<>

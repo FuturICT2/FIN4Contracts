@@ -7,6 +7,7 @@ import { Button, TextField } from '@material-ui/core';
 import Modal from './Modal';
 import Dropdown from './Dropdown';
 import AddIcon from '@material-ui/icons/Add';
+import OpenIcon from '@material-ui/icons/OpenInNew';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -280,8 +281,16 @@ class ContractForm extends Component {
 							return '';
 						}
 
-						var inputType = translateType(type);
-						var inputLabel = this.props.labels ? this.props.labels[index] : name;
+						const inputType = translateType(type);
+						let inputLabel = this.props.labels ? this.props.labels[index] : name;
+						// enrich inputLabel with modal trigger if available
+						try {
+							inputLabel = this.props.helperModalTriggers[index] ? (
+								<HelperModalTrigger onClick={this.props.helperModalTriggers[index]}>{inputLabel}</HelperModalTrigger>
+							) : (
+								inputLabel
+							);
+						} catch {}
 
 						if (name === 'requiredProofTypes' && this.props.multiSelectOptions) {
 							return (
@@ -351,6 +360,14 @@ const inputFieldStyle = {
 	marginBottom: '15px'
 };
 
+const HelperModalTrigger = props => {
+	return (
+		<span {...props} style={{ cursor: 'pointer' }}>
+			{props.children} (Learn More <OpenIcon style={{ verticalAlign: 'middle' }} />)
+		</span>
+	);
+};
+
 ContractForm.contextTypes = {
 	drizzle: PropTypes.object
 };
@@ -361,7 +378,8 @@ ContractForm.propTypes = {
 	method: PropTypes.string.isRequired,
 	methodArgsCount: PropTypes.string,
 	sendArgs: PropTypes.object,
-	labels: PropTypes.arrayOf(PropTypes.string)
+	labels: PropTypes.arrayOf(PropTypes.string),
+	helperModalTriggers: PropTypes.arrayOf(PropTypes.func)
 };
 
 /*
