@@ -158,7 +158,7 @@ class ContractForm extends Component {
 			}
 
 			var newValue;
-			if (this.state.requiredProofTypes.length == 0) {
+			if (this.state.requiredProofTypes.length === 0) {
 				// first tag was added
 				newValue = values[0];
 			} else if (values.length < this.state.requiredProofTypes.length) {
@@ -196,7 +196,7 @@ class ContractForm extends Component {
 			return '';
 		}
 		for (var i = 0; i < this.props.multiSelectOptions.length; i++) {
-			if (this.props.multiSelectOptions[i].value == address) {
+			if (this.props.multiSelectOptions[i].value === address) {
 				return this.props.multiSelectOptions[i];
 			}
 		}

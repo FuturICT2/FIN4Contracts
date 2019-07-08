@@ -5,6 +5,7 @@ import More from '../views/More/More';
 import Actions from '../views/Actions/Actions';
 import ProofSubmission from '../views/ProofSubmission';
 import Approving from '../views/Approving';
+import Offers from '../views/Offers';
 
 const menu = [
 	{
@@ -29,6 +30,12 @@ const menu = [
 		component: Approving,
 		path: '/approving',
 		label: 'Approving',
+		icon: StarIcon
+	},
+	{
+		component: Offers,
+		path: '/offers',
+		label: 'Offers',
 		icon: StarIcon
 	}
 ];
