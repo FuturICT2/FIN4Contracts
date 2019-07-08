@@ -10,11 +10,9 @@ contract Fin4Main {
 
 	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes, uint8 decimals) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, decimals, address(this), msg.sender);
-
     for (uint i = 0; i < requiredProofTypes.length; i++) {
       newToken.addRequiredProofType(requiredProofTypes[i]);
     }
-
     children.push(address(newToken));
     return address(newToken);
   }
@@ -39,22 +37,28 @@ contract Fin4Main {
       return Fin4Token(tokenAddress).balanceOf(msg.sender);
   }
 
-   /*function getAllTokenBalance() public view returns(address[] memory, uint256[] memory) {
+  function getAllTokenWithBalance() public view returns(address[] memory) {
+    //NEED TO FIX THE LOGIC
     uint count = 0;
     for (uint i = 0; i < children.length; i ++) {
+      Fin4Token tok = Fin4Token(children[i]);
+      uint256 bal = tok.balanceOf(msg.sender);
+      if(bal != 0){
         count ++;
+      }
     }
-    uint[] memory balances = new uint[](count);
     address[] memory addresses = new address[](count);
     uint256 j = 0;
     for (uint i = 0; i < children.length; i++) {
       Fin4Token tok = Fin4Token(children[i]);
-      balances[j] = tok.balanceOf(msg.sender);
-      addresses[j] = address(tok);
-      j++;
+      uint256 bal = tok.balanceOf(msg.sender);
+      if(bal != 0){
+        addresses[j] = address(tok);
+        j++;
+      }
     }
-    return (addresses, balances);
-  }*/
+    return (addresses);
+  }
 
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
 
@@ -117,7 +121,6 @@ contract Fin4Main {
     string message;
     address fulfillmentAddress; // where to go and do something
   }
-
   mapping (address => Message[]) public messages;
 
   function addMessage(uint messageType, address sender, address receiver,
@@ -126,11 +129,9 @@ contract Fin4Main {
     messages[receiver].push(m);
     return true;
   }
-
   function getMyMessagesCount() public view returns(uint) {
     return messages[msg.sender].length;
   }
-
   function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory) {
     Message memory m = messages[msg.sender][index];
     return (m.messageType, m.sender, m.message, m.fulfillmentAddress, Fin4BaseProofType(m.fulfillmentAddress).getName());
