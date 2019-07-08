@@ -4,8 +4,38 @@ import ContractData from '../../components/ContractData';
 import ContractForm from '../../components/ContractForm';
 import styled from 'styled-components';
 import colors from '../../config/colors-config';
+import { drizzleConnect } from 'drizzle-react';
+import PropTypes from 'prop-types';
+import { getContractData } from '../../components/ContractData';
 
 class ProofSubmission extends Component {
+
+	constructor(props, context) {
+		super(props);
+
+		this.state = {};
+
+		/*getContractData(this.props.tokenAddress, 'Fin4Token.json', 'getClaim', [this.props.claimId], context.drizzle)
+			.then(({ 7: requiredProofTypes, 8: proofTypeStatuses }) => {
+				this.proofTypeStatusesObj = {};
+				for (var i = 0; i < requiredProofTypes.length; i++) {
+					this.proofTypeStatusesObj[requiredProofTypes[i]] = {};
+					this.proofTypeStatusesObj[requiredProofTypes[i]].approved = proofTypeStatuses[i];
+				}
+				return requiredProofTypes.map((address, index) => {
+					return getContractData('Fin4Main', 'Fin4Main.json', 'getProofTypeInfo', [address], context.drizzle)
+						.then(({1: name, 2: description, 3: submitProofMethodArgsCount }) => {
+							const isApproved = this.proofTypeStatusesObj[address].approved;
+
+							return ({address, name, description});
+
+						});
+				})
+			})
+			.then(data => Promise.all(data))
+			.then(console.log);*/
+	}
+
 	requiredProofTypeAddresses = ({ 7: requiredProofTypes, 8: proofTypeStatuses }) => {
 		this.proofTypeStatusesObj = {};
 		for (var i = 0; i < requiredProofTypes.length; i++) {
@@ -84,4 +114,14 @@ const Status = styled(Typography)`
 	}
 `;
 
-export default ProofSubmission;
+ProofSubmission.contextTypes = {
+	drizzle: PropTypes.object
+};
+
+const mapStateToProps = state => {
+	return {
+		contracts: state.contracts
+	};
+};
+
+export default drizzleConnect(ProofSubmission, mapStateToProps);

@@ -53,6 +53,7 @@ contract Fin4TokenBase { // abstract class
     return nextClaimId - 1;
   }
 
+  // TODO only the last two arrays are being used in the frontend, reduce this methods return values?
   function getClaim(uint claimId) public view returns(string memory, string memory,
     address, bool, uint, uint, string memory, address[] memory, bool[] memory) {
     // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
