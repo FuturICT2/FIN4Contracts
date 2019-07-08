@@ -134,11 +134,10 @@ class ContractForm extends Component {
 			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) {
 
 				if (input.name == 'paramValues') { // expected to happen before paramValuesIndices
-					console.log("paramValues");
 					var allParamValuesArr = [];
 					for (var i = 0; i < this.state.requiredProofTypes.length; i++) {
 						var proofTypeObj = this.getProofTypeObj(this.state.requiredProofTypes[i]);
-						console.log(proofTypeObj);
+						// console.log(proofTypeObj);
 						var paramValuesObj = proofTypeObj.paramValues;
 						var count = 0;
 						var startIndex = allParamValuesArr.length;
@@ -152,12 +151,11 @@ class ContractForm extends Component {
 						paramValuesIndicesArr.push(count === 0 ? 99 : startIndex); // 99 as indicator for no params for this ProofType
 						paramValuesIndicesArr.push(count === 0 ? 99 : endIndex);
 					}
-					console.log(paramValuesIndicesArr, allParamValuesArr);
+					// console.log(paramValuesIndicesArr, allParamValuesArr);
 					return allParamValuesArr;
 				}
 
 				if (input.name == 'paramValuesIndices') {
-					console.log("paramValuesIndices");
 					return paramValuesIndicesArr;
 				}
 
