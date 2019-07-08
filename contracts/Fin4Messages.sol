@@ -23,12 +23,12 @@ contract Fin4Messages {
     return true;
   }
 
-  function getMyMessagesCount() public view returns(uint) {
-    return messages[msg.sender].length;
+  function getMyMessagesCount(address sender) public view returns(uint) {
+    return messages[sender].length;
   }
 
-  function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory) {
-    Message memory m = messages[msg.sender][index];
+  function getMyMessage(address sender, uint index) public view returns(uint, address, string memory, address, string memory) {
+    Message memory m = messages[sender][index];
     return (m.messageType, m.sender, m.message, m.fulfillmentAddress, "TODO");
   }
 
