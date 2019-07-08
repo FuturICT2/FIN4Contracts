@@ -296,7 +296,7 @@ class ContractForm extends Component {
 							);
 						}
 
-						if (inputLabel === 'date') {
+						if (name === 'date') {
 							const dateFormat = 'YYYY-MM-DD HH:mm';
 							return (
 								<MuiPickersUtilsProvider key={name} utils={DateFnsUtils}>
