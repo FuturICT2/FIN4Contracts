@@ -11,7 +11,7 @@ contract Picture is SpecificAddress {
   // @Override
   function setNameAndDescription() public returns(bool) {
     name = "Picture";
-    description = "The claimer has to supply a picture proofing the action done. Based on that the approver will decide on the claim";
+    description = "The claimer has to supply a picture, based on which the approver will decide to approve";
   }
 
   function submitProof(address tokenAdrToReceiveProof, uint claimId, address approver, string memory imageURL) public returns(bool) {
@@ -31,7 +31,7 @@ contract Picture is SpecificAddress {
 
   // @Override
   function getMessageText() public pure returns(string memory) {
-    return "You were requested to approve the proof type Picture on the action type  ";
+    return "You were requested to approve the proof type Picture on the action type ";
   }
 
   function getAttachment() public view returns(string memory) {

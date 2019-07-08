@@ -64,7 +64,7 @@ class TypeCreation extends Component {
 							contractName="Fin4Main"
 							method="createNewToken"
 							multiSelectOptions={this.state.proofTypes}
-							labels={['Name', 'Symbol', 'Proof Types', 'Decimals']}
+							labels={['Name', 'Symbol', 'Proof Types']}
 							hideArgs={{
 								proofTypeParams: 'proofTypeParams'
 							}}
