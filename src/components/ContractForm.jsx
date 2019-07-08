@@ -44,7 +44,7 @@ class ContractForm extends Component {
 
 		this.inputs = [];
 		var initialState = {
-			isPopupOpen: false,
+			isModalOpen: false,
 			newValue: null
 		};
 
@@ -132,8 +132,8 @@ class ContractForm extends Component {
 			}
 
 			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) {
-
-				if (input.name == 'paramValues') { // expected to happen before paramValuesIndices
+				if (input.name === 'paramValues') {
+					// expected to happen before paramValuesIndices
 					var allParamValuesArr = [];
 					for (var i = 0; i < this.state.requiredProofTypes.length; i++) {
 						var proofTypeObj = this.getProofTypeObj(this.state.requiredProofTypes[i]);
@@ -144,7 +144,7 @@ class ContractForm extends Component {
 						for (var key in paramValuesObj) {
 							if (paramValuesObj.hasOwnProperty(key)) {
 								allParamValuesArr.push(paramValuesObj[key]);
-								count ++;
+								count++;
 							}
 						}
 						var endIndex = startIndex + count - 1;
@@ -155,11 +155,11 @@ class ContractForm extends Component {
 					return allParamValuesArr;
 				}
 
-				if (input.name == 'paramValuesIndices') {
+				if (input.name === 'paramValuesIndices') {
 					return paramValuesIndicesArr;
 				}
 
-				return "";
+				return '';
 			}
 
 			if (input.type === 'bytes32') {
@@ -189,35 +189,27 @@ class ContractForm extends Component {
 
 		if (!event.target && this.props.multiSelectOptions) {
 			// indicator for react-select
-			var values = [];
-			for (var i = 0; i < event.length; i++) {
-				values.push(event[i].value);
-			}
+			value = event.map(e => e.value);
 
-			var newValue;
-			if (this.state.requiredProofTypes.length == 0) {
+			let newValue;
+			if (this.state.requiredProofTypes.length === 0) {
 				// first tag was added
-				newValue = values[0];
-			} else if (values.length < this.state.requiredProofTypes.length) {
+				newValue = value[0];
+			} else if (value.length < this.state.requiredProofTypes.length) {
 				// a tag was removed
 				newValue = null;
 			} else {
-				newValue = values[values.length - 1];
+				newValue = value[value.length - 1];
 			}
 
 			this.setState({
-				['requiredProofTypes']: values,
 				newValue: newValue
 			});
 
 			if (newValue != null && this.getProofTypeObj(newValue).paramsEncoded.length > 0) {
-				// this.getProofTypeObj(newValue).label == "MinimumClaimingInterval"
-				this.openPopup();
+				this.openModal();
 			}
-			return;
-		}
-
-		if (event.target.type === 'checkbox') {
+		} else if (event.target.type === 'checkbox') {
 			value = event.target.checked;
 		} else if (event.target.type === 'date') {
 			value = moment(event.target.value).valueOf();
@@ -230,20 +222,20 @@ class ContractForm extends Component {
 
 	getProofTypeObj(address) {
 		for (var i = 0; this.props.multiSelectOptions && i < this.props.multiSelectOptions.length; i++) {
-			if (this.props.multiSelectOptions[i].value == address) {
+			if (this.props.multiSelectOptions[i].value === address) {
 				return this.props.multiSelectOptions[i];
 			}
 		}
 		return '';
 	}
 
-	openPopup = () => {
-		this.setState({ isPopupOpen: true });
+	openModal = () => {
+		this.setState({ isModalOpen: true });
 	};
 
-	closePopup = () => {
+	closeModal = () => {
 		this.setState({
-			isPopupOpen: false,
+			isModalOpen: false,
 			newValue: null
 		});
 	};
@@ -261,8 +253,8 @@ class ContractForm extends Component {
 		return (
 			<>
 				<Modal
-					isOpen={this.state.isPopupOpen}
-					handleClose={this.closePopup}
+					isOpen={this.state.isModalOpen}
+					handleClose={this.closeModal}
 					title={'Set Parameters for ' + this.getProofTypeObj(this.state.newValue).label}
 					width="400px">
 					{this.state.newValue &&
@@ -275,14 +267,14 @@ class ContractForm extends Component {
 										key={paramName}
 										name={paramName}
 										type={translateType(paramType)}
-										label={paramName + " (" + unit + ")"}
+										label={paramName + ' (' + unit + ')'}
 										onChange={e => this.handleParamChange(this.getProofTypeObj(this.state.newValue), e)}
 										style={inputFieldStyle}
 									/>
 								);
 							})}
 					<p style={{ textAlign: 'center' }}>
-						<Button key="submit" variant="contained" color="primary" onClick={this.closePopup}>
+						<Button key="submit" variant="contained" color="primary" onClick={this.closeModal}>
 							<AddIcon /> &nbsp;Submit
 						</Button>
 					</p>

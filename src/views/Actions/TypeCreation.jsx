@@ -13,7 +13,7 @@ class TypeCreation extends Component {
 		super(props);
 
 		this.state = {
-			isPopupOpen: false,
+			isModalOpen: false,
 			proofTypes: []
 		};
 
@@ -49,8 +49,8 @@ class TypeCreation extends Component {
 			});
 	}
 
-	togglePopup = () => {
-		this.setState({ isPopupOpen: !this.state.isPopupOpen });
+	toggleModal = () => {
+		this.setState({ isModalOpen: !this.state.isModalOpen });
 	};
 
 	render() {
@@ -67,10 +67,10 @@ class TypeCreation extends Component {
 								paramValues: 'paramValues',
 								paramValuesIndices: 'paramValuesIndices'
 							}}
-							helperModalTriggers={[, , this.togglePopup]}
+							helperModalTriggers={[, , this.toggleModal]}
 						/>
 					</Box>
-					<Modal isOpen={this.state.isPopupOpen} handleClose={this.togglePopup} title="Proof Types">
+					<Modal isOpen={this.state.isModalOpen} handleClose={this.toggleModal} title="Proof Types">
 						<Table headers={['Name', 'Description']}>
 							{this.state.proofTypes.length > 0 && (
 								<>
