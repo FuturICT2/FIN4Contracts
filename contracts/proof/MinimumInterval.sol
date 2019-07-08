@@ -49,4 +49,9 @@ contract MinimumInterval is Fin4BaseProofType {
         return true;
     }
 
+    // @Override
+    function setParameters(uint[] memory params) public returns(bool) {
+      minimumInterval = params[0];
+    }
+
 }

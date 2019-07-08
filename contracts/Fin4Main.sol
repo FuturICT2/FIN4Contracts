@@ -14,6 +14,16 @@ contract Fin4Main {
 
     for (uint i = 0; i < requiredProofTypes.length; i++) {
       newToken.addRequiredProofType(requiredProofTypes[i]);
+      uint indexStart = paramValuesIndices[i * 2];
+      uint indexEnd = paramValuesIndices[i * 2 + 1];
+      if (indexStart != 99) {
+        uint paramsCount = indexEnd - indexStart + 1;
+        uint[] memory params = new uint[](paramsCount);
+        for (uint j = indexStart; j <= indexEnd; j ++) {
+            params[j - indexStart] = paramValues[j];
+        }
+        Fin4BaseProofType(requiredProofTypes[i]).setParameters(params);
+      }
     }
 
     children.push(address(newToken));
