@@ -67,6 +67,6 @@ Via the gear-icon in Ganache, *Add Project* and select the `truffle-config.js` t
 ### BigchainDB network setup 
 
 1. Install Git, Make, Docker, and Docker Compose on your local machine.
-2. `git clone git@github.com:bigchaindb/bigchaindb.git`
+2. `git clone https://github.com/bigchaindb/bigchaindb.git`
 3. `cd bigchaindb`
 4. `make run`
