@@ -3,7 +3,7 @@ import { Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Database from '../components/Database';
 import Box from '../components/Box';
-import ActionTokenSelectMenu from '../components/ActionTokenSelectMenu';
+import DropdownActionType from '../components/DropdownActionType';
 
 class Offers extends Component {
 	constructor(props) {
@@ -50,7 +50,7 @@ class Offers extends Component {
 		return (
 			<Box>
 				<form>
-					<ActionTokenSelectMenu
+					<DropdownActionType
 						handleChange={this.handleChange.bind(this)}
 						value={this.state.selectedActionTypeAddress}
 					/>

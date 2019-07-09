@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import ContractData from '../components/ContractData';
-import Currency from '../components/Currency';
+import ContractData from './ContractData';
+import Currency from './Currency';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
 
-class ActionTokenSelectMenu extends Component {
+class DropdownActionType extends Component {
 	showActionTypes = data => {
 		const menuItems =
 			data &&
@@ -60,4 +60,4 @@ const inputFieldStyle = {
 	width: '100%',
 	marginBottom: '15px'
 };
-export default ActionTokenSelectMenu;
+export default DropdownActionType;
