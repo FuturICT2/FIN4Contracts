@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
 
 class ProofSubmission extends Component {
-
 	constructor(props, context) {
 		super(props);
 
@@ -24,27 +23,32 @@ class ProofSubmission extends Component {
 					proofTypeStatusesObj[requiredProofTypes[i]].isApproved = proofTypeStatuses[i];
 				}
 				return requiredProofTypes.map((address, index) => {
-					return getContractData(address, 'Fin4BaseProofType.json', 'getParameterizedInfo', [this.props.tokenAddress], context.drizzle)
-						.then(({0: name, 1: parameterizedDescription, 2: submitProofMethodArgsCount }) => {
-							return ({
-								address: address,
-								name: name,
-								description: parameterizedDescription,
-								submitProofMethodArgsCount: submitProofMethodArgsCount,
-								isApproved: proofTypeStatusesObj[address].isApproved
-							});
-						});
-				})
+					return getContractData(
+						address,
+						'Fin4BaseProofType.json',
+						'getParameterizedInfo',
+						[this.props.tokenAddress],
+						context.drizzle
+					).then(({ 0: name, 1: parameterizedDescription, 2: submitProofMethodArgsCount }) => {
+						return {
+							address: address,
+							name: name,
+							description: parameterizedDescription,
+							submitProofMethodArgsCount: submitProofMethodArgsCount,
+							isApproved: proofTypeStatusesObj[address].isApproved
+						};
+					});
+				});
 			})
 			.then(data => Promise.all(data))
 			.then(data => {
-				this.setState({proofData: data});
+				this.setState({ proofData: data });
 			});
 	}
 
 	render() {
 		if (this.state.proofData === null) {
-			return "";
+			return '';
 		}
 		return (
 			<>
@@ -76,7 +80,7 @@ class ProofSubmission extends Component {
 					);
 				})}
 			</>
-		)
+		);
 	}
 }
 

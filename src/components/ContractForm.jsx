@@ -315,7 +315,10 @@ class ContractForm extends Component {
 									onChange={this.handleInputChange}
 									options={this.props.multiSelectOptions}
 									label={inputLabel}
-									placeholder="test"
+									style={{
+										width: '100%',
+										marginBottom: '30px'
+									}}
 								/>
 							);
 						}

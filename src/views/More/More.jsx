@@ -115,7 +115,7 @@ class More extends React.Component {
 				<Modal
 					isOpen={this.state.isOfferModalOpen}
 					handleClose={this.toggleOfferModal}
-					title="Create a new Offer"
+					title="Create a New Offer"
 					width="500px">
 					<Offers offerType="spendingOffers" toggleModal={this.toggleOfferModal.bind(this)} />
 				</Modal>
@@ -129,11 +129,10 @@ class More extends React.Component {
 				<Fab color="primary" aria-label="Add" onClick={this.toggleDonationModal}>
 					<AddIcon />
 				</Fab>
-
 				<Modal
 					isOpen={this.state.isDoantionModalOpen}
 					handleClose={this.toggleDonationModal}
-					title="Create a new Donation Offer"
+					title="Create a New Donation Offer"
 					width="500px">
 					<Offers offerType="donationOffers" toggleModal={this.toggleDonationModal.bind(this)} />
 				</Modal>
