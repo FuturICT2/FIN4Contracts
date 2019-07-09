@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import Offers from '../Offers';
+import OfferCreation from './OfferCreation';
 import Modal from '../../components/Modal';
 import bigchainConfig from '../../config/bigchain-config';
 
@@ -117,7 +117,7 @@ class More extends React.Component {
 					handleClose={this.toggleOfferModal}
 					title="Create a New Offer"
 					width="500px">
-					<Offers offerType="spendingOffers" toggleModal={this.toggleOfferModal.bind(this)} />
+					<OfferCreation offerType="spendingOffers" toggleModal={this.toggleOfferModal.bind(this)} />
 				</Modal>
 
 				<ContractData
@@ -134,7 +134,7 @@ class More extends React.Component {
 					handleClose={this.toggleDonationModal}
 					title="Create a New Donation Offer"
 					width="500px">
-					<Offers offerType="donationOffers" toggleModal={this.toggleDonationModal.bind(this)} />
+					<OfferCreation offerType="donationOffers" toggleModal={this.toggleDonationModal.bind(this)} />
 				</Modal>
 			</Wrapper>
 		);

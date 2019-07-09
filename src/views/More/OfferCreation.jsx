@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import Database from '../components/Database';
-import Box from '../components/Box';
-import DropdownActionType from '../components/DropdownActionType';
+import Database from '../../components/Database';
+import Box from '../../components/Box';
+import DropdownActionType from '../../components/DropdownActionType';
 
-class Offers extends Component {
+class OfferCreation extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -112,4 +112,4 @@ const inputFieldStyle = {
 	marginBottom: '15px'
 };
 
-export default Offers;
+export default OfferCreation;

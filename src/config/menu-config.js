@@ -4,7 +4,7 @@ import StarIcon from '@material-ui/icons/StarRate';
 import More from '../views/More/More';
 import Actions from '../views/Actions/Actions';
 import Approving from '../views/Approving';
-import Offers from '../views/Offers';
+import Offers from '../views/More/OfferCreation';
 
 const menu = [
 	{
