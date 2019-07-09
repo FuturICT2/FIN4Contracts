@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import ContractData from '../components/ContractData';
-import Box from '../components/Box';
+import ContractData from '../../components/ContractData';
+import Box from '../../components/Box';
 
 class Messages extends Component {
-	getMyMessage = ({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName }) => {
+	showMessage = ({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName }) => {
 		if (messageType === '1') {
 			// INFO
 			return <p>{message}</p>;
@@ -21,7 +21,7 @@ class Messages extends Component {
 		);
 	};
 
-	getMyMessagesCount = data => {
+	showMyMessages = data => {
 		var messageCount = Number(data);
 		if (messageCount === 0) {
 			return <></>;
@@ -41,7 +41,7 @@ class Messages extends Component {
 									contractName="Fin4Main"
 									method="getMyMessage"
 									methodArgs={[index]}
-									callback={this.getMyMessage}
+									callback={this.showMessage}
 								/>
 								<hr></hr>
 							</div>
@@ -53,7 +53,7 @@ class Messages extends Component {
 	};
 
 	render() {
-		return <ContractData contractName="Fin4Main" method="getMyMessagesCount" callback={this.getMyMessagesCount} />;
+		return <ContractData contractName="Fin4Main" method="getMyMessagesCount" callback={this.showMyMessages} />;
 	}
 }
 

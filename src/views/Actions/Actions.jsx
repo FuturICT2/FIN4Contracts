@@ -3,7 +3,7 @@ import Container from '../../components/Container';
 import PreviousClaims from './PreviousClaims';
 import Claim from './Claim';
 import TypeCreation from './TypeCreation';
-import Messages from '../Messages';
+import Messages from './Messages';
 import styled from 'styled-components';
 
 class Actions extends Component {
