@@ -10,6 +10,7 @@ import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@materia
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../config/colors-config';
 import DateIcon from '@material-ui/icons/AccessTime';
+import ProofIcon from '@material-ui/icons/Fingerprint';
 import moment from 'moment';
 import styled from 'styled-components';
 import ContractForm from '../../components/ContractForm';
@@ -129,6 +130,7 @@ class PreviousClaims extends Component {
 											<Chip
 												key="1"
 												color={isApproved ? 'primary' : 'secondary'}
+												icon={<ProofIcon />}
 												component={isApproved ? 'span' : 'a'}
 												clickable={!isApproved}
 												onClick={() => {
