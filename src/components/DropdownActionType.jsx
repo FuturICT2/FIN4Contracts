@@ -33,10 +33,6 @@ class DropdownActionType extends Component {
 	}
 
 	render() {
-		if (this.state.tokens.length < 1) {
-			return "";
-		}
-
 		const menuItems = this.state.tokens.map((token, index) => {
 			return (
 				<MenuItem key={index} value={token.address}>
