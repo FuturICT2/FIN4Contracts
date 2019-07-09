@@ -283,7 +283,7 @@ class ContractForm extends Component {
 							})}
 					<p style={{ textAlign: 'center' }}>
 						<Button key="submit" variant="contained" color="primary" onClick={this.closeModal}>
-							<AddIcon /> &nbsp;Initiate Proof
+							<AddIcon /> &nbsp;Submit
 						</Button>
 					</p>
 				</Modal>
