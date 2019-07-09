@@ -12,39 +12,38 @@ class OfferCreation extends Component {
 			name: '',
 			description: '',
 			quantity: '',
-			tokenAddress: '',
-			receiverAddress: '',
-			offerUrl: '',
-			imagePath: '',
-			type: props.offerType
+			tokenaddress: '',
+			accountaddress: '',
+			offerurl: '',
+			imageurl: '',
+			type: props.offerType,
+			selectedActionTypeAddress: ''
 		};
 
 		this.database = new Database();
-		this.handleChange = this.handleChange.bind(this);
-		this.onclickSubmit = this.onclickSubmit.bind(this);
 	}
-	handleChange(event) {
+	handleChange = event => {
 		if (event.target.name === 'tokenAddress') {
 			this.setState({ selectedActionTypeAddress: event.target.value });
 		}
 		this.setState({ [event.target.name]: event.target.value });
-	}
+	};
 
-	onclickSubmit() {
+	onclickSubmit = () => {
 		console.log('OnClick Submit');
 		this.props.toggleModal();
 		console.log(this.state.name);
 		new Database().saveOfferDetails(
 			this.state.name,
 			this.state.description,
-			this.state.tokenAddress,
-			this.state.receiverAddress,
-			this.state.imagePath,
-			this.state.offerUrl,
+			this.state.tokenaddress,
+			this.state.accountaddress,
+			this.state.imageurl,
+			this.state.offerurl,
 			this.state.quantity,
 			this.state.type
 		);
-	}
+	};
 
 	render() {
 		return (
@@ -54,49 +53,18 @@ class OfferCreation extends Component {
 						handleChange={this.handleChange.bind(this)}
 						value={this.state.selectedActionTypeAddress}
 					/>
-					<TextField
-						name="name"
-						label="Name"
-						style={inputFieldStyle}
-						value={this.state.name}
-						onChange={this.handleChange}
-					/>
-					<TextField
-						name="description"
-						label="Description"
-						style={inputFieldStyle}
-						value={this.state.description}
-						onChange={this.handleChange}
-					/>
-					<TextField
-						name="quantity"
-						label="Quantity"
-						style={inputFieldStyle}
-						value={this.state.quantity}
-						type="number"
-						onChange={this.handleChange}
-					/>
-					<TextField
-						name="receiverAddress"
-						label="Account Addess"
-						style={inputFieldStyle}
-						value={this.state.receiverAddress}
-						onChange={this.handleChange}
-					/>
-					<TextField
-						name="imagePath"
-						label="Image URL"
-						style={inputFieldStyle}
-						value={this.state.imagePath}
-						onChange={this.handleChange}
-					/>
-					<TextField
-						name="offerUrl"
-						label="Offer URL"
-						style={inputFieldStyle}
-						value={this.state.offerUrl}
-						onChange={this.handleChange}
-					/>
+					{['Name', 'Description', 'Quantity', 'Account Address', 'Image URL', 'Offer URL'].map(fieldName => {
+						const varName = fieldName.toLowerCase().replace(/\s+/g, '');
+						return (
+							<TextField
+								name={varName}
+								label={fieldName}
+								style={inputFieldStyle}
+								value={this.state[varName]}
+								onChange={this.handleChange}
+							/>
+						);
+					})}
 					<p style={{ textAlign: 'center' }}>
 						<Button key="submit" variant="contained" color="primary" onClick={this.onclickSubmit}>
 							<AddIcon /> &nbsp;Submit
