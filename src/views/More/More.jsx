@@ -11,6 +11,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Offers from '../Offers';
 import Modal from '../../components/Modal';
+import bigchainConfig from '../../config/bigchain-config';
 
 const showBalanceByActionType = data => {
 	return (
@@ -38,8 +39,8 @@ class More extends React.Component {
 		this.state = {
 			spendingOffers: [],
 			donationOffers: [],
-			isOfferPopupOpen: false,
-			isDoantionPopupOpen: false,
+			isOfferModalOpen: false,
+			isDoantionModalOpen: false,
 			tokenAddress: []
 		};
 	}
@@ -85,52 +86,38 @@ class More extends React.Component {
 	};
 
 	getOfferData() {
-		var PATH = 'http://localhost:9984/api/v1/assets?search=spendingOffers';
-		axios.get(PATH).then(res => {
-			const spendingOffers = res.data;
-			const offer = [];
-			for (var i = 0; i < spendingOffers.length; i++) {
-				if (this.state.tokenAddress.includes(spendingOffers[i].data.offerData.tokenAddress)) {
-					offer.push(spendingOffers[i]);
-				}
-			}
-			this.setState({ spendingOffers: offer });
-		});
-		PATH = 'http://localhost:9984/api/v1/assets?search=donationOffers';
-		axios.get(PATH).then(res => {
-			const donationOffers = res.data;
-			const offer = [];
-			for (var i = 0; i < donationOffers.length; i++) {
-				if (this.state.tokenAddress.includes(donationOffers[i].data.offerData.tokenAddress)) {
-					offer.push(donationOffers[i]);
-				}
-			}
-			this.setState({ donationOffers: offer });
+		['spendingOffers', 'donationOffers'].forEach(offers => {
+			axios.get(`${bigchainConfig.path}/assets?search=${offers}`).then(res => {
+				const offersResult = res.data.filter(offer =>
+					this.state.tokenAddress.includes(offer.data.offerData.tokenAddress)
+				);
+				this.setState({ [offers]: offersResult });
+			});
 		});
 	}
 
-	toggleOfferPopup = () => {
-		console.log(this.state.isOfferPopupOpen);
-		this.setState({ isOfferPopupOpen: !this.state.isOfferPopupOpen });
+	toggleOfferModal = () => {
+		console.log(this.state.isOfferModalOpen);
+		this.setState({ isOfferModalOpen: !this.state.isOfferModalOpen });
 	};
 
-	toggleDonationPopup = () => {
-		console.log(this.state.isDoantionPopupOpen);
-		this.setState({ isDoantionPopupOpen: !this.state.isDoantionPopupOpen });
+	toggleDonationModal = () => {
+		console.log(this.state.isDoantionModalOpen);
+		this.setState({ isDoantionModalOpen: !this.state.isDoantionModalOpen });
 	};
 
 	render() {
 		return (
 			<Wrapper>
-				<Fab color="primary" aria-label="Add" onClick={this.toggleOfferPopup}>
+				<Fab color="primary" aria-label="Add" onClick={this.toggleOfferModal}>
 					<AddIcon />
 				</Fab>
 				<Modal
-					isOpen={this.state.isOfferPopupOpen}
-					handleClose={this.toggleOfferPopup}
+					isOpen={this.state.isOfferModalOpen}
+					handleClose={this.toggleOfferModal}
 					title="Create a new Offer"
 					width="500px">
-					<Offers offerType="spendingOffers" togglePopup={this.toggleOfferPopup.bind(this)} />
+					<Offers offerType="spendingOffers" toggleModal={this.toggleOfferModal.bind(this)} />
 				</Modal>
 
 				<ContractData
@@ -139,16 +126,16 @@ class More extends React.Component {
 					callback={this.setTokenAddressWithBalance}
 				/>
 
-				<Fab color="primary" aria-label="Add" onClick={this.toggleDonationPopup}>
+				<Fab color="primary" aria-label="Add" onClick={this.toggleDonationModal}>
 					<AddIcon />
 				</Fab>
 
 				<Modal
-					isOpen={this.state.isDoantionPopupOpen}
-					handleClose={this.toggleDonationPopup}
+					isOpen={this.state.isDoantionModalOpen}
+					handleClose={this.toggleDonationModal}
 					title="Create a new Donation Offer"
 					width="500px">
-					<Offers offerType="donationOffers" togglePopup={this.toggleDonationPopup.bind(this)} />
+					<Offers offerType="donationOffers" toggleModal={this.toggleDonationModal.bind(this)} />
 				</Modal>
 			</Wrapper>
 		);
