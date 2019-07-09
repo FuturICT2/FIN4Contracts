@@ -7,7 +7,7 @@ class Claim extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedActionTypeAddress: null
+			selectedActionTypeAddress: ""
 		};
 	}
 
