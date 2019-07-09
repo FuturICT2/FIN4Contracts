@@ -127,7 +127,7 @@ class PreviousClaims extends Component {
 														claimIdForProofModal: claimId
 													});
 												}}
-												label={isApproved ? 'approved' : 'submit proof'}
+												label={isApproved ? (balanceTransferred ? 'approved & token transferred' : 'approved') : 'submit proof'}
 											/>
 											{isApproved && !balanceTransferred ? (
 												<ContractForm
