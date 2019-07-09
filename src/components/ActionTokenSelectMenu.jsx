@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ContractData from '../components/ContractData';
+import Currency from '../components/Currency';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
 
 class ActionTokenSelectMenu extends Component {
@@ -15,9 +16,8 @@ class ActionTokenSelectMenu extends Component {
 							callback={({ 0: name, 1: symbol }) => {
 								return (
 									<>
-										<span style={{ fontWeight: 'bold' }}>{name}</span>
-										&nbsp;
-										<span>[{symbol}]</span>
+										<span>{name}</span>&nbsp;
+										<Currency>{symbol}</Currency>
 									</>
 								);
 							}}
