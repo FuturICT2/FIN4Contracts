@@ -21,7 +21,7 @@ class Claim extends Component {
 		return (
 			<Box title={'Claim an Action'}>
 				<DropdownActionType handleChange={this.handleChange.bind(this)} value={this.state.selectedActionTypeAddress} />
-				{this.state.selectedActionTypeAddress !== null && (
+				{this.state.selectedActionTypeAddress && (
 					<ContractForm
 						contractAddress={this.state.selectedActionTypeAddress}
 						method="submit"
