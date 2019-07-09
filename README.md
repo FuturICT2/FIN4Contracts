@@ -17,8 +17,7 @@ YouTube Image Film:
 
 ## Setup
 
-#### Install `yarn` and `truffle`
-If you don't have them yet.
+#### Install `yarn`, `truffle`, `git`, `make`, `docker`, and `docker compose`
 
 ```sh
 # yarn
@@ -55,7 +54,13 @@ yarn install
 3. `truffle migrate` to place the smart contract on the local blockchain
 4. install the [Metamask](https://metamask.io/) browser extension, paste `MNEMONIC` from Ganache into the `seed` input and `http://127.0.0.1:7545` into `custom RPC` input
 
-### Start the react app
+#### Set up BigchainDB network
+
+1. `git clone https://github.com/bigchaindb/bigchaindb.git`
+2. `cd bigchaindb`
+3. `make run`
+
+## Start the react app
 ```sh
 yarn start
 ```
@@ -63,10 +68,3 @@ yarn start
 [//]: <> (
 Via the gear-icon in Ganache, *Add Project* and select the `truffle-config.js` to add this project and therewith be able to see the values in the smart contract. Click *Save and Restart* top right. This might throw an error on Ganache - if that happens it doesn't seem possible to see the smart contract via Ganache unfortunately. TODO: fix this?
 )
-
-### BigchainDB network setup 
-
-1. Install Git, Make, Docker, and Docker Compose on your local machine.
-2. `git clone https://github.com/bigchaindb/bigchaindb.git`
-3. `cd bigchaindb`
-4. `make run`
