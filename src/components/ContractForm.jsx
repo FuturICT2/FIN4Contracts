@@ -122,6 +122,9 @@ class ContractForm extends Component {
 	};
 
 	handleSubmit = event => {
+		if (this.props.toggleModal) {
+			this.props.toggleModal();
+		}
 		event.preventDefault();
 
 		var paramValuesIndicesArr = [];
@@ -168,6 +171,7 @@ class ContractForm extends Component {
 			return this.state[input.name];
 		});
 
+		console.log(convertedInputs);
 		if (this.props.sendArgs) {
 			return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(
 				...convertedInputs,
@@ -364,7 +368,8 @@ class ContractForm extends Component {
 					})}
 					<p style={{ textAlign: 'center' }}>
 						<Button key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
-							<AddIcon /> &nbsp;Submit
+							<AddIcon /> &nbsp;
+							{this.props.buttonLable ? this.props.buttonLable : 'Submit'}
 						</Button>
 					</p>
 				</form>

@@ -60,6 +60,9 @@ class More extends React.Component {
 								description={data.offerData.description}
 								readMore={data.offerData.offerUrl}
 								actionButtonText="redeem now"
+								actionbuttonAddress={data.offerData.tokenAddress}
+								recepientAddress={data.offerData.receiverAddress}
+								amount={data.offerData.quantity}
 							/>
 						);
 					})}
@@ -69,6 +72,7 @@ class More extends React.Component {
 				</Container>
 				<div>
 					{this.state.donationOffers.map(({ data }, index) => {
+						//console.log(data.offerData)
 						return (
 							<Card
 								key={index}
@@ -77,6 +81,9 @@ class More extends React.Component {
 								description={data.offerData.description}
 								readMore={data.offerData.offerUrl}
 								actionButtonText="donate"
+								actionbuttonAddress={data.offerData.tokenAddress}
+								recepientAddress={data.offerData.receiverAddress}
+								amount={data.offerData.quantity}
 							/>
 						);
 					})}
@@ -87,7 +94,7 @@ class More extends React.Component {
 
 	getOfferData() {
 		['spendingOffers', 'donationOffers'].forEach(offers => {
-			axios.get(`${bigchainConfig.path}/assets?search=${offers}`).then(res => {
+			axios.get(`${bigchainConfig.path}assets?search=${offers}`).then(res => {
 				const offersResult = res.data.filter(offer =>
 					this.state.tokenAddress.includes(offer.data.offerData.tokenAddress)
 				);
@@ -97,12 +104,10 @@ class More extends React.Component {
 	}
 
 	toggleOfferModal = () => {
-		console.log(this.state.isOfferModalOpen);
 		this.setState({ isOfferModalOpen: !this.state.isOfferModalOpen });
 	};
 
 	toggleDonationModal = () => {
-		console.log(this.state.isDoantionModalOpen);
 		this.setState({ isDoantionModalOpen: !this.state.isDoantionModalOpen });
 	};
 
