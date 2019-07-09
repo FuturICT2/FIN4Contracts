@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Database from '../components/Database';
+import Box from '../components/Box';
 import ActionTokenSelectMenu from '../components/ActionTokenSelectMenu';
 
 class Offers extends Component {
@@ -47,60 +48,62 @@ class Offers extends Component {
 
 	render() {
 		return (
-			<form>
-				<ActionTokenSelectMenu
-					handleChange={this.handleChange.bind(this)}
-					value={this.state.selectedActionTypeAddress}
-				/>
-				<TextField
-					name="name"
-					label="Name"
-					style={inputFieldStyle}
-					value={this.state.name}
-					onChange={this.handleChange}
-				/>
-				<TextField
-					name="description"
-					label="Description"
-					style={inputFieldStyle}
-					value={this.state.description}
-					onChange={this.handleChange}
-				/>
-				<TextField
-					name="quantity"
-					label="Quantity"
-					style={inputFieldStyle}
-					value={this.state.quantity}
-					type="number"
-					onChange={this.handleChange}
-				/>
-				<TextField
-					name="receiverAddress"
-					label="Account Addess"
-					style={inputFieldStyle}
-					value={this.state.receiverAddress}
-					onChange={this.handleChange}
-				/>
-				<TextField
-					name="imagePath"
-					label="Image Url"
-					style={inputFieldStyle}
-					value={this.state.imagePath}
-					onChange={this.handleChange}
-				/>
-				<TextField
-					name="offerUrl"
-					label="Offer Url"
-					style={inputFieldStyle}
-					value={this.state.offerUrl}
-					onChange={this.handleChange}
-				/>
-				<p style={{ textAlign: 'center' }}>
-					<Button key="submit" variant="contained" color="primary" onClick={this.onclickSubmit}>
-						<AddIcon /> &nbsp;Submit
-					</Button>
-				</p>
-			</form>
+			<Box>
+				<form>
+					<ActionTokenSelectMenu
+						handleChange={this.handleChange.bind(this)}
+						value={this.state.selectedActionTypeAddress}
+					/>
+					<TextField
+						name="name"
+						label="Name"
+						style={inputFieldStyle}
+						value={this.state.name}
+						onChange={this.handleChange}
+					/>
+					<TextField
+						name="description"
+						label="Description"
+						style={inputFieldStyle}
+						value={this.state.description}
+						onChange={this.handleChange}
+					/>
+					<TextField
+						name="quantity"
+						label="Quantity"
+						style={inputFieldStyle}
+						value={this.state.quantity}
+						type="number"
+						onChange={this.handleChange}
+					/>
+					<TextField
+						name="receiverAddress"
+						label="Account Addess"
+						style={inputFieldStyle}
+						value={this.state.receiverAddress}
+						onChange={this.handleChange}
+					/>
+					<TextField
+						name="imagePath"
+						label="Image Url"
+						style={inputFieldStyle}
+						value={this.state.imagePath}
+						onChange={this.handleChange}
+					/>
+					<TextField
+						name="offerUrl"
+						label="Offer Url"
+						style={inputFieldStyle}
+						value={this.state.offerUrl}
+						onChange={this.handleChange}
+					/>
+					<p style={{ textAlign: 'center' }}>
+						<Button key="submit" variant="contained" color="primary" onClick={this.onclickSubmit}>
+							<AddIcon /> &nbsp;Submit
+						</Button>
+					</p>
+				</form>
+			</Box>
 		);
 	}
 }
