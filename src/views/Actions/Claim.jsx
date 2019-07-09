@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
-import Currency from '../../components/Currency';
-import ContractData from '../../components/ContractData';
-import { Select, MenuItem, InputLabel } from '@material-ui/core';
 import ActionTokenSelectMenu from '../../components/ActionTokenSelectMenu';
 
 class Claim extends Component {

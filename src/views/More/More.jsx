@@ -96,7 +96,7 @@ class More extends React.Component {
 			}
 			this.setState({ spendingOffers: offer });
 		});
-		var PATH = 'http://localhost:9984/api/v1/assets?search=donationOffers';
+		PATH = 'http://localhost:9984/api/v1/assets?search=donationOffers';
 		axios.get(PATH).then(res => {
 			const donationOffers = res.data;
 			const offer = [];
