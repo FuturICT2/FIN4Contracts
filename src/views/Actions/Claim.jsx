@@ -7,7 +7,7 @@ class Claim extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedActionTypeAddress: ''
+			selectedActionTypeAddress: null
 		};
 	}
 
@@ -21,7 +21,7 @@ class Claim extends Component {
 		return (
 			<Box title={'Claim an Action'}>
 				<DropdownActionType handleChange={this.handleChange.bind(this)} value={this.state.selectedActionTypeAddress} />
-				{this.state.selectedActionTypeAddress !== '' && (
+				{this.state.selectedActionTypeAddress !== null && (
 					<ContractForm
 						contractAddress={this.state.selectedActionTypeAddress}
 						method="submit"
