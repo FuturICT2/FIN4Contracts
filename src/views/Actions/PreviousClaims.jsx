@@ -6,7 +6,7 @@ import Box from '../../components/Box';
 import Currency from '../../components/Currency';
 import Modal from '../../components/Modal';
 import ProofSubmission from './ProofSubmission';
-import { Chip, Typography, Divider, Grid, Paper, createMuiTheme, Button } from '@material-ui/core';
+import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../config/colors-config';
 import DateIcon from '@material-ui/icons/AccessTime';
@@ -89,7 +89,17 @@ class PreviousClaims extends Component {
 				<>
 					<Box title="My Previous Claims">
 						{this.state.claims.map(
-							({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment, balanceTransferred }) => {
+							({
+								claimId,
+								actionTypeAddress,
+								tokenName,
+								tokenSymbol,
+								isApproved,
+								quantity,
+								date,
+								comment,
+								balanceTransferred
+							}) => {
 								// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
 								date = moment.unix(Number(date.substring(0, date.length - 3))).calendar();
 								return (
@@ -127,7 +137,13 @@ class PreviousClaims extends Component {
 														claimIdForProofModal: claimId
 													});
 												}}
-												label={isApproved ? (balanceTransferred ? 'approved & token transferred' : 'approved') : 'submit proof'}
+												label={
+													isApproved
+														? balanceTransferred
+															? 'approved & token transferred'
+															: 'approved'
+														: 'submit proof'
+												}
 											/>
 											{isApproved && !balanceTransferred ? (
 												<ContractForm
