@@ -369,7 +369,7 @@ class ContractForm extends Component {
 					<p style={{ textAlign: 'center' }}>
 						<Button key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
 							<AddIcon /> &nbsp;
-							{this.props.buttonLable ? this.props.buttonLable : 'Submit'}
+							{this.props.buttonLabel ? this.props.buttonLabel : 'Submit'}
 						</Button>
 					</p>
 				</form>

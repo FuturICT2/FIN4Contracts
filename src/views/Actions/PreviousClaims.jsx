@@ -132,7 +132,7 @@ class PreviousClaims extends Component {
 												<ContractForm
 													contractName="Fin4Main"
 													method="mintToken"
-													buttonLable="Claim token"
+													buttonLabel="Claim token"
 													fixArgs={{
 														tokenAddress: actionTypeAddress,
 														amount: quantity
