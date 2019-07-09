@@ -1,30 +1,50 @@
 import React, { Component } from 'react';
-import ContractData from './ContractData';
 import Currency from './Currency';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
+import { drizzleConnect } from 'drizzle-react';
+import PropTypes from 'prop-types';
+import { getContractData } from './ContractData';
 
 class DropdownActionType extends Component {
-	showActionTypes = data => {
-		const menuItems =
-			data &&
-			data.map((address, index) => {
-				return (
-					<MenuItem key={index} value={address}>
-						<ContractData
-							contractAddress={address}
-							method="getInfo"
-							callback={({ 0: name, 1: symbol }) => {
-								return (
-									<>
-										<span>{name}</span>&nbsp;
-										<Currency>{symbol}</Currency>
-									</>
-								);
-							}}
-						/>
-					</MenuItem>
-				);
+	constructor(props, context) {
+		super(props);
+
+		this.state = {
+			tokens: []
+		};
+
+		getContractData('Fin4Main', 'Fin4Main.json', 'getChildren', [], context.drizzle)
+			.then(tokens => {
+				return tokens.map(address => {
+				 return getContractData(address, 'Fin4Token.json', 'getInfo', [], context.drizzle)
+					.then(({ 0: name, 1: symbol }) => {
+						return {
+							address: address,
+							name: name,
+							symbol: symbol
+						};
+					})
+				});
+			})
+			.then(data => Promise.all(data))
+			.then(data => {
+				this.setState({ tokens: data });
 			});
+	}
+
+	render() {
+		if (this.state.tokens.length < 1) {
+			return "";
+		}
+
+		const menuItems = this.state.tokens.map((token, index) => {
+			return (
+				<MenuItem key={index} value={token.address}>
+					<span>{token.name}</span>&nbsp;
+					<Currency>{token.symbol}</Currency>							
+				</MenuItem>
+			);
+		});
 
 		return (
 			<>
@@ -45,14 +65,6 @@ class DropdownActionType extends Component {
 				</Select>
 			</>
 		);
-	};
-
-	render() {
-		return (
-			<>
-				<ContractData contractName="Fin4Main" method="getChildren" callback={this.showActionTypes} />
-			</>
-		);
 	}
 }
 
@@ -60,4 +72,15 @@ const inputFieldStyle = {
 	width: '100%',
 	marginBottom: '15px'
 };
-export default DropdownActionType;
+
+DropdownActionType.contextTypes = {
+	drizzle: PropTypes.object
+};
+
+const mapStateToProps = state => {
+	return {
+		contracts: state.contracts
+	};
+};
+
+export default drizzleConnect(DropdownActionType, mapStateToProps);
