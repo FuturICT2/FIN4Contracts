@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ContractData from '../../components/ContractData';
 import Box from '../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
