@@ -6,12 +6,13 @@ import Box from '../../components/Box';
 import Currency from '../../components/Currency';
 import Modal from '../../components/Modal';
 import ProofSubmission from './ProofSubmission';
-import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
+import { Chip, Typography, Divider, Grid, Paper, createMuiTheme, Button } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../config/colors-config';
 import DateIcon from '@material-ui/icons/AccessTime';
 import moment from 'moment';
 import styled from 'styled-components';
+import ContractForm from '../../components/ContractForm';
 
 class PreviousClaims extends Component {
 	constructor(props, context) {
@@ -127,6 +128,17 @@ class PreviousClaims extends Component {
 												}}
 												label={isApproved ? 'approved' : 'submit proof'}
 											/>
+											{isApproved ? (
+												<ContractForm
+													contractName="Fin4Main"
+													method="mintToken"
+													buttonLable="Claim token"
+													fixArgs={{
+														tokenAddress: actionTypeAddress,
+														amount: quantity
+													}}
+												/>
+											) : null}
 										</ThemeProvider>
 									</Claim>
 								);
