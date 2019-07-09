@@ -24,12 +24,12 @@ class ProofSubmission extends Component {
 					proofTypeStatusesObj[requiredProofTypes[i]].isApproved = proofTypeStatuses[i];
 				}
 				return requiredProofTypes.map((address, index) => {
-					return getContractData(address, 'Fin4BaseProofType.json', 'getInfo', [], context.drizzle)
-						.then(({0: name, 1: description, 3: submitProofMethodArgsCount }) => {
+					return getContractData(address, 'Fin4BaseProofType.json', 'getParameterizedInfo', [this.props.tokenAddress], context.drizzle)
+						.then(({0: name, 1: parameterizedDescription, 2: submitProofMethodArgsCount }) => {
 							return ({
 								address: address,
 								name: name,
-								description: description,
+								description: parameterizedDescription,
 								submitProofMethodArgsCount: submitProofMethodArgsCount,
 								isApproved: proofTypeStatusesObj[address].isApproved
 							});

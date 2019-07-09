@@ -33,8 +33,17 @@ contract Fin4BaseProofType is utils {
     return description;
   }
 
-  function getInfo() public view returns(string memory, string memory, string memory, uint) {
-    return (name, description, getParameterForActionTypeCreatorToSetEncoded(), getSubmitProofMethodArgsCount());
+  // includes the token-specific parameters if overriden
+  function getParameterizedDescription(address token) public view returns(string memory) {
+    return getDescription();
+  }
+
+  function getParameterizedInfo(address token) public view returns(string memory, string memory, uint) {
+    return (name, getParameterizedDescription(token), getSubmitProofMethodArgsCount());
+  }
+
+  function getInfo() public view returns(string memory, string memory, string memory) {
+    return (name, description, getParameterForActionTypeCreatorToSetEncoded());
   }
 
   function getSubmitProofMethodArgsCount() public view returns(uint);
