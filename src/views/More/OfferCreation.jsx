@@ -49,7 +49,7 @@ class OfferCreation extends Component {
 	render() {
 		return (
 			<Box>
-				<form>
+				<form autoComplete="off">
 					<DropdownActionType
 						handleChange={this.handleChange.bind(this)}
 						value={this.state.selectedActionTypeAddress}
@@ -85,14 +85,14 @@ class OfferCreation extends Component {
 					/>
 					<TextField
 						name="imagePath"
-						label="Image Url"
+						label="Image URL"
 						style={inputFieldStyle}
 						value={this.state.imagePath}
 						onChange={this.handleChange}
 					/>
 					<TextField
 						name="offerUrl"
-						label="Offer Url"
+						label="Offer URL"
 						style={inputFieldStyle}
 						value={this.state.offerUrl}
 						onChange={this.handleChange}
