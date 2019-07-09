@@ -1,11 +1,12 @@
+import bigchainConfig from '../config/bigchain-config';
+
 const BigchainDB = require('bigchaindb-driver');
 const bip39 = require('bip39');
-const API_PATH = 'http://localhost:9984/api/v1/';
 
 class Database {
 	constructor() {
-		this.conn = new BigchainDB.Connection(API_PATH);
-		var seed = bip39.mnemonicToSeedSync('fantasticFin4 seedPhrase').slice(0, 32);
+		this.conn = new BigchainDB.Connection(bigchainConfig.path);
+		var seed = bip39.mnemonicToSeedSync(bigchainConfig.seed).slice(0, 32);
 		this.user = new BigchainDB.Ed25519Keypair(seed);
 	}
 

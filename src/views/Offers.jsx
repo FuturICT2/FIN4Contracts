@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Box from '../components/Box';
 import { Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Database from '../components/Database';
+import Box from '../components/Box';
 import ActionTokenSelectMenu from '../components/ActionTokenSelectMenu';
 
 class Offers extends Component {
@@ -32,7 +32,7 @@ class Offers extends Component {
 
 	onclickSubmit() {
 		console.log('OnClick Submit');
-		this.props.togglePopup();
+		this.props.toggleModal();
 		console.log(this.state.name);
 		new Database().saveOfferDetails(
 			this.state.name,
