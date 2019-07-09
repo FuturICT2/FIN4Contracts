@@ -33,6 +33,7 @@ contract Fin4TokenBase { // abstract class
     uint date;
     string comment;
     mapping(address => bool) proof_statuses;
+    bool balanceTransferred;
   }
 
 	mapping (uint => Claim) public claims;
@@ -48,6 +49,7 @@ contract Fin4TokenBase { // abstract class
       claim.proof_statuses[requiredProofs[i]] = false;
     }
     claim.isApproved = false;
+    claim.balanceTransferred = false;
     nextClaimId ++;
     pingbackClaimSubmissionToMain();
     return nextClaimId - 1;
@@ -71,9 +73,9 @@ contract Fin4TokenBase { // abstract class
       claim.quantity, claim.date, claim.comment, requiredProofTypes, proofTypeStatuses);
   }
 
-  function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory) {
+  function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory, bool) {
     return (claims[claimId].claimer, claims[claimId].isApproved,
-      claims[claimId].quantity, claims[claimId].date, claims[claimId].comment);
+      claims[claimId].quantity, claims[claimId].date, claims[claimId].comment, claims[claimId].balanceTransferred);
   }
 
   function getMyClaimIds() public view returns(address, string memory, string memory, uint[] memory) {
@@ -128,6 +130,10 @@ contract Fin4TokenBase { // abstract class
     }
 
     return (sum, claims[claimId].quantity);
+  }
+
+  function setClaimToBalanceTransferred(uint claimId) public {
+    claims[claimId].balanceTransferred = true;
   }
 
   // ------------------------- PROOF TYPES -------------------------

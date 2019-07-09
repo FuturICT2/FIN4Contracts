@@ -41,9 +41,10 @@ contract Fin4Main {
       token.transferFrom(msg.sender, recepient, 1);
   }
 
-  function mintToken(address tokenAddress,uint256 amount) public {
+  function mintToken(address tokenAddress, uint256 amount, uint claimId) public {
       Fin4Token token = Fin4Token(tokenAddress);
       token.mint(msg.sender, amount);
+      token.setClaimToBalanceTransferred(claimId);
   }
 
   function getBalance(address tokenAddress) public view returns(uint256) {

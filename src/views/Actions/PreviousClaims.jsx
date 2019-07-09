@@ -48,7 +48,7 @@ class PreviousClaims extends Component {
 									'getClaimInfo',
 									[claimId],
 									context.drizzle
-								).then(({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
+								).then(({ 1: isApproved, 2: quantity, 3: date, 4: comment, 5: balanceTransferred }) => {
 									// claims per claim id per action type
 									return {
 										claimId: claimId,
@@ -56,6 +56,7 @@ class PreviousClaims extends Component {
 										tokenName: tokenName,
 										tokenSymbol: tokenSymbol,
 										isApproved: isApproved,
+										balanceTransferred: balanceTransferred,
 										quantity: quantity,
 										date: date,
 										comment: comment
@@ -88,7 +89,7 @@ class PreviousClaims extends Component {
 				<>
 					<Box title="My Previous Claims">
 						{this.state.claims.map(
-							({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment }) => {
+							({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment, balanceTransferred }) => {
 								// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
 								date = moment.unix(Number(date.substring(0, date.length - 3))).calendar();
 								return (
@@ -128,14 +129,15 @@ class PreviousClaims extends Component {
 												}}
 												label={isApproved ? 'approved' : 'submit proof'}
 											/>
-											{isApproved ? (
+											{isApproved && !balanceTransferred ? (
 												<ContractForm
 													contractName="Fin4Main"
 													method="mintToken"
 													buttonLabel="Claim token"
 													fixArgs={{
 														tokenAddress: actionTypeAddress,
-														amount: quantity
+														amount: quantity,
+														claimId: claimId
 													}}
 												/>
 											) : null}
