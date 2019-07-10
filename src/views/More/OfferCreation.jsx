@@ -30,13 +30,11 @@ class OfferCreation extends Component {
 	};
 
 	onclickSubmit = () => {
-		console.log('OnClick Submit');
 		this.props.toggleModal();
-		console.log(this.state.name);
 		new Database().saveOfferDetails(
 			this.state.name,
 			this.state.description,
-			this.state.tokenaddress,
+			this.state.selectedActionTypeAddress,
 			this.state.accountaddress,
 			this.state.imageurl,
 			this.state.offerurl,
