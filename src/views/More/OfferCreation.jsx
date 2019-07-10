@@ -49,10 +49,7 @@ class OfferCreation extends Component {
 		return (
 			<Box>
 				<form autoComplete="off">
-					<DropdownActionType
-						handleChange={this.handleChange.bind(this)}
-						value={this.state.selectedActionTypeAddress}
-					/>
+					<DropdownActionType handleChange={this.handleChange} value={this.state.selectedActionTypeAddress} />
 					{['Name', 'Description', 'Quantity', 'Account Address', 'Image URL', 'Offer URL'].map(fieldName => {
 						const varName = fieldName.toLowerCase().replace(/\s+/g, '');
 						return (
