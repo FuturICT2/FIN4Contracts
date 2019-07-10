@@ -115,6 +115,16 @@ class ContractForm extends Component {
 		}
 		event.preventDefault();
 
+		if (this.props.multiSelectOptions && this.state.requiredProofTypes.length < 1) {
+			alert("At least one proof type must be selected.");
+			return;
+		}
+
+		if (this.props.singleSelectOptions && !this.state.tokenAddress) {
+			alert("An action type must be chosen.");	
+			return;
+		}		
+
 		var paramValuesIndicesArr = [];
 
 		const convertedInputs = this.inputs.map(input => {
