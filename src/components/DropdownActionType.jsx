@@ -16,14 +16,15 @@ class DropdownActionType extends Component {
 		getContractData('Fin4Main', 'Fin4Main.json', 'getChildren', [], context.drizzle)
 			.then(tokens => {
 				return tokens.map(address => {
-				 return getContractData(address, 'Fin4Token.json', 'getInfo', [], context.drizzle)
-					.then(({ 0: name, 1: symbol }) => {
-						return {
-							address: address,
-							name: name,
-							symbol: symbol
-						};
-					})
+					return getContractData(address, 'Fin4Token.json', 'getInfo', [], context.drizzle).then(
+						({ 0: name, 1: symbol }) => {
+							return {
+								address: address,
+								name: name,
+								symbol: symbol
+							};
+						}
+					);
 				});
 			})
 			.then(data => Promise.all(data))
@@ -36,8 +37,7 @@ class DropdownActionType extends Component {
 		const menuItems = this.state.tokens.map((token, index) => {
 			return (
 				<MenuItem key={index} value={token.address}>
-					<span>{token.name}</span>&nbsp;
-					<Currency>{token.symbol}</Currency>							
+					<Currency symbol={token.symbol} name={token.name} />
 				</MenuItem>
 			);
 		});

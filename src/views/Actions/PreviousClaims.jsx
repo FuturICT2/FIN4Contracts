@@ -114,7 +114,7 @@ class PreviousClaims extends Component {
 												</Grid>
 												<Grid item>
 													<Typography gutterBottom variant="h6">
-														{quantity} <Currency>{tokenSymbol}</Currency>
+														{quantity} <Currency symbol={tokenSymbol} />
 													</Typography>
 												</Grid>
 											</Grid>

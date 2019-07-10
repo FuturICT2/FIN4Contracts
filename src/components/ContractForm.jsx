@@ -336,7 +336,6 @@ class ContractForm extends Component {
 									onChange={this.handleSingleSelectInputChange}
 									options={this.props.singleSelectOptions}
 									label={inputLabel}
-									style={inputFieldStyle}
 								/>
 							);
 						}

@@ -56,19 +56,14 @@ class Fin4Card extends React.Component {
 				<Modal
 					isOpen={this.state.isModalOpen}
 					handleClose={this.toggleModal}
-					title="Please enter the the amount"
+					title="Please Enter The Amount"
 					width="500px">
 					Token:{' '}
 					<ContractData
 						contractAddress={this.props.actionbuttonAddress}
 						method="getInfo"
 						callback={({ 0: name, 1: symbol }) => {
-							return (
-								<>
-									<span>{name}</span>&nbsp;
-									<Currency>{symbol}</Currency>
-								</>
-							);
+							return <Currency symbol={symbol} name={name} />;
 						}}
 					/>
 					<ContractForm

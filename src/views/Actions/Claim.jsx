@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
+import Currency from '../../components/Currency';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
@@ -19,7 +20,7 @@ class Claim extends Component {
 						({ 0: name, 1: symbol }) => {
 							return {
 								value: address,
-								label: name + ' (' + symbol + ')'
+								label: <Currency symbol={symbol} name={name} />
 							};
 						}
 					);
