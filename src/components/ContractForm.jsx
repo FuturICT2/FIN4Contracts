@@ -35,40 +35,6 @@ class ContractForm extends Component {
 		this.state = {};
 		this.inputs = [];
 		this.newValue = null;
-		this.rebuild();
-	}
-
-	initState = self => {
-		// Get the contract ABI
-		const abi = self.contracts[self.contractIdentifier].abi;
-
-		this.inputs = [];
-		var initialState = {
-			isModalOpen: false,
-			newValue: null
-		};
-
-		// Iterate over abi for correct function.
-		for (var i = 0; i < abi.length; i++) {
-			if (abi[i].name === self.props.method) {
-				if (self.props.methodArgsCount && abi[i].inputs.length !== Number(self.props.methodArgsCount)) {
-					continue;
-				}
-
-				self.inputs = abi[i].inputs;
-				for (var j = 0; j < self.inputs.length; j++) {
-					// set default date to today for date inputs
-					initialState[self.inputs[j].name] = self.inputs[j].name === 'date' ? moment().valueOf() : '';
-				}
-				break;
-			}
-		}
-
-		self.hasInit = true;
-		self.setState(initialState);
-	};
-
-	rebuild = () => {
 		this.contracts = this.context.drizzle.contracts;
 		this.utils = this.context.drizzle.web3.utils;
 
@@ -109,16 +75,36 @@ class ContractForm extends Component {
 				clearInterval(setDataKey);
 			} catch (e) {}
 		}, 10);
-	};
+	}
 
-	componentDidUpdate = previousProps => {
-		if (this.props.contractName) {
-			return;
+	initState = self => {
+		// Get the contract ABI
+		const abi = self.contracts[self.contractIdentifier].abi;
+
+		this.inputs = [];
+		var initialState = {
+			isModalOpen: false,
+			newValue: null
+		};
+
+		// Iterate over abi for correct function.
+		for (var i = 0; i < abi.length; i++) {
+			if (abi[i].name === self.props.method) {
+				if (self.props.methodArgsCount && abi[i].inputs.length !== Number(self.props.methodArgsCount)) {
+					continue;
+				}
+
+				self.inputs = abi[i].inputs;
+				for (var j = 0; j < self.inputs.length; j++) {
+					// set default date to today for date inputs
+					initialState[self.inputs[j].name] = self.inputs[j].name === 'date' ? moment().valueOf() : '';
+				}
+				break;
+			}
 		}
-		const didContractChange = this.props.contractAddress !== previousProps.contractAddress;
-		if (didContractChange) {
-			this.rebuild();
-		}
+
+		self.hasInit = true;
+		self.setState(initialState);
 	};
 
 	handleSubmit = event => {
