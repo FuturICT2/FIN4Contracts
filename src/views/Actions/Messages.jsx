@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Box from '../../components/Box';
+import ContractForm from '../../components/ContractForm';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
-import { Chip, Typography, Divider, Paper, createMuiTheme } from '@material-ui/core';
+import { Typography, Divider, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
-import ProofIcon from '@material-ui/icons/Fingerprint';
 import colors from '../../config/colors-config';
 import styled from 'styled-components';
 
@@ -62,20 +62,12 @@ class Messages extends Component {
 										</Typography>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
 										<ThemeProvider theme={chipTheme}>
-											<Chip
-												key="1"
-												color="secondary"
-												icon={<ProofIcon />}
-												component="a"
-												href={`/approving?fulfillmentAddress=${msg.fulfillmentAddress}&proofTypeName=${msg.proofTypeName}`}
-												clickable={true}
-												// onClick={() => {
-												// 	this.setState({
-												// 		actionTypeAddressForProofModal: actionTypeAddress,
-												// 		claimIdForProofModal: claimId
-												// 	});
-												// }}
-												label="approve"
+											<ContractForm
+												buttonLabel="approve"
+												contractAddress={msg.fulfillmentAddress}
+												// instead of passing the proofTypeName, make an extra getName() call for that?
+												contractJson={`${msg.proofTypeName}.json`}
+												method="receiveApprovalFromSpecificAddress"
 											/>
 										</ThemeProvider>
 									</>
@@ -91,6 +83,10 @@ class Messages extends Component {
 
 const chipTheme = createMuiTheme({
 	palette: {
+		primary: {
+			main: colors.light,
+			contrastText: colors.main
+		},
 		secondary: {
 			main: 'rgba(0, 0, 0, .3)',
 			contrastText: colors.light

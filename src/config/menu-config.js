@@ -3,7 +3,6 @@ import StarIcon from '@material-ui/icons/StarRate';
 
 import Actions from '../views/Actions/Actions';
 import More from '../views/More/More';
-import Approving from '../views/Approving';
 
 const menu = [
 	{
@@ -16,12 +15,6 @@ const menu = [
 		component: More,
 		path: '/more',
 		label: 'More',
-		icon: StarIcon
-	},
-	{
-		component: Approving,
-		path: '/approving',
-		label: 'Approving',
 		icon: StarIcon
 	}
 ];
