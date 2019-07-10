@@ -8,7 +8,7 @@ contract Location is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "Location";
-      description = "A location, which is within a radius of a location the token creator defines, needs to be provided";
+      description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";
       messageType = MessageType.INFO;
       _Latitude = 0;
       _Longitude = 0;
@@ -24,8 +24,8 @@ contract Location is Fin4BaseProofType {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-        Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
-        ": Your location is not within the allowed distance to the defined location"));
+        Fin4TokenStrut(tokenAdrToReceiveProof).name(),
+        ": Your location is not within the allowed distance to the defined location."));
         Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
       }
       return true;
@@ -43,7 +43,7 @@ contract Location is Fin4BaseProofType {
 
     // @Override
     function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
-      return "uint:latitude,uint:longitude,uint:maxDistance";
+      return "uint:latitude:m,uint:longitude:m,uint:maxDistance:m";
     }
 
 }

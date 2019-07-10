@@ -11,7 +11,7 @@ contract Picture is SpecificAddress {
   // @Override
   function setNameAndDescription() public returns(bool) {
     name = "Picture";
-    description = "The claimer has to supply a picture, based on which the approver will decide to approve";
+    description = "The claimer has to supply a picture, based on which the approver will decide to approve.";
   }
 
   function submitProof(address tokenAdrToReceiveProof, uint claimId, address approver, string memory imageURL) public returns(bool) {

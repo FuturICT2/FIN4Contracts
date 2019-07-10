@@ -8,7 +8,7 @@ contract Password is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "Password";
-      description = "A numeric password (PIN), which the token creator set, needs to be provided";
+      description = "A numeric password (PIN), which the token creator set, needs to be provided.";
       // _password = 1234;
       messageType = MessageType.INFO;
     }
@@ -19,8 +19,8 @@ contract Password is Fin4BaseProofType {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
-          ": The password you provided is not matching the one set by the action type creator"
+          Fin4TokenStrut(tokenAdrToReceiveProof).name(),
+          ": The password you provided is not matching the one set by the action type creator."
         ));
         Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
       }

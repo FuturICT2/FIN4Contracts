@@ -8,7 +8,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "MaximumQuantityPerInterval";
-      description = "Defines the maximum quantity a user can claim within a specified time interval";
+      description = "Defines the maximum quantity a user can claim within a specified time interval.";
       // interval = 1 * 24 * 60 * 60 * 1000; // 1 day
       // maxQuantity = 10;
       messageType = MessageType.INFO;
@@ -19,10 +19,10 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStrut(tokenAdrToReceiveProof).name(), ", claim #", uint2str(claimId),
+          Fin4TokenStrut(tokenAdrToReceiveProof).name(),
           ": The quantity you are claiming would take you beyond the allowed amount for the given interval. Interval: ",
           uint2str(_getInterval(tokenAdrToReceiveProof) / 1000), "s, max. quantity: ",
-          uint2str(_getMaxQuantity(tokenAdrToReceiveProof))
+          uint2str(_getMaxQuantity(tokenAdrToReceiveProof)), "."
         ));
         Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
       }
@@ -53,7 +53,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
           "The action type creator defined a maximum quantity of ",
           uint2str(_getMaxQuantity(token)),
           " to be claimable in an interval of ",
-          uint2str(_getInterval(token) / (1000 * 60 * 60 * 24)), " days"
+          uint2str(_getInterval(token) / (1000 * 60 * 60 * 24)), " days."
         ));
     }
 

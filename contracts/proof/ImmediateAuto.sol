@@ -8,7 +8,7 @@ contract ImmediateAuto is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       name = "ImmediateAuto";
-      description = "Sends the approval immediately, no checks";
+      description = "Sends the approval immediately, no checks.";
     }
 
     function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
