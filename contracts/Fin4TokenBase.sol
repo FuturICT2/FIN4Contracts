@@ -38,9 +38,9 @@ contract Fin4TokenBase { // abstract class
 
 	mapping (uint => Claim) public claims;
 
-	function submit(uint quantity, uint date, string memory comment) public returns (uint) {
+	function submit(address claimer, uint quantity, uint date, string memory comment) public returns (uint) {
     Claim storage claim = claims[nextClaimId];
-    claim.claimer = msg.sender;
+    claim.claimer = claimer;
     claim.quantity = quantity;
     claim.date = date;
     claim.comment = comment;

@@ -98,6 +98,10 @@ contract Fin4Main {
     }
   }
 
+  function submitClaim(address token, uint quantity, uint date, string memory comment) public returns(uint) {
+    return Fin4Token(token).submit(msg.sender, quantity, date, comment);
+  }
+
   // ------------------------- PROOF TYPES -------------------------
 
   address[] public proofTypes;
