@@ -50,7 +50,7 @@ class Messages extends Component {
 						return (
 							<Message key={`${msg.proofTypeName}${msg.fulfillmentAddress}`}>
 								<Typography color="textSecondary" variant="body2">
-									{msg.message}
+									{msg.message}.
 								</Typography>
 								{msg.messageType === '0' && (
 									<>
