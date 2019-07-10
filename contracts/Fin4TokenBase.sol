@@ -132,10 +132,6 @@ contract Fin4TokenBase { // abstract class
     return (sum, claims[claimId].quantity);
   }
 
-  function setClaimToBalanceTransferred(uint claimId) public {
-    claims[claimId].balanceTransferred = true;
-  }
-
   // ------------------------- PROOF TYPES -------------------------
 
   address[] public requiredProofTypes;
@@ -150,10 +146,20 @@ contract Fin4TokenBase { // abstract class
     claims[claimId].proof_statuses[msg.sender] = true;
     if (_allProofTypesApprovedOnClaim(claimId)) {
       claims[claimId].isApproved = true;
-      // TODO mint
+      if (!isMinter(claimer)) {
+        addMinter(claimer);
+      }
+      mint(claimer, claims[claimId].quantity);
+      claims[claimId].balanceTransferred = true;
     }
     return true;
   }
+
+  function isMinter(address account) public view returns (bool);
+
+  function addMinter(address account) public;
+
+  function mint(address account, uint256 amount) public returns (bool);
 
   function _allProofTypesApprovedOnClaim(uint claimId) private view returns(bool) {
     for (uint i = 0; i < requiredProofTypes.length; i ++) {

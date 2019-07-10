@@ -149,25 +149,9 @@ class PreviousClaims extends Component {
 												}}>
 												<ProofIcon />
 												&nbsp;
-												{isApproved
-													? balanceTransferred
-														? 'approved & token transferred'
-														: 'approved'
-													: 'submit proof'}
+												{isApproved ? 'approved' : 'submit proof'}
 											</Fab>
 										</ThemeProvider>
-										{isApproved && !balanceTransferred ? (
-											<ContractForm
-												contractName="Fin4Main"
-												method="mintToken"
-												buttonLabel="Claim token"
-												fixArgs={{
-													tokenAddress: actionTypeAddress,
-													amount: quantity,
-													claimId: claimId
-												}}
-											/>
-										) : null}
 									</Claim>
 								);
 							}

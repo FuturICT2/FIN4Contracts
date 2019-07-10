@@ -12,9 +12,11 @@ contract Fin4Main {
 	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes,
     uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, address(this), msg.sender);
+    newToken.addMinter(msg.sender); // not necessary actually
 
     for (uint i = 0; i < requiredProofTypes.length; i++) {
       newToken.addRequiredProofType(requiredProofTypes[i]);
+      newToken.addMinter(requiredProofTypes[i]);
       uint indexStart = paramValuesIndices[i * 2];
       uint indexEnd = paramValuesIndices[i * 2 + 1];
       if (indexStart != 99) {
@@ -36,21 +38,9 @@ contract Fin4Main {
 
   // ------------------------- MINT, TRANSFER, BALANCE -------------------------
 
-  function transferTokens(address tokenAddress, address recepient) public {
-      Fin4Token token = Fin4Token(tokenAddress);
-      token.transferFrom(msg.sender, recepient, 1);
-  }
-
-  function mintToken(address tokenAddress, uint256 amount, uint claimId) public {
-      Fin4Token token = Fin4Token(tokenAddress);
-      token.mint(msg.sender, amount);
-      token.setClaimToBalanceTransferred(claimId);
-  }
-
   function getBalance(address tokenAddress) public view returns(uint256) {
       return Fin4Token(tokenAddress).balanceOf(msg.sender);
   }
-
 
   function getAllTokenWithBalance() public view returns(address[] memory) {
     //NEED TO FIX THE LOGIC
