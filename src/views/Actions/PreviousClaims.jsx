@@ -5,15 +5,15 @@ import { getContractData } from '../../components/ContractData';
 import Box from '../../components/Box';
 import Currency from '../../components/Currency';
 import Modal from '../../components/Modal';
+import Button from '../../components/Button';
 import ProofSubmission from './ProofSubmission';
-import { Chip, Fab, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
+import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../config/colors-config';
 import DateIcon from '@material-ui/icons/AccessTime';
 import ProofIcon from '@material-ui/icons/Fingerprint';
 import moment from 'moment';
 import styled from 'styled-components';
-import ContractForm from '../../components/ContractForm';
 
 class PreviousClaims extends Component {
 	constructor(props, context) {
@@ -90,17 +90,7 @@ class PreviousClaims extends Component {
 				<>
 					<Box title="My Previous Claims">
 						{this.state.claims.map(
-							({
-								claimId,
-								actionTypeAddress,
-								tokenName,
-								tokenSymbol,
-								isApproved,
-								quantity,
-								date,
-								comment,
-								balanceTransferred
-							}) => {
+							({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment }) => {
 								// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
 								date = moment.unix(Number(date.substring(0, date.length - 3))).calendar();
 								return (
@@ -135,22 +125,18 @@ class PreviousClaims extends Component {
 											/>
 										</ThemeProvider>
 										<ThemeProvider theme={buttonTheme}>
-											<Fab
-												key="1"
-												variant="extended"
-												size="small"
-												color={isApproved ? 'primary' : 'secondary'}
-												style={{ height: 32, margin: '0 7px 7px 0' }}
+											<Button
+												icon={ProofIcon}
 												onClick={() => {
 													this.setState({
 														actionTypeAddressForProofModal: actionTypeAddress,
 														claimIdForProofModal: claimId
 													});
-												}}>
-												<ProofIcon />
-												&nbsp;
+												}}
+												color={isApproved ? 'primary' : 'secondary'}
+												style={{ margin: '0 7px 7px 0' }}>
 												{isApproved ? 'approved' : 'submit proof'}
-											</Fab>
+											</Button>
 										</ThemeProvider>
 									</Claim>
 								);

@@ -3,9 +3,10 @@
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Fab, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import Modal from './Modal';
 import Dropdown from './Dropdown';
+import Button from './Button';
 import AddIcon from '@material-ui/icons/Add';
 import OpenIcon from '@material-ui/icons/OpenInNew';
 import DateFnsUtils from '@date-io/moment';
@@ -291,11 +292,9 @@ class ContractForm extends Component {
 									/>
 								);
 							})}
-					<p style={{ textAlign: 'center' }}>
-						<Fab key="submit" variant="extended" size="small" color="primary" onClick={this.closeModal}>
-							<AddIcon /> &nbsp;Submit
-						</Fab>
-					</p>
+					<Button onClick={this.closeModal} center>
+						Apply
+					</Button>
 				</Modal>
 				<form onSubmit={this.handleSubmit} autoComplete="off">
 					{this.inputs.map(({ name, type }, index) => {
@@ -379,12 +378,9 @@ class ContractForm extends Component {
 							/>
 						);
 					})}
-					<p style={{ textAlign: 'center' }}>
-						<Fab key="submit" variant="extended" size="small" color="primary" onClick={this.handleSubmit}>
-							<AddIcon /> &nbsp;
-							{this.props.buttonLabel ? this.props.buttonLabel : 'Submit'}
-						</Fab>
-					</p>
+					<Button icon={AddIcon} onClick={this.handleSubmit} center>
+						{this.props.buttonLabel ? this.props.buttonLabel : 'Submit'}
+					</Button>
 				</form>
 			</>
 		);

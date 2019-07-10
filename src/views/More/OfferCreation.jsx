@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Button, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import Button from '../../components/Button';
 import Database from '../../components/Database';
 import Box from '../../components/Box';
 import DropdownActionType from '../../components/DropdownActionType';
@@ -60,11 +61,9 @@ class OfferCreation extends Component {
 							/>
 						);
 					})}
-					<p style={{ textAlign: 'center' }}>
-						<Button key="submit" variant="contained" color="primary" onClick={this.onclickSubmit}>
-							<AddIcon /> &nbsp;Submit
-						</Button>
-					</p>
+					<Button icon={AddIcon} onClick={this.onclickSubmit} center>
+						Submit
+					</Button>
 				</form>
 			</Box>
 		);
