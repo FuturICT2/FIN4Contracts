@@ -54,7 +54,7 @@ class ProofSubmission extends Component {
 			<>
 				{this.state.proofData.map((proofObj, index) => {
 					return (
-						<>
+						<div key={index}>
 							{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
 							<Status isApproved={proofObj.isApproved}>
 								{proofObj.isApproved
@@ -76,7 +76,7 @@ class ProofSubmission extends Component {
 									}}
 								/>
 							)}
-						</>
+						</div>
 					);
 				})}
 			</>
