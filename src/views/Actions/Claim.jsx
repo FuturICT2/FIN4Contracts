@@ -15,13 +15,14 @@ class Claim extends Component {
 		getContractData('Fin4Main', 'Fin4Main.json', 'getChildren', [], context.drizzle)
 			.then(tokens => {
 				return tokens.map(address => {
-				 return getContractData(address, 'Fin4Token.json', 'getInfo', [], context.drizzle)
-					.then(({ 0: name, 1: symbol }) => {
-						return {
-							value: address,
-							label: name + " (" + symbol + ")"
-						};
-					})
+					return getContractData(address, 'Fin4Token.json', 'getInfo', [], context.drizzle).then(
+						({ 0: name, 1: symbol }) => {
+							return {
+								value: address,
+								label: name + ' (' + symbol + ')'
+							};
+						}
+					);
 				});
 			})
 			.then(data => Promise.all(data))
@@ -31,22 +32,17 @@ class Claim extends Component {
 	}
 
 	render() {
-		if (this.state.tokens.length < 1) {
-			return (
+		return (
+			this.state.tokens.length > 0 && (
 				<Box title={'Claim an Action'}>
-					No action types created yet
+					<ContractForm
+						contractName="Fin4Main"
+						method="submitClaim"
+						labels={['Action type', 'Quantity', 'Date', 'Comment']}
+						singleSelectOptions={this.state.tokens}
+					/>
 				</Box>
 			)
-		}
-		return (
-			<Box title={'Claim an Action'}>
-				<ContractForm
-					contractName="Fin4Main"
-					method="submitClaim"
-					labels={['Action type', 'Quantity', 'Date', 'Comment']}
-					singleSelectOptions={this.state.tokens}
-				/>
-			</Box>
 		);
 	}
 }
