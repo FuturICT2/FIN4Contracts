@@ -51,7 +51,7 @@ contract Fin4TokenBase { // abstract class
     claim.isApproved = false;
     claim.balanceTransferred = false;
     nextClaimId ++;
-    pingbackClaimSubmissionToMain();
+    // pingbackClaimSubmissionToMain();
     return nextClaimId - 1;
   }
 
@@ -140,10 +140,10 @@ contract Fin4TokenBase { // abstract class
 
   address[] public requiredProofTypes;
 
-  function pingbackClaimSubmissionToMain() public returns(bool) {
+  /*function pingbackClaimSubmissionToMain() public returns(bool) {
     Fin4MainStrut(Fin4Main).claimSubmissionPingback(msg.sender);
     return true;
-  }
+  }*/
 
   // called from ProofType contracts, therefore msg.sender is the address of that SC
   function receiveProofApproval(address claimer, uint claimId) public returns(bool) {

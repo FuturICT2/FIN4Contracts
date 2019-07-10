@@ -84,7 +84,9 @@ class ContractForm extends Component {
 		this.inputs = [];
 		var initialState = {
 			isModalOpen: false,
-			newValue: null
+			newValue: null,
+			tokenAddress: null,
+			requiredProofTypes: []
 		};
 
 		// Iterate over abi for correct function.
@@ -151,13 +153,17 @@ class ContractForm extends Component {
 				return '';
 			}
 
+			if (input.name === 'tokenAddress' && this.props.singleSelectOptions) {
+				return this.state.tokenAddress;
+			}
+
 			if (input.type === 'bytes32') {
 				return this.utils.toHex(this.state[input.name]);
 			}
+
 			return this.state[input.name];
 		});
 
-		console.log(convertedInputs);
 		if (this.props.sendArgs) {
 			return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(
 				...convertedInputs,
@@ -166,6 +172,10 @@ class ContractForm extends Component {
 		}
 
 		return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(...convertedInputs);
+	};
+
+	handleSingleSelectInputChange = event => {
+		this.setState({ ['tokenAddress']: event.value });
 	};
 
 	handleInputChange = event => {
@@ -304,6 +314,18 @@ class ContractForm extends Component {
 									multipleChoice
 									onChange={this.handleInputChange}
 									options={this.props.multiSelectOptions}
+									label={inputLabel}
+									style={inputFieldStyle}
+								/>
+							);
+						}
+
+						if (name === 'tokenAddress' && this.props.singleSelectOptions) {
+							return (
+								<Dropdown
+									key={name}
+									onChange={this.handleSingleSelectInputChange}
+									options={this.props.singleSelectOptions}
 									label={inputLabel}
 									style={inputFieldStyle}
 								/>

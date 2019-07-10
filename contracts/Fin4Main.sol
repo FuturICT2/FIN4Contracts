@@ -92,14 +92,15 @@ contract Fin4Main {
     return actionsWhereUserHasClaims[msg.sender];
   }
 
-  function claimSubmissionPingback(address claimer) public returns(bool) {
-    if (!_userClaimedOnThisActionAlready(claimer, msg.sender)) {
-      actionsWhereUserHasClaims[claimer].push(msg.sender);
+  function claimSubmissionPingback(address claimer, address token) public returns(bool) {
+    if (!_userClaimedOnThisActionAlready(claimer, token)) {
+      actionsWhereUserHasClaims[claimer].push(token);
     }
   }
 
-  function submitClaim(address token, uint quantity, uint date, string memory comment) public returns(uint) {
-    return Fin4Token(token).submit(msg.sender, quantity, date, comment);
+  function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public returns(uint) {
+    claimSubmissionPingback(msg.sender, tokenAddress);
+    return Fin4Token(tokenAddress).submit(msg.sender, quantity, date, comment);
   }
 
   // ------------------------- PROOF TYPES -------------------------
