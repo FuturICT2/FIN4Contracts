@@ -13,8 +13,8 @@ const Fin4Modal = props => {
 
 	const CloseButton = styled(IconButton)`
 		position: absolute !important;
-		right: 5px;
-		top: 5px;
+		right: 3px;
+		top: 3px;
 	`;
 
 	return (

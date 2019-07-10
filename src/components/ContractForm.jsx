@@ -3,7 +3,7 @@
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, TextField } from '@material-ui/core';
+import { Fab, TextField } from '@material-ui/core';
 import Modal from './Modal';
 import Dropdown from './Dropdown';
 import AddIcon from '@material-ui/icons/Add';
@@ -286,9 +286,9 @@ class ContractForm extends Component {
 								);
 							})}
 					<p style={{ textAlign: 'center' }}>
-						<Button key="submit" variant="contained" color="primary" onClick={this.closeModal}>
+						<Fab key="submit" variant="extended" size="small" color="primary" onClick={this.closeModal}>
 							<AddIcon /> &nbsp;Submit
-						</Button>
+						</Fab>
 					</p>
 				</Modal>
 				<form onSubmit={this.handleSubmit} autoComplete="off">
@@ -364,10 +364,10 @@ class ContractForm extends Component {
 						);
 					})}
 					<p style={{ textAlign: 'center' }}>
-						<Button key="submit" variant="contained" color="primary" onClick={this.handleSubmit}>
+						<Fab key="submit" variant="extended" size="small" color="primary" onClick={this.handleSubmit}>
 							<AddIcon /> &nbsp;
 							{this.props.buttonLabel ? this.props.buttonLabel : 'Submit'}
-						</Button>
+						</Fab>
 					</p>
 				</form>
 			</>

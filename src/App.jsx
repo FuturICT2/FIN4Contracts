@@ -61,10 +61,8 @@ const Container = styled.div`
 	min-height: 100%;
 `;
 
-// make room for dropdowns at the bottom
 const Spacer = styled.div`
-	margin-top: 250px;
-	height: 55px;
+	height: 100px;
 `;
 
 export default App;

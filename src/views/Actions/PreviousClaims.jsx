@@ -6,7 +6,7 @@ import Box from '../../components/Box';
 import Currency from '../../components/Currency';
 import Modal from '../../components/Modal';
 import ProofSubmission from './ProofSubmission';
-import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
+import { Chip, Fab, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../config/colors-config';
 import DateIcon from '@material-ui/icons/AccessTime';
@@ -126,40 +126,48 @@ class PreviousClaims extends Component {
 										</div>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
 										<ThemeProvider theme={chipTheme}>
-											<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ marginRight: '20px' }} />
 											<Chip
+												key="0"
+												color="primary"
+												icon={<DateIcon />}
+												label={date}
+												style={{ margin: '0 7px 7px 0' }}
+											/>
+										</ThemeProvider>
+										<ThemeProvider theme={buttonTheme}>
+											<Fab
 												key="1"
+												variant="extended"
+												size="small"
 												color={isApproved ? 'primary' : 'secondary'}
-												icon={<ProofIcon />}
-												component="span"
-												clickable={true}
+												style={{ height: 32, margin: '0 7px 7px 0' }}
 												onClick={() => {
 													this.setState({
 														actionTypeAddressForProofModal: actionTypeAddress,
 														claimIdForProofModal: claimId
 													});
-												}}
-												label={
-													isApproved
-														? balanceTransferred
-															? 'approved & token transferred'
-															: 'approved'
-														: 'submit proof'
-												}
-											/>
-											{isApproved && !balanceTransferred ? (
-												<ContractForm
-													contractName="Fin4Main"
-													method="mintToken"
-													buttonLabel="Claim token"
-													fixArgs={{
-														tokenAddress: actionTypeAddress,
-														amount: quantity,
-														claimId: claimId
-													}}
-												/>
-											) : null}
+												}}>
+												<ProofIcon />
+												&nbsp;
+												{isApproved
+													? balanceTransferred
+														? 'approved & token transferred'
+														: 'approved'
+													: 'submit proof'}
+											</Fab>
 										</ThemeProvider>
+										{isApproved && !balanceTransferred ? (
+											<ContractForm
+												contractName="Fin4Main"
+												method="mintToken"
+												buttonLabel="Claim token"
+												fixArgs={{
+													tokenAddress: actionTypeAddress,
+													amount: quantity,
+													claimId: claimId
+												}}
+											/>
+										) : null}
 									</Claim>
 								);
 							}
@@ -186,9 +194,18 @@ const chipTheme = createMuiTheme({
 		primary: {
 			main: colors.light,
 			contrastText: colors.main
+		}
+	}
+});
+
+const buttonTheme = createMuiTheme({
+	palette: {
+		primary: {
+			main: 'rgba(61, 219, 81, 0.7)',
+			contrastText: colors.light
 		},
 		secondary: {
-			main: 'rgba(248, 57, 48, 0.5)',
+			main: 'rgba(248, 57, 48, 0.7)',
 			contrastText: colors.light
 		}
 	}

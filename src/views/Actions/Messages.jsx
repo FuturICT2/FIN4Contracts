@@ -4,9 +4,7 @@ import ContractForm from '../../components/ContractForm';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
-import { Typography, Divider, Paper, createMuiTheme } from '@material-ui/core';
-import ThemeProvider from '@material-ui/styles/ThemeProvider';
-import colors from '../../config/colors-config';
+import { Typography, Divider, Paper } from '@material-ui/core';
 import styled from 'styled-components';
 
 class Messages extends Component {
@@ -61,15 +59,13 @@ class Messages extends Component {
 											Requested by {msg.sender}
 										</Typography>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
-										<ThemeProvider theme={chipTheme}>
-											<ContractForm
-												buttonLabel="approve"
-												contractAddress={msg.fulfillmentAddress}
-												// instead of passing the proofTypeName, make an extra getName() call for that?
-												contractJson={`${msg.proofTypeName}.json`}
-												method="receiveApprovalFromSpecificAddress"
-											/>
-										</ThemeProvider>
+										<ContractForm
+											buttonLabel="approve"
+											contractAddress={msg.fulfillmentAddress}
+											// instead of passing the proofTypeName, make an extra getName() call for that?
+											contractJson={`${msg.proofTypeName}.json`}
+											method="receiveApprovalFromSpecificAddress"
+										/>
 									</>
 								)}
 							</Message>
@@ -80,19 +76,6 @@ class Messages extends Component {
 		);
 	}
 }
-
-const chipTheme = createMuiTheme({
-	palette: {
-		primary: {
-			main: colors.light,
-			contrastText: colors.main
-		},
-		secondary: {
-			main: 'rgba(0, 0, 0, .3)',
-			contrastText: colors.light
-		}
-	}
-});
 
 const Message = styled(Paper)`
 	&& {

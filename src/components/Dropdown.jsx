@@ -44,11 +44,11 @@ const useStyles = makeStyles(theme => ({
 		fontSize: 16
 	},
 	paper: {
-		position: 'absolute',
-		zIndex: 1,
-		marginTop: theme.spacing(1),
-		left: 0,
-		right: 0
+		// position: 'absolute',
+		// zIndex: 1,
+		marginTop: theme.spacing(1)
+		// left: 0,
+		// right: 0
 	},
 	divider: {
 		height: theme.spacing(2)

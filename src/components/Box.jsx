@@ -6,6 +6,7 @@ import colors from '../config/colors-config';
 const Fin4Box = props => {
 	const PaperStyle = styled(Paper)`
 		width: ${props.width || '400px'};
+		box-sizing: border-box;
 		position: relative;
 		padding: 1em;
 		margin: 20px;
