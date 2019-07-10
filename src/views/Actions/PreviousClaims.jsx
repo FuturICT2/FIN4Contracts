@@ -131,8 +131,8 @@ class PreviousClaims extends Component {
 												key="1"
 												color={isApproved ? 'primary' : 'secondary'}
 												icon={<ProofIcon />}
-												component={isApproved ? 'span' : 'a'}
-												clickable={!isApproved}
+												component="span"
+												clickable={true}
 												onClick={() => {
 													this.setState({
 														actionTypeAddressForProofModal: actionTypeAddress,
