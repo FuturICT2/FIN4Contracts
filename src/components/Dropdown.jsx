@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1,
 		height: 'auto',
-		marginBottom: 30
+		marginBottom: 15
 	},
 	input: {
 		display: 'flex',
@@ -230,26 +230,29 @@ const Dropdown = props => {
 	};
 
 	return (
-		<div className={classes.root}>
-			<NoSsr>
-				<Select
-					classes={classes}
-					styles={selectStyles}
-					inputId="dropdownselect"
-					TextFieldProps={{
-						label: props.label,
-						InputLabelProps: {
-							htmlFor: 'dropdownselect',
-							shrink: true
-						}
-					}}
-					options={props.options}
-					components={components}
-					onChange={props.onChange}
-					isMulti={props.multipleChoice}
-				/>
-			</NoSsr>
-		</div>
+		<>
+			<div className={classes.root}>
+				<NoSsr>
+					<Select
+						classes={classes}
+						styles={selectStyles}
+						inputId="dropdownselect"
+						TextFieldProps={{
+							label: props.label,
+							InputLabelProps: {
+								htmlFor: 'dropdownselect',
+								shrink: true
+							}
+						}}
+						options={props.options}
+						components={components}
+						onChange={props.onChange}
+						isMulti={props.multipleChoice}
+					/>
+				</NoSsr>
+			</div>
+			<div id="collapsing-margin-obstacle" style={{ padding: '1px' }}></div>
+		</>
 	);
 };
 

@@ -116,14 +116,14 @@ class ContractForm extends Component {
 		event.preventDefault();
 
 		if (this.props.multiSelectOptions && this.state.requiredProofTypes.length < 1) {
-			alert("At least one proof type must be selected.");
+			alert('At least one proof type must be selected.');
 			return;
 		}
 
 		if (this.props.singleSelectOptions && !this.state.tokenAddress) {
-			alert("An action type must be chosen.");	
+			alert('An action type must be chosen.');
 			return;
-		}		
+		}
 
 		var paramValuesIndicesArr = [];
 
@@ -325,7 +325,6 @@ class ContractForm extends Component {
 									onChange={this.handleInputChange}
 									options={this.props.multiSelectOptions}
 									label={inputLabel}
-									style={inputFieldStyle}
 								/>
 							);
 						}
