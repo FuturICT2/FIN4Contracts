@@ -172,8 +172,12 @@ class ContractForm extends Component {
 				return this.utils.toHex(this.state[input.name]);
 			}
 
-			if (this.props.specialField && this.props.specialField.name === input.name) {
-				return this.props.specialField.value;
+			if (this.props.specialFields && this.props.specialFields[input.name]) {
+				if (this.props.specialFields[input.name].belongsTo) {
+					var belongsTo = this.props.specialFields[input.name].belongsTo;
+					return this.props.specialFields[belongsTo].values[input.name];
+				}
+				return this.props.specialFields[input.name].values[input.name];
 			}
 
 			return this.state[input.name];
@@ -332,11 +336,11 @@ class ContractForm extends Component {
 							);
 						}
 
-						if (this.props.specialField && name === this.props.specialField.name) {
+						if (this.props.specialFields && this.props.specialFields[name]) {
 							return (
 								<>
-									<Button icon={AddIcon} onClick={() => this.props.specialField.onClick(this.props.specialField)} center>
-										{this.props.specialField.buttonText}
+									<Button key={name} icon={AddIcon} onClick={() => this.props.specialFields[name].onClick(this.props.specialFields[name])} center>
+										{this.props.specialFields[name].buttonText}
 									</Button>
 									<hr></hr>
 								</>
