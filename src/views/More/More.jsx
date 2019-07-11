@@ -40,7 +40,7 @@ class More extends React.Component {
 			spendingOffers: [],
 			donationOffers: [],
 			isOfferModalOpen: false,
-			isDoantionModalOpen: false,
+			isDonationModalOpen: false,
 			tokenAddress: []
 		};
 	}
@@ -108,7 +108,7 @@ class More extends React.Component {
 	};
 
 	toggleDonationModal = () => {
-		this.setState({ isDoantionModalOpen: !this.state.isDoantionModalOpen });
+		this.setState({ isDonationModalOpen: !this.state.isDonationModalOpen });
 	};
 
 	render() {
@@ -135,7 +135,7 @@ class More extends React.Component {
 					<AddIcon />
 				</Fab>
 				<Modal
-					isOpen={this.state.isDoantionModalOpen}
+					isOpen={this.state.isDonationModalOpen}
 					handleClose={this.toggleDonationModal}
 					title="Create a New Donation Offer"
 					width="500px">
