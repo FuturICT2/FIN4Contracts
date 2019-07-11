@@ -172,6 +172,10 @@ class ContractForm extends Component {
 				return this.utils.toHex(this.state[input.name]);
 			}
 
+			if (this.props.specialField && this.props.specialField.name === input.name) {
+				return this.props.specialField.value;
+			}
+
 			return this.state[input.name];
 		});
 

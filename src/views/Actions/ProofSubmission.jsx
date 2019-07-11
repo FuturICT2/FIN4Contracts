@@ -47,8 +47,8 @@ class ProofSubmission extends Component {
 	}
 
 	onUploadImageClick = (specialFieldObj) => {
-		console.log(specialFieldObj);
-		// TODO
+		// TODO popup, upload and then:
+		specialFieldObj.value = "TODO-the-IPFS-hash-goes-here"
 	};
 
 	render() {
@@ -79,11 +79,11 @@ class ProofSubmission extends Component {
 										tokenAdrToReceiveProof: this.props.tokenAddress,
 										claimId: this.props.claimId + ''
 									}}
-									specialField={{
+									specialField={{ // location: "location" // TODO latitude/longitude... ?!
 										name: "IPFS_hash",
 										buttonText: "Upload image to IPFS",
-										onClick: this.onUploadImageClick
-										// location: "location" // TODO latitude/longitude... ?!
+										onClick: this.onUploadImageClick,
+										value: "no-value"
 									}}
 								/>
 							)}
