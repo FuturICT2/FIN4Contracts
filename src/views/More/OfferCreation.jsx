@@ -26,6 +26,7 @@ class OfferCreation extends Component {
 	handleChange = event => {
 		if (event.target.name === 'tokenAddress') {
 			this.setState({ selectedActionTypeAddress: event.target.value });
+			return;
 		}
 		this.setState({ [event.target.name]: event.target.value });
 	};
