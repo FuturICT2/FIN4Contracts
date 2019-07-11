@@ -183,6 +183,8 @@ class ContractForm extends Component {
 			return this.state[input.name];
 		});
 
+		// console.log(convertedInputs);
+
 		if (this.props.sendArgs) {
 			return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(
 				...convertedInputs,
@@ -268,8 +270,13 @@ class ContractForm extends Component {
 	};
 
 	handleParamChange = (proofTypeObj, event) => {
-		proofTypeObj.paramValues[event.target.name] = Number(event.target.value);
-		//event.target.type + ':' + event.target.name + '=' + event.target.value;
+		var name = event.target.name;
+		var value = Number(event.target.value);
+		if (name === "latitude" || name === "longitude") {
+			var multiplier = 10000000;
+			value *= Math.round(multiplier);
+		}
+		proofTypeObj.paramValues[name] = value
 	};
 
 	render() {

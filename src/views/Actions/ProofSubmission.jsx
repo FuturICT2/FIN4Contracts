@@ -29,12 +29,13 @@ class ProofSubmission extends Component {
 						'getParameterizedInfo',
 						[this.props.tokenAddress],
 						context.drizzle
-					).then(({ 0: name, 1: parameterizedDescription, 2: submitProofMethodArgsCount }) => {
+					).then(({ 0: name, 1: parameterizedDescription, 2: submitProofMethodArgsCount, 3: paramValues }) => {
 						return {
 							address: address,
 							name: name,
 							description: parameterizedDescription,
 							submitProofMethodArgsCount: submitProofMethodArgsCount,
+							paramValues: paramValues,
 							isApproved: proofTypeStatusesObj[address].isApproved
 						};
 					});
@@ -52,11 +53,32 @@ class ProofSubmission extends Component {
 	};
 
 	onSubmitLocationClick = (specialFieldObj) => {
-		// TODO request location in browser and fill it in here:
-		specialFieldObj.values = {
-			latitude: "5",
-			longitude: "10"
+		const positionCallback = (position) => {
+			var latitude = position.coords.latitude;
+			var longitude = position.coords.longitude;
+			// var timestamp = position.timestamp; // TODO use for another proof type "location in interval"?
+			var multiplier = 10000000;
+
+			var tokenCreatorLatitude = Number(specialFieldObj.data.paramValues[0]) / multiplier;
+			var tokenCreatorLongitude = Number(specialFieldObj.data.paramValues[1]) / multiplier;
+
+			// use an oracle instead!? Maybe http://provable.xyz
+			var distanceToTokenCreatorsLocation = Math.round(
+				distanceInKmBetweenEarthCoordinates(tokenCreatorLatitude, tokenCreatorLongitude, latitude, longitude) * 1000);
+
+			// console.log(latitude, longitude, tokenCreatorLatitude, tokenCreatorLongitude, distanceToTokenCreatorsLocation);
+
+			specialFieldObj.values = {
+				latitude: Math.round(latitude * multiplier).toString(),
+				longitude: Math.round(longitude * multiplier).toString(),
+				distanceToLocation: distanceToTokenCreatorsLocation.toString()
+			};
 		};
+		if (navigator.geolocation) { // via https://www.w3schools.com/html/html5_geolocation.asp
+			navigator.geolocation.getCurrentPosition(positionCallback);
+		} else {
+			console.error("Geolocation is not supported by this browser.");
+		}
 	};
 
 	render() {
@@ -88,7 +110,8 @@ class ProofSubmission extends Component {
 										claimId: this.props.claimId + ''
 									}}
 									hideArgs={{
-										longitude: "longitude"
+										longitude: "longitude",
+										distanceToLocation: "distanceToLocation"
 									}}
 									specialFields={{ // location: "location" // TODO latitude/longitude... ?!
 										IPFShash: {
@@ -101,12 +124,17 @@ class ProofSubmission extends Component {
 										latitude: {
 											buttonText: "Submit location",
 											onClick: this.onSubmitLocationClick,
+											data: proofObj,
 											values: {
 												latitude: "0",
-												longitude: "0"
+												longitude: "0",
+												distanceToLocation: "999999"
 											}
 										},
 										longitude: {
+											belongsTo: "latitude"
+										},
+										distanceToLocation: {
 											belongsTo: "latitude"
 										}
 									}}
@@ -119,6 +147,26 @@ class ProofSubmission extends Component {
 		);
 	}
 }
+
+function degreesToRadians(degrees) {
+	return degrees * Math.PI / 180;
+}
+
+// from https://stackoverflow.com/a/365853
+function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+	var earthRadiusKm = 6371;
+  
+	var dLat = degreesToRadians(lat2-lat1);
+	var dLon = degreesToRadians(lon2-lon1);
+  
+	lat1 = degreesToRadians(lat1);
+	lat2 = degreesToRadians(lat2);
+  
+	var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+			Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	return earthRadiusKm * c;
+  }
 
 const Status = styled(Typography)`
 	&& {

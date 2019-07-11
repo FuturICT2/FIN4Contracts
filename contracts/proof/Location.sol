@@ -10,17 +10,11 @@ contract Location is Fin4BaseProofType {
       name = "Location";
       description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";
       messageType = MessageType.INFO;
-      _Latitude = 0;
-      _Longitude = 0;
-      maxDistance = 10; // km
     }
 
-    uint public _Latitude; // TODO float?
-    uint public _Longitude;
-    uint public maxDistance;
-
-    function submitProof(address tokenAdrToReceiveProof, uint claimId, uint latitude, uint longitude) public returns(bool) {
-      if (locationIsWithinMaxDistToSpecifiedLocation(latitude, longitude)) {
+    function submitProof(address tokenAdrToReceiveProof, uint claimId,
+      uint latitude, uint longitude, uint distanceToLocation) public returns(bool) {
+      if (locationIsWithinMaxDistToSpecifiedLocation(tokenAdrToReceiveProof, distanceToLocation)) {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
@@ -31,19 +25,30 @@ contract Location is Fin4BaseProofType {
       return true;
     }
 
-    function locationIsWithinMaxDistToSpecifiedLocation(uint latitude, uint longitude) public view returns(bool) {
-        // TODO
-        return false;
+    function locationIsWithinMaxDistToSpecifiedLocation(address token, uint distanceToLocation) public view returns(bool) {
+        return distanceToLocation <= _getMaxDistance(token);
     }
 
     // @Override
     function getSubmitProofMethodArgsCount() public view returns(uint) {
-      return 4;
+      return 5;
     }
 
     // @Override
     function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
-      return "uint:latitude:m,uint:longitude:m,uint:maxDistance:m";
+      return "uint:latitude:gps,uint:longitude:gps,uint:maxDistance:m";
+    }
+
+    function _getLatitude(address token) private view returns(uint) {
+      return fin4TokenToParametersSetOnThisProofType[token][0];
+    }
+
+    function _getLongitude(address token) private view returns(uint) {
+      return fin4TokenToParametersSetOnThisProofType[token][1];
+    }
+
+    function _getMaxDistance(address token) private view returns(uint) {
+      return fin4TokenToParametersSetOnThisProofType[token][2];
     }
 
 }
