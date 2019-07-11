@@ -46,6 +46,11 @@ class ProofSubmission extends Component {
 			});
 	}
 
+	onUploadImageClick = (specialFieldObj) => {
+		console.log(specialFieldObj);
+		// TODO
+	};
+
 	render() {
 		if (this.state.proofData === null) {
 			return '';
@@ -73,6 +78,12 @@ class ProofSubmission extends Component {
 									fixArgs={{
 										tokenAdrToReceiveProof: this.props.tokenAddress,
 										claimId: this.props.claimId + ''
+									}}
+									specialField={{
+										name: "IPFS_hash",
+										buttonText: "Upload image to IPFS",
+										onClick: this.onUploadImageClick
+										// location: "location" // TODO latitude/longitude... ?!
 									}}
 								/>
 							)}

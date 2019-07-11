@@ -328,6 +328,17 @@ class ContractForm extends Component {
 							);
 						}
 
+						if (this.props.specialField && name === this.props.specialField.name) {
+							return (
+								<>
+									<Button icon={AddIcon} onClick={() => this.props.specialField.onClick(this.props.specialField)} center>
+										{this.props.specialField.buttonText}
+									</Button>
+									<hr></hr>
+								</>
+							)
+						}
+
 						if (name === 'tokenAddress' && this.props.singleSelectOptions) {
 							return (
 								<Dropdown
