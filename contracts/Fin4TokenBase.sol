@@ -144,9 +144,6 @@ contract Fin4TokenBase { // abstract class
     claims[claimId].proof_statuses[msg.sender] = true;
     if (_allProofTypesApprovedOnClaim(claimId)) {
       claims[claimId].isApproved = true;
-      if (!isMinter(claimer)) {
-        addMinter(claimer);
-      }
       mint(claimer, claims[claimId].quantity);
     }
     return true;

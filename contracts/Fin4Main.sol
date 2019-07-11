@@ -12,10 +12,10 @@ contract Fin4Main {
 	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes,
     uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, address(this), msg.sender);
-    newToken.addMinter(msg.sender); // not necessary actually
 
     for (uint i = 0; i < requiredProofTypes.length; i++) {
       newToken.addRequiredProofType(requiredProofTypes[i]);
+      // ProofTypes must be minters because "they" (via msg.sender) are the ones calling mint() if the last required proof type is set to true
       newToken.addMinter(requiredProofTypes[i]);
       uint indexStart = paramValuesIndices[i * 2];
       uint indexEnd = paramValuesIndices[i * 2 + 1];
