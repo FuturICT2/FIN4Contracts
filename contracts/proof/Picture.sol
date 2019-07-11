@@ -14,8 +14,8 @@ contract Picture is SpecificAddress {
     description = "The claimer has to supply a picture, based on which the approver will decide to approve.";
   }
 
-  function submitProof(address tokenAdrToReceiveProof, uint claimId, address approver, string memory IPFS_hash) public returns(bool) {
-    pendingApprovals[approver].attachment = IPFS_hash;
+  function submitProof(address tokenAdrToReceiveProof, uint claimId, address approver, string memory IPFShash) public returns(bool) {
+    pendingApprovals[approver].attachment = IPFShash;
     submitProof(tokenAdrToReceiveProof, claimId, approver);
   }
 
