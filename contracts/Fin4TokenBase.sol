@@ -33,7 +33,6 @@ contract Fin4TokenBase { // abstract class
     uint date;
     string comment;
     mapping(address => bool) proof_statuses;
-    bool balanceTransferred;
   }
 
 	mapping (uint => Claim) public claims;
@@ -49,7 +48,6 @@ contract Fin4TokenBase { // abstract class
       claim.proof_statuses[requiredProofs[i]] = false;
     }
     claim.isApproved = false;
-    claim.balanceTransferred = false;
     nextClaimId ++;
     // pingbackClaimSubmissionToMain();
     return nextClaimId - 1;
@@ -73,9 +71,9 @@ contract Fin4TokenBase { // abstract class
       claim.quantity, claim.date, claim.comment, requiredProofTypes, proofTypeStatuses);
   }
 
-  function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory, bool) {
+  function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory) {
     return (claims[claimId].claimer, claims[claimId].isApproved,
-      claims[claimId].quantity, claims[claimId].date, claims[claimId].comment, claims[claimId].balanceTransferred);
+      claims[claimId].quantity, claims[claimId].date, claims[claimId].comment);
   }
 
   function getMyClaimIds() public view returns(address, string memory, string memory, uint[] memory) {
@@ -150,7 +148,6 @@ contract Fin4TokenBase { // abstract class
         addMinter(claimer);
       }
       mint(claimer, claims[claimId].quantity);
-      claims[claimId].balanceTransferred = true;
     }
     return true;
   }

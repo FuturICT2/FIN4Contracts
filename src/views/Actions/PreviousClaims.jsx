@@ -49,7 +49,7 @@ class PreviousClaims extends Component {
 									'getClaimInfo',
 									[claimId],
 									context.drizzle
-								).then(({ 1: isApproved, 2: quantity, 3: date, 4: comment, 5: balanceTransferred }) => {
+								).then(({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
 									// claims per claim id per action type
 									return {
 										claimId: claimId,
@@ -57,7 +57,6 @@ class PreviousClaims extends Component {
 										tokenName: tokenName,
 										tokenSymbol: tokenSymbol,
 										isApproved: isApproved,
-										balanceTransferred: balanceTransferred,
 										quantity: quantity,
 										date: date,
 										comment: comment
