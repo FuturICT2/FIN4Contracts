@@ -7,6 +7,7 @@ import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
 import ipfs from '../../ipfs';
+import AddLocation from '@material-ui/icons/AddLocation';
 
 class ProofSubmission extends Component {
 	constructor(props, context) {
@@ -155,6 +156,7 @@ class ProofSubmission extends Component {
 										IPFShash: {
 											type: 'file',
 											buttonText: 'Upload image to IPFS',
+											buttonIcon: null,
 											onClick: this.onUploadImageClick,
 											values: {
 												IPFShash: this.state.ipfsHash
@@ -163,6 +165,7 @@ class ProofSubmission extends Component {
 										},
 										latitude: {
 											buttonText: 'Submit location',
+											buttonIcon: AddLocation,
 											onClick: this.onSubmitLocationClick,
 											data: proofObj,
 											values: {

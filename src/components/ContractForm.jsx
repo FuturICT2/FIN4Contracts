@@ -346,26 +346,24 @@ class ContractForm extends Component {
 						if (this.props.specialFields && this.props.specialFields[name]) {
 							if (this.props.specialFields[name].type && this.props.specialFields[name].type === 'file') {
 								return (
-									<>
+									<center>
 										<input
 											type="file"
 											name={name}
 											onChange={this.props.specialFields[name].onClick}
-											accept="image/png, image/jpeg"></input>
-									</>
+											accept="image/png, image/jpeg">
+										</input>
+									</center>
 								);
 							} else {
 								return (
-									<>
-										<Button
-											key={name}
-											icon={AddIcon}
-											onClick={() => this.props.specialFields[name].onClick(this.props.specialFields[name])}
-											center>
-											{this.props.specialFields[name].buttonText}
-										</Button>
-										<hr></hr>
-									</>
+									<Button
+										key={name}
+										icon={this.props.specialFields[name].buttonIcon}
+										onClick={() => this.props.specialFields[name].onClick(this.props.specialFields[name])}
+										center>
+										{this.props.specialFields[name].buttonText}
+									</Button>
 								);
 							}
 						}
