@@ -24,7 +24,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
           uint2str(_getInterval(tokenAdrToReceiveProof) / 1000), "s, max. quantity: ",
           uint2str(_getMaxQuantity(tokenAdrToReceiveProof)), "."
         ));
-        Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this));
+        Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this), "");
       }
       return true;
     }

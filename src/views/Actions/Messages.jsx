@@ -26,14 +26,15 @@ class Messages extends Component {
 					}
 					return messageIndices.map(index => {
 						return getContractData(Fin4MessagesAddress, 'Fin4Messages.json', 'getMyMessage', [index], context.drizzle).then(
-							({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName, 5: hasBeenActedUpon }) => {
+							({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName, 5: hasBeenActedUpon, 6: attachment }) => {
 								return {
 									messageType: messageType,
 									sender: sender,
 									message: message,
 									fulfillmentAddress: fulfillmentAddress,
 									proofTypeName: proofTypeName,
-									hasBeenActedUpon: hasBeenActedUpon
+									hasBeenActedUpon: hasBeenActedUpon,
+									attachment: attachment
 								};
 							}
 						);
@@ -66,6 +67,9 @@ class Messages extends Component {
 											Requested by {msg.sender}
 										</Typography>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
+										{msg.attachment && msg.attachment.length > 0 && (
+											<center><b><a target="_blank" href={msg.attachment}>Click to see the image</a></b></center>
+										)}
 										<ContractForm
 											buttonLabel="approve"
 											contractAddress={msg.fulfillmentAddress}

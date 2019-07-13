@@ -14,14 +14,15 @@ contract Fin4Messages {
     address receiver;
     string message;
     address fulfillmentAddress; // where to go and do something
-    bool hasBeenActedUpon; // TODO
+    bool hasBeenActedUpon;
+    string attachment;
   }
 
   mapping (address => Message[]) public messages;
 
   function addMessage(uint messageType, address sender, address receiver,
-    string memory message, address fulfillmentAddress) public returns(uint) {
-    Message memory m = Message(messageType, sender, receiver, message, fulfillmentAddress, false);
+    string memory message, address fulfillmentAddress, string memory attachment) public returns(uint) {
+    Message memory m = Message(messageType, sender, receiver, message, fulfillmentAddress, false, attachment);
     messages[receiver].push(m);
     return messages[receiver].length - 1;
   }
@@ -30,10 +31,10 @@ contract Fin4Messages {
     return messages[msg.sender].length;
   }
 
-  function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory, bool) {
+  function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory, bool, string memory) {
     Message memory m = messages[msg.sender][index];
     return (m.messageType, m.sender, m.message, m.fulfillmentAddress,
-      Fin4BaseProofTypeStrut(m.fulfillmentAddress).getName(), m.hasBeenActedUpon);
+      Fin4BaseProofTypeStrut(m.fulfillmentAddress).getName(), m.hasBeenActedUpon, m.attachment);
   }
 
   function markMessageAsActedUpon(address approver, uint messageId) public {
