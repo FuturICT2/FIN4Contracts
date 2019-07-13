@@ -26,13 +26,14 @@ class Messages extends Component {
 					}
 					return messageIndices.map(index => {
 						return getContractData(Fin4MessagesAddress, 'Fin4Messages.json', 'getMyMessage', [index], context.drizzle).then(
-							({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName }) => {
+							({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName, 5: hasBeenActedUpon }) => {
 								return {
 									messageType: messageType,
 									sender: sender,
 									message: message,
 									fulfillmentAddress: fulfillmentAddress,
-									proofTypeName: proofTypeName
+									proofTypeName: proofTypeName,
+									hasBeenActedUpon: hasBeenActedUpon
 								};
 							}
 						);
@@ -50,6 +51,9 @@ class Messages extends Component {
 			this.state.messages.length > 0 && (
 				<Box title="Messages">
 					{this.state.messages.map(msg => {
+						if (msg.hasBeenActedUpon) {
+							return "";
+						}
 						return (
 							<Message key={`${msg.proofTypeName}${msg.fulfillmentAddress}`}>
 								<Typography color="textSecondary" variant="body2">

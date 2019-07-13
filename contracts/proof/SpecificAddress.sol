@@ -23,6 +23,7 @@ contract SpecificAddress is Fin4BaseProofType {
     address requester;
     address approver;
     string attachment;
+    uint messageId;
   }
 
   // this assumes only one pending approval per address, TODO value must be an array
@@ -36,7 +37,7 @@ contract SpecificAddress is Fin4BaseProofType {
     pa.approver = approver;
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
-    Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, approver, message, address(this));
+    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, approver, message, address(this));
     return true;
   }
 
@@ -56,6 +57,7 @@ contract SpecificAddress is Fin4BaseProofType {
 
   function receiveApprovalFromSpecificAddress() public returns(bool) {
     require(pendingApprovals[msg.sender].approver == msg.sender, "This address is not registered as approver for any pending approval");
+    Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pendingApprovals[msg.sender].messageId);
     _sendApproval(pendingApprovals[msg.sender].tokenAdrToReceiveProof, pendingApprovals[msg.sender].claimIdOnTokenToReceiveProof);
     return true;
   }
