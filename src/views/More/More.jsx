@@ -68,7 +68,7 @@ class More extends React.Component {
 					})}
 				</div>
 				<Container>
-					<ContractData contractName="Fin4Main" method="getChildren" callback={showBalanceByActionType} />
+					<ContractData contractName="Fin4Main" method="getChildrenWhereUserHasNonzeroBalance" callback={showBalanceByActionType} />
 				</Container>
 				<div>
 					{this.state.donationOffers.map(({ data }, index) => {
