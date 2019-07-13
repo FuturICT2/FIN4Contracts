@@ -68,7 +68,7 @@ class Messages extends Component {
 										</Typography>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
 										{msg.attachment && msg.attachment.length > 0 && (
-											<center><b><a target="_blank" href={msg.attachment}>Click to see the image</a></b></center>
+											<center><b><a target="_blank" href={"https://gateway.ipfs.io/ipfs/" + msg.attachment}>Click to see the image</a></b></center>
 										)}
 										<ContractForm
 											buttonLabel="approve"

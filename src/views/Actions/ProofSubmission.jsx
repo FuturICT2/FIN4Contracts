@@ -65,26 +65,25 @@ class ProofSubmission extends Component {
 	};
 
 	convertToBuffer = async reader => {
-		//file is converted to a buffer for upload to IPFS
+		// file is converted to a buffer for upload to IPFS
 		const buffer = await Buffer.from(reader.result);
-		//set this buffer -using es6 syntax
+		// set this buffer -using es6 syntax
 		this.setState({ buffer });
-		console.log(buffer);
 		this.saveToIpfs();
 	};
 
 	saveToIpfs = async () => {
-		console.log('File....', this.ipfsApi);
+		//console.log('File....', this.ipfsApi);
 		this.ipfsApi
 			.add(this.state.buffer, (err, ipfsHash) => {
-				console.log('......', err);
+				//console.log('......', err);
 				//setState by setting ipfsHash to ipfsHash[0].hash
-				console.log('DDDDD', ipfsHash[0]);
+				//console.log('IPFS-hash', ipfsHash[0]);
 				this.setState({ ipfsHash: ipfsHash[0].hash });
-			})
-			.catch(err => {
-				console.error('Err:', err);
 			});
+			//.catch(err => {
+			//	console.error('Err:', err);
+			//});
 	};
 
 	onSubmitLocationClick = specialFieldObj => {
