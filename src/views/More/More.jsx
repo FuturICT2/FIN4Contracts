@@ -45,10 +45,9 @@ class More extends React.Component {
 		};
 	}
 
-	setTokenAddressWithBalance = tokenAddress => {
+	setTokenAddressWithBalance = () => {
 		return (
 			<Wrapper>
-				{this.setState({ tokenAddress })}
 				{this.getOfferData()}
 				<div>
 					{this.state.spendingOffers.map(({ data }, index) => {
@@ -125,11 +124,7 @@ class More extends React.Component {
 					<OfferCreation offerType="spendingOffers" toggleModal={this.toggleOfferModal.bind(this)} />
 				</Modal>
 
-				<ContractData
-					contractName="Fin4Main"
-					method="getAllTokenWithBalance"
-					callback={this.setTokenAddressWithBalance}
-				/>
+				{this.setTokenAddressWithBalance()}
 
 				<Fab color="primary" aria-label="Add" onClick={this.toggleDonationModal}>
 					<AddIcon />

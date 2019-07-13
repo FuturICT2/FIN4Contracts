@@ -59,29 +59,6 @@ contract Fin4Main {
       return Fin4Token(tokenAddress).balanceOf(msg.sender);
   }
 
-  function getAllTokenWithBalance() public view returns(address[] memory) {
-    //NEED TO FIX THE LOGIC
-    uint count = 0;
-    for (uint i = 0; i < children.length; i ++) {
-      Fin4Token tok = Fin4Token(children[i]);
-      uint256 bal = tok.balanceOf(msg.sender);
-      if(bal != 0){
-        count ++;
-      }
-    }
-    address[] memory addresses = new address[](count);
-    uint256 j = 0;
-    for (uint i = 0; i < children.length; i++) {
-      Fin4Token tok = Fin4Token(children[i]);
-      uint256 bal = tok.balanceOf(msg.sender);
-      if(bal != 0){
-        addresses[j] = address(tok);
-        j++;
-      }
-    }
-    return (addresses);
-  }
-
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
 
   mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
