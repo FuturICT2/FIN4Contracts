@@ -4,6 +4,8 @@ import ContractForm from '../../components/ContractForm';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
+import Button from '../../components/Button';
+import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
 import styled from 'styled-components';
 
@@ -68,7 +70,12 @@ class Messages extends Component {
 										</Typography>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
 										{msg.attachment && msg.attachment.length > 0 && (
-											<center><b><a target="_blank" href={"https://gateway.ipfs.io/ipfs/" + msg.attachment}>Click to see the image</a></b></center>
+											<Button
+												center
+												icon={Photo}
+												onClick={()=> window.open("https://gateway.ipfs.io/ipfs/" + msg.attachment, "_blank")}>
+												Click to see the image
+											</Button>
 										)}
 										<ContractForm
 											buttonLabel="approve"
