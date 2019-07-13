@@ -149,6 +149,7 @@ class ProofSubmission extends Component {
 										longitude: 'longitude',
 										distanceToLocation: 'distanceToLocation'
 									}}
+									buttonLabel="Initiate proof"
 									specialFields={{
 										// location: "location" // TODO latitude/longitude... ?!
 										IPFShash: {
