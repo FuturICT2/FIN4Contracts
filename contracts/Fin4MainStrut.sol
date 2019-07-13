@@ -6,6 +6,6 @@ contract Fin4MainStrut {
 
   // function claimSubmissionPingback(address claimer) public returns(bool);
 
-  function getFin4Messages() public view returns(address);
+  function getFin4MessagesAddress() public view returns(address);
 
 }

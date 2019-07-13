@@ -20,7 +20,7 @@ module.exports = async function(deployer) {
 
 	const Fin4MainInstance = await Fin4Main.deployed();
 	const Fin4MessagesInstance = await Fin4Messages.deployed();
-	await Fin4MainInstance.setFin4Messages(Fin4MessagesInstance.address);
+	await Fin4MainInstance.setFin4MessagesAddress(Fin4MessagesInstance.address);
 
 	await Promise.all(contracts.map(contract => deployer.deploy(contract, Fin4MainInstance.address)));
 

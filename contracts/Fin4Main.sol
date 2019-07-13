@@ -125,21 +125,12 @@ contract Fin4Main {
 
   address public Fin4MessagesAddr;
 
-  function setFin4Messages(address addr) public {
+  function setFin4MessagesAddress(address addr) public {
     Fin4MessagesAddr = addr;
   }
 
-  function getFin4Messages() public view returns(address) {
+  function getFin4MessagesAddress() public view returns(address) {
     return Fin4MessagesAddr;
-  }
-
-  // TODO remove the following two, just as quick-hack to avoid having to change the frontend at this point
-  function getMyMessagesCount() public view returns(uint) {
-    return Fin4Messages(Fin4MessagesAddr).getMyMessagesCount(msg.sender);
-  }
-
-  function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory) {
-    return Fin4Messages(Fin4MessagesAddr).getMyMessage(msg.sender, index);
   }
 
 }

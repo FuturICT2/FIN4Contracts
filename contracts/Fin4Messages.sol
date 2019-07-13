@@ -25,12 +25,12 @@ contract Fin4Messages {
     return true;
   }
 
-  function getMyMessagesCount(address sender) public view returns(uint) {
-    return messages[sender].length;
+  function getMyMessagesCount() public view returns(uint) {
+    return messages[msg.sender].length;
   }
 
-  function getMyMessage(address sender, uint index) public view returns(uint, address, string memory, address, string memory) {
-    Message memory m = messages[sender][index];
+  function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory) {
+    Message memory m = messages[msg.sender][index];
     return (m.messageType, m.sender, m.message, m.fulfillmentAddress, Fin4BaseProofTypeStrut(m.fulfillmentAddress).getName());
   }
 
