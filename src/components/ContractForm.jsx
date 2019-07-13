@@ -196,13 +196,13 @@ class ContractForm extends Component {
 	};
 
 	handleSingleSelectInputChange = event => {
-		this.setState({ ['tokenAddress']: event.value });
+		this.setState({ tokenAddress: event.value });
 	};
 
 	handleInputChange = event => {
 		// removing the last tag in the multiselect field fires a null-event
 		if (event === null && this.props.multiSelectOptions) {
-			this.setState({ ['requiredProofTypes']: [] });
+			this.setState({ requiredProofTypes: [] });
 			return;
 		}
 
@@ -227,7 +227,7 @@ class ContractForm extends Component {
 			}
 
 			this.setState({
-				['requiredProofTypes']: values,
+				requiredProofTypes: values,
 				newValue: newValue
 			});
 
@@ -344,7 +344,7 @@ class ContractForm extends Component {
 						}
 
 						if (this.props.specialFields && this.props.specialFields[name]) {
-							if (this.props.specialFields[name].type && this.props.specialFields[name].type == 'file') {
+							if (this.props.specialFields[name].type && this.props.specialFields[name].type === 'file') {
 								return (
 									<>
 										<input
