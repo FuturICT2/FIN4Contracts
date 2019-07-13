@@ -272,11 +272,11 @@ class ContractForm extends Component {
 	handleParamChange = (proofTypeObj, event) => {
 		var name = event.target.name;
 		var value = Number(event.target.value);
-		if (name === "latitude" || name === "longitude") {
+		if (name === 'latitude' || name === 'longitude') {
 			var multiplier = 10000000;
 			value *= Math.round(multiplier);
 		}
-		proofTypeObj.paramValues[name] = value
+		proofTypeObj.paramValues[name] = value;
 	};
 
 	render() {
@@ -344,14 +344,30 @@ class ContractForm extends Component {
 						}
 
 						if (this.props.specialFields && this.props.specialFields[name]) {
-							return (
-								<>
-									<Button key={name} icon={AddIcon} onClick={() => this.props.specialFields[name].onClick(this.props.specialFields[name])} center>
-										{this.props.specialFields[name].buttonText}
-									</Button>
-									<hr></hr>
-								</>
-							)
+							if (this.props.specialFields[name].type && this.props.specialFields[name].type == 'file') {
+								return (
+									<>
+										<input
+											type="file"
+											name={name}
+											onChange={this.props.specialFields[name].onClick}
+											accept="image/png, image/jpeg"></input>
+									</>
+								);
+							} else {
+								return (
+									<>
+										<Button
+											key={name}
+											icon={AddIcon}
+											onClick={() => this.props.specialFields[name].onClick(this.props.specialFields[name])}
+											center>
+											{this.props.specialFields[name].buttonText}
+										</Button>
+										<hr></hr>
+									</>
+								);
+							}
 						}
 
 						if (name === 'tokenAddress' && this.props.singleSelectOptions) {
