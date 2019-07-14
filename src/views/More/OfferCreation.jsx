@@ -12,7 +12,7 @@ class OfferCreation extends Component {
 		this.state = {
 			name: '',
 			description: '',
-			quantity: '',
+			quantity: '1',
 			tokenaddress: '',
 			accountaddress: '',
 			offerurl: '',
@@ -50,7 +50,7 @@ class OfferCreation extends Component {
 			<Box>
 				<form autoComplete="off">
 					<DropdownActionType handleChange={this.handleChange} value={this.state.selectedActionTypeAddress} />
-					{['Name', 'Description', 'Quantity', 'Account Address', 'Image URL', 'Offer URL'].map(fieldName => {
+					{['Name', 'Description', 'Account Address', 'Image URL', 'Offer URL'].map(fieldName => {
 						const varName = fieldName.toLowerCase().replace(/\s+/g, '');
 						return (
 							<TextField
