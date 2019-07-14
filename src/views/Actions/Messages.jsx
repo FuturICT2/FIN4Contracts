@@ -17,9 +17,11 @@ class Messages extends Component {
 			messages: []
 		};
 
+		var currentAccount = window.web3.currentProvider.selectedAddress;
+
 		getContractData('Fin4Main', 'Fin4Main.json', 'getFin4MessagesAddress', [], context.drizzle)
 		.then(Fin4MessagesAddress => {
-			getContractData(Fin4MessagesAddress, 'Fin4Messages.json', 'getMyMessagesCount', [], context.drizzle)
+			getContractData(Fin4MessagesAddress, 'Fin4Messages.json', 'getMyMessagesCount', [currentAccount], context.drizzle)
 				.then(data => {
 					var messageCount = Number(data);
 					var messageIndices = [];
@@ -27,7 +29,7 @@ class Messages extends Component {
 						messageIndices.push(i);
 					}
 					return messageIndices.map(index => {
-						return getContractData(Fin4MessagesAddress, 'Fin4Messages.json', 'getMyMessage', [index], context.drizzle).then(
+						return getContractData(Fin4MessagesAddress, 'Fin4Messages.json', 'getMyMessage', [currentAccount, index], context.drizzle).then(
 							({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName, 5: hasBeenActedUpon, 6: attachment }) => {
 								return {
 									messageType: messageType,

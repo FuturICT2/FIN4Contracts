@@ -25,11 +25,13 @@ class PreviousClaims extends Component {
 			claimIdForProofModal: ''
 		};
 
-		getContractData('Fin4Main', 'Fin4Main.json', 'getActionsWhereUserHasClaims', [], context.drizzle)
+		var currentAccount = window.web3.currentProvider.selectedAddress;
+		
+		getContractData('Fin4Main', 'Fin4Main.json', 'getActionsWhereUserHasClaims', [currentAccount], context.drizzle)
 			.then(actionTypeAddresses => {
 				// action types
 				return actionTypeAddresses.map(actionTypeAddress => {
-					return getContractData(actionTypeAddress, 'Fin4Token.json', 'getMyClaimIds', [], context.drizzle)
+					return getContractData(actionTypeAddress, 'Fin4Token.json', 'getMyClaimIds', [currentAccount], context.drizzle)
 						.then(({ 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
 							// claim ids per action type
 							return claimIds.map(claimId => {

@@ -14,6 +14,7 @@ import Modal from '../../components/Modal';
 import bigchainConfig from '../../config/bigchain-config';
 
 const showBalanceByActionType = data => {
+	var currentAccount = window.web3.currentProvider.selectedAddress;
 	return (
 		<Box title="My Action Tokens">
 			<Table headers={['Name', 'Symbol', 'Balance']}>
@@ -24,6 +25,7 @@ const showBalanceByActionType = data => {
 								key={index}
 								contractAddress={address}
 								method="getInfoAndBalance"
+								methodArgs={[currentAccount]}
 								callback={data => <TableRow data={data} />}
 							/>
 						);
@@ -46,6 +48,7 @@ class More extends React.Component {
 	}
 
 	setTokenAddressWithBalance = () => {
+		var currentAccount = window.web3.currentProvider.selectedAddress;
 		return (
 			<Wrapper>
 				{this.getOfferData()}
@@ -67,7 +70,7 @@ class More extends React.Component {
 					})}
 				</div>
 				<Container>
-					<ContractData contractName="Fin4Main" method="getChildrenWhereUserHasNonzeroBalance" callback={showBalanceByActionType} />
+					<ContractData contractName="Fin4Main" method="getChildrenWhereUserHasNonzeroBalance" methodArgs={[currentAccount]} callback={showBalanceByActionType} />
 				</Container>
 				<div>
 					{this.state.donationOffers.map(({ data }, index) => {
