@@ -45,6 +45,9 @@ class More extends React.Component {
 			isDonationModalOpen: false,
 			tokenAddress: []
 		};
+		{
+			this.getOfferData();
+		}
 	}
 
 	getOfferData() {
@@ -83,7 +86,6 @@ class More extends React.Component {
 				</Modal>
 
 				<Wrapper>
-					{this.getOfferData()}
 					<div>
 						{this.state.spendingOffers.map(({ data }, index) => {
 							return (
