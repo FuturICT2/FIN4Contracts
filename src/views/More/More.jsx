@@ -47,58 +47,6 @@ class More extends React.Component {
 		};
 	}
 
-	setTokenAddressWithBalance = () => {
-		var currentAccount = window.web3.currentProvider.selectedAddress;
-		return (
-			<Wrapper>
-				{this.getOfferData()}
-				<div>
-					{this.state.spendingOffers.map(({ data }, index) => {
-						return (
-							<Card
-								key={index}
-								title={data.offerData.name}
-								imagePath={data.offerData.imagePath}
-								description={data.offerData.description}
-								readMore={data.offerData.offerUrl}
-								actionButtonText="redeem now"
-								actionbuttonAddress={data.offerData.tokenAddress}
-								recepientAddress={data.offerData.receiverAddress}
-								amount={data.offerData.quantity}
-							/>
-						);
-					})}
-				</div>
-				<Container>
-					<ContractData
-						contractName="Fin4Main"
-						method="getChildrenWhereUserHasNonzeroBalance"
-						methodArgs={[currentAccount]}
-						callback={showBalanceByActionType}
-					/>
-				</Container>
-				<div>
-					{this.state.donationOffers.map(({ data }, index) => {
-						//console.log(data.offerData)
-						return (
-							<Card
-								key={index}
-								title={data.offerData.name}
-								imagePath={data.offerData.imagePath}
-								description={data.offerData.description}
-								readMore={data.offerData.offerUrl}
-								actionButtonText="donate"
-								actionbuttonAddress={data.offerData.tokenAddress}
-								recepientAddress={data.offerData.receiverAddress}
-								amount={data.offerData.quantity}
-							/>
-						);
-					})}
-				</div>
-			</Wrapper>
-		);
-	};
-
 	getOfferData() {
 		['spendingOffers', 'donationOffers'].forEach(offers => {
 			axios.get(`${bigchainConfig.path}assets?search=${offers}`).then(res => {
@@ -119,6 +67,8 @@ class More extends React.Component {
 	};
 
 	render() {
+		var currentAccount = window.web3.currentProvider.selectedAddress;
+
 		return (
 			<Wrapper>
 				<Fab color="primary" aria-label="Add" onClick={this.toggleOfferModal}>
@@ -132,7 +82,52 @@ class More extends React.Component {
 					<OfferCreation offerType="spendingOffers" toggleModal={this.toggleOfferModal.bind(this)} />
 				</Modal>
 
-				{this.setTokenAddressWithBalance()}
+				<Wrapper>
+					{this.getOfferData()}
+					<div>
+						{this.state.spendingOffers.map(({ data }, index) => {
+							return (
+								<Card
+									key={index}
+									title={data.offerData.name}
+									imagePath={data.offerData.imagePath}
+									description={data.offerData.description}
+									readMore={data.offerData.offerUrl}
+									actionButtonText="redeem now"
+									actionbuttonAddress={data.offerData.tokenAddress}
+									recepientAddress={data.offerData.receiverAddress}
+									amount={data.offerData.quantity}
+								/>
+							);
+						})}
+					</div>
+					<Container>
+						<ContractData
+							contractName="Fin4Main"
+							method="getChildrenWhereUserHasNonzeroBalance"
+							methodArgs={[currentAccount]}
+							callback={showBalanceByActionType}
+						/>
+					</Container>
+					<div>
+						{this.state.donationOffers.map(({ data }, index) => {
+							//console.log(data.offerData)
+							return (
+								<Card
+									key={index}
+									title={data.offerData.name}
+									imagePath={data.offerData.imagePath}
+									description={data.offerData.description}
+									readMore={data.offerData.offerUrl}
+									actionButtonText="donate"
+									actionbuttonAddress={data.offerData.tokenAddress}
+									recepientAddress={data.offerData.receiverAddress}
+									amount={data.offerData.quantity}
+								/>
+							);
+						})}
+					</div>
+				</Wrapper>
 
 				<Fab color="primary" aria-label="Add" onClick={this.toggleDonationModal}>
 					<AddIcon />
