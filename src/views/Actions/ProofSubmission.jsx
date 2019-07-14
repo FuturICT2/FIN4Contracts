@@ -81,6 +81,7 @@ class ProofSubmission extends Component {
 				//setState by setting ipfsHash to ipfsHash[0].hash
 				//console.log('IPFS-hash', ipfsHash[0]);
 				this.setState({ ipfsHash: ipfsHash[0].hash });
+				alert("Upload to IPFS successful")
 			});
 			//.catch(err => {
 			//	console.error('Err:', err);
