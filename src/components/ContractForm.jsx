@@ -196,13 +196,13 @@ class ContractForm extends Component {
 	};
 
 	handleSingleSelectInputChange = event => {
-		this.setState({ ['tokenAddress']: event.value });
+		this.setState({ tokenAddress: event.value });
 	};
 
 	handleInputChange = event => {
 		// removing the last tag in the multiselect field fires a null-event
 		if (event === null && this.props.multiSelectOptions) {
-			this.setState({ ['requiredProofTypes']: [] });
+			this.setState({ requiredProofTypes: [] });
 			return;
 		}
 
@@ -227,7 +227,7 @@ class ContractForm extends Component {
 			}
 
 			this.setState({
-				['requiredProofTypes']: values,
+				requiredProofTypes: values,
 				newValue: newValue
 			});
 
@@ -272,11 +272,11 @@ class ContractForm extends Component {
 	handleParamChange = (proofTypeObj, event) => {
 		var name = event.target.name;
 		var value = Number(event.target.value);
-		if (name === "latitude" || name === "longitude") {
+		if (name === 'latitude' || name === 'longitude') {
 			var multiplier = 10000000;
 			value *= Math.round(multiplier);
 		}
-		proofTypeObj.paramValues[name] = value
+		proofTypeObj.paramValues[name] = value;
 	};
 
 	render() {
@@ -344,14 +344,27 @@ class ContractForm extends Component {
 						}
 
 						if (this.props.specialFields && this.props.specialFields[name]) {
-							return (
-								<>
-									<Button key={name} icon={AddIcon} onClick={() => this.props.specialFields[name].onClick(this.props.specialFields[name])} center>
+							if (this.props.specialFields[name].type && this.props.specialFields[name].type === 'file') {
+								return (
+									<center>
+										<input
+											type="file"
+											name={name}
+											onChange={this.props.specialFields[name].onClick}
+											accept="image/png, image/jpeg"></input>
+									</center>
+								);
+							} else {
+								return (
+									<Button
+										key={name}
+										icon={this.props.specialFields[name].buttonIcon}
+										onClick={() => this.props.specialFields[name].onClick(this.props.specialFields[name])}
+										center>
 										{this.props.specialFields[name].buttonText}
 									</Button>
-									<hr></hr>
-								</>
-							)
+								);
+							}
 						}
 
 						if (name === 'tokenAddress' && this.props.singleSelectOptions) {

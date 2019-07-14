@@ -14,24 +14,31 @@ contract Fin4Messages {
     address receiver;
     string message;
     address fulfillmentAddress; // where to go and do something
+    bool hasBeenActedUpon;
+    string attachment;
   }
 
   mapping (address => Message[]) public messages;
 
   function addMessage(uint messageType, address sender, address receiver,
-    string memory message, address fulfillmentAddress) public returns(bool) {
-    Message memory m = Message(messageType, sender, receiver, message, fulfillmentAddress);
+    string memory message, address fulfillmentAddress, string memory attachment) public returns(uint) {
+    Message memory m = Message(messageType, sender, receiver, message, fulfillmentAddress, false, attachment);
     messages[receiver].push(m);
-    return true;
+    return messages[receiver].length - 1;
   }
 
-  function getMyMessagesCount(address sender) public view returns(uint) {
-    return messages[sender].length;
+  function getMyMessagesCount(address msg_sender_tmp) public view returns(uint) {
+    return messages[msg_sender_tmp].length;
   }
 
-  function getMyMessage(address sender, uint index) public view returns(uint, address, string memory, address, string memory) {
-    Message memory m = messages[sender][index];
-    return (m.messageType, m.sender, m.message, m.fulfillmentAddress, Fin4BaseProofTypeStrut(m.fulfillmentAddress).getName());
+  function getMyMessage(address msg_sender_tmp, uint index) public view returns(uint, address, string memory, address, string memory, bool, string memory) {
+    Message memory m = messages[msg_sender_tmp][index];
+    return (m.messageType, m.sender, m.message, m.fulfillmentAddress,
+      Fin4BaseProofTypeStrut(m.fulfillmentAddress).getName(), m.hasBeenActedUpon, m.attachment);
+  }
+
+  function markMessageAsActedUpon(address approver, uint messageId) public {
+    messages[approver][messageId].hasBeenActedUpon = true;
   }
 
 }

@@ -15,8 +15,16 @@ contract Picture is SpecificAddress {
   }
 
   function submitProof(address tokenAdrToReceiveProof, uint claimId, address approver, string memory IPFShash) public returns(bool) {
-    pendingApprovals[approver].attachment = IPFShash;
-    submitProof(tokenAdrToReceiveProof, claimId, approver);
+    // TODO minimize duplicate code by reusing super method
+    PendingApproval storage pa = pendingApprovals[approver];
+    pa.tokenAdrToReceiveProof = tokenAdrToReceiveProof;
+    pa.claimIdOnTokenToReceiveProof = claimId;
+    pa.requester = msg.sender;
+    pa.approver = approver;
+    pa.attachment = IPFShash;
+    string memory message = string(abi.encodePacked(getMessageText(),
+      Fin4TokenBase(tokenAdrToReceiveProof).name()));
+    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, approver, message, address(this), IPFShash);
   }
 
   // @Override

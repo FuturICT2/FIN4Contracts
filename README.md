@@ -44,7 +44,7 @@ Add and fill this file: `src/config/ethereum-keys.json`
 
 #### Install dependencies
 ```sh
-yarn install
+yarn install # try 'npm install' if yarn doesn't work
 ```
 
 #### Compile and migrate the smart contracts

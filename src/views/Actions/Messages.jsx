@@ -4,6 +4,8 @@ import ContractForm from '../../components/ContractForm';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
+import Button from '../../components/Button';
+import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
 import styled from 'styled-components';
 
@@ -15,31 +17,59 @@ class Messages extends Component {
 			messages: []
 		};
 
-		getContractData('Fin4Main', 'Fin4Main.json', 'getMyMessagesCount', [], context.drizzle)
-			.then(data => {
-				var messageCount = Number(data);
-				var messageIndices = [];
-				for (var i = 0; i < messageCount; i++) {
-					messageIndices.push(i);
-				}
-				return messageIndices.map(index => {
-					return getContractData('Fin4Main', 'Fin4Main.json', 'getMyMessage', [index], context.drizzle).then(
-						({ 0: messageType, 1: sender, 2: message, 3: fulfillmentAddress, 4: proofTypeName }) => {
-							return {
-								messageType: messageType,
-								sender: sender,
-								message: message,
-								fulfillmentAddress: fulfillmentAddress,
-								proofTypeName: proofTypeName
-							};
+		var currentAccount = window.web3.currentProvider.selectedAddress;
+
+		getContractData('Fin4Main', 'Fin4Main.json', 'getFin4MessagesAddress', [], context.drizzle).then(
+			Fin4MessagesAddress => {
+				getContractData(
+					Fin4MessagesAddress,
+					'Fin4Messages.json',
+					'getMyMessagesCount',
+					[currentAccount],
+					context.drizzle
+				)
+					.then(data => {
+						var messageCount = Number(data);
+						var messageIndices = [];
+						for (var i = 0; i < messageCount; i++) {
+							messageIndices.push(i);
 						}
-					);
-				});
-			})
-			.then(data => Promise.all(data))
-			.then(data => {
-				this.setState({ messages: data });
-			});
+						return messageIndices.map(index => {
+							return getContractData(
+								Fin4MessagesAddress,
+								'Fin4Messages.json',
+								'getMyMessage',
+								[currentAccount, index],
+								context.drizzle
+							).then(
+								({
+									0: messageType,
+									1: sender,
+									2: message,
+									3: fulfillmentAddress,
+									4: proofTypeName,
+									5: hasBeenActedUpon,
+									6: attachment
+								}) => {
+									return {
+										messageType: messageType,
+										sender: sender,
+										message: message,
+										fulfillmentAddress: fulfillmentAddress,
+										proofTypeName: proofTypeName,
+										hasBeenActedUpon: hasBeenActedUpon,
+										attachment: attachment
+									};
+								}
+							);
+						});
+					})
+					.then(data => Promise.all(data))
+					.then(data => {
+						this.setState({ messages: data });
+					});
+			}
+		);
 	}
 
 	render() {
@@ -47,6 +77,9 @@ class Messages extends Component {
 			this.state.messages.length > 0 && (
 				<Box title="Messages">
 					{this.state.messages.map(msg => {
+						if (msg.hasBeenActedUpon) {
+							return '';
+						}
 						return (
 							<Message key={`${msg.proofTypeName}${msg.fulfillmentAddress}`}>
 								<Typography color="textSecondary" variant="body2">
@@ -59,6 +92,14 @@ class Messages extends Component {
 											Requested by {msg.sender}
 										</Typography>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
+										{msg.attachment && msg.attachment.length > 0 && (
+											<Button
+												center
+												icon={Photo}
+												onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
+												Click to see the image
+											</Button>
+										)}
 										<ContractForm
 											buttonLabel="approve"
 											contractAddress={msg.fulfillmentAddress}

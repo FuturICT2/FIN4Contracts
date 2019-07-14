@@ -36,33 +36,27 @@ contract Fin4Main {
     return children;
   }
 
-  // ------------------------- MINT, TRANSFER, BALANCE -------------------------
-
-  function getBalance(address tokenAddress) public view returns(uint256) {
-      return Fin4Token(tokenAddress).balanceOf(msg.sender);
-  }
-
-  function getAllTokenWithBalance() public view returns(address[] memory) {
-    //NEED TO FIX THE LOGIC
+  function getChildrenWhereUserHasNonzeroBalance(address msg_sender_tmp) public view returns(address[] memory) {
+    address[] memory tokens = actionsWhereUserHasClaims[msg_sender_tmp];
     uint count = 0;
-    for (uint i = 0; i < children.length; i ++) {
-      Fin4Token tok = Fin4Token(children[i]);
-      uint256 bal = tok.balanceOf(msg.sender);
-      if(bal != 0){
+    for (uint i = 0; i < tokens.length; i ++) {
+      if (getBalance(msg_sender_tmp, tokens[i]) > 0) {
         count ++;
       }
     }
-    address[] memory addresses = new address[](count);
-    uint256 j = 0;
-    for (uint i = 0; i < children.length; i++) {
-      Fin4Token tok = Fin4Token(children[i]);
-      uint256 bal = tok.balanceOf(msg.sender);
-      if(bal != 0){
-        addresses[j] = address(tok);
-        j++;
+    address[] memory nonzeroBalanceTokens = new address[](count);
+    for (uint i = 0; i < count; i ++) {
+      if (getBalance(msg_sender_tmp, tokens[i]) > 0) {
+        nonzeroBalanceTokens[i] = tokens[i];
       }
     }
-    return (addresses);
+    return nonzeroBalanceTokens;
+  }
+
+  // ------------------------- MINT, TRANSFER, BALANCE -------------------------
+
+  function getBalance(address msg_sender_tmp, address tokenAddress) public view returns(uint256) {
+      return Fin4Token(tokenAddress).balanceOf(msg_sender_tmp);
   }
 
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
@@ -78,8 +72,8 @@ contract Fin4Main {
     return false;
   }
 
-  function getActionsWhereUserHasClaims() public view returns(address[] memory) {
-    return actionsWhereUserHasClaims[msg.sender];
+  function getActionsWhereUserHasClaims(address msg_sender_tmp) public view returns(address[] memory) {
+    return actionsWhereUserHasClaims[msg_sender_tmp];
   }
 
   function claimSubmissionPingback(address claimer, address token) public returns(bool) {
@@ -125,21 +119,12 @@ contract Fin4Main {
 
   address public Fin4MessagesAddr;
 
-  function setFin4Messages(address addr) public {
+  function setFin4MessagesAddress(address addr) public {
     Fin4MessagesAddr = addr;
   }
 
-  function getFin4Messages() public view returns(address) {
+  function getFin4MessagesAddress() public view returns(address) {
     return Fin4MessagesAddr;
-  }
-
-  // TODO remove the following two, just as quick-hack to avoid having to change the frontend at this point
-  function getMyMessagesCount() public view returns(uint) {
-    return Fin4Messages(Fin4MessagesAddr).getMyMessagesCount(msg.sender);
-  }
-
-  function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory) {
-    return Fin4Messages(Fin4MessagesAddr).getMyMessage(msg.sender, index);
   }
 
 }

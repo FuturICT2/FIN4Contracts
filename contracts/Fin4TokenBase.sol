@@ -76,8 +76,8 @@ contract Fin4TokenBase { // abstract class
       claims[claimId].quantity, claims[claimId].date, claims[claimId].comment);
   }
 
-  function getMyClaimIds() public view returns(address, string memory, string memory, uint[] memory) {
-    return (address(this), name(), symbol(), _getMyClaimIds(msg.sender));
+  function getMyClaimIds(address msg_sender_tmp) public view returns(address, string memory, string memory, uint[] memory) {
+    return (address(this), name(), symbol(), _getMyClaimIds(msg_sender_tmp));
   }
 
   function _getMyClaimIds(address claimer) private view returns(uint[] memory) {

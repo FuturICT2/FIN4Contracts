@@ -6,13 +6,22 @@ import colors from '../../config/colors-config';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
+import ipfs from '../../ipfs';
+import AddLocation from '@material-ui/icons/AddLocation';
 
 class ProofSubmission extends Component {
 	constructor(props, context) {
 		super(props);
-
+		this.ipfsApi = ipfs;
 		this.state = {
-			proofData: null
+			proofData: null,
+			ipfsHash: null,
+			buffer: '',
+			ethAddress: '',
+			blockNumber: '',
+			transactionHash: '',
+			gasUsed: '',
+			txReceipt: ''
 		};
 
 		getContractData(this.props.tokenAddress, 'Fin4Token.json', 'getClaim', [this.props.claimId], context.drizzle)
@@ -47,13 +56,39 @@ class ProofSubmission extends Component {
 			});
 	}
 
-	onUploadImageClick = (specialFieldObj) => {
-		// TODO popup, upload and then:
-		specialFieldObj.values.IPFShash = "TODO-the-IPFS-hash-goes-here";
+	onUploadImageClick = event => {
+		event.stopPropagation();
+		event.preventDefault();
+		const file = event.target.files[0];
+		let reader = new window.FileReader();
+		reader.readAsArrayBuffer(file);
+		reader.onloadend = () => this.convertToBuffer(reader);
 	};
 
-	onSubmitLocationClick = (specialFieldObj) => {
-		const positionCallback = (position) => {
+	convertToBuffer = async reader => {
+		// file is converted to a buffer for upload to IPFS
+		const buffer = await Buffer.from(reader.result);
+		// set this buffer -using es6 syntax
+		this.setState({ buffer });
+		this.saveToIpfs();
+	};
+
+	saveToIpfs = async () => {
+		//console.log('File....', this.ipfsApi);
+		this.ipfsApi.add(this.state.buffer, (err, ipfsHash) => {
+			//console.log('......', err);
+			//setState by setting ipfsHash to ipfsHash[0].hash
+			//console.log('IPFS-hash', ipfsHash[0]);
+			this.setState({ ipfsHash: ipfsHash[0].hash });
+			alert('Upload to IPFS successful');
+		});
+		//.catch(err => {
+		//	console.error('Err:', err);
+		//});
+	};
+
+	onSubmitLocationClick = specialFieldObj => {
+		const positionCallback = position => {
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
 			// var timestamp = position.timestamp; // TODO use for another proof type "location in interval"?
@@ -64,7 +99,8 @@ class ProofSubmission extends Component {
 
 			// use an oracle instead!? Maybe http://provable.xyz
 			var distanceToTokenCreatorsLocation = Math.round(
-				distanceInKmBetweenEarthCoordinates(tokenCreatorLatitude, tokenCreatorLongitude, latitude, longitude) * 1000);
+				distanceInKmBetweenEarthCoordinates(tokenCreatorLatitude, tokenCreatorLongitude, latitude, longitude) * 1000
+			);
 
 			// console.log(latitude, longitude, tokenCreatorLatitude, tokenCreatorLongitude, distanceToTokenCreatorsLocation);
 
@@ -74,10 +110,11 @@ class ProofSubmission extends Component {
 				distanceToLocation: distanceToTokenCreatorsLocation.toString()
 			};
 		};
-		if (navigator.geolocation) { // via https://www.w3schools.com/html/html5_geolocation.asp
+		if (navigator.geolocation) {
+			// via https://www.w3schools.com/html/html5_geolocation.asp
 			navigator.geolocation.getCurrentPosition(positionCallback);
 		} else {
-			console.error("Geolocation is not supported by this browser.");
+			console.error('Geolocation is not supported by this browser.');
 		}
 	};
 
@@ -110,32 +147,38 @@ class ProofSubmission extends Component {
 										claimId: this.props.claimId + ''
 									}}
 									hideArgs={{
-										longitude: "longitude",
-										distanceToLocation: "distanceToLocation"
+										longitude: 'longitude',
+										distanceToLocation: 'distanceToLocation'
 									}}
-									specialFields={{ // location: "location" // TODO latitude/longitude... ?!
+									buttonLabel="Initiate proof"
+									specialFields={{
+										// location: "location" // TODO latitude/longitude... ?!
 										IPFShash: {
-											buttonText: "Upload image to IPFS",
+											type: 'file',
+											buttonText: 'Upload image to IPFS',
+											buttonIcon: null,
 											onClick: this.onUploadImageClick,
 											values: {
-												IPFShash: "no-value"
-											}
+												IPFShash: this.state.ipfsHash
+											},
+											state: this.state
 										},
 										latitude: {
-											buttonText: "Submit location",
+											buttonText: 'Submit location',
+											buttonIcon: AddLocation,
 											onClick: this.onSubmitLocationClick,
 											data: proofObj,
 											values: {
-												latitude: "0",
-												longitude: "0",
-												distanceToLocation: "999999"
+												latitude: '0',
+												longitude: '0',
+												distanceToLocation: '999999'
 											}
 										},
 										longitude: {
-											belongsTo: "latitude"
+											belongsTo: 'latitude'
 										},
 										distanceToLocation: {
-											belongsTo: "latitude"
+											belongsTo: 'latitude'
 										}
 									}}
 								/>
@@ -149,24 +192,24 @@ class ProofSubmission extends Component {
 }
 
 function degreesToRadians(degrees) {
-	return degrees * Math.PI / 180;
+	return (degrees * Math.PI) / 180;
 }
 
 // from https://stackoverflow.com/a/365853
 function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
 	var earthRadiusKm = 6371;
-  
-	var dLat = degreesToRadians(lat2-lat1);
-	var dLon = degreesToRadians(lon2-lon1);
-  
+
+	var dLat = degreesToRadians(lat2 - lat1);
+	var dLon = degreesToRadians(lon2 - lon1);
+
 	lat1 = degreesToRadians(lat1);
 	lat2 = degreesToRadians(lat2);
-  
-	var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-			Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+
+	var a =
+		Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	return earthRadiusKm * c;
-  }
+}
 
 const Status = styled(Typography)`
 	&& {

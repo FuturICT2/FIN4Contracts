@@ -14,6 +14,7 @@ import Modal from '../../components/Modal';
 import bigchainConfig from '../../config/bigchain-config';
 
 const showBalanceByActionType = data => {
+	var currentAccount = window.web3.currentProvider.selectedAddress;
 	return (
 		<Box title="My Action Tokens">
 			<Table headers={['Name', 'Symbol', 'Balance']}>
@@ -24,6 +25,7 @@ const showBalanceByActionType = data => {
 								key={index}
 								contractAddress={address}
 								method="getInfoAndBalance"
+								methodArgs={[currentAccount]}
 								callback={data => <TableRow data={data} />}
 							/>
 						);
@@ -45,10 +47,10 @@ class More extends React.Component {
 		};
 	}
 
-	setTokenAddressWithBalance = tokenAddress => {
+	setTokenAddressWithBalance = () => {
+		var currentAccount = window.web3.currentProvider.selectedAddress;
 		return (
 			<Wrapper>
-				{this.setState({ tokenAddress })}
 				{this.getOfferData()}
 				<div>
 					{this.state.spendingOffers.map(({ data }, index) => {
@@ -68,7 +70,12 @@ class More extends React.Component {
 					})}
 				</div>
 				<Container>
-					<ContractData contractName="Fin4Main" method="getChildren" callback={showBalanceByActionType} />
+					<ContractData
+						contractName="Fin4Main"
+						method="getChildrenWhereUserHasNonzeroBalance"
+						methodArgs={[currentAccount]}
+						callback={showBalanceByActionType}
+					/>
 				</Container>
 				<div>
 					{this.state.donationOffers.map(({ data }, index) => {
@@ -125,11 +132,7 @@ class More extends React.Component {
 					<OfferCreation offerType="spendingOffers" toggleModal={this.toggleOfferModal.bind(this)} />
 				</Modal>
 
-				<ContractData
-					contractName="Fin4Main"
-					method="getAllTokenWithBalance"
-					callback={this.setTokenAddressWithBalance}
-				/>
+				{this.setTokenAddressWithBalance()}
 
 				<Fab color="primary" aria-label="Add" onClick={this.toggleDonationModal}>
 					<AddIcon />

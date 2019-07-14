@@ -67,7 +67,7 @@ class TypeCreation extends Component {
 								paramValues: 'paramValues',
 								paramValuesIndices: 'paramValuesIndices'
 							}}
-							helperModalTriggers={[, , this.toggleModal]}
+							helperModalTriggers={[null, null, this.toggleModal]}
 						/>
 					</Box>
 					<Modal isOpen={this.state.isModalOpen} handleClose={this.toggleModal} title="Proof Types">

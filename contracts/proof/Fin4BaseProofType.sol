@@ -22,7 +22,7 @@ contract Fin4BaseProofType is utils {
   }
 
   function _Fin4MessagesAddr() public view returns(address) {
-    return Fin4MainStrut(Fin4Main).getFin4Messages();
+    return Fin4MainStrut(Fin4Main).getFin4MessagesAddress();
   }
 
   function getName() public view returns(string memory) {
