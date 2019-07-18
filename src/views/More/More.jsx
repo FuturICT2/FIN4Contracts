@@ -56,7 +56,7 @@ class More extends React.Component {
 				const offersResult = res.data.filter(offer =>
 					this.state.tokenAddress.includes(offer.data.offerData.tokenAddress)
 				);
-				this.setState({ [offers]: offersResult });
+				this.setState({ [offers]: res.data }); // TODO use offersResult once this.state.tokenAddress is properly filled again
 			});
 		});
 	}
