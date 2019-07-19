@@ -17,7 +17,7 @@ YouTube Image Film:
 
 ## Setup
 
-#### Install `yarn`, `truffle`, `git`, `make`, `docker`, and `docker compose`
+Install `yarn`, `truffle`, `git`, `make`, `docker`, and `docker compose`
 
 ```sh
 # yarn
@@ -25,8 +25,10 @@ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get update && sudo apt-get install yarn
 
-# truffle
+# npm
 sudo apt install npm
+
+# truffle
 sudo npm install -g truffle
 sudo npm install -g ganache-cli
 ```
@@ -50,9 +52,10 @@ yarn install # try 'npm install' if yarn doesn't work
 1. `truffle compile`
 2. `ganache-cli --port=7545 --allowUnlimitedContractSize`
 3. `truffle migrate` to place the smart contract on the local blockchain
-4. install the [Metamask](https://metamask.io/) browser extension, paste `MNEMONIC` from Ganache into the `seed` input and `http://127.0.0.1:7545` into `custom RPC` input
+4. install the [MetaMask](https://metamask.io/) browser extension, paste the `MNEMONIC` from Ganache into the `seed` input and `http://127.0.0.1:7545` into `custom RPC` input
 
-#### Set up BigchainDB network
+#### Start a local BigchainDB node
+Used for offers on the marketplace
 
 1. `git clone https://github.com/bigchaindb/bigchaindb.git`
 2. `cd bigchaindb`
@@ -62,7 +65,3 @@ yarn install # try 'npm install' if yarn doesn't work
 ```sh
 yarn start
 ```
-
-[//]: <> (
-Via the gear-icon in Ganache, *Add Project* and select the `truffle-config.js` to add this project and therewith be able to see the values in the smart contract. Click *Save and Restart* top right. This might throw an error on Ganache - if that happens it doesn't seem possible to see the smart contract via Ganache unfortunately. TODO: fix this?
-)
