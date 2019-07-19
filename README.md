@@ -28,9 +28,7 @@ sudo apt-get update && sudo apt-get install yarn
 # truffle
 sudo apt install npm
 sudo npm install -g truffle
-
-# this only if you get permission-errors regarding truffle
-~/.config$ sudo chmod -R 777 truffle/
+sudo npm install -g ganache-cli
 ```
 
 #### For testnet-deployment 
