@@ -44,7 +44,7 @@ Add and fill this file: `src/config/ethereum-keys.json`
 
 #### Install dependencies
 ```sh
-yarn install # try 'npm install' if yarn doesn't work
+npm install # takes a while
 ```
 
 #### Compile and migrate the smart contracts
@@ -63,5 +63,5 @@ Used for offers on the marketplace
 
 ## Start the react app
 ```sh
-yarn start
+npm start
 ```
