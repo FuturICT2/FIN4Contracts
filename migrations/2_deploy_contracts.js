@@ -10,6 +10,7 @@ const contracts = [
 	artifacts.require('Picture'),
 	artifacts.require('Location')
 ];
+var path = require('path');
 
 module.exports = async function(deployer) {
 	// via https://ethereum.stackexchange.com/a/30579
@@ -19,6 +20,14 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4Messages);
 
 	const Fin4MainInstance = await Fin4Main.deployed();
+
+	// write Fin4Main address to src/config/Fin4MainAddress.js
+	let data = "const Fin4MainAddress = '" + Fin4MainInstance.address + "';\n" + 'export { Fin4MainAddress };\n';
+	const fs = require('fs');
+	fs.writeFile(path.join(__dirname, '../src/config/Fin4MainAddress.js'), data, err => {
+		if (err) throw 'Error writing file: ' + err;
+	});
+
 	const Fin4MessagesInstance = await Fin4Messages.deployed();
 	await Fin4MainInstance.setFin4MessagesAddress(Fin4MessagesInstance.address);
 
