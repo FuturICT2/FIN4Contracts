@@ -31,11 +31,9 @@ const translateType = type => {
 class ContractForm extends Component {
 	constructor(props, context) {
 		super(props);
-		this.context = context;
+		this.drizzle = context.drizzle;
 
 		this.newValue = null;
-		this.contracts = this.context.drizzle.contracts;
-		this.utils = this.context.drizzle.web3.utils;
 
 		this.contractAddress = this.props.contractAddress;
 		this.contractName = this.props.contractName;
@@ -124,7 +122,7 @@ class ContractForm extends Component {
 			}
 
 			if (input.type === 'bytes32') {
-				return this.utils.toHex(this.state[input.name]);
+				return this.drizzle.web3.utils.toHex(this.state[input.name]);
 			}
 
 			if (this.props.specialFields && this.props.specialFields[input.name]) {
@@ -148,10 +146,10 @@ class ContractForm extends Component {
 		return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(...convertedInputs);
 		*/
 
-		var currentAccount = this.context.drizzle.web3.currentProvider.selectedAddress;
+		var currentAccount = this.drizzle.web3.currentProvider.selectedAddress;
 		var method = this.props.method;
 
-		getContract(this.context.drizzle, this.contractAddress, this.contractName)
+		getContract(this.drizzle, this.contractAddress, this.contractName)
 			.then(function(instance) {
 				return instance[method](...convertedInputs, {
 					from: currentAccount
