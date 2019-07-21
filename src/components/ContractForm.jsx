@@ -244,7 +244,7 @@ class ContractForm extends Component {
 		var value = Number(event.target.value);
 		if (name === 'latitude' || name === 'longitude') {
 			var multiplier = 10000000;
-			value *= Math.round(multiplier);
+			value = Math.round(value * multiplier);
 		}
 		proofTypeObj.paramValues[name] = value;
 	};
