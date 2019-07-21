@@ -1,4 +1,4 @@
-// heavily adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractData.js
+// TODO make this class obsolete: replace usage in More and Card
 
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
