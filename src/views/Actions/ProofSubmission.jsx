@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import colors from '../../config/colors-config';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../components/ContractData';
+import { getContractData } from '../../components/Contractor';
 import ipfs from '../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
 

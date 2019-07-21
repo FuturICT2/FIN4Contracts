@@ -3,7 +3,7 @@ import Currency from './Currency';
 import { Select, MenuItem, InputLabel } from '@material-ui/core';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from './ContractData';
+import { getContractData } from './Contractor';
 
 class DropdownActionType extends Component {
 	constructor(props, context) {

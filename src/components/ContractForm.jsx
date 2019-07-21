@@ -13,7 +13,7 @@ import OpenIcon from '@material-ui/icons/OpenInNew';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { getContract } from '../utils/Contractor.jsx';
+import { getContract } from './Contractor.jsx';
 
 const translateType = type => {
 	switch (true) {

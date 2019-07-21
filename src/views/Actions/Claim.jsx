@@ -4,7 +4,7 @@ import Box from '../../components/Box';
 import Currency from '../../components/Currency';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../components/ContractData';
+import { getContractData } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class Claim extends Component {
