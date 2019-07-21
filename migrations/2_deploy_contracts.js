@@ -24,7 +24,7 @@ module.exports = async function(deployer) {
 	// write Fin4Main address to src/config/Fin4MainAddress.js
 	let data = "const Fin4MainAddress = '" + Fin4MainInstance.address + "';\n" + 'export { Fin4MainAddress };\n';
 	const fs = require('fs');
-	fs.writeFile(path.join(__dirname, '../src/config/Fin4MainAddress.js'), data, err => {
+	fs.writeFile(path.join(__dirname, '../src/config/DeployedAddresses.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
 

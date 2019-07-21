@@ -1,4 +1,5 @@
-// heavily adapted from https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
+// original was https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
+// much changed since then :)
 
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';

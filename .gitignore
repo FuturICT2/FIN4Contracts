@@ -2,7 +2,7 @@
 src/build/
 .idea/
 src/config/ethereum-keys.json
-src/config/Fin4MainAddress.js
+src/config/DeployedAddresses.js
 
 package-lock.json
 
