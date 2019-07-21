@@ -38,12 +38,11 @@ class ProofSubmission extends Component {
 						'getParameterizedInfo',
 						[this.props.tokenAddress],
 						context.drizzle
-					).then(({ 0: name, 1: parameterizedDescription, 2: submitProofMethodArgsCount, 3: paramValues }) => {
+					).then(({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
 						return {
 							address: address,
 							name: name,
 							description: parameterizedDescription,
-							submitProofMethodArgsCount: submitProofMethodArgsCount,
 							paramValues: paramValues,
 							isApproved: proofTypeStatusesObj[address].isApproved
 						};
@@ -138,10 +137,6 @@ class ProofSubmission extends Component {
 									contractAddress={proofObj.address}
 									contractName={proofObj.name}
 									method="submitProof"
-									// submitProof() occurs multiple times with different args in ProofTypes that inherit from each other.
-									// ContractForm would just take the first one in the abi that matches the method-name. Thats why another
-									// identifier is necessary to pick the right method. Probably by specific types would be even better.
-									methodArgsCount={proofObj.submitProofMethodArgsCount}
 									fixArgs={{
 										tokenAdrToReceiveProof: this.props.tokenAddress,
 										claimId: this.props.claimId + ''

@@ -28,11 +28,6 @@ contract Picture is SpecificAddress {
   }
 
   // @Override
-  function getSubmitProofMethodArgsCount() public view returns(uint) {
-    return 4;
-  }
-
-  // @Override
   function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
     return "";
   }

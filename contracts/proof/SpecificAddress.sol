@@ -42,11 +42,6 @@ contract SpecificAddress is Fin4BaseProofType {
   }
 
   // @Override
-  function getSubmitProofMethodArgsCount() public view returns(uint) {
-    return 3;
-  }
-
-  // @Override
   function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
     return "";
   }

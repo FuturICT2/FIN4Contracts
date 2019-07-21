@@ -30,11 +30,6 @@ contract Location is Fin4BaseProofType {
     }
 
     // @Override
-    function getSubmitProofMethodArgsCount() public view returns(uint) {
-      return 5;
-    }
-
-    // @Override
     function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
       return "uint:latitude:gps,uint:longitude:gps,uint:maxDistance:m";
     }

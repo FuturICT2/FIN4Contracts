@@ -19,11 +19,6 @@ contract ActionTypeCreator is SpecificAddress {
   }
 
   // @Override
-  function getSubmitProofMethodArgsCount() public view returns(uint) {
-    return 2;
-  }
-
-  // @Override
   function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
     return "";
   }
