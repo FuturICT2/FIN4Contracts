@@ -12,7 +12,7 @@ contract Location is Fin4BaseProofType {
       messageType = MessageType.INFO;
     }
 
-    function submitProof(address tokenAdrToReceiveProof, uint claimId,
+    function submitProof_Location(address tokenAdrToReceiveProof, uint claimId,
       uint latitude, uint longitude, uint distanceToLocation) public returns(bool) {
       if (locationIsWithinMaxDistToSpecifiedLocation(tokenAdrToReceiveProof, distanceToLocation)) {
         _sendApproval(tokenAdrToReceiveProof, claimId);

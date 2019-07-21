@@ -29,7 +29,7 @@ contract SpecificAddress is Fin4BaseProofType {
   // this assumes only one pending approval per address, TODO value must be an array
   mapping (address => PendingApproval) public pendingApprovals;
 
-  function submitProof(address tokenAdrToReceiveProof, uint claimId, address approver) public returns(bool) {
+  function submitProof_SpecificAddress(address tokenAdrToReceiveProof, uint claimId, address approver) public returns(bool) {
     PendingApproval storage pa = pendingApprovals[approver];
     pa.tokenAdrToReceiveProof = tokenAdrToReceiveProof;
     pa.claimIdOnTokenToReceiveProof = claimId;

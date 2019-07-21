@@ -14,8 +14,8 @@ contract ActionTypeCreator is SpecificAddress {
     description = "The action type creator has to approve.";
   }
 
-  function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
-    submitProof(tokenAdrToReceiveProof, claimId, getCreatorOfToken(tokenAdrToReceiveProof));
+  function submitProof_ActionTypeCreator(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
+    submitProof_SpecificAddress(tokenAdrToReceiveProof, claimId, getCreatorOfToken(tokenAdrToReceiveProof));
   }
 
   // @Override

@@ -136,7 +136,7 @@ class ProofSubmission extends Component {
 								<ContractForm
 									contractAddress={proofObj.address}
 									contractName={proofObj.name}
-									method="submitProof"
+									method={'submitProof_' + proofObj.name}
 									fixArgs={{
 										tokenAdrToReceiveProof: this.props.tokenAddress,
 										claimId: this.props.claimId + ''

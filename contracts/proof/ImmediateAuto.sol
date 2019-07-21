@@ -11,7 +11,7 @@ contract ImmediateAuto is Fin4BaseProofType {
       description = "Sends the approval immediately, no checks.";
     }
 
-    function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
+    function submitProof_ImmediateAuto(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
       _sendApproval(tokenAdrToReceiveProof, claimId);
       return true;
     }

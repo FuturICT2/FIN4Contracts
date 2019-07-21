@@ -13,7 +13,7 @@ contract MinimumInterval is Fin4BaseProofType {
       messageType = MessageType.INFO;
     }
 
-    function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
+    function submitProof_MinimumInterval(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
       if (minimumIntervalRequirementMet(tokenAdrToReceiveProof, msg.sender, claimId)) {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {

@@ -14,7 +14,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       messageType = MessageType.INFO;
     }
 
-    function submitProof(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
+    function submitProof_MaximumQuantityPerInterval(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
       if (requirementMet(tokenAdrToReceiveProof, msg.sender, claimId)) {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
