@@ -104,7 +104,7 @@ class Messages extends Component {
 											buttonLabel="approve"
 											contractAddress={msg.fulfillmentAddress}
 											// instead of passing the proofTypeName, make an extra getName() call for that?
-											contractJson={`${msg.proofTypeName}.json`}
+											contractName={msg.proofTypeName}
 											method="receiveApprovalFromSpecificAddress"
 										/>
 									</>

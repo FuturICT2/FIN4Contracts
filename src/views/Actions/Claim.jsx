@@ -5,6 +5,7 @@ import Currency from '../../components/Currency';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
+import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class Claim extends Component {
 	constructor(props, context) {
@@ -37,6 +38,7 @@ class Claim extends Component {
 			this.state.tokens.length > 0 && (
 				<Box title={'Claim an Action'}>
 					<ContractForm
+						contractAddress={Fin4MainAddress}
 						contractName="Fin4Main"
 						method="submitClaim"
 						labels={['Action type', 'Quantity', 'Date', 'Comment']}

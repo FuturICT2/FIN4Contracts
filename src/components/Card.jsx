@@ -68,6 +68,7 @@ class Fin4Card extends React.Component {
 					/>
 					<ContractForm
 						contractAddress={this.props.actionbuttonAddress}
+						contractName="Fin4Token"
 						// instead of passing the proofTypeName, make an extra getName() call for that?
 						method="transfer"
 						toggleModal={this.toggleModal.bind(this)}

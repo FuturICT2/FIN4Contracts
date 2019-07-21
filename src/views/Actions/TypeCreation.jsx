@@ -7,6 +7,7 @@ import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/ContractData';
+import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class TypeCreation extends Component {
 	constructor(props, context) {
@@ -59,6 +60,7 @@ class TypeCreation extends Component {
 				<>
 					<Box title="Create a New Action Type">
 						<ContractForm
+							contractAddress={Fin4MainAddress}
 							contractName="Fin4Main"
 							method="createNewToken"
 							multiSelectOptions={this.state.proofTypes}

@@ -136,7 +136,7 @@ class ProofSubmission extends Component {
 							{!proofObj.isApproved && (
 								<ContractForm
 									contractAddress={proofObj.address}
-									contractJson={proofObj.name + '.json'}
+									contractName={proofObj.name}
 									method="submitProof"
 									// submitProof() occurs multiple times with different args in ProofTypes that inherit from each other.
 									// ContractForm would just take the first one in the abi that matches the method-name. Thats why another

@@ -13,7 +13,7 @@ import OpenIcon from '@material-ui/icons/OpenInNew';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import Web3 from 'web3';
+import { getContract } from '../utils/Contractor.jsx';
 
 const translateType = type => {
 	switch (true) {
@@ -33,56 +33,15 @@ class ContractForm extends Component {
 		super(props);
 		this.context = context;
 
-		this.state = {};
-		this.inputs = [];
 		this.newValue = null;
 		this.contracts = this.context.drizzle.contracts;
 		this.utils = this.context.drizzle.web3.utils;
 
-		if (this.props.contractAddress) {
-			const web3 = new Web3(window.web3.currentProvider);
-
-			var contractJson = 'Fin4Token.json';
-			if (this.props.contractJson) {
-				contractJson = this.props.contractJson;
-			}
-
-			var tokenJson = require('../build/contracts/' + contractJson);
-
-			// needs time and has no callback -> timout below
-			this.context.drizzle.addContract({
-				contractName: this.props.contractAddress,
-				web3Contract: new web3.eth.Contract(tokenJson.abi, this.props.contractAddress)
-			});
-
-			this.contractIdentifier = this.props.contractAddress;
-		} else {
-			this.contractIdentifier = this.props.contractName;
-		}
-
-		// conditional timout if addContract was called above
-		var setDataKey = setInterval(() => {
-			try {
-				if (this.props.contractAddress) {
-					var self = this;
-					new Web3(window.web3.currentProvider).eth.getAccounts((error, result) => {
-						if (error) console.log("Couldn't get accounts");
-						self.contracts[self.contractIdentifier].options.from = result[0];
-						this.initState(self);
-					});
-				} else {
-					this.initState(this);
-				}
-				clearInterval(setDataKey);
-			} catch (e) {}
-		}, 10);
-	}
-
-	initState = self => {
-		// Get the contract ABI
-		const abi = self.contracts[self.contractIdentifier].abi;
+		this.contractAddress = this.props.contractAddress;
+		this.contractName = this.props.contractName;
 
 		this.inputs = [];
+
 		var initialState = {
 			isModalOpen: false,
 			newValue: null,
@@ -90,24 +49,25 @@ class ContractForm extends Component {
 			requiredProofTypes: []
 		};
 
-		// Iterate over abi for correct function.
+		const abi = require('../build/contracts/' + this.contractName).abi;
+
 		for (var i = 0; i < abi.length; i++) {
-			if (abi[i].name === self.props.method) {
-				if (self.props.methodArgsCount && abi[i].inputs.length !== Number(self.props.methodArgsCount)) {
+			if (abi[i].name === this.props.method) {
+				if (this.props.methodArgsCount && abi[i].inputs.length !== Number(this.props.methodArgsCount)) {
 					continue;
 				}
 
-				self.inputs = abi[i].inputs;
-				for (var j = 0; j < self.inputs.length; j++) {
+				this.inputs = abi[i].inputs;
+				for (var j = 0; j < this.inputs.length; j++) {
 					// set default date to today for date inputs
-					initialState[self.inputs[j].name] = self.inputs[j].name === 'date' ? moment().valueOf() : '';
+					initialState[this.inputs[j].name] = this.inputs[j].name === 'date' ? moment().valueOf() : '';
 				}
 				break;
 			}
 		}
 
-		self.setState(initialState);
-	};
+		this.state = initialState;
+	}
 
 	handleSubmit = event => {
 		if (this.props.toggleModal) {
@@ -182,16 +142,31 @@ class ContractForm extends Component {
 			return this.state[input.name];
 		});
 
-		// console.log(convertedInputs);
-
+		/*
 		if (this.props.sendArgs) {
 			return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(
 				...convertedInputs,
 				this.props.sendArgs
 			);
 		}
-
 		return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(...convertedInputs);
+		*/
+
+		var currentAccount = this.context.drizzle.web3.currentProvider.selectedAddress;
+		var method = this.props.method;
+
+		getContract(this.context.drizzle, this.contractAddress, this.contractName)
+			.then(function(instance) {
+				return instance[method](...convertedInputs, {
+					from: currentAccount
+				});
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			})
+			.catch(function(err) {
+				console.log('Error: ', err.message);
+			});
 	};
 
 	handleSingleSelectInputChange = event => {
