@@ -65,7 +65,7 @@ class Fin4Card extends React.Component {
 						method="transfer"
 						toggleModal={this.toggleModal.bind(this)}
 						fixArgs={{
-							recipient: this.props.recepientAddress
+							recipient: this.props.recipientAddress
 						}}
 					/>
 				</Modal>

@@ -111,7 +111,7 @@ class More extends React.Component {
 									readMore={data.offerData.offerUrl}
 									actionButtonText="redeem now"
 									tokenInfo={this.state.tokenInfosAndBalances[data.offerData.tokenAddress]}
-									recepientAddress={data.offerData.receiverAddress}
+									recipientAddress={data.offerData.receiverAddress}
 									amount={data.offerData.quantity}
 								/>
 							);
@@ -147,7 +147,7 @@ class More extends React.Component {
 									readMore={data.offerData.offerUrl}
 									actionButtonText="donate"
 									tokenInfo={this.state.tokenInfosAndBalances[data.offerData.tokenAddress]}
-									recepientAddress={data.offerData.receiverAddress}
+									recipientAddress={data.offerData.receiverAddress}
 									amount={data.offerData.quantity}
 								/>
 							);
