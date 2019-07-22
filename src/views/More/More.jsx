@@ -24,7 +24,7 @@ class More extends React.Component {
 			isOfferModalOpen: false,
 			isDonationModalOpen: false,
 			tokenAddress: [],
-			balances: []
+			tokenInfosAndBalances: []
 		};
 		{
 			this.getOfferData();
@@ -49,7 +49,7 @@ class More extends React.Component {
 						context.drizzle
 					).then(({ 0: name, 1: symbol, 2: balance }) => {
 						return {
-							// address: address,
+							address: address,
 							name: name,
 							symbol: symbol,
 							balance: balance
@@ -59,7 +59,7 @@ class More extends React.Component {
 			})
 			.then(data => Promise.all(data))
 			.then(data => {
-				this.setState({ balances: data });
+				this.setState({ tokenInfosAndBalances: data });
 			});
 	}
 
@@ -117,8 +117,17 @@ class More extends React.Component {
 					<Container>
 						<Box title="My Action Tokens">
 							<Table headers={['Name', 'Symbol', 'Balance']}>
-								{this.state.balances.map((entry, index) => {
-									return <TableRow key={index} data={entry} />;
+								{this.state.tokenInfosAndBalances.map((entry, index) => {
+									return (
+										<TableRow
+											key={index}
+											data={{
+												name: entry.name,
+												symbol: entry.symbol,
+												balance: entry.balance
+											}}
+										/>
+									);
 								})}
 							</Table>
 						</Box>
