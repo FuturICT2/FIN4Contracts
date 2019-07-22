@@ -3,7 +3,6 @@ import { Typography, Button, Card, CardActionArea, CardActions, CardContent, Car
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import ContractForm from '../components/ContractForm';
-import ContractData from './ContractData';
 import Currency from './Currency';
 
 const CardStyle = styled(Card)`
@@ -58,16 +57,9 @@ class Fin4Card extends React.Component {
 					handleClose={this.toggleModal}
 					title="Please Enter The Amount"
 					width="500px">
-					Token:{' '}
-					<ContractData
-						contractAddress={this.props.actionbuttonAddress}
-						method="getInfo"
-						callback={({ 0: name, 1: symbol }) => {
-							return <Currency symbol={symbol} name={name} />;
-						}}
-					/>
+					Token: <Currency symbol={this.props.tokenInfo.symbol} name={this.props.tokenInfo.name} />
 					<ContractForm
-						contractAddress={this.props.actionbuttonAddress}
+						contractAddress={this.props.tokenInfo.address}
 						contractName="Fin4Token"
 						// instead of passing the proofTypeName, make an extra getName() call for that?
 						method="transfer"

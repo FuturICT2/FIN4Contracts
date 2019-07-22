@@ -83,6 +83,9 @@ class More extends React.Component {
 	};
 
 	render() {
+		if (this.state.tokenInfosAndBalances.length < 1) {
+			return <center>Loading...</center>;
+		}
 		return (
 			<Wrapper>
 				<Fab color="primary" aria-label="Add" onClick={this.toggleOfferModal}>
@@ -107,7 +110,7 @@ class More extends React.Component {
 									description={data.offerData.description}
 									readMore={data.offerData.offerUrl}
 									actionButtonText="redeem now"
-									actionbuttonAddress={data.offerData.tokenAddress}
+									tokenInfo={this.state.tokenInfosAndBalances[data.offerData.tokenAddress]}
 									recepientAddress={data.offerData.receiverAddress}
 									amount={data.offerData.quantity}
 								/>
@@ -143,7 +146,7 @@ class More extends React.Component {
 									description={data.offerData.description}
 									readMore={data.offerData.offerUrl}
 									actionButtonText="donate"
-									actionbuttonAddress={data.offerData.tokenAddress}
+									tokenInfo={this.state.tokenInfosAndBalances[data.offerData.tokenAddress]}
 									recepientAddress={data.offerData.receiverAddress}
 									amount={data.offerData.quantity}
 								/>
