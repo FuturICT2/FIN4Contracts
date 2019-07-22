@@ -92,9 +92,6 @@ class More extends React.Component {
 	};
 
 	render() {
-		if (this.state.tokenInfosAndBalances.length < 1) {
-			return <center>Loading...</center>;
-		}
 		return (
 			<Wrapper>
 				<Fab color="primary" aria-label="Add" onClick={this.toggleOfferModal}>
@@ -110,57 +107,63 @@ class More extends React.Component {
 
 				<Wrapper>
 					<div>
-						{this.state.spendingOffers.map(({ data }, index) => {
-							return (
-								<Card
-									key={index}
-									title={data.offerData.name}
-									imagePath={data.offerData.imagePath}
-									description={data.offerData.description}
-									readMore={data.offerData.offerUrl}
-									actionButtonText="redeem now"
-									tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
-									recipientAddress={data.offerData.receiverAddress}
-									amount={data.offerData.quantity}
-								/>
-							);
-						})}
+						{this.state.tokenInfosAndBalances.length > 0 &&
+							this.state.spendingOffers.map(({ data }, index) => {
+								return (
+									<Card
+										key={index}
+										title={data.offerData.name}
+										imagePath={data.offerData.imagePath}
+										description={data.offerData.description}
+										readMore={data.offerData.offerUrl}
+										actionButtonText="redeem now"
+										tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
+										recipientAddress={data.offerData.receiverAddress}
+										amount={data.offerData.quantity}
+									/>
+								);
+							})}
 					</div>
 					<Container>
 						<Box title="My Action Tokens">
-							<Table headers={['Name', 'Symbol', 'Balance']}>
-								{this.state.tokenInfosAndBalances.map((entry, index) => {
-									return (
-										<TableRow
-											key={index}
-											data={{
-												name: entry.name,
-												symbol: entry.symbol,
-												balance: entry.balance
-											}}
-										/>
-									);
-								})}
-							</Table>
+							{this.state.tokenInfosAndBalances.length > 0 ? (
+								<Table headers={['Name', 'Symbol', 'Balance']}>
+									{this.state.tokenInfosAndBalances.map((entry, index) => {
+										return (
+											<TableRow
+												key={index}
+												data={{
+													name: entry.name,
+													symbol: entry.symbol,
+													balance: entry.balance
+												}}
+											/>
+										);
+									})}
+								</Table>
+							) : (
+								<center>You have no balance on any token yet.</center>
+							)}
 						</Box>
 					</Container>
 					<div>
-						{this.state.donationOffers.map(({ data }, index) => {
-							//console.log(data.offerData)
-							return (
-								<Card
-									key={index}
-									title={data.offerData.name}
-									imagePath={data.offerData.imagePath}
-									description={data.offerData.description}
-									readMore={data.offerData.offerUrl}
-									actionButtonText="donate"
-									tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
-									recipientAddress={data.offerData.receiverAddress}
-									amount={data.offerData.quantity}
-								/>
-							);
-						})}
+						{this.state.tokenInfosAndBalances.length > 0 &&
+							this.state.donationOffers.map(({ data }, index) => {
+								//console.log(data.offerData)
+								return (
+									<Card
+										key={index}
+										title={data.offerData.name}
+										imagePath={data.offerData.imagePath}
+										description={data.offerData.description}
+										readMore={data.offerData.offerUrl}
+										actionButtonText="donate"
+										tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
+										recipientAddress={data.offerData.receiverAddress}
+										amount={data.offerData.quantity}
+									/>
+								);
+							})}
 					</div>
 				</Wrapper>
 
