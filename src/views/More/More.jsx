@@ -4,7 +4,6 @@ import Card from '../../components/Card';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-import ContractData from '../../components/ContractData';
 import styled from 'styled-components';
 import axios from 'axios';
 import Fab from '@material-ui/core/Fab';
@@ -12,42 +11,56 @@ import AddIcon from '@material-ui/icons/Add';
 import OfferCreation from './OfferCreation';
 import Modal from '../../components/Modal';
 import bigchainConfig from '../../config/bigchain-config';
-
-const showBalanceByActionType = data => {
-	var currentAccount = window.web3.currentProvider.selectedAddress;
-	return (
-		<Box title="My Action Tokens">
-			<Table headers={['Name', 'Symbol', 'Balance']}>
-				{data &&
-					data.map((address, index) => {
-						return (
-							<ContractData
-								key={index}
-								contractAddress={address}
-								method="getInfoAndBalance"
-								methodArgs={[currentAccount]}
-								callback={data => <TableRow data={data} />}
-							/>
-						);
-					})}
-			</Table>
-		</Box>
-	);
-};
+import { drizzleConnect } from 'drizzle-react';
+import PropTypes from 'prop-types';
+import { getContractData } from '../../components/Contractor';
 
 class More extends React.Component {
-	constructor(props) {
+	constructor(props, context) {
 		super(props);
 		this.state = {
 			spendingOffers: [],
 			donationOffers: [],
 			isOfferModalOpen: false,
 			isDonationModalOpen: false,
-			tokenAddress: []
+			tokenAddress: [],
+			balances: []
 		};
 		{
 			this.getOfferData();
 		}
+
+		var currentAccount = window.web3.currentProvider.selectedAddress;
+
+		getContractData(
+			'Fin4Main',
+			'Fin4Main.json',
+			'getChildrenWhereUserHasNonzeroBalance',
+			[currentAccount],
+			context.drizzle
+		)
+			.then(tokenAddresses => {
+				return tokenAddresses.map((address, index) => {
+					return getContractData(
+						address,
+						'Fin4Token.json',
+						'getInfoAndBalance',
+						[currentAccount],
+						context.drizzle
+					).then(({ 0: name, 1: symbol, 2: balance }) => {
+						return {
+							// address: address,
+							name: name,
+							symbol: symbol,
+							balance: balance
+						};
+					});
+				});
+			})
+			.then(data => Promise.all(data))
+			.then(data => {
+				this.setState({ balances: data });
+			});
 	}
 
 	getOfferData() {
@@ -70,8 +83,6 @@ class More extends React.Component {
 	};
 
 	render() {
-		var currentAccount = window.web3.currentProvider.selectedAddress;
-
 		return (
 			<Wrapper>
 				<Fab color="primary" aria-label="Add" onClick={this.toggleOfferModal}>
@@ -104,12 +115,13 @@ class More extends React.Component {
 						})}
 					</div>
 					<Container>
-						<ContractData
-							contractName="Fin4Main"
-							method="getChildrenWhereUserHasNonzeroBalance"
-							methodArgs={[currentAccount]}
-							callback={showBalanceByActionType}
-						/>
+						<Box title="My Action Tokens">
+							<Table headers={['Name', 'Symbol', 'Balance']}>
+								{this.state.balances.map((entry, index) => {
+									return <TableRow key={index} data={entry} />;
+								})}
+							</Table>
+						</Box>
 					</Container>
 					<div>
 						{this.state.donationOffers.map(({ data }, index) => {
@@ -152,4 +164,14 @@ const Wrapper = styled.div`
 	align-items: center;
 `;
 
-export default More;
+More.contextTypes = {
+	drizzle: PropTypes.object
+};
+
+const mapStateToProps = state => {
+	return {
+		contracts: state.contracts
+	};
+};
+
+export default drizzleConnect(More, mapStateToProps);
