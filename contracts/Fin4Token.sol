@@ -1,8 +1,8 @@
 pragma solidity ^0.5.0;
 
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
 
-import 'contracts/tokens/ERC20Mintable.sol';
 import 'contracts/Fin4TokenBase.sol';
 
 contract Fin4Token is Fin4TokenBase, ERC20Detailed, ERC20Mintable {
