@@ -82,6 +82,15 @@ class More extends React.Component {
 		this.setState({ isDonationModalOpen: !this.state.isDonationModalOpen });
 	};
 
+	getTokenInfoByAddress = tokenAddress => {
+		var arr = this.state.tokenInfosAndBalances;
+		for (var i = 0; i < arr.length; i++) {
+			if (arr[i].address === tokenAddress) {
+				return arr[i];
+			}
+		}
+	};
+
 	render() {
 		if (this.state.tokenInfosAndBalances.length < 1) {
 			return <center>Loading...</center>;
@@ -110,7 +119,7 @@ class More extends React.Component {
 									description={data.offerData.description}
 									readMore={data.offerData.offerUrl}
 									actionButtonText="redeem now"
-									tokenInfo={this.state.tokenInfosAndBalances[data.offerData.tokenAddress]}
+									tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
 									recipientAddress={data.offerData.receiverAddress}
 									amount={data.offerData.quantity}
 								/>
@@ -146,7 +155,7 @@ class More extends React.Component {
 									description={data.offerData.description}
 									readMore={data.offerData.offerUrl}
 									actionButtonText="donate"
-									tokenInfo={this.state.tokenInfosAndBalances[data.offerData.tokenAddress]}
+									tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
 									recipientAddress={data.offerData.receiverAddress}
 									amount={data.offerData.quantity}
 								/>
