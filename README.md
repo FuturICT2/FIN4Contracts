@@ -33,7 +33,10 @@ sudo npm install -g truffle
 sudo npm install -g ganache-cli
 ```
 
-#### For testnet-deployment 
+BigchainDB requires `docker` and `docker-compose`. 
+Follow the installation instructions for Docker [here](https://docs.docker.com/engine/installation/) (don't forget the Post-installation steps for Linux) and for Docker Compose [here](https://docs.docker.com/compose/install/).
+
+### For testnet-deployment 
 Add and fill this file: `src/config/ethereum-keys.json`
 ```json
 {
@@ -42,26 +45,26 @@ Add and fill this file: `src/config/ethereum-keys.json`
 }
 ```
 
-#### Install dependencies
+### Install dependencies
 ```sh
 npm install # takes a while
 ```
 
-#### Compile and migrate the smart contracts
+### Compile and migrate the smart contracts
 
 1. `truffle compile`
 2. `ganache-cli --port=7545 --allowUnlimitedContractSize`
 3. `truffle migrate` to place the smart contract on the local blockchain
 4. install the [MetaMask](https://metamask.io/) browser extension, paste the `MNEMONIC` from Ganache into the `seed` input and `http://127.0.0.1:7545` into `custom RPC` input
 
-#### Start a local BigchainDB node
+### Start a local BigchainDB node
 Used for offers on the marketplace
 
 1. `git clone https://github.com/bigchaindb/bigchaindb.git`
 2. `cd bigchaindb`
 3. `make run`
 
-## Start the react app
+### Start the react app
 ```sh
 npm start
 ```
