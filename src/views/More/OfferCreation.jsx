@@ -31,7 +31,8 @@ class OfferCreation extends Component {
 		this.setState({ [event.target.name]: event.target.value });
 	};
 
-	onclickSubmit = () => {
+	handleSubmit = event => {
+		event.preventDefault();
 		this.props.toggleModal();
 		new Database().saveOfferDetails(
 			this.state.name,
@@ -62,7 +63,7 @@ class OfferCreation extends Component {
 							/>
 						);
 					})}
-					<Button icon={AddIcon} onClick={this.onclickSubmit} center>
+					<Button icon={AddIcon} onClick={this.handleSubmit} center>
 						Submit
 					</Button>
 				</form>
