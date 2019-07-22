@@ -37,17 +37,16 @@ contract Fin4Main {
   }
 
   function getChildrenWhereUserHasNonzeroBalance(address msg_sender_tmp) public view returns(address[] memory) {
-    address[] memory tokens = actionsWhereUserHasClaims[msg_sender_tmp];
     uint count = 0;
-    for (uint i = 0; i < tokens.length; i ++) {
-      if (getBalance(msg_sender_tmp, tokens[i]) > 0) {
+    for (uint i = 0; i < children.length; i ++) {
+      if (getBalance(msg_sender_tmp, children[i]) > 0) {
         count ++;
       }
     }
     address[] memory nonzeroBalanceTokens = new address[](count);
     for (uint i = 0; i < count; i ++) {
-      if (getBalance(msg_sender_tmp, tokens[i]) > 0) {
-        nonzeroBalanceTokens[i] = tokens[i];
+      if (getBalance(msg_sender_tmp, children[i]) > 0) {
+        nonzeroBalanceTokens[i] = children[i];
       }
     }
     return nonzeroBalanceTokens;
