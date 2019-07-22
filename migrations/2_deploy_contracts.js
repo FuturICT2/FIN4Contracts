@@ -10,6 +10,9 @@ const contracts = [
 	artifacts.require('Picture'),
 	artifacts.require('Location')
 ];
+const Registry = artifacts.require('tcr/Registry');
+const Parametrizer = artifacts.require('tcr/Parametrizer');
+
 var path = require('path');
 
 module.exports = async function(deployer) {
@@ -36,4 +39,7 @@ module.exports = async function(deployer) {
 	const proofTypeInstances = await Promise.all(contracts.map(contract => contract.deployed()));
 
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
+
+	await deployer.deploy(Registry);
+	await deployer.deploy(Parametrizer);
 };
