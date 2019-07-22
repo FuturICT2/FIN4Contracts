@@ -6,10 +6,10 @@ var getContractByName = function(drizzle, contractName) { // those defined in dr
 };
 */
 
-var getContract = function(drizzle, contractAddress, contractName) {
-	var contract = require('truffle-contract');
+const getContract = (drizzle, contractAddress, contractName) => {
+	const contract = require('truffle-contract');
 	const json = require('../build/contracts/' + contractName + '.json');
-	var Contractor = contract({
+	let Contractor = contract({
 		abi: json.abi
 	});
 	Contractor.setProvider(drizzle.web3.givenProvider);
