@@ -1,4 +1,6 @@
 import Web3 from 'web3';
+import Currency from './Currency';
+import React from 'react';
 
 /*
 var getContractByName = function(drizzle, contractName) { // those defined in drizzle-config.js
@@ -42,4 +44,24 @@ const getContractData = (contract, contractJson, method, methodArgs, drizzle) =>
 	});
 };
 
-export { getContractData, getContract };
+const getAllTokenTypes = drizzle => {
+	return new Promise((resolve, reject) => {
+		getContractData('Fin4Main', 'Fin4Main.json', 'getChildren', [], drizzle)
+			.then(tokens => {
+				return tokens.map(address => {
+					return getContractData(address, 'Fin4Token.json', 'getInfo', [], drizzle).then(({ 0: name, 1: symbol }) => {
+						return {
+							value: address,
+							label: <Currency symbol={symbol} name={name} />
+						};
+					});
+				});
+			})
+			.then(data => Promise.all(data))
+			.then(data => {
+				resolve(data);
+			});
+	});
+};
+
+export { getContractData, getContract, getAllTokenTypes };
