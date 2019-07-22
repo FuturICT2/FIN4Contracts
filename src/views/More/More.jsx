@@ -89,6 +89,7 @@ class More extends React.Component {
 				return arr[i];
 			}
 		}
+		return null;
 	};
 
 	render() {
@@ -107,22 +108,25 @@ class More extends React.Component {
 
 				<Wrapper>
 					<div>
-						{this.state.tokenInfosAndBalances.length > 0 &&
-							this.state.spendingOffers.map(({ data }, index) => {
-								return (
-									<Card
-										key={index}
-										title={data.offerData.name}
-										imagePath={data.offerData.imagePath}
-										description={data.offerData.description}
-										readMore={data.offerData.offerUrl}
-										actionButtonText="redeem now"
-										tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
-										recipientAddress={data.offerData.receiverAddress}
-										amount={data.offerData.quantity}
-									/>
-								);
-							})}
+						{this.state.spendingOffers.map(({ data }, index) => {
+							let tokenInfo = this.getTokenInfoByAddress(data.offerData.tokenAddress);
+							if (tokenInfo === null) {
+								return '';
+							}
+							return (
+								<Card
+									key={index}
+									title={data.offerData.name}
+									imagePath={data.offerData.imagePath}
+									description={data.offerData.description}
+									readMore={data.offerData.offerUrl}
+									actionButtonText="redeem now"
+									tokenInfo={tokenInfo}
+									recipientAddress={data.offerData.receiverAddress}
+									amount={data.offerData.quantity}
+								/>
+							);
+						})}
 					</div>
 					<Container>
 						<Box title="My Action Tokens">
@@ -149,7 +153,10 @@ class More extends React.Component {
 					<div>
 						{this.state.tokenInfosAndBalances.length > 0 &&
 							this.state.donationOffers.map(({ data }, index) => {
-								//console.log(data.offerData)
+								let tokenInfo = this.getTokenInfoByAddress(data.offerData.tokenAddress);
+								if (tokenInfo === null) {
+									return '';
+								}
 								return (
 									<Card
 										key={index}
@@ -158,7 +165,7 @@ class More extends React.Component {
 										description={data.offerData.description}
 										readMore={data.offerData.offerUrl}
 										actionButtonText="donate"
-										tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
+										tokenInfo={tokenInfo}
 										recipientAddress={data.offerData.receiverAddress}
 										amount={data.offerData.quantity}
 									/>
