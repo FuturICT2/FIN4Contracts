@@ -72,6 +72,10 @@ class Messages extends Component {
 				}));
 			});
 		});
+
+		// add a message if the Fin4Main contract could not be found on the network
+		// could happen because of the wrong address in DeployedAddresses.js and/or the wrong network in MetaMask
+		// TODO
 	}
 
 	render() {
