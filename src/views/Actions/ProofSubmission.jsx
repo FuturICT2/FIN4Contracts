@@ -130,7 +130,7 @@ class ProofSubmission extends Component {
 							<Status isApproved={proofObj.isApproved}>
 								{proofObj.isApproved
 									? `The proof "${proofObj.name}" was submitted successfully.`
-									: `Your claim requires you to fill out the following form: ${proofObj.description}.`}
+									: `Your claim requires you to fill out the following form: ${proofObj.description}`}
 							</Status>
 							{!proofObj.isApproved && (
 								<ContractForm
