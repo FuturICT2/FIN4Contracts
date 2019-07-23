@@ -1,6 +1,6 @@
 pragma solidity ^0.5.8;
 
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "../tokens/ERC20Plus.sol";
 import "./Parameterizer.sol";
 import "./PLCR/PLCRVoting.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -53,21 +53,21 @@ contract Registry {
     mapping(bytes32 => Listing) public listings;
 
     // Global Variables
-    ERC20 public token;
+    ERC20Plus public token;
     PLCRVoting public voting;
     Parameterizer public parameterizer;
     string public name;
 
     /**
     @dev Initializer. Can only be called once.
-    @param _token The address where the ERC20 token contract is deployed
+    @param _token The address where the ERC20Plus token contract is deployed
     */
     function init(address _token, address _voting, address _parameterizer, string memory _name) public {
         require(_token != address(0) && address(token) == address(0));
         require(_voting != address(0) && address(voting) == address(0));
         require(_parameterizer != address(0) && address(parameterizer) == address(0));
 
-        token = ERC20(_token);
+        token = ERC20Plus(_token);
         voting = PLCRVoting(_voting);
         parameterizer = Parameterizer(_parameterizer);
         name = _name;
@@ -81,7 +81,7 @@ contract Registry {
     @dev                Allows a user to start an application. Takes tokens from user and sets
                         apply stage end time.
     @param _listingHash The hash of a potential listing a user is applying to add to the registry
-    @param _amount      The number of ERC20 tokens a user is willing to potentially stake
+    @param _amount      The number of ERC20Plus tokens a user is willing to potentially stake
     @param _data        Extra data relevant to the application. Think IPFS hashes.
     */
     function applyToken(bytes32 _listingHash, uint _amount, string calldata _data) external {
@@ -106,7 +106,7 @@ contract Registry {
     /**
     @dev                Allows the owner of a listingHash to increase their unstaked deposit.
     @param _listingHash A listingHash msg.sender is the owner of
-    @param _amount      The number of ERC20 tokens to increase a user's unstaked deposit
+    @param _amount      The number of ERC20Plus tokens to increase a user's unstaked deposit
     */
     function deposit(bytes32 _listingHash, uint _amount) external {
         Listing storage listing = listings[_listingHash];
@@ -122,7 +122,7 @@ contract Registry {
     /**
     @dev                Allows the owner of a listingHash to decrease their unstaked deposit.
     @param _listingHash A listingHash msg.sender is the owner of.
-    @param _amount      The number of ERC20 tokens to withdraw from the unstaked deposit.
+    @param _amount      The number of ERC20Plus tokens to withdraw from the unstaked deposit.
     */
     function withdraw(bytes32 _listingHash, uint _amount) external {
         Listing storage listing = listings[_listingHash];
