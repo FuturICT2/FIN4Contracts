@@ -38,7 +38,7 @@ class Messages extends Component {
 								6: attachment
 							}) => {
 								return {
-									messageType: messageType,
+									messageType: messageType.toString(),
 									sender: sender,
 									message: message,
 									fulfillmentAddress: fulfillmentAddress,
