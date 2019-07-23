@@ -1,6 +1,6 @@
 pragma solidity ^0.5.8;
 
-import "../tokens/ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "./ParameterizerFactory.sol";
 import "./Registry.sol";
 import "./PLCR/PLCRVoting.sol";
@@ -34,8 +34,8 @@ contract RegistryFactory {
         Parameterizer parameterizer = parameterizerFactory.newParameterizerBYOToken(_token, _parameters);
         PLCRVoting plcr = parameterizer.voting();
 
-        Registry registry = Registry(proxyFactory.createProxy(canonizedRegistry, ""));
-        registry.init(_token, plcr, parameterizer, _name);
+        Registry registry = Registry(proxyFactory.createProxy(address(canonizedRegistry), ""));
+        registry.init(address(_token), address(plcr), address(parameterizer), _name);
 
         emit NewRegistry(msg.sender, _token, plcr, parameterizer, registry);
         return registry;
@@ -65,8 +65,8 @@ contract RegistryFactory {
         PLCRVoting plcr = parameterizer.voting();
 
         // Create & initialize a new Registry contract
-        Registry registry = Registry(proxyFactory.createProxy(canonizedRegistry, ""));
-        registry.init(token, plcr, parameterizer, _registryName);
+        Registry registry = Registry(proxyFactory.createProxy(address(canonizedRegistry), ""));
+        registry.init(address(token), address(plcr), address(parameterizer), _registryName);
 
         emit NewRegistry(msg.sender, token, plcr, parameterizer, registry);
         return registry;

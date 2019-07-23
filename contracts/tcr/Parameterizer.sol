@@ -1,7 +1,7 @@
 pragma solidity ^0.5.8;
 
 import "./PLCR/PLCRVoting.sol";
-import "../tokens/ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 contract Parameterizer {
@@ -156,7 +156,7 @@ contract Parameterizer {
             value: _value
         });
 
-        require(token.transferFrom(msg.sender, this, deposit)); // escrow tokens (deposit amt)
+        require(token.transferFrom(msg.sender, address(this), deposit)); // escrow tokens (deposit amt)
 
         emit _ReparameterizationProposal(_name, _value, propID, deposit, proposals[propID].appExpiry, msg.sender);
         return propID;
@@ -190,7 +190,7 @@ contract Parameterizer {
         proposals[_propID].challengeID = pollID;       // update listing to store most recent challenge
 
         //take tokens from challenger
-        require(token.transferFrom(msg.sender, this, deposit));
+        require(token.transferFrom(msg.sender, address(this), deposit));
 
         (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
 

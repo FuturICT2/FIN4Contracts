@@ -1,6 +1,6 @@
 pragma solidity ^0.5.8;
 
-import "../tokens/ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "./Parameterizer.sol";
 import "./PLCR/PLCRVoting.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -98,7 +98,7 @@ contract Registry {
         listing.unstakedDeposit = _amount;
 
         // Transfers tokens from user to Registry contract
-        require(token.transferFrom(listing.owner, this, _amount));
+        require(token.transferFrom(listing.owner, address(this), _amount));
 
         emit _Application(_listingHash, _amount, listing.applicationExpiry, _data, msg.sender);
     }
@@ -114,7 +114,7 @@ contract Registry {
         require(listing.owner == msg.sender);
 
         listing.unstakedDeposit += _amount;
-        require(token.transferFrom(msg.sender, this, _amount));
+        require(token.transferFrom(msg.sender, address(this), _amount));
 
         emit _Deposit(_listingHash, _amount, listing.unstakedDeposit, msg.sender);
     }
@@ -231,7 +231,7 @@ contract Registry {
         listing.unstakedDeposit -= minDeposit;
 
         // Takes tokens from challenger
-        require(token.transferFrom(msg.sender, this, minDeposit));
+        require(token.transferFrom(msg.sender, address(this), minDeposit));
 
         (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
 

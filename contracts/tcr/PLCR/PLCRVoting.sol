@@ -1,5 +1,5 @@
 pragma solidity ^0.5.8;
-import "../../tokens/ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "./dependencies/DLL.sol";
 import "./dependencies/AttributeStore.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -53,7 +53,7 @@ contract PLCRVoting {
     mapping(address => DLL.Data) dllMap;
     AttributeStore.Data store;
 
-    ERC20 public token;
+    IERC20 public token;
 
     /**
     @dev Initializer. Can only be called once.
@@ -62,7 +62,7 @@ contract PLCRVoting {
     function init(address _token) public {
         require(_token != address(0) && address(token) == address(0));
 
-        token = ERC20(_token);
+        token = IERC20(_token);
         pollNonce = INITIAL_POLL_NONCE;
     }
 

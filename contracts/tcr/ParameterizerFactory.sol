@@ -3,7 +3,7 @@ pragma solidity ^0.5.8;
 import "./PLCR/PLCRFactory.sol";
 import "./PLCR/PLCRVoting.sol";
 import "./Parameterizer.sol";
-import "../tokens/ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 contract ParameterizerFactory {
 
@@ -32,14 +32,14 @@ contract ParameterizerFactory {
         uint[] memory _parameters
     ) public returns (Parameterizer) {
         PLCRVoting plcr = plcrFactory.newPLCRBYOToken(_token);
-        Parameterizer parameterizer = Parameterizer(proxyFactory.createProxy(canonizedParameterizer, ""));
+        Parameterizer parameterizer = Parameterizer(proxyFactory.createProxy(address(canonizedParameterizer), ""));
 
         parameterizer.init(
-            _token,
-            plcr,
+            address(_token),
+            address(plcr),
             _parameters
         );
-        emit NewParameterizer(msg.sender, _token, plcr, parameterizer);
+        emit NewParameterizer(msg.sender, address(_token), address(plcr), parameterizer);
         return parameterizer;
     }
 
@@ -65,14 +65,14 @@ contract ParameterizerFactory {
         token.transfer(msg.sender, _supply);
 
         // Create & initialize a new Parameterizer contract
-        Parameterizer parameterizer = Parameterizer(proxyFactory.createProxy(canonizedParameterizer, ""));
+        Parameterizer parameterizer = Parameterizer(proxyFactory.createProxy(address(canonizedParameterizer), ""));
         parameterizer.init(
-            token,
-            plcr,
+            address(token),
+            address(plcr),
             _parameters
         );
 
-        emit NewParameterizer(msg.sender, token, plcr, parameterizer);
+        emit NewParameterizer(msg.sender, address(token), address(plcr), parameterizer);
         return parameterizer;
     }
 }
