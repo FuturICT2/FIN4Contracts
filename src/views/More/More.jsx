@@ -48,7 +48,7 @@ class More extends React.Component {
 								address: address,
 								name: name,
 								symbol: symbol,
-								balance: balance
+								balance: balance.toString()
 							};
 						}
 					);

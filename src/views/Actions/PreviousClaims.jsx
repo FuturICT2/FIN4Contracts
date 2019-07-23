@@ -55,8 +55,8 @@ class PreviousClaims extends Component {
 											tokenName: tokenName,
 											tokenSymbol: tokenSymbol,
 											isApproved: isApproved,
-											quantity: quantity,
-											date: date,
+											quantity: quantity.toString(),
+											date: date.toString(),
 											comment: comment
 										};
 									}
