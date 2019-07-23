@@ -1,13 +1,13 @@
 pragma solidity ^0.5.8;
 
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "./PLCRVoting.sol";
 import "./ProxyFactory.sol";
 
 contract PLCRFactory {
 
-  event newPLCR(address creator, IERC20 token, PLCRVoting plcr);
+  event newPLCR(address creator, ERC20 token, PLCRVoting plcr);
 
   ProxyFactory public proxyFactory;
   PLCRVoting public canonizedPLCR;
@@ -23,7 +23,7 @@ contract PLCRFactory {
   supplied by the user.
   @param _token an ERC20 token to be consumed by the new PLCR contract
   */
-  function newPLCRBYOToken(IERC20 _token) public returns (PLCRVoting) {
+  function newPLCRBYOToken(ERC20 _token) public returns (PLCRVoting) {
     PLCRVoting plcr = PLCRVoting(proxyFactory.createProxy(address(canonizedPLCR), ""));
     plcr.init(address(_token));
 
@@ -41,13 +41,10 @@ contract PLCRFactory {
   @param _symbol the symbol of the new ERC20 token
   */
   function newPLCRWithToken(
-    uint _supply,
-    string memory _name,
-    uint8 _decimals,
-    string memory _symbol
+    uint _supply
   ) public returns (PLCRVoting) {
     // Create a new token and give all the tokens to the PLCR creator
-    IERC20 token = new ERC20Detailed(_name, _symbol, _decimals);
+    ERC20Capped token = new ERC20Capped(_supply);
     token.transfer(msg.sender, _supply);
 
     // Create and initialize a new PLCR contract

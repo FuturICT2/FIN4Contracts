@@ -4,6 +4,8 @@ import "./PLCR/PLCRFactory.sol";
 import "./PLCR/PLCRVoting.sol";
 import "./Parameterizer.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol";
+
 
 contract ParameterizerFactory {
 
@@ -60,7 +62,7 @@ contract ParameterizerFactory {
     ) public returns (Parameterizer) {
         // Creates a new ERC20 token & transfers the supply to creator (msg.sender)
         // Deploys & initializes a new PLCRVoting contract
-        PLCRVoting plcr = plcrFactory.newPLCRWithToken(_supply, _name, _decimals, _symbol);
+        PLCRVoting plcr = plcrFactory.newPLCRWithToken(_supply);
         ERC20 token = ERC20(plcr.token());
         token.transfer(msg.sender, _supply);
 
