@@ -149,7 +149,7 @@ class ContractForm extends Component {
 		var currentAccount = this.drizzle.web3.currentProvider.selectedAddress;
 		var method = this.props.method;
 
-		getContract(this.drizzle, this.contractAddress, this.contractName)
+		getContract(this.contractAddress, this.contractName)
 			.then(function(instance) {
 				return instance[method](...convertedInputs, {
 					from: currentAccount

@@ -42,7 +42,7 @@ class More extends React.Component {
 		)
 			.then(tokenAddresses => {
 				return tokenAddresses.map((address, index) => {
-					return getContractData(address, 'Fin4Token', 'getInfoAndBalance', [currentAccount], context.drizzle).then(
+					return getContractData(address, 'Fin4Token', 'getInfoAndBalance', [currentAccount]).then(
 						({ 0: name, 1: symbol, 2: balance }) => {
 							return {
 								address: address,

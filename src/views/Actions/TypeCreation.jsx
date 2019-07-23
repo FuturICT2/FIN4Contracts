@@ -21,25 +21,21 @@ class TypeCreation extends Component {
 		getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes', [], context.drizzle)
 			.then(proofTypeAddresses => {
 				return proofTypeAddresses.map(proofTypeAddress => {
-					return getContractData(
-						Fin4MainAddress,
-						'Fin4Main',
-						'getProofTypeName',
-						[proofTypeAddress],
-						context.drizzle
-					).then(proofTypeName => {
-						return getContractData(proofTypeAddress, proofTypeName, 'getInfo', [], context.drizzle).then(
-							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
-								return {
-									value: proofTypeAddress,
-									label: name,
-									description: description,
-									paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
-									paramValues: {}
-								};
-							}
-						);
-					});
+					return getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypeName', [proofTypeAddress]).then(
+						proofTypeName => {
+							return getContractData(proofTypeAddress, proofTypeName, 'getInfo', []).then(
+								({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
+									return {
+										value: proofTypeAddress,
+										label: name,
+										description: description,
+										paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
+										paramValues: {}
+									};
+								}
+							);
+						}
+					);
 				});
 			})
 			.then(data => Promise.all(data))

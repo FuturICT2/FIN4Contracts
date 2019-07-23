@@ -28,11 +28,11 @@ class PreviousClaims extends Component {
 
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims', [currentAccount], context.drizzle)
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims', [currentAccount])
 			.then(actionTypeAddresses => {
 				// action types
 				return actionTypeAddresses.map(actionTypeAddress => {
-					return getContractData(actionTypeAddress, 'Fin4Token', 'getMyClaimIds', [currentAccount], context.drizzle)
+					return getContractData(actionTypeAddress, 'Fin4Token', 'getMyClaimIds', [currentAccount])
 						.then(({ 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
 							// claim ids per action type
 							return claimIds.map(claimId => {
@@ -46,7 +46,7 @@ class PreviousClaims extends Component {
 						})
 						.then(claims => {
 							return claims.map(({ claimId, actionTypeAddress, tokenName, tokenSymbol }) => {
-								return getContractData(actionTypeAddress, 'Fin4Token', 'getClaimInfo', [claimId], context.drizzle).then(
+								return getContractData(actionTypeAddress, 'Fin4Token', 'getClaimInfo', [claimId]).then(
 									({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
 										// claims per claim id per action type
 										return {

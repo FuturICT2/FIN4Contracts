@@ -20,51 +20,43 @@ class Messages extends Component {
 
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress', [], context.drizzle).then(
-			Fin4MessagesAddress => {
-				getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount', [currentAccount], context.drizzle)
-					.then(data => {
-						var messageCount = Number(data);
-						var messageIndices = [];
-						for (var i = 0; i < messageCount; i++) {
-							messageIndices.push(i);
-						}
-						return messageIndices.map(index => {
-							return getContractData(
-								Fin4MessagesAddress,
-								'Fin4Messages',
-								'getMyMessage',
-								[currentAccount, index],
-								context.drizzle
-							).then(
-								({
-									0: messageType,
-									1: sender,
-									2: message,
-									3: fulfillmentAddress,
-									4: proofTypeName,
-									5: hasBeenActedUpon,
-									6: attachment
-								}) => {
-									return {
-										messageType: messageType,
-										sender: sender,
-										message: message,
-										fulfillmentAddress: fulfillmentAddress,
-										proofTypeName: proofTypeName,
-										hasBeenActedUpon: hasBeenActedUpon,
-										attachment: attachment
-									};
-								}
-							);
-						});
-					})
-					.then(data => Promise.all(data))
-					.then(data => {
-						this.setState({ messages: data });
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress', []).then(Fin4MessagesAddress => {
+			getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount', [currentAccount])
+				.then(data => {
+					var messageCount = Number(data);
+					var messageIndices = [];
+					for (var i = 0; i < messageCount; i++) {
+						messageIndices.push(i);
+					}
+					return messageIndices.map(index => {
+						return getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', [currentAccount, index]).then(
+							({
+								0: messageType,
+								1: sender,
+								2: message,
+								3: fulfillmentAddress,
+								4: proofTypeName,
+								5: hasBeenActedUpon,
+								6: attachment
+							}) => {
+								return {
+									messageType: messageType,
+									sender: sender,
+									message: message,
+									fulfillmentAddress: fulfillmentAddress,
+									proofTypeName: proofTypeName,
+									hasBeenActedUpon: hasBeenActedUpon,
+									attachment: attachment
+								};
+							}
+						);
 					});
-			}
-		);
+				})
+				.then(data => Promise.all(data))
+				.then(data => {
+					this.setState({ messages: data });
+				});
+		});
 	}
 
 	render() {

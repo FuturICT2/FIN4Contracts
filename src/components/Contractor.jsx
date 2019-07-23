@@ -8,21 +8,21 @@ var getContractByName = function(drizzle, contractName) { // those defined in dr
 };
 */
 
-const getContract = (drizzle, contractAddress, contractName) => {
+const getContract = (contractAddress, contractName) => {
 	const contract = require('truffle-contract');
 	const json = require('../build/contracts/' + contractName + '.json');
 	let Contractor = contract({
 		abi: json.abi
 	});
-	Contractor.setProvider(drizzle.web3.givenProvider);
+	Contractor.setProvider(window.web3.currentProvider);
 	return Contractor.at(contractAddress);
 };
 
-const getContractData = (contract, contractJson, method, methodArgs, drizzle) => {
-	var currentAccount = drizzle.web3.currentProvider.selectedAddress;
+const getContractData = (contract, contractJson, method, methodArgs) => {
+	var currentAccount = window.web3.currentProvider.selectedAddress;
 
 	return new Promise((resolve, reject) => {
-		getContract(drizzle, contract, contractJson)
+		getContract(contract, contractJson)
 			.then(function(instance) {
 				return instance[method].call(...methodArgs, {
 					from: currentAccount
@@ -62,12 +62,12 @@ const getContractData = (contract, contractJson, method, methodArgs, drizzle) =>
 };
 */
 
-const getAllTokenTypes = drizzle => {
+const getAllTokenTypes = () => {
 	return new Promise((resolve, reject) => {
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren', [], drizzle)
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren', [])
 			.then(tokens => {
 				return tokens.map(address => {
-					return getContractData(address, 'Fin4Token', 'getInfo', [], drizzle).then(({ 0: name, 1: symbol }) => {
+					return getContractData(address, 'Fin4Token', 'getInfo', []).then(({ 0: name, 1: symbol }) => {
 						return {
 							value: address,
 							label: <Currency symbol={symbol} name={name} />
