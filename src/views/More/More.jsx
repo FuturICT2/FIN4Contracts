@@ -17,7 +17,7 @@ import { getContractData } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class More extends React.Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			spendingOffers: [],
@@ -31,18 +31,10 @@ class More extends React.Component {
 			this.getOfferData();
 		}
 
-		var currentAccount = window.web3.currentProvider.selectedAddress;
-
-		getContractData(
-			Fin4MainAddress,
-			'Fin4Main',
-			'getChildrenWhereUserHasNonzeroBalance',
-			[currentAccount],
-			context.drizzle
-		)
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildrenWhereUserHasNonzeroBalance', [])
 			.then(tokenAddresses => {
 				return tokenAddresses.map((address, index) => {
-					return getContractData(address, 'Fin4Token', 'getInfoAndBalance', [currentAccount]).then(
+					return getContractData(address, 'Fin4Token', 'getInfoAndBalance', []).then(
 						({ 0: name, 1: symbol, 2: balance }) => {
 							return {
 								address: address,

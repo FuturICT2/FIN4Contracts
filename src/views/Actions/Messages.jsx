@@ -18,10 +18,8 @@ class Messages extends Component {
 			messages: []
 		};
 
-		var currentAccount = window.web3.currentProvider.selectedAddress;
-
 		getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress', []).then(Fin4MessagesAddress => {
-			getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount', [currentAccount])
+			getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount', [])
 				.then(data => {
 					var messageCount = Number(data);
 					var messageIndices = [];
@@ -29,7 +27,7 @@ class Messages extends Component {
 						messageIndices.push(i);
 					}
 					return messageIndices.map(index => {
-						return getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', [currentAccount, index]).then(
+						return getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', [index]).then(
 							({
 								0: messageType,
 								1: sender,

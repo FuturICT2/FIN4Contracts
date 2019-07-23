@@ -27,12 +27,12 @@ contract Fin4Messages {
     return messages[receiver].length - 1;
   }
 
-  function getMyMessagesCount(address msg_sender_tmp) public view returns(uint) {
-    return messages[msg_sender_tmp].length;
+  function getMyMessagesCount() public view returns(uint) {
+    return messages[msg.sender].length;
   }
 
-  function getMyMessage(address msg_sender_tmp, uint index) public view returns(uint, address, string memory, address, string memory, bool, string memory) {
-    Message memory m = messages[msg_sender_tmp][index];
+  function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory, bool, string memory) {
+    Message memory m = messages[msg.sender][index];
     return (m.messageType, m.sender, m.message, m.fulfillmentAddress,
       Fin4BaseProofTypeStrut(m.fulfillmentAddress).getName(), m.hasBeenActedUpon, m.attachment);
   }

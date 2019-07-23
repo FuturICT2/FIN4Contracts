@@ -26,13 +26,11 @@ class PreviousClaims extends Component {
 			claimIdForProofModal: ''
 		};
 
-		var currentAccount = window.web3.currentProvider.selectedAddress;
-
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims', [currentAccount])
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims', [])
 			.then(actionTypeAddresses => {
 				// action types
 				return actionTypeAddresses.map(actionTypeAddress => {
-					return getContractData(actionTypeAddress, 'Fin4Token', 'getMyClaimIds', [currentAccount])
+					return getContractData(actionTypeAddress, 'Fin4Token', 'getMyClaimIds', [])
 						.then(({ 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
 							// claim ids per action type
 							return claimIds.map(claimId => {
