@@ -229,6 +229,8 @@ const Dropdown = props => {
 		})
 	};
 
+	// TODO use floating design of deleted DropdownActionType:
+	// https://github.com/benjaminaaron/DLT4PI-FIN4/blob/7f8feb17deaa4090fb05f90188abd071c368a9ed/src/components/DropdownActionType.jsx#L45
 	return (
 		<>
 			<div className={classes.root}>

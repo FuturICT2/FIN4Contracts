@@ -3,73 +3,79 @@ import Box from '../../components/Box';
 import ContractForm from '../../components/ContractForm';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../components/Contractor';
+import { getContractData, getNetworkName, getNetworkBalance } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
 import styled from 'styled-components';
+import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class Messages extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 
 		this.state = {
 			messages: []
 		};
 
-		var currentAccount = window.web3.currentProvider.selectedAddress;
-
-		getContractData('Fin4Main', 'Fin4Main.json', 'getFin4MessagesAddress', [], context.drizzle).then(
-			Fin4MessagesAddress => {
-				getContractData(
-					Fin4MessagesAddress,
-					'Fin4Messages.json',
-					'getMyMessagesCount',
-					[currentAccount],
-					context.drizzle
-				)
-					.then(data => {
-						var messageCount = Number(data);
-						var messageIndices = [];
-						for (var i = 0; i < messageCount; i++) {
-							messageIndices.push(i);
-						}
-						return messageIndices.map(index => {
-							return getContractData(
-								Fin4MessagesAddress,
-								'Fin4Messages.json',
-								'getMyMessage',
-								[currentAccount, index],
-								context.drizzle
-							).then(
-								({
-									0: messageType,
-									1: sender,
-									2: message,
-									3: fulfillmentAddress,
-									4: proofTypeName,
-									5: hasBeenActedUpon,
-									6: attachment
-								}) => {
-									return {
-										messageType: messageType,
-										sender: sender,
-										message: message,
-										fulfillmentAddress: fulfillmentAddress,
-										proofTypeName: proofTypeName,
-										hasBeenActedUpon: hasBeenActedUpon,
-										attachment: attachment
-									};
-								}
-							);
-						});
-					})
-					.then(data => Promise.all(data))
-					.then(data => {
-						this.setState({ messages: data });
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress', []).then(Fin4MessagesAddress => {
+			getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount', [])
+				.then(data => {
+					var messageCount = Number(data);
+					var messageIndices = [];
+					for (var i = 0; i < messageCount; i++) {
+						messageIndices.push(i);
+					}
+					return messageIndices.map(index => {
+						return getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', [index]).then(
+							({
+								0: messageType,
+								1: sender,
+								2: message,
+								3: fulfillmentAddress,
+								4: proofTypeName,
+								5: hasBeenActedUpon,
+								6: attachment
+							}) => {
+								return {
+									messageType: messageType.toString(),
+									sender: sender,
+									message: message,
+									fulfillmentAddress: fulfillmentAddress,
+									proofTypeName: proofTypeName,
+									hasBeenActedUpon: hasBeenActedUpon,
+									attachment: attachment
+								};
+							}
+						);
 					});
-			}
-		);
+				})
+				.then(data => Promise.all(data))
+				.then(data => {
+					this.setState({ messages: data });
+				});
+		});
+
+		// add a message if the users ETH balance is 0
+		getNetworkBalance().then(result => {
+			if (result.c[0] > 0) return;
+			getNetworkName().then(name => {
+				let msg = {
+					messageType: '1',
+					message: 'It looks like your current ' + name + " account has 0 ETH. You won't be able to make transactions",
+					fulfillmentAddress: '0x0',
+					proofTypeName: 'dummy',
+					hasBeenActedUpon: false
+				};
+				this.setState(prevState => ({
+					messages: [...prevState.messages, msg]
+				}));
+			});
+		});
+
+		// add a message if the Fin4Main contract could not be found on the network
+		// could happen because of the wrong address in DeployedAddresses.js and/or the wrong network in MetaMask
+		// TODO
 	}
 
 	render() {

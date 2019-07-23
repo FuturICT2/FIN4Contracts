@@ -14,9 +14,10 @@ import bigchainConfig from '../../config/bigchain-config';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
+import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class More extends React.Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			spendingOffers: [],
@@ -30,31 +31,19 @@ class More extends React.Component {
 			this.getOfferData();
 		}
 
-		var currentAccount = window.web3.currentProvider.selectedAddress;
-
-		getContractData(
-			'Fin4Main',
-			'Fin4Main.json',
-			'getChildrenWhereUserHasNonzeroBalance',
-			[currentAccount],
-			context.drizzle
-		)
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildrenWhereUserHasNonzeroBalance', [])
 			.then(tokenAddresses => {
 				return tokenAddresses.map((address, index) => {
-					return getContractData(
-						address,
-						'Fin4Token.json',
-						'getInfoAndBalance',
-						[currentAccount],
-						context.drizzle
-					).then(({ 0: name, 1: symbol, 2: balance }) => {
-						return {
-							address: address,
-							name: name,
-							symbol: symbol,
-							balance: balance
-						};
-					});
+					return getContractData(address, 'Fin4Token', 'getInfoAndBalance', []).then(
+						({ 0: name, 1: symbol, 2: balance }) => {
+							return {
+								address: address,
+								name: name,
+								symbol: symbol,
+								balance: balance.toString()
+							};
+						}
+					);
 				});
 			})
 			.then(data => Promise.all(data))
@@ -89,12 +78,10 @@ class More extends React.Component {
 				return arr[i];
 			}
 		}
+		return null;
 	};
 
 	render() {
-		if (this.state.tokenInfosAndBalances.length < 1) {
-			return <center>Loading...</center>;
-		}
 		return (
 			<Wrapper>
 				<Fab color="primary" aria-label="Add" onClick={this.toggleOfferModal}>
@@ -111,6 +98,10 @@ class More extends React.Component {
 				<Wrapper>
 					<div>
 						{this.state.spendingOffers.map(({ data }, index) => {
+							let tokenInfo = this.getTokenInfoByAddress(data.offerData.tokenAddress);
+							if (tokenInfo === null) {
+								return '';
+							}
 							return (
 								<Card
 									key={index}
@@ -119,7 +110,7 @@ class More extends React.Component {
 									description={data.offerData.description}
 									readMore={data.offerData.offerUrl}
 									actionButtonText="redeem now"
-									tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
+									tokenInfo={tokenInfo}
 									recipientAddress={data.offerData.receiverAddress}
 									amount={data.offerData.quantity}
 								/>
@@ -128,39 +119,47 @@ class More extends React.Component {
 					</div>
 					<Container>
 						<Box title="My Action Tokens">
-							<Table headers={['Name', 'Symbol', 'Balance']}>
-								{this.state.tokenInfosAndBalances.map((entry, index) => {
-									return (
-										<TableRow
-											key={index}
-											data={{
-												name: entry.name,
-												symbol: entry.symbol,
-												balance: entry.balance
-											}}
-										/>
-									);
-								})}
-							</Table>
+							{this.state.tokenInfosAndBalances.length > 0 ? (
+								<Table headers={['Name', 'Symbol', 'Balance']}>
+									{this.state.tokenInfosAndBalances.map((entry, index) => {
+										return (
+											<TableRow
+												key={index}
+												data={{
+													name: entry.name,
+													symbol: entry.symbol,
+													balance: entry.balance
+												}}
+											/>
+										);
+									})}
+								</Table>
+							) : (
+								<center>You have no balance on any token yet.</center>
+							)}
 						</Box>
 					</Container>
 					<div>
-						{this.state.donationOffers.map(({ data }, index) => {
-							//console.log(data.offerData)
-							return (
-								<Card
-									key={index}
-									title={data.offerData.name}
-									imagePath={data.offerData.imagePath}
-									description={data.offerData.description}
-									readMore={data.offerData.offerUrl}
-									actionButtonText="donate"
-									tokenInfo={this.getTokenInfoByAddress(data.offerData.tokenAddress)}
-									recipientAddress={data.offerData.receiverAddress}
-									amount={data.offerData.quantity}
-								/>
-							);
-						})}
+						{this.state.tokenInfosAndBalances.length > 0 &&
+							this.state.donationOffers.map(({ data }, index) => {
+								let tokenInfo = this.getTokenInfoByAddress(data.offerData.tokenAddress);
+								if (tokenInfo === null) {
+									return '';
+								}
+								return (
+									<Card
+										key={index}
+										title={data.offerData.name}
+										imagePath={data.offerData.imagePath}
+										description={data.offerData.description}
+										readMore={data.offerData.offerUrl}
+										actionButtonText="donate"
+										tokenInfo={tokenInfo}
+										recipientAddress={data.offerData.receiverAddress}
+										amount={data.offerData.quantity}
+									/>
+								);
+							})}
 					</div>
 				</Wrapper>
 

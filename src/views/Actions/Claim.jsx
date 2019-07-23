@@ -1,36 +1,21 @@
 import React, { Component } from 'react';
 import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
-import Currency from '../../components/Currency';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../components/Contractor';
+import { getAllTokenTypes } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class Claim extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			tokens: []
 		};
 
-		getContractData('Fin4Main', 'Fin4Main.json', 'getChildren', [], context.drizzle)
-			.then(tokens => {
-				return tokens.map(address => {
-					return getContractData(address, 'Fin4Token.json', 'getInfo', [], context.drizzle).then(
-						({ 0: name, 1: symbol }) => {
-							return {
-								value: address,
-								label: <Currency symbol={symbol} name={name} />
-							};
-						}
-					);
-				});
-			})
-			.then(data => Promise.all(data))
-			.then(data => {
-				this.setState({ tokens: data });
-			});
+		getAllTokenTypes().then(data => {
+			this.setState({ tokens: data });
+		});
 	}
 
 	render() {

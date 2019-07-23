@@ -36,18 +36,17 @@ contract Fin4Main {
     return children;
   }
 
-  function getChildrenWhereUserHasNonzeroBalance(address msg_sender_tmp) public view returns(address[] memory) {
-    address[] memory tokens = actionsWhereUserHasClaims[msg_sender_tmp];
+  function getChildrenWhereUserHasNonzeroBalance() public view returns(address[] memory) {
     uint count = 0;
-    for (uint i = 0; i < tokens.length; i ++) {
-      if (getBalance(msg_sender_tmp, tokens[i]) > 0) {
+    for (uint i = 0; i < children.length; i ++) {
+      if (getBalance(msg.sender, children[i]) > 0) {
         count ++;
       }
     }
     address[] memory nonzeroBalanceTokens = new address[](count);
     for (uint i = 0; i < count; i ++) {
-      if (getBalance(msg_sender_tmp, tokens[i]) > 0) {
-        nonzeroBalanceTokens[i] = tokens[i];
+      if (getBalance(msg.sender, children[i]) > 0) {
+        nonzeroBalanceTokens[i] = children[i];
       }
     }
     return nonzeroBalanceTokens;
@@ -55,8 +54,8 @@ contract Fin4Main {
 
   // ------------------------- MINT, TRANSFER, BALANCE -------------------------
 
-  function getBalance(address msg_sender_tmp, address tokenAddress) public view returns(uint256) {
-      return Fin4Token(tokenAddress).balanceOf(msg_sender_tmp);
+  function getBalance(address user, address tokenAddress) public view returns(uint256) {
+      return Fin4Token(tokenAddress).balanceOf(user);
   }
 
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
@@ -72,8 +71,8 @@ contract Fin4Main {
     return false;
   }
 
-  function getActionsWhereUserHasClaims(address msg_sender_tmp) public view returns(address[] memory) {
-    return actionsWhereUserHasClaims[msg_sender_tmp];
+  function getActionsWhereUserHasClaims() public view returns(address[] memory) {
+    return actionsWhereUserHasClaims[msg.sender];
   }
 
   function claimSubmissionPingback(address claimer, address token) public returns(bool) {

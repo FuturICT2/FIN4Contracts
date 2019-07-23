@@ -10,7 +10,7 @@ import { getContractData } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class TypeCreation extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 
 		this.state = {
@@ -18,28 +18,24 @@ class TypeCreation extends Component {
 			proofTypes: []
 		};
 
-		getContractData('Fin4Main', 'Fin4Main.json', 'getProofTypes', [], context.drizzle)
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes', [])
 			.then(proofTypeAddresses => {
 				return proofTypeAddresses.map(proofTypeAddress => {
-					return getContractData(
-						'Fin4Main',
-						'Fin4Main.json',
-						'getProofTypeName',
-						[proofTypeAddress],
-						context.drizzle
-					).then(proofTypeName => {
-						return getContractData(proofTypeAddress, proofTypeName + '.json', 'getInfo', [], context.drizzle).then(
-							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
-								return {
-									value: proofTypeAddress,
-									label: name,
-									description: description,
-									paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
-									paramValues: {}
-								};
-							}
-						);
-					});
+					return getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypeName', [proofTypeAddress]).then(
+						proofTypeName => {
+							return getContractData(proofTypeAddress, proofTypeName, 'getInfo', []).then(
+								({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
+									return {
+										value: proofTypeAddress,
+										label: name,
+										description: description,
+										paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
+										paramValues: {}
+									};
+								}
+							);
+						}
+					);
 				});
 			})
 			.then(data => Promise.all(data))

@@ -10,7 +10,7 @@ import ipfs from '../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
 
 class ProofSubmission extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 		this.ipfsApi = ipfs;
 		this.state = {
@@ -24,7 +24,7 @@ class ProofSubmission extends Component {
 			txReceipt: ''
 		};
 
-		getContractData(this.props.tokenAddress, 'Fin4Token.json', 'getClaim', [this.props.claimId], context.drizzle)
+		getContractData(this.props.tokenAddress, 'Fin4Token', 'getClaim', [this.props.claimId])
 			.then(({ 7: requiredProofTypes, 8: proofTypeStatuses }) => {
 				var proofTypeStatusesObj = {};
 				for (var i = 0; i < requiredProofTypes.length; i++) {
@@ -32,21 +32,17 @@ class ProofSubmission extends Component {
 					proofTypeStatusesObj[requiredProofTypes[i]].isApproved = proofTypeStatuses[i];
 				}
 				return requiredProofTypes.map((address, index) => {
-					return getContractData(
-						address,
-						'Fin4BaseProofType.json',
-						'getParameterizedInfo',
-						[this.props.tokenAddress],
-						context.drizzle
-					).then(({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
-						return {
-							address: address,
-							name: name,
-							description: parameterizedDescription,
-							paramValues: paramValues,
-							isApproved: proofTypeStatusesObj[address].isApproved
-						};
-					});
+					return getContractData(address, 'Fin4BaseProofType', 'getParameterizedInfo', [this.props.tokenAddress]).then(
+						({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
+							return {
+								address: address,
+								name: name,
+								description: parameterizedDescription,
+								paramValues: paramValues,
+								isApproved: proofTypeStatusesObj[address].isApproved
+							};
+						}
+					);
 				});
 			})
 			.then(data => Promise.all(data))
@@ -130,7 +126,7 @@ class ProofSubmission extends Component {
 							<Status isApproved={proofObj.isApproved}>
 								{proofObj.isApproved
 									? `The proof "${proofObj.name}" was submitted successfully.`
-									: `Your claim requires you to fill out the following form: ${proofObj.description}.`}
+									: `Your claim requires you to fill out the following form: ${proofObj.description}`}
 							</Status>
 							{!proofObj.isApproved && (
 								<ContractForm
