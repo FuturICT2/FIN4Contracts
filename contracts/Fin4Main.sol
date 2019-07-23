@@ -39,13 +39,13 @@ contract Fin4Main {
   function getChildrenWhereUserHasNonzeroBalance() public view returns(address[] memory) {
     uint count = 0;
     for (uint i = 0; i < children.length; i ++) {
-      if (getBalance(children[i]) > 0) {
+      if (getBalance(msg.sender, children[i]) > 0) {
         count ++;
       }
     }
     address[] memory nonzeroBalanceTokens = new address[](count);
     for (uint i = 0; i < count; i ++) {
-      if (getBalance(children[i]) > 0) {
+      if (getBalance(msg.sender, children[i]) > 0) {
         nonzeroBalanceTokens[i] = children[i];
       }
     }
@@ -54,8 +54,8 @@ contract Fin4Main {
 
   // ------------------------- MINT, TRANSFER, BALANCE -------------------------
 
-  function getBalance(address tokenAddress) public view returns(uint256) {
-      return Fin4Token(tokenAddress).balanceOf(msg.sender);
+  function getBalance(address user, address tokenAddress) public view returns(uint256) {
+      return Fin4Token(tokenAddress).balanceOf(user);
   }
 
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
