@@ -14,6 +14,7 @@ import DateIcon from '@material-ui/icons/AccessTime';
 import ProofIcon from '@material-ui/icons/Fingerprint';
 import moment from 'moment';
 import styled from 'styled-components';
+import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class PreviousClaims extends Component {
 	constructor(props, context) {
@@ -27,17 +28,11 @@ class PreviousClaims extends Component {
 
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 
-		getContractData('Fin4Main', 'Fin4Main.json', 'getActionsWhereUserHasClaims', [currentAccount], context.drizzle)
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims', [currentAccount], context.drizzle)
 			.then(actionTypeAddresses => {
 				// action types
 				return actionTypeAddresses.map(actionTypeAddress => {
-					return getContractData(
-						actionTypeAddress,
-						'Fin4Token.json',
-						'getMyClaimIds',
-						[currentAccount],
-						context.drizzle
-					)
+					return getContractData(actionTypeAddress, 'Fin4Token', 'getMyClaimIds', [currentAccount], context.drizzle)
 						.then(({ 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
 							// claim ids per action type
 							return claimIds.map(claimId => {
@@ -51,25 +46,21 @@ class PreviousClaims extends Component {
 						})
 						.then(claims => {
 							return claims.map(({ claimId, actionTypeAddress, tokenName, tokenSymbol }) => {
-								return getContractData(
-									actionTypeAddress,
-									'Fin4Token.json',
-									'getClaimInfo',
-									[claimId],
-									context.drizzle
-								).then(({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
-									// claims per claim id per action type
-									return {
-										claimId: claimId,
-										actionTypeAddress: actionTypeAddress,
-										tokenName: tokenName,
-										tokenSymbol: tokenSymbol,
-										isApproved: isApproved,
-										quantity: quantity,
-										date: date,
-										comment: comment
-									};
-								});
+								return getContractData(actionTypeAddress, 'Fin4Token', 'getClaimInfo', [claimId], context.drizzle).then(
+									({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
+										// claims per claim id per action type
+										return {
+											claimId: claimId,
+											actionTypeAddress: actionTypeAddress,
+											tokenName: tokenName,
+											tokenSymbol: tokenSymbol,
+											isApproved: isApproved,
+											quantity: quantity,
+											date: date,
+											comment: comment
+										};
+									}
+								);
 							});
 						});
 				});

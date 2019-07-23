@@ -8,6 +8,7 @@ import Button from '../../components/Button';
 import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
 import styled from 'styled-components';
+import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class Messages extends Component {
 	constructor(props, context) {
@@ -19,15 +20,9 @@ class Messages extends Component {
 
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 
-		getContractData('Fin4Main', 'Fin4Main.json', 'getFin4MessagesAddress', [], context.drizzle).then(
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress', [], context.drizzle).then(
 			Fin4MessagesAddress => {
-				getContractData(
-					Fin4MessagesAddress,
-					'Fin4Messages.json',
-					'getMyMessagesCount',
-					[currentAccount],
-					context.drizzle
-				)
+				getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount', [currentAccount], context.drizzle)
 					.then(data => {
 						var messageCount = Number(data);
 						var messageIndices = [];
@@ -37,7 +32,7 @@ class Messages extends Component {
 						return messageIndices.map(index => {
 							return getContractData(
 								Fin4MessagesAddress,
-								'Fin4Messages.json',
+								'Fin4Messages',
 								'getMyMessage',
 								[currentAccount, index],
 								context.drizzle

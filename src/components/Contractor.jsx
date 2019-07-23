@@ -1,6 +1,6 @@
-import Web3 from 'web3';
 import Currency from './Currency';
 import React from 'react';
+import { Fin4MainAddress } from '../config/DeployedAddresses.js';
 
 /*
 var getContractByName = function(drizzle, contractName) { // those defined in drizzle-config.js
@@ -18,6 +18,23 @@ const getContract = (drizzle, contractAddress, contractName) => {
 	return Contractor.at(contractAddress);
 };
 
+const getContractData = (contract, contractJson, method, methodArgs, drizzle) => {
+	var currentAccount = drizzle.web3.currentProvider.selectedAddress;
+
+	return new Promise((resolve, reject) => {
+		getContract(drizzle, contract, contractJson)
+			.then(function(instance) {
+				return instance[method].call(...methodArgs, {
+					from: currentAccount
+				});
+			})
+			.then(function(result) {
+				resolve(result);
+			});
+	});
+};
+
+/*
 const getContractData = (contract, contractJson, method, methodArgs, drizzle) => {
 	// add contract if not yet added
 	if (!Object.keys(drizzle.contracts).includes(contract)) {
@@ -43,13 +60,14 @@ const getContractData = (contract, contractJson, method, methodArgs, drizzle) =>
 		}, 1);
 	});
 };
+*/
 
 const getAllTokenTypes = drizzle => {
 	return new Promise((resolve, reject) => {
-		getContractData('Fin4Main', 'Fin4Main.json', 'getChildren', [], drizzle)
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren', [], drizzle)
 			.then(tokens => {
 				return tokens.map(address => {
-					return getContractData(address, 'Fin4Token.json', 'getInfo', [], drizzle).then(({ 0: name, 1: symbol }) => {
+					return getContractData(address, 'Fin4Token', 'getInfo', [], drizzle).then(({ 0: name, 1: symbol }) => {
 						return {
 							value: address,
 							label: <Currency symbol={symbol} name={name} />

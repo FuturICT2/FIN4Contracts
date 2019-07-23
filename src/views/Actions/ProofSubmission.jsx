@@ -24,7 +24,7 @@ class ProofSubmission extends Component {
 			txReceipt: ''
 		};
 
-		getContractData(this.props.tokenAddress, 'Fin4Token.json', 'getClaim', [this.props.claimId], context.drizzle)
+		getContractData(this.props.tokenAddress, 'Fin4Token', 'getClaim', [this.props.claimId], context.drizzle)
 			.then(({ 7: requiredProofTypes, 8: proofTypeStatuses }) => {
 				var proofTypeStatusesObj = {};
 				for (var i = 0; i < requiredProofTypes.length; i++) {
@@ -34,7 +34,7 @@ class ProofSubmission extends Component {
 				return requiredProofTypes.map((address, index) => {
 					return getContractData(
 						address,
-						'Fin4BaseProofType.json',
+						'Fin4BaseProofType',
 						'getParameterizedInfo',
 						[this.props.tokenAddress],
 						context.drizzle

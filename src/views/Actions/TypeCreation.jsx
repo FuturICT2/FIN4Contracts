@@ -18,17 +18,17 @@ class TypeCreation extends Component {
 			proofTypes: []
 		};
 
-		getContractData('Fin4Main', 'Fin4Main.json', 'getProofTypes', [], context.drizzle)
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes', [], context.drizzle)
 			.then(proofTypeAddresses => {
 				return proofTypeAddresses.map(proofTypeAddress => {
 					return getContractData(
+						Fin4MainAddress,
 						'Fin4Main',
-						'Fin4Main.json',
 						'getProofTypeName',
 						[proofTypeAddress],
 						context.drizzle
 					).then(proofTypeName => {
-						return getContractData(proofTypeAddress, proofTypeName + '.json', 'getInfo', [], context.drizzle).then(
+						return getContractData(proofTypeAddress, proofTypeName, 'getInfo', [], context.drizzle).then(
 							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
 								return {
 									value: proofTypeAddress,

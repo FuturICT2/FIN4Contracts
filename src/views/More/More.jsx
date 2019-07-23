@@ -14,6 +14,7 @@ import bigchainConfig from '../../config/bigchain-config';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
+import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class More extends React.Component {
 	constructor(props, context) {
@@ -33,28 +34,24 @@ class More extends React.Component {
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 
 		getContractData(
+			Fin4MainAddress,
 			'Fin4Main',
-			'Fin4Main.json',
 			'getChildrenWhereUserHasNonzeroBalance',
 			[currentAccount],
 			context.drizzle
 		)
 			.then(tokenAddresses => {
 				return tokenAddresses.map((address, index) => {
-					return getContractData(
-						address,
-						'Fin4Token.json',
-						'getInfoAndBalance',
-						[currentAccount],
-						context.drizzle
-					).then(({ 0: name, 1: symbol, 2: balance }) => {
-						return {
-							address: address,
-							name: name,
-							symbol: symbol,
-							balance: balance
-						};
-					});
+					return getContractData(address, 'Fin4Token', 'getInfoAndBalance', [currentAccount], context.drizzle).then(
+						({ 0: name, 1: symbol, 2: balance }) => {
+							return {
+								address: address,
+								name: name,
+								symbol: symbol,
+								balance: balance
+							};
+						}
+					);
 				});
 			})
 			.then(data => Promise.all(data))
