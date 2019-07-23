@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class Messages extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 
 		this.state = {

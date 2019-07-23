@@ -9,7 +9,7 @@ import { getAllTokenTypes } from '../../components/Contractor';
 import Dropdown from '../../components/Dropdown';
 
 class OfferCreation extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			tokens: []
@@ -26,7 +26,7 @@ class OfferCreation extends Component {
 			type: props.offerType
 		};
 
-		getAllTokenTypes(context.drizzle).then(data => {
+		getAllTokenTypes().then(data => {
 			this.setState({ tokens: data });
 		});
 

@@ -7,13 +7,13 @@ import { getAllTokenTypes } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class Claim extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			tokens: []
 		};
 
-		getAllTokenTypes(context.drizzle).then(data => {
+		getAllTokenTypes().then(data => {
 			this.setState({ tokens: data });
 		});
 	}

@@ -10,7 +10,7 @@ import { getContractData } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class TypeCreation extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 
 		this.state = {
@@ -18,7 +18,7 @@ class TypeCreation extends Component {
 			proofTypes: []
 		};
 
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes', [], context.drizzle)
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes', [])
 			.then(proofTypeAddresses => {
 				return proofTypeAddresses.map(proofTypeAddress => {
 					return getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypeName', [proofTypeAddress]).then(

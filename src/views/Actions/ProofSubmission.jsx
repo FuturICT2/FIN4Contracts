@@ -10,7 +10,7 @@ import ipfs from '../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
 
 class ProofSubmission extends Component {
-	constructor(props, context) {
+	constructor(props) {
 		super(props);
 		this.ipfsApi = ipfs;
 		this.state = {
