@@ -82,4 +82,39 @@ const getAllTokenTypes = () => {
 	});
 };
 
-export { getContractData, getContract, getAllTokenTypes };
+const getNetworkName = () => {
+	return new Promise((resolve, reject) => {
+		window.web3.version.getNetwork((err, netId) => {
+			switch (netId) {
+				case '1':
+					resolve('MainNet');
+					break;
+				case '3':
+					resolve('Ropsten');
+					break;
+				case '4':
+					resolve('Rinkeby');
+					break;
+				case '5':
+					resolve('Goerli');
+					break;
+				case '42':
+					resolve('Kovan');
+					break;
+				default:
+					resolve('Unknown');
+			}
+		});
+	});
+};
+
+const getNetworkBalance = () => {
+	return new Promise((resolve, reject) => {
+		let currentAccount = window.web3.currentProvider.selectedAddress;
+		window.web3.eth.getBalance(currentAccount, function(error, result) {
+			resolve(result);
+		});
+	});
+};
+
+export { getContractData, getContract, getAllTokenTypes, getNetworkName, getNetworkBalance };

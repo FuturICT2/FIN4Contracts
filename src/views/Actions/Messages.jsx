@@ -3,7 +3,7 @@ import Box from '../../components/Box';
 import ContractForm from '../../components/ContractForm';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../components/Contractor';
+import { getContractData, getNetworkName, getNetworkBalance } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
@@ -54,6 +54,23 @@ class Messages extends Component {
 				.then(data => {
 					this.setState({ messages: data });
 				});
+		});
+
+		// add a message if the users ETH balance is 0
+		getNetworkBalance().then(result => {
+			if (result.c[0] > 0) return;
+			getNetworkName().then(name => {
+				let msg = {
+					messageType: '1',
+					message: 'It looks like your current ' + name + " account has 0 ETH. You won't be able to make transactions",
+					fulfillmentAddress: '0x0',
+					proofTypeName: 'dummy',
+					hasBeenActedUpon: false
+				};
+				this.setState(prevState => ({
+					messages: [...prevState.messages, msg]
+				}));
+			});
 		});
 	}
 
