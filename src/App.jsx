@@ -62,7 +62,7 @@ const Container = styled.div`
 `;
 
 const Spacer = styled.div`
-	height: 100px;
+	height: 300px;
 `;
 
 export default App;

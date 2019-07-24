@@ -44,11 +44,11 @@ const useStyles = makeStyles(theme => ({
 		fontSize: 16
 	},
 	paper: {
-		// position: 'absolute',
-		// zIndex: 1,
-		marginTop: theme.spacing(1)
-		// left: 0,
-		// right: 0
+		position: 'absolute',
+		zIndex: 1,
+		marginTop: theme.spacing(1),
+		left: 0,
+		right: 0
 	},
 	divider: {
 		height: theme.spacing(2)
@@ -229,8 +229,6 @@ const Dropdown = props => {
 		})
 	};
 
-	// TODO use floating design of deleted DropdownActionType:
-	// https://github.com/benjaminaaron/DLT4PI-FIN4/blob/7f8feb17deaa4090fb05f90188abd071c368a9ed/src/components/DropdownActionType.jsx#L45
 	return (
 		<>
 			<div className={classes.root}>
