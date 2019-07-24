@@ -1,5 +1,3 @@
-import Currency from './Currency';
-import React from 'react';
 import { Fin4MainAddress } from '../config/DeployedAddresses.js';
 
 /*
@@ -23,12 +21,12 @@ const getContractData = (contract, contractJson, method, methodArgs) => {
 
 	return new Promise((resolve, reject) => {
 		getContract(contract, contractJson)
-			.then(function(instance) {
+			.then(instance => {
 				return instance[method].call(...methodArgs, {
 					from: currentAccount
 				});
 			})
-			.then(function(result) {
+			.then(result => {
 				resolve(result);
 			});
 	});
@@ -70,7 +68,7 @@ const getAllTokenTypes = () => {
 					return getContractData(address, 'Fin4Token', 'getInfo', []).then(({ 0: name, 1: symbol }) => {
 						return {
 							value: address,
-							label: <Currency symbol={symbol} name={name} />
+							label: `[${symbol}] ${name}`
 						};
 					});
 				});
@@ -111,7 +109,7 @@ const getNetworkName = () => {
 const getNetworkBalance = () => {
 	return new Promise((resolve, reject) => {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
-		window.web3.eth.getBalance(currentAccount, function(error, result) {
+		window.web3.eth.getBalance(currentAccount, (error, result) => {
 			resolve(result);
 		});
 	});
