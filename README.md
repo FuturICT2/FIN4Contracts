@@ -1,5 +1,5 @@
 # DLT4PI-FIN4
-Team **Action Magic for Finance 4.0** in the SoSe2019 [TUM](https://www.tum.de/) course [*Advanced Practical Course - Blockchain technology for public sector innovation*](https://campus.tum.de/tumonline/wbLv.wbShowLVDetail?pStpSpNr=950404716&pSpracheNr=2) at [fortiss](https://www.fortiss.org/) with [Marcus Dapp](http://digisus.com/) ([FuturICT 2.0](https://futurict2.eu/)) from [ETH Zürich](https://www.ethz.ch/) as partner.
+Team **FINFOO** in the SoSe2019 [TUM](https://www.tum.de/) course [*Advanced Practical Course - Blockchain technology for public sector innovation*](https://campus.tum.de/tumonline/wbLv.wbShowLVDetail?pStpSpNr=950404716&pSpracheNr=2) at [fortiss](https://www.fortiss.org/) with [Marcus Dapp](http://digisus.com/) ([FuturICT 2.0](https://futurict2.eu/)) from [ETH Zürich](https://www.ethz.ch/) as partner.
 
 **Team**: [@simonzachau](https://github.com/simonzachau) | [@benjaminaaron](https://github.com/benjaminaaron) |  [@sangeetajoseph8](https://github.com/sangeetajoseph8) | [@ShreshthaKriti](https://github.com/ShreshthaKriti) | [@leonKObi](https://github.com/leonKObi)
 
@@ -12,6 +12,25 @@ Team **Action Magic for Finance 4.0** in the SoSe2019 [TUM](https://www.tum.de/)
 YouTube Image Film:
 
 [![](http://img.youtube.com/vi/oNlKdHjvExo/0.jpg)](http://www.youtube.com/watch?v=oNlKdHjvExo "Finance 4.0")
+
+**FINFOO** is a multi-dimensional and multilayered finance system, destined to become a self-organizing and nuanced incentive system to contribute to healthier and more vibrant social and ecological communities worldwide. FINFOO aims to incentivize positive actions of individuals and promote sustainable development. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach
+
+
+
+<br/>
+
+**How to use the front-end:**
+
+[![](https://img.youtube.com/vi/suODLSig1sA/0.jpg)](https://youtu.be/suODLSig1sA)
+
+
+**Architecture**
+
+<table border="0"><tr>
+<td><img src="https://user-images.githubusercontent.com/5141792/61829156-9f107b00-ae68-11e9-8ab7-6800f249caf8.png" width="500" ></a></td>
+<td><img src="https://user-images.githubusercontent.com/5141792/61829167-a3d52f00-ae68-11e9-98ef-76878f39d2d8.png" width="500" ></a></td>
+</table>
+
 
 ---
 
@@ -42,7 +61,7 @@ Add and fill this file: `src/config/ethereum-keys.json`
 {
     "MNEMONIC": "",
     "INFURA_API_KEY": ""
-}
+} =100x20
 ```
 
 ### Install dependencies
