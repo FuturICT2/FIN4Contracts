@@ -27,9 +27,7 @@ class More extends React.Component {
 			tokenAddress: [],
 			tokenInfosAndBalances: []
 		};
-		{
-			this.getOfferData();
-		}
+		this.getOfferData();
 
 		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildrenWhereUserHasNonzeroBalance', [])
 			.then(tokenAddresses => {
@@ -55,10 +53,11 @@ class More extends React.Component {
 	getOfferData() {
 		['spendingOffers', 'donationOffers'].forEach(offers => {
 			axios.get(`${bigchainConfig.path}assets?search=${offers}`).then(res => {
-				const offersResult = res.data.filter(offer =>
-					this.state.tokenAddress.includes(offer.data.offerData.tokenAddress)
-				);
-				this.setState({ [offers]: res.data }); // TODO use offersResult once this.state.tokenAddress is properly filled again
+				// const offersResult = res.data.filter(offer =>
+				// 	this.state.tokenAddress.includes(offer.data.offerData.tokenAddress)
+				// );
+				// TODO use offersResult instead of res.data once this.state.tokenAddress is properly filled again
+				this.setState({ [offers]: res.data });
 			});
 		});
 	}
