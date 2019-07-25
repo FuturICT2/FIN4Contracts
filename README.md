@@ -19,19 +19,7 @@ YouTube Image Film:
 
 <br/>
 
-**How to use the front-end:**
-
-[![](https://img.youtube.com/vi/suODLSig1sA/0.jpg)](https://youtu.be/suODLSig1sA)
-
-
-**Architecture**
-
-<table border="0"><tr>
-<td><img src="https://user-images.githubusercontent.com/5141792/61829156-9f107b00-ae68-11e9-8ab7-6800f249caf8.png" width="500" ></a></td>
-<td><img src="https://user-images.githubusercontent.com/5141792/61829167-a3d52f00-ae68-11e9-98ef-76878f39d2d8.png" width="500" ></a></td>
-</table>
-
-
+**Pre-requisites**
 ---
 
 ## Setup
@@ -69,6 +57,12 @@ Add and fill this file: `src/config/ethereum-keys.json`
 npm install # takes a while
 ```
 
+
+**How to use the front-end:**
+---
+
+[![](https://img.youtube.com/vi/suODLSig1sA/0.jpg)](https://youtu.be/suODLSig1sA)
+
 ### Compile and migrate the smart contracts
 
 1. `truffle compile`
@@ -87,3 +81,14 @@ Used for offers on the marketplace
 ```sh
 npm start
 ```
+
+
+
+**Architecture**
+---
+
+<table border="0"><tr>
+<td><img src="https://user-images.githubusercontent.com/5141792/61829156-9f107b00-ae68-11e9-8ab7-6800f249caf8.png" width="500" ></a></td>
+<br/>
+<td><img src="https://user-images.githubusercontent.com/5141792/61829167-a3d52f00-ae68-11e9-98ef-76878f39d2d8.png" width="500" ></a></td>
+</table>
