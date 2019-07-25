@@ -15,6 +15,14 @@ YouTube Image Film:
 
 **FINFOO** is a multi-dimensional and multilayered finance system, destined to become a self-organizing and nuanced incentive system to contribute to healthier and more vibrant social and ecological communities worldwide. FINFOO aims to incentivize positive actions of individuals and promote sustainable development. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach
 
+### Architecture
+
+<table border="0"><tr>
+<td><img src="https://user-images.githubusercontent.com/5141792/61829156-9f107b00-ae68-11e9-8ab7-6800f249caf8.png" width="500" ></a></td>
+<br/>
+<td><img src="https://user-images.githubusercontent.com/5141792/61829167-a3d52f00-ae68-11e9-98ef-76878f39d2d8.png" width="500" ></a></td>
+</table>
+
 ## Setup
 
 ```sh
@@ -64,11 +72,3 @@ Used for offers on the marketplace
 ```sh
 npm start
 ```
-
-### Architecture
-
-<table border="0"><tr>
-<td><img src="https://user-images.githubusercontent.com/5141792/61829156-9f107b00-ae68-11e9-8ab7-6800f249caf8.png" width="500" ></a></td>
-<br/>
-<td><img src="https://user-images.githubusercontent.com/5141792/61829167-a3d52f00-ae68-11e9-98ef-76878f39d2d8.png" width="500" ></a></td>
-</table>
