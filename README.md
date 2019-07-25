@@ -15,23 +15,9 @@ YouTube Image Film:
 
 **FINFOO** is a multi-dimensional and multilayered finance system, destined to become a self-organizing and nuanced incentive system to contribute to healthier and more vibrant social and ecological communities worldwide. FINFOO aims to incentivize positive actions of individuals and promote sustainable development. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach
 
-
-
-<br/>
-
-**Pre-requisites**
----
-
 ## Setup
 
-Install `yarn`, `truffle`, `git`, `make`, `docker`, and `docker compose`
-
 ```sh
-# yarn
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt-get update && sudo apt-get install yarn
-
 # npm
 sudo apt install npm
 
@@ -40,16 +26,15 @@ sudo npm install -g truffle
 sudo npm install -g ganache-cli
 ```
 
-BigchainDB requires `docker` and `docker-compose`. 
-Follow the installation instructions for Docker [here](https://docs.docker.com/engine/installation/) (don't forget the Post-installation steps for Linux) and for Docker Compose [here](https://docs.docker.com/compose/install/).
+BigchainDB requires `docker` and `docker-compose`: follow the installation instructions for Docker [here](https://docs.docker.com/engine/installation/) (don't forget the post-installation steps for Linux) and for Docker Compose [here](https://docs.docker.com/compose/install/).
 
-### For testnet-deployment 
+### For deployment
 Add and fill this file: `src/config/ethereum-keys.json`
 ```json
 {
     "MNEMONIC": "",
     "INFURA_API_KEY": ""
-} =100x20
+}
 ```
 
 ### Install dependencies
@@ -57,9 +42,7 @@ Add and fill this file: `src/config/ethereum-keys.json`
 npm install # takes a while
 ```
 
-
-**How to use the front-end:**
----
+### How to use the front end:
 
 [![](https://img.youtube.com/vi/suODLSig1sA/0.jpg)](https://youtu.be/suODLSig1sA)
 
@@ -68,7 +51,7 @@ npm install # takes a while
 1. `truffle compile`
 2. `ganache-cli --port=7545 --allowUnlimitedContractSize`
 3. `truffle migrate` to place the smart contract on the local blockchain
-4. install the [MetaMask](https://metamask.io/) browser extension, paste the `MNEMONIC` from Ganache into the `seed` input and `http://127.0.0.1:7545` into `custom RPC` input
+4. install the [MetaMask](https://metamask.io/) browser extension, paste the `MNEMONIC` from Ganache into the `seed` input and create a network with `http://127.0.0.1:7545` as `custom RPC`
 
 ### Start a local BigchainDB node
 Used for offers on the marketplace
@@ -82,10 +65,7 @@ Used for offers on the marketplace
 npm start
 ```
 
-
-
-**Architecture**
----
+### Architecture
 
 <table border="0"><tr>
 <td><img src="https://user-images.githubusercontent.com/5141792/61829156-9f107b00-ae68-11e9-8ab7-6800f249caf8.png" width="500" ></a></td>
