@@ -15,13 +15,23 @@ YouTube Image Film:
 
 **FINFOO** is a multi-dimensional and multilayered finance system, destined to become a self-organizing and nuanced incentive system to contribute to healthier and more vibrant social and ecological communities worldwide. FINFOO aims to incentivize positive actions of individuals and promote sustainable development. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach
 
-### Architecture
+## Architecture
 
 <table border="0"><tr>
 <td><img src="https://user-images.githubusercontent.com/5141792/61829156-9f107b00-ae68-11e9-8ab7-6800f249caf8.png" width="500" ></a></td>
 <br/>
 <td><img src="https://user-images.githubusercontent.com/5141792/61829167-a3d52f00-ae68-11e9-98ef-76878f39d2d8.png" width="500" ></a></td>
 </table>
+
+## Assumptions made
+
+Our assumptions for the development were that our users are tech-savvy enough to get Ethereum on their account and handle the MetaMask popups.
+
+Furthermore we assumed a certain community engagement to be present that makes people want to use the plattform to participate in the token economy.
+
+## Errors we encountered
+
+During some development cycles involving re-migration, new mnemonics etc. strange errors were occuring in relation to the local ganache-blockchain. Sometimes these could only be resolved by manually resetting everything: deleting the `src/build`-folder, a new workspace in Ganache, logging out in MetaMask, closing Chrome and restoring from the new mnemonic.
 
 ## Setup
 
@@ -34,7 +44,7 @@ sudo npm install -g truffle
 sudo npm install -g ganache-cli
 ```
 
-BigchainDB requires `docker` and `docker-compose`: follow the installation instructions for Docker [here](https://docs.docker.com/engine/installation/) (don't forget the post-installation steps for Linux) and for Docker Compose [here](https://docs.docker.com/compose/install/).
+BigchainDB requires `docker` and `docker-compose`: follow the installation instructions for **Docker** [here](https://docs.docker.com/engine/installation/) (don't forget the post-installation steps for Linux) and for **Docker Compose** [here](https://docs.docker.com/compose/install/).
 
 ### For deployment
 Add and fill this file: `src/config/ethereum-keys.json`
