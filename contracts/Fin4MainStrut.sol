@@ -4,8 +4,6 @@ contract Fin4MainStrut {
 
   function proofTypeIsRegistered(address proofTypeToCheck) public view returns(bool);
 
-  // function claimSubmissionPingback(address claimer) public returns(bool);
-
   function getFin4MessagesAddress() public view returns(address);
 
 }

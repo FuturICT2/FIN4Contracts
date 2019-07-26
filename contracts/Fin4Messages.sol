@@ -31,12 +31,14 @@ contract Fin4Messages {
     return messages[msg.sender].length;
   }
 
+  // have to get messages one by one because returning string arrays is not possible
   function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory, bool, string memory) {
     Message memory m = messages[msg.sender][index];
     return (m.messageType, m.sender, m.message, m.fulfillmentAddress,
       Fin4BaseProofTypeStrut(m.fulfillmentAddress).getName(), m.hasBeenActedUpon, m.attachment);
   }
 
+  // after a picture is approved for instance, the message doesn't need to be shown to the approver anymore
   function markMessageAsActedUpon(address approver, uint messageId) public {
     messages[approver][messageId].hasBeenActedUpon = true;
   }
