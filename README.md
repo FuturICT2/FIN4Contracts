@@ -61,6 +61,7 @@ Add and fill this file: `src/config/ethereum-keys.json`
 ### Install dependencies
 ```sh
 npm install # takes a while
+            # requires "python" to be on the PATH as Python 2 executable
 ```
 
 ### How to use the front end:
