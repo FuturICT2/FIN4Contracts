@@ -51,7 +51,9 @@ contract Fin4BaseProofType is utils {
   // This method gets overriden by the proof types and encode the parameter names (types are only uint for now TODO)
   // to be filled by the action type creator. He gets prompted to set them via a popup in the front end when adding
   // a proof type, see the first <Modal> in ContractForm.render()
-  function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory); // TODO return "" by default here?
+  function getParameterForActionTypeCreatorToSetEncoded() public pure returns(string memory) {
+    return "";
+  }
 
   // Get's called from the contract Fin4Main.createNewToken() after the parameter arrays there have been dissected
   // into portions for the respective proof types

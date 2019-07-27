@@ -43,11 +43,6 @@ contract SpecificAddress is Fin4BaseProofType {
     return true;
   }
 
-  // @Override
-  function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
-    return "";
-  }
-
   function getMessageText() public pure returns(string memory) {
     return "You were requested to approve the proof type SpecificAddress on the action type ";
   }
