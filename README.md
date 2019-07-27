@@ -33,6 +33,8 @@ Furthermore we assumed a certain community engagement to be present that makes p
 
 During some development cycles involving re-migration, new mnemonics etc. strange errors were occuring in relation to the local ganache-blockchain. Sometimes these could only be resolved by manually resetting everything: deleting the `src/build`-folder, a new workspace in Ganache, logging out in MetaMask, closing Chrome and restoring from the new mnemonic.
 
+When creating a new action type and add proof types that trigger a popup for you to set parameters - it's possible to close the popup without having set values, we haven't shielded against that case. This creates a wrong state, so please do set valid parameters in the popup.
+
 ## Setup
 
 ```sh
