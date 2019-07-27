@@ -1,7 +1,8 @@
-# DLT4PI-FIN4
-Team **FINFOO** in the SoSe2019 [TUM](https://www.tum.de/) course [*Advanced Practical Course - Blockchain technology for public sector innovation*](https://campus.tum.de/tumonline/wbLv.wbShowLVDetail?pStpSpNr=950404716&pSpracheNr=2) at [fortiss](https://www.fortiss.org/) with [Marcus Dapp](http://digisus.com/) ([FuturICT 2.0](https://futurict2.eu/)) from [ETH Zürich](https://www.ethz.ch/) as partner.
+# FINFOO
 
-**Team**: [@simonzachau](https://github.com/simonzachau) | [@benjaminaaron](https://github.com/benjaminaaron) |  [@sangeetajoseph8](https://github.com/sangeetajoseph8) | [@ShreshthaKriti](https://github.com/ShreshthaKriti) | [@leonKObi](https://github.com/leonKObi)
+## Context
+
+**FINFOO** is a decentralised design for a bottom-up and multidimensional finance system with the aim of making communities healthier, more social, and sustainable. It is based on Finance4, part of the FLAG-ERA-funded project [FuturICT 2.0](https://futurict2.eu/), on which we are working on as part of the course [*Advanced Practical Course - Blockchain technology for public sector innovation*](https://campus.tum.de/tumonline/wbLv.wbShowLVDetail?pStpSpNr=950404716&pSpracheNr=2) at [fortiss](https://www.fortiss.org/) with [Marcus Dapp](http://digisus.com/).
 
 <table border="0"><tr><td>
 <a href="https://futurict2.eu/"><img src="public/project-logos/FuturICT2_logo_on_white.png" width="250" ></a></td>
@@ -9,11 +10,22 @@ Team **FINFOO** in the SoSe2019 [TUM](https://www.tum.de/) course [*Advanced Pra
 <img src="public/project-logos/Fin4_logo_on_white.jpg" width="100">
 </td></tr></table>
 
-YouTube Image Film:
+**Image Film**:
 
 [![](http://img.youtube.com/vi/oNlKdHjvExo/0.jpg)](http://www.youtube.com/watch?v=oNlKdHjvExo "Finance 4.0")
 
-**FINFOO** is a multi-dimensional and multilayered finance system, destined to become a self-organizing and nuanced incentive system to contribute to healthier and more vibrant social and ecological communities worldwide. FINFOO aims to incentivize positive actions of individuals and promote sustainable development. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach
+## Description
+
+**FINFOO** allows any person, organisation, and public institution to create tokens, which stand for a positive action. Users can claim and prove these actions, for which they receive said tokens. By designing the system to be open to markets tailored to the respective actions, incentives are generated. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach.
+
+## Developers
+
+[@benjaminaaron](/benjaminaaron) | [@simonzachau](/simonzachau) | [@sangeetajoseph8](/sangeetajoseph8) | [@ShreshthaKriti](/ShreshthaKriti) | [@leonKObi](/leonKObi)
+
+## Assumptions
+
+- We assume a certain tech-savvyness of users to get Ethereum on their account and handle the MetaMask popups. Our interviews with stakeholders proved that this is given.
+- Furthermore we assume a certain community engagement to be present that makes people want to use the plattform to participate in the token economy.
 
 ## Architecture
 
@@ -23,28 +35,21 @@ YouTube Image Film:
 <td><img src="https://user-images.githubusercontent.com/5141792/61829167-a3d52f00-ae68-11e9-98ef-76878f39d2d8.png" width="500" ></a></td>
 </table>
 
-## Assumptions made
+## Quick start
 
-Our assumptions for the development were that our users are tech-savvy enough to get Ethereum on their account and handle the MetaMask popups.
-
-Furthermore we assumed a certain community engagement to be present that makes people want to use the plattform to participate in the token economy.
-
-## Errors we encountered
-
-During some development cycles involving re-migration, new mnemonics etc. strange errors were occuring in relation to the local ganache-blockchain. Sometimes these could only be resolved by manually resetting everything: deleting the `src/build`-folder, a new workspace in Ganache, logging out in MetaMask, closing Chrome and restoring from the new mnemonic.
-
-When creating a new action type and add proof types that trigger a popup for you to set parameters - it's possible to close the popup without having set values, we haven't shielded against that case. This creates a wrong state, so please do set valid parameters in the popup.
-
-## Setup
+### Install dependencies
 
 ```sh
-# install latest npm via nvm
+# npm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 nvm install node
 
 # truffle
 npm install -g truffle
 npm install -g ganache-cli
+
+# project
+npm install # requires "python" to be on the PATH as Python 2 executable
 ```
 
 BigchainDB requires `docker` and `docker-compose`: follow the installation instructions for **Docker** [here](https://docs.docker.com/engine/installation/) (don't forget the post-installation steps for Linux) and for **Docker Compose** [here](https://docs.docker.com/compose/install/).
@@ -57,16 +62,6 @@ Add and fill this file: `src/config/ethereum-keys.json`
     "INFURA_API_KEY": ""
 }
 ```
-
-### Install dependencies
-```sh
-npm install # takes a while
-            # requires "python" to be on the PATH as Python 2 executable
-```
-
-### How to use the front end:
-
-[![](https://img.youtube.com/vi/suODLSig1sA/0.jpg)](https://youtu.be/suODLSig1sA)
 
 ### Compile and migrate the smart contracts
 
@@ -82,7 +77,16 @@ Used for offers on the marketplace
 2. `cd bigchaindb`
 3. `make run`
 
-### Start the react app
+### Use the app
 ```sh
 npm start
 ```
+
+#### Video tutorial on using the application
+
+[![](https://img.youtube.com/vi/suODLSig1sA/0.jpg)](https://youtu.be/suODLSig1sA)
+
+#### Errors / Considerations
+
+- During some development cycles involving re-migration, new mnemonics etc. strange errors were occuring in relation to the local ganache-blockchain. Sometimes these could only be resolved by manually resetting everything: deleting the `src/build`-folder, a new workspace in Ganache, logging out in MetaMask, closing Chrome and restoring from the new mnemonic.
+- When adding a new action type and then adding a new proof type for that action type, a modal may pop up that let's you select parameters for that proof type. In case you decide (instead of specifying the parameters) to not want to add this proof type anymore, clicking on the "x" in the top right corner of the modal is not enough; you also have to then click on the "x" of the proof type in the selection.
