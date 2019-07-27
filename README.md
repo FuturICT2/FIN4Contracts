@@ -38,12 +38,13 @@ When creating a new action type and add proof types that trigger a popup for you
 ## Setup
 
 ```sh
-# npm
-sudo apt install npm
+# install latest npm via nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+nvm install node
 
 # truffle
-sudo npm install -g truffle
-sudo npm install -g ganache-cli
+npm install -g truffle
+npm install -g ganache-cli
 ```
 
 BigchainDB requires `docker` and `docker-compose`: follow the installation instructions for **Docker** [here](https://docs.docker.com/engine/installation/) (don't forget the post-installation steps for Linux) and for **Docker Compose** [here](https://docs.docker.com/compose/install/).
