@@ -38,7 +38,6 @@ contract Picture is SpecificAddress {
   }
 
   function getAttachment() public view returns(string memory) {
-    // TODO verification
     return pendingApprovals[msg.sender].attachment;
   }
 

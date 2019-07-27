@@ -25,6 +25,8 @@ contract Location is Fin4BaseProofType {
       return true;
     }
 
+    // TODO calculate distance here instead of trusting the front end?
+    // requires an oracle or using floating point math (sin etc.) here though
     function locationIsWithinMaxDistToSpecifiedLocation(address token, uint distanceToLocation) public view returns(bool) {
         return distanceToLocation <= _getMaxDistance(token);
     }

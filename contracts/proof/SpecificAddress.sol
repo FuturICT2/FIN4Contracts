@@ -17,6 +17,8 @@ contract SpecificAddress is Fin4BaseProofType {
     description = "The claimer specifies an address, which has to approve.";
   }
 
+  // Holds the info of a pending approval: who should approve what on which token
+  // Get's displayed on the frontend as message
   struct PendingApproval {
     address tokenAdrToReceiveProof;
     uint claimIdOnTokenToReceiveProof;
@@ -26,7 +28,7 @@ contract SpecificAddress is Fin4BaseProofType {
     uint messageId;
   }
 
-  // this assumes only one pending approval per address, TODO value must be an array
+  // This assumes only one pending approval per address, TODO value must be an array!
   mapping (address => PendingApproval) public pendingApprovals;
 
   function submitProof_SpecificAddress(address tokenAdrToReceiveProof, uint claimId, address approver) public returns(bool) {
