@@ -5,6 +5,7 @@ import Claim from './Claim';
 import TypeCreation from './TypeCreation';
 import Messages from './Messages';
 
+// view of the first tab
 class Actions extends Component {
 	render() {
 		return (
