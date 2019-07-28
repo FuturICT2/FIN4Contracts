@@ -11,39 +11,28 @@ const getContract = (contractAddress, contractName) => {
 };
 
 const getContractData = (contract, contractJson, method, methodArgs) => {
-	var currentAccount = window.web3.currentProvider.selectedAddress;
+	const currentAccount = window.web3.currentProvider.selectedAddress;
 
-	return new Promise((resolve, reject) => {
-		getContract(contract, contractJson)
-			.then(instance => {
-				return instance[method].call(...methodArgs, {
-					from: currentAccount
-				});
-			})
-			.then(result => {
-				resolve(result);
-			});
+	return getContract(contract, contractJson).then(instance => {
+		return instance[method].call(...methodArgs, {
+			from: currentAccount
+		});
 	});
 };
 
-const getAllTokenTypes = () => {
-	return new Promise((resolve, reject) => {
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren', [])
-			.then(tokens => {
-				return tokens.map(address => {
-					return getContractData(address, 'Fin4Token', 'getInfo', []).then(({ 0: name, 1: symbol }) => {
-						return {
-							value: address,
-							label: `[${symbol}] ${name}`
-						};
-					});
+const getAllActionTypes = () => {
+	return getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren', [])
+		.then(tokens => {
+			return tokens.map(address => {
+				return getContractData(address, 'Fin4Token', 'getInfo', []).then(({ 0: name, 1: symbol }) => {
+					return {
+						value: address,
+						label: `[${symbol}] ${name}`
+					};
 				});
-			})
-			.then(data => Promise.all(data))
-			.then(data => {
-				resolve(data);
 			});
-	});
+		})
+		.then(data => Promise.all(data));
 };
 
 const getNetworkName = () => {
@@ -81,4 +70,4 @@ const getNetworkBalance = () => {
 	});
 };
 
-export { getContractData, getContract, getAllTokenTypes, getNetworkName, getNetworkBalance };
+export { getContractData, getContract, getAllActionTypes, getNetworkName, getNetworkBalance };

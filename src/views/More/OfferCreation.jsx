@@ -5,7 +5,7 @@ import Button from '../../components/Button';
 import Database from '../../components/Database';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getAllTokenTypes } from '../../components/Contractor';
+import { getAllActionTypes } from '../../components/Contractor';
 import Dropdown from '../../components/Dropdown';
 
 class OfferCreation extends Component {
@@ -26,7 +26,7 @@ class OfferCreation extends Component {
 			type: props.offerType
 		};
 
-		getAllTokenTypes().then(data => {
+		getAllActionTypes().then(data => {
 			this.setState({ tokens: data });
 		});
 
