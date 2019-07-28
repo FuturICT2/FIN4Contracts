@@ -18,8 +18,8 @@ class Messages extends Component {
 			messages: []
 		};
 
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress', []).then(Fin4MessagesAddress => {
-			getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount', [])
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
+			getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount')
 				.then(data => {
 					var messageCount = Number(data);
 					var messageIndices = [];

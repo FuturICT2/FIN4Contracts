@@ -18,12 +18,12 @@ class TypeCreation extends Component {
 			proofTypes: []
 		};
 
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes', [])
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes')
 			.then(proofTypeAddresses => {
 				return proofTypeAddresses.map(proofTypeAddress => {
 					return getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypeName', [proofTypeAddress]).then(
 						proofTypeName => {
-							return getContractData(proofTypeAddress, proofTypeName, 'getInfo', []).then(
+							return getContractData(proofTypeAddress, proofTypeName, 'getInfo').then(
 								({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
 									return {
 										value: proofTypeAddress,

@@ -10,7 +10,7 @@ const getContract = (contractAddress, contractName) => {
 	return Contractor.at(contractAddress);
 };
 
-const getContractData = (contract, contractJson, method, methodArgs) => {
+const getContractData = (contract, contractJson, method, methodArgs = []) => {
 	const currentAccount = window.web3.currentProvider.selectedAddress;
 
 	return getContract(contract, contractJson).then(instance => {
@@ -21,10 +21,10 @@ const getContractData = (contract, contractJson, method, methodArgs) => {
 };
 
 const getAllActionTypes = () => {
-	return getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren', [])
+	return getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
 		.then(tokens => {
 			return tokens.map(address => {
-				return getContractData(address, 'Fin4Token', 'getInfo', []).then(({ 0: name, 1: symbol }) => {
+				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol }) => {
 					return {
 						value: address,
 						label: `[${symbol}] ${name}`
