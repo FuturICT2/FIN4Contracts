@@ -35,6 +35,9 @@
 <td><img src="https://user-images.githubusercontent.com/5141792/61829167-a3d52f00-ae68-11e9-98ef-76878f39d2d8.png" width="500" ></a></td>
 </table>
 
+![File Structure](
+https://user-images.githubusercontent.com/9423641/62013340-4f47f180-b191-11e9-8e9f-fa45b0577063.png "File Structure")
+
 ## Quick start
 
 ### Install dependencies
