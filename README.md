@@ -40,16 +40,21 @@
 ### Install dependencies
 
 ```sh
-# npm
+# make, python, gcc, ... (python needs to be in the $PATH afterwards)
+sudo apt-get install build-essential python
+
+# node v10
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-nvm install node
+source ~/.bashrc
+nvm install 10.0.0
+nvm use 10.0.0
 
 # truffle
 npm install -g truffle
 npm install -g ganache-cli
 
 # project
-npm install # requires "python" to be on the PATH as Python 2 executable
+npm install
 ```
 
 BigchainDB requires `docker` and `docker-compose`: follow the installation instructions for **Docker** [here](https://docs.docker.com/engine/installation/) (don't forget the post-installation steps for Linux) and for **Docker Compose** [here](https://docs.docker.com/compose/install/).
