@@ -55,28 +55,6 @@ class Messages extends Component {
 					this.setState({ messages: data });
 				});
 		});
-
-		// add a message if the users ETH balance is 0
-		// causes errors on startup sometimes TODO fix
-		/*getNetworkBalance().then(result => {
-			if (result.c[0] > 0) return;
-			getNetworkName().then(name => {
-				let msg = {
-					messageType: '1',
-					message: 'It looks like your current ' + name + " account has 0 ETH. You won't be able to make transactions",
-					fulfillmentAddress: '0x0',
-					proofTypeName: 'dummy',
-					hasBeenActedUpon: false
-				};
-				this.setState(prevState => ({
-					messages: [...prevState.messages, msg]
-				}));
-			});
-		});*/
-
-		// add a message if the Fin4Main contract could not be found on the network
-		// could happen because of the wrong address in DeployedAddresses.js and/or the wrong network in MetaMask
-		// TODO
 	}
 
 	render() {

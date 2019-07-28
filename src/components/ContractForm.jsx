@@ -135,16 +135,6 @@ class ContractForm extends Component {
 			return this.state[input.name];
 		});
 
-		/*
-		if (this.props.sendArgs) {
-			return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(
-				...convertedInputs,
-				this.props.sendArgs
-			);
-		}
-		return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(...convertedInputs);
-		*/
-
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 		var method = this.props.method;
 

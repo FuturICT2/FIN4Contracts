@@ -71,22 +71,15 @@ class ProofSubmission extends Component {
 	saveToIpfs = async () => {
 		//console.log('File....', this.ipfsApi);
 		this.ipfsApi.add(this.state.buffer, (err, ipfsHash) => {
-			//console.log('......', err);
-			//setState by setting ipfsHash to ipfsHash[0].hash
-			//console.log('IPFS-hash', ipfsHash[0]);
 			this.setState({ ipfsHash: ipfsHash[0].hash });
 			alert('Upload to IPFS successful');
 		});
-		//.catch(err => {
-		//	console.error('Err:', err);
-		//});
 	};
 
 	onSubmitLocationClick = specialFieldObj => {
 		const positionCallback = position => {
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
-			// var timestamp = position.timestamp; // TODO use for another proof type "location in interval"?
 			var multiplier = 10000000;
 
 			var tokenCreatorLatitude = Number(specialFieldObj.data.paramValues[0]) / multiplier;
