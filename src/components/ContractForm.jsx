@@ -1,7 +1,7 @@
 // The original class was from here: https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
 // Much changed since then. The following PropTypes were added:
 // 		contractAddress, contractName: used to get the contract via truffle-contract
-// 		fixArgs: for SC method arguments that are not for the user to set
+// 		staticArgs: additional arguments, which are always submitted regardless of the input arguments
 //		hideArgs: for SC method arguments that are being set computationally, based on the user's input in other fields
 // 		buttonLabel: to customize the submit-button at the end of the form
 // 		specialFields: this is used by the ProofSubmission class to customize the fields for requesting location access and for uploading a picture to IPFS
@@ -89,8 +89,8 @@ class ContractForm extends Component {
 		var paramValuesIndicesArr = [];
 
 		const convertedInputs = this.inputs.map(input => {
-			if (this.props.fixArgs && this.props.fixArgs[input.name]) {
-				return this.props.fixArgs[input.name];
+			if (this.props.staticArgs && this.props.staticArgs[input.name]) {
+				return this.props.staticArgs[input.name];
 			}
 
 			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) {
@@ -273,7 +273,7 @@ class ContractForm extends Component {
 				<form onSubmit={this.handleSubmit} autoComplete="off">
 					{this.inputs.map(({ name, type }, index) => {
 						if (
-							(this.props.fixArgs && this.props.fixArgs[name]) ||
+							(this.props.staticArgs && this.props.staticArgs[name]) ||
 							(this.props.hideArgs && this.props.hideArgs[name])
 						) {
 							return '';
