@@ -2,7 +2,7 @@
 // Much changed since then. The following PropTypes were added:
 // 		contractAddress, contractName: used to get the contract via truffle-contract
 // 		staticArgs: additional arguments, which are always submitted regardless of the input arguments
-//		hideArgs: for SC method arguments that are being set computationally, based on the user's input in other fields
+//		hideArgs: arguments that are being set computationally, based on the user's input in other fields
 // 		buttonLabel: to customize the submit-button at the end of the form
 // 		specialFields: this is used by the ProofSubmission class to customize the fields for requesting location access and for uploading a picture to IPFS
 // 		singleSelectOptions, multiSelectOptions: to supply options for a single- or multiselect dropdown list instead of an input field
