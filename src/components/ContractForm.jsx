@@ -1,5 +1,12 @@
-// original was https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
-// much changed since then :)
+// The original class was from here: https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
+// Much changed since then. The following PropTypes were added:
+// 		contractAddress, contractName
+// 		fixArgs, hideArgs
+// 		buttonLabel
+// 		specialFields
+// 		singleSelectOptions, multiSelectOptions
+// 		helperModalTriggers
+// TODO Some of the added functionality is very specific and should be restructured to be more generic
 
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
@@ -91,7 +98,6 @@ class ContractForm extends Component {
 					var allParamValuesArr = [];
 					for (var i = 0; i < this.state.requiredProofTypes.length; i++) {
 						var proofTypeObj = this.getProofTypeObj(this.state.requiredProofTypes[i]);
-						// console.log(proofTypeObj);
 						var paramValuesObj = proofTypeObj.paramValues;
 						var count = 0;
 						var startIndex = allParamValuesArr.length;
@@ -102,10 +108,10 @@ class ContractForm extends Component {
 							}
 						}
 						var endIndex = startIndex + count - 1;
-						paramValuesIndicesArr.push(count === 0 ? 99 : startIndex); // 99 as indicator for no params for this ProofType
+						// 99 as indicator for no params for this ProofType
+						paramValuesIndicesArr.push(count === 0 ? 99 : startIndex);
 						paramValuesIndicesArr.push(count === 0 ? 99 : endIndex);
 					}
-					// console.log(paramValuesIndicesArr, allParamValuesArr);
 					return allParamValuesArr;
 				}
 
@@ -189,7 +195,6 @@ class ContractForm extends Component {
 			});
 
 			if (newValue != null && this.getProofTypeObj(newValue).paramsEncoded.length > 0) {
-				// this.getProofTypeObj(newValue).label === "MinimumClaimingInterval"
 				this.openModal();
 			}
 			return;
