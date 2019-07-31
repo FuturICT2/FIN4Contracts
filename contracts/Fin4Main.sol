@@ -6,17 +6,28 @@ import 'contracts/proof/Fin4BaseProofType.sol';
 
 contract Fin4Main {
 
-  address[] public children;
+  address[] public children; // all Action Types
   // mapping (address => bool) public officialChildren; // TODO for Sergiu's TCR
 
+  // This methods creates new action types and gets called from TypeCreation
 	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes,
     uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, address(this), msg.sender);
 
-    for (uint i = 0; i < requiredProofTypes.length; i++) {
+    for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the action type creator
       newToken.addRequiredProofType(requiredProofTypes[i]);
       // ProofTypes must be minters because "they" (via msg.sender) are the ones calling mint() if the last required proof type is set to true
       newToken.addMinter(requiredProofTypes[i]);
+
+      // This approach enables setting integer-parameters for the proof types that require parameters.
+      // The challenge to solve here was that some don't need parameters and others need multiple.
+      // Therefore the paramValuesIndices array encodes successively the start- and end indices for
+      // each proof type as they appear in the paramValues array.
+      // An example:
+      //    Proof type A has parameter values 4, 7 and 9, Proof type B as no parameters and Proof type C has the parameter 5.
+      //    paramValues would look like this [4, 7, 9, 5] whereas paramValuesIndices would like like this: [0, 2, 99, 99, 3, 3]
+      //    --> Proof type A has the parameters from index 0 to index 2, Proof type b has no parameters as indicated by the 99
+      //        and Proof type C has the single parameter at index 3
       uint indexStart = paramValuesIndices[i * 2];
       uint indexEnd = paramValuesIndices[i * 2 + 1];
       if (indexStart != 99) {
@@ -25,6 +36,7 @@ contract Fin4Main {
         for (uint j = indexStart; j <= indexEnd; j ++) {
             params[j - indexStart] = paramValues[j];
         }
+        // Send parameters to proof type, it will be stored there linked to the new tokens address
         Fin4BaseProofType(requiredProofTypes[i]).setParameters(address(newToken), params);
       }
     }
@@ -36,6 +48,9 @@ contract Fin4Main {
     return children;
   }
 
+  // ------------------------- BALANCE -------------------------
+
+  // used by More (the marketplace)
   function getChildrenWhereUserHasNonzeroBalance() public view returns(address[] memory) {
     uint count = 0;
     for (uint i = 0; i < children.length; i ++) {
@@ -52,14 +67,13 @@ contract Fin4Main {
     return nonzeroBalanceTokens;
   }
 
-  // ------------------------- MINT, TRANSFER, BALANCE -------------------------
-
   function getBalance(address user, address tokenAddress) public view returns(uint256) {
       return Fin4Token(tokenAddress).balanceOf(user);
   }
 
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
 
+  // to keep track on which action types the user has claims (independent of their approval-statuses)
   mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
 
   function _userClaimedOnThisActionAlready(address user, address action) private view returns (bool) {
@@ -71,6 +85,7 @@ contract Fin4Main {
     return false;
   }
 
+  // used in PreviousClaims
   function getActionsWhereUserHasClaims() public view returns(address[] memory) {
     return actionsWhereUserHasClaims[msg.sender];
   }
@@ -81,6 +96,7 @@ contract Fin4Main {
     }
   }
 
+  // used in Claim - could also happen directly on the Token, but that would complicate the workflow in the front end
   function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public returns(uint) {
     claimSubmissionPingback(msg.sender, tokenAddress);
     return Fin4Token(tokenAddress).submit(msg.sender, quantity, date, comment);
@@ -88,6 +104,7 @@ contract Fin4Main {
 
   // ------------------------- PROOF TYPES -------------------------
 
+  // all the proof types that action type creators can use
   address[] public proofTypes;
 
   function addProofType(address proofType) public returns(bool) {
@@ -116,6 +133,7 @@ contract Fin4Main {
 
   // ------------------------- MESSAGES -------------------------
 
+  // contract handling messages to the user is outsourced
   address public Fin4MessagesAddr;
 
   function setFin4MessagesAddress(address addr) public {

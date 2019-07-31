@@ -16,6 +16,7 @@ import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
+// view of the second tab
 class More extends React.Component {
 	constructor(props) {
 		super(props);
@@ -27,14 +28,12 @@ class More extends React.Component {
 			tokenAddress: [],
 			tokenInfosAndBalances: []
 		};
-		{
-			this.getOfferData();
-		}
+		this.getOfferData();
 
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildrenWhereUserHasNonzeroBalance', [])
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildrenWhereUserHasNonzeroBalance')
 			.then(tokenAddresses => {
-				return tokenAddresses.map((address, index) => {
-					return getContractData(address, 'Fin4Token', 'getInfoAndBalance', []).then(
+				return tokenAddresses.map(address => {
+					return getContractData(address, 'Fin4Token', 'getInfoAndBalance').then(
 						({ 0: name, 1: symbol, 2: balance }) => {
 							return {
 								address: address,
@@ -55,10 +54,11 @@ class More extends React.Component {
 	getOfferData() {
 		['spendingOffers', 'donationOffers'].forEach(offers => {
 			axios.get(`${bigchainConfig.path}assets?search=${offers}`).then(res => {
-				const offersResult = res.data.filter(offer =>
-					this.state.tokenAddress.includes(offer.data.offerData.tokenAddress)
-				);
-				this.setState({ [offers]: res.data }); // TODO use offersResult once this.state.tokenAddress is properly filled again
+				// const offersResult = res.data.filter(offer =>
+				// 	this.state.tokenAddress.includes(offer.data.offerData.tokenAddress)
+				// );
+				// TODO use offersResult instead of res.data once this.state.tokenAddress is properly filled again
+				this.setState({ [offers]: res.data });
 			});
 		});
 	}

@@ -1,5 +1,5 @@
 pragma solidity ^0.5.0;
-pragma experimental ABIEncoderV2;
+pragma experimental ABIEncoderV2; // TODO remove?
 
 import 'contracts/Fin4MainStrut.sol';
 import "contracts/proof/Fin4BaseProofType.sol";
@@ -37,6 +37,8 @@ contract Fin4TokenBase { // abstract class
 
 	mapping (uint => Claim) public claims;
 
+  // Called by submitClaim in Fin4Main
+  // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
 	function submit(address claimer, uint quantity, uint date, string memory comment) public returns (uint) {
     Claim storage claim = claims[nextClaimId];
     claim.claimer = claimer;
@@ -44,23 +46,24 @@ contract Fin4TokenBase { // abstract class
     claim.date = date;
     claim.comment = comment;
     address[] memory requiredProofs = getRequiredProofTypes();
+    // initialize all the proofs required by the action type creator with false
     for (uint i = 0; i < requiredProofs.length; i ++) {
       claim.proof_statuses[requiredProofs[i]] = false;
     }
     claim.isApproved = false;
     nextClaimId ++;
-    // pingbackClaimSubmissionToMain();
     return nextClaimId - 1;
   }
 
-  // TODO only the last two arrays are being used in the frontend, reduce this methods return values?
+  // Used by ProofSubmission
+  // TODO only the last two arrays are being used in the frontend, reduce this methods return values or split off a slimmer method?
   function getClaim(uint claimId) public view returns(string memory, string memory,
     address, bool, uint, uint, string memory, address[] memory, bool[] memory) {
     // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
 
     Claim storage claim = claims[claimId];
-    // this assumes these are still the same as when the claim was submitted
-    // should we support an evolving set of proof types though? TODO
+    // This assumes the proof types are still the same as when the claim was submitted
+    // We probably want to support an evolving set of proof types though? TODO
     address[] memory requiredProofTypes = getRequiredProofTypes();
     bool[] memory proofTypeStatuses = new bool[](requiredProofTypes.length);
     for (uint i = 0; i < requiredProofTypes.length; i ++) {
@@ -98,6 +101,9 @@ contract Fin4TokenBase { // abstract class
     return ids;
   }
 
+  // ------------------------- METHODS USED BY PROOF TYPES -------------------------
+
+  // Used by the MinimumInterval proof type
   function getTimeBetweenThisClaimAndThatClaimersPreviousOne(address claimer, uint claimId) public view returns(uint) {
     uint[] memory ids = _getMyClaimIds(claimer);
     if (ids.length < 2 || ids[0] == claimId) {
@@ -112,13 +118,14 @@ contract Fin4TokenBase { // abstract class
     }
   }
 
+  // Used by the MaximumQuantityPerInterval proof type
   function sumUpQuantitiesWithinIntervalBeforeThisClaim(address claimer, uint claimId, uint interval) public view returns(uint, uint) {
     uint[] memory ids = _getMyClaimIds(claimer);
     if (ids.length < 2 || ids[0] == claimId) {
       return (0, claims[claimId].quantity);
     }
 
-    uint dateOfRequestingClaim = claims[claimId].date; // TODO check if that's actually the claimers
+    uint dateOfRequestingClaim = claims[claimId].date; // TODO check if that's actually the claimers claim
     uint sum = 0;
 
     for (uint i = 0; i < ids.length; i ++) {
@@ -132,18 +139,16 @@ contract Fin4TokenBase { // abstract class
 
   // ------------------------- PROOF TYPES -------------------------
 
-  address[] public requiredProofTypes;
-
-  /*function pingbackClaimSubmissionToMain() public returns(bool) {
-    Fin4MainStrut(Fin4Main).claimSubmissionPingback(msg.sender);
-    return true;
-  }*/
+  address[] public requiredProofTypes; // a subset of all existing ones linked to Fin4Main, defined by the action type creator
 
   // called from ProofType contracts, therefore msg.sender is the address of that SC
   function receiveProofApproval(address claimer, uint claimId) public returns(bool) {
     claims[claimId].proof_statuses[msg.sender] = true;
     if (_allProofTypesApprovedOnClaim(claimId)) {
       claims[claimId].isApproved = true;
+      // here the minting happens, actual change of balance
+      // requires the proof type calling this method to have the Minter role on this Token
+      // that was granted him in Fin4Main.createNewToken()
       mint(claimer, claims[claimId].quantity);
     }
     return true;
@@ -168,6 +173,7 @@ contract Fin4TokenBase { // abstract class
     return requiredProofTypes;
   }
 
+  // called for each proof type from Fin4Main.createNewToken()
   function addRequiredProofType(address proofType) public returns(bool) {
     require(Fin4MainStrut(Fin4Main).proofTypeIsRegistered(proofType),
       "This address is not registered as proof type in Fin4Main");

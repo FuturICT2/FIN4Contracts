@@ -3,7 +3,7 @@ import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getAllTokenTypes } from '../../components/Contractor';
+import { getAllActionTypes } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class Claim extends Component {
@@ -13,7 +13,7 @@ class Claim extends Component {
 			tokens: []
 		};
 
-		getAllTokenTypes().then(data => {
+		getAllActionTypes().then(data => {
 			this.setState({ tokens: data });
 		});
 	}

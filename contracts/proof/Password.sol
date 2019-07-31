@@ -13,6 +13,7 @@ contract Password is Fin4BaseProofType {
       messageType = MessageType.INFO;
     }
 
+    // TODO support string parameters to be able to use a string-password here
     function submitProof_Password(address tokenAdrToReceiveProof, uint claimId, uint password) public returns(bool) {
       //if (keccak256(abi.encodePacked((_password))) == keccak256(abi.encodePacked((password)))) { // via https://ethereum.stackexchange.com/a/30914
       if (password == _getPassword(tokenAdrToReceiveProof)) {
@@ -28,12 +29,12 @@ contract Password is Fin4BaseProofType {
     }
 
     // @Override
-    function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
+    function getParameterForActionTypeCreatorToSetEncoded() public pure returns(string memory) {
       return "uint:password:numeric PIN";
     }
 
     function _getPassword(address token) private view returns(uint) {
-      return fin4TokenToParametersSetOnThisProofType[token][0];
+      return fin4TokenToParametersSetOnThisProofType[token][0]; // TODO this must not be visible to someone using truffle console or similar!
     }
 
 }

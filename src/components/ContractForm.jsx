@@ -1,5 +1,13 @@
-// original was https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
-// much changed since then :)
+// The original class was from here: https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
+// Much changed since then. The following PropTypes were added:
+// 		contractAddress, contractName: used to get the contract via truffle-contract
+// 		staticArgs: additional arguments, which are always submitted regardless of the input arguments
+//		hideArgs: arguments that are being set computationally, based on the user's input in other fields
+// 		buttonLabel: to customize the submit-button at the end of the form
+// 		specialFields: this is used by the ProofSubmission class to customize the fields for requesting location access and for uploading a picture to IPFS
+// 		singleSelectOptions, multiSelectOptions: to supply options for a single- or multiselect dropdown list instead of an input field
+// 		helperModalTriggers: used in TypeCreation to pass the click on
+// TODO Some of the added functionality is very specific and should be restructured to be more generic
 
 import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
@@ -81,8 +89,8 @@ class ContractForm extends Component {
 		var paramValuesIndicesArr = [];
 
 		const convertedInputs = this.inputs.map(input => {
-			if (this.props.fixArgs && this.props.fixArgs[input.name]) {
-				return this.props.fixArgs[input.name];
+			if (this.props.staticArgs && this.props.staticArgs[input.name]) {
+				return this.props.staticArgs[input.name];
 			}
 
 			if (this.props.hideArgs && this.props.hideArgs[input.name] && this.props.multiSelectOptions) {
@@ -91,7 +99,6 @@ class ContractForm extends Component {
 					var allParamValuesArr = [];
 					for (var i = 0; i < this.state.requiredProofTypes.length; i++) {
 						var proofTypeObj = this.getProofTypeObj(this.state.requiredProofTypes[i]);
-						// console.log(proofTypeObj);
 						var paramValuesObj = proofTypeObj.paramValues;
 						var count = 0;
 						var startIndex = allParamValuesArr.length;
@@ -102,10 +109,10 @@ class ContractForm extends Component {
 							}
 						}
 						var endIndex = startIndex + count - 1;
-						paramValuesIndicesArr.push(count === 0 ? 99 : startIndex); // 99 as indicator for no params for this ProofType
+						// 99 as indicator for no params for this ProofType
+						paramValuesIndicesArr.push(count === 0 ? 99 : startIndex);
 						paramValuesIndicesArr.push(count === 0 ? 99 : endIndex);
 					}
-					// console.log(paramValuesIndicesArr, allParamValuesArr);
 					return allParamValuesArr;
 				}
 
@@ -134,16 +141,6 @@ class ContractForm extends Component {
 
 			return this.state[input.name];
 		});
-
-		/*
-		if (this.props.sendArgs) {
-			return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(
-				...convertedInputs,
-				this.props.sendArgs
-			);
-		}
-		return this.contracts[this.contractIdentifier].methods[this.props.method].cacheSend(...convertedInputs);
-		*/
 
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 		var method = this.props.method;
@@ -199,7 +196,6 @@ class ContractForm extends Component {
 			});
 
 			if (newValue != null && this.getProofTypeObj(newValue).paramsEncoded.length > 0) {
-				// this.getProofTypeObj(newValue).label === "MinimumClaimingInterval"
 				this.openModal();
 			}
 			return;
@@ -277,7 +273,7 @@ class ContractForm extends Component {
 				<form onSubmit={this.handleSubmit} autoComplete="off">
 					{this.inputs.map(({ name, type }, index) => {
 						if (
-							(this.props.fixArgs && this.props.fixArgs[name]) ||
+							(this.props.staticArgs && this.props.staticArgs[name]) ||
 							(this.props.hideArgs && this.props.hideArgs[name])
 						) {
 							return '';

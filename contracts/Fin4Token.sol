@@ -11,6 +11,7 @@ contract Fin4Token is Fin4TokenBase, ERC20Detailed, ERC20Mintable {
 
   constructor(string memory name, string memory symbol, address Fin4MainAddress, address actionTypeCreatorAddress)
     // default decimals to 0
+    // Good enough for now, later on we should give advanced token creators the ability to decide this themselves
     ERC20Detailed(name, symbol, d)
     ERC20Mintable()
     ERC20()

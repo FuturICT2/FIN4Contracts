@@ -33,7 +33,7 @@ contract MinimumInterval is Fin4BaseProofType {
     }
 
     // @Override
-    function getParameterForActionTypeCreatorToSetEncoded() public view returns(string memory) {
+    function getParameterForActionTypeCreatorToSetEncoded() public pure returns(string memory) {
       return "uint:minimumInterval:days";
     }
 

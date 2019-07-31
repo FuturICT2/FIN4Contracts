@@ -64,7 +64,7 @@ class Fin4Card extends React.Component {
 						// instead of passing the proofTypeName, make an extra getName() call for that?
 						method="transfer"
 						toggleModal={this.toggleModal.bind(this)}
-						fixArgs={{
+						staticArgs={{
 							recipient: this.props.recipientAddress
 						}}
 					/>

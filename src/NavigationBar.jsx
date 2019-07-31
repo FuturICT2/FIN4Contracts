@@ -29,8 +29,8 @@ class NavigationBar extends Component {
 			<ThemeProvider theme={this.navBarTheme}>
 				<MenuContainer
 					value={this.state.value}
-					onChange={(event, newValue) => {
-						this.setState({ value: newValue });
+					onChange={(event, value) => {
+						this.setState({ value });
 					}}
 					showLabels>
 					{menuItems.map((route, i) => {
