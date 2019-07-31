@@ -11,7 +11,9 @@ const contracts = [
 	artifacts.require('Location')
 ];
 const Registry = artifacts.require('tcr/Registry');
-const Parametrizer = artifacts.require('tcr/Parametrizer');
+const Parametrizer = artifacts.require('tcr/Parameterizer');
+const RegistryFactory = artifacts.require('tcr/RegistryFactory');
+const ParametrizerFactory = artifacts.require('tcr/ParameterizerFactory');
 
 var path = require('path');
 
@@ -42,4 +44,6 @@ module.exports = async function(deployer) {
 
 	await deployer.deploy(Registry);
 	await deployer.deploy(Parametrizer);
+	await deployer.deploy(RegistryFactory);
+	await deployer.deploy(ParametrizerFactory);
 };

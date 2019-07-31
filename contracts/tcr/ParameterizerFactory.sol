@@ -62,7 +62,7 @@ contract ParameterizerFactory {
         // Creates a new ERC20Plus token & transfers the supply to creator (msg.sender)
         // Deploys & initializes a new PLCRVoting contract
         PLCRVoting plcr = plcrFactory.newPLCRWithToken(_supply, _name, _decimals, _symbol);
-        ERC20Plus token = ERC20Plus(plcr.token());
+        ERC20Plus token = ERC20Plus(address(plcr.token()));
         token.transfer(msg.sender, _supply);
 
         // Create & initialize a new Parameterizer contract
