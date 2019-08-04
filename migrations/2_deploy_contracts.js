@@ -10,10 +10,17 @@ const contracts = [
 	artifacts.require('Picture'),
 	artifacts.require('Location')
 ];
-const Registry = artifacts.require('tcr/Registry');
-const Parametrizer = artifacts.require('tcr/Parameterizer');
+
+const DLL = artifacts.require('tcr/PLCR/dependencies/DLL');
+const AttributeStore = artifacts.require('tcr/PLCR/dependencies/AttributeStore');
+const PLCRFactory = artifacts.require('tcr/PLCR/PLCRFactory');
+//const Registry = artifacts.require('tcr/Registry');
+//const Parametrizer = artifacts.require('tcr/Parameterizer');
 const RegistryFactory = artifacts.require('tcr/RegistryFactory');
-const ParametrizerFactory = artifacts.require('tcr/ParameterizerFactory');
+const ParameterizerFactory = artifacts.require('tcr/ParameterizerFactory');
+
+const ERC20Plus = artifacts.require('tokens/ERC20Plus');
+const Reputation = artifacts.require('tcr/Reputation');
 
 var path = require('path');
 
@@ -42,8 +49,30 @@ module.exports = async function(deployer) {
 
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
 
-	await deployer.deploy(Registry);
-	await deployer.deploy(Parametrizer);
-	await deployer.deploy(RegistryFactory);
-	await deployer.deploy(ParametrizerFactory);
+	// TCR Deployment
+
+	// Deploy Dependencies
+	await deployer.deploy(DLL);
+	await deployer.deploy(AttributeStore);
+
+	// Deploy PLCRFactory
+	await deployer.link(DLL, PLCRFactory);
+	await deployer.link(AttributeStore, PLCRFactory);
+	await deployer.deploy(PLCRFactory);
+
+	//Deploy ParametrizerFactory
+	await deployer.link(DLL, ParameterizerFactory);
+	await deployer.link(AttributeStore, ParameterizerFactory);
+	ParametrizerFactoryInstance = await deployer.deploy(ParameterizerFactory, PLCRFactory.address);
+
+	//Deploy RegistryFactory
+	await deployer.link(DLL, RegistryFactory);
+	await deployer.link(AttributeStore, RegistryFactory);
+	RegistryFactoryInstance = await deployer.deploy(RegistryFactory, ParameterizerFactory.address);
+
+	//Deploy GOV token
+	//GOVToken = await deployer.deploy(ERC20Plus, "Governance Token", "GOV", 250, address(0), true, false, true, 0);
+	//await deployer.deploy(ERC20Plus)
+	//await deployer.link(ERC20Plus, RegistryFactory)
+	//await deployer.deploy(Reputation);
 };
