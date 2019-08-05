@@ -48,31 +48,4 @@ module.exports = async function(deployer) {
 	const proofTypeInstances = await Promise.all(contracts.map(contract => contract.deployed()));
 
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
-
-	// TCR Deployment
-
-	// Deploy Dependencies
-	await deployer.deploy(DLL);
-	await deployer.deploy(AttributeStore);
-
-	// Deploy PLCRFactory
-	await deployer.link(DLL, PLCRFactory);
-	await deployer.link(AttributeStore, PLCRFactory);
-	await deployer.deploy(PLCRFactory);
-
-	//Deploy ParametrizerFactory
-	await deployer.link(DLL, ParameterizerFactory);
-	await deployer.link(AttributeStore, ParameterizerFactory);
-	ParametrizerFactoryInstance = await deployer.deploy(ParameterizerFactory, PLCRFactory.address);
-
-	//Deploy RegistryFactory
-	await deployer.link(DLL, RegistryFactory);
-	await deployer.link(AttributeStore, RegistryFactory);
-	RegistryFactoryInstance = await deployer.deploy(RegistryFactory, ParameterizerFactory.address);
-
-	//Deploy GOV token
-	//GOVToken = await deployer.deploy(ERC20Plus, "Governance Token", "GOV", 250, address(0), true, false, true, 0);
-	//await deployer.deploy(ERC20Plus)
-	//await deployer.link(ERC20Plus, RegistryFactory)
-	//await deployer.deploy(Reputation);
 };

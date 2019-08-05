@@ -41,7 +41,8 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"start-ganache": "ganache-cli --port=7545 --allowUnlimitedContractSize --mnemonic=\"camera exclude mail month insect grab eye bubble involve burger soldier ghost\""
 	},
 	"browserslist": {
 		"production": [
