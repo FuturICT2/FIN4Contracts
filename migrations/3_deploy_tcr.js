@@ -51,7 +51,7 @@ module.exports = async function(deployer) {
 	await Fin4ReputationInstance.init(GOVTokenInstance.address);
 
 	// dev: give all tokenHolders 20 reputation tokens
-	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 20)));
+	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 1000)));
 	// get GOV token from rep tokens
 	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.getGOVFromReputation(tokenHolder)));
 

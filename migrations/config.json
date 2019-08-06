@@ -1,6 +1,6 @@
 {
 	"paramConfig": {
-		"minDeposit": 1000,
+		"minDeposit": 100,
 		"pMinDeposit": 100000,
 		"applyStageLength": 600,
 		"pApplyStageLength": 1200,

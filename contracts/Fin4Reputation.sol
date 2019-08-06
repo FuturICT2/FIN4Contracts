@@ -43,7 +43,7 @@ contract Fin4Reputation is ERC20Plus {
 
   // for deployment-dev only, make sure this can't be misused
   function getGOVFromReputation(address tokenHolder) public returns (bool) {
-    GOVToken.mint(tokenHolder, 10);
+    GOVToken.mint(tokenHolder, 500);
     return true;
   }
 
