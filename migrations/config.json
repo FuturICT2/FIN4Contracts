@@ -20,6 +20,7 @@
 		"name": "Governance Token",
 		"symbol": "GOV",
 		"decimals": "18",
+		"supply": "1000000000000000000000000000",
 		"isBurnable": true,
 		"isTransferable": true,
 		"isMintable": true,
