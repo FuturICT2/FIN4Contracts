@@ -5,7 +5,10 @@ const ParameterizerFactory = artifacts.require('tcr/ParameterizerFactory');
 const RegistryFactory = artifacts.require('tcr/RegistryFactory');
 const ERC20Plus = artifacts.require('tokens/ERC20Plus');
 const Reputation = artifacts.require('tcr/Reputation');
+
+const fs = require('fs');
 const config = JSON.parse(fs.readFileSync('./config.json'));
+const paramConfig = config.paramConfig;
 
 module.exports = async function(deployer) {
 	// Deploy Dependencies
@@ -17,12 +20,12 @@ module.exports = async function(deployer) {
 	await deployer.link(AttributeStore, PLCRFactory);
 	await deployer.deploy(PLCRFactory);
 
-	//Deploy ParametrizerFactory
+	// Deploy ParametrizerFactory
 	await deployer.link(DLL, ParameterizerFactory);
 	await deployer.link(AttributeStore, ParameterizerFactory);
 	const parametrizerFactoryInstance = await deployer.deploy(ParameterizerFactory, PLCRFactory.address);
 
-	//Deploy RegistryFactory
+	// Deploy RegistryFactory
 	await deployer.link(DLL, RegistryFactory);
 	await deployer.link(AttributeStore, RegistryFactory);
 	const registryFactoryInstance = await deployer.deploy(RegistryFactory, ParameterizerFactory.address);
@@ -51,5 +54,5 @@ module.exports = async function(deployer) {
 		config.name
 	);
 
-	console.log(registryReceipt.logs);
+	// console.log(registryReceipt.logs);
 };
