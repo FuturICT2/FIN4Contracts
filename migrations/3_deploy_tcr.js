@@ -79,19 +79,14 @@ module.exports = async function(deployer) {
 	);
 
 	const { token, plcr, parameterizer, registry } = registryReceipt.logs[0].args;
+	console.log(registryReceipt.logs);
 
-	const RegistryInstance = await Registry.at(registry);
-
-	// TODO doesn't work yet
 	await GOVTokenInstance.approve(registry, 200);
 
-	console.log(registryReceipt.logs);
+	const RegistryInstance = await Registry.at(registry);
 
 	const Fin4MainInstance = await Fin4Main.deployed();
 	// Token-TCR-Dev-1, Token-TCR-Dev-2, Token-TCR-Dev-3
 	const children = await Fin4MainInstance.getChildren();
-
-	console.log(children);
-
-	//await RegistryInstance.applyToken(children[0], 110, "data");
+	await RegistryInstance.applyToken(children[0], 110, 'data');
 };

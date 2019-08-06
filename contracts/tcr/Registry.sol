@@ -101,7 +101,7 @@ contract Registry {
         listing.unstakedDeposit = _amount;
 
         // Transfers tokens from user to Registry contract
-        require(token.transferFrom(listing.owner, address(this), _amount), "Failed to transfer tokens from user to Registry contract");
+        require(ERC20Plus(token).transferFrom(listing.owner, address(this), _amount), "Failed to transfer tokens from user to Registry contract");
 
         emit _Application(_listingHash, _amount, listing.applicationExpiry, _data, msg.sender);
     }
