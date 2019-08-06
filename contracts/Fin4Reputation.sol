@@ -10,12 +10,12 @@ contract Fin4Reputation is ERC20Plus {
 
     ERC20Plus public GOVToken;
 
-    constructor()//ERC20Plus _GOVToken)
+    constructor()
       ERC20Plus("Fin4Reputation", "REP", 250, address(0), true, true, true,0)
       public{}
 
     function init(address _token) public {
-        require(_token != address(0) && address(GOVToken) == address(0));
+        require(_token != address(0) && address(GOVToken) == address(0), "_token is null or GOVToken is not null");
         GOVToken = ERC20Plus(_token);
     }
 
@@ -36,7 +36,6 @@ contract Fin4Reputation is ERC20Plus {
   }
 
   function getGOVFromReputation() public returns (bool) {
-    require(GOVToken.balanceOf(msg.sender)<this.balanceOf(msg.sender));
     getGOVFromReputation(msg.sender);
     return true;
   }
