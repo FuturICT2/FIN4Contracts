@@ -55,11 +55,8 @@ module.exports = async function(deployer) {
 	// get GOV token from rep tokens
 	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.getGOVFromReputation(tokenHolder)));
 
-	const registryReceipt = await registryFactoryInstance.newRegistryWithToken(
-		config.token.supply,
-		config.token.name,
-		config.token.decimals,
-		config.token.symbol,
+	const registryReceipt = await registryFactoryInstance.newRegistryBYOToken(
+		GOVTokenInstance.address,
 		[
 			paramConfig.minDeposit,
 			paramConfig.pMinDeposit,
