@@ -84,7 +84,10 @@ contract Registry {
     @param _amount      The number of ERC20Plus tokens a user is willing to potentially stake
     @param _data        Extra data relevant to the application. Think IPFS hashes.
     */
-    function applyToken(bytes32 _listingHash, uint _amount, string calldata _data) external {
+    function applyToken(address tokenAddress, uint _amount, string calldata _data) external {
+        // conversion to bytes32 added (Sergiu)
+        bytes32 _listingHash = bytes32(uint256(tokenAddress)); // convert back via address adr = address(uint160(uint256(test)))
+        //
         require(!isWhitelisted(_listingHash));
         require(!appWasMade(_listingHash));
         require(_amount >= parameterizer.get("minDeposit"));
