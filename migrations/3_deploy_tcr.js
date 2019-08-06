@@ -9,6 +9,7 @@ const Fin4Reputation = artifacts.require('Fin4Reputation');
 const fs = require('fs');
 const config = JSON.parse(fs.readFileSync('./config.json'));
 const paramConfig = config.paramConfig;
+const tokenHolders = config.token.tokenHolders;
 
 module.exports = async function(deployer) {
 	// Deploy Dependencies
@@ -47,6 +48,9 @@ module.exports = async function(deployer) {
 
 	const GOVTokenInstance = await ERC20Plus.deployed(); // TODO should be GOVToken?
 	await Fin4ReputationInstance.init(GOVTokenInstance.address);
+
+	// dev: give all tokenHolders 20 reputation tokens
+	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 20)));
 
 	const registryReceipt = await registryFactoryInstance.newRegistryWithToken(
 		config.token.supply,
