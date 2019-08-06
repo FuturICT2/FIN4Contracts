@@ -11,17 +11,6 @@ const contracts = [
 	artifacts.require('Location')
 ];
 
-const DLL = artifacts.require('tcr/PLCR/dependencies/DLL');
-const AttributeStore = artifacts.require('tcr/PLCR/dependencies/AttributeStore');
-const PLCRFactory = artifacts.require('tcr/PLCR/PLCRFactory');
-//const Registry = artifacts.require('tcr/Registry');
-//const Parametrizer = artifacts.require('tcr/Parameterizer');
-const RegistryFactory = artifacts.require('tcr/RegistryFactory');
-const ParameterizerFactory = artifacts.require('tcr/ParameterizerFactory');
-
-const ERC20Plus = artifacts.require('tokens/ERC20Plus');
-const Reputation = artifacts.require('tcr/Reputation');
-
 var path = require('path');
 
 module.exports = async function(deployer) {
