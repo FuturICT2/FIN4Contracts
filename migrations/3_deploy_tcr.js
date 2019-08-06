@@ -45,6 +45,9 @@ module.exports = async function(deployer) {
 		0
 	);
 
+	const GOVTokenInstance = await ERC20Plus.deployed(); // TODO should be GOVToken?
+	await Fin4ReputationInstance.init(GOVTokenInstance.address);
+
 	const registryReceipt = await registryFactoryInstance.newRegistryWithToken(
 		config.token.supply,
 		config.token.name,

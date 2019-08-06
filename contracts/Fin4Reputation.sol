@@ -12,9 +12,12 @@ contract Fin4Reputation is ERC20Plus {
 
     constructor()//ERC20Plus _GOVToken)
       ERC20Plus("Fin4Reputation", "REP", 250, address(0), true, true, true,0)
-      public{
-          GOVToken = new ERC20Plus("Governance Token", "GOV", 250, address(0), true, true, true, 0);
-      }
+      public{}
+
+    function init(address _token) public {
+        require(_token != address(0) && address(GOVToken) == address(0));
+        GOVToken = ERC20Plus(_token);
+    }
 
  /**
    * @dev Function to mint tokens
