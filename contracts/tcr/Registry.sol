@@ -86,7 +86,7 @@ contract Registry {
     */
     function applyToken(address tokenAddress, uint _amount, string calldata _data) external {
         // conversion to bytes32 added (Sergiu)
-        bytes32 _listingHash = bytes32(uint256(tokenAddress)); // convert back via address adr = address(uint160(uint256(test)))
+        bytes32 _listingHash = bytes32(uint256(tokenAddress)); // convert back via address adr = address(uint160(uint256(test))), from https://ethereum.stackexchange.com/a/68358 and https://ethereum.stackexchange.com/a/41356
         //
         require(!isWhitelisted(_listingHash));
         require(!appWasMade(_listingHash));
