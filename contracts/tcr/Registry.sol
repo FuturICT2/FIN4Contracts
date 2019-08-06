@@ -144,7 +144,7 @@ contract Registry {
     @dev		Initialize an exit timer for a listing to leave the whitelist
     @param _listingHash	A listing hash msg.sender is the owner of
     */
-    function initExit(bytes32 _listingHash) external {	
+    function initExit(bytes32 _listingHash) external {
         Listing storage listing = listings[_listingHash];
 
         require(msg.sender == listing.owner);
@@ -177,7 +177,7 @@ contract Registry {
 
         // Make sure the exit was initialized
         require(listing.exitTime > 0);
-        // Time to exit has to be after exit delay but before the exitPeriodLen is over 
+        // Time to exit has to be after exit delay but before the exitPeriodLen is over
 	require(listing.exitTime < now && now < listing.exitTimeExpiry);
 
         resetListing(_listingHash);
@@ -336,7 +336,7 @@ contract Registry {
     @dev                Determines whether the given listingHash be whitelisted.
     @param _listingHash The listingHash whose status is to be examined
     */
-    function canBeWhitelisted(bytes32 _listingHash) view public returns (bool) {
+    function canBeWhitelisted(bytes32 _listingHash) public view returns (bool) {
         uint challengeID = listings[_listingHash].challengeID;
 
         // Ensures that the application was made,
@@ -348,7 +348,9 @@ contract Registry {
             listings[_listingHash].applicationExpiry < now &&
             !isWhitelisted(_listingHash) &&
             (challengeID == 0 || challenges[challengeID].resolved == true)
-        ) { return true; }
+        ) {
+            return true;
+        }
 
         return false;
     }
@@ -357,7 +359,7 @@ contract Registry {
     @dev                Returns true if the provided listingHash is whitelisted
     @param _listingHash The listingHash whose status is to be examined
     */
-    function isWhitelisted(bytes32 _listingHash) view public returns (bool whitelisted) {
+    function isWhitelisted(bytes32 _listingHash) public view returns (bool whitelisted) {
         return listings[_listingHash].whitelisted;
     }
 
@@ -365,7 +367,7 @@ contract Registry {
     @dev                Returns true if apply was called for this listingHash
     @param _listingHash The listingHash whose status is to be examined
     */
-    function appWasMade(bytes32 _listingHash) view public returns (bool exists) {
+    function appWasMade(bytes32 _listingHash) public view returns (bool exists) {
         return listings[_listingHash].applicationExpiry > 0;
     }
 
@@ -373,7 +375,7 @@ contract Registry {
     @dev                Returns true if the application/listingHash has an unresolved challenge
     @param _listingHash The listingHash whose status is to be examined
     */
-    function challengeExists(bytes32 _listingHash) view public returns (bool) {
+    function challengeExists(bytes32 _listingHash) public view returns (bool) {
         uint challengeID = listings[_listingHash].challengeID;
 
         return (listings[_listingHash].challengeID > 0 && !challenges[challengeID].resolved);
@@ -384,7 +386,7 @@ contract Registry {
                         listingHash. Throws if no challenge exists.
     @param _listingHash A listingHash with an unresolved challenge
     */
-    function challengeCanBeResolved(bytes32 _listingHash) view public returns (bool) {
+    function challengeCanBeResolved(bytes32 _listingHash) public view returns (bool) {
         uint challengeID = listings[_listingHash].challengeID;
 
         require(challengeExists(_listingHash));
@@ -436,8 +438,7 @@ contract Registry {
         challenges[challengeID].resolved = true;
 
         // Stores the total tokens used for voting by the winning side for reward purposes
-        challenges[challengeID].totalTokens =
-            voting.getTotalNumberOfTokensForWinningOption(challengeID);
+        challenges[challengeID].totalTokens = voting.getTotalNumberOfTokensForWinningOption(challengeID);
 
         // Case: challenge failed
         if (voting.isPassed(challengeID)) {
@@ -486,7 +487,7 @@ contract Registry {
         address owner = listing.owner;
         uint unstakedDeposit = listing.unstakedDeposit;
         delete listings[_listingHash];
-        
+
         // Transfers any remaining balance back to the owner
         if (unstakedDeposit > 0){
             require(token.transfer(owner, unstakedDeposit));

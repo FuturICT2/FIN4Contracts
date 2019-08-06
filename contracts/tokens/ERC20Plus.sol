@@ -77,11 +77,11 @@ contract ERC20Plus is ERC20Mintable, ERC20Burnable, ERC20Pausable {
   }
 
    /**
-   * @dev This will undo pause(). The purpose of this declaration is to 
+   * @dev This will undo pause(). The purpose of this declaration is to
    * disable this function, as this function must not be called (unless
    * making an untransferable token transferable again is wanted, but
    * this is currently not an offered feature).
-   */  
+   */
   function unpause() public{
     // Checks whether token is being constructed, throws exception if not
     require(constructing, "this function can only be run on creation");
@@ -111,7 +111,7 @@ contract ERC20Plus is ERC20Mintable, ERC20Burnable, ERC20Pausable {
     if(!isTransferable_){
       pause();
     }
-    if(address(minter)!= address(0)){
+    if(address(minter) != address(0)) {
         _addMinter(minter);}
     _mint(msg.sender, initialSupply);
     // To indicate construction is over, and block pause() and unpause()
@@ -122,8 +122,8 @@ contract ERC20Plus is ERC20Mintable, ERC20Burnable, ERC20Pausable {
 
 /**
  * @title ERC20PlusCapped
- * @dev ERC20 Token, which acts very similarly to ERC20Plus, but with the 
- * exception that it has a cap. 
+ * @dev ERC20 Token, which acts very similarly to ERC20Plus, but with the
+ * exception that it has a cap.
  */
 contract ERC20PlusCapped is ERC20Capped, ERC20Plus {
 

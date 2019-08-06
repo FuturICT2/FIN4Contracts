@@ -18,7 +18,7 @@
 * v0.0.3
 * Thanks @dacarley for noticing the incorrect check for the subsequent call to the proxy. 🙌
 * Note: I'm creating a new version of this that doesn't need that one call.
-*       Will add tests and put this in its own repository soon™. 
+*       Will add tests and put this in its own repository soon™.
 * 
 * v0.0.4
 * All the merit in this fix + update of the factory is @dacarley 's. 🙌
