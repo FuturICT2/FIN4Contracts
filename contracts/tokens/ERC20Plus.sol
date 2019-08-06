@@ -16,7 +16,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
  */
 contract ERC20Plus is ERC20Mintable, ERC20Burnable, ERC20Pausable {
 
-  string public  name;
+  string public  name; // TODO store this in ERC20Detailed instead of here?
   string public  symbol;
   uint8 public  decimals;
 
@@ -96,6 +96,10 @@ contract ERC20Plus is ERC20Mintable, ERC20Burnable, ERC20Pausable {
     bool isTransferable_,
     bool isMintable_,
     uint initialSupply)
+      ERC20()
+      ERC20Mintable()
+      ERC20Burnable()
+      ERC20Pausable()
       public
   {
     name = name_;
