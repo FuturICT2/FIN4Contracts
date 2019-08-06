@@ -30,7 +30,8 @@ module.exports = async function(deployer) {
 	await deployer.link(AttributeStore, RegistryFactory);
 	const registryFactoryInstance = await deployer.deploy(RegistryFactory, ParameterizerFactory.address);
 
-	const Fin4ReputationInstance = await deployer.deploy(Fin4Reputation);
+	await deployer.deploy(Fin4Reputation);
+	const Fin4ReputationInstance = await Fin4Reputation.deployed();
 
 	const GOVToken = await deployer.deploy(
 		ERC20Plus,

@@ -6,12 +6,12 @@ import "./tcr/Parameterizer.sol";
 import "./tokens/ERC20Plus.sol";
 
 
-contract Reputation is ERC20Plus {
+contract Fin4Reputation is ERC20Plus {
 
     ERC20Plus public GOVToken;
 
     constructor()//ERC20Plus _GOVToken)
-      ERC20Plus("Reputation", "REP", 250, address(0), true, true, true,0)
+      ERC20Plus("Fin4Reputation", "REP", 250, address(0), true, true, true,0)
       public{
           GOVToken = new ERC20Plus("Governance Token", "GOV", 250, address(0), true, true, true, 0);
       }
