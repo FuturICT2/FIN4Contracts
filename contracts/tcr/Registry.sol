@@ -80,7 +80,7 @@ contract Registry {
     /**
     @dev                Allows a user to start an application. Takes tokens from user and sets
                         apply stage end time.
-    @param _listingHash The hash of a potential listing a user is applying to add to the registry
+    @param tokenAddress The hash of a potential listing a user is applying to add to the registry // TODO adapt comment
     @param _amount      The number of ERC20Plus tokens a user is willing to potentially stake
     @param _data        Extra data relevant to the application. Think IPFS hashes.
     */
