@@ -3,6 +3,7 @@ const DLL = artifacts.require('tcr/PLCR/dependencies/DLL');
 const PLCRFactory = artifacts.require('tcr/PLCRFactory');
 const ParameterizerFactory = artifacts.require('tcr/ParameterizerFactory');
 const RegistryFactory = artifacts.require('tcr/RegistryFactory');
+const Registry = artifacts.require('tcr/Registry');
 const ERC20Plus = artifacts.require('tokens/ERC20Plus');
 const Fin4Reputation = artifacts.require('Fin4Reputation');
 
@@ -77,6 +78,10 @@ module.exports = async function(deployer) {
 		],
 		config.name
 	);
+
+	const { token, plcr, parameterizer, registry } = registryReceipt.logs[0].args;
+
+	const RegistryInstance = await Registry.at(registry);
 
 	console.log(registryReceipt.logs);
 };
