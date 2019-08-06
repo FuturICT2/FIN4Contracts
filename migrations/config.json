@@ -17,10 +17,12 @@
 	},
 	"name": "FIN4 list of accepted tokens",
 	"token": {
-		"supply": "1000000000000000000000000000",
 		"name": "Governance Token",
-		"decimals": "18",
 		"symbol": "GOV",
+		"decimals": "18",
+		"isBurnable": true,
+		"isTransferable": true,
+		"isMintable": true,
 		"tokenHolders": [
 			"0xcb8310d61294b52500ad2359eb43fca4ed6bcebb",
 			"0x89d566c1dbcc16e72bcf99faa2a3e8bd0b00c61c",

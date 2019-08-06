@@ -37,13 +37,13 @@ module.exports = async function(deployer) {
 
 	const GOVToken = await deployer.deploy(
 		ERC20Plus,
-		'Governance Token',
-		'GOV',
-		250,
+		config.token.name,
+		config.token.symbol,
+		config.token.decimals,
 		Fin4ReputationInstance.address,
-		true,
-		true,
-		true,
+		config.token.isBurnable,
+		config.token.isTransferable,
+		config.token.isMintable,
 		0
 	);
 
