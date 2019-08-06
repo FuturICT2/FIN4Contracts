@@ -19,10 +19,36 @@ module.exports = async function(deployer) {
 	//Deploy ParametrizerFactory
 	await deployer.link(DLL, ParameterizerFactory);
 	await deployer.link(AttributeStore, ParameterizerFactory);
-	ParametrizerFactoryInstance = await deployer.deploy(ParameterizerFactory, PLCRFactory.address);
+	const parametrizerFactoryInstance = await deployer.deploy(ParameterizerFactory, PLCRFactory.address);
 
 	//Deploy RegistryFactory
 	await deployer.link(DLL, RegistryFactory);
 	await deployer.link(AttributeStore, RegistryFactory);
-	RegistryFactoryInstance = await deployer.deploy(RegistryFactory, ParameterizerFactory.address);
+	const registryFactoryInstance = await deployer.deploy(RegistryFactory, ParameterizerFactory.address);
+
+	const registryReceipt = await registryFactoryInstance.newRegistryWithToken(
+		config.token.supply,
+		config.token.name,
+		config.token.decimals,
+		config.token.symbol,
+		[
+			paramConfig.minDeposit,
+			paramConfig.pMinDeposit,
+			paramConfig.applyStageLength,
+			paramConfig.pApplyStageLength,
+			paramConfig.commitStageLength,
+			paramConfig.pCommitStageLength,
+			paramConfig.revealStageLength,
+			paramConfig.pRevealStageLength,
+			paramConfig.dispensationPct,
+			paramConfig.pDispensationPct,
+			paramConfig.voteQuorum,
+			paramConfig.pVoteQuorum,
+			paramConfig.exitTimeDelay,
+			paramConfig.exitPeriodLen
+		],
+		config.name
+	);
+
+	console.log(registryReceipt.logs);
 };
