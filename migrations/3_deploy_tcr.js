@@ -7,6 +7,8 @@ const Registry = artifacts.require('tcr/Registry');
 const ERC20Plus = artifacts.require('tokens/ERC20Plus');
 const Fin4Reputation = artifacts.require('Fin4Reputation');
 
+const Fin4Main = artifacts.require('Fin4Main');
+
 const fs = require('fs');
 const config = JSON.parse(fs.readFileSync('./config.json'));
 const paramConfig = config.paramConfig;
@@ -84,4 +86,12 @@ module.exports = async function(deployer) {
 	await GOVTokenInstance.approve(registry, 200);
 
 	console.log(registryReceipt.logs);
+
+	const Fin4MainInstance = await Fin4Main.deployed();
+	// Token-TCR-Dev-1, Token-TCR-Dev-2, Token-TCR-Dev-3
+	const children = await Fin4MainInstance.getChildren();
+
+	console.log(children);
+
+	//await RegistryInstance.applyToken(children[0], 110, "data");
 };
