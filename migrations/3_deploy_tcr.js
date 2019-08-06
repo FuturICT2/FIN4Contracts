@@ -4,7 +4,7 @@ const PLCRFactory = artifacts.require('tcr/PLCRFactory');
 const ParameterizerFactory = artifacts.require('tcr/ParameterizerFactory');
 const RegistryFactory = artifacts.require('tcr/RegistryFactory');
 const ERC20Plus = artifacts.require('tokens/ERC20Plus');
-const Reputation = artifacts.require('tcr/Reputation');
+const Fin4Reputation = artifacts.require('Fin4Reputation');
 
 const fs = require('fs');
 const config = JSON.parse(fs.readFileSync('./config.json'));
@@ -30,6 +30,20 @@ module.exports = async function(deployer) {
 	await deployer.link(AttributeStore, RegistryFactory);
 	const registryFactoryInstance = await deployer.deploy(RegistryFactory, ParameterizerFactory.address);
 
+	const Fin4ReputationInstance = await deployer.deploy(Fin4Reputation);
+
+	const GOVToken = await deployer.deploy(
+		ERC20Plus,
+		'Governance Token',
+		'GOV',
+		250,
+		Fin4ReputationInstance.address,
+		true,
+		true,
+		true,
+		0
+	);
+
 	const registryReceipt = await registryFactoryInstance.newRegistryWithToken(
 		config.token.supply,
 		config.token.name,
@@ -54,5 +68,5 @@ module.exports = async function(deployer) {
 		config.name
 	);
 
-	// console.log(registryReceipt.logs);
+	console.log(registryReceipt.logs);
 };
