@@ -38,7 +38,8 @@ module.exports = async function(deployer) {
 
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
 
-	//ion createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes,
-	//uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
-	await Fin4MainInstance.createNewToken('Tree-Token-TCR-Dev', 'TDT', [], [], []);
+	// temp: tokens to work on TCR dev
+	await Fin4MainInstance.createNewToken('Token-TCR-Dev-1', 'TD1', [], [], []);
+	await Fin4MainInstance.createNewToken('Token-TCR-Dev-2', 'TD2', [], [], []);
+	await Fin4MainInstance.createNewToken('Token-TCR-Dev-3', 'TD3', [], [], []);
 };

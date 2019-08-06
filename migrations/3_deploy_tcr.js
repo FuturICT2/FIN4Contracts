@@ -83,5 +83,8 @@ module.exports = async function(deployer) {
 
 	const RegistryInstance = await Registry.at(registry);
 
+	// TODO doesn't work yet
+	await GOVTokenInstance.approve(registry, 200);
+
 	console.log(registryReceipt.logs);
 };
