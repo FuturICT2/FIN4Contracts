@@ -51,6 +51,8 @@ module.exports = async function(deployer) {
 
 	// dev: give all tokenHolders 20 reputation tokens
 	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 20)));
+	// get GOV token from rep tokens
+	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.getGOVFromReputation(tokenHolder)));
 
 	const registryReceipt = await registryFactoryInstance.newRegistryWithToken(
 		config.token.supply,
