@@ -88,9 +88,9 @@ contract Registry {
         // conversion to bytes32 added (Sergiu)
         bytes32 _listingHash = bytes32(uint256(tokenAddress)); // convert back via address adr = address(uint160(uint256(test))), from https://ethereum.stackexchange.com/a/68358 and https://ethereum.stackexchange.com/a/41356
         //
-        require(!isWhitelisted(_listingHash));
-        require(!appWasMade(_listingHash));
-        require(_amount >= parameterizer.get("minDeposit"));
+        require(!isWhitelisted(_listingHash), "listingHash is not whitelisted");
+        require(!appWasMade(_listingHash), "app was not made for listingHash");
+        require(_amount >= parameterizer.get("minDeposit"), "amount is smaller then minDeposit");
 
         // Sets owner
         Listing storage listing = listings[_listingHash];
@@ -101,7 +101,7 @@ contract Registry {
         listing.unstakedDeposit = _amount;
 
         // Transfers tokens from user to Registry contract
-        require(token.transferFrom(listing.owner, address(this), _amount));
+        require(token.transferFrom(listing.owner, address(this), _amount), "Failed to transfer tokens from user to Registry contract");
 
         emit _Application(_listingHash, _amount, listing.applicationExpiry, _data, msg.sender);
     }
