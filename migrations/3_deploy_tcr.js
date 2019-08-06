@@ -5,6 +5,7 @@ const ParameterizerFactory = artifacts.require('tcr/ParameterizerFactory');
 const RegistryFactory = artifacts.require('tcr/RegistryFactory');
 const ERC20Plus = artifacts.require('tokens/ERC20Plus');
 const Reputation = artifacts.require('tcr/Reputation');
+const config = JSON.parse(fs.readFileSync('./config.json'));
 
 module.exports = async function(deployer) {
 	// Deploy Dependencies
