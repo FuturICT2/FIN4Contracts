@@ -10,6 +10,7 @@ const Fin4Reputation = artifacts.require('Fin4Reputation');
 const Fin4Main = artifacts.require('Fin4Main');
 
 const fs = require('fs');
+var path = require('path');
 const config = JSON.parse(fs.readFileSync('./config.json'));
 const paramConfig = config.paramConfig;
 const tokenHolders = config.token.tokenHolders;
@@ -84,8 +85,21 @@ module.exports = async function(deployer) {
 	await GOVTokenInstance.approve(registry, 200);
 
 	const RegistryInstance = await Registry.at(registry);
-
 	const Fin4MainInstance = await Fin4Main.deployed();
+
+	// write Fin4Main and registry address to src/config/DeployedAddresses.js
+	let data =
+		"const Fin4MainAddress = '" +
+		Fin4MainInstance.address +
+		"';\n" +
+		"const RegistryAddress = '" +
+		RegistryInstance.address +
+		"';\n" +
+		'export { Fin4MainAddress, RegistryAddress };\n';
+	fs.writeFile(path.join(__dirname, '../src/config/DeployedAddresses.js'), data, err => {
+		if (err) throw 'Error writing file: ' + err;
+	});
+
 	// Token-TCR-Dev-1, Token-TCR-Dev-2, Token-TCR-Dev-3
 	const children = await Fin4MainInstance.getChildren();
 	await RegistryInstance.applyToken(children[0], 110, 'data');
