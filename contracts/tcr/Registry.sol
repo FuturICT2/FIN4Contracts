@@ -514,4 +514,38 @@ contract Registry {
             }
         }
     }
+
+    /**
+    @dev                Returns a list of 
+    */
+    function getListings () public view returns (address[] memory, bytes32[] memory) {
+        address[] memory addresses = new address[](listingsIndexes.length);
+        uint[] memory applicationExpiries = new uint[](listingsIndexes.length);
+        bool[] memory whitelistees = new bool[](listingsIndexes.length);
+        address[] memory owners = new address[](listingsIndexes.length);
+        uint[] memory unstakedDeposits = new uint[](listingsIndexes.length);
+        uint[] memory challengeIDs = new uint[](listingsIndexes.length);
+	    uint[] memory exitTimes = new uint[](listingsIndexes.length);
+        uint[] memory exitTimeExpiries = new uint[](listingsIndexes.length);
+    
+        for (uint i = 0; i<listingsIndexes.length-1; i++){
+            addresses[i] = address(uint160(uint256(listingsIndexes[i])));
+            Listing memory lst = listings[listingsIndexes[i]];
+            applicationExpiries[i] = lst.applicationExpiry;
+            whitelistees[i] = lst.whitelisted;
+            owners[i] = lst.owner;
+            unstakedDeposits[i] = lst.unstakedDeposit;
+            challengeIDs[i] = lst.challengeID;
+            exitTimes[i] = lst.exitTime;
+            exitTimeExpiries[i] = lst.exitTimeExpiry;
+        }
+        return (addresses, listingsIndexes);
+    }
+
+    function addressToString(address x) private view returns (string memory) {
+        bytes memory b = new bytes(20);
+        for (uint i = 0; i < 20; i++)
+            b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
+        return string(b);
+    }
 }
