@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
+import { RegistryAddress } from '../../config/DeployedAddresses.js';
 
 class AcceptedTokens extends Component {
 	constructor(props) {
@@ -20,7 +21,11 @@ class AcceptedTokens extends Component {
 			]
 		};
 
-		// TODO getContractData()
+		/*
+		getContractData(RegistryAddress, 'Registry', 'getListings').then(listings => {
+			// TODO setState
+		});
+		*/
 	}
 
 	render() {
