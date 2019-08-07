@@ -47,9 +47,11 @@ contract Registry {
     }
 
     // Maps challengeIDs to associated challenge data
+    bytes32[] private challengesIndexes;
     mapping(uint => Challenge) public challenges;
 
     // Maps listingHashes to associated listingHash data
+    bytes32[] private listingsIndexes;
     mapping(bytes32 => Listing) public listings;
 
     // Global Variables
@@ -93,6 +95,7 @@ contract Registry {
         require(_amount >= parameterizer.get("minDeposit"), "amount is smaller then minDeposit");
 
         // Sets owner
+        listingsIndexes.push(_listingHash);
         Listing storage listing = listings[_listingHash];
         listing.owner = msg.sender;
 
@@ -476,6 +479,7 @@ contract Registry {
     function resetListing(bytes32 _listingHash) private {
         Listing storage listing = listings[_listingHash];
 
+
         // Emit events before deleting listing to check whether is whitelisted
         if (listing.whitelisted) {
             emit _ListingRemoved(_listingHash);
@@ -487,10 +491,27 @@ contract Registry {
         address owner = listing.owner;
         uint unstakedDeposit = listing.unstakedDeposit;
         delete listings[_listingHash];
+        removeListingIndex(_listingHash);
 
         // Transfers any remaining balance back to the owner
         if (unstakedDeposit > 0){
             require(token.transfer(owner, unstakedDeposit));
+        }
+    }
+    /**
+    @dev                Deletes entry from the listingIndex
+    @param _listingHash The listing hash to delete
+    */
+    function removeListingIndex(bytes32 _listingHash) private {
+        for (uint i = 0; i<listingsIndexes.length-1; i++){
+            if (listingsIndexes[i] == _listingHash) {
+                for (uint j = i; j<listingsIndexes.length-1; j++){
+                    listingsIndexes[j] = listingsIndexes[j+1];
+                }
+                delete listingsIndexes[listingsIndexes.length-1];
+                listingsIndexes.length--;
+                break;
+            }
         }
     }
 }
