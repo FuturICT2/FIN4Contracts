@@ -1,24 +1,10 @@
 import React, { Component } from 'react';
 import Container from '../../components/Container';
-import PreviousClaims from './PreviousClaims';
-import Claim from './Claim';
-import TypeCreation from './TypeCreation';
-import Messages from './Messages';
 
-// view of the first tab
-class Actions extends Component {
+class AcceptedTokens extends Component {
 	render() {
-		return (
-			<Container>
-				<Messages />
-				<div>
-					<Claim />
-					<TypeCreation />
-				</div>
-				<PreviousClaims />
-			</Container>
-		);
+		return <Container>TODO</Container>;
 	}
 }
 
-export default Actions;
+export default AcceptedTokens;
