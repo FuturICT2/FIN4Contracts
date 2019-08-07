@@ -156,7 +156,7 @@ contract Parameterizer {
             value: _value
         });
 
-        require(token.transferFrom(msg.sender, address(this), deposit)); // escrow tokens (deposit amt)
+        require(ERC20Plus(token).transferFrom(msg.sender, address(this), deposit)); // escrow tokens (deposit amt)
 
         emit _ReparameterizationProposal(_name, _value, propID, deposit, proposals[propID].appExpiry, msg.sender);
         return propID;
@@ -190,7 +190,7 @@ contract Parameterizer {
         proposals[_propID].challengeID = pollID;       // update listing to store most recent challenge
 
         //take tokens from challenger
-        require(token.transferFrom(msg.sender, address(this), deposit));
+        require(ERC20Plus(token).transferFrom(msg.sender, address(this), deposit));
 
         (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
 
@@ -216,7 +216,7 @@ contract Parameterizer {
             set(prop.name, prop.value);
             emit _ProposalAccepted(_propID, prop.name, prop.value);
             delete proposals[_propID];
-            require(token.transfer(propOwner, propDeposit));
+            require(ERC20Plus(token).transfer(propOwner, propDeposit));
         } else if (challengeCanBeResolved(_propID)) {
             // There is a challenge against the proposal.
             resolveChallenge(_propID);
@@ -224,7 +224,7 @@ contract Parameterizer {
             // There is no challenge against the proposal, but the processBy date has passed.
             emit _ProposalExpired(_propID);
             delete proposals[_propID];
-            require(token.transfer(propOwner, propDeposit));
+            require(ERC20Plus(token).transfer(propOwner, propDeposit));
         } else {
             // There is no challenge against the proposal, and neither the appExpiry date nor the
             // processBy date has passed.
@@ -265,7 +265,7 @@ contract Parameterizer {
         challenge.tokenClaims[msg.sender] = true;
 
         emit _RewardClaimed(_challengeID, reward, msg.sender);
-        require(token.transfer(msg.sender, reward));
+        require(ERC20Plus(token).transfer(msg.sender, reward));
     }
 
     /**
@@ -380,11 +380,11 @@ contract Parameterizer {
                 set(prop.name, prop.value);
             }
             emit _ChallengeFailed(_propID, prop.challengeID, challenge.rewardPool, challenge.winningTokens);
-            require(token.transfer(prop.owner, reward));
+            require(ERC20Plus(token).transfer(prop.owner, reward));
         }
         else { // The challenge succeeded or nobody voted
             emit _ChallengeSucceeded(_propID, prop.challengeID, challenge.rewardPool, challenge.winningTokens);
-            require(token.transfer(challenges[prop.challengeID].challenger, reward));
+            require(ERC20Plus(token).transfer(challenges[prop.challengeID].challenger, reward));
         }
     }
 

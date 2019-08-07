@@ -76,9 +76,9 @@ contract PLCRVoting {
     @param _numTokens The number of votingTokens desired in exchange for ERC20 tokens
     */
     function requestVotingRights(uint _numTokens) public {
-        require(token.balanceOf(msg.sender) >= _numTokens);
+        require(ERC20Plus(token).balanceOf(msg.sender) >= _numTokens);
         voteTokenBalance[msg.sender] += _numTokens;
-        require(token.transferFrom(msg.sender, address(this), _numTokens));
+        require(ERC20Plus(token).transferFrom(msg.sender, address(this), _numTokens));
         emit _VotingRightsGranted(_numTokens, msg.sender);
     }
 
@@ -90,7 +90,7 @@ contract PLCRVoting {
         uint availableTokens = voteTokenBalance[msg.sender].sub(getLockedTokens(msg.sender));
         require(availableTokens >= _numTokens);
         voteTokenBalance[msg.sender] -= _numTokens;
-        require(token.transfer(msg.sender, _numTokens));
+        require(ERC20Plus(token).transfer(msg.sender, _numTokens));
         emit _VotingRightsWithdrawn(_numTokens, msg.sender);
     }
 

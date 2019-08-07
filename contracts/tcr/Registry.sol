@@ -117,7 +117,7 @@ contract Registry {
         require(listing.owner == msg.sender);
 
         listing.unstakedDeposit += _amount;
-        require(token.transferFrom(msg.sender, address(this), _amount));
+        require(ERC20Plus(token).transferFrom(msg.sender, address(this), _amount));
 
         emit _Deposit(_listingHash, _amount, listing.unstakedDeposit, msg.sender);
     }
@@ -234,7 +234,7 @@ contract Registry {
         listing.unstakedDeposit -= minDeposit;
 
         // Takes tokens from challenger
-        require(token.transferFrom(msg.sender, address(this), minDeposit));
+        require(ERC20Plus(token).transferFrom(msg.sender, address(this), minDeposit));
 
         (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
 
