@@ -3,34 +3,38 @@ import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { RegistryAddress } from '../../config/DeployedAddresses.js';
-import { getContractData } from '../../components/Contractor';
+import { getContractData, getAllActionTypes } from '../../components/Contractor';
 
 class AcceptedTokens extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			listings: [
-				{
-					address: 'foo1',
-					listingKey: 'info1'
-				},
-				{
-					address: 'foo2',
-					listingKey: 'info2'
-				}
-			]
+			listings: {},
+			allFin4Tokens: [],
+			unlistedFin4Tokens: []
 		};
 
 		getContractData(RegistryAddress, 'Registry', 'getListings').then(({ 0: addresses, 1: listingsKeys }) => {
-			let listingsArr = [];
+			let listingsObj = [];
 			for (var i = 0; i < addresses.length; i++) {
-				listingsArr.push({
+				listingsObj[addresses[i]] = {
 					address: addresses[i],
 					listingKey: listingsKeys[i]
-				});
+				};
 			}
-			this.setState({ listings: listingsArr });
+			this.setState({ listings: listingsObj });
+
+			getAllActionTypes().then(data => {
+				this.setState({ allFin4Tokens: data });
+				let unlistedFin4TokensArr = [];
+				for (var i = 0; i < data.length; i++) {
+					if (!listingsObj[data.value]) {
+						unlistedFin4TokensArr.push(data[i]);
+					}
+				}
+				this.setState({ unlistedFin4Tokens: unlistedFin4TokensArr });
+			});
 		});
 	}
 
@@ -39,13 +43,13 @@ class AcceptedTokens extends Component {
 			<center>
 				<Box title="Listings">
 					<Table headers={['address', 'listingKey']}>
-						{this.state.listings.map((entry, index) => {
+						{Object.keys(this.state.listings).map((key, index) => {
 							return (
 								<TableRow
 									key={index}
 									data={{
-										address: entry.address,
-										listingKey: entry.listingKey
+										address: this.state.listings[key].address,
+										listingKey: this.state.listings[key].listingKey
 									}}
 								/>
 							);
