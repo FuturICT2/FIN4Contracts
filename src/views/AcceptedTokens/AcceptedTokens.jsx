@@ -4,6 +4,7 @@ import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { RegistryAddress } from '../../config/DeployedAddresses.js';
 import { getContractData, getAllActionTypes } from '../../components/Contractor';
+import Button from '../../components/Button';
 
 class AcceptedTokens extends Component {
 	constructor(props) {
@@ -38,6 +39,10 @@ class AcceptedTokens extends Component {
 		});
 	}
 
+	applyTokenClick = event => {
+		// TODO
+	};
+
 	render() {
 		return (
 			<center>
@@ -50,6 +55,21 @@ class AcceptedTokens extends Component {
 									data={{
 										address: this.state.listings[key].address,
 										listingKey: this.state.listings[key].listingKey
+									}}
+								/>
+							);
+						})}
+					</Table>
+				</Box>
+				<Box title="Unlisted Fin4 Tokens">
+					<Table headers={['name', 'apply']}>
+						{this.state.unlistedFin4Tokens.map((entry, index) => {
+							return (
+								<TableRow
+									key={index}
+									data={{
+										name: entry.label,
+										apply: <Button onClick={this.applyTokenClick}>Apply</Button>
 									}}
 								/>
 							);
