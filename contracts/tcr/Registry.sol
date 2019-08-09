@@ -51,7 +51,7 @@ contract Registry {
     mapping(uint => Challenge) public challenges;
 
     // Maps listingHashes to associated listingHash data
-    bytes32[] private listingsKeys;
+    bytes32[] private listingsIndexes;
     mapping(bytes32 => Listing) public listings;
 
     // Global Variables
@@ -88,14 +88,14 @@ contract Registry {
     */
     function applyToken(address tokenAddress, uint _amount, string calldata _data) external {
         // conversion to bytes32 added (Sergiu)
-        bytes32 _listingHash = bytes32(uint256(tokenAddress)) << 96; // convert back via address adr = address(uint160(uint256(test))), from https://ethereum.stackexchange.com/a/68358 and https://ethereum.stackexchange.com/a/41356
+        bytes32 _listingHash = bytes32(uint256(tokenAddress)); // convert back via address adr = address(uint160(uint256(test))), from https://ethereum.stackexchange.com/a/68358 and https://ethereum.stackexchange.com/a/41356
         //
         require(!isWhitelisted(_listingHash), "listingHash is not whitelisted");
         require(!appWasMade(_listingHash), "app was not made for listingHash");
         require(_amount >= parameterizer.get("minDeposit"), "amount is smaller then minDeposit");
 
         // Sets owner
-        listingsKeys.push(_listingHash);
+        listingsIndexes.push(_listingHash);
         Listing storage listing = listings[_listingHash];
         listing.owner = msg.sender;
 
@@ -503,35 +503,34 @@ contract Registry {
     @param _listingHash The listing hash to delete
     */
     function removeListingIndex(bytes32 _listingHash) private {
-        for (uint i = 0; i<listingsKeys.length-1; i++){
-            if (listingsKeys[i] == _listingHash) {
-                for (uint j = i; j<listingsKeys.length-1; j++){
-                    listingsKeys[j] = listingsKeys[j+1];
+        for (uint i = 0; i<listingsIndexes.length-1; i++){
+            if (listingsIndexes[i] == _listingHash) {
+                for (uint j = i; j<listingsIndexes.length-1; j++){
+                    listingsIndexes[j] = listingsIndexes[j+1];
                 }
-                delete listingsKeys[listingsKeys.length-1];
-                listingsKeys.length--;
+                delete listingsIndexes[listingsIndexes.length-1];
+                listingsIndexes.length--;
                 break;
             }
         }
     }
 
     /**
-    @dev                Returns a list of listees
+    @dev                Returns a list of 
     */
-    function getListings () public view returns (address[] memory, bytes32[] memory, uint[] memory,
-    bool[] memory, address[] memory, uint[] memory, uint[] memory, uint[] memory, uint[] memory) {
-        address[] memory addresses = new address[](listingsKeys.length);
-        uint[] memory applicationExpiries = new uint[](listingsKeys.length);
-        bool[] memory whitelistees = new bool[](listingsKeys.length);
-        address[] memory owners = new address[](listingsKeys.length);
-        uint[] memory unstakedDeposits = new uint[](listingsKeys.length);
-        uint[] memory challengeIDs = new uint[](listingsKeys.length);
-	    uint[] memory exitTimes = new uint[](listingsKeys.length);
-        uint[] memory exitTimeExpiries = new uint[](listingsKeys.length);
+    function getListings () public view returns (address[] memory, bytes32[] memory) {
+        address[] memory addresses = new address[](listingsIndexes.length);
+        uint[] memory applicationExpiries = new uint[](listingsIndexes.length);
+        bool[] memory whitelistees = new bool[](listingsIndexes.length);
+        address[] memory owners = new address[](listingsIndexes.length);
+        uint[] memory unstakedDeposits = new uint[](listingsIndexes.length);
+        uint[] memory challengeIDs = new uint[](listingsIndexes.length);
+	    uint[] memory exitTimes = new uint[](listingsIndexes.length);
+        uint[] memory exitTimeExpiries = new uint[](listingsIndexes.length);
     
-        for (uint i = 0; i<listingsKeys.length-1; i++){
-            addresses[i] = address(uint160(uint256(listingsKeys[i])));
-            Listing memory lst = listings[listingsKeys[i]];
+        for (uint i = 0; i<listingsIndexes.length-1; i++){
+            addresses[i] = address(uint160(uint256(listingsIndexes[i])));
+            Listing memory lst = listings[listingsIndexes[i]];
             applicationExpiries[i] = lst.applicationExpiry;
             whitelistees[i] = lst.whitelisted;
             owners[i] = lst.owner;
@@ -540,7 +539,13 @@ contract Registry {
             exitTimes[i] = lst.exitTime;
             exitTimeExpiries[i] = lst.exitTimeExpiry;
         }
-        return (addresses, listingsKeys, applicationExpiries, whitelistees, owners, 
-        unstakedDeposits, challengeIDs, exitTimes, exitTimeExpiries);
+        return (addresses, listingsIndexes);
+    }
+
+    function addressToString(address x) private view returns (string memory) {
+        bytes memory b = new bytes(20);
+        for (uint i = 0; i < 20; i++)
+            b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
+        return string(b);
     }
 }
