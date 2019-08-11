@@ -16,27 +16,53 @@ class AcceptedTokens extends Component {
 			unlistedFin4Tokens: []
 		};
 
-		getContractData(RegistryAddress, 'Registry', 'getListings').then(({ 0: addresses, 1: listingsKeys }) => {
-			let listingsObj = [];
-			for (var i = 0; i < addresses.length; i++) {
-				listingsObj[addresses[i]] = {
-					address: addresses[i],
-					listingKey: listingsKeys[i]
-				};
-			}
-			this.setState({ listings: listingsObj });
-
-			getAllActionTypes().then(data => {
-				this.setState({ allFin4Tokens: data });
-				let unlistedFin4TokensArr = [];
-				for (var i = 0; i < data.length; i++) {
-					if (!listingsObj[data.value]) {
-						unlistedFin4TokensArr.push(data[i]);
-					}
+		getContractData(RegistryAddress, 'Registry', 'getListings').then(
+			({
+				0: addresses,
+				1: listingsKeys,
+				2: applicationExpiries,
+				3: whitelistees,
+				4: owners,
+				5: unstakedDeposits,
+				6: challengeIDs
+			}) => {
+				let listingsObj = [];
+				let testObj;
+				for (var i = 0; i < addresses.length; i++) {
+					let addressFromListingKey = '0x' + listingsKeys[i].substr(26, listingsKeys[i].length - 1);
+					testObj = addressFromListingKey;
+					listingsObj[addressFromListingKey] = {
+						address: addressFromListingKey, //addresses[i],
+						listingKey: listingsKeys[i],
+						applicationExpiry: applicationExpiries[i],
+						whitelisted: whitelistees[i],
+						owner: owners[i],
+						unstakedDeposit: unstakedDeposits[i],
+						challengeID: challengeIDs[i]
+					};
+					testObj = listingsObj[testObj];
 				}
-				this.setState({ unlistedFin4Tokens: unlistedFin4TokensArr });
-			});
-		});
+				this.setState({ listings: listingsObj });
+				console.log(testObj.address);
+				console.log(testObj.applicationExpiries);
+				console.log(testObj.applicationExpiries);
+				console.log(testObj.whitelistees);
+				console.log(testObj.owner);
+				console.log(testObj.unstakedDeposit);
+				console.log(testObj.challengeID);
+
+				getAllActionTypes().then(data => {
+					this.setState({ allFin4Tokens: data });
+					let unlistedFin4TokensArr = [];
+					for (var i = 0; i < data.length; i++) {
+						if (!listingsObj[data.value]) {
+							unlistedFin4TokensArr.push(data[i]);
+						}
+					}
+					this.setState({ unlistedFin4Tokens: unlistedFin4TokensArr });
+				});
+			}
+		);
 	}
 
 	applyTokenClick = event => {

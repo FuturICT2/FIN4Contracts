@@ -33,7 +33,7 @@ contract Registry {
         address owner;          // Owner of Listing
         uint unstakedDeposit;   // Number of tokens in the listing not locked in a challenge
         uint challengeID;       // Corresponds to a PollID in PLCRVoting
-	uint exitTime;		// Time the listing may leave the registry
+	    uint exitTime;		// Time the listing may leave the registry
         uint exitTimeExpiry;    // Expiration date of exit period
     }
 
@@ -88,7 +88,7 @@ contract Registry {
     */
     function applyToken(address tokenAddress, uint _amount, string calldata _data) external {
         // conversion to bytes32 added (Sergiu)
-        bytes32 _listingHash = bytes32(uint256(tokenAddress)); // convert back via address adr = address(uint160(uint256(test))), from https://ethereum.stackexchange.com/a/68358 and https://ethereum.stackexchange.com/a/41356
+        bytes32 _listingHash = bytes32(uint256(tokenAddress)); //>> 96; // convert back via address adr = address(uint160(uint256(test))), from https://ethereum.stackexchange.com/a/68358 and https://ethereum.stackexchange.com/a/41356
         //
         require(!isWhitelisted(_listingHash), "listingHash is not whitelisted");
         require(!appWasMade(_listingHash), "app was not made for listingHash");
@@ -518,7 +518,8 @@ contract Registry {
     /**
     @dev                Returns a list of 
     */
-    function getListings () public view returns (address[] memory, bytes32[] memory) {
+       function getListings () public view returns (address[] memory, bytes32[] memory, uint[] memory,
+    bool[] memory, address[] memory, uint[] memory, uint[] memory) { //uint[] memory, address) {
         address[] memory addresses = new address[](listingsIndexes.length);
         uint[] memory applicationExpiries = new uint[](listingsIndexes.length);
         bool[] memory whitelistees = new bool[](listingsIndexes.length);
@@ -529,7 +530,7 @@ contract Registry {
         uint[] memory exitTimeExpiries = new uint[](listingsIndexes.length);
     
         for (uint i = 0; i<listingsIndexes.length-1; i++){
-            addresses[i] = address(uint160(uint256(listingsIndexes[i])));
+            addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
             Listing memory lst = listings[listingsIndexes[i]];
             applicationExpiries[i] = lst.applicationExpiry;
             whitelistees[i] = lst.whitelisted;
@@ -539,13 +540,7 @@ contract Registry {
             exitTimes[i] = lst.exitTime;
             exitTimeExpiries[i] = lst.exitTimeExpiry;
         }
-        return (addresses, listingsIndexes);
-    }
+        return (addresses, listingsIndexes, applicationExpiries, whitelistees, owners, 
+        unstakedDeposits, challengeIDs);
 
-    function addressToString(address x) private view returns (string memory) {
-        bytes memory b = new bytes(20);
-        for (uint i = 0; i < 20; i++)
-            b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
-        return string(b);
-    }
 }
