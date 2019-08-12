@@ -13,6 +13,7 @@ contract Registry {
 
     event _Application(bytes32 indexed listingHash, uint deposit, uint appEndDate, string data, address indexed applicant);
     event _Challenge(bytes32 indexed listingHash, uint challengeID, string data, uint commitEndDate, uint revealEndDate, address indexed challenger);
+    event _Review(bytes32 indexed listingHash, uint reviewID, uint commitEndDate, uint revealEndDate);   
     event _Deposit(bytes32 indexed listingHash, uint added, uint newTotal, address indexed owner);
     event _Withdrawal(bytes32 indexed listingHash, uint withdrew, uint newTotal, address indexed owner);
     event _ApplicationWhitelisted(bytes32 indexed listingHash);
@@ -33,13 +34,23 @@ contract Registry {
         address owner;          // Owner of Listing
         uint unstakedDeposit;   // Number of tokens in the listing not locked in a challenge
         uint challengeID;       // Corresponds to a PollID in PLCRVoting
-	uint exitTime;		// Time the listing may leave the registry
+        uint reviewID;
+	    uint exitTime;		// Time the listing may leave the registry
         uint exitTimeExpiry;    // Expiration date of exit period
     }
 
     struct Challenge {
         uint rewardPool;        // (remaining) Pool of tokens to be distributed to winning voters
         address challenger;     // Owner of Challenge
+        bool resolved;          // Indication of if challenge is resolved
+        bool isReview;
+        uint stake;             // Number of tokens at stake for either party during challenge
+        uint totalTokens;       // (remaining) Number of tokens used in voting by the winning side
+        mapping(address => bool) tokenClaims; // Indicates whether a voter has claimed a reward yet
+    }
+
+    struct Review {
+        uint rewardPool;        // (remaining) Pool of tokens to be distributed to winning voters
         bool resolved;          // Indication of if challenge is resolved
         uint stake;             // Number of tokens at stake for either party during challenge
         uint totalTokens;       // (remaining) Number of tokens used in voting by the winning side
@@ -49,6 +60,10 @@ contract Registry {
     // Maps challengeIDs to associated challenge data
     bytes32[] private challengesIndexes;
     mapping(uint => Challenge) public challenges;
+
+    // Maps reviewIDs to associated challenge data
+    bytes32[] private reviewIndexes;
+    mapping(uint => Review) public reviews;
 
     // Maps listingHashes to associated listingHash data
     bytes32[] private listingsIndexes;
@@ -92,7 +107,7 @@ contract Registry {
         //
         require(!isWhitelisted(_listingHash), "listingHash is not whitelisted");
         require(!appWasMade(_listingHash), "app was not made for listingHash");
-        require(_amount >= parameterizer.get("minDeposit"), "amount is smaller then minDeposit");
+        require(_amount >= parameterizer.get("minDeposit") + parameterizer.get("reviewTax"), "amount is smaller then minDeposit + reviewTax");
 
         // Sets owner
         listingsIndexes.push(_listingHash);
@@ -227,9 +242,9 @@ contract Registry {
             rewardPool: ((oneHundred.sub(parameterizer.get("dispensationPct"))).mul(minDeposit)).div(100),
             stake: minDeposit,
             resolved: false,
+            isReview: false,
             totalTokens: 0
         });
-
         // Updates listingHash to store most recent challenge
         listing.challengeID = pollID;
 
@@ -242,6 +257,47 @@ contract Registry {
         (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
 
         emit _Challenge(_listingHash, pollID, _data, commitEndDate, revealEndDate, msg.sender);
+        return pollID;
+    }
+
+    /**
+    @dev                Starts a poll for a listingHash which is either in the apply stage or
+                        already in the whitelist. Tokens are taken from the challenger and the
+                        applicant's deposits are locked.
+    @param _listingHash The listingHash being challenged, whether listed or in application
+    */
+    function review(bytes32 _listingHash) internal returns (uint reviewID) {
+        Listing storage listing = listings[_listingHash];
+        uint reviewTax = parameterizer.get("reviewTax");
+
+        // Starts poll
+        uint pollID = voting.startPoll(
+            parameterizer.get("voteQuorum"),
+            parameterizer.get("applyStageLength").div(2),
+            parameterizer.get("applyStageLength").div(2)
+        );
+
+        challenges[pollID] = Challenge({
+            challenger: msg.sender,
+            rewardPool: reviewTax,
+            stake: reviewTax,
+            resolved: false,
+            isReview: true,
+            totalTokens: 0
+        });
+
+        // Updates listingHash to store most recent challenge
+        listing.reviewID = pollID;
+
+        // Locks tokens for listingHash during challenge
+        listing.unstakedDeposit -= reviewTax;
+
+        // Takes tokens from challenger
+        require(ERC20Plus(token).transferFrom(msg.sender, address(this), reviewTax));
+
+        (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
+
+        emit _Review(_listingHash, pollID, commitEndDate, revealEndDate);
         return pollID;
     }
 
@@ -404,6 +460,10 @@ contract Registry {
     function determineReward(uint _challengeID) public view returns (uint) {
         require(!challenges[_challengeID].resolved && voting.pollEnded(_challengeID));
 
+        if (challenges[_challengeID].isReview) {
+            return 0;
+        }
+
         // Edge case, nobody voted, give all tokens to the challenger.
         if (voting.getTotalNumberOfTokensForWinningOption(_challengeID) == 0) {
             return 2 * challenges[_challengeID].stake;
@@ -448,8 +508,9 @@ contract Registry {
             whitelistApplication(_listingHash);
             // Unlock stake so that it can be retrieved by the applicant
             listings[_listingHash].unstakedDeposit += reward;
-
-            emit _ChallengeFailed(_listingHash, challengeID, challenges[challengeID].rewardPool, challenges[challengeID].totalTokens);
+            if (!challenges[challengeID].isReview){
+                emit _ChallengeFailed(_listingHash, challengeID, challenges[challengeID].rewardPool, challenges[challengeID].totalTokens);
+            }
         }
         // Case: challenge succeeded or nobody voted
         else {

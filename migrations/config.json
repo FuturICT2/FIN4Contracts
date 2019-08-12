@@ -2,7 +2,7 @@
 	"paramConfig": {
 		"minDeposit": 100,
 		"pMinDeposit": 100000,
-		"applyStageLength": 1,
+		"applyStageLength": 2,
 		"pApplyStageLength": 1200,
 		"commitStageLength": 600,
 		"pCommitStageLength": 1200,
@@ -13,7 +13,8 @@
 		"voteQuorum": 50,
 		"pVoteQuorum": 50,
 		"exitTimeDelay": 600,
-		"exitPeriodLen": 600
+		"exitPeriodLen": 600,
+		"reviewTax": 10
 	},
 	"name": "FIN4 list of accepted tokens",
 	"token": {
