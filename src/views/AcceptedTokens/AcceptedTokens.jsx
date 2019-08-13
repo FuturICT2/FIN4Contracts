@@ -18,17 +18,16 @@ class AcceptedTokens extends Component {
 
 		getContractData(RegistryAddress, 'Registry', 'getListings').then(
 			({
-				0: addresses,
-				1: listingsKeys,
-				2: applicationExpiries,
-				3: whitelistees,
-				4: owners,
-				5: unstakedDeposits,
-				6: challengeIDs
+				0: listingsKeys,
+				1: applicationExpiries,
+				2: whitelistees,
+				3: owners,
+				4: unstakedDeposits,
+				5: challengeIDs
 			}) => {
 				let listingsObj = [];
 				let testObj;
-				for (var i = 0; i < addresses.length; i++) {
+				for (var i = 0; i < listingsKeys.length; i++) {
 					let addressFromListingKey = '0x' + listingsKeys[i].substr(26, listingsKeys[i].length - 1);
 					testObj = addressFromListingKey;
 					listingsObj[addressFromListingKey] = {
@@ -44,9 +43,8 @@ class AcceptedTokens extends Component {
 				}
 				this.setState({ listings: listingsObj });
 				console.log(testObj.address);
-				console.log(testObj.applicationExpiries);
-				console.log(testObj.applicationExpiries);
-				console.log(testObj.whitelistees);
+				console.log(testObj.applicationExpiry);
+				console.log(testObj.whitelisted);
 				console.log(testObj.owner);
 				console.log(testObj.unstakedDeposit);
 				console.log(testObj.challengeID);
