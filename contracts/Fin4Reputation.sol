@@ -9,6 +9,7 @@ import "./tokens/ERC20Plus.sol";
 contract Fin4Reputation is ERC20Plus {
 
     ERC20Plus public GOVToken;
+    
 
     constructor()
       ERC20Plus("Fin4Reputation", "REP", 250, address(0), true, true, true,0)

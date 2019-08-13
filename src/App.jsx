@@ -10,6 +10,7 @@ import NavigationBar from './NavigationBar';
 import { createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from './config/colors-config';
+import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
 class App extends Component {
 	render() {

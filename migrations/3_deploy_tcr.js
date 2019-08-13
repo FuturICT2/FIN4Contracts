@@ -102,7 +102,8 @@ module.exports = async function(deployer) {
 
 	// Token-TCR-Dev-1, Token-TCR-Dev-2, Token-TCR-Dev-3
 	const children = await Fin4MainInstance.getChildren();
-	await RegistryInstance.applyToken(children[0], 110, 'data');
-	console.log('Token address: ', children[0]);
-	console.log('hallo', await RegistryInstance.listings);
+	await RegistryInstance.applyToken(children[0], 150, 'data');
+	//await RegistryInstance.applyToken(children[2], 150, 'data');
+	//console.log("Token address: ", children[0])
+	//console.log('hallo', await RegistryInstance.listings);
 };
