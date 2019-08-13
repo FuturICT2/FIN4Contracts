@@ -280,7 +280,7 @@ contract Registry {
         challenges[pollID] = Challenge({
             challenger: msg.sender,
             rewardPool: reviewTax,
-            stake: reviewTax,
+            stake: parameterizer.get("minDeposit"),
             resolved: false,
             isReview: true,
             totalTokens: 0
@@ -461,7 +461,7 @@ contract Registry {
         require(!challenges[_challengeID].resolved && voting.pollEnded(_challengeID));
 
         if (challenges[_challengeID].isReview) {
-            return 0;
+            return challenges[_challengeID].stake;
         }
 
         // Edge case, nobody voted, give all tokens to the challenger.
@@ -516,7 +516,12 @@ contract Registry {
         else {
             resetListing(_listingHash);
             // Transfer the reward to the challenger
+            if(challenges[challengeID].isReview){
+                challenges[challengeID].rewardPool += reward;
+            }
+            else {
             require(token.transfer(challenges[challengeID].challenger, reward));
+            }
 
             emit _ChallengeSucceeded(_listingHash, challengeID, challenges[challengeID].rewardPool, challenges[challengeID].totalTokens);
         }

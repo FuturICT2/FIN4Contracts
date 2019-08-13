@@ -14,7 +14,8 @@
 		"pVoteQuorum": 50,
 		"exitTimeDelay": 600,
 		"exitPeriodLen": 600,
-		"reviewTax": 10
+		"reviewTax": 10,
+		"pminReputation": 20
 	},
 	"name": "FIN4 list of accepted tokens",
 	"token": {
