@@ -585,7 +585,7 @@ contract Registry {
     /**
     @dev                Returns a list of 
     */
-       function getListings () public view returns (bytes32[] memory, uint[] memory,
+    function getListings () public view returns (bytes32[] memory, uint[] memory,
     bool[] memory, address[] memory, uint[] memory, uint[] memory) {
         uint[] memory applicationExpiries = new uint[](listingsIndexes.length);
         bool[] memory whitelistees = new bool[](listingsIndexes.length);
@@ -608,6 +608,5 @@ contract Registry {
         }
         return (listingsIndexes, applicationExpiries, whitelistees, owners, 
         unstakedDeposits, challengeIDs);
-
-}
+    }
 }
