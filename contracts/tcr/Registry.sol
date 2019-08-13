@@ -515,11 +515,12 @@ contract Registry {
         // Case: challenge succeeded or nobody voted
         else {
             resetListing(_listingHash);
-            // Transfer the reward to the challenger
             if(challenges[challengeID].isReview){
+            //If Review, add reward to the voter's rewardpool
                 challenges[challengeID].rewardPool += reward;
             }
             else {
+            // Transfer the reward to the challenger
             require(token.transfer(challenges[challengeID].challenger, reward));
             }
 
@@ -584,9 +585,8 @@ contract Registry {
     /**
     @dev                Returns a list of 
     */
-       function getListings () public view returns (address[] memory, bytes32[] memory, uint[] memory,
+       function getListings () public view returns (bytes32[] memory, uint[] memory,
     bool[] memory, address[] memory, uint[] memory, uint[] memory) {
-        address[] memory addresses = new address[](listingsIndexes.length);
         uint[] memory applicationExpiries = new uint[](listingsIndexes.length);
         bool[] memory whitelistees = new bool[](listingsIndexes.length);
         address[] memory owners = new address[](listingsIndexes.length);
@@ -596,7 +596,7 @@ contract Registry {
         uint[] memory exitTimeExpiries = new uint[](listingsIndexes.length);
     
         for (uint i = 0; i<listingsIndexes.length-1; i++){
-            addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
+            //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
             Listing memory lst = listings[listingsIndexes[i]];
             applicationExpiries[i] = lst.applicationExpiry;
             whitelistees[i] = lst.whitelisted;
@@ -606,7 +606,7 @@ contract Registry {
             exitTimes[i] = lst.exitTime;
             exitTimeExpiries[i] = lst.exitTimeExpiry;
         }
-        return (addresses, listingsIndexes, applicationExpiries, whitelistees, owners, 
+        return (listingsIndexes, applicationExpiries, whitelistees, owners, 
         unstakedDeposits, challengeIDs);
 
 }
