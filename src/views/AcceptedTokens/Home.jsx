@@ -25,38 +25,32 @@ class Home extends Component {
 				4: unstakedDeposits,
 				5: challengeIDs
 			}) => {
-				let listingsObj = [];
-				let testObj;
+				let listingsObj = {};
 				for (var i = 0; i < listingsKeys.length; i++) {
-					let addressFromListingKey = '0x' + listingsKeys[i].substr(26, listingsKeys[i].length - 1);
-					testObj = addressFromListingKey;
-					listingsObj[addressFromListingKey] = {
-						address: addressFromListingKey, //addresses[i],
+					let address = '0x' + listingsKeys[i].substr(26, listingsKeys[i].length - 1);
+					listingsObj[address] = {
+						address: address,
 						listingKey: listingsKeys[i],
 						applicationExpiry: applicationExpiries[i],
 						whitelisted: whitelistees[i],
 						owner: owners[i],
 						unstakedDeposit: unstakedDeposits[i],
-						challengeID: challengeIDs[i]
+						challengeID: challengeIDs[i],
+						name: ''
 					};
-					testObj = listingsObj[testObj];
 				}
-				this.setState({ listings: listingsObj });
-				console.log(testObj.address);
-				console.log(testObj.applicationExpiry);
-				console.log(testObj.whitelisted);
-				console.log(testObj.owner);
-				console.log(testObj.unstakedDeposit);
-				console.log(testObj.challengeID);
 
 				getAllActionTypes().then(data => {
 					this.setState({ allFin4Tokens: data });
 					let unlistedFin4TokensArr = [];
 					for (var i = 0; i < data.length; i++) {
-						if (!listingsObj[data.value]) {
+						if (!listingsObj[data[i].value]) {
 							unlistedFin4TokensArr.push(data[i]);
+						} else {
+							listingsObj[data.value].name = data[i].label;
 						}
 					}
+					this.setState({ listings: listingsObj });
 					this.setState({ unlistedFin4Tokens: unlistedFin4TokensArr });
 				});
 			}
@@ -71,14 +65,16 @@ class Home extends Component {
 		return (
 			<center>
 				<Box title="Listings">
-					<Table headers={['address', 'listingKey']}>
+					<Table headers={['Name', 'Status', 'Due Date', 'Actions']}>
 						{Object.keys(this.state.listings).map((key, index) => {
 							return (
 								<TableRow
 									key={index}
 									data={{
-										address: this.state.listings[key].address,
-										listingKey: this.state.listings[key].listingKey
+										name: this.state.listings[key].name,
+										status: 'TODO',
+										dueDate: 'TODO',
+										actions: 'TODO'
 									}}
 								/>
 							);
@@ -86,7 +82,7 @@ class Home extends Component {
 					</Table>
 				</Box>
 				<Box title="Unlisted Fin4 Tokens">
-					<Table headers={['name', 'apply']}>
+					<Table headers={['Name', 'Apply']}>
 						{this.state.unlistedFin4Tokens.map((entry, index) => {
 							return (
 								<TableRow
