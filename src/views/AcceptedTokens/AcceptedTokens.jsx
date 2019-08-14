@@ -28,11 +28,11 @@ class AcceptedTokens extends Component {
 					{(() => {
 						switch (this.state.page) {
 							case 'home':
-								return <Home></Home>;
+								return <Home />;
 							case 'governance':
-								return <Governance></Governance>;
+								return <Governance />;
 							case 'application':
-								return <Application></Application>;
+								return <Application />;
 							default:
 								return null;
 						}
