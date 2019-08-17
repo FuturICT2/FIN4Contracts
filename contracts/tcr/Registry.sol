@@ -583,7 +583,7 @@ contract Registry {
     }
 
     /**
-    @dev                Returns a list of 
+    @dev Returns a list of
     */
     function getListings () public view returns (bytes32[] memory, uint[] memory,
     bool[] memory, address[] memory, uint[] memory, uint[] memory) {
@@ -594,7 +594,7 @@ contract Registry {
         uint[] memory challengeIDs = new uint[](listingsIndexes.length);
 	    uint[] memory exitTimes = new uint[](listingsIndexes.length);
         uint[] memory exitTimeExpiries = new uint[](listingsIndexes.length);
-    
+
         for (uint i = 0; i<listingsIndexes.length-1; i++){
             //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
             Listing memory lst = listings[listingsIndexes[i]];
@@ -606,7 +606,7 @@ contract Registry {
             exitTimes[i] = lst.exitTime;
             exitTimeExpiries[i] = lst.exitTimeExpiry;
         }
-        return (listingsIndexes, applicationExpiries, whitelistees, owners, 
-        unstakedDeposits, challengeIDs);
+        return (listingsIndexes, applicationExpiries, whitelistees, owners,
+            unstakedDeposits, challengeIDs);
     }
 }
