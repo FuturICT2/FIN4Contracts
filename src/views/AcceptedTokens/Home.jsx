@@ -44,10 +44,12 @@ class Home extends Component {
 					this.setState({ allFin4Tokens: data });
 					let unlistedFin4TokensArr = [];
 					for (var i = 0; i < data.length; i++) {
-						if (!listingsObj[data[i].value]) {
+						// addresses are case in-sensitive. the address-to-byte32 method in Registry.applyToken() leaves only lower-case
+						let tokenAddr = data[i].value.toLowerCase();
+						if (!listingsObj[tokenAddr]) {
 							unlistedFin4TokensArr.push(data[i]);
 						} else {
-							listingsObj[data.value].name = data[i].label;
+							listingsObj[tokenAddr].name = data[i].label;
 						}
 					}
 					this.setState({ listings: listingsObj });
