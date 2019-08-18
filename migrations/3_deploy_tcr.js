@@ -87,6 +87,8 @@ module.exports = async function(deployer) {
 	const RegistryInstance = await Registry.at(registry);
 	const Fin4MainInstance = await Fin4Main.deployed();
 
+	const PLCRVotingAddress = await RegistryInstance.voting();
+
 	// write Fin4Main and registry address to src/config/DeployedAddresses.js
 	let data =
 		"const Fin4MainAddress = '" +
@@ -95,7 +97,10 @@ module.exports = async function(deployer) {
 		"const RegistryAddress = '" +
 		RegistryInstance.address +
 		"';\n" +
-		'export { Fin4MainAddress, RegistryAddress };\n';
+		"const PLCRVotingAddress = '" +
+		PLCRVotingAddress +
+		"';\n" +
+		'export { Fin4MainAddress, RegistryAddress, PLCRVoting };\n';
 	fs.writeFile(path.join(__dirname, '../src/config/DeployedAddresses.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
