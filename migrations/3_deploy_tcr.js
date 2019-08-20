@@ -100,7 +100,7 @@ module.exports = async function(deployer) {
 		"const PLCRVotingAddress = '" +
 		PLCRVotingAddress +
 		"';\n" +
-		'export { Fin4MainAddress, RegistryAddress, PLCRVoting };\n';
+		'export { Fin4MainAddress, RegistryAddress, PLCRVotingAddress };\n';
 	fs.writeFile(path.join(__dirname, '../src/config/DeployedAddresses.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
