@@ -29,13 +29,34 @@ module.exports = done => {
 		const registry = await Registry.at(registryAddress);
 		const plcr = await PLCRVoting.at(PLCRVotingAddress);
 
-		let listings = await registry.getListings();
-		console.log(listings);
-		await registry.updateStatus('0x00000000000000000000000009f90c3b2c2a9129581733a8de5c096f54dc049a');
-		listings = await registry.getListings();
-		console.log(listings);
-		console.log('bla');
-		done();
+		await registry
+			.getListings()
+			.then(
+				({
+					0: listingsKeys,
+					1: applicationExpiries,
+					2: whitelistees,
+					3: owners,
+					4: unstakedDeposits,
+					5: challengeIDs
+				}) => {
+					let listingsObj = {};
+					for (var i = 0; i < listingsKeys.length; i++) {
+						let address = '0x' + listingsKeys[i].substr(26, listingsKeys[i].length - 1);
+						listingsObj[address] = {
+							address: address,
+							listingKey: listingsKeys[i],
+							applicationExpiry: applicationExpiries[i],
+							whitelisted: whitelistees[i],
+							owner: owners[i],
+							unstakedDeposit: unstakedDeposits[i],
+							challengeID: challengeIDs[i]
+						};
+					}
+					console.log(listingsObj);
+				}
+			);
+		return true;
 	}
 
 	deployProxies().then(() => done());
