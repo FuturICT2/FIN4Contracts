@@ -43,8 +43,10 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"start-ganache": "ganache-cli --port=7545 --allowUnlimitedContractSize --mnemonic=\"camera exclude mail month insect grab eye bubble involve burger soldier ghost\"",
-		"migrate": "rm -rf src/build && truffle migrate"
+		"start-ganache": "ganache-cli --port=7545 --networkId 5777 --allowUnlimitedContractSize --mnemonic=\"camera exclude mail month insect grab eye bubble involve burger soldier ghost\"",
+		"migrate": "rm -rf src/build && truffle migrate",
+		"acceptTokens": "truffle exec --network development ./scripts/acceptToken.js",
+		"listFin4Tokens": "truffle exec --network development ./scripts/listFin4Tokens.js"
 	},
 	"browserslist": {
 		"production": [

@@ -54,7 +54,7 @@ module.exports = async function(deployer) {
 	await Fin4ReputationInstance.init(GOVTokenInstance.address);
 
 	// dev: give all tokenHolders 20 reputation tokens
-	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 1000)));
+	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 10000)));
 	// get GOV token from rep tokens
 	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.getGOVFromReputation(tokenHolder)));
 
@@ -82,7 +82,7 @@ module.exports = async function(deployer) {
 	const { token, plcr, parameterizer, registry } = registryReceipt.logs[0].args;
 	console.log(registryReceipt.logs);
 
-	await GOVTokenInstance.approve(registry, 200);
+	await GOVTokenInstance.approve(registry, 1000);
 
 	const RegistryInstance = await Registry.at(registry);
 	const Fin4MainInstance = await Fin4Main.deployed();
@@ -105,9 +105,26 @@ module.exports = async function(deployer) {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
+	let jsonData =
+		'{\n' +
+		'"Fin4MainAddress": "' +
+		Fin4MainInstance.address +
+		'",\n' +
+		'"RegistryAddress": "' +
+		RegistryInstance.address +
+		'",\n' +
+		'"PLCRVotingAddress": "' +
+		PLCRVotingAddress +
+		'"\n' +
+		'}\n';
+	fs.writeFile(path.join(__dirname, '../scripts/DeployedAddresses.json'), jsonData, err => {
+		if (err) throw 'Error writing file: ' + err;
+	});
+
 	// Token-TCR-Dev-1, Token-TCR-Dev-2, Token-TCR-Dev-3
 	const children = await Fin4MainInstance.getChildren();
 	await RegistryInstance.applyToken(children[0], 150, 'data');
+	await RegistryInstance.applyToken(children[1], 150, 'data');
 	//await RegistryInstance.applyToken(children[2], 150, 'data');
 	//console.log("Token address: ", children[0])
 	//console.log('hallo', await RegistryInstance.listings);
