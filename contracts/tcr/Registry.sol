@@ -49,21 +49,9 @@ contract Registry {
         mapping(address => bool) tokenClaims; // Indicates whether a voter has claimed a reward yet
     }
 
-    struct Review {
-        uint rewardPool;        // (remaining) Pool of tokens to be distributed to winning voters
-        bool resolved;          // Indication of if challenge is resolved
-        uint stake;             // Number of tokens at stake for either party during challenge
-        uint totalTokens;       // (remaining) Number of tokens used in voting by the winning side
-        mapping(address => bool) tokenClaims; // Indicates whether a voter has claimed a reward yet
-    }
-
     // Maps challengeIDs to associated challenge data
-    bytes32[] private challengesIndexes;
+    uint[] private challengesIndexes;
     mapping(uint => Challenge) public challenges;
-
-    // Maps reviewIDs to associated challenge data
-    bytes32[] private reviewIndexes;
-    mapping(uint => Review) public reviews;
 
     // Maps listingHashes to associated listingHash data
     bytes32[] private listingsIndexes;
@@ -120,6 +108,8 @@ contract Registry {
 
         // Transfers tokens from user to Registry contract
         require(ERC20Plus(token).transferFrom(listing.owner, address(this), _amount), "Failed to transfer tokens from user to Registry contract");
+
+        review(_listingHash);
 
         emit _Application(_listingHash, _amount, listing.applicationExpiry, _data, msg.sender);
     }
@@ -245,6 +235,7 @@ contract Registry {
             isReview: false,
             totalTokens: 0
         });
+        challengesIndexes.push(pollID);
         // Updates listingHash to store most recent challenge
         listing.challengeID = pollID;
 
@@ -285,7 +276,7 @@ contract Registry {
             isReview: true,
             totalTokens: 0
         });
-
+        challengesIndexes.push(pollID);
         // Updates listingHash to store most recent challenge
         listing.reviewID = pollID;
 
@@ -503,6 +494,9 @@ contract Registry {
         // Stores the total tokens used for voting by the winning side for reward purposes
         challenges[challengeID].totalTokens = voting.getTotalNumberOfTokensForWinningOption(challengeID);
 
+        // Remove the challenge index
+        removeChallengeIndex(challengeID);
+
         // Case: challenge failed
         if (voting.isPassed(challengeID)) {
             whitelistApplication(_listingHash);
@@ -583,6 +577,23 @@ contract Registry {
     }
 
     /**
+    @dev                Deletes entry from the listingIndex
+    @param _challengeID The listing hash to delete
+    */
+    function removeChallengeIndex(uint _challengeID) private {
+        for (uint i = 0; i<challengesIndexes.length-1; i++){
+            if (challengesIndexes[i] == _challengeID) {
+                for (uint j = i; j<challengesIndexes.length-1; j++){
+                    challengesIndexes[j] = challengesIndexes[j+1];
+                }
+                delete challengesIndexes[challengesIndexes.length-1];
+                challengesIndexes.length--;
+                break;
+            }
+        }
+    }
+
+    /**
     @dev Returns a list of
     */
     function getListings () public view returns (bytes32[] memory, uint[] memory,
@@ -608,5 +619,28 @@ contract Registry {
         }
         return (listingsIndexes, applicationExpiries, whitelistees, owners,
             unstakedDeposits, challengeIDs);
+    }
+
+    function getChallenges () public view returns (uint[] memory, uint[] memory,
+    address[] memory, bool[] memory, uint[] memory, uint[] memory) {
+        uint[] memory challengeID = new uint[](challengesIndexes.length);
+        uint[] memory rewardPool = new uint[](challengesIndexes.length);
+        address[] memory challenger = new address[](challengesIndexes.length);
+        bool[] memory isReview = new bool[](challengesIndexes.length);
+        uint[] memory stake = new uint[](challengesIndexes.length);
+	    uint[] memory totalTokens = new uint[](challengesIndexes.length);
+
+        for (uint i = 0; i<challengesIndexes.length-1; i++){
+            //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
+            Challenge memory lst = challenges[challengesIndexes[i]];
+            challengeID[i] = challengesIndexes[i];
+            rewardPool[i] = lst.rewardPool;
+            challenger[i] = lst.challenger;
+            isReview[i] = lst.isReview;
+            stake[i] = lst.stake;
+            totalTokens[i] = lst.totalTokens;
+        }
+        return (challengeID, rewardPool, challenger, isReview,
+            stake, totalTokens);
     }
 }

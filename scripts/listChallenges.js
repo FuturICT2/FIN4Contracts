@@ -9,7 +9,7 @@ const PLCRVoting = artifacts.require('PLCRVoting.sol');
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
-	async function deployProxies() {
+	async function listChallenges() {
 		let registryAddress = config.RegistryAddress;
 		let fin4MainAddress = config.Fin4MainAddress;
 		let PLCRVotingAddress = config.PLCRVotingAddress;
@@ -31,33 +31,22 @@ module.exports = done => {
 
 		await registry
 			.getListings()
-			.then(
-				({
-					0: listingsKeys,
-					1: applicationExpiries,
-					2: whitelistees,
-					3: owners,
-					4: unstakedDeposits,
-					5: challengeIDs
-				}) => {
-					let listingsObj = {};
-					for (var i = 0; i < listingsKeys.length; i++) {
-						let address = '0x' + listingsKeys[i].substr(26, listingsKeys[i].length - 1);
-						listingsObj[address] = {
-							address: address,
-							listingKey: listingsKeys[i],
-							applicationExpiry: applicationExpiries[i],
-							whitelisted: whitelistees[i],
-							owner: owners[i],
-							unstakedDeposit: unstakedDeposits[i],
-							challengeID: challengeIDs[i]
-						};
-					}
-					console.log(listingsObj);
+			.then(({ 0: challengeID, 1: rewardPool, 2: challenger, 3: isReview, 4: stake, 5: totalTokens }) => {
+				let listingsObj = {};
+				for (var i = 0; i < listingsKeys.length; i++) {
+					challengesObj[address] = {
+						challengeID: challengeID[i],
+						rewardPool: rewardPool[i],
+						challenger: challenger[i],
+						isReview: isReview[i],
+						stake: stake[i],
+						totalTokens: totalTokens[i]
+					};
 				}
-			);
+				console.log(challenges);
+			});
 		return true;
 	}
 
-	deployProxies().then(() => done());
+	listChallenges().then(() => done());
 };

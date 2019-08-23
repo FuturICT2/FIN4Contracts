@@ -46,8 +46,12 @@
 		"start-ganache": "ganache-cli --port=7545 --networkId 5777 --allowUnlimitedContractSize --mnemonic=\"camera exclude mail month insect grab eye bubble involve burger soldier ghost\"",
 		"migrate": "rm -rf src/build && truffle migrate",
 		"acceptTokens": "truffle exec --network development ./scripts/acceptToken.js",
-		"listFin4Tokens": "truffle exec --network development ./scripts/listFin4Tokens.js",
-		"getListings": "truffle exec --network development ./scripts/getListings.js"
+		"listRegistryTokens": "truffle exec --network development ./scripts/listRegistryTokens.js",
+		"getListings": "truffle exec --network development ./scripts/getListings.js",
+		"apply": "truffle exec --network development ./scripts/apply.js",
+		"updateStatus": "truffle exec --network development ./scripts/updateStatus.js",
+		"challenge": "truffle exec --network development ./scripts/challenge.js",
+		"listChallenges": "truffle exec --network development ./scripts/listChallenges.js"
 	},
 	"browserslist": {
 		"production": [
