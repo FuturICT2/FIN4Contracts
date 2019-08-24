@@ -1,5 +1,4 @@
 pragma solidity ^0.5.0;
-pragma experimental ABIEncoderV2; // TODO remove?
 
 import 'contracts/stub/Fin4MainStub.sol';
 import "contracts/proof/Fin4BaseProofType.sol";
