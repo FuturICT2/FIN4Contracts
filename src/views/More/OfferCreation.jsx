@@ -3,8 +3,6 @@ import { TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '../../components/Button';
 import Database from '../../components/Database';
-import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
 import { getAllActionTypes } from '../../components/Contractor';
 import Dropdown from '../../components/Dropdown';
 
@@ -77,14 +75,4 @@ const inputFieldStyle = {
 	marginBottom: '15px'
 };
 
-OfferCreation.contextTypes = {
-	drizzle: PropTypes.object
-};
-
-const mapStateToProps = state => {
-	return {
-		contracts: state.contracts
-	};
-};
-
-export default drizzleConnect(OfferCreation, mapStateToProps);
+export default OfferCreation;

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
 import Box from '../../components/Box';
 import Currency from '../../components/Currency';
@@ -186,14 +184,4 @@ const Claim = styled(Paper)`
 	}
 `;
 
-PreviousClaims.contextTypes = {
-	drizzle: PropTypes.object
-};
-
-const mapStateToProps = state => {
-	return {
-		contracts: state.contracts
-	};
-};
-
-export default drizzleConnect(PreviousClaims, mapStateToProps);
+export default PreviousClaims;

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
-import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
 import { getAllActionTypes } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
@@ -35,14 +33,4 @@ class Claim extends Component {
 	}
 }
 
-Claim.contextTypes = {
-	drizzle: PropTypes.object
-};
-
-const mapStateToProps = state => {
-	return {
-		contracts: state.contracts
-	};
-};
-
-export default drizzleConnect(Claim, mapStateToProps);
+export default Claim;

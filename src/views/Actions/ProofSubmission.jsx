@@ -3,8 +3,6 @@ import { Typography, Divider } from '@material-ui/core';
 import ContractForm from '../../components/ContractForm';
 import styled from 'styled-components';
 import colors from '../../config/colors-config';
-import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
 import ipfs from '../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
@@ -205,14 +203,4 @@ const Status = styled(Typography)`
 	}
 `;
 
-ProofSubmission.contextTypes = {
-	drizzle: PropTypes.object
-};
-
-const mapStateToProps = state => {
-	return {
-		contracts: state.contracts
-	};
-};
-
-export default drizzleConnect(ProofSubmission, mapStateToProps);
+export default ProofSubmission;

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import Box from '../../components/Box';
 import ContractForm from '../../components/ContractForm';
-import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
-import { getContractData, getNetworkName, getNetworkBalance } from '../../components/Contractor';
+import { getContractData } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
@@ -112,14 +110,4 @@ const Message = styled(Paper)`
 	}
 `;
 
-Messages.contextTypes = {
-	drizzle: PropTypes.object
-};
-
-const mapStateToProps = state => {
-	return {
-		contracts: state.contracts
-	};
-};
-
-export default drizzleConnect(Messages, mapStateToProps);
+export default Messages;

@@ -4,8 +4,6 @@ import Box from '../../components/Box';
 import Modal from '../../components/Modal';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
@@ -93,14 +91,4 @@ class TypeCreation extends Component {
 	}
 }
 
-TypeCreation.contextTypes = {
-	drizzle: PropTypes.object
-};
-
-const mapStateToProps = state => {
-	return {
-		contracts: state.contracts
-	};
-};
-
-export default drizzleConnect(TypeCreation, mapStateToProps);
+export default TypeCreation;
