@@ -19,7 +19,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStrut(tokenAdrToReceiveProof).name(),
+          Fin4TokenStub(tokenAdrToReceiveProof).name(),
           ": The quantity you are claiming would take you beyond the allowed amount for the given interval. Interval: ",
           uint2str(_getInterval(tokenAdrToReceiveProof) / 1000), "s, max. quantity: ",
           uint2str(_getMaxQuantity(tokenAdrToReceiveProof)), "."
@@ -32,7 +32,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
     function requirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
       uint sum;
       uint requestedQuantity;
-      (sum, requestedQuantity) = Fin4TokenStrut(tokenAddressUsingThisProofType)
+      (sum, requestedQuantity) = Fin4TokenStub(tokenAddressUsingThisProofType)
         .sumUpQuantitiesWithinIntervalBeforeThisClaim(claimer, claimId, _getInterval(tokenAddressUsingThisProofType));
       return sum + requestedQuantity <= _getMaxQuantity(tokenAddressUsingThisProofType);
     }

@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
-import "contracts/Fin4TokenStrut.sol";
-import 'contracts/Fin4MainStrut.sol';
+import "contracts/Fin4TokenStub.sol";
+import 'contracts/Fin4MainStub.sol';
 import "contracts/Fin4Messages.sol";
 import "contracts/utils.sol";
 
@@ -23,7 +23,7 @@ contract Fin4BaseProofType is utils {
   }
 
   function _Fin4MessagesAddr() public view returns(address) {
-    return Fin4MainStrut(Fin4Main).getFin4MessagesAddress();
+    return Fin4MainStub(Fin4Main).getFin4MessagesAddress();
   }
 
   function getName() public view returns(string memory) {
@@ -66,7 +66,7 @@ contract Fin4BaseProofType is utils {
   // to the respective claim on a token
   function _sendApproval(address tokenAdrToReceiveProof, uint claimId) internal returns(bool) {
     // TODO ensure it can only be called from within this SC?
-    Fin4TokenStrut(tokenAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
+    Fin4TokenStub(tokenAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
     return true;
   }
 

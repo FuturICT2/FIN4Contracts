@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2; // TODO remove?
 
-import 'contracts/Fin4MainStrut.sol';
+import 'contracts/Fin4MainStub.sol';
 import "contracts/proof/Fin4BaseProofType.sol";
 
 contract Fin4TokenBase { // abstract class
@@ -175,7 +175,7 @@ contract Fin4TokenBase { // abstract class
 
   // called for each proof type from Fin4Main.createNewToken()
   function addRequiredProofType(address proofType) public returns(bool) {
-    require(Fin4MainStrut(Fin4Main).proofTypeIsRegistered(proofType),
+    require(Fin4MainStub(Fin4Main).proofTypeIsRegistered(proofType),
       "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
     Fin4BaseProofType(proofType).registerActionTypeCreator(actionTypeCreator);
