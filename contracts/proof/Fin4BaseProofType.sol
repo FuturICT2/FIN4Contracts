@@ -1,9 +1,9 @@
 pragma solidity ^0.5.0;
 
-import "contracts/Fin4TokenStub.sol";
-import 'contracts/Fin4MainStub.sol';
+import "contracts/stub/Fin4TokenStub.sol";
+import 'contracts/stub/Fin4MainStub.sol';
 import "contracts/Fin4Messages.sol";
-import "contracts/utils.sol";
+import "contracts/util/utils.sol";
 
 contract Fin4BaseProofType is utils {
 

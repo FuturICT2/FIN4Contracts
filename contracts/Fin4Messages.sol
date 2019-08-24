@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import 'contracts/proof/Fin4BaseProofTypeStub.sol';
+import 'contracts/stub/Fin4BaseProofTypeStub.sol';
 
 contract Fin4Messages {
 
