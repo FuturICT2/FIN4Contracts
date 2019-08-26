@@ -10,7 +10,7 @@ const PLCRVoting = artifacts.require('PLCRVoting.sol');
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
-	async function commitVote() {
+	async function revealVote() {
 		let registryAddress = config.RegistryAddress;
 		let fin4MainAddress = config.Fin4MainAddress;
 		let PLCRVotingAddress = config.PLCRVotingAddress;
@@ -18,39 +18,17 @@ module.exports = done => {
 		const registry = await Registry.at(registryAddress);
 		const plcr = await PLCRVoting.at(PLCRVotingAddress);
 
-		console.log(plcr.address);
-		test = await registry.voting();
-		console.log(test);
-
-		myAddress = await registry.whoAmI();
 		console.log('myAddress: ', myAddress);
 		let pollID = process.argv.slice(-4)[0];
 		//has to be 1 or 0
 		let voteOption = process.argv.slice(-4)[1];
 		let salt = process.argv.slice(-4)[2];
 
-		let numberOfTokens = process.argv.slice(-4)[3];
+		await plcr.revealVote(pollID, voteOption, salt);
+		console.log('Vote revealed');
 
-		let prevPollID = parseInt(
-			new BN(await plcr.getInsertPointForNumTokens(myAddress, numberOfTokens, pollID)).toString()
-		);
-
-		secretHash = soliditySha3(voteOption, salt);
-		console.log(
-			'pollID: ',
-			pollID,
-			'secretHash: ',
-			secretHash,
-			'numberOfTokens: ',
-			numberOfTokens,
-			'prevPollID: ',
-			prevPollID
-		);
-		await plcr.commitVote(pollID, secretHash, numberOfTokens, prevPollID);
-
-		console.log('Vote commited');
 		return true;
 	}
 
-	commitVote().then(() => done());
+	revealVote().then(() => done());
 };

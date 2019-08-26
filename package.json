@@ -58,7 +58,8 @@
 		"updateStatus": "truffle exec --network $npm_package_config_account ./scripts/updateStatus.js",
 		"challenge": "truffle exec --network $npm_package_config_account ./scripts/challenge.js",
 		"listChallenges": "truffle exec --network $npm_package_config_account ./scripts/listChallenges.js",
-		"commitVote": "truffle exec --network $npm_package_config_account ./scripts/commitVote.js"
+		"commitVote": "truffle exec --network $npm_package_config_account ./scripts/commitVote.js",
+		"revealVote": "truffle exec --network $npm_package_config_account ./scripts/revealVote.js"
 	},
 	"browserslist": {
 		"production": [

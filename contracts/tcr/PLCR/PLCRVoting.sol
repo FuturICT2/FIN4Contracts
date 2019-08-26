@@ -76,9 +76,9 @@ contract PLCRVoting {
     @param _numTokens The number of votingTokens desired in exchange for ERC20 tokens
     */
     function requestVotingRights(uint _numTokens) public {
-        require(ERC20Plus(token).balanceOf(msg.sender) >= _numTokens);
+        require(ERC20Plus(token).balanceOf(msg.sender) >= _numTokens, "ERC20Plus(token).balanceOf(msg.sender) < _numTokens");
         voteTokenBalance[msg.sender] += _numTokens;
-        require(ERC20Plus(token).transferFrom(msg.sender, address(this), _numTokens));
+        require(ERC20Plus(token).transferFrom(msg.sender, address(this), _numTokens), "Cannot transferfrom GOVTokens");
         emit _VotingRightsGranted(_numTokens, msg.sender);
     }
 
@@ -129,7 +129,7 @@ contract PLCRVoting {
     @param _prevPollID The ID of the poll that the user has voted the maximum number of tokens in which is still less than or equal to numTokens
     */
     function commitVote(uint _pollID, bytes32 _secretHash, uint _numTokens, uint _prevPollID) public {
-        require(commitPeriodActive(_pollID));
+        require(commitPeriodActive(_pollID), "Commit period not Active");
 
         // if msg.sender doesn't have enough voting rights,
         // request for enough voting rights
@@ -139,14 +139,14 @@ contract PLCRVoting {
         }
 
         // make sure msg.sender has enough voting rights
-        require(voteTokenBalance[msg.sender] >= _numTokens);
+        require(voteTokenBalance[msg.sender] >= _numTokens, "You do not have enough voting rights");
         // prevent user from committing to zero node placeholder
-        require(_pollID != 0);
+        require(_pollID != 0, "user committed to zero node placeholder");
         // prevent user from committing a secretHash of 0
-        require(_secretHash != 0);
+        require(_secretHash != 0, "secret hash is 0");
 
         // Check if _prevPollID exists in the user's DLL or if _prevPollID is 0
-        require(_prevPollID == 0 || dllMap[msg.sender].contains(_prevPollID));
+        require(_prevPollID == 0 || dllMap[msg.sender].contains(_prevPollID), "prevPollID does not exists in the user's DLL and _prevPollID not 0");
 
         uint nextPollID = dllMap[msg.sender].getNext(_prevPollID);
 
@@ -155,7 +155,7 @@ contract PLCRVoting {
             nextPollID = dllMap[msg.sender].getNext(_pollID);
         }
 
-        require(validPosition(_prevPollID, nextPollID, msg.sender, _numTokens));
+        require(validPosition(_prevPollID, nextPollID, msg.sender, _numTokens), "Position of prevPollID not valid");
         dllMap[msg.sender].insert(_prevPollID, _pollID, nextPollID);
 
         bytes32 UUID = attrUUID(msg.sender, _pollID);
@@ -339,7 +339,7 @@ contract PLCRVoting {
     @return Boolean indication of isCommitPeriodActive for target poll
     */
     function commitPeriodActive(uint _pollID) public view returns (bool active) {
-        require(pollExists(_pollID));
+        require(pollExists(_pollID), "This pollID does not exist");
 
         return !isExpired(pollMap[_pollID].commitEndDate);
     }

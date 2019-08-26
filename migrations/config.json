@@ -2,7 +2,7 @@
 	"paramConfig": {
 		"minDeposit": 100,
 		"pMinDeposit": 100000,
-		"applyStageLength": 2,
+		"applyStageLength": 2000,
 		"pApplyStageLength": 1200,
 		"commitStageLength": 600,
 		"pCommitStageLength": 1200,
