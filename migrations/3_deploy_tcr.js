@@ -53,7 +53,7 @@ module.exports = async function(deployer) {
 	const GOVTokenInstance = await ERC20Plus.deployed(); // TODO should be GOVToken?
 	await Fin4ReputationInstance.init(GOVTokenInstance.address);
 
-	// dev: give all tokenHolders 20 reputation tokens
+	// dev: give all tokenHolders 10000 reputation tokens
 	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 10000)));
 	// get GOV token from rep tokens
 	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.getGOVFromReputation(tokenHolder)));
@@ -74,7 +74,9 @@ module.exports = async function(deployer) {
 			paramConfig.voteQuorum,
 			paramConfig.pVoteQuorum,
 			paramConfig.exitTimeDelay,
-			paramConfig.exitPeriodLen
+			paramConfig.exitPeriodLen,
+			paramConfig.reviewTax,
+			paramConfig.pminReputation
 		],
 		config.name
 	);
@@ -91,6 +93,9 @@ module.exports = async function(deployer) {
 
 	// write Fin4Main and registry address to src/config/DeployedAddresses.js
 	let data =
+		"const GOVTokenAddress = '" +
+		GOVTokenInstance.address +
+		"';\n" +
 		"const Fin4MainAddress = '" +
 		Fin4MainInstance.address +
 		"';\n" +
@@ -100,13 +105,16 @@ module.exports = async function(deployer) {
 		"const PLCRVotingAddress = '" +
 		PLCRVotingAddress +
 		"';\n" +
-		'export { Fin4MainAddress, RegistryAddress, PLCRVotingAddress };\n';
+		'export { Fin4MainAddress, RegistryAddress, PLCRVotingAddress, GOVTokenAddress };\n';
 	fs.writeFile(path.join(__dirname, '../src/config/DeployedAddresses.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
 	let jsonData =
 		'{\n' +
+		'"GOVTokenAddress": "' +
+		GOVTokenInstance.address +
+		'",\n' +
 		'"Fin4MainAddress": "' +
 		Fin4MainInstance.address +
 		'",\n' +
@@ -121,7 +129,7 @@ module.exports = async function(deployer) {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
-	// Token-TCR-Dev-1, Token-TCR-Dev-2, Token-TCR-Dev-3
+	// Token-TCR-Dev-1, Token-TCR-Dev-2, Token-TCR-Dev-3, Token-TCR-Dev-4, Token-TCR-Dev-5
 	const children = await Fin4MainInstance.getChildren();
 	await RegistryInstance.applyToken(children[0], 150, 'data');
 	await RegistryInstance.applyToken(children[1], 150, 'data');

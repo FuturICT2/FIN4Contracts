@@ -34,7 +34,6 @@ contract Registry {
         address owner;          // Owner of Listing
         uint unstakedDeposit;   // Number of tokens in the listing not locked in a challenge
         uint challengeID;       // Corresponds to a PollID in PLCRVoting
-        uint reviewID;
 	    uint exitTime;		// Time the listing may leave the registry
         uint exitTimeExpiry;    // Expiration date of exit period
     }
@@ -260,6 +259,7 @@ contract Registry {
     function review(bytes32 _listingHash) internal returns (uint reviewID) {
         Listing storage listing = listings[_listingHash];
         uint reviewTax = parameterizer.get("reviewTax");
+        uint minDeposit = parameterizer.get("minDeposit");
 
         // Starts poll
         uint pollID = voting.startPoll(
@@ -271,16 +271,17 @@ contract Registry {
         challenges[pollID] = Challenge({
             challenger: msg.sender,
             rewardPool: reviewTax,
-            stake: parameterizer.get("minDeposit"),
+            stake: minDeposit,
             resolved: false,
             isReview: true,
             totalTokens: 0
         });
         challengesIndexes.push(pollID);
         // Updates listingHash to store most recent challenge
-        listing.reviewID = pollID;
+        listing.challengeID = pollID;
 
         // Locks tokens for listingHash during challenge
+        listing.unstakedDeposit -= parameterizer.get("minDeposit");
         listing.unstakedDeposit -= reviewTax;
 
         // Takes tokens from challenger
@@ -642,5 +643,10 @@ contract Registry {
         }
         return (challengeID, rewardPool, challenger, isReview,
             stake, totalTokens);
+    }
+
+    function whoAmI() public view returns (address)
+    {
+        return msg.sender;
     }
 }

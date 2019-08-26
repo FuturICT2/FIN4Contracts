@@ -13,7 +13,6 @@ module.exports = done => {
 		let registryAddress = config.RegistryAddress;
 
 		const registry = await Registry.at(registryAddress);
-		console.log('process.argv', process.argv.slice(-3)[0]);
 		let theToken = process.argv.slice(-3)[0];
 		let deposit = process.argv.slice(-3)[1];
 		let description = process.argv.slice(-3)[2];

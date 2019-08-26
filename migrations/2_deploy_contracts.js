@@ -33,4 +33,6 @@ module.exports = async function(deployer) {
 	await Fin4MainInstance.createNewToken('Token-TCR-Dev-1', 'TD1', [], [], []);
 	await Fin4MainInstance.createNewToken('Token-TCR-Dev-2', 'TD2', [], [], []);
 	await Fin4MainInstance.createNewToken('Token-TCR-Dev-3', 'TD3', [], [], []);
+	await Fin4MainInstance.createNewToken('Token-TCR-Dev-4', 'TD4', [], [], []);
+	await Fin4MainInstance.createNewToken('Token-TCR-Dev-5', 'TD5', [], [], []);
 };

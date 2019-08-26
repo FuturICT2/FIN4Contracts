@@ -22,8 +22,7 @@ module.exports = done => {
 		console.log('Using Fin4Main at:');
 		console.log(`     ${fin4MainAddress}`);
 		console.log('');
-		console.log('Deploying proxy contracts...');
-		console.log('...');
+
 		/* eslint-enable no-console */
 
 		const registry = await Registry.at(registryAddress);
@@ -46,11 +45,11 @@ module.exports = done => {
 						listingsObj[address] = {
 							address: address,
 							listingKey: listingsKeys[i],
-							applicationExpiry: applicationExpiries[i],
+							applicationExpiry: new Date(parseInt(new BN(applicationExpiries[i]).toString()) * 1000).toISOString(),
 							whitelisted: whitelistees[i],
 							owner: owners[i],
-							unstakedDeposit: unstakedDeposits[i],
-							challengeID: challengeIDs[i]
+							unstakedDeposit: new BN(unstakedDeposits[i]).toString(),
+							challengeID: new BN(challengeIDs[i]).toString()
 						};
 					}
 					console.log(listingsObj);

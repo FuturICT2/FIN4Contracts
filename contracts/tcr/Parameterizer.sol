@@ -119,6 +119,12 @@ contract Parameterizer {
 
         // maximum length of time user can wait to exit the registry
         set("exitPeriodLen", _parameters[13]);
+
+        // fee for the reviewers
+        set("reviewTax", _parameters[14]);
+
+        // minimum amount of needed reputation for users to be able to participate in governance
+        set("pminReputation", _parameters[15]);
     }
 
     // -----------------------

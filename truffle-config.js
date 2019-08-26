@@ -1,6 +1,10 @@
 const path = require('path');
 var HDWalletProvider = require('truffle-hdwallet-provider');
 
+//Get the keys, to not use mnemonic
+const fs = require('fs');
+const config = JSON.parse(fs.readFileSync('./migrations/config.json'));
+const tokenHolders = config.token.tokenHolders;
 MNEMONIC = 'camera exclude mail month insect grab eye bubble involve burger soldier ghost';
 
 var keys;
@@ -13,13 +17,31 @@ try {
 module.exports = {
 	contracts_build_directory: path.join(__dirname, 'src/build/contracts'),
 	networks: {
-		development: {
+		account1: {
 			provider: function() {
 				return new HDWalletProvider(MNEMONIC, 'http://127.0.0.1:7545');
 			},
 			host: '127.0.0.1',
 			port: 7545,
 			network_id: '5777'
+		},
+		account2: {
+			provider: function() {
+				return new HDWalletProvider(MNEMONIC, 'http://127.0.0.1:7545', 1);
+			},
+			host: '127.0.0.1',
+			port: 7545,
+			network_id: '5777',
+			from: '0x89D566c1dBCc16E72bcF99FaA2A3E8bd0B00C61c'
+		},
+		account3: {
+			provider: function() {
+				return new HDWalletProvider(MNEMONIC, 'http://127.0.0.1:7545', 2);
+			},
+			host: '127.0.0.1',
+			port: 7545,
+			network_id: '5777',
+			from: '0x89D566c1dBCc16E72bcF99FaA2A3E8bd0B00C61c'
 		},
 		ropsten: {
 			provider: function() {

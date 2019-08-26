@@ -11,39 +11,27 @@ const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 module.exports = done => {
 	async function listChallenges() {
 		let registryAddress = config.RegistryAddress;
-		let fin4MainAddress = config.Fin4MainAddress;
-		let PLCRVotingAddress = config.PLCRVotingAddress;
-
-		/* eslint-disable no-console */
-		console.log('Using RegistryFactory at:');
-		console.log(`     ${registryAddress}`);
-		console.log('Using PLCR at:');
-		console.log(`     ${PLCRVotingAddress}`);
-		console.log('Using Fin4Main at:');
-		console.log(`     ${fin4MainAddress}`);
-		console.log('');
-		console.log('Deploying proxy contracts...');
-		console.log('...');
-		/* eslint-enable no-console */
 
 		const registry = await Registry.at(registryAddress);
-		const plcr = await PLCRVoting.at(PLCRVotingAddress);
 
 		await registry
-			.getListings()
+			.getChallenges()
 			.then(({ 0: challengeID, 1: rewardPool, 2: challenger, 3: isReview, 4: stake, 5: totalTokens }) => {
-				let listingsObj = {};
-				for (var i = 0; i < listingsKeys.length; i++) {
-					challengesObj[address] = {
-						challengeID: challengeID[i],
-						rewardPool: rewardPool[i],
+				let challengesObj = {};
+				console.log('bla');
+				for (var i = 0; i < challengeID.length; i++) {
+					challengesObj[i] = {
+						challengeID: new BN(challengeID[i]).toString(),
+						rewardPool: new BN(rewardPool[i]).toString(),
 						challenger: challenger[i],
 						isReview: isReview[i],
-						stake: stake[i],
-						totalTokens: totalTokens[i]
+						stake: new BN(stake[i]).toString(),
+						totalTokens: new BN(totalTokens[i]).toString()
 					};
+					//console.log("blabla");
+					//console.log(challengesObj)
 				}
-				console.log(challenges);
+				console.log(challengesObj);
 			});
 		return true;
 	}

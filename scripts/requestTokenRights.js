@@ -16,12 +16,12 @@ module.exports = done => {
 		const registry = await Registry.at(registryAddress);
 		const plcr = await PLCRVoting.at(PLCRVotingAddress);
 
-		let listingHash = process.argv.slice(-2)[0];
-		let data = process.argv.slice(-2)[1];
-		console.log(listingHash, data);
-		let challengeID = await registry.challenge(listingHash, data);
-		console.log('ChallengeID: ', challengeID.logs[0].args);
-
+		let listings = await registry.getListings();
+		console.log(listings);
+		await registry.updateStatus('0x00000000000000000000000009f90c3b2c2a9129581733a8de5c096f54dc049a');
+		listings = await registry.getListings();
+		console.log(listings);
+		console.log('bla');
 		done();
 	}
 

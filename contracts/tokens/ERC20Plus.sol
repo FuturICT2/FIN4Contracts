@@ -36,6 +36,11 @@ contract ERC20Plus is ERC20Mintable, ERC20Burnable, ERC20Pausable {
       super.burn(value);
   }
 
+  function who() public view returns (address)
+  {
+    return msg.sender;
+  }
+
   /**
    * @dev Burns a specific amount of tokens from the target address and decrements allowance
    * @param from address The address which you want to send tokens from
