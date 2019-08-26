@@ -1,6 +1,7 @@
 /* global artifacts web3 */
 const fs = require('fs');
 const BN = require('bignumber.js');
+const { soliditySha3 } = require('web3-utils');
 
 const Registry = artifacts.require('Registry.sol');
 const Token = artifacts.require('ERC20Plus.sol');
@@ -17,26 +18,34 @@ module.exports = done => {
 		const registry = await Registry.at(registryAddress);
 		const plcr = await PLCRVoting.at(PLCRVotingAddress);
 
-		myAddress = await Registry.whoAmI();
-
+		myAddress = await registry.whoAmI();
+		console.log('myAddress: ', myAddress);
 		let pollID = process.argv.slice(-4)[0];
 		//has to be 1 or 0
 		let voteOption = process.argv.slice(-4)[1];
 		let salt = process.argv.slice(-4)[2];
 
-		let numTokens = process.argv.slice(-4)[3];
+		let numberOfTokens = process.argv.slice(-4)[3];
 
-		let prevPollID = await plcr.getInsertPointForNumTokens(myAddress, numTokens, pollID);
+		let prevPollID = parseInt(
+			new BN(await plcr.getInsertPointForNumTokens(myAddress, numberOfTokens, pollID)).toString()
+		);
 
-		await plcr;
+		secretHash = soliditySha3(voteOption, salt);
+		console.log(
+			'pollID: ',
+			pollID,
+			'secretHash: ',
+			secretHash,
+			'numberOfTokens: ',
+			numberOfTokens,
+			'prevPollID: ',
+			prevPollID
+		);
+		await plcr.commitVote(pollID, secretHash, numberOfTokens, prevPollID);
 
-		let listings = await registry.getListings();
-		console.log(listings);
-		await registry.updateStatus('0x00000000000000000000000009f90c3b2c2a9129581733a8de5c096f54dc049a');
-		listings = await registry.getListings();
-		console.log(listings);
 		console.log('bla');
-		done();
+		return true;
 	}
 
 	commitVote().then(() => done());

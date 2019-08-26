@@ -4,22 +4,25 @@ const BN = require('bignumber.js');
 
 const Token = artifacts.require('ERC20Plus.sol');
 const Registry = artifacts.require('Registry.sol');
+const PLCRVoting = artifacts.require('PLCRVoting.sol');
 
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
 	async function approvePLCR() {
+		let registryAddress = config.RegistryAddress;
 		let PLCRVotingAddress = config.PLCRVotingAddress;
 		let GOVTokenAddress = config.GOVTokenAddress;
 
 		registry = await Registry.at(registryAddress);
+		plcr = await PLCRVoting.at(PLCRVotingAddress);
 		GOVTokenInstance = await Token.at(GOVTokenAddress);
 
 		amount = process.argv.slice(-1)[0];
 		console.log('PLCR Address: ', PLCRVotingAddress);
 		console.log('Requested amount: ', amount);
 
-		myAddress = await Registry.whoAmI();
+		myAddress = await registry.whoAmI();
 		console.log('My address: ', myAddress);
 
 		availableAmount = await GOVTokenInstance.balanceOf(myAddress);
@@ -32,6 +35,10 @@ module.exports = done => {
 
 		newAllowance = await GOVTokenInstance.allowance(myAddress, PLCRVotingAddress);
 		console.log('New allowance: ', new BN(newAllowance).toString());
+
+		await plcr.requestVotingRights(amount);
+		console.log('plcr.requestVotingRights: ', amount);
+
 		return true;
 	}
 

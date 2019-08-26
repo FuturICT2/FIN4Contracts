@@ -20,7 +20,7 @@ module.exports = done => {
 		console.log('Registry Address: ', registryAddress);
 		console.log('requested amount: ', amount);
 
-		myAddress = await Registry.whoAmI();
+		myAddress = await registry.whoAmI();
 		console.log('My address: ', myAddress);
 
 		availableAmount = await GOVTokenInstance.balanceOf(myAddress);
