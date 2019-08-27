@@ -209,10 +209,10 @@ contract PLCRVoting {
     */
     function revealVote(uint _pollID, uint _voteOption, uint _salt) public {
         // Make sure the reveal period is active
-        require(revealPeriodActive(_pollID));
-        require(pollMap[_pollID].didCommit[msg.sender]);                         // make sure user has committed a vote for this poll
-        require(!pollMap[_pollID].didReveal[msg.sender]);                        // prevent user from revealing multiple times
-        require(keccak256(abi.encodePacked(_voteOption, _salt)) == getCommitHash(msg.sender, _pollID)); // compare resultant hash from inputs to original commitHash
+        require(revealPeriodActive(_pollID), "Reveal period not active");
+        require(pollMap[_pollID].didCommit[msg.sender], "Your user did not commit");                         // make sure user has committed a vote for this poll
+        require(!pollMap[_pollID].didReveal[msg.sender], "Your user has already Revealed");                        // prevent user from revealing multiple times
+        require(keccak256(abi.encodePacked(_voteOption, _salt)) == getCommitHash(msg.sender, _pollID), "Vote and Salt hash do not corresopond with the commited value"); // compare resultant hash from inputs to original commitHash
 
         uint numTokens = getNumTokens(msg.sender, _pollID);
 
@@ -362,7 +362,7 @@ contract PLCRVoting {
     @return Boolean indication of whether user has committed
     */
     function didCommit(address _voter, uint _pollID) public view returns (bool committed) {
-        require(pollExists(_pollID));
+        require(pollExists(_pollID), "This pollID does not exist");
 
         return pollMap[_pollID].didCommit[_voter];
     }

@@ -59,7 +59,8 @@
 		"challenge": "truffle exec --network $npm_package_config_account ./scripts/challenge.js",
 		"listChallenges": "truffle exec --network $npm_package_config_account ./scripts/listChallenges.js",
 		"commitVote": "truffle exec --network $npm_package_config_account ./scripts/commitVote.js",
-		"revealVote": "truffle exec --network $npm_package_config_account ./scripts/revealVote.js"
+		"revealVote": "truffle exec --network $npm_package_config_account ./scripts/revealVote.js",
+		"getPoll": "truffle exec --network $npm_package_config_account ./scripts/getPoll.js"
 	},
 	"browserslist": {
 		"production": [
