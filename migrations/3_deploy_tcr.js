@@ -85,6 +85,7 @@ module.exports = async function(deployer) {
 	console.log(registryReceipt.logs);
 
 	await GOVTokenInstance.approve(registry, 1000);
+	await GOVTokenInstance.init(registry, parameterizer, plcr);
 
 	const RegistryInstance = await Registry.at(registry);
 	const Fin4MainInstance = await Fin4Main.deployed();
