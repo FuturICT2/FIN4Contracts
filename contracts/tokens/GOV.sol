@@ -1,6 +1,9 @@
 pragma solidity ^0.5.8;
 
 import "./ERC20Plus.sol";
+import "./../tcr/Parameterizer.sol";
+import "./../tcr/Registry.sol";
+import "./../tcr/PLCR/PLCRVoting.sol";
 
 
 
@@ -14,7 +17,12 @@ import "./ERC20Plus.sol";
  */
 contract GOV is ERC20Plus {
 
-  mapping(address => mapping(address => uint256)) public delegatedTokens;
+  mapping(address => mapping(address => uint256)) internal delegatorTokens;
+  mapping(address => uint256) internal delegateeTokens;
+
+  PLCRVoting public voting;
+  Parameterizer public parameterizer;
+  Registry public registry;
 
   constructor(
     string memory _name,
@@ -28,24 +36,39 @@ contract GOV is ERC20Plus {
       ERC20Plus(_name,_symbol, _decimals, minter, _isBurnable, _isTransferable, _isMintable, _initialSupply)
       public{}
 
-  function delegate(address to, uint256 value) public {
-    require(balanceOf(msg.sender)>=value, "You do not have enough tokens for this transaction");
-    delegatedTokens[msg.sender][to]+=value;
-    _transfer(msg.sender, to, value);
+  function delegate(address to, uint256 amount) public {
+    require(balanceOf(msg.sender) >= amount, "You do not have enough tokens for this transaction");
+
+    delegatorTokens[msg.sender][to] += amount;
+    delegateeTokens[to] += amount;
+
+    _transfer(msg.sender, to, amount);
   }
 
-  function refundeDelegation(address to, uint256 value) public {
-    require(balanceOf(to)>=value, "The balance of reciver is too low");
+  function refundDelegation(address to, uint256 amount) public {
+    require(balanceOf(to) >= amount, "The balance of reciver is too low");
+    require(delegatorTokens[msg.sender][to] >= amount, "You do not have that much delegation for this account");
+    delegatorTokens[msg.sender][to] -= amount;
+    delegateeTokens[to] -= amount;
 
-    delegatedTokens[msg.sender][to]+=value;
-    _transfer(msg.sender, to, value);
+    _transfer(to, msg.sender, amount);
   }
-/*
+
+  function transfer(address recipient, uint256 amount) public returns (bool) {
+    if (balanceOf(msg.sender) - amount < delegateeTokens[msg.sender]){
+      require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry), "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
+    }
+    return super.transfer(recipient, amount);
+  }
+
   function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
-    _transfer(sender, recipient, amount);
-    //_approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount));
-    return true;
-    }*/
+    if (balanceOf(msg.sender) - amount < delegateeTokens[msg.sender]){
+      require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry), "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
+    }
+    return super.transferFrom(sender, recipient, amount);
+  }
+
+  //function transferFrom(address sender, address recipient, uint256 amount) public returns (bool)
 
   function addressToString(address _addr) private pure returns(string memory) {
     bytes32 value = bytes32(uint256(_addr));

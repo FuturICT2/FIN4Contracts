@@ -13,8 +13,8 @@ module.exports = done => {
 		let registryAddress = config.RegistryAddress;
 
 		const registry = await Registry.at(registryAddress);
-		let listing = process.argv.slice(-1)[0];
-		await registry.updateStatus(listing);
+		let listingHash = process.argv.slice(-1)[0];
+		await registry.updateStatus(listingHash);
 
 		return true;
 	}

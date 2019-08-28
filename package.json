@@ -60,7 +60,9 @@
 		"listChallenges": "truffle exec --network $npm_package_config_account ./scripts/listChallenges.js",
 		"commitVote": "truffle exec --network $npm_package_config_account ./scripts/commitVote.js",
 		"revealVote": "truffle exec --network $npm_package_config_account ./scripts/revealVote.js",
-		"getPoll": "truffle exec --network $npm_package_config_account ./scripts/getPoll.js"
+		"getPoll": "truffle exec --network $npm_package_config_account ./scripts/getPoll.js",
+		"GOVdelegate": "truffle exec --network $npm_package_config_account ./scripts/GOVdelegate.js",
+		"GOVrefundDelegation": "truffle exec --network $npm_package_config_account ./scripts/GOVrefundDelegation.js"
 	},
 	"browserslist": {
 		"production": [
