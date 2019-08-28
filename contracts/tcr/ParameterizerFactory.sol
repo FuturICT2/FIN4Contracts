@@ -3,7 +3,7 @@ pragma solidity ^0.5.8;
 import "./PLCR/PLCRFactory.sol";
 import "./PLCR/PLCRVoting.sol";
 import "./Parameterizer.sol";
-import "../tokens/ERC20Plus.sol";
+import "../tokens/GOV.sol";
 
 
 contract ParameterizerFactory {
@@ -29,7 +29,7 @@ contract ParameterizerFactory {
     @param _parameters        array of canonical parameters
     */
     function newParameterizerBYOToken(
-        ERC20Plus _token,
+        GOV _token,
         uint[] memory _parameters
     ) public returns (Parameterizer) {
         PLCRVoting plcr = plcrFactory.newPLCRBYOToken(_token);
@@ -45,11 +45,11 @@ contract ParameterizerFactory {
     }
 
     /*
-    @dev deploys and initializes new ERC20Plus, PLCRVoting, and Parameterizer contracts
-    @param _supply            the total number of tokens to mint in the ERC20Plus contract
-    @param _name              the name of the new ERC20Plus token
-    @param _decimals          the decimal precision to be used in rendering balances in the ERC20Plus token
-    @param _symbol            the symbol of the new ERC20Plus token
+    @dev deploys and initializes new GOV, PLCRVoting, and Parameterizer contracts
+    @param _supply            the total number of tokens to mint in the GOV contract
+    @param _name              the name of the new GOV token
+    @param _decimals          the decimal precision to be used in rendering balances in the GOV token
+    @param _symbol            the symbol of the new GOV token
     @param _parameters        array of canonical parameters
     */
     function newParameterizerWithToken(
@@ -59,10 +59,10 @@ contract ParameterizerFactory {
         string memory _symbol,
         uint[] memory _parameters
     ) public returns (Parameterizer) {
-        // Creates a new ERC20Plus token & transfers the supply to creator (msg.sender)
+        // Creates a new GOV token & transfers the supply to creator (msg.sender)
         // Deploys & initializes a new PLCRVoting contract
         PLCRVoting plcr = plcrFactory.newPLCRWithToken(_supply, _name, _decimals, _symbol);
-        ERC20Plus token = ERC20Plus(address(plcr.token()));
+        GOV token = GOV(address(plcr.token()));
         token.transfer(msg.sender, _supply);
 
         // Create & initialize a new Parameterizer contract

@@ -1,5 +1,5 @@
 pragma solidity ^0.5.8;
-import "../../tokens/ERC20Plus.sol";
+import "../../tokens/GOV.sol";
 import "./dependencies/DLL.sol";
 import "./dependencies/AttributeStore.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -53,7 +53,7 @@ contract PLCRVoting {
     mapping(address => DLL.Data) dllMap;
     AttributeStore.Data store;
 
-    ERC20Plus public token;
+    GOV public token;
 
     /**
     @dev Initializer. Can only be called once.
@@ -62,7 +62,7 @@ contract PLCRVoting {
     function init(address _token) public {
         require(_token != address(0) && address(token) == address(0));
 
-        token = ERC20Plus(_token);
+        token = GOV(_token);
         pollNonce = INITIAL_POLL_NONCE;
     }
 
@@ -76,9 +76,9 @@ contract PLCRVoting {
     @param _numTokens The number of votingTokens desired in exchange for ERC20 tokens
     */
     function requestVotingRights(uint _numTokens) public {
-        require(ERC20Plus(token).balanceOf(msg.sender) >= _numTokens, "ERC20Plus(token).balanceOf(msg.sender) < _numTokens");
+        require(GOV(token).balanceOf(msg.sender) >= _numTokens, "GOV(token).balanceOf(msg.sender) < _numTokens");
         voteTokenBalance[msg.sender] += _numTokens;
-        require(ERC20Plus(token).transferFrom(msg.sender, address(this), _numTokens), "Cannot transferfrom GOVTokens");
+        require(GOV(token).transferFrom(msg.sender, address(this), _numTokens), "Cannot transferfrom GOVTokens");
         emit _VotingRightsGranted(_numTokens, msg.sender);
     }
 
@@ -90,7 +90,7 @@ contract PLCRVoting {
         uint availableTokens = voteTokenBalance[msg.sender].sub(getLockedTokens(msg.sender));
         require(availableTokens >= _numTokens);
         voteTokenBalance[msg.sender] -= _numTokens;
-        require(ERC20Plus(token).transfer(msg.sender, _numTokens));
+        require(GOV(token).transfer(msg.sender, _numTokens));
         emit _VotingRightsWithdrawn(_numTokens, msg.sender);
     }
 

@@ -3,16 +3,15 @@ const fs = require('fs');
 const BN = require('bignumber.js');
 
 const Registry = artifacts.require('Registry.sol');
-const Token = artifacts.require('ERC20Plus.sol');
+const Token = artifacts.require('GOV.sol');
 const PLCRVoting = artifacts.require('PLCRVoting.sol');
-const GOV = artifacts.require('GOV.sol');
 
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
 	async function GOVdelegate() {
 		let GOVTokenAddress = config.GOVTokenAddress;
-		const govToken = await GOV.at(GOVTokenAddress);
+		const govToken = await Token.at(GOVTokenAddress);
 
 		to = process.argv.slice(-2)[0];
 		amount = process.argv.slice(-2)[1];
@@ -25,7 +24,7 @@ module.exports = done => {
 		newBalanceOfTo = await govToken.balanceOf(to);
 		console.log('New balance of reciever: ', new BN(newBalanceOfTo).toString());
 
-		console.log('bla');
+		console.log('Delegated!');
 		done();
 	}
 

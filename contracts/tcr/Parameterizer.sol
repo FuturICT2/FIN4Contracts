@@ -1,6 +1,6 @@
 pragma solidity ^0.5.8;
 
-import "../tokens/ERC20Plus.sol";
+import "../tokens/GOV.sol";
 import "./PLCR/PLCRVoting.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
@@ -57,7 +57,7 @@ contract Parameterizer {
     mapping(bytes32 => ParamProposal) public proposals;
 
     // Global Variables
-    ERC20Plus public token;
+    GOV public token;
     PLCRVoting public voting;
     uint public PROCESSBY = 604800; // 7 days
 
@@ -75,7 +75,7 @@ contract Parameterizer {
         require(_token != address(0) && address(token) == address(0));
         require(_plcr != address(0) && address(voting) == address(0));
 
-        token = ERC20Plus(_token);
+        token = GOV(_token);
         voting = PLCRVoting(_plcr);
 
         // minimum deposit for listing to be whitelisted
@@ -162,7 +162,7 @@ contract Parameterizer {
             value: _value
         });
 
-        require(ERC20Plus(token).transferFrom(msg.sender, address(this), deposit)); // escrow tokens (deposit amt)
+        require(GOV(token).transferFrom(msg.sender, address(this), deposit)); // escrow tokens (deposit amt)
 
         emit _ReparameterizationProposal(_name, _value, propID, deposit, proposals[propID].appExpiry, msg.sender);
         return propID;
@@ -196,7 +196,7 @@ contract Parameterizer {
         proposals[_propID].challengeID = pollID;       // update listing to store most recent challenge
 
         //take tokens from challenger
-        require(ERC20Plus(token).transferFrom(msg.sender, address(this), deposit));
+        require(GOV(token).transferFrom(msg.sender, address(this), deposit));
 
         (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
 
@@ -222,7 +222,7 @@ contract Parameterizer {
             set(prop.name, prop.value);
             emit _ProposalAccepted(_propID, prop.name, prop.value);
             delete proposals[_propID];
-            require(ERC20Plus(token).transfer(propOwner, propDeposit));
+            require(GOV(token).transfer(propOwner, propDeposit));
         } else if (challengeCanBeResolved(_propID)) {
             // There is a challenge against the proposal.
             resolveChallenge(_propID);
@@ -230,7 +230,7 @@ contract Parameterizer {
             // There is no challenge against the proposal, but the processBy date has passed.
             emit _ProposalExpired(_propID);
             delete proposals[_propID];
-            require(ERC20Plus(token).transfer(propOwner, propDeposit));
+            require(GOV(token).transfer(propOwner, propDeposit));
         } else {
             // There is no challenge against the proposal, and neither the appExpiry date nor the
             // processBy date has passed.
@@ -271,7 +271,7 @@ contract Parameterizer {
         challenge.tokenClaims[msg.sender] = true;
 
         emit _RewardClaimed(_challengeID, reward, msg.sender);
-        require(ERC20Plus(token).transfer(msg.sender, reward));
+        require(GOV(token).transfer(msg.sender, reward));
     }
 
     /**
@@ -386,11 +386,11 @@ contract Parameterizer {
                 set(prop.name, prop.value);
             }
             emit _ChallengeFailed(_propID, prop.challengeID, challenge.rewardPool, challenge.winningTokens);
-            require(ERC20Plus(token).transfer(prop.owner, reward));
+            require(GOV(token).transfer(prop.owner, reward));
         }
         else { // The challenge succeeded or nobody voted
             emit _ChallengeSucceeded(_propID, prop.challengeID, challenge.rewardPool, challenge.winningTokens);
-            require(ERC20Plus(token).transfer(challenges[prop.challengeID].challenger, reward));
+            require(GOV(token).transfer(challenges[prop.challengeID].challenger, reward));
         }
     }
 

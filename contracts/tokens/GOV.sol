@@ -8,12 +8,8 @@ import "./../tcr/PLCR/PLCRVoting.sol";
 
 
 /**
- * @title ERC20Plus
-* @dev ERC20 Token, where all tokens (INITIAL_SUPPLY) are pre-assigned to the creator.
- * Note they can later distribute these tokens as they wish using `transfer` and other
- * `ERC20` functions.
- * Depending on the parameters provided, this token can be mintable, burnable and/or 
- * pausable (non-transferable).
+ * @title GOV
+* @dev Token used for governance
  */
 contract GOV is ERC20Plus {
 
@@ -37,6 +33,7 @@ contract GOV is ERC20Plus {
       public{}
 
   function delegate(address to, uint256 amount) public {
+    require(msg.sender != to, "You cannot delegate to yourself");
     require(balanceOf(msg.sender) >= amount, "You do not have enough tokens for this transaction");
 
     delegatorTokens[msg.sender][to] += amount;
@@ -55,6 +52,7 @@ contract GOV is ERC20Plus {
   }
 
   function transfer(address recipient, uint256 amount) public returns (bool) {
+    require (balanceOf(msg.sender) > amount, "Not enough balance");
     if (balanceOf(msg.sender) - amount < delegateeTokens[msg.sender]){
       require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry), "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
     }
@@ -62,7 +60,8 @@ contract GOV is ERC20Plus {
   }
 
   function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
-    if (balanceOf(msg.sender) - amount < delegateeTokens[msg.sender]){
+    require (balanceOf(sender) > amount, "Not enough balance");
+    if (balanceOf(sender) - amount < delegateeTokens[msg.sender]){
       require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry), "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
     }
     return super.transferFrom(sender, recipient, amount);

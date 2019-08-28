@@ -40,7 +40,7 @@
 		]
 	},
 	"config": {
-		"account": "account2"
+		"account": "account3"
 	},
 	"scripts": {
 		"start": "react-scripts start --hot",

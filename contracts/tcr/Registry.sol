@@ -1,6 +1,6 @@
 pragma solidity ^0.5.8;
 
-import "../tokens/ERC20Plus.sol";
+import "../tokens/GOV.sol";
 import "./Parameterizer.sol";
 import "./PLCR/PLCRVoting.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -57,21 +57,21 @@ contract Registry {
     mapping(bytes32 => Listing) public listings;
 
     // Global Variables
-    ERC20Plus public token;
+    GOV public token;
     PLCRVoting public voting;
     Parameterizer public parameterizer;
     string public name;
 
     /**
     @dev Initializer. Can only be called once.
-    @param _token The address where the ERC20Plus token contract is deployed
+    @param _token The address where the GOV token contract is deployed
     */
     function init(address _token, address _voting, address _parameterizer, string memory _name) public {
         require(_token != address(0) && address(token) == address(0));
         require(_voting != address(0) && address(voting) == address(0));
         require(_parameterizer != address(0) && address(parameterizer) == address(0));
 
-        token = ERC20Plus(_token);
+        token = GOV(_token);
         voting = PLCRVoting(_voting);
         parameterizer = Parameterizer(_parameterizer);
         name = _name;
@@ -85,7 +85,7 @@ contract Registry {
     @dev                Allows a user to start an application. Takes tokens from user and sets
                         apply stage end time.
     @param tokenAddress The hash of a potential listing a user is applying to add to the registry // TODO adapt comment
-    @param _amount      The number of ERC20Plus tokens a user is willing to potentially stake
+    @param _amount      The number of GOV tokens a user is willing to potentially stake
     @param _data        Extra data relevant to the application. Think IPFS hashes.
     */
     function applyToken(address tokenAddress, uint _amount, string calldata _data) external {
@@ -106,7 +106,7 @@ contract Registry {
         listing.unstakedDeposit = _amount;
 
         // Transfers tokens from user to Registry contract
-        require(ERC20Plus(token).transferFrom(listing.owner, address(this), _amount), "Failed to transfer tokens from user to Registry contract");
+        require(GOV(token).transferFrom(listing.owner, address(this), _amount), "Failed to transfer tokens from user to Registry contract");
 
         review(_listingHash);
 
@@ -116,7 +116,7 @@ contract Registry {
     /**
     @dev                Allows the owner of a listingHash to increase their unstaked deposit.
     @param _listingHash A listingHash msg.sender is the owner of
-    @param _amount      The number of ERC20Plus tokens to increase a user's unstaked deposit
+    @param _amount      The number of GOV tokens to increase a user's unstaked deposit
     */
     function deposit(bytes32 _listingHash, uint _amount) external {
         Listing storage listing = listings[_listingHash];
@@ -124,7 +124,7 @@ contract Registry {
         require(listing.owner == msg.sender);
 
         listing.unstakedDeposit += _amount;
-        require(ERC20Plus(token).transferFrom(msg.sender, address(this), _amount));
+        require(GOV(token).transferFrom(msg.sender, address(this), _amount));
 
         emit _Deposit(_listingHash, _amount, listing.unstakedDeposit, msg.sender);
     }
@@ -132,7 +132,7 @@ contract Registry {
     /**
     @dev                Allows the owner of a listingHash to decrease their unstaked deposit.
     @param _listingHash A listingHash msg.sender is the owner of.
-    @param _amount      The number of ERC20Plus tokens to withdraw from the unstaked deposit.
+    @param _amount      The number of GOV tokens to withdraw from the unstaked deposit.
     */
     function withdraw(bytes32 _listingHash, uint _amount) external {
         Listing storage listing = listings[_listingHash];
@@ -242,7 +242,7 @@ contract Registry {
         listing.unstakedDeposit -= minDeposit;
 
         // Takes tokens from challenger
-        require(ERC20Plus(token).transferFrom(msg.sender, address(this), minDeposit));
+        require(GOV(token).transferFrom(msg.sender, address(this), minDeposit));
 
         (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
 
@@ -285,7 +285,7 @@ contract Registry {
         listing.unstakedDeposit -= reviewTax;
 
         // Takes tokens from challenger
-        require(ERC20Plus(token).transferFrom(msg.sender, address(this), reviewTax));
+        require(GOV(token).transferFrom(msg.sender, address(this), reviewTax));
 
         (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
 

@@ -4,7 +4,7 @@ const BN = require('bignumber.js');
 const { soliditySha3 } = require('web3-utils');
 
 const Registry = artifacts.require('Registry.sol');
-const Token = artifacts.require('ERC20Plus.sol');
+const Token = artifacts.require('GOV.sol');
 const PLCRVoting = artifacts.require('PLCRVoting.sol');
 
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));

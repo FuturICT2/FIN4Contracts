@@ -1,6 +1,6 @@
 pragma solidity ^0.5.8;
 
-import "../tokens/ERC20Plus.sol";
+import "../tokens/GOV.sol";
 import "./ParameterizerFactory.sol";
 import "./Registry.sol";
 import "./PLCR/PLCRVoting.sol";
@@ -8,7 +8,7 @@ import "./Parameterizer.sol";
 
 contract RegistryFactory {
 
-    event NewRegistry(address creator, ERC20Plus token, PLCRVoting plcr, Parameterizer parameterizer, Registry registry);
+    event NewRegistry(address creator, GOV token, PLCRVoting plcr, Parameterizer parameterizer, Registry registry);
 
     ParameterizerFactory public parameterizerFactory;
     ProxyFactory public proxyFactory;
@@ -24,10 +24,10 @@ contract RegistryFactory {
     /*
     @dev deploys and initializes a new Registry contract that consumes a token at an address
         supplied by the user.
-    @param _token           an ERC20Plus token to be consumed by the new Registry contract
+    @param _token           an GOV token to be consumed by the new Registry contract
     */
     function newRegistryBYOToken(
-        ERC20Plus _token,
+        GOV _token,
         uint[] memory _parameters,
         string memory _name
     ) public returns (Registry) {
@@ -42,12 +42,12 @@ contract RegistryFactory {
     }
 
     /*
-    @dev deploys and initializes a new Registry contract, an ERC20Plus, a PLCRVoting, and Parameterizer
+    @dev deploys and initializes a new Registry contract, an GOV, a PLCRVoting, and Parameterizer
         to be consumed by the Registry's initializer.
-    @param _supply          the total number of tokens to mint in the ERC20Plus contract
-    @param _name            the name of the new ERC20Plus token
-    @param _decimals        the decimal precision to be used in rendering balances in the ERC20Plus token
-    @param _symbol          the symbol of the new ERC20Plus token
+    @param _supply          the total number of tokens to mint in the GOV contract
+    @param _name            the name of the new GOV token
+    @param _decimals        the decimal precision to be used in rendering balances in the GOV token
+    @param _symbol          the symbol of the new GOV token
     */
     function newRegistryWithToken(
         uint _supply,
@@ -57,10 +57,10 @@ contract RegistryFactory {
         uint[] memory _parameters,
         string memory _registryName
     ) public returns (Registry) {
-        // Creates a new ERC20Plus token & transfers the supply to creator (msg.sender)
+        // Creates a new GOV token & transfers the supply to creator (msg.sender)
         // Deploys & initializes (1) PLCRVoting contract & (2) Parameterizer contract
         Parameterizer parameterizer = parameterizerFactory.newParameterizerWithToken(_supply, _tokenName, _decimals, _symbol, _parameters);
-        ERC20Plus token = ERC20Plus(parameterizer.token());
+        GOV token = GOV(parameterizer.token());
         token.transfer(msg.sender, _supply);
         PLCRVoting plcr = parameterizer.voting();
 

@@ -4,9 +4,8 @@ const PLCRFactory = artifacts.require('tcr/PLCRFactory');
 const ParameterizerFactory = artifacts.require('tcr/ParameterizerFactory');
 const RegistryFactory = artifacts.require('tcr/RegistryFactory');
 const Registry = artifacts.require('tcr/Registry');
-const ERC20Plus = artifacts.require('tokens/ERC20Plus');
-const Fin4Reputation = artifacts.require('Fin4Reputation');
 const GOV = artifacts.require('tokens/GOV');
+const Fin4Reputation = artifacts.require('Fin4Reputation');
 
 const Fin4Main = artifacts.require('Fin4Main');
 
@@ -40,7 +39,7 @@ module.exports = async function(deployer) {
 	const Fin4ReputationInstance = await Fin4Reputation.deployed();
 
 	const GOVToken = await deployer.deploy(
-		ERC20Plus,
+		GOV,
 		config.token.name,
 		config.token.symbol,
 		config.token.decimals,
@@ -51,7 +50,7 @@ module.exports = async function(deployer) {
 		0
 	);
 
-	const GOVTokenInstance = await ERC20Plus.deployed(); // TODO should be GOVToken?
+	const GOVTokenInstance = await GOV.deployed();
 	await Fin4ReputationInstance.init(GOVTokenInstance.address);
 
 	// dev: give all tokenHolders 10000 reputation tokens
@@ -111,23 +110,10 @@ module.exports = async function(deployer) {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
-	const testToken = await deployer.deploy(
-		GOV,
-		config.token.name,
-		config.token.symbol,
-		config.token.decimals,
-		Fin4ReputationInstance.address,
-		config.token.isBurnable,
-		config.token.isTransferable,
-		config.token.isMintable,
-		0
-	);
-	await Promise.all(tokenHolders.map(tokenHolder => testToken.mint(tokenHolder, 10000)));
-
 	let jsonData =
 		'{\n' +
 		'"GOVTokenAddress": "' +
-		testToken.address +
+		GOVTokenInstance.address +
 		'",\n' +
 		'"Fin4MainAddress": "' +
 		Fin4MainInstance.address +

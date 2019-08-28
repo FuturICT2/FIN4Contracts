@@ -2,7 +2,7 @@
 const fs = require('fs');
 const BN = require('bignumber.js');
 
-const Token = artifacts.require('ERC20Plus.sol');
+const Token = artifacts.require('GOV.sol');
 const Registry = artifacts.require('Registry.sol');
 const PLCRVoting = artifacts.require('PLCRVoting.sol');
 

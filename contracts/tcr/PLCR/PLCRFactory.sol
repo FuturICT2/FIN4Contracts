@@ -1,12 +1,12 @@
 pragma solidity ^0.5.8;
 
-import "./../../tokens/ERC20Plus.sol";
+import "./../../tokens/GOV.sol";
 import "./PLCRVoting.sol";
 import "./ProxyFactory.sol";
 
 contract PLCRFactory {
 
-  event newPLCR(address creator, ERC20Plus token, PLCRVoting plcr);
+  event newPLCR(address creator, GOV token, PLCRVoting plcr);
 
   ProxyFactory public proxyFactory;
   PLCRVoting public canonizedPLCR;
@@ -22,7 +22,7 @@ contract PLCRFactory {
   supplied by the user.
   @param _token an ERC20 token to be consumed by the new PLCR contract
   */
-  function newPLCRBYOToken(ERC20Plus _token) public returns (PLCRVoting) {
+  function newPLCRBYOToken(GOV _token) public returns (PLCRVoting) {
     PLCRVoting plcr = PLCRVoting(proxyFactory.createProxy(address(canonizedPLCR), ""));
     plcr.init(address(_token));
 
@@ -46,7 +46,7 @@ contract PLCRFactory {
     string memory _symbol
   ) public returns (PLCRVoting) {
     // Create a new token and give all the tokens to the PLCR creator
-    ERC20Plus token = new ERC20Plus(_name, _symbol, _decimals, address(0), true, true, false, _supply);
+    GOV token = new GOV(_name, _symbol, _decimals, address(0), true, true, false, _supply);
 
     token.transfer(msg.sender, _supply);
 
