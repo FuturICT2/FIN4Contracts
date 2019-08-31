@@ -30,6 +30,9 @@ source ~/.bashrc
 nvm install 10.0.0
 nvm use 10.0.0
 
+# on macOS to prevent gyp related errors
+npm explore npm -g -- npm install node-gyp@latest
+
 # truffle
 npm install -g truffle
 npm install -g ganache-cli
