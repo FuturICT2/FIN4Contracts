@@ -9,6 +9,7 @@
 // 		helperModalTriggers: used in TypeCreation to pass the click on
 // TODO Some of the added functionality is very specific and should be restructured to be more generic
 
+import { drizzleConnect } from 'drizzle-react';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TextField } from '@material-ui/core';
@@ -397,6 +398,10 @@ const HelperModalTrigger = props => {
 	);
 };
 
+ContractForm.contextTypes = {
+	drizzle: PropTypes.object
+};
+
 ContractForm.propTypes = {
 	contractName: PropTypes.string,
 	contractAddress: PropTypes.string,
@@ -406,4 +411,14 @@ ContractForm.propTypes = {
 	helperModalTriggers: PropTypes.arrayOf(PropTypes.func)
 };
 
-export default ContractForm;
+/*
+ * Export connected component.
+ */
+
+const mapStateToProps = state => {
+	return {
+		contracts: state.contracts
+	};
+};
+
+export default drizzleConnect(ContractForm, mapStateToProps);

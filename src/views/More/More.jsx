@@ -11,6 +11,8 @@ import AddIcon from '@material-ui/icons/Add';
 import OfferCreation from './OfferCreation';
 import Modal from '../../components/Modal';
 import bigchainConfig from '../../config/bigchain-config';
+import { drizzleConnect } from 'drizzle-react';
+import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
@@ -182,4 +184,14 @@ const Wrapper = styled.div`
 	align-items: center;
 `;
 
-export default More;
+More.contextTypes = {
+	drizzle: PropTypes.object
+};
+
+const mapStateToProps = state => {
+	return {
+		contracts: state.contracts
+	};
+};
+
+export default drizzleConnect(More, mapStateToProps);
