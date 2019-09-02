@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-contract Fin4TokenStrut {
+contract Fin4TokenStub {
 
   function name() public view returns(string memory);
 

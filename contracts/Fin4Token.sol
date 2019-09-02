@@ -1,20 +1,12 @@
 pragma solidity ^0.5.0;
 
-import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
-import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
-
+import 'contracts/tokens/ERC20Plus.sol';
 import 'contracts/Fin4TokenBase.sol';
 
-contract Fin4Token is Fin4TokenBase, ERC20Detailed, ERC20Mintable {
-
-  uint8 d = 0;
+contract Fin4Token is Fin4TokenBase, ERC20Plus {
 
   constructor(string memory name, string memory symbol, address Fin4MainAddress, address actionTypeCreatorAddress)
-    // default decimals to 0
-    // Good enough for now, later on we should give advanced token creators the ability to decide this themselves
-    ERC20Detailed(name, symbol, d)
-    ERC20Mintable()
-    ERC20()
+    ERC20Plus(name, symbol, 0, actionTypeCreatorAddress, false, true, true, 0)
     Fin4TokenBase(Fin4MainAddress, actionTypeCreatorAddress)
     public {}
 

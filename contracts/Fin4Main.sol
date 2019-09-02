@@ -1,5 +1,4 @@
 pragma solidity ^0.5.0;
-pragma experimental ABIEncoderV2;
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/proof/Fin4BaseProofType.sol';

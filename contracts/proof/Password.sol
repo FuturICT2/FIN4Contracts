@@ -20,7 +20,7 @@ contract Password is Fin4BaseProofType {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStrut(tokenAdrToReceiveProof).name(),
+          Fin4TokenStub(tokenAdrToReceiveProof).name(),
           ": The password you provided is not matching the one set by the action type creator."
         ));
         Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this), "");

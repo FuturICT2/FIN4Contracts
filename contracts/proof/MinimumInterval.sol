@@ -18,7 +18,7 @@ contract MinimumInterval is Fin4BaseProofType {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStrut(tokenAdrToReceiveProof).name(),
+          Fin4TokenStub(tokenAdrToReceiveProof).name(),
           ": The time between your previous claim and this one is shorter than the minimum required timespan of ",
           uint2str(_getMinimumInterval(tokenAdrToReceiveProof) / 1000), "s."
         ));
@@ -28,7 +28,7 @@ contract MinimumInterval is Fin4BaseProofType {
     }
 
     function minimumIntervalRequirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
-      uint timeBetween = Fin4TokenStrut(tokenAddressUsingThisProofType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
+      uint timeBetween = Fin4TokenStub(tokenAddressUsingThisProofType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
       return timeBetween >= _getMinimumInterval(tokenAddressUsingThisProofType);
     }
 

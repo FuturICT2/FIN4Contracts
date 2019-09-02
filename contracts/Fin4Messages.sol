@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import 'contracts/proof/Fin4BaseProofTypeStrut.sol';
+import 'contracts/stub/Fin4BaseProofTypeStub.sol';
 
 contract Fin4Messages {
 
@@ -35,7 +35,7 @@ contract Fin4Messages {
   function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory, bool, string memory) {
     Message memory m = messages[msg.sender][index];
     return (m.messageType, m.sender, m.message, m.fulfillmentAddress,
-      Fin4BaseProofTypeStrut(m.fulfillmentAddress).getName(), m.hasBeenActedUpon, m.attachment);
+      Fin4BaseProofTypeStub(m.fulfillmentAddress).getName(), m.hasBeenActedUpon, m.attachment);
   }
 
   // after a picture is approved for instance, the message doesn't need to be shown to the approver anymore

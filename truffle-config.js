@@ -17,6 +17,11 @@ try {
 module.exports = {
 	contracts_build_directory: path.join(__dirname, 'src/build/contracts'),
 	networks: {
+		development: {
+			host: '127.0.0.1',
+			port: 7545,
+			network_id: '*'
+		},
 		account1: {
 			provider: function() {
 				return new HDWalletProvider(MNEMONIC, 'http://127.0.0.1:7545');

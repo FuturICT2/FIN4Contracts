@@ -3,6 +3,7 @@ src/build/
 .idea/
 src/config/ethereum-keys.json
 src/config/DeployedAddresses.js
+scripts/DeployedAddresses.json
 
 package-lock.json
 

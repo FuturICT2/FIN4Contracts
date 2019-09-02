@@ -18,7 +18,7 @@ contract Location is Fin4BaseProofType {
         _sendApproval(tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-        Fin4TokenStrut(tokenAdrToReceiveProof).name(),
+        Fin4TokenStub(tokenAdrToReceiveProof).name(),
         ": Your location is not within the allowed distance to the defined location."));
         Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, msg.sender, message, address(this), "");
       }
