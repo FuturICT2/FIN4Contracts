@@ -25,7 +25,7 @@ module.exports = done => {
 		newBalanceOfTo = await govToken.balanceOf(to);
 		console.log('New balance of reciever: ', new BN(newBalanceOfTo).toString());
 
-		console.log('Done');
+		console.log('Refunded!');
 		done();
 	}
 

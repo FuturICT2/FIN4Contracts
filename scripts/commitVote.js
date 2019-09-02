@@ -26,6 +26,7 @@ module.exports = done => {
 		let pollID = process.argv.slice(-4)[0];
 		//has to be 1 or 0
 		let voteOption = process.argv.slice(-4)[1];
+		//has to be a number
 		let salt = process.argv.slice(-4)[2];
 		let numberOfTokens = process.argv.slice(-4)[3];
 
