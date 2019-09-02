@@ -1,5 +1,6 @@
 pragma solidity ^0.5.8;
 
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Burnable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol";
@@ -11,14 +12,10 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
 * @dev ERC20 Token, where all tokens (INITIAL_SUPPLY) are pre-assigned to the creator.
  * Note they can later distribute these tokens as they wish using `transfer` and other
  * `ERC20` functions.
- * Depending on the parameters provided, this token can be mintable, burnable and/or 
+ * Depending on the parameters provided, this token can be mintable, burnable and/or
  * pausable (non-transferable).
  */
-contract ERC20Plus is ERC20Mintable, ERC20Burnable, ERC20Pausable {
-
-  string public  name; // TODO store this in ERC20Detailed instead of here?
-  string public  symbol;
-  uint8 public  decimals;
+contract ERC20Plus is ERC20Detailed, ERC20Mintable, ERC20Burnable, ERC20Pausable {
 
   bool   public  isBurnable;
   bool   public  isTransferable;
@@ -96,15 +93,13 @@ contract ERC20Plus is ERC20Mintable, ERC20Burnable, ERC20Pausable {
     bool isTransferable_,
     bool isMintable_,
     uint initialSupply)
-      ERC20()
+      ERC20Detailed(name_, symbol_, decimals_)
       ERC20Mintable()
       ERC20Burnable()
       ERC20Pausable()
+      ERC20()
       public
   {
-    name = name_;
-    symbol = symbol_;
-    decimals = decimals_;
     isBurnable = isBurnable_;
     isTransferable = isTransferable_;
     isMintable = isMintable_;
@@ -112,7 +107,8 @@ contract ERC20Plus is ERC20Mintable, ERC20Burnable, ERC20Pausable {
       pause();
     }
     if(address(minter) != address(0)) {
-        _addMinter(minter);}
+        _addMinter(minter);
+    }
     _mint(msg.sender, initialSupply);
     // To indicate construction is over, and block pause() and unpause()
     // from being used
