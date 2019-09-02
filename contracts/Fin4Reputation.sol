@@ -1,15 +1,13 @@
 pragma solidity ^0.5.8;
 
-import "./tcr/PLCR/PLCRFactory.sol";
-import "./tcr/PLCR/PLCRVoting.sol";
 import "./tcr/Parameterizer.sol";
 import "./tokens/ERC20Plus.sol";
+import "./tokens/GOV.sol";
 
 
 contract Fin4Reputation is ERC20Plus {
 
-    ERC20Plus public GOVToken;
-    
+    GOV public GOVToken;
 
     constructor()
       ERC20Plus("Fin4Reputation", "REP", 250, address(0), true, true, true,0)
@@ -17,7 +15,7 @@ contract Fin4Reputation is ERC20Plus {
 
     function init(address _token) public {
         require(_token != address(0) && address(GOVToken) == address(0), "_token is null or GOVToken is not null");
-        GOVToken = ERC20Plus(_token);
+        GOVToken = GOV(_token);
     }
 
  /**
@@ -37,6 +35,8 @@ contract Fin4Reputation is ERC20Plus {
   }
 
   function getGOVFromReputation() public returns (bool) {
+    Parameterizer parameterizer = GOVToken.parameterizer();
+    require(balanceOf(msg.sender) > parameterizer.get("pminReputation"), "user has less than pminReputation");
     getGOVFromReputation(msg.sender);
     return true;
   }

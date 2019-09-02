@@ -15,11 +15,12 @@ module.exports = done => {
 		let pollID = process.argv.slice(-3)[0];
 		//has to be 1 or 0
 		let voteOption = process.argv.slice(-3)[1];
+		//has to be a number
 		let salt = process.argv.slice(-3)[2];
 
 		await plcr.revealVote(pollID, voteOption, salt);
 		console.log('Vote revealed');
-		2;
+
 		return true;
 	}
 
