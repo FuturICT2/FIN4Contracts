@@ -607,7 +607,7 @@ contract Registry {
 	    uint[] memory exitTimes = new uint[](listingsIndexes.length);
         uint[] memory exitTimeExpiries = new uint[](listingsIndexes.length);
 
-        for (uint i = 0; i<=listingsIndexes.length-1; i++){
+        for (uint i = 0; i < listingsIndexes.length; i++) {
             //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
             Listing memory lst = listings[listingsIndexes[i]];
             applicationExpiries[i] = lst.applicationExpiry;
