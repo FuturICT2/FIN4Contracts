@@ -46,6 +46,7 @@ class Home extends Component {
 						challengeID: challengeIDs[i],
 						name: '',
 						status: '',
+						statusIsCommit: true, // boolean to make button-label switching easier
 						commitEndDate: '',
 						revealEndDate: ''
 					};
@@ -71,20 +72,20 @@ class Home extends Component {
 							let listing = listingsObj[tokenAddr];
 							let challengeID = listing.challengeID;
 							return getContractData(PLCRVotingAddress, 'PLCRVoting', 'pollMap', [challengeID]).then(
-								({ 0: commitEndDate, 1: revealEndDate, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
-									// TODO use the local timezone of the user
-									listing.commitEndDate = new Date(commitEndDate * 1000).toLocaleString('de-CH-1996', {
-										timeZone: 'UTC'
-									});
-									listing.revealEndDate = new Date(revealEndDate * 1000).toLocaleString('de-CH-1996', {
-										timeZone: 'UTC'
-									});
+								({ 0: commitEndDateBN, 1: revealEndDateBN, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
+									let commitEndDate = new BN(commitEndDateBN).toNumber() * 1000;
+									let revealEndDate = new BN(revealEndDateBN).toNumber() * 1000;
+
+									listing.commitEndDate = new Date(commitEndDate).toLocaleString('de-CH-1996');
+									listing.revealEndDate = new Date(revealEndDate).toLocaleString('de-CH-1996');
 									let nowTimestamp = Date.now();
 									let inCommitPeriod = commitEndDate - nowTimestamp > 0;
 									//let inRevealPeriod = !inCommitPeriod && revealEndDate - nowTimestamp > 0;
-									let commit_reveal = inCommitPeriod ? 'Commit period' : 'Reveal period';
+
+									let commit_reveal = inCommitPeriod ? 'commit period' : 'reveal period';
 									let review_challenge = challengesObj[challengeID].isReview ? 'Review' : 'Challenge';
 									listing.status = review_challenge + ': ' + commit_reveal;
+									listing.statusIsCommit = inCommitPeriod;
 								}
 							);
 						}); // Promise.all(allPollPromises).then(results => {});
@@ -128,7 +129,14 @@ class Home extends Component {
 										name: this.state.listings[key].name,
 										status: this.state.listings[key].status,
 										dueDate: this.state.listings[key].commitEndDate,
-										actions: 'TODO'
+										actions: (
+											<Button
+												onClick={() => {
+													// TODO
+												}}>
+												{this.state.listings[key].statusIsCommit ? 'Vote' : 'Reveal vote'}
+											</Button>
+										)
 									}}
 								/>
 							);
