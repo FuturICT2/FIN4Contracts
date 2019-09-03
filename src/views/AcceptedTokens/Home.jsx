@@ -112,7 +112,7 @@ class Home extends Component {
 		);
 	}
 
-	toggleModal = () => {
+	toggleApplyModal = () => {
 		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
 	};
 
@@ -145,7 +145,7 @@ class Home extends Component {
 				</Box>
 				<Modal
 					isOpen={this.state.isApplyModalOpen}
-					handleClose={this.toggleModal}
+					handleClose={this.toggleApplyModal}
 					title="Set deposit and data"
 					width="400px">
 					<ContractForm
@@ -156,7 +156,7 @@ class Home extends Component {
 							tokenAddress: this.clickedToken
 						}}
 						labels={['Token', 'Deposit', 'Data']}
-						postSubmitCallback={this.toggleModal}
+						postSubmitCallback={this.toggleApplyModal}
 					/>
 				</Modal>
 				<Box title="Unlisted Fin4 Tokens">
