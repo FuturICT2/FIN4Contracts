@@ -53,8 +53,8 @@ class Home extends Component {
 					let listing = listingsObj[tokenAddr];
 					return getContractData(PLCRVotingAddress, 'PLCRVoting', 'pollMap', [listing.challengeID]).then(
 						({ 0: commitEndDate, 1: revealEndDate, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
-							listing.commitEndDate = commitEndDate;
-							listing.revealEndDate = revealEndDate;
+							listing.commitEndDate = new Date(commitEndDate * 1000).toLocaleString('de-CH-1996', { timeZone: 'UTC' });
+							listing.revealEndDate = new Date(revealEndDate * 1000).toLocaleString('de-CH-1996', { timeZone: 'UTC' });
 						}
 					);
 				}); // Promise.all(allPollPromises).then(results => {});
@@ -95,7 +95,7 @@ class Home extends Component {
 									data={{
 										name: this.state.listings[key].name,
 										status: 'TODO',
-										dueDate: this.state.listings[key].commitEndDate.toString(),
+										dueDate: this.state.listings[key].commitEndDate,
 										actions: 'TODO'
 									}}
 								/>
