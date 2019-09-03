@@ -631,7 +631,7 @@ contract Registry {
         uint[] memory stake = new uint[](challengesIndexes.length);
 	    uint[] memory totalTokens = new uint[](challengesIndexes.length);
 
-        for (uint i = 0; i<=challengesIndexes.length-1; i++){
+        for (uint i = 0; i < challengesIndexes.length; i++){
             //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
             Challenge memory lst = challenges[challengesIndexes[i]];
             challengeID[i] = challengesIndexes[i];
