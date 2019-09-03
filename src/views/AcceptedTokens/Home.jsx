@@ -26,8 +26,7 @@ class Home extends Component {
 			unlistedFin4Tokens: []
 		};
 
-		this.clickedToken = null;
-		this.clickedPollID = null;
+		this.resetApplyModalValues();
 		this.resetVoteModalValues();
 
 		getContractData(RegistryAddress, 'Registry', 'getListings').then(
@@ -121,17 +120,35 @@ class Home extends Component {
 
 	// ---------- ApplyModal ----------
 
+	resetApplyModalValues() {
+		this.applyModalValues = {
+			token: null, // address
+			deposit: null, // number
+			data: null // string
+		};
+	}
+
 	toggleApplyModal = () => {
 		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
+	};
+
+	submitApplyModal = () => {
+		if (this.applyModalValues.deposit === null || this.applyModalValues.data === null) {
+			alert('Both values must be set.');
+			return;
+		}
+
+		// TODO Registry.applyToken
 	};
 
 	// ---------- VoteModal ----------
 
 	resetVoteModalValues() {
 		this.voteModalValues = {
-			vote: null,
-			salt: null,
-			numbTokens: null
+			pollID: null, // number
+			vote: null, // number
+			salt: null, // number
+			numbTokens: null // number
 		};
 	}
 
@@ -156,7 +173,7 @@ class Home extends Component {
 		let vote = this.voteModalValues.vote;
 		let salt = this.voteModalValues.salt;
 		let numbTokens = this.voteModalValues.numbTokens;
-		let pollID = this.clickedPollID;
+		let pollID = this.voteModalValues.pollID;
 		this.toggleVoteModal();
 
 		getContractData(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
@@ -207,7 +224,7 @@ class Home extends Component {
 										actions: (
 											<Button
 												onClick={() => {
-													this.clickedPollID = this.state.listings[key].challengeID;
+													this.voteModalValues.pollID = this.state.listings[key].challengeID;
 													this.state.listings[key].statusIsCommit ? this.toggleVoteModal() : this.toggleRevealModal();
 												}}>
 												{this.state.listings[key].statusIsCommit ? 'Vote' : 'Reveal vote'}
@@ -230,7 +247,7 @@ class Home extends Component {
 										apply: (
 											<Button
 												onClick={() => {
-													this.clickedToken = entry.value;
+													this.applyModalValues.token = entry.value;
 													this.toggleApplyModal();
 												}}>
 												Apply
@@ -247,16 +264,23 @@ class Home extends Component {
 					handleClose={this.toggleApplyModal}
 					title="Set deposit and data"
 					width="400px">
-					<ContractForm
-						contractAddress={RegistryAddress}
-						contractName="Registry"
-						method="applyToken"
-						staticArgs={{
-							tokenAddress: this.clickedToken
-						}}
-						labels={['Token', 'Deposit', 'Data']}
-						postSubmitCallback={this.toggleApplyModal}
+					<TextField
+						key="apply-deposit"
+						type="number"
+						label="Deposit"
+						onChange={e => (this.applyModalValues.deposit = e.target.value)}
+						style={inputFieldStyle}
 					/>
+					<TextField
+						key="apply-data"
+						type="text"
+						label="Data"
+						onChange={e => (this.applyModalValues.data = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<Button onClick={this.submitApplyModal} center>
+						Submit
+					</Button>
 				</Modal>
 				<Modal
 					isOpen={this.state.isVoteModalOpen}
