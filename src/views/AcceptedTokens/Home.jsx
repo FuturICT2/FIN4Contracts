@@ -20,6 +20,7 @@ class Home extends Component {
 			isApplyModalOpen: false,
 			isVoteModalOpen: false,
 			isRevealModalOpen: false,
+
 			listings: {},
 			allFin4Tokens: [],
 			unlistedFin4Tokens: []
@@ -118,6 +119,14 @@ class Home extends Component {
 		);
 	}
 
+	// ---------- ApplyModal ----------
+
+	toggleApplyModal = () => {
+		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
+	};
+
+	// ---------- VoteModal ----------
+
 	resetVoteModalValues() {
 		this.voteModalValues = {
 			vote: null,
@@ -126,19 +135,11 @@ class Home extends Component {
 		};
 	}
 
-	toggleApplyModal = () => {
-		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
-	};
-
 	toggleVoteModal = () => {
 		if (this.state.isVoteModalOpen) {
 			this.resetVoteModalValues();
 		}
 		this.setState({ isVoteModalOpen: !this.state.isVoteModalOpen });
-	};
-
-	toggleRevealModal = () => {
-		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
 	};
 
 	submitVoteModal = () => {
@@ -184,6 +185,12 @@ class Home extends Component {
 		});
 	};
 
+	// ---------- RevealModal ----------
+
+	toggleRevealModal = () => {
+		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
+	};
+
 	render() {
 		return (
 			<center>
@@ -204,6 +211,29 @@ class Home extends Component {
 													this.state.listings[key].statusIsCommit ? this.toggleVoteModal() : this.toggleRevealModal();
 												}}>
 												{this.state.listings[key].statusIsCommit ? 'Vote' : 'Reveal vote'}
+											</Button>
+										)
+									}}
+								/>
+							);
+						})}
+					</Table>
+				</Box>
+				<Box title="Unlisted Fin4 Tokens">
+					<Table headers={['Name', 'Apply']}>
+						{this.state.unlistedFin4Tokens.map((entry, index) => {
+							return (
+								<TableRow
+									key={index}
+									data={{
+										name: entry.label,
+										apply: (
+											<Button
+												onClick={() => {
+													this.clickedToken = entry.value;
+													this.toggleApplyModal();
+												}}>
+												Apply
 											</Button>
 										)
 									}}
@@ -263,29 +293,6 @@ class Home extends Component {
 					handleClose={this.toggleRevealModal}
 					title="Set vote and salt"
 					width="400px"></Modal>
-				<Box title="Unlisted Fin4 Tokens">
-					<Table headers={['Name', 'Apply']}>
-						{this.state.unlistedFin4Tokens.map((entry, index) => {
-							return (
-								<TableRow
-									key={index}
-									data={{
-										name: entry.label,
-										apply: (
-											<Button
-												onClick={() => {
-													this.clickedToken = entry.value;
-													this.toggleApplyModal();
-												}}>
-												Apply
-											</Button>
-										)
-									}}
-								/>
-							);
-						})}
-					</Table>
-				</Box>
 			</center>
 		);
 	}
