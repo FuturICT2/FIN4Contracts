@@ -3,11 +3,13 @@ import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { RegistryAddress, PLCRVotingAddress } from '../../config/DeployedAddresses.js';
-import { getContractData, getAllActionTypes } from '../../components/Contractor';
+import { getContractData, getAllActionTypes, getContract } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';
 import ContractForm from '../../components/ContractForm';
+import { TextField } from '@material-ui/core';
+const { soliditySha3 } = require('web3-utils');
 const BN = require('bignumber.js');
 
 class Home extends Component {
@@ -24,6 +26,8 @@ class Home extends Component {
 		};
 
 		this.clickedToken = null;
+		this.clickedPollID = null;
+		this.resetVoteModalValues();
 
 		getContractData(RegistryAddress, 'Registry', 'getListings').then(
 			({
@@ -45,7 +49,7 @@ class Home extends Component {
 						whitelisted: whitelistees[i],
 						owner: owners[i],
 						unstakedDeposit: unstakedDeposits[i],
-						challengeID: challengeIDs[i],
+						challengeID: new BN(challengeIDs[i]).toNumber(),
 						name: '',
 						status: '',
 						statusIsCommit: true, // boolean to make button-label switching easier
@@ -58,7 +62,7 @@ class Home extends Component {
 					({ 0: challengeIDs, 1: rewardPools, 2: challengers, 3: isReviews, 4: stakes, 5: totalTokenss }) => {
 						let challengesObj = {};
 						for (var i = 0; i < challengeIDs.length; i++) {
-							let challengeID = new BN(challengeIDs[i]).toString();
+							let challengeID = new BN(challengeIDs[i]).toNumber();
 							challengesObj[challengeID] = {
 								challengeID: challengeID,
 								rewardPool: new BN(rewardPools[i]).toString(),
@@ -114,16 +118,70 @@ class Home extends Component {
 		);
 	}
 
+	resetVoteModalValues() {
+		this.voteModalValues = {
+			vote: null,
+			salt: null,
+			numbTokens: null
+		};
+	}
+
 	toggleApplyModal = () => {
 		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
 	};
 
 	toggleVoteModal = () => {
+		if (this.state.isVoteModalOpen) {
+			this.resetVoteModalValues();
+		}
 		this.setState({ isVoteModalOpen: !this.state.isVoteModalOpen });
 	};
 
 	toggleRevealModal = () => {
 		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
+	};
+
+	submitVoteModal = () => {
+		if (
+			this.voteModalValues.vote === null ||
+			this.voteModalValues.salt === null ||
+			this.voteModalValues.numbTokens === null
+		) {
+			alert('All values must be set.');
+			return;
+		}
+
+		let currentAccount = window.web3.currentProvider.selectedAddress;
+		let vote = this.voteModalValues.vote;
+		let salt = this.voteModalValues.salt;
+		let numbTokens = this.voteModalValues.numbTokens;
+		let pollID = this.clickedPollID;
+		this.toggleVoteModal();
+
+		getContractData(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
+			currentAccount,
+			numbTokens,
+			pollID
+		]).then(prevPollIdBN => {
+			let prevPollID = new BN(prevPollIdBN).toNumber();
+			let secretHash = soliditySha3(vote, salt);
+
+			let self = this;
+			//console.log(pollID, secretHash, numbTokens, prevPollID);
+
+			getContract(PLCRVotingAddress, 'PLCRVoting')
+				.then(function(instance) {
+					return instance.commitVote(pollID, secretHash, numbTokens, prevPollID, {
+						from: currentAccount
+					});
+				})
+				.then(function(result) {
+					console.log('Results of submitting: ', result);
+				})
+				.catch(function(err) {
+					console.log('Error: ', err.message);
+				});
+		});
 	};
 
 	render() {
@@ -142,7 +200,8 @@ class Home extends Component {
 										actions: (
 											<Button
 												onClick={() => {
-													// TODO
+													this.clickedPollID = this.state.listings[key].challengeID;
+													this.state.listings[key].statusIsCommit ? this.toggleVoteModal() : this.toggleRevealModal();
 												}}>
 												{this.state.listings[key].statusIsCommit ? 'Vote' : 'Reveal vote'}
 											</Button>
@@ -173,7 +232,32 @@ class Home extends Component {
 					isOpen={this.state.isVoteModalOpen}
 					handleClose={this.toggleVoteModal}
 					title="Set vote, salt and number of tokens"
-					width="400px"></Modal>
+					width="400px">
+					<TextField
+						key="set-vote"
+						type="number"
+						label="Vote (1 or 0)"
+						onChange={e => (this.voteModalValues.vote = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<TextField
+						key="set-salt"
+						type="number"
+						label="Salt"
+						onChange={e => (this.voteModalValues.salt = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<TextField
+						key="set-numb-tokens"
+						type="number"
+						label="Number of tokens"
+						onChange={e => (this.voteModalValues.numbTokens = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<Button onClick={this.submitVoteModal} center>
+						Submit
+					</Button>
+				</Modal>
 				<Modal
 					isOpen={this.state.isRevealModalOpen}
 					handleClose={this.toggleRevealModal}
