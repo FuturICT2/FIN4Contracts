@@ -7,6 +7,7 @@ const PLCRVoting = artifacts.require('PLCRVoting.sol');
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
+	// e.g. npm run revealVote -- <pollID(number)> <voteOption(0 or 1)> <salt(number)>
 	async function revealVote() {
 		let PLCRVotingAddress = config.PLCRVotingAddress;
 

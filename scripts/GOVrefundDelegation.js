@@ -9,6 +9,7 @@ const PLCRVoting = artifacts.require('PLCRVoting.sol');
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
+	// e.g. npm run GOVrefundDelegation -- <from(address)> <amount>
 	async function GOVdelegate() {
 		let GOVTokenAddress = config.GOVTokenAddress;
 

@@ -9,6 +9,7 @@ const PLCRVoting = artifacts.require('PLCRVoting.sol');
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
+	// e.g. npm run listRegistryTokens
 	async function listRegistryTokens() {
 		let registryAddress = config.RegistryAddress;
 		let fin4MainAddress = config.Fin4MainAddress;

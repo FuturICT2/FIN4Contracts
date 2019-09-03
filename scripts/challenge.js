@@ -9,6 +9,7 @@ const PLCRVoting = artifacts.require('PLCRVoting.sol');
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
+	//e.g: npm run challenge -- <token(listingHash)> <data(string)>
 	async function deployProxies() {
 		let registryAddress = config.RegistryAddress;
 		let PLCRVotingAddress = config.PLCRVotingAddress;

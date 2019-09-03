@@ -7,7 +7,8 @@ const PLCRVoting = artifacts.require('PLCRVoting.sol');
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
-	async function commitVote() {
+	// e.g. npm run getPoll -- <pollID(number)>
+	async function getPoll() {
 		let PLCRVotingAddress = config.PLCRVotingAddress;
 
 		const plcr = await PLCRVoting.at(PLCRVotingAddress);
@@ -32,5 +33,5 @@ module.exports = done => {
 		return true;
 	}
 
-	commitVote().then(() => done());
+	getPoll().then(() => done());
 };

@@ -8,6 +8,7 @@ const Registry = artifacts.require('Registry.sol');
 const config = JSON.parse(fs.readFileSync('./DeployedAddresses.json'));
 
 module.exports = done => {
+	//e.g: npm run approveRegistry -- <number>
 	async function approveRegistry() {
 		let registryAddress = config.RegistryAddress;
 		let GOVTokenAddress = config.GOVTokenAddress;
