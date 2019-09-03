@@ -8,6 +8,7 @@ import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';
 import ContractForm from '../../components/ContractForm';
+const BN = require('bignumber.js');
 
 class Home extends Component {
 	constructor(props) {
@@ -44,20 +45,51 @@ class Home extends Component {
 						unstakedDeposit: unstakedDeposits[i],
 						challengeID: challengeIDs[i],
 						name: '',
+						status: '',
 						commitEndDate: '',
 						revealEndDate: ''
 					};
 				}
-				// TODO what is with those that are not in an application or challenge phase?
-				let allPollPromises = Object.keys(listingsObj).map(tokenAddr => {
-					let listing = listingsObj[tokenAddr];
-					return getContractData(PLCRVotingAddress, 'PLCRVoting', 'pollMap', [listing.challengeID]).then(
-						({ 0: commitEndDate, 1: revealEndDate, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
-							listing.commitEndDate = new Date(commitEndDate * 1000).toLocaleString('de-CH-1996', { timeZone: 'UTC' });
-							listing.revealEndDate = new Date(revealEndDate * 1000).toLocaleString('de-CH-1996', { timeZone: 'UTC' });
+
+				getContractData(RegistryAddress, 'Registry', 'getChallenges').then(
+					({ 0: challengeIDs, 1: rewardPools, 2: challengers, 3: isReviews, 4: stakes, 5: totalTokenss }) => {
+						let challengesObj = {};
+						for (var i = 0; i < challengeIDs.length; i++) {
+							let challengeID = new BN(challengeIDs[i]).toString();
+							challengesObj[challengeID] = {
+								challengeID: challengeID,
+								rewardPool: new BN(rewardPools[i]).toString(),
+								challenger: challengers[i],
+								isReview: isReviews[i],
+								stake: new BN(stakes[i]).toString(),
+								totalTokens: new BN(totalTokenss[i]).toString()
+							};
 						}
-					);
-				}); // Promise.all(allPollPromises).then(results => {});
+
+						// TODO what is with those that are not in an application or challenge phase?
+						let allPollPromises = Object.keys(listingsObj).map(tokenAddr => {
+							let listing = listingsObj[tokenAddr];
+							let challengeID = listing.challengeID;
+							return getContractData(PLCRVotingAddress, 'PLCRVoting', 'pollMap', [challengeID]).then(
+								({ 0: commitEndDate, 1: revealEndDate, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
+									// TODO use the local timezone of the user
+									listing.commitEndDate = new Date(commitEndDate * 1000).toLocaleString('de-CH-1996', {
+										timeZone: 'UTC'
+									});
+									listing.revealEndDate = new Date(revealEndDate * 1000).toLocaleString('de-CH-1996', {
+										timeZone: 'UTC'
+									});
+									let nowTimestamp = Date.now();
+									let inCommitPeriod = commitEndDate - nowTimestamp > 0;
+									//let inRevealPeriod = !inCommitPeriod && revealEndDate - nowTimestamp > 0;
+									let commit_reveal = inCommitPeriod ? 'Commit period' : 'Reveal period';
+									let review_challenge = challengesObj[challengeID].isReview ? 'Review' : 'Challenge';
+									listing.status = review_challenge + ': ' + commit_reveal;
+								}
+							);
+						}); // Promise.all(allPollPromises).then(results => {});
+					}
+				);
 
 				// Unlisted Fin4 Tokens
 				getAllActionTypes().then(data => {
@@ -94,7 +126,7 @@ class Home extends Component {
 									key={index}
 									data={{
 										name: this.state.listings[key].name,
-										status: 'TODO',
+										status: this.state.listings[key].status,
 										dueDate: this.state.listings[key].commitEndDate,
 										actions: 'TODO'
 									}}
