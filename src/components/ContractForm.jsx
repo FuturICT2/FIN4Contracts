@@ -145,6 +145,7 @@ class ContractForm extends Component {
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 		var method = this.props.method;
 
+		let self = this;
 		getContract(this.contractAddress, this.contractName)
 			.then(function(instance) {
 				return instance[method](...convertedInputs, {
@@ -153,11 +154,19 @@ class ContractForm extends Component {
 			})
 			.then(function(result) {
 				console.log('Results of submitting: ', result);
+				self.postSubmitCallback();
 			})
 			.catch(function(err) {
 				console.log('Error: ', err.message);
+				self.postSubmitCallback();
 			});
 	};
+
+	postSubmitCallback() {
+		if (this.props.postSubmitCallback) {
+			this.props.postSubmitCallback();
+		}
+	}
 
 	handleSingleSelectInputChange = event => {
 		this.setState({ tokenAddress: event.value });
@@ -408,7 +417,8 @@ ContractForm.propTypes = {
 	method: PropTypes.string.isRequired,
 	sendArgs: PropTypes.object,
 	labels: PropTypes.arrayOf(PropTypes.string),
-	helperModalTriggers: PropTypes.arrayOf(PropTypes.func)
+	helperModalTriggers: PropTypes.arrayOf(PropTypes.func),
+	postSubmitCallback: PropTypes.func
 };
 
 /*

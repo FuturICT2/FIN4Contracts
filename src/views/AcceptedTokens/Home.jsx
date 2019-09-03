@@ -102,6 +102,7 @@ class Home extends Component {
 							tokenAddress: this.clickedToken
 						}}
 						labels={['Token', 'Deposit', 'Data']}
+						postSubmitCallback={this.toggleModal}
 					/>
 				</Modal>
 				<Box title="Unlisted Fin4 Tokens">
