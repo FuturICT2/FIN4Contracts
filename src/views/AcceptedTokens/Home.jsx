@@ -6,8 +6,8 @@ import { RegistryAddress } from '../../config/DeployedAddresses.js';
 import { getContractData, getAllActionTypes } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
-import { TextField } from '@material-ui/core';
 import { drizzleConnect } from 'drizzle-react';
+import ContractForm from '../../components/ContractForm';
 
 class Home extends Component {
 	constructor(props) {
@@ -20,7 +20,7 @@ class Home extends Component {
 			unlistedFin4Tokens: []
 		};
 
-		this.resetApplyModalValues();
+		this.clickedToken = null;
 
 		getContractData(RegistryAddress, 'Registry', 'getListings').then(
 			({
@@ -65,40 +65,8 @@ class Home extends Component {
 		);
 	}
 
-	resetApplyModalValues() {
-		// holds the values from the apply-popup until submit is pressed
-		this.applyModalValues = {
-			token: null, // address
-			deposit: null, // number
-			data: null // string
-		};
-	}
-
-	applyTokenClick = token => {
-		this.setState({ isApplyModalOpen: true });
-		this.applyModalValues.token = token;
-	};
-
-	cancelApplyModal = () => {
-		this.setState({
-			isApplyModalOpen: false
-		});
-		this.resetApplyModalValues();
-	};
-
-	submitApplyModal = () => {
-		if (this.applyModalValues.deposit === null || this.applyModalValues.data === null) {
-			alert('Both values must be set.');
-			this.resetApplyModalValues();
-			return;
-		}
-		this.setState({
-			isApplyModalOpen: false
-		});
-
-		// TODO registry.applyToken(theToken, deposit, description);
-
-		this.resetApplyModalValues();
+	toggleModal = () => {
+		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
 	};
 
 	render() {
@@ -123,26 +91,18 @@ class Home extends Component {
 				</Box>
 				<Modal
 					isOpen={this.state.isApplyModalOpen}
-					handleClose={this.cancelApplyModal}
+					handleClose={this.toggleModal}
 					title="Set deposit and data"
 					width="400px">
-					<TextField
-						key="apply-deposit"
-						type="number"
-						label="deposit"
-						onChange={e => (this.applyModalValues.deposit = e.target.value)}
-						style={inputFieldStyle}
+					<ContractForm
+						contractAddress={RegistryAddress}
+						contractName="Registry"
+						method="applyToken"
+						staticArgs={{
+							tokenAddress: this.clickedToken
+						}}
+						labels={['Token', 'Deposit', 'Data']}
 					/>
-					<TextField
-						key="apply-data"
-						type="text"
-						label="data"
-						onChange={e => (this.applyModalValues.data = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<Button onClick={this.submitApplyModal} center>
-						Submit
-					</Button>
 				</Modal>
 				<Box title="Unlisted Fin4 Tokens">
 					<Table headers={['Name', 'Apply']}>
@@ -152,7 +112,15 @@ class Home extends Component {
 									key={index}
 									data={{
 										name: entry.label,
-										apply: <Button onClick={() => this.applyTokenClick(entry.value)}>Apply</Button>
+										apply: (
+											<Button
+												onClick={() => {
+													this.clickedToken = entry.value;
+													this.toggleModal();
+												}}>
+												Apply
+											</Button>
+										)
 									}}
 								/>
 							);
