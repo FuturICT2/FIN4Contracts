@@ -5,6 +5,7 @@ import TableRow from '../../components/TableRow';
 import { RegistryAddress } from '../../config/DeployedAddresses.js';
 import { getContractData, getAllActionTypes } from '../../components/Contractor';
 import Button from '../../components/Button';
+import { drizzleConnect } from 'drizzle-react';
 
 class Home extends Component {
 	constructor(props) {
@@ -102,4 +103,4 @@ class Home extends Component {
 		);
 	}
 }
-export default Home;
+export default drizzleConnect(Home);
