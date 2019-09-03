@@ -5,11 +5,9 @@ import "./../tcr/Parameterizer.sol";
 import "./../tcr/Registry.sol";
 import "./../tcr/PLCR/PLCRVoting.sol";
 
-
-
 /**
- * @title GOV
-* @dev Token used for governance
+  * @title GOV
+  * @dev Token used for governance
  */
 contract GOV is ERC20Plus {
 
@@ -31,7 +29,6 @@ contract GOV is ERC20Plus {
     uint _initialSupply)
       ERC20Plus(_name,_symbol, _decimals, minter, _isBurnable, _isTransferable, _isMintable, _initialSupply)
       public{}
-
 
     function init(address _registry, address _parameterizer, address _voting) public {
         require(_registry != address(0) && address(registry) == address(0), "Contract already initialized");
@@ -60,18 +57,18 @@ contract GOV is ERC20Plus {
   }
 
   function transfer(address recipient, uint256 amount) public returns (bool) {
-    require (balanceOf(msg.sender) > amount, "Not enough balance");
-    require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry), "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
+    require (balanceOf(msg.sender) > amount, "transfer: Not enough balance");
+    require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry),
+      "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
     return super.transfer(recipient, amount);
   }
 
   function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
-    require (balanceOf(sender) >= amount, "Not enough balance");
-    require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry), "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
+    require (balanceOf(sender) >= amount, "transferFrom: Not enough balance");
+    require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry),
+      "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
     return super.transferFrom(sender, recipient, amount);
   }
-
-  //function transferFrom(address sender, address recipient, uint256 amount) public returns (bool)
 
   function addressToString(address _addr) private pure returns(string memory) {
     bytes32 value = bytes32(uint256(_addr));
@@ -85,6 +82,5 @@ contract GOV is ERC20Plus {
         str[3+i*2] = alphabet[uint(uint8(value[i + 12] & 0x0f))];
     }
     return string(str);
-}
-
+  }
 }
