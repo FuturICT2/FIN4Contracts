@@ -16,6 +16,8 @@ class Home extends Component {
 
 		this.state = {
 			isApplyModalOpen: false,
+			isVoteModalOpen: false,
+			isRevealModalOpen: false,
 			listings: {},
 			allFin4Tokens: [],
 			unlistedFin4Tokens: []
@@ -116,6 +118,14 @@ class Home extends Component {
 		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
 	};
 
+	toggleVoteModal = () => {
+		this.setState({ isVoteModalOpen: !this.state.isVoteModalOpen });
+	};
+
+	toggleRevealModal = () => {
+		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
+	};
+
 	render() {
 		return (
 			<center>
@@ -159,6 +169,16 @@ class Home extends Component {
 						postSubmitCallback={this.toggleApplyModal}
 					/>
 				</Modal>
+				<Modal
+					isOpen={this.state.isVoteModalOpen}
+					handleClose={this.toggleVoteModal}
+					title="Set vote, salt and number of tokens"
+					width="400px"></Modal>
+				<Modal
+					isOpen={this.state.isRevealModalOpen}
+					handleClose={this.toggleRevealModal}
+					title="Set vote and salt"
+					width="400px"></Modal>
 				<Box title="Unlisted Fin4 Tokens">
 					<Table headers={['Name', 'Apply']}>
 						{this.state.unlistedFin4Tokens.map((entry, index) => {
@@ -171,7 +191,7 @@ class Home extends Component {
 											<Button
 												onClick={() => {
 													this.clickedToken = entry.value;
-													this.toggleModal();
+													this.toggleApplyModal();
 												}}>
 												Apply
 											</Button>
