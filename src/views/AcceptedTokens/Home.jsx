@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-import { RegistryAddress } from '../../config/DeployedAddresses.js';
+import { RegistryAddress, PLCRVotingAddress } from '../../config/DeployedAddresses.js';
 import { getContractData, getAllActionTypes } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
@@ -31,6 +31,7 @@ class Home extends Component {
 				4: unstakedDeposits,
 				5: challengeIDs
 			}) => {
+				// Listings
 				let listingsObj = {};
 				for (var i = 0; i < listingsKeys.length; i++) {
 					let address = '0x' + listingsKeys[i].substr(26, listingsKeys[i].length - 1);
@@ -42,10 +43,23 @@ class Home extends Component {
 						owner: owners[i],
 						unstakedDeposit: unstakedDeposits[i],
 						challengeID: challengeIDs[i],
-						name: ''
+						name: '',
+						commitEndDate: '',
+						revealEndDate: ''
 					};
 				}
+				// TODO what is with those that are not in an application or challenge phase?
+				let allPollPromises = Object.keys(listingsObj).map(tokenAddr => {
+					let listing = listingsObj[tokenAddr];
+					return getContractData(PLCRVotingAddress, 'PLCRVoting', 'pollMap', [listing.challengeID]).then(
+						({ 0: commitEndDate, 1: revealEndDate, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
+							listing.commitEndDate = commitEndDate;
+							listing.revealEndDate = revealEndDate;
+						}
+					);
+				}); // Promise.all(allPollPromises).then(results => {});
 
+				// Unlisted Fin4 Tokens
 				getAllActionTypes().then(data => {
 					this.setState({ allFin4Tokens: data });
 					let unlistedFin4TokensArr = [];
@@ -81,7 +95,7 @@ class Home extends Component {
 									data={{
 										name: this.state.listings[key].name,
 										status: 'TODO',
-										dueDate: 'TODO',
+										dueDate: this.state.listings[key].commitEndDate.toString(),
 										actions: 'TODO'
 									}}
 								/>
