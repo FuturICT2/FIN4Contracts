@@ -196,9 +196,8 @@ contract Registry {
     // -----------------------
 
     /**
-    @dev                Starts a poll for a listingHash which is either in the apply stage or
-                        already in the whitelist. Tokens are taken from the challenger and the
-                        applicant's deposits are locked.
+    @dev                Starts a poll for a listingHash which is already in the whitelist.
+                        Tokens are taken from the challenger and the applicant's deposits are locked.
     @param _listingHash The listingHash being challenged, whether listed or in application
     @param _data        Extra data relevant to the challenge. Think IPFS hashes.
     */
@@ -251,9 +250,8 @@ contract Registry {
     }
 
     /**
-    @dev                Starts a poll for a listingHash which is either in the apply stage or
-                        already in the whitelist. Tokens are taken from the challenger and the
-                        applicant's deposits are locked.
+    @dev Starts a poll for a listingHash which is either in the apply stage.
+        Tokens are taken from the challenger and the applicant's deposits are locked.
     @param _listingHash The listingHash being challenged, whether listed or in application
     */
     function review(bytes32 _listingHash) internal returns (uint reviewID) {
