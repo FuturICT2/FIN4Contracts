@@ -37,7 +37,7 @@ contract GOV is ERC20Plus {
         voting = PLCRVoting(_voting);
     }
 
-  function delegate(address to, uint256 amount) public {
+  function delegate(address to, uint256 amount) public returns (bool){
     require(msg.sender != to, "You cannot delegate to yourself");
     require(balanceOf(msg.sender) >= amount, "You do not have enough tokens for this transaction");
 
@@ -45,15 +45,17 @@ contract GOV is ERC20Plus {
     delegateeTokens[to] += amount;
 
     _transfer(msg.sender, to, amount);
+    return true;
   }
 
-  function refundDelegation(address to, uint256 amount) public {
+  function refundDelegation(address to, uint256 amount) public returns (bool){
     require(balanceOf(to) >= amount, "The balance of reciver is too low");
     require(delegatorTokens[msg.sender][to] >= amount, "You do not have that much delegation for this account");
     delegatorTokens[msg.sender][to] -= amount;
     delegateeTokens[to] -= amount;
 
     _transfer(to, msg.sender, amount);
+    return true;
   }
 
   function transfer(address recipient, uint256 amount) public returns (bool) {
