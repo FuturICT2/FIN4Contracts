@@ -530,21 +530,6 @@ contract Registry {
     }
 
     /**
-    @dev                Updates a listingHash's status from 'application' to 'listing' or resolves
-                        a challenge if one exists.
-    @param _listingHash The listingHash whose status is being updated
-    */
-    function updateStatus(bytes32 _listingHash) public {
-        if (canBeWhitelisted(_listingHash)) {
-            whitelistApplication(_listingHash);
-        } else if (challengeCanBeResolved(_listingHash)) {
-            resolveChallenge(_listingHash);
-        } else {
-            revert();
-        }
-    }
-
-    /**
     @dev                Determines the winner in a challenge. Rewards the winner tokens and
                         either whitelists or de-whitelists the listingHash.
     @param _listingHash A listingHash with a challenge that is to be resolved
