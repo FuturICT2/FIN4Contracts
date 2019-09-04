@@ -340,6 +340,12 @@ class Home extends Component {
 					<Button onClick={this.submitApplyModal} center>
 						Submit
 					</Button>
+					<center>
+						<small style={{ color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
+							token balance and then to submit the application for this token.
+						</small>
+					</center>
 				</Modal>
 				<Modal
 					isOpen={this.state.isVoteModalOpen}
