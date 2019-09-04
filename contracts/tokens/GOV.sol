@@ -11,8 +11,8 @@ import "./../tcr/PLCR/PLCRVoting.sol";
  */
 contract GOV is ERC20Plus {
 
-  mapping(address => mapping(address => uint256)) internal delegatorTokens;
-  mapping(address => uint256) internal delegateeTokens;
+  mapping(address => mapping(address => uint256)) public delegatorTokens;
+  mapping(address => uint256) public delegateeTokens;
 
   PLCRVoting public voting;
   Parameterizer public parameterizer;
@@ -68,19 +68,5 @@ contract GOV is ERC20Plus {
     require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry),
       "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
     return super.transferFrom(sender, recipient, amount);
-  }
-
-  function addressToString(address _addr) private pure returns(string memory) {
-    bytes32 value = bytes32(uint256(_addr));
-    bytes memory alphabet = "0123456789abcdef";
-
-    bytes memory str = new bytes(42);
-    str[0] = '0';
-    str[1] = 'x';
-    for (uint i = 0; i < 20; i++) {
-        str[2+i*2] = alphabet[uint(uint8(value[i + 12] >> 4))];
-        str[3+i*2] = alphabet[uint(uint8(value[i + 12] & 0x0f))];
-    }
-    return string(str);
   }
 }
