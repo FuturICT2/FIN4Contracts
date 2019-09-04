@@ -260,7 +260,7 @@ contract Registry {
         } else if (challengeCanBeResolved(_listingHash)) {
             resolveChallenge(_listingHash);
         } else {
-            revert();
+            revert("Nothing to update");
         }
     }
 
