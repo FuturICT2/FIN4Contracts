@@ -402,7 +402,20 @@ class Home extends Component {
 					isOpen={this.state.isRevealModalOpen}
 					handleClose={this.toggleRevealModal}
 					title="Set vote and salt"
-					width="400px"></Modal>
+					width="400px">
+					<ContractForm
+						contractAddress={PLCRVotingAddress}
+						contractName="PLCRVoting"
+						method="revealVote"
+						labels={['pollID', 'Vote', 'Salt']}
+						staticArgs={{
+							_pollID: this.voteModalValues.pollID
+						}}
+						postSubmitCallback={() => {
+							this.toggleRevealModal();
+						}}
+					/>
+				</Modal>
 			</center>
 		);
 	}
