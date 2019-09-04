@@ -303,6 +303,23 @@ class Home extends Component {
 		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
 	};
 
+	updateStatus(tokenAddr) {
+		let currentAccount = window.web3.currentProvider.selectedAddress;
+		let listingKey = this.state.listings[tokenAddr].listingKey;
+		getContract(RegistryAddress, 'Registry')
+			.then(function(instance) {
+				return instance.updateStatus(listingKey, {
+					from: currentAccount
+				});
+			})
+			.then(function(result) {
+				console.log('RegistryAddress.updateStatus Result: ', result);
+			})
+			.catch(function(err) {
+				console.log('RegistryAddress.updateStatus Error: ', err.message);
+			});
+	}
+
 	determineDueDateEntry(listing) {
 		switch (listing.actionStatus) {
 			case Action_Status.VOTE:
@@ -342,6 +359,7 @@ class Home extends Component {
 															this.toggleRevealModal();
 															break;
 														case Action_Status.UPDATE:
+															this.updateStatus(key);
 															break;
 														case Action_Status.CHALLENGE:
 															break;
