@@ -129,6 +129,9 @@ class Home extends Component {
 	}
 
 	toggleApplyModal = () => {
+		if (this.state.isApplyModalOpen) {
+			this.resetApplyModalValues();
+		}
 		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
 	};
 
@@ -138,7 +141,30 @@ class Home extends Component {
 			return;
 		}
 
-		// TODO Registry.applyToken
+		let currentAccount = window.web3.currentProvider.selectedAddress;
+		let token = this.applyModalValues.token;
+		let deposit = this.applyModalValues.deposit;
+		let data = this.applyModalValues.data;
+		this.toggleApplyModal();
+
+		// Step 1: approve
+
+		// TODO
+
+		// Step 2: applyToken
+
+		getContract(RegistryAddress, 'Registry')
+			.then(function(instance) {
+				return instance.applyToken(token, deposit, data, {
+					from: currentAccount
+				});
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			})
+			.catch(function(err) {
+				console.log('Error: ', err.message);
+			});
 	};
 
 	// ---------- VoteModal ----------
