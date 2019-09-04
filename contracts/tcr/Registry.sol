@@ -250,48 +250,6 @@ contract Registry {
     }
 
     /**
-    @dev Starts a poll for a listingHash which is either in the apply stage.
-        Tokens are taken from the challenger and the applicant's deposits are locked.
-    @param _listingHash The listingHash being challenged, whether listed or in application
-    */
-    function review(bytes32 _listingHash) internal returns (uint reviewID) {
-        Listing storage listing = listings[_listingHash];
-        uint reviewTax = parameterizer.get("reviewTax");
-        uint minDeposit = parameterizer.get("minDeposit");
-
-        // Starts poll
-        uint pollID = voting.startPoll(
-            parameterizer.get("voteQuorum"),
-            parameterizer.get("applyStageLen").div(2),
-            parameterizer.get("applyStageLen").div(2)
-        );
-
-        challenges[pollID] = Challenge({
-            challenger: msg.sender,
-            rewardPool: reviewTax,
-            stake: minDeposit,
-            resolved: false,
-            isReview: true,
-            totalTokens: 0
-        });
-        challengesIndexes.push(pollID);
-        // Updates listingHash to store most recent challenge
-        listing.challengeID = pollID;
-
-        // Locks tokens for listingHash during challenge
-        listing.unstakedDeposit -= parameterizer.get("minDeposit");
-        listing.unstakedDeposit -= reviewTax;
-
-        // Takes tokens from challenger
-        require(GOV(token).transferFrom(msg.sender, address(this), reviewTax));
-
-        (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
-
-        emit _Review(_listingHash, pollID, commitEndDate, revealEndDate);
-        return pollID;
-    }
-
-    /**
     @dev                Updates a listingHash's status from 'application' to 'listing' or resolves
                         a challenge if one exists.
     @param _listingHash The listingHash whose status is being updated
@@ -471,9 +429,122 @@ contract Registry {
         return challenges[_challengeID].tokenClaims[_voter];
     }
 
+        /**
+    @dev Returns a list of
+    */
+    function getListings () public view returns (bytes32[] memory, uint[] memory,
+    bool[] memory, address[] memory, uint[] memory, uint[] memory) {
+        uint[] memory applicationExpiries = new uint[](listingsIndexes.length);
+        bool[] memory whitelistees = new bool[](listingsIndexes.length);
+        address[] memory owners = new address[](listingsIndexes.length);
+        uint[] memory unstakedDeposits = new uint[](listingsIndexes.length);
+        uint[] memory challengeIDs = new uint[](listingsIndexes.length);
+	    uint[] memory exitTimes = new uint[](listingsIndexes.length);
+        uint[] memory exitTimeExpiries = new uint[](listingsIndexes.length);
+
+        for (uint i = 0; i < listingsIndexes.length; i++) {
+            //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
+            Listing memory lst = listings[listingsIndexes[i]];
+            applicationExpiries[i] = lst.applicationExpiry;
+            whitelistees[i] = lst.whitelisted;
+            owners[i] = lst.owner;
+            unstakedDeposits[i] = lst.unstakedDeposit;
+            challengeIDs[i] = lst.challengeID;
+            exitTimes[i] = lst.exitTime;
+            exitTimeExpiries[i] = lst.exitTimeExpiry;
+        }
+        return (listingsIndexes, applicationExpiries, whitelistees, owners,
+            unstakedDeposits, challengeIDs);
+    }
+
+    function getChallenges () public view returns (uint[] memory, uint[] memory,
+    address[] memory, bool[] memory, uint[] memory, uint[] memory) {
+        uint[] memory challengeID = new uint[](challengesIndexes.length);
+        uint[] memory rewardPool = new uint[](challengesIndexes.length);
+        address[] memory challenger = new address[](challengesIndexes.length);
+        bool[] memory isReview = new bool[](challengesIndexes.length);
+        uint[] memory stake = new uint[](challengesIndexes.length);
+	    uint[] memory totalTokens = new uint[](challengesIndexes.length);
+
+        for (uint i = 0; i < challengesIndexes.length; i++){
+            //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
+            Challenge memory lst = challenges[challengesIndexes[i]];
+            challengeID[i] = challengesIndexes[i];
+            rewardPool[i] = lst.rewardPool;
+            challenger[i] = lst.challenger;
+            isReview[i] = lst.isReview;
+            stake[i] = lst.stake;
+            totalTokens[i] = lst.totalTokens;
+        }
+        return (challengeID, rewardPool, challenger, isReview,
+            stake, totalTokens);
+    }
+
+    function whoAmI() public view returns (address)
+    {
+        return msg.sender;
+    }
+
     // ----------------
     // PRIVATE FUNCTIONS:
     // ----------------
+
+/**
+    @dev Starts a poll for a listingHash which is either in the apply stage.
+        Tokens are taken from the challenger and the applicant's deposits are locked.
+    @param _listingHash The listingHash being challenged, whether listed or in application
+    */
+    function review(bytes32 _listingHash) internal returns (uint reviewID) {
+        Listing storage listing = listings[_listingHash];
+        uint reviewTax = parameterizer.get("reviewTax");
+        uint minDeposit = parameterizer.get("minDeposit");
+
+        // Starts poll
+        uint pollID = voting.startPoll(
+            parameterizer.get("voteQuorum"),
+            parameterizer.get("applyStageLen").div(2),
+            parameterizer.get("applyStageLen").div(2)
+        );
+
+        challenges[pollID] = Challenge({
+            challenger: msg.sender,
+            rewardPool: reviewTax,
+            stake: minDeposit,
+            resolved: false,
+            isReview: true,
+            totalTokens: 0
+        });
+        challengesIndexes.push(pollID);
+        // Updates listingHash to store most recent challenge
+        listing.challengeID = pollID;
+
+        // Locks tokens for listingHash during challenge
+        listing.unstakedDeposit -= parameterizer.get("minDeposit");
+        listing.unstakedDeposit -= reviewTax;
+
+        // Takes tokens from challenger
+        require(GOV(token).transferFrom(msg.sender, address(this), reviewTax));
+
+        (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
+
+        emit _Review(_listingHash, pollID, commitEndDate, revealEndDate);
+        return pollID;
+    }
+
+    /**
+    @dev                Updates a listingHash's status from 'application' to 'listing' or resolves
+                        a challenge if one exists.
+    @param _listingHash The listingHash whose status is being updated
+    */
+    function updateStatus(bytes32 _listingHash) public {
+        if (canBeWhitelisted(_listingHash)) {
+            whitelistApplication(_listingHash);
+        } else if (challengeCanBeResolved(_listingHash)) {
+            resolveChallenge(_listingHash);
+        } else {
+            revert();
+        }
+    }
 
     /**
     @dev                Determines the winner in a challenge. Rewards the winner tokens and
@@ -590,61 +661,5 @@ contract Registry {
                 break;
             }
         }
-    }
-
-    /**
-    @dev Returns a list of
-    */
-    function getListings () public view returns (bytes32[] memory, uint[] memory,
-    bool[] memory, address[] memory, uint[] memory, uint[] memory) {
-        uint[] memory applicationExpiries = new uint[](listingsIndexes.length);
-        bool[] memory whitelistees = new bool[](listingsIndexes.length);
-        address[] memory owners = new address[](listingsIndexes.length);
-        uint[] memory unstakedDeposits = new uint[](listingsIndexes.length);
-        uint[] memory challengeIDs = new uint[](listingsIndexes.length);
-	    uint[] memory exitTimes = new uint[](listingsIndexes.length);
-        uint[] memory exitTimeExpiries = new uint[](listingsIndexes.length);
-
-        for (uint i = 0; i < listingsIndexes.length; i++) {
-            //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
-            Listing memory lst = listings[listingsIndexes[i]];
-            applicationExpiries[i] = lst.applicationExpiry;
-            whitelistees[i] = lst.whitelisted;
-            owners[i] = lst.owner;
-            unstakedDeposits[i] = lst.unstakedDeposit;
-            challengeIDs[i] = lst.challengeID;
-            exitTimes[i] = lst.exitTime;
-            exitTimeExpiries[i] = lst.exitTimeExpiry;
-        }
-        return (listingsIndexes, applicationExpiries, whitelistees, owners,
-            unstakedDeposits, challengeIDs);
-    }
-
-    function getChallenges () public view returns (uint[] memory, uint[] memory,
-    address[] memory, bool[] memory, uint[] memory, uint[] memory) {
-        uint[] memory challengeID = new uint[](challengesIndexes.length);
-        uint[] memory rewardPool = new uint[](challengesIndexes.length);
-        address[] memory challenger = new address[](challengesIndexes.length);
-        bool[] memory isReview = new bool[](challengesIndexes.length);
-        uint[] memory stake = new uint[](challengesIndexes.length);
-	    uint[] memory totalTokens = new uint[](challengesIndexes.length);
-
-        for (uint i = 0; i < challengesIndexes.length; i++){
-            //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
-            Challenge memory lst = challenges[challengesIndexes[i]];
-            challengeID[i] = challengesIndexes[i];
-            rewardPool[i] = lst.rewardPool;
-            challenger[i] = lst.challenger;
-            isReview[i] = lst.isReview;
-            stake[i] = lst.stake;
-            totalTokens[i] = lst.totalTokens;
-        }
-        return (challengeID, rewardPool, challenger, isReview,
-            stake, totalTokens);
-    }
-
-    function whoAmI() public view returns (address)
-    {
-        return msg.sender;
     }
 }
