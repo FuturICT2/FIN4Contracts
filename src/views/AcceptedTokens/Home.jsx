@@ -67,7 +67,7 @@ class Home extends Component {
 						challengeID: new BN(challengeIDs[i]).toNumber(),
 						name: '',
 						status: '',
-						statusIsCommit: true, // boolean to make button-label switching easier
+						actionStatus: Action_Status.UNDEFINED,
 						commitEndDate: '',
 						revealEndDate: ''
 					};
@@ -88,7 +88,6 @@ class Home extends Component {
 							};
 						}
 
-						// TODO what is with those that are not in an application or challenge phase?
 						let allPollPromises = Object.keys(listingsObj).map(tokenAddr => {
 							let listing = listingsObj[tokenAddr];
 							let challengeID = listing.challengeID;
@@ -101,12 +100,31 @@ class Home extends Component {
 									listing.revealEndDate = new Date(revealEndDate).toLocaleString('de-CH-1996');
 									let nowTimestamp = Date.now();
 									let inCommitPeriod = commitEndDate - nowTimestamp > 0;
-									//let inRevealPeriod = !inCommitPeriod && revealEndDate - nowTimestamp > 0;
+									let inRevealPeriod = !inCommitPeriod && revealEndDate - nowTimestamp > 0;
 
-									let commit_reveal = inCommitPeriod ? 'commit period' : 'reveal period';
 									let review_challenge = challengesObj[challengeID].isReview ? 'Review' : 'Challenge';
-									listing.status = review_challenge + ': ' + commit_reveal;
-									listing.statusIsCommit = inCommitPeriod;
+
+									// TODO logically simplify these ifs?
+
+									if (!inRevealPeriod && inCommitPeriod) {
+										listing.actionStatus = Action_Status.VOTE;
+										listing.status = review_challenge + ': commit period';
+									}
+
+									if (inRevealPeriod && !inCommitPeriod) {
+										listing.actionStatus = Action_Status.REVEAL;
+										listing.status = review_challenge + ': reveal period';
+									}
+
+									if (!inRevealPeriod && !inCommitPeriod) {
+										listing.actionStatus = Action_Status.UPDATE;
+										listing.status = review_challenge;
+									}
+
+									if (!inRevealPeriod && !inCommitPeriod && listing.whitelisted) {
+										listing.actionStatus = Action_Status.CHALLENGE;
+										listing.status = review_challenge;
+									}
 								}
 							);
 						}); // Promise.all(allPollPromises).then(results => {});
@@ -279,31 +297,60 @@ class Home extends Component {
 	// ---------- RevealModal ----------
 
 	toggleRevealModal = () => {
+		if (this.state.isRevealModalOpen) {
+			this.resetVoteModalValues(); // is used to store the pollID from modal-opening click to submission
+		}
 		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
 	};
+
+	determineDueDateEntry(listing) {
+		switch (listing.actionStatus) {
+			case Action_Status.VOTE:
+				return listing.commitEndDate;
+			case Action_Status.REVEAL:
+				return listing.revealEndDate;
+			case Action_Status.UPDATE:
+			case Action_Status.CHALLENGE:
+				return '-';
+		}
+	}
 
 	render() {
 		return (
 			<center>
-				<Box title="Listings">
-					<Table headers={['Name', 'Status', 'Due Date', 'Actions']}>
+				<Box title="Listings" width="800px">
+					<Table headers={['Name', 'Status', 'Due Date', 'Actions', 'Whitelisted']}>
 						{Object.keys(this.state.listings).map((key, index) => {
+							// key is address of the Fin4Token
 							return (
 								<TableRow
 									key={index}
 									data={{
 										name: this.state.listings[key].name,
 										status: this.state.listings[key].status,
-										dueDate: this.state.listings[key].commitEndDate,
+										dueDate: this.determineDueDateEntry(this.state.listings[key]),
 										actions: (
 											<Button
 												onClick={() => {
-													this.voteModalValues.pollID = this.state.listings[key].challengeID;
-													this.state.listings[key].statusIsCommit ? this.toggleVoteModal() : this.toggleRevealModal();
+													switch (this.state.listings[key].actionStatus) {
+														case Action_Status.VOTE:
+															this.voteModalValues.pollID = this.state.listings[key].challengeID;
+															this.toggleVoteModal();
+															break;
+														case Action_Status.REVEAL:
+															this.voteModalValues.pollID = this.state.listings[key].challengeID;
+															this.toggleRevealModal();
+															break;
+														case Action_Status.UPDATE:
+															break;
+														case Action_Status.CHALLENGE:
+															break;
+													}
 												}}>
-												{this.state.listings[key].statusIsCommit ? 'Vote' : 'Reveal vote'}
+												{this.state.listings[key].actionStatus}
 											</Button>
-										)
+										),
+										whitelisted: this.state.listings[key].whitelisted.toString()
 									}}
 								/>
 							);
@@ -420,6 +467,14 @@ class Home extends Component {
 		);
 	}
 }
+
+const Action_Status = {
+	UNDEFINED: 'Undefined',
+	VOTE: 'Vote', // = commit
+	REVEAL: 'Reveal',
+	UPDATE: 'Update',
+	CHALLENGE: 'Challenge'
+};
 
 const inputFieldStyle = {
 	// copied from ContractForm
