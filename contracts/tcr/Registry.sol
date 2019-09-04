@@ -428,9 +428,9 @@ contract Registry {
     function tokenClaims(uint _challengeID, address _voter) public view returns (bool) {
         return challenges[_challengeID].tokenClaims[_voter];
     }
-
-        /**
-    @dev Returns a list of
+    
+    /**
+    @dev Getter for easy handling of listings in the Front-End
     */
     function getListings () public view returns (bytes32[] memory, uint[] memory,
     bool[] memory, address[] memory, uint[] memory, uint[] memory) {
@@ -443,7 +443,6 @@ contract Registry {
         uint[] memory exitTimeExpiries = new uint[](listingsIndexes.length);
 
         for (uint i = 0; i < listingsIndexes.length; i++) {
-            //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
             Listing memory lst = listings[listingsIndexes[i]];
             applicationExpiries[i] = lst.applicationExpiry;
             whitelistees[i] = lst.whitelisted;
@@ -457,6 +456,9 @@ contract Registry {
             unstakedDeposits, challengeIDs);
     }
 
+    /**
+    @dev Getter for easy handling of Challenges in the Front-End
+    */
     function getChallenges () public view returns (uint[] memory, uint[] memory,
     address[] memory, bool[] memory, uint[] memory, uint[] memory) {
         uint[] memory challengeID = new uint[](challengesIndexes.length);
@@ -467,7 +469,6 @@ contract Registry {
 	    uint[] memory totalTokens = new uint[](challengesIndexes.length);
 
         for (uint i = 0; i < challengesIndexes.length; i++){
-            //addresses[i] = address(uint160(uint256(listingsIndexes[i])));//address(uint160(uint256(listingsIndexes[i])));
             Challenge memory lst = challenges[challengesIndexes[i]];
             challengeID[i] = challengesIndexes[i];
             rewardPool[i] = lst.rewardPool;
@@ -521,9 +522,6 @@ contract Registry {
         // Locks tokens for listingHash during challenge
         listing.unstakedDeposit -= parameterizer.get("minDeposit");
         listing.unstakedDeposit -= reviewTax;
-
-        // Takes tokens from challenger
-        require(GOV(token).transferFrom(msg.sender, address(this), reviewTax));
 
         (uint commitEndDate, uint revealEndDate,,,) = voting.pollMap(pollID);
 
