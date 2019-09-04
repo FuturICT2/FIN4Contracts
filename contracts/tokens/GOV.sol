@@ -60,7 +60,7 @@ contract GOV is ERC20Plus {
 
   function transfer(address recipient, uint256 amount) public returns (bool) {
     require (balanceOf(msg.sender) > amount, "transfer: Not enough balance");
-    if(recipient != address(voting) && recipient != address(parameterizer) && recipient != address(registry)){
+    if(msg.sender != address(voting) && msg.sender != address(parameterizer) && msg.sender != address(registry)){
       require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry),
         "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
     }
@@ -69,7 +69,7 @@ contract GOV is ERC20Plus {
 
   function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
     require (balanceOf(sender) >= amount, "transferFrom: Not enough balance");
-    if(recipient != address(voting) && recipient != address(parameterizer) && recipient != address(registry)){
+    if(sender != address(voting) && sender != address(parameterizer) && sender != address(registry)){
       require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry),
         "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
       }
