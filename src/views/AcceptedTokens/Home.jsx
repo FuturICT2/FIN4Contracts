@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-import { RegistryAddress, PLCRVotingAddress } from '../../config/DeployedAddresses.js';
+import { RegistryAddress, PLCRVotingAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import { getContractData, getAllActionTypes, getContract } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
@@ -28,6 +28,21 @@ class Home extends Component {
 
 		this.resetApplyModalValues();
 		this.resetVoteModalValues();
+
+		this.parameterizerValues = {
+			// TODO load this into redux store
+			minDeposit: null,
+			reviewTax: null
+		};
+
+		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
+			getContractData(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
+				this.parameterizerValues.minDeposit = new BN(minDepositBN).toNumber();
+			});
+			getContractData(parameterizerAddress, 'Parameterizer', 'get', ['reviewTax']).then(reviewTaxBN => {
+				this.parameterizerValues.reviewTax = new BN(reviewTaxBN).toNumber();
+			});
+		});
 
 		getContractData(RegistryAddress, 'Registry', 'getListings').then(
 			({
@@ -143,27 +158,45 @@ class Home extends Component {
 
 		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let token = this.applyModalValues.token;
-		let deposit = this.applyModalValues.deposit;
+		let deposit = Number(this.applyModalValues.deposit);
 		let data = this.applyModalValues.data;
+
+		let minDepositPlusReviewTax = this.parameterizerValues.minDeposit + this.parameterizerValues.reviewTax;
+		if (deposit < minDepositPlusReviewTax) {
+			alert('Deposit must be bigger than minDeposit + reviewTax (=' + minDepositPlusReviewTax + ')');
+			return;
+		}
+
 		this.toggleApplyModal();
 
 		// Step 1: approve
 
-		// TODO
-
-		// Step 2: applyToken
-
-		getContract(RegistryAddress, 'Registry')
+		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
-				return instance.applyToken(token, deposit, data, {
+				return instance.approve(RegistryAddress, deposit, {
 					from: currentAccount
 				});
 			})
 			.then(function(result) {
-				console.log('Results of submitting: ', result);
+				console.log('GOV.approve Result: ', result);
+
+				// Step 2: applyToken
+
+				getContract(RegistryAddress, 'Registry')
+					.then(function(instance) {
+						return instance.applyToken(token, deposit, data, {
+							from: currentAccount
+						});
+					})
+					.then(function(result) {
+						console.log('Registry.applyToken Result: ', result);
+					})
+					.catch(function(err) {
+						console.log('Registry.applyToken Error: ', err.message);
+					});
 			})
 			.catch(function(err) {
-				console.log('Error: ', err.message);
+				console.log('GOV.approve Error: ', err.message);
 			});
 	};
 
@@ -220,10 +253,10 @@ class Home extends Component {
 					});
 				})
 				.then(function(result) {
-					console.log('Results of submitting: ', result);
+					console.log('PLCRVoting.commitVote Result: ', result);
 				})
 				.catch(function(err) {
-					console.log('Error: ', err.message);
+					console.log('PLCRVoting.commitVote Error: ', err.message);
 				});
 		});
 	};
