@@ -78,7 +78,7 @@ contract PLCRVoting {
     function requestVotingRights(uint _numTokens) public {
         require(GOV(token).balanceOf(msg.sender) >= _numTokens, "GOV(token).balanceOf(msg.sender) < _numTokens");
         voteTokenBalance[msg.sender] += _numTokens;
-        require(GOV(token).transferFrom(msg.sender, address(this), _numTokens), "Cannot transferfrom GOVTokens");
+        require(GOV(token).transferFrom(msg.sender, address(this), _numTokens), "Cannot transfer from GOVTokens");
         emit _VotingRightsGranted(_numTokens, msg.sender);
     }
 

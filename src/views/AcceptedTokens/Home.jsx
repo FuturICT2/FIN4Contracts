@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-import { RegistryAddress, PLCRVotingAddress } from '../../config/DeployedAddresses.js';
+import { RegistryAddress, PLCRVotingAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import { getContractData, getAllActionTypes, getContract } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
@@ -28,6 +28,21 @@ class Home extends Component {
 
 		this.resetApplyModalValues();
 		this.resetVoteModalValues();
+
+		this.parameterizerValues = {
+			// TODO load this into redux store
+			minDeposit: null,
+			reviewTax: null
+		};
+
+		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
+			getContractData(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
+				this.parameterizerValues.minDeposit = new BN(minDepositBN).toNumber();
+			});
+			getContractData(parameterizerAddress, 'Parameterizer', 'get', ['reviewTax']).then(reviewTaxBN => {
+				this.parameterizerValues.reviewTax = new BN(reviewTaxBN).toNumber();
+			});
+		});
 
 		getContractData(RegistryAddress, 'Registry', 'getListings').then(
 			({
@@ -143,27 +158,45 @@ class Home extends Component {
 
 		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let token = this.applyModalValues.token;
-		let deposit = this.applyModalValues.deposit;
+		let deposit = Number(this.applyModalValues.deposit);
 		let data = this.applyModalValues.data;
+
+		let minDepositPlusReviewTax = this.parameterizerValues.minDeposit + this.parameterizerValues.reviewTax;
+		if (deposit < minDepositPlusReviewTax) {
+			alert('Deposit must be bigger than minDeposit + reviewTax (=' + minDepositPlusReviewTax + ')');
+			return;
+		}
+
 		this.toggleApplyModal();
 
 		// Step 1: approve
 
-		// TODO
-
-		// Step 2: applyToken
-
-		getContract(RegistryAddress, 'Registry')
+		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
-				return instance.applyToken(token, deposit, data, {
+				return instance.approve(RegistryAddress, deposit, {
 					from: currentAccount
 				});
 			})
 			.then(function(result) {
-				console.log('Results of submitting: ', result);
+				console.log('GOV.approve Result: ', result);
+
+				// Step 2: applyToken
+
+				getContract(RegistryAddress, 'Registry')
+					.then(function(instance) {
+						return instance.applyToken(token, deposit, data, {
+							from: currentAccount
+						});
+					})
+					.then(function(result) {
+						console.log('Registry.applyToken Result: ', result);
+					})
+					.catch(function(err) {
+						console.log('Registry.applyToken Error: ', err.message);
+					});
 			})
 			.catch(function(err) {
-				console.log('Error: ', err.message);
+				console.log('GOV.approve Error: ', err.message);
 			});
 	};
 
@@ -198,34 +231,49 @@ class Home extends Component {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let vote = this.voteModalValues.vote;
 		let salt = this.voteModalValues.salt;
-		let numbTokens = this.voteModalValues.numbTokens;
+		let numbTokens = Number(this.voteModalValues.numbTokens);
 		let pollID = this.voteModalValues.pollID;
+
+		if (numbTokens < 0) {
+			alert('Number of tokens must be more than 0.');
+			return;
+		}
+
 		this.toggleVoteModal();
 
-		getContractData(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
-			currentAccount,
-			numbTokens,
-			pollID
-		]).then(prevPollIdBN => {
-			let prevPollID = new BN(prevPollIdBN).toNumber();
-			let secretHash = soliditySha3(vote, salt);
-
-			let self = this;
-			//console.log(pollID, secretHash, numbTokens, prevPollID);
-
-			getContract(PLCRVotingAddress, 'PLCRVoting')
-				.then(function(instance) {
-					return instance.commitVote(pollID, secretHash, numbTokens, prevPollID, {
-						from: currentAccount
-					});
-				})
-				.then(function(result) {
-					console.log('Results of submitting: ', result);
-				})
-				.catch(function(err) {
-					console.log('Error: ', err.message);
+		getContract(GOVTokenAddress, 'GOV')
+			.then(function(instance) {
+				return instance.approve(PLCRVotingAddress, numbTokens, {
+					from: currentAccount
 				});
-		});
+			})
+			.then(function(result) {
+				console.log('GOV.approve Result: ', result);
+
+				getContractData(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
+					currentAccount,
+					numbTokens,
+					pollID
+				]).then(prevPollIdBN => {
+					let prevPollID = new BN(prevPollIdBN).toNumber();
+					let secretHash = soliditySha3(vote, salt);
+					getContract(PLCRVotingAddress, 'PLCRVoting')
+						.then(function(instance) {
+							return instance.commitVote(pollID, secretHash, numbTokens, prevPollID, {
+								from: currentAccount
+							});
+						})
+						.then(function(result) {
+							console.log('PLCRVoting.commitVote Result: ', result);
+						})
+						.catch(function(err) {
+							console.log('PLCRVoting.commitVote Error: ', err.message);
+						});
+				});
+			})
+			.catch(function(err) {
+				console.log('GOV.approve Error: ', err.message);
+			});
 	};
 
 	// ---------- RevealModal ----------
@@ -307,6 +355,12 @@ class Home extends Component {
 					<Button onClick={this.submitApplyModal} center>
 						Submit
 					</Button>
+					<center>
+						<small style={{ color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
+							token balance and then to submit the application for this token.
+						</small>
+					</center>
 				</Modal>
 				<Modal
 					isOpen={this.state.isVoteModalOpen}
@@ -337,6 +391,12 @@ class Home extends Component {
 					<Button onClick={this.submitVoteModal} center>
 						Submit
 					</Button>
+					<center>
+						<small style={{ color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow the number of tokens to be withdrawn from
+							your GOV token balance and then to submit your vote.
+						</small>
+					</center>
 				</Modal>
 				<Modal
 					isOpen={this.state.isRevealModalOpen}
