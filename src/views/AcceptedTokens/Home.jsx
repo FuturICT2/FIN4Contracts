@@ -231,34 +231,49 @@ class Home extends Component {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let vote = this.voteModalValues.vote;
 		let salt = this.voteModalValues.salt;
-		let numbTokens = this.voteModalValues.numbTokens;
+		let numbTokens = Number(this.voteModalValues.numbTokens);
 		let pollID = this.voteModalValues.pollID;
+
+		if (numbTokens < 0) {
+			alert('Number of tokens must be more than 0.');
+			return;
+		}
+
 		this.toggleVoteModal();
 
-		getContractData(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
-			currentAccount,
-			numbTokens,
-			pollID
-		]).then(prevPollIdBN => {
-			let prevPollID = new BN(prevPollIdBN).toNumber();
-			let secretHash = soliditySha3(vote, salt);
-
-			let self = this;
-			//console.log(pollID, secretHash, numbTokens, prevPollID);
-
-			getContract(PLCRVotingAddress, 'PLCRVoting')
-				.then(function(instance) {
-					return instance.commitVote(pollID, secretHash, numbTokens, prevPollID, {
-						from: currentAccount
-					});
-				})
-				.then(function(result) {
-					console.log('PLCRVoting.commitVote Result: ', result);
-				})
-				.catch(function(err) {
-					console.log('PLCRVoting.commitVote Error: ', err.message);
+		getContract(GOVTokenAddress, 'GOV')
+			.then(function(instance) {
+				return instance.approve(PLCRVotingAddress, numbTokens, {
+					from: currentAccount
 				});
-		});
+			})
+			.then(function(result) {
+				console.log('GOV.approve Result: ', result);
+
+				getContractData(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
+					currentAccount,
+					numbTokens,
+					pollID
+				]).then(prevPollIdBN => {
+					let prevPollID = new BN(prevPollIdBN).toNumber();
+					let secretHash = soliditySha3(vote, salt);
+					getContract(PLCRVotingAddress, 'PLCRVoting')
+						.then(function(instance) {
+							return instance.commitVote(pollID, secretHash, numbTokens, prevPollID, {
+								from: currentAccount
+							});
+						})
+						.then(function(result) {
+							console.log('PLCRVoting.commitVote Result: ', result);
+						})
+						.catch(function(err) {
+							console.log('PLCRVoting.commitVote Error: ', err.message);
+						});
+				});
+			})
+			.catch(function(err) {
+				console.log('GOV.approve Error: ', err.message);
+			});
 	};
 
 	// ---------- RevealModal ----------
@@ -376,6 +391,12 @@ class Home extends Component {
 					<Button onClick={this.submitVoteModal} center>
 						Submit
 					</Button>
+					<center>
+						<small style={{ color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow the number of tokens to be withdrawn from
+							your GOV token balance and then to submit your vote.
+						</small>
+					</center>
 				</Modal>
 				<Modal
 					isOpen={this.state.isRevealModalOpen}
