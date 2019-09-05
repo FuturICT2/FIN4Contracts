@@ -218,10 +218,12 @@ class Home extends Component {
 					})
 					.catch(function(err) {
 						console.log('Registry.applyToken Error: ', err.message);
+						alert(err.message);
 					});
 			})
 			.catch(function(err) {
 				console.log('GOV.approve Error: ', err.message);
+				alert(err.message);
 			});
 	};
 
@@ -293,11 +295,13 @@ class Home extends Component {
 						})
 						.catch(function(err) {
 							console.log('PLCRVoting.commitVote Error: ', err.message);
+							alert(err.message);
 						});
 				});
 			})
 			.catch(function(err) {
 				console.log('GOV.approve Error: ', err.message);
+				alert(err.message);
 			});
 	};
 
@@ -324,6 +328,7 @@ class Home extends Component {
 			})
 			.catch(function(err) {
 				console.log('RegistryAddress.updateStatus Error: ', err.message);
+				alert(err.message);
 			});
 	}
 
@@ -485,7 +490,10 @@ class Home extends Component {
 						staticArgs={{
 							_pollID: this.voteModalValues.pollID
 						}}
-						postSubmitCallback={() => {
+						postSubmitCallback={(success, result) => {
+							if (!success) {
+								alert(result.message);
+							}
 							this.toggleRevealModal();
 						}}
 					/>

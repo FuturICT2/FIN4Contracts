@@ -154,17 +154,17 @@ class ContractForm extends Component {
 			})
 			.then(function(result) {
 				console.log('Results of submitting: ', result);
-				self.postSubmitCallback();
+				self.postSubmitCallback(true, result);
 			})
 			.catch(function(err) {
 				console.log('Error: ', err.message);
-				self.postSubmitCallback();
+				self.postSubmitCallback(false, err);
 			});
 	};
 
-	postSubmitCallback() {
+	postSubmitCallback(success, result) {
 		if (this.props.postSubmitCallback) {
-			this.props.postSubmitCallback();
+			this.props.postSubmitCallback(success, result);
 		}
 	}
 
