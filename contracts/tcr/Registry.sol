@@ -635,13 +635,13 @@ contract Registry {
     @param _challengeID The listing hash to delete
     */
     function removeChallengeIndex(uint _challengeID) private {
-        for (uint i = 0; i<challengesIndexes.length-1; i++){
+        for (uint i = 0; i < challengesIndexes.length; i++){
             if (challengesIndexes[i] == _challengeID) {
-                for (uint j = i; j<challengesIndexes.length-1; j++){
-                    challengesIndexes[j] = challengesIndexes[j+1];
+                for (uint j = i; j < challengesIndexes.length - 1; j++){
+                    challengesIndexes[j] = challengesIndexes[j + 1];
                 }
-                delete challengesIndexes[challengesIndexes.length-1];
-                challengesIndexes.length--;
+                delete challengesIndexes[challengesIndexes.length - 1];
+                challengesIndexes.length --;
                 break;
             }
         }
