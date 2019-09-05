@@ -91,6 +91,13 @@ class Home extends Component {
 						let allPollPromises = Object.keys(listingsObj).map(tokenAddr => {
 							let listing = listingsObj[tokenAddr];
 							let challengeID = listing.challengeID;
+
+							if (challengeID === 0) {
+								listing.actionStatus = Action_Status.REJECTED;
+								listing.status = 'Rejected';
+								return;
+							}
+
 							return getContractData(PLCRVotingAddress, 'PLCRVoting', 'pollMap', [challengeID]).then(
 								({ 0: commitEndDateBN, 1: revealEndDateBN, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
 									let commitEndDate = new BN(commitEndDateBN).toNumber() * 1000;
@@ -328,6 +335,7 @@ class Home extends Component {
 				return listing.revealEndDate;
 			case Action_Status.UPDATE:
 			case Action_Status.CHALLENGE:
+			case Action_Status.REJECTED:
 				return '-';
 		}
 	}
@@ -346,7 +354,7 @@ class Home extends Component {
 										name: this.state.listings[key].name,
 										status: this.state.listings[key].status,
 										dueDate: this.determineDueDateEntry(this.state.listings[key]),
-										actions: (
+										actions: this.state.listings[key].actionStatus !== Action_Status.REJECTED && (
 											<Button
 												onClick={() => {
 													switch (this.state.listings[key].actionStatus) {
@@ -362,6 +370,7 @@ class Home extends Component {
 															this.updateStatus(key);
 															break;
 														case Action_Status.CHALLENGE:
+															// TODO
 															break;
 													}
 												}}>
@@ -491,7 +500,8 @@ const Action_Status = {
 	VOTE: 'Vote', // = commit
 	REVEAL: 'Reveal',
 	UPDATE: 'Update',
-	CHALLENGE: 'Challenge'
+	CHALLENGE: 'Challenge',
+	REJECTED: 'Rejected'
 };
 
 const inputFieldStyle = {
