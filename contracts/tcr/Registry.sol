@@ -584,6 +584,7 @@ contract Registry {
     function whitelistApplication(bytes32 _listingHash) private {
         if (!listings[_listingHash].whitelisted) { emit _ApplicationWhitelisted(_listingHash); }
         listings[_listingHash].whitelisted = true;
+        listings[_listingHash].challengeID = 0;
     }
 
     /**
@@ -617,9 +618,9 @@ contract Registry {
     @param _listingHash The listing hash to delete
     */
     function removeListingIndex(bytes32 _listingHash) private {
-        for (uint i = 0; i<listingsIndexes.length-1; i++){
+        for (uint i = 0; i<listingsIndexes.length; i++){
             if (listingsIndexes[i] == _listingHash) {
-                for (uint j = i; j<listingsIndexes.length-1; j++){
+                for (uint j = i; j<listingsIndexes.length; j++){
                     listingsIndexes[j] = listingsIndexes[j+1];
                 }
                 delete listingsIndexes[listingsIndexes.length-1];
