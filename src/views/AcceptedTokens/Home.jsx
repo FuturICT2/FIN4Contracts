@@ -20,6 +20,7 @@ class Home extends Component {
 			isApplyModalOpen: false,
 			isVoteModalOpen: false,
 			isRevealModalOpen: false,
+			isChallengeModalOpen: false,
 
 			listings: {},
 			allFin4Tokens: [],
@@ -28,6 +29,7 @@ class Home extends Component {
 
 		this.resetApplyModalValues();
 		this.resetVoteModalValues();
+		this.resetChallengeModalValues();
 
 		this.parameterizerValues = {
 			// TODO load this into redux store
@@ -314,6 +316,60 @@ class Home extends Component {
 		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
 	};
 
+	// ---------- ChallengeModal ----------
+
+	resetChallengeModalValues() {
+		this.challengeModalValues = {
+			listingHash: null, // ?
+			data: null // string
+		};
+	}
+
+	toggleChallengeModal = () => {
+		if (this.state.isChallengeModalOpen) {
+			this.resetChallengeModalValues();
+		}
+		this.setState({ isChallengeModalOpen: !this.state.isChallengeModalOpen });
+	};
+
+	submitChallengeModal = () => {
+		let currentAccount = window.web3.currentProvider.selectedAddress;
+		let listingHash = this.challengeModalValues.listingHash;
+		let data = this.challengeModalValues.data;
+		let minDeposit = this.parameterizerValues.minDeposit;
+
+		this.toggleChallengeModal();
+
+		getContract(GOVTokenAddress, 'GOV')
+			.then(function(instance) {
+				return instance.approve(RegistryAddress, minDeposit, {
+					from: currentAccount
+				});
+			})
+			.then(function(result) {
+				console.log('GOV.approve Result: ', result);
+				getContract(RegistryAddress, 'Registry')
+					.then(function(instance) {
+						return instance.challenge(listingHash, data, {
+							from: currentAccount
+						});
+					})
+					.then(function(result) {
+						console.log('Registry.challenge Result: ', result);
+					})
+					.catch(function(err) {
+						console.log('Registry.challenge Error: ', err.message);
+						alert(err.message);
+					});
+			})
+			.catch(function(err) {
+				console.log('GOV.approve Error: ', err.message);
+				alert(err.message);
+			});
+	};
+
+	// ----------
+
 	updateStatus(tokenAddr) {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let listingKey = this.state.listings[tokenAddr].listingKey;
@@ -372,10 +428,11 @@ class Home extends Component {
 															this.toggleRevealModal();
 															break;
 														case Action_Status.UPDATE:
-															this.updateStatus(key);
+															this.updateStatus(key); // direct transaction call, no popup first
 															break;
 														case Action_Status.CHALLENGE:
-															// TODO
+															this.challengeModalValues.listingHash = this.state.listings[key].listingKey;
+															this.toggleChallengeModal();
 															break;
 													}
 												}}>
@@ -486,7 +543,7 @@ class Home extends Component {
 						contractAddress={PLCRVotingAddress}
 						contractName="PLCRVoting"
 						method="revealVote"
-						labels={['pollID', 'Vote', 'Salt']}
+						labels={['_pollID', 'Vote', 'Salt']}
 						staticArgs={{
 							_pollID: this.voteModalValues.pollID
 						}}
@@ -497,6 +554,29 @@ class Home extends Component {
 							this.toggleRevealModal();
 						}}
 					/>
+				</Modal>
+				<Modal
+					isOpen={this.state.isChallengeModalOpen}
+					handleClose={this.toggleChallengeModal}
+					title="Add optional data"
+					width="400px">
+					<TextField
+						key="set-data"
+						type="text"
+						label="Data"
+						onChange={e => (this.challengeModalValues.data = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<Button onClick={this.submitChallengeModal} center>
+						Submit
+					</Button>
+					<center>
+						<small style={{ color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow minDeposit (
+							{this.parameterizerValues.minDeposit === null ? '?' : this.parameterizerValues.minDeposit}) to be
+							withdrawn from your GOV token balance and then to submit your challenge.
+						</small>
+					</center>
 				</Modal>
 			</center>
 		);
