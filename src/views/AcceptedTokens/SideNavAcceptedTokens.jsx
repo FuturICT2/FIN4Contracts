@@ -18,11 +18,11 @@ class SideNavAcceptedTokens extends Component {
 						</NavIcon>
 						<NavText>Home</NavText>
 					</NavItem>
-					<NavItem eventKey="application">
+					<NavItem eventKey="management">
 						<NavIcon>
 							<i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
 						</NavIcon>
-						<NavText>Application</NavText>
+						<NavText>Management</NavText>
 					</NavItem>
 					<NavItem eventKey="governance">
 						<NavIcon>

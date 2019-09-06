@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SideNavAcceptedTokens from './SideNavAcceptedTokens';
-import Application from './Application';
+import Management from './Management';
 import Home from './Home';
 import Governance from './Governance';
 
@@ -31,8 +31,8 @@ class AcceptedTokens extends Component {
 								return <Home />;
 							case 'governance':
 								return <Governance />;
-							case 'application':
-								return <Application />;
+							case 'management':
+								return <Management />;
 							default:
 								return null;
 						}
