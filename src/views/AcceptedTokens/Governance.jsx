@@ -8,25 +8,6 @@ import TableRow from '../../components/TableRow';
 import Button from '../../components/Button';
 const BN = require('bignumber.js');
 
-const paramNames = [
-	'minDeposit',
-	'pMinDeposit',
-	'applyStageLen',
-	'pApplyStageLen',
-	'commitStageLen',
-	'pCommitStageLen',
-	'revealStageLen',
-	'pRevealStageLen',
-	'dispensationPct',
-	'pDispensationPct',
-	'voteQuorum',
-	'pVoteQuorum',
-	'exitTimeDelay',
-	'exitPeriodLen',
-	'reviewTax',
-	'pminReputation'
-];
-
 class Governance extends Component {
 	constructor(props) {
 		super(props);
@@ -38,7 +19,7 @@ class Governance extends Component {
 		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			getContractData(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
 				let paramValues = [];
-				for (var i = 0; i < paramNames.length; i++) {
+				for (var i = 0; i < params.length; i++) {
 					paramValues.push(new BN(paramValuesBN[i]).toNumber());
 				}
 				this.setState({ paramValues: paramValues });
@@ -49,16 +30,17 @@ class Governance extends Component {
 	render() {
 		return (
 			<center>
-				<Box title="TCR Parameters" width="800px">
-					<Table headers={['Parameter', 'Value', 'Actions']}>
+				<Box title="TCR Parameters" width="600px">
+					<Table headers={['Parameter', 'Description', 'Value', 'Actions']}>
 						{this.state.paramValues.map((paramValue, index) => {
 							return (
 								<TableRow
 									key={index}
 									data={{
-										parameter: paramNames[index],
+										parameter: params[index].name,
+										description: params[index].description,
 										value: paramValue,
-										actions: <Button onClick={() => {}}>Action</Button>
+										actions: <Button onClick={() => {}}>Edit</Button>
 									}}
 								/>
 							);
@@ -69,5 +51,72 @@ class Governance extends Component {
 		);
 	}
 }
+
+const params = [
+	{
+		name: 'minDeposit',
+		description: 'minimum deposit for listing to be whitelisted'
+	},
+	{
+		name: 'pMinDeposit',
+		description: 'minimum deposit to propose a reparameterization'
+	},
+	{
+		name: 'applyStageLen',
+		description: 'period over which applicants wait to be whitelisted'
+	},
+	{
+		name: 'pApplyStageLen',
+		description: 'period over which reparmeterization proposals wait to be processed'
+	},
+	{
+		name: 'commitStageLen',
+		description: 'length of commit period for voting'
+	},
+	{
+		name: 'pCommitStageLen',
+		description: 'length of commit period for voting in parameterizer'
+	},
+	{
+		name: 'revealStageLen',
+		description: 'length of reveal period for voting'
+	},
+	{
+		name: 'pRevealStageLen',
+		description: 'length of reveal period for voting in parameterizer'
+	},
+	{
+		name: 'dispensationPct',
+		description: "percentage of losing party's deposit distributed to winning party"
+	},
+	{
+		name: 'pDispensationPct',
+		description: "percentage of losing party's deposit distributed to winning party in parameterizer"
+	},
+	{
+		name: 'voteQuorum',
+		description: 'type of majority out of 100 necessary for candidate success'
+	},
+	{
+		name: 'pVoteQuorum',
+		description: 'type of majority out of 100 necessary for proposal success in parameterizer'
+	},
+	{
+		name: 'exitTimeDelay',
+		description: 'minimum length of time user has to wait to exit the registry'
+	},
+	{
+		name: 'exitPeriodLen',
+		description: 'maximum length of time user can wait to exit the registry'
+	},
+	{
+		name: 'reviewTax',
+		description: 'fee for the reviewers'
+	},
+	{
+		name: 'pminReputation',
+		description: 'minimum amount of needed reputation for users to be able to participate in governance'
+	}
+];
 
 export default drizzleConnect(Governance);
