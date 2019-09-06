@@ -94,9 +94,15 @@ class Home extends Component {
 							let listing = listingsObj[tokenAddr];
 							let challengeID = listing.challengeID;
 
-							if (challengeID === 0) {
+							if (!listing.whitelisted && challengeID === 0) {
 								listing.actionStatus = Action_Status.REJECTED;
-								listing.status = 'Rejected';
+								listing.status = 'Rejected / Voted out';
+								return;
+							}
+
+							if (challengesObj[challengeID].isResolved) {
+								listing.actionStatus = Action_Status.CHALLENGE;
+								listing.status = '-';
 								return;
 							}
 
@@ -113,27 +119,21 @@ class Home extends Component {
 
 									let review_challenge = challengesObj[challengeID].isReview ? 'Review' : 'Challenge';
 
-									// TODO logically simplify these ifs?
-
-									if (!inRevealPeriod && inCommitPeriod) {
+									if (inCommitPeriod) {
 										listing.actionStatus = Action_Status.VOTE;
 										listing.status = review_challenge + ': commit period';
+										return;
 									}
 
-									if (inRevealPeriod && !inCommitPeriod) {
+									if (inRevealPeriod) {
+										// no longer inCommitPeriod
 										listing.actionStatus = Action_Status.REVEAL;
 										listing.status = review_challenge + ': reveal period';
+										return;
 									}
 
-									if (!inRevealPeriod && !inCommitPeriod) {
-										listing.actionStatus = Action_Status.UPDATE;
-										listing.status = review_challenge;
-									}
-
-									if (!inRevealPeriod && !inCommitPeriod && listing.whitelisted) {
-										listing.actionStatus = Action_Status.CHALLENGE;
-										listing.status = review_challenge;
-									}
+									listing.actionStatus = Action_Status.UPDATE;
+									listing.status = review_challenge;
 								}
 							);
 						}); // Promise.all(allPollPromises).then(results => {});
