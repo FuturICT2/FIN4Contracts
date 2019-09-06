@@ -11,7 +11,9 @@ import "./../tcr/PLCR/PLCRVoting.sol";
  */
 contract GOV is ERC20Plus {
 
+  // The tokens that you delegated to someone else
   mapping(address => mapping(address => uint256)) public delegatorTokens;
+  // The tokens that have been delagated to you
   mapping(address => uint256) public delegateeTokens;
 
   PLCRVoting public voting;
