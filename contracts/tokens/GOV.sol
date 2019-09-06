@@ -30,12 +30,16 @@ contract GOV is ERC20Plus {
       ERC20Plus(_name,_symbol, _decimals, minter, _isBurnable, _isTransferable, _isMintable, _initialSupply)
       public{}
 
-    function init(address _registry, address _parameterizer, address _voting) public {
-        require(_registry != address(0) && address(registry) == address(0), "Contract already initialized");
-        registry = Registry(_registry);
-        parameterizer = Parameterizer(_parameterizer);
-        voting = PLCRVoting(_voting);
-    }
+  function init(address _registry, address _parameterizer, address _voting) public {
+      require(_registry != address(0) && address(registry) == address(0), "Contract already initialized");
+      registry = Registry(_registry);
+      parameterizer = Parameterizer(_parameterizer);
+      voting = PLCRVoting(_voting);
+  }
+
+  // function getAmountsIDelegatedToOthers() public returns(address[] memory, uint256[] memory) {}
+
+  // function getAmountsDelegatedToMe() public returns(address[] memory, uint256[] memory) {}
 
   function delegate(address to, uint256 amount) public returns (bool){
     require(msg.sender != to, "You cannot delegate to yourself");

@@ -69,6 +69,9 @@ class Management extends Component {
 						/>
 					</Table>
 				</Box>
+				<Box title="Delegation" width="600px">
+					TODO
+				</Box>
 			</center>
 		);
 	}
