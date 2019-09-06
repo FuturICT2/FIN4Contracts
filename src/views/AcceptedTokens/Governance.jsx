@@ -35,6 +35,17 @@ class Governance extends Component {
 				}
 				this.setState({ paramValues: paramValues });
 			});
+
+			getContractData(parameterizerAddress, 'Parameterizer', 'getProposalKeys').then(proposalKeys => {
+				let allPromises = proposalKeys.map(key => {
+					return getContractData(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(data => {
+						// TODO
+					});
+				});
+				Promise.all(allPromises).then(results => {
+					// TODO
+				});
+			});
 		});
 	}
 
