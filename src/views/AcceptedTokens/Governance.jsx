@@ -13,10 +13,15 @@ class Governance extends Component {
 		super(props);
 
 		this.state = {
+			isProposeReparamOpen: false,
 			paramValues: []
 		};
 
+		this.parameterizerAddress = null;
+		this.resetProposeReparamModalValues();
+
 		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
+			this.parameterizerAddress = parameterizerAddress;
 			getContractData(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
 				let paramValues = [];
 				for (var i = 0; i < params.length; i++) {
@@ -26,6 +31,33 @@ class Governance extends Component {
 			});
 		});
 	}
+
+	// ---------- ProposeReparam ----------
+
+	resetProposeReparamModalValues() {
+		this.proposeReparamModalValues = {
+			name: null,
+			proposedValue: null
+		};
+	}
+
+	toggleProposeReparamModal = () => {
+		if (this.state.isProposeReparamOpen) {
+			this.resetProposeReparamModalValues();
+		}
+		this.setState({ isProposeReparamOpen: !this.state.isProposeReparamOpen });
+	};
+
+	submitProposeReparamModal = () => {
+		let currentAccount = window.web3.currentProvider.selectedAddress;
+		let name = this.proposeReparamModalValues.name;
+		let proposedValue = Number(this.proposeReparamModalValues.proposedValue);
+		let self = this;
+
+		this.toggleProposeReparamModal();
+
+		// TODO
+	};
 
 	render() {
 		return (
@@ -40,13 +72,43 @@ class Governance extends Component {
 										parameter: params[index].name,
 										description: params[index].description,
 										value: paramValue,
-										actions: <Button onClick={() => {}}>Edit</Button>
+										actions: (
+											<Button
+												onClick={() => {
+													this.proposeReparamModalValues.name = params[index].name;
+													this.toggleProposeReparamModal();
+												}}>
+												Propose Value
+											</Button>
+										)
 									}}
 								/>
 							);
 						})}
 					</Table>
 				</Box>
+				<Modal
+					isOpen={this.state.isProposeReparamOpen}
+					handleClose={this.toggleProposeReparamModal}
+					title="Propose new value"
+					width="400px">
+					<TextField
+						key="propose-value"
+						type="number"
+						label="Value"
+						onChange={e => (this.proposeReparamModalValues.value = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<Button onClick={this.submitProposeReparamModal} center>
+						Submit
+					</Button>
+					<center>
+						<small style={{ color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
+							token balance and then to submit the proposed reparameterization.
+						</small>
+					</center>
+				</Modal>
 			</center>
 		);
 	}
@@ -118,5 +180,11 @@ const params = [
 		description: 'minimum amount of needed reputation for users to be able to participate in governance'
 	}
 ];
+
+const inputFieldStyle = {
+	// copied from ContractForm
+	width: '100%',
+	marginBottom: '15px'
+};
 
 export default drizzleConnect(Governance);
