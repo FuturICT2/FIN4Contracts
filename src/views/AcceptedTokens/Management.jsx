@@ -6,6 +6,7 @@ import TableRow from '../../components/TableRow';
 import Button from '../../components/Button';
 import { RepTokenAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import { getContractData } from '../../components/Contractor';
+const BN = require('bignumber.js');
 
 class Management extends Component {
 	constructor(props) {
@@ -16,7 +17,15 @@ class Management extends Component {
 			govTokenBalance: '?'
 		};
 
-		// TODO
+		let currentAccount = window.web3.currentProvider.selectedAddress;
+
+		getContractData(RepTokenAddress, 'Fin4Reputation', 'balanceOf', [currentAccount]).then(repTokenBalanceBN => {
+			this.setState({ repTokenBalance: new BN(repTokenBalanceBN).toNumber() });
+		});
+
+		getContractData(GOVTokenAddress, 'GOV', 'balanceOf', [currentAccount]).then(govTokenBalanceBN => {
+			this.setState({ govTokenBalance: new BN(govTokenBalanceBN).toNumber() });
+		});
 	}
 
 	render() {
