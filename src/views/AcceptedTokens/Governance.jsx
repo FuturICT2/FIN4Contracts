@@ -6,6 +6,8 @@ import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
+import { TextField } from '@material-ui/core';
 const BN = require('bignumber.js');
 
 class Governance extends Component {
@@ -14,7 +16,7 @@ class Governance extends Component {
 
 		this.state = {
 			isProposeReparamOpen: false,
-			paramValues: []
+			paramValues: null
 		};
 
 		this.parameterizerAddress = null;
@@ -23,9 +25,9 @@ class Governance extends Component {
 		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			this.parameterizerAddress = parameterizerAddress;
 			getContractData(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
-				let paramValues = [];
+				let paramValues = {};
 				for (var i = 0; i < params.length; i++) {
-					paramValues.push(new BN(paramValuesBN[i]).toNumber());
+					paramValues[params[i].name] = new BN(paramValuesBN[i]).toNumber();
 				}
 				this.setState({ paramValues: paramValues });
 			});
@@ -64,27 +66,28 @@ class Governance extends Component {
 			<center>
 				<Box title="TCR Parameters" width="600px">
 					<Table headers={['Parameter', 'Description', 'Value', 'Actions']}>
-						{this.state.paramValues.map((paramValue, index) => {
-							return (
-								<TableRow
-									key={index}
-									data={{
-										parameter: params[index].name,
-										description: params[index].description,
-										value: paramValue,
-										actions: (
-											<Button
-												onClick={() => {
-													this.proposeReparamModalValues.name = params[index].name;
-													this.toggleProposeReparamModal();
-												}}>
-												Propose Value
-											</Button>
-										)
-									}}
-								/>
-							);
-						})}
+						{this.state.paramValues !== null &&
+							params.map((entry, index) => {
+								return (
+									<TableRow
+										key={index}
+										data={{
+											parameter: entry.name,
+											description: entry.description,
+											value: this.state.paramValues[entry.name],
+											actions: (
+												<Button
+													onClick={() => {
+														this.proposeReparamModalValues.name = params[index].name;
+														this.toggleProposeReparamModal();
+													}}>
+													Propose Value
+												</Button>
+											)
+										}}
+									/>
+								);
+							})}
 					</Table>
 				</Box>
 				<Modal
