@@ -94,6 +94,9 @@ module.exports = async function(deployer) {
 
 	// write Fin4Main and registry address to src/config/DeployedAddresses.js
 	let data =
+		"const RepTokenAddress = '" +
+		Fin4ReputationInstance.address +
+		"';\n" +
 		"const GOVTokenAddress = '" +
 		GOVTokenInstance.address +
 		"';\n" +
@@ -106,7 +109,7 @@ module.exports = async function(deployer) {
 		"const PLCRVotingAddress = '" +
 		PLCRVotingAddress +
 		"';\n" +
-		'export { Fin4MainAddress, RegistryAddress, PLCRVotingAddress, GOVTokenAddress };\n';
+		'export { Fin4MainAddress, RegistryAddress, PLCRVotingAddress, GOVTokenAddress, RepTokenAddress };\n';
 	fs.writeFile(path.join(__dirname, '../src/config/DeployedAddresses.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
