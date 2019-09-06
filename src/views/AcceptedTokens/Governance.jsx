@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { RegistryAddress } from '../../config/DeployedAddresses.js';
-import { getContractData } from '../../components/Contractor';
+import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
+import { getContractData, getContract } from '../../components/Contractor';
 import { drizzleConnect } from 'drizzle-react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
@@ -39,7 +39,7 @@ class Governance extends Component {
 	resetProposeReparamModalValues() {
 		this.proposeReparamModalValues = {
 			name: null,
-			proposedValue: null
+			value: null
 		};
 	}
 
@@ -53,12 +53,40 @@ class Governance extends Component {
 	submitProposeReparamModal = () => {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let name = this.proposeReparamModalValues.name;
-		let proposedValue = Number(this.proposeReparamModalValues.proposedValue);
+		let value = Number(this.proposeReparamModalValues.value);
+		let pMinDeposit = this.state.paramValues['pMinDeposit'];
 		let self = this;
+
+		console.log(name, value, pMinDeposit);
 
 		this.toggleProposeReparamModal();
 
-		// TODO
+		getContract(GOVTokenAddress, 'GOV')
+			.then(function(instance) {
+				return instance.approve(self.parameterizerAddress, pMinDeposit, {
+					from: currentAccount
+				});
+			})
+			.then(function(result) {
+				console.log('GOV.approve Result: ', result);
+				getContract(self.parameterizerAddress, 'Parameterizer')
+					.then(function(instance) {
+						return instance.proposeReparameterization(name, value, {
+							from: currentAccount
+						});
+					})
+					.then(function(result) {
+						console.log('Parameterizer.proposeReparameterization Result: ', result);
+					})
+					.catch(function(err) {
+						console.log('Parameterizer.proposeReparameterization Error: ', err.message);
+						alert(err.message);
+					});
+			})
+			.catch(function(err) {
+				console.log('GOV.approve Error: ', err.message);
+				alert(err.message);
+			});
 	};
 
 	render() {
@@ -107,8 +135,9 @@ class Governance extends Component {
 					</Button>
 					<center>
 						<small style={{ color: 'gray' }}>
-							Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
-							token balance and then to submit the proposed reparameterization.
+							Upon submitting, two transactions have to be signed: to allow the deposit (
+							{this.state.paramValues === null ? '?' : this.state.paramValues['pMinDeposit']}) to be withdrawn from your
+							GOV token balance and then to submit the proposed reparameterization.
 						</small>
 					</center>
 				</Modal>
