@@ -27,7 +27,11 @@ class Governance extends Component {
 			getContractData(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
 				let paramValues = {};
 				for (var i = 0; i < params.length; i++) {
-					paramValues[params[i].name] = new BN(paramValuesBN[i]).toNumber();
+					let entry = {
+						value: new BN(paramValuesBN[i]).toNumber(),
+						status: Param_Action_Status.DEFAULT
+					};
+					paramValues[params[i].name] = entry;
 				}
 				this.setState({ paramValues: paramValues });
 			});
@@ -54,10 +58,8 @@ class Governance extends Component {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let name = this.proposeReparamModalValues.name;
 		let value = Number(this.proposeReparamModalValues.value);
-		let pMinDeposit = this.state.paramValues['pMinDeposit'];
+		let pMinDeposit = this.state.paramValues['pMinDeposit'].value;
 		let self = this;
-
-		console.log(name, value, pMinDeposit);
 
 		this.toggleProposeReparamModal();
 
@@ -92,8 +94,8 @@ class Governance extends Component {
 	render() {
 		return (
 			<center>
-				<Box title="TCR Parameters" width="600px">
-					<Table headers={['Parameter', 'Description', 'Value', 'Actions']}>
+				<Box title="TCR Parameters" width="800px">
+					<Table headers={['Parameter', 'Description', 'Value', 'Status', 'Actions']}>
 						{this.state.paramValues !== null &&
 							params.map((entry, index) => {
 								return (
@@ -102,7 +104,8 @@ class Governance extends Component {
 										data={{
 											parameter: entry.name,
 											description: entry.description,
-											value: this.state.paramValues[entry.name],
+											value: this.state.paramValues[entry.name].value,
+											status: this.state.paramValues[entry.name].status,
 											actions: (
 												<Button
 													onClick={() => {
@@ -136,8 +139,8 @@ class Governance extends Component {
 					<center>
 						<small style={{ color: 'gray' }}>
 							Upon submitting, two transactions have to be signed: to allow the deposit (
-							{this.state.paramValues === null ? '?' : this.state.paramValues['pMinDeposit']}) to be withdrawn from your
-							GOV token balance and then to submit the proposed reparameterization.
+							{this.state.paramValues === null ? '?' : this.state.paramValues['pMinDeposit'].value}) to be withdrawn
+							from your GOV token balance and then to submit the proposed reparameterization.
 						</small>
 					</center>
 				</Modal>
@@ -145,6 +148,14 @@ class Governance extends Component {
 		);
 	}
 }
+
+const Param_Action_Status = {
+	DEFAULT: '-',
+	PROPOSEDREPARAM: 'Proposed reparameterization',
+	VOTE: 'Vote',
+	REVEAL: 'Reveal',
+	UPDATE: 'Update'
+};
 
 const params = [
 	{
