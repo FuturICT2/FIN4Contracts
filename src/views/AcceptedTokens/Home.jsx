@@ -233,6 +233,7 @@ class Home extends Component {
 
 	resetVoteModalValues() {
 		this.voteModalValues = {
+			whitelisted: null,
 			pollID: null, // number
 			vote: null, // number
 			salt: null, // number
@@ -421,6 +422,7 @@ class Home extends Component {
 													switch (this.state.listings[key].actionStatus) {
 														case Action_Status.VOTE:
 															this.voteModalValues.pollID = this.state.listings[key].challengeID;
+															this.voteModalValues.whitelisted = this.state.listings[key].whitelisted;
 															this.toggleVoteModal();
 															break;
 														case Action_Status.REVEAL:
@@ -510,6 +512,11 @@ class Home extends Component {
 						onChange={e => (this.voteModalValues.vote = e.target.value)}
 						style={inputFieldStyle}
 					/>
+					<small style={{ color: 'gray' }}>
+						{this.toggleVoteModal.whitelisted
+							? 'Challenge: 1 = keep token on the list, 0 = remove it'
+							: 'Review: 1 = put token on list, 0 = reject application'}
+					</small>
 					<TextField
 						key="set-salt"
 						type="number"
