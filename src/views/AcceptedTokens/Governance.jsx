@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { RegistryAddress } from '../../config/DeployedAddresses.js';
 import { getContractData } from '../../components/Contractor';
 import { drizzleConnect } from 'drizzle-react';
+import Box from '../../components/Box';
+import Table from '../../components/Table';
+import TableRow from '../../components/TableRow';
+import Button from '../../components/Button';
 const BN = require('bignumber.js');
 
 const paramNames = [
@@ -28,22 +32,41 @@ class Governance extends Component {
 		super(props);
 
 		this.state = {
-			parameters: {}
+			paramValues: []
 		};
 
 		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
-			getContractData(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValues => {
-				let params = {};
+			getContractData(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
+				let paramValues = [];
 				for (var i = 0; i < paramNames.length; i++) {
-					params[paramNames[i]] = new BN(paramValues[i]).toNumber();
+					paramValues.push(new BN(paramValuesBN[i]).toNumber());
 				}
-				this.setState({ parameters: params });
+				this.setState({ paramValues: paramValues });
 			});
 		});
 	}
 
 	render() {
-		return <p> Governance component</p>;
+		return (
+			<center>
+				<Box title="TCR Parameters" width="800px">
+					<Table headers={['Parameter', 'Value', 'Actions']}>
+						{this.state.paramValues.map((paramValue, index) => {
+							return (
+								<TableRow
+									key={index}
+									data={{
+										parameter: paramNames[index],
+										value: paramValue,
+										actions: <Button onClick={() => {}}>Action</Button>
+									}}
+								/>
+							);
+						})}
+					</Table>
+				</Box>
+			</center>
+		);
 	}
 }
 
