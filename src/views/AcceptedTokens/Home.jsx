@@ -76,7 +76,7 @@ class Home extends Component {
 				}
 
 				getContractData(RegistryAddress, 'Registry', 'getChallenges').then(
-					({ 0: challengeIDs, 1: rewardPools, 2: challengers, 3: isReviews, 4: stakes, 5: totalTokenss }) => {
+					({ 0: challengeIDs, 1: rewardPools, 2: challengers, 3: isReviews, 4: isResolveds, 5: totalTokenss }) => {
 						let challengesObj = {};
 						for (var i = 0; i < challengeIDs.length; i++) {
 							let challengeID = new BN(challengeIDs[i]).toNumber();
@@ -85,7 +85,7 @@ class Home extends Component {
 								rewardPool: new BN(rewardPools[i]).toString(),
 								challenger: challengers[i],
 								isReview: isReviews[i],
-								stake: new BN(stakes[i]).toString(),
+								isResolved: isResolveds[i],
 								totalTokens: new BN(totalTokenss[i]).toString()
 							};
 						}
