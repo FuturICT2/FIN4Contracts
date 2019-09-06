@@ -30,6 +30,11 @@ module.exports = done => {
 				};
 				console.log(pollObj);
 			});
+
+		let registryAddress = config.RegistryAddress;
+		registry = await Registry.at(registryAddress);
+		resolved = await registry.challengeExists('0x0000000000000000000000001cebb80345ec6e46dd1eb52aefe6a944f5570873');
+		console.log(resolved);
 		return true;
 	}
 

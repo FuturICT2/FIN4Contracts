@@ -17,7 +17,7 @@ module.exports = done => {
 
 		await registry
 			.getChallenges()
-			.then(({ 0: challengeID, 1: rewardPool, 2: challenger, 3: isReview, 4: stake, 5: totalTokens }) => {
+			.then(({ 0: challengeID, 1: rewardPool, 2: challenger, 3: isReview, 4: resolved, 5: totalTokens }) => {
 				let challengesObj = {};
 				console.log('bla');
 				for (var i = 0; i < challengeID.length; i++) {
@@ -26,7 +26,7 @@ module.exports = done => {
 						rewardPool: new BN(rewardPool[i]).toString(),
 						challenger: challenger[i],
 						isReview: isReview[i],
-						stake: new BN(stake[i]).toString(),
+						resolved: resolved[i],
 						totalTokens: new BN(totalTokens[i]).toString()
 					};
 					//console.log("blabla");
