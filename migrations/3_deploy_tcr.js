@@ -55,8 +55,8 @@ module.exports = async function(deployer) {
 
 	// dev: give all tokenHolders 10000 reputation tokens
 	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 10000)));
-	// get GOV token from rep tokens
-	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.getGOVFromReputation(tokenHolder)));
+	// get GOV token from rep tokens, happens via GUI now
+	// await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.getGOVFromReputation(tokenHolder)));
 
 	const registryReceipt = await registryFactoryInstance.newRegistryBYOToken(
 		GOVTokenInstance.address,
@@ -84,7 +84,7 @@ module.exports = async function(deployer) {
 	const { token, plcr, parameterizer, registry } = registryReceipt.logs[0].args;
 	console.log(registryReceipt.logs);
 
-	await GOVTokenInstance.approve(registry, 1000);
+	// await GOVTokenInstance.approve(registry, 1000); // happens via GUI now
 	await GOVTokenInstance.init(registry, parameterizer, plcr);
 
 	const RegistryInstance = await Registry.at(registry);
