@@ -32,7 +32,9 @@ class Governance extends Component {
 				for (var i = 0; i < params.length; i++) {
 					let entry = {
 						value: new BN(paramValuesBN[i]).toNumber(),
-						status: Param_Action_Status.DEFAULT
+						statusEnum: Param_Action_Status.DEFAULT,
+						status: '-',
+						dueDate: '-'
 					};
 					paramValues[params[i].name] = entry;
 				}
@@ -44,12 +46,29 @@ class Governance extends Component {
 					let allPromises = proposalKeys.map(key => {
 						return getContractData(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(
 							({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
-								// TODO
+								let param = this.state.paramValues[name];
+
+								let appExpiry = new BN(appExpiryBN).toNumber() * 1000;
+								param.dueDate = new Date(appExpiry).toLocaleString('de-CH-1996');
+
+								let nowTimestamp = Date.now();
+								let inAppTime = appExpiry - nowTimestamp > 0;
+
+								let challengeID = new BN(challengeIDBN).toNumber();
+								// let deposit = new BN(depositBN).toNumber();
+								// let processBy = new BN(processByBN).toNumber();
+								let value = new BN(valueBN).toNumber();
+
+								if (inAppTime) {
+									param.statusEnum = Param_Action_Status.PROPOSEDREPARAM;
+									param.status = 'Proposed value: ' + value;
+								}
 							}
 						);
 					});
 					Promise.all(allPromises).then(results => {
-						// TODO
+						// a more elegant way to trigger a state-update?
+						this.setState({ paramValues: this.state.paramValues });
 					});
 				});
 			});
@@ -112,8 +131,8 @@ class Governance extends Component {
 	render() {
 		return (
 			<center>
-				<Box title="TCR Parameters" width="800px">
-					<Table headers={['Parameter', 'Description', 'Value', 'Status', 'Actions']}>
+				<Box title="TCR Parameters" width="900px">
+					<Table headers={['Parameter', 'Description', 'Value', 'Actions', 'Status', 'Due Date']}>
 						{this.state.paramValues !== null &&
 							params.map((entry, index) => {
 								return (
@@ -123,16 +142,24 @@ class Governance extends Component {
 											parameter: entry.name,
 											description: entry.description,
 											value: this.state.paramValues[entry.name].value,
-											status: this.state.paramValues[entry.name].status,
 											actions: (
 												<Button
 													onClick={() => {
-														this.proposeReparamModalValues.name = params[index].name;
-														this.toggleProposeReparamModal();
+														switch (this.state.paramValues[entry.name].statusEnum) {
+															case Param_Action_Status.DEFAULT:
+																this.proposeReparamModalValues.name = params[index].name;
+																this.toggleProposeReparamModal();
+																break;
+															case Param_Action_Status.PROPOSEDREPARAM:
+																// TODO
+																break;
+														}
 													}}>
-													Propose Value
+													{this.state.paramValues[entry.name].statusEnum}
 												</Button>
-											)
+											),
+											status: this.state.paramValues[entry.name].status,
+											dueDate: this.state.paramValues[entry.name].dueDate
 										}}
 									/>
 								);
@@ -168,8 +195,8 @@ class Governance extends Component {
 }
 
 const Param_Action_Status = {
-	DEFAULT: '-',
-	PROPOSEDREPARAM: 'Proposed reparameterization',
+	DEFAULT: 'Propose',
+	PROPOSEDREPARAM: 'Challenge',
 	VOTE: 'Vote',
 	REVEAL: 'Reveal',
 	UPDATE: 'Update'
