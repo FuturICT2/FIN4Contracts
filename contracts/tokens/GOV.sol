@@ -12,9 +12,10 @@ import "./../tcr/PLCR/PLCRVoting.sol";
 contract GOV is ERC20Plus {
 
   // The tokens that you delegated to someone else
-  mapping(address => mapping(address => uint256)) public delegatorTokens;
+  mapping(address => uint256[]) private delegatorTokensIndexes;
+  mapping(address => mapping(address => uint256)) private delegatorTokens;
   // The tokens that have been delagated to you
-  mapping(address => uint256) public delegateeTokens;
+  mapping(address => uint256) private delegateeTokens;
 
   PLCRVoting public voting;
   Parameterizer public parameterizer;
@@ -39,9 +40,17 @@ contract GOV is ERC20Plus {
       voting = PLCRVoting(_voting);
   }
 
-  // function getAmountsIDelegatedToOthers() public returns(address[] memory, uint256[] memory) {}
+  function getAmountsIDelegatedToOthers() public returns(address[] memory, uint256[] memory) {
+    addresses = [];
+    tokens = [];
+    for (uint i = 0; i<listingsIndexes.length-1; i++){
 
-  // function getAmountsDelegatedToMe() public returns(address[] memory, uint256[] memory) {}
+    return delegatorTokens[msg.sender];
+  }
+
+  function getAmountsDelegatedToMe() public returns(address[] memory, uint256[] memory) {
+    return (delegateeTokens[msg.sender];
+  }
 
   function delegate(address to, uint256 amount) public returns (bool){
     require(msg.sender != to, "You cannot delegate to yourself");
