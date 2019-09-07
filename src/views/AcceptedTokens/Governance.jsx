@@ -24,6 +24,9 @@ class Governance extends Component {
 
 		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			this.parameterizerAddress = parameterizerAddress;
+
+			// get all parameters
+
 			getContractData(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
 				let paramValues = {};
 				for (var i = 0; i < params.length; i++) {
@@ -34,16 +37,20 @@ class Governance extends Component {
 					paramValues[params[i].name] = entry;
 				}
 				this.setState({ paramValues: paramValues });
-			});
 
-			getContractData(parameterizerAddress, 'Parameterizer', 'getProposalKeys').then(proposalKeys => {
-				let allPromises = proposalKeys.map(key => {
-					return getContractData(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(data => {
+				// get proposals
+
+				getContractData(parameterizerAddress, 'Parameterizer', 'getProposalKeys').then(proposalKeys => {
+					let allPromises = proposalKeys.map(key => {
+						return getContractData(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(
+							({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
+								// TODO
+							}
+						);
+					});
+					Promise.all(allPromises).then(results => {
 						// TODO
 					});
-				});
-				Promise.all(allPromises).then(results => {
-					// TODO
 				});
 			});
 		});
