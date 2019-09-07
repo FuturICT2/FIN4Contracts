@@ -55,6 +55,7 @@ contract Parameterizer {
 
     // maps pollIDs to intended data change if poll passes
     mapping(bytes32 => ParamProposal) public proposals;
+    bytes32[] public proposalKeys;
 
     // Global Variables
     GOV public token;
@@ -164,8 +165,14 @@ contract Parameterizer {
 
         require(GOV(token).transferFrom(msg.sender, address(this), deposit)); // escrow tokens (deposit amt)
 
+        proposalKeys.push(propID); // TODO remove from this array when done
+
         emit _ReparameterizationProposal(_name, _value, propID, deposit, proposals[propID].appExpiry, msg.sender);
         return propID;
+    }
+
+    function getProposalKeys() public returns (bytes32[] memory) {
+        return proposalKeys;
     }
 
     /**
