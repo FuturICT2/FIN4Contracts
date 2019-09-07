@@ -12,7 +12,7 @@ import "./../tcr/PLCR/PLCRVoting.sol";
 contract GOV is ERC20Plus {
 
   // The tokens that you delegated to someone else
-  mapping(address => uint256[]) private delegatorTokensIndexes;
+  // mapping(address => address[]) private delegatorTokensIndexes;
   mapping(address => mapping(address => uint256)) private delegatorTokens;
   // The tokens that have been delagated to you
   mapping(address => uint256) private delegateeTokens;
@@ -40,22 +40,25 @@ contract GOV is ERC20Plus {
       voting = PLCRVoting(_voting);
   }
 
+  /* TODO: 
   function getAmountsIDelegatedToOthers() public returns(address[] memory, uint256[] memory) {
-    addresses = [];
-    tokens = [];
-    for (uint i = 0; i<listingsIndexes.length-1; i++){
-
-    return delegatorTokens[msg.sender];
+    uint256[] memory tokens = new uint256[](delegatorTokensIndexes[msg.sender].length);
+    for (uint i = 0; i<delegatorTokensIndexes[msg.sender].length; i++){
+        tokens[i] = delegatorTokens[msg.sender][delegatorTokensIndexes[msg.sender][i]];
+    }
+    return (delegatorTokensIndexes[msg.sender], tokens);
   }
+  */
 
-  function getAmountsDelegatedToMe() public returns(address[] memory, uint256[] memory) {
-    return (delegateeTokens[msg.sender];
+  function getAmountsDelegatedToMe() public returns(uint256) {
+    return (delegateeTokens[msg.sender]);
   }
 
   function delegate(address to, uint256 amount) public returns (bool){
     require(msg.sender != to, "You cannot delegate to yourself");
     require(balanceOf(msg.sender) >= amount, "You do not have enough tokens for this transaction");
 
+    //delegatorTokensIndexes.push(to);
     delegatorTokens[msg.sender][to] += amount;
     delegateeTokens[to] += amount;
 
@@ -66,6 +69,8 @@ contract GOV is ERC20Plus {
   function refundDelegation(address to, uint256 amount) public returns (bool){
     require(balanceOf(to) >= amount, "The balance of reciver is too low");
     require(delegatorTokens[msg.sender][to] >= amount, "You do not have that much delegation for this account");
+
+    //TODO: remove from 
     delegatorTokens[msg.sender][to] -= amount;
     delegateeTokens[to] -= amount;
 
