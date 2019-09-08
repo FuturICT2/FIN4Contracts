@@ -16,11 +16,13 @@ class Governance extends Component {
 
 		this.state = {
 			isProposeReparamOpen: false,
+			isChallengeReparamOpen: false,
 			paramValues: null
 		};
 
 		this.parameterizerAddress = null;
 		this.resetProposeReparamModalValues();
+		this.resetChallengeReparamModalValues();
 
 		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			this.parameterizerAddress = parameterizerAddress;
@@ -47,22 +49,33 @@ class Governance extends Component {
 						return getContractData(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(
 							({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
 								let param = this.state.paramValues[name];
+								param.propID = key;
+								param.propDeposit = new BN(depositBN).toNumber();
 
 								let appExpiry = new BN(appExpiryBN).toNumber() * 1000;
 								param.dueDate = new Date(appExpiry).toLocaleString('de-CH-1996');
 
 								let nowTimestamp = Date.now();
 								let inAppTime = appExpiry - nowTimestamp > 0;
-
-								let challengeID = new BN(challengeIDBN).toNumber();
-								// let deposit = new BN(depositBN).toNumber();
-								// let processBy = new BN(processByBN).toNumber();
 								let value = new BN(valueBN).toNumber();
 
 								if (inAppTime) {
 									param.statusEnum = Param_Action_Status.PROPOSEDREPARAM;
 									param.status = 'Proposed value: ' + value;
+									return;
 								}
+
+								let challengeID = new BN(challengeIDBN).toNumber();
+
+								if (challengeID === 0) {
+									param.statusEnum = Param_Action_Status.DEFAULT;
+									param.status = '-';
+									param.dueDate = '-';
+									return;
+								}
+
+								// return getContractData(parameterizerAddress, 'Parameterizer', 'challenges', [challengeID]).then(
+								// data => {});
 							}
 						);
 					});
@@ -128,6 +141,60 @@ class Governance extends Component {
 			});
 	};
 
+	// ---------- ChallengeReparam ----------
+
+	resetChallengeReparamModalValues() {
+		this.challengeReparamModalValues = {
+			propID: null,
+			propDeposit: null
+		};
+	}
+
+	toggleChallengeReparamModal = () => {
+		if (this.state.isChallengeReparamOpen) {
+			this.resetChallengeReparamModalValues();
+		}
+		this.setState({ isChallengeReparamOpen: !this.state.isChallengeReparamOpen });
+	};
+
+	submitChallengeReparamModal = () => {
+		let currentAccount = window.web3.currentProvider.selectedAddress;
+		let propID = this.challengeReparamModalValues.propID;
+		let propDeposit = this.challengeReparamModalValues.propDeposit;
+		let self = this;
+
+		this.toggleChallengeReparamModal();
+
+		getContract(GOVTokenAddress, 'GOV')
+			.then(function(instance) {
+				return instance.approve(self.parameterizerAddress, propDeposit, {
+					from: currentAccount
+				});
+			})
+			.then(function(result) {
+				console.log('GOV.approve Result: ', result);
+				getContract(self.parameterizerAddress, 'Parameterizer')
+					.then(function(instance) {
+						return instance.challengeReparameterization(propID, {
+							from: currentAccount
+						});
+					})
+					.then(function(result) {
+						console.log('Parameterizer.challengeReparameterization Result: ', result);
+					})
+					.catch(function(err) {
+						console.log('Parameterizer.challengeReparameterization Error: ', err.message);
+						alert(err.message);
+					});
+			})
+			.catch(function(err) {
+				console.log('GOV.approve Error: ', err.message);
+				alert(err.message);
+			});
+	};
+
+	// ----------
+
 	render() {
 		return (
 			<center>
@@ -151,7 +218,11 @@ class Governance extends Component {
 																this.toggleProposeReparamModal();
 																break;
 															case Param_Action_Status.PROPOSEDREPARAM:
-																// TODO
+																this.challengeReparamModalValues.propID = this.state.paramValues[entry.name].propID;
+																this.challengeReparamModalValues.propDeposit = this.state.paramValues[
+																	entry.name
+																].propDeposit;
+																this.toggleChallengeReparamModal();
 																break;
 														}
 													}}>
@@ -186,6 +257,22 @@ class Governance extends Component {
 							Upon submitting, two transactions have to be signed: to allow the deposit (
 							{this.state.paramValues === null ? '?' : this.state.paramValues['pMinDeposit'].value}) to be withdrawn
 							from your GOV token balance and then to submit the proposed reparameterization.
+						</small>
+					</center>
+				</Modal>
+				<Modal
+					isOpen={this.state.isChallengeReparamOpen}
+					handleClose={this.toggleChallengeReparamModal}
+					title="Challenge proposed value"
+					width="400px">
+					<Button onClick={this.submitChallengeReparamModal} center>
+						Submit
+					</Button>
+					<center>
+						<small style={{ color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow the proposal-deposit (
+							{this.challengeReparamModalValues.propDeposit}) to be withdrawn from your GOV token balance and then to
+							challenge the proposed reparameterization.
 						</small>
 					</center>
 				</Modal>
