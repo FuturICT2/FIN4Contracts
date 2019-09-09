@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
-import { getContractData, getContract } from '../../components/Contractor';
+import { getContractData, getContract, getPollStatus, PollStatus } from '../../components/Contractor';
 import { drizzleConnect } from 'drizzle-react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
@@ -77,8 +77,40 @@ class Governance extends Component {
 									return;
 								}
 
-								// return getContractData(parameterizerAddress, 'Parameterizer', 'challenges', [challengeID]).then(
-								// data => {});
+								return getPollStatus(challengeID).then(pollStatus => {
+									param.dueDate = pollStatus.dueDate;
+									switch (pollStatus.inPeriod) {
+										case PollStatus.IN_COMMIT_PERIOD:
+											param.statusEnum = Param_Action_Status.VOTE;
+											param.status = Param_Action_Status.VOTE;
+											return;
+										case PollStatus.IN_REVEAL_PERIOD:
+											param.statusEnum = Param_Action_Status.REVEAL;
+											param.status = Param_Action_Status.REVEAL;
+											return;
+										case PollStatus.PAST_REVEAL_PERIOD:
+											return getContractData(parameterizerAddress, 'Parameterizer', 'challenges', [challengeID]).then(
+												({
+													0: rewardPoolBN,
+													1: challenger,
+													2: resolved,
+													3: stakeBN,
+													4: winningTokensBN,
+													5: tokenClaimsMapping
+												}) => {
+													if (resolved) {
+														param.statusEnum = Param_Action_Status.DEFAULT;
+														param.status = '-';
+														param.dueDate = '-';
+														return;
+													}
+													param.statusEnum = Param_Action_Status.UPDATE;
+													param.status = 'Update pending';
+													param.dueDate = '-';
+												}
+											);
+									}
+								});
 							}
 						);
 					});
