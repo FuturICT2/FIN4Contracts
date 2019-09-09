@@ -194,6 +194,24 @@ class Governance extends Component {
 
 	// ----------
 
+	// same as Registry.updateStatus()
+	processProposal(propID) {
+		let currentAccount = window.web3.currentProvider.selectedAddress;
+		getContract(this.parameterizerAddress, 'Parameterizer')
+			.then(function(instance) {
+				return instance.processProposal(propID, {
+					from: currentAccount
+				});
+			})
+			.then(function(result) {
+				console.log('Parameterizer.processProposal Result: ', result);
+			})
+			.catch(function(err) {
+				console.log('Parameterizer.processProposal Error: ', err.message);
+				alert(err.message);
+			});
+	}
+
 	render() {
 		return (
 			<center>
@@ -222,6 +240,9 @@ class Governance extends Component {
 																	entry.name
 																].propDeposit;
 																this.toggleChallengeReparamModal();
+																break;
+															case Param_Action_Status.UPDATE:
+																this.processProposal(this.state.paramValues[entry.name].propID);
 																break;
 														}
 													}}>
