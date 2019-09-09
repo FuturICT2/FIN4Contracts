@@ -513,7 +513,7 @@ class Home extends Component {
 						style={inputFieldStyle}
 					/>
 					<small style={{ color: 'gray' }}>
-						{this.toggleVoteModal.whitelisted
+						{this.voteModalValues.whitelisted
 							? 'Challenge: 1 = keep token on the list, 0 = remove it'
 							: 'Review: 1 = put token on list, 0 = reject application'}
 					</small>
