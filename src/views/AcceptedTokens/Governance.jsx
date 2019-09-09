@@ -59,15 +59,14 @@ class Governance extends Component {
 								let inAppTime = appExpiry - nowTimestamp > 0;
 								let value = new BN(valueBN).toNumber();
 
-								if (inAppTime) {
-									param.statusEnum = Param_Action_Status.PROPOSEDREPARAM;
-									param.status = 'Proposed value: ' + value;
-									return;
-								}
-
 								let challengeID = new BN(challengeIDBN).toNumber();
 
 								if (challengeID === 0) {
+									if (inAppTime) {
+										param.statusEnum = Param_Action_Status.PROPOSEDREPARAM;
+										param.status = 'Proposed value: ' + value;
+										return;
+									}
 									param.statusEnum = Param_Action_Status.DEFAULT;
 									param.status = '-';
 									param.dueDate = '-';
