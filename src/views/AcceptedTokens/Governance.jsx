@@ -48,6 +48,10 @@ class Governance extends Component {
 					let allPromises = proposalKeys.map(key => {
 						return getContractData(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(
 							({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
+								if (!this.state.paramValues[name]) {
+									// is this correct? TODO
+									return;
+								}
 								let param = this.state.paramValues[name];
 								param.propID = key;
 								param.propDeposit = new BN(depositBN).toNumber();
