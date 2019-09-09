@@ -1,4 +1,5 @@
-import { Fin4MainAddress } from '../config/DeployedAddresses.js';
+import { Fin4MainAddress, PLCRVotingAddress } from '../config/DeployedAddresses.js';
+const BN = require('bignumber.js');
 
 const getContract = (contractAddress, contractName) => {
 	const contract = require('truffle-contract');
@@ -35,4 +36,40 @@ const getAllActionTypes = () => {
 		.then(data => Promise.all(data));
 };
 
-export { getContractData, getContract, getAllActionTypes };
+const getPollStatus = pollID => {
+	// pollID is also called challengeID in Registry.sol
+	return getContractData(PLCRVotingAddress, 'PLCRVoting', 'pollMap', [pollID]).then(
+		({ 0: commitEndDateBN, 1: revealEndDateBN, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
+			let commitEndDate = new BN(commitEndDateBN).toNumber() * 1000;
+			let revealEndDate = new BN(revealEndDateBN).toNumber() * 1000;
+			let nowTimestamp = Date.now();
+
+			if (commitEndDate - nowTimestamp > 0) {
+				return {
+					inPeriod: PollStatus.IN_COMMIT_PERIOD,
+					dueDate: new Date(commitEndDate).toLocaleString('de-CH-1996') // choose locale automatically?
+				};
+			}
+
+			if (revealEndDate - nowTimestamp > 0) {
+				return {
+					inPeriod: PollStatus.IN_REVEAL_PERIOD,
+					dueDate: new Date(revealEndDate).toLocaleString('de-CH-1996')
+				};
+			}
+
+			return {
+				inPeriod: PollStatus.PAST_REVEAL_PERIOD,
+				dueDate: ''
+			};
+		}
+	);
+};
+
+const PollStatus = {
+	IN_COMMIT_PERIOD: 'Commit Vote',
+	IN_REVEAL_PERIOD: 'Reveal',
+	PAST_REVEAL_PERIOD: '-'
+};
+
+export { getContractData, getContract, getAllActionTypes, getPollStatus, PollStatus };
