@@ -3,7 +3,13 @@ import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { RegistryAddress, PLCRVotingAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
-import { getContractData, getAllActionTypes, getContract } from '../../components/Contractor';
+import {
+	getContractData,
+	getAllActionTypes,
+	getContract,
+	getPollStatus,
+	PollStatus
+} from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';
@@ -70,8 +76,7 @@ class Home extends Component {
 						name: '',
 						status: '',
 						actionStatus: Action_Status.UNDEFINED,
-						commitEndDate: '',
-						revealEndDate: ''
+						dueDate: ''
 					};
 				}
 
@@ -106,37 +111,27 @@ class Home extends Component {
 								return;
 							}
 
-							return getContractData(PLCRVotingAddress, 'PLCRVoting', 'pollMap', [challengeID]).then(
-								({ 0: commitEndDateBN, 1: revealEndDateBN, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
-									let commitEndDate = new BN(commitEndDateBN).toNumber() * 1000;
-									let revealEndDate = new BN(revealEndDateBN).toNumber() * 1000;
+							let review_challenge = challengesObj[challengeID].isReview ? 'Review' : 'Challenge';
 
-									listing.commitEndDate = new Date(commitEndDate).toLocaleString('de-CH-1996');
-									listing.revealEndDate = new Date(revealEndDate).toLocaleString('de-CH-1996');
-									let nowTimestamp = Date.now();
-									let inCommitPeriod = commitEndDate - nowTimestamp > 0;
-									let inRevealPeriod = !inCommitPeriod && revealEndDate - nowTimestamp > 0;
+							return getPollStatus(challengeID).then(pollStatus => {
+								listing.dueDate = pollStatus.dueDate;
 
-									let review_challenge = challengesObj[challengeID].isReview ? 'Review' : 'Challenge';
-
-									if (inCommitPeriod) {
+								switch (pollStatus.inPeriod) {
+									case PollStatus.IN_COMMIT_PERIOD:
 										listing.actionStatus = Action_Status.VOTE;
 										listing.status = review_challenge + ': commit period';
 										return;
-									}
-
-									if (inRevealPeriod) {
-										// no longer inCommitPeriod
+									case PollStatus.IN_REVEAL_PERIOD:
 										listing.actionStatus = Action_Status.REVEAL;
 										listing.status = review_challenge + ': reveal period';
 										return;
-									}
-
-									listing.actionStatus = Action_Status.UPDATE;
-									listing.status = review_challenge;
+									case PollStatus.PAST_REVEAL_PERIOD:
+										listing.actionStatus = Action_Status.UPDATE;
+										listing.status = review_challenge;
+										break;
 								}
-							);
-						}); // Promise.all(allPollPromises).then(results => {});
+							});
+						});
 					}
 				);
 
@@ -389,19 +384,6 @@ class Home extends Component {
 			});
 	}
 
-	determineDueDateEntry(listing) {
-		switch (listing.actionStatus) {
-			case Action_Status.VOTE:
-				return listing.commitEndDate;
-			case Action_Status.REVEAL:
-				return listing.revealEndDate;
-			case Action_Status.UPDATE:
-			case Action_Status.CHALLENGE:
-			case Action_Status.REJECTED:
-				return '-';
-		}
-	}
-
 	render() {
 		return (
 			<center>
@@ -415,7 +397,7 @@ class Home extends Component {
 									data={{
 										name: this.state.listings[key].name,
 										status: this.state.listings[key].status,
-										dueDate: this.determineDueDateEntry(this.state.listings[key]),
+										dueDate: this.state.listings[key].dueDate,
 										actions: this.state.listings[key].actionStatus !== Action_Status.REJECTED && (
 											<Button
 												onClick={() => {
