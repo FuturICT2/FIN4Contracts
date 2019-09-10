@@ -20,9 +20,9 @@ class Governance extends Component {
 			paramValues: null
 		};
 
+		this.selectedParam = null;
 		this.parameterizerAddress = null;
 		this.resetProposeReparamModalValues();
-		this.resetChallengeReparamModalValues();
 
 		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			this.parameterizerAddress = parameterizerAddress;
@@ -33,6 +33,7 @@ class Governance extends Component {
 				let paramValues = {};
 				for (var i = 0; i < params.length; i++) {
 					let entry = {
+						name: params[i].name,
 						value: new BN(paramValuesBN[i]).toNumber(),
 						statusEnum: Param_Action_Status.DEFAULT,
 						status: '-',
@@ -64,6 +65,7 @@ class Governance extends Component {
 								let value = new BN(valueBN).toNumber();
 
 								let challengeID = new BN(challengeIDBN).toNumber();
+								param.challengeID = challengeID;
 
 								if (challengeID === 0) {
 									if (inAppTime) {
@@ -127,7 +129,6 @@ class Governance extends Component {
 
 	resetProposeReparamModalValues() {
 		this.proposeReparamModalValues = {
-			name: null,
 			value: null
 		};
 	}
@@ -141,22 +142,22 @@ class Governance extends Component {
 
 	submitProposeReparamModal = () => {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
-		let name = this.proposeReparamModalValues.name;
+		let name = this.selectedParam.name;
 		let value = Number(this.proposeReparamModalValues.value);
 		let pMinDeposit = this.state.paramValues['pMinDeposit'].value;
-		let self = this;
+		let parameterizerAddr = this.parameterizerAddress;
 
 		this.toggleProposeReparamModal();
 
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
-				return instance.approve(self.parameterizerAddress, pMinDeposit, {
+				return instance.approve(parameterizerAddr, pMinDeposit, {
 					from: currentAccount
 				});
 			})
 			.then(function(result) {
 				console.log('GOV.approve Result: ', result);
-				getContract(self.parameterizerAddress, 'Parameterizer')
+				getContract(parameterizerAddr, 'Parameterizer')
 					.then(function(instance) {
 						return instance.proposeReparameterization(name, value, {
 							from: currentAccount
@@ -178,37 +179,27 @@ class Governance extends Component {
 
 	// ---------- ChallengeReparam ----------
 
-	resetChallengeReparamModalValues() {
-		this.challengeReparamModalValues = {
-			propID: null,
-			propDeposit: null
-		};
-	}
-
 	toggleChallengeReparamModal = () => {
-		if (this.state.isChallengeReparamOpen) {
-			this.resetChallengeReparamModalValues();
-		}
 		this.setState({ isChallengeReparamOpen: !this.state.isChallengeReparamOpen });
 	};
 
 	submitChallengeReparamModal = () => {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
-		let propID = this.challengeReparamModalValues.propID;
-		let propDeposit = this.challengeReparamModalValues.propDeposit;
-		let self = this;
+		let propID = this.selectedParam.propID;
+		let propDeposit = this.selectedParam.propDeposit;
+		let parameterizerAddr = this.parameterizerAddress;
 
 		this.toggleChallengeReparamModal();
 
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
-				return instance.approve(self.parameterizerAddress, propDeposit, {
+				return instance.approve(parameterizerAddr, propDeposit, {
 					from: currentAccount
 				});
 			})
 			.then(function(result) {
 				console.log('GOV.approve Result: ', result);
-				getContract(self.parameterizerAddress, 'Parameterizer')
+				getContract(parameterizerAddr, 'Parameterizer')
 					.then(function(instance) {
 						return instance.challengeReparameterization(propID, {
 							from: currentAccount
@@ -231,8 +222,9 @@ class Governance extends Component {
 	// ----------
 
 	// same as Registry.updateStatus()
-	processProposal(propID) {
+	processProposal() {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
+		let propID = this.selectedParam.propID;
 		getContract(this.parameterizerAddress, 'Parameterizer')
 			.then(function(instance) {
 				return instance.processProposal(propID, {
@@ -265,20 +257,20 @@ class Governance extends Component {
 											actions: (
 												<Button
 													onClick={() => {
+														this.selectedParam = this.state.paramValues[entry.name];
 														switch (this.state.paramValues[entry.name].statusEnum) {
 															case Param_Action_Status.DEFAULT:
-																this.proposeReparamModalValues.name = params[index].name;
 																this.toggleProposeReparamModal();
 																break;
 															case Param_Action_Status.PROPOSEDREPARAM:
-																this.challengeReparamModalValues.propID = this.state.paramValues[entry.name].propID;
-																this.challengeReparamModalValues.propDeposit = this.state.paramValues[
-																	entry.name
-																].propDeposit;
 																this.toggleChallengeReparamModal();
 																break;
+															case Param_Action_Status.VOTE:
+																break;
+															case Param_Action_Status.REVEAL:
+																break;
 															case Param_Action_Status.UPDATE:
-																this.processProposal(this.state.paramValues[entry.name].propID);
+																this.processProposal();
 																break;
 														}
 													}}>
@@ -327,8 +319,8 @@ class Governance extends Component {
 					<center>
 						<small style={{ color: 'gray' }}>
 							Upon submitting, two transactions have to be signed: to allow the proposal-deposit (
-							{this.challengeReparamModalValues.propDeposit}) to be withdrawn from your GOV token balance and then to
-							challenge the proposed reparameterization.
+							{this.selectedParam ? this.selectedParam.propDeposit : '?'}) to be withdrawn from your GOV token balance
+							and then to challenge the proposed reparameterization.
 						</small>
 					</center>
 				</Modal>
