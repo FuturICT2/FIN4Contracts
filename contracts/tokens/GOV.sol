@@ -40,7 +40,7 @@ contract GOV is ERC20Plus {
       voting = PLCRVoting(_voting);
   }
 
-  /* TODO: 
+  /* TODO:
   function getAmountsIDelegatedToOthers() public returns(address[] memory, uint256[] memory) {
     uint256[] memory tokens = new uint256[](delegatorTokensIndexes[msg.sender].length);
     for (uint i = 0; i<delegatorTokensIndexes[msg.sender].length; i++){
@@ -58,7 +58,7 @@ contract GOV is ERC20Plus {
     require(msg.sender != to, "You cannot delegate to yourself");
     require(balanceOf(msg.sender) >= amount, "You do not have enough tokens for this transaction");
 
-    //delegatorTokensIndexes.push(to);
+    // delegatorTokensIndexes.push(to);
     delegatorTokens[msg.sender][to] += amount;
     delegateeTokens[to] += amount;
 
@@ -70,7 +70,7 @@ contract GOV is ERC20Plus {
     require(balanceOf(to) >= amount, "The balance of reciver is too low");
     require(delegatorTokens[msg.sender][to] >= amount, "You do not have that much delegation for this account");
 
-    //TODO: remove from 
+    // TODO: remove from
     delegatorTokens[msg.sender][to] -= amount;
     delegateeTokens[to] -= amount;
 
