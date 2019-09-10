@@ -33,6 +33,7 @@ class Home extends Component {
 			unlistedFin4Tokens: []
 		};
 
+		this.selectedListing = null;
 		this.resetApplyModalValues();
 		this.resetVoteModalValues();
 		this.resetChallengeModalValues();
@@ -228,8 +229,6 @@ class Home extends Component {
 
 	resetVoteModalValues() {
 		this.voteModalValues = {
-			whitelisted: null,
-			pollID: null, // number
 			vote: null, // number
 			salt: null, // number
 			numbTokens: null // number
@@ -237,9 +236,6 @@ class Home extends Component {
 	}
 
 	toggleVoteModal = () => {
-		if (this.state.isVoteModalOpen) {
-			this.resetVoteModalValues();
-		}
 		this.setState({ isVoteModalOpen: !this.state.isVoteModalOpen });
 	};
 
@@ -257,7 +253,7 @@ class Home extends Component {
 		let vote = this.voteModalValues.vote;
 		let salt = this.voteModalValues.salt;
 		let numbTokens = Number(this.voteModalValues.numbTokens);
-		let pollID = this.voteModalValues.pollID;
+		let pollID = this.selectedListing.challengeID;
 
 		if (numbTokens < 0) {
 			alert('Number of tokens must be more than 0.');
@@ -306,9 +302,6 @@ class Home extends Component {
 	// ---------- RevealModal ----------
 
 	toggleRevealModal = () => {
-		if (this.state.isRevealModalOpen) {
-			this.resetVoteModalValues(); // is used to store the pollID from modal-opening click to submission
-		}
 		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
 	};
 
@@ -316,7 +309,6 @@ class Home extends Component {
 
 	resetChallengeModalValues() {
 		this.challengeModalValues = {
-			listingHash: null, // ?
 			data: null // string
 		};
 	}
@@ -330,7 +322,7 @@ class Home extends Component {
 
 	submitChallengeModal = () => {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
-		let listingHash = this.challengeModalValues.listingHash;
+		let listingHash = this.selectedListing.listingKey;
 		let data = this.challengeModalValues.data;
 		let minDeposit = this.parameterizerValues.minDeposit;
 
@@ -366,9 +358,9 @@ class Home extends Component {
 
 	// ----------
 
-	updateStatus(tokenAddr) {
+	updateStatus() {
 		let currentAccount = window.web3.currentProvider.selectedAddress;
-		let listingKey = this.state.listings[tokenAddr].listingKey;
+		let listingKey = this.selectedListing.listingKey;
 		getContract(RegistryAddress, 'Registry')
 			.then(function(instance) {
 				return instance.updateStatus(listingKey, {
@@ -401,21 +393,18 @@ class Home extends Component {
 										actions: this.state.listings[key].actionStatus !== Action_Status.REJECTED && (
 											<Button
 												onClick={() => {
+													this.selectedListing = this.state.listings[key];
 													switch (this.state.listings[key].actionStatus) {
 														case Action_Status.VOTE:
-															this.voteModalValues.pollID = this.state.listings[key].challengeID;
-															this.voteModalValues.whitelisted = this.state.listings[key].whitelisted;
 															this.toggleVoteModal();
 															break;
 														case Action_Status.REVEAL:
-															this.voteModalValues.pollID = this.state.listings[key].challengeID;
 															this.toggleRevealModal();
 															break;
 														case Action_Status.UPDATE:
-															this.updateStatus(key); // direct transaction call, no popup first
+															this.updateStatus();
 															break;
 														case Action_Status.CHALLENGE:
-															this.challengeModalValues.listingHash = this.state.listings[key].listingKey;
 															this.toggleChallengeModal();
 															break;
 													}
@@ -495,7 +484,7 @@ class Home extends Component {
 						style={inputFieldStyle}
 					/>
 					<small style={{ color: 'gray' }}>
-						{this.voteModalValues.whitelisted
+						{this.selectedListing && this.selectedListing.whitelisted
 							? 'Challenge: 1 = keep token on the list, 0 = remove it'
 							: 'Review: 1 = put token on list, 0 = reject application'}
 					</small>
@@ -534,7 +523,7 @@ class Home extends Component {
 						method="revealVote"
 						labels={['_pollID', 'Vote', 'Salt']}
 						staticArgs={{
-							_pollID: this.voteModalValues.pollID
+							_pollID: this.selectedListing ? this.selectedListing.challengeID : null
 						}}
 						postSubmitCallback={(success, result) => {
 							if (!success) {
