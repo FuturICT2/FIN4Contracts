@@ -405,12 +405,17 @@ class Home extends Component {
 				<VoteModal
 					isOpen={this.state.isVoteModalOpen}
 					handleClose={this.toggleVoteModal}
-					listing={this.selectedListing}
+					pollID={this.selectedListing && this.selectedListing.challengeID}
+					voteOptionsInfo={
+						this.selectedListing && this.selectedListing.whitelisted
+							? 'Challenge: 1 = keep token on the list, 0 = remove it'
+							: 'Review: 1 = put token on list, 0 = reject application'
+					}
 				/>
 				<RevealModal
 					isOpen={this.state.isRevealModalOpen}
 					handleClose={this.toggleRevealModal}
-					listing={this.selectedListing}
+					pollID={this.selectedListing && this.selectedListing.challengeID}
 				/>
 				<Modal
 					isOpen={this.state.isChallengeModalOpen}

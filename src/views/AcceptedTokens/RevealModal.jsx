@@ -19,7 +19,7 @@ class RevealModal extends Component {
 						method="revealVote"
 						labels={['_pollID', 'Vote', 'Salt']}
 						staticArgs={{
-							_pollID: this.props.listing ? this.props.listing.challengeID : null
+							_pollID: this.props.pollID
 						}}
 						postSubmitCallback={(success, result) => {
 							if (!success) {

@@ -36,7 +36,7 @@ class VoteModal extends Component {
 		let vote = this.voteModalValues.vote;
 		let salt = this.voteModalValues.salt;
 		let numbTokens = Number(this.voteModalValues.numbTokens);
-		let pollID = this.props.listing.challengeID;
+		let pollID = this.props.pollID;
 
 		if (numbTokens < 0) {
 			alert('Number of tokens must be more than 0.');
@@ -98,11 +98,7 @@ class VoteModal extends Component {
 						onChange={e => (this.voteModalValues.vote = e.target.value)}
 						style={inputFieldStyle}
 					/>
-					<small style={{ color: 'gray' }}>
-						{this.props.listing && this.props.listing.whitelisted
-							? 'Challenge: 1 = keep token on the list, 0 = remove it'
-							: 'Review: 1 = put token on list, 0 = reject application'}
-					</small>
+					<small style={{ color: 'gray' }}>{this.props.voteOptionsInfo}</small>
 					<TextField
 						key="set-salt"
 						type="number"
