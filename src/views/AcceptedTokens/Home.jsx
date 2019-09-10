@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-import { RegistryAddress, PLCRVotingAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
+import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import {
 	getContractData,
 	getAllActionTypes,
