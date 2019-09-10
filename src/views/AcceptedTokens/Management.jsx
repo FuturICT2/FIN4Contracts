@@ -6,6 +6,8 @@ import TableRow from '../../components/TableRow';
 import Button from '../../components/Button';
 import { RepTokenAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import { getContractData, getContract } from '../../components/Contractor';
+import Modal from '../../components/Modal';
+import ContractForm from '../../components/ContractForm';
 const BN = require('bignumber.js');
 
 class Management extends Component {
@@ -13,6 +15,8 @@ class Management extends Component {
 		super(props);
 
 		this.state = {
+			isDelegateModalOpen: false,
+			isRefundDelegationModalOpen: false,
 			repTokenBalance: '?',
 			govTokenBalance: '?',
 			govTokenDelegateeBalance: '?'
@@ -51,6 +55,14 @@ class Management extends Component {
 			});
 	}
 
+	toggleDelegateModal = () => {
+		this.setState({ isDelegateModalOpen: !this.state.isDelegateModalOpen });
+	};
+
+	toggleRefundDelegationModal = () => {
+		this.setState({ isRefundDelegationModalOpen: !this.state.isRefundDelegationModalOpen });
+	};
+
 	render() {
 		return (
 			<center>
@@ -84,6 +96,48 @@ class Management extends Component {
 							}}
 						/>
 					</Table>
+					<Button onClick={this.toggleDelegateModal} center>
+						Delegate
+					</Button>
+					<Button onClick={this.toggleRefundDelegationModal} center>
+						Refund delegation
+					</Button>
+					<Modal
+						isOpen={this.state.isDelegateModalOpen}
+						handleClose={this.toggleDelegateModal}
+						title="Delegate GOV tokens"
+						width="400px">
+						<ContractForm
+							contractAddress={GOVTokenAddress}
+							contractName="GOV"
+							method="delegate"
+							labels={['Delegator address', 'Amount']}
+							postSubmitCallback={(success, result) => {
+								if (!success) {
+									alert(result.message);
+								}
+								this.toggleDelegateModal();
+							}}
+						/>
+					</Modal>
+					<Modal
+						isOpen={this.state.isRefundDelegationModalOpen}
+						handleClose={this.toggleRefundDelegationModal}
+						title="Refund delegated GOV tokens"
+						width="400px">
+						<ContractForm
+							contractAddress={GOVTokenAddress}
+							contractName="GOV"
+							method="refundDelegation"
+							labels={['Delegator address', 'Amount']}
+							postSubmitCallback={(success, result) => {
+								if (!success) {
+									alert(result.message);
+								}
+								this.toggleRefundDelegationModal();
+							}}
+						/>
+					</Modal>
 				</Box>
 			</center>
 		);
