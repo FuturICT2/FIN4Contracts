@@ -13,10 +13,9 @@ import {
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';
-import ContractForm from '../../components/ContractForm';
 import { TextField } from '@material-ui/core';
 import VoteModal from './VoteModal';
-const { soliditySha3 } = require('web3-utils');
+import RevealModal from './RevealModal';
 const BN = require('bignumber.js');
 
 class Home extends Component {
@@ -408,27 +407,11 @@ class Home extends Component {
 					handleClose={this.toggleVoteModal}
 					listing={this.selectedListing}
 				/>
-				<Modal
+				<RevealModal
 					isOpen={this.state.isRevealModalOpen}
 					handleClose={this.toggleRevealModal}
-					title="Set vote and salt"
-					width="400px">
-					<ContractForm
-						contractAddress={PLCRVotingAddress}
-						contractName="PLCRVoting"
-						method="revealVote"
-						labels={['_pollID', 'Vote', 'Salt']}
-						staticArgs={{
-							_pollID: this.selectedListing ? this.selectedListing.challengeID : null
-						}}
-						postSubmitCallback={(success, result) => {
-							if (!success) {
-								alert(result.message);
-							}
-							this.toggleRevealModal();
-						}}
-					/>
-				</Modal>
+					listing={this.selectedListing}
+				/>
 				<Modal
 					isOpen={this.state.isChallengeModalOpen}
 					handleClose={this.toggleChallengeModal}
