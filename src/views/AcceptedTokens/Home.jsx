@@ -15,6 +15,7 @@ import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';
 import ContractForm from '../../components/ContractForm';
 import { TextField } from '@material-ui/core';
+import VoteModal from './VoteModal';
 const { soliditySha3 } = require('web3-utils');
 const BN = require('bignumber.js');
 
@@ -35,7 +36,6 @@ class Home extends Component {
 
 		this.selectedListing = null;
 		this.resetApplyModalValues();
-		this.resetVoteModalValues();
 		this.resetChallengeModalValues();
 
 		this.parameterizerValues = {
@@ -227,76 +227,8 @@ class Home extends Component {
 
 	// ---------- VoteModal ----------
 
-	resetVoteModalValues() {
-		this.voteModalValues = {
-			vote: null, // number
-			salt: null, // number
-			numbTokens: null // number
-		};
-	}
-
 	toggleVoteModal = () => {
 		this.setState({ isVoteModalOpen: !this.state.isVoteModalOpen });
-	};
-
-	submitVoteModal = () => {
-		if (
-			this.voteModalValues.vote === null ||
-			this.voteModalValues.salt === null ||
-			this.voteModalValues.numbTokens === null
-		) {
-			alert('All values must be set.');
-			return;
-		}
-
-		let currentAccount = window.web3.currentProvider.selectedAddress;
-		let vote = this.voteModalValues.vote;
-		let salt = this.voteModalValues.salt;
-		let numbTokens = Number(this.voteModalValues.numbTokens);
-		let pollID = this.selectedListing.challengeID;
-
-		if (numbTokens < 0) {
-			alert('Number of tokens must be more than 0.');
-			return;
-		}
-
-		this.toggleVoteModal();
-
-		getContract(GOVTokenAddress, 'GOV')
-			.then(function(instance) {
-				return instance.approve(PLCRVotingAddress, numbTokens, {
-					from: currentAccount
-				});
-			})
-			.then(function(result) {
-				console.log('GOV.approve Result: ', result);
-
-				getContractData(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
-					currentAccount,
-					numbTokens,
-					pollID
-				]).then(prevPollIdBN => {
-					let prevPollID = new BN(prevPollIdBN).toNumber();
-					let secretHash = soliditySha3(vote, salt);
-					getContract(PLCRVotingAddress, 'PLCRVoting')
-						.then(function(instance) {
-							return instance.commitVote(pollID, secretHash, numbTokens, prevPollID, {
-								from: currentAccount
-							});
-						})
-						.then(function(result) {
-							console.log('PLCRVoting.commitVote Result: ', result);
-						})
-						.catch(function(err) {
-							console.log('PLCRVoting.commitVote Error: ', err.message);
-							alert(err.message);
-						});
-				});
-			})
-			.catch(function(err) {
-				console.log('GOV.approve Error: ', err.message);
-				alert(err.message);
-			});
 	};
 
 	// ---------- RevealModal ----------
@@ -471,47 +403,11 @@ class Home extends Component {
 						</small>
 					</center>
 				</Modal>
-				<Modal
+				<VoteModal
 					isOpen={this.state.isVoteModalOpen}
 					handleClose={this.toggleVoteModal}
-					title="Set vote, salt and number of tokens"
-					width="400px">
-					<TextField
-						key="set-vote"
-						type="number"
-						label="Vote (1 or 0)"
-						onChange={e => (this.voteModalValues.vote = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<small style={{ color: 'gray' }}>
-						{this.selectedListing && this.selectedListing.whitelisted
-							? 'Challenge: 1 = keep token on the list, 0 = remove it'
-							: 'Review: 1 = put token on list, 0 = reject application'}
-					</small>
-					<TextField
-						key="set-salt"
-						type="number"
-						label="Salt"
-						onChange={e => (this.voteModalValues.salt = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<TextField
-						key="set-numb-tokens"
-						type="number"
-						label="Number of tokens"
-						onChange={e => (this.voteModalValues.numbTokens = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<Button onClick={this.submitVoteModal} center>
-						Submit
-					</Button>
-					<center>
-						<small style={{ color: 'gray' }}>
-							Upon submitting, two transactions have to be signed: to allow the number of tokens to be withdrawn from
-							your GOV token balance and then to submit your vote.
-						</small>
-					</center>
-				</Modal>
+					listing={this.selectedListing}
+				/>
 				<Modal
 					isOpen={this.state.isRevealModalOpen}
 					handleClose={this.toggleRevealModal}
