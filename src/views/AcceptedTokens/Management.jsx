@@ -14,7 +14,8 @@ class Management extends Component {
 
 		this.state = {
 			repTokenBalance: '?',
-			govTokenBalance: '?'
+			govTokenBalance: '?',
+			govTokenDelegateeBalance: '?'
 		};
 
 		let currentAccount = window.web3.currentProvider.selectedAddress;
@@ -25,6 +26,10 @@ class Management extends Component {
 
 		getContractData(GOVTokenAddress, 'GOV', 'balanceOf', [currentAccount]).then(govTokenBalanceBN => {
 			this.setState({ govTokenBalance: new BN(govTokenBalanceBN).toNumber() });
+		});
+
+		getContractData(GOVTokenAddress, 'GOV', 'getAmountsDelegatedToMe').then(govTokenDelegateeBalanceBN => {
+			this.setState({ govTokenDelegateeBalance: new BN(govTokenDelegateeBalanceBN).toNumber() });
 		});
 	}
 
@@ -70,7 +75,15 @@ class Management extends Component {
 					</Table>
 				</Box>
 				<Box title="Delegation" width="600px">
-					TODO
+					<Table headers={['Type', 'Amount']}>
+						<TableRow
+							key="delegatee"
+							data={{
+								type: 'GOV tokens delegated to me',
+								amount: this.state.govTokenDelegateeBalance
+							}}
+						/>
+					</Table>
 				</Box>
 			</center>
 		);
