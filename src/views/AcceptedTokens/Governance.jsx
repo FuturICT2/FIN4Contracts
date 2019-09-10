@@ -281,8 +281,10 @@ class Governance extends Component {
 																this.toggleChallengeReparamModal();
 																break;
 															case Param_Action_Status.VOTE:
+																this.toggleVoteModal();
 																break;
 															case Param_Action_Status.REVEAL:
+																this.toggleRevealModal();
 																break;
 															case Param_Action_Status.UPDATE:
 																this.processProposal();
@@ -343,7 +345,9 @@ class Governance extends Component {
 					isOpen={this.state.isVoteModalOpen}
 					handleClose={this.toggleVoteModal}
 					pollID={this.selectedParam && this.selectedParam.challengeID}
-					voteOptionsInfo={'TODO'}
+					voteOptionsInfo={
+						'Challenge: 1 = vote for the proposed new value, 0 = reject the proposed value and keep the existing one'
+					}
 				/>
 				<RevealModal
 					isOpen={this.state.isRevealModalOpen}
