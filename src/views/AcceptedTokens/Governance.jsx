@@ -8,6 +8,8 @@ import TableRow from '../../components/TableRow';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { TextField } from '@material-ui/core';
+import VoteModal from './VoteModal';
+import RevealModal from './RevealModal';
 const BN = require('bignumber.js');
 
 class Governance extends Component {
@@ -17,6 +19,8 @@ class Governance extends Component {
 		this.state = {
 			isProposeReparamOpen: false,
 			isChallengeReparamOpen: false,
+			isVoteModalOpen: false,
+			isRevealModalOpen: false,
 			paramValues: null
 		};
 
@@ -176,6 +180,17 @@ class Governance extends Component {
 				alert(err.message);
 			});
 	};
+	// ---------- VoteModal ----------
+
+	toggleVoteModal = () => {
+		this.setState({ isVoteModalOpen: !this.state.isVoteModalOpen });
+	};
+
+	// ---------- RevealModal ----------
+
+	toggleRevealModal = () => {
+		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
+	};
 
 	// ---------- ChallengeReparam ----------
 
@@ -324,6 +339,17 @@ class Governance extends Component {
 						</small>
 					</center>
 				</Modal>
+				<VoteModal
+					isOpen={this.state.isVoteModalOpen}
+					handleClose={this.toggleVoteModal}
+					pollID={this.selectedParam && this.selectedParam.challengeID}
+					voteOptionsInfo={'TODO'}
+				/>
+				<RevealModal
+					isOpen={this.state.isRevealModalOpen}
+					handleClose={this.toggleRevealModal}
+					pollID={this.selectedParam && this.selectedParam.challengeID}
+				/>
 			</center>
 		);
 	}
