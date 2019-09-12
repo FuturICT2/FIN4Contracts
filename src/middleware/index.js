@@ -3,6 +3,7 @@
 import { generateStore, EventActions } from 'drizzle';
 import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
+import { ADD_FIN4_TOKEN, ADD_MULTIPLE_FIN4_TOKENS } from './actionTypes';
 
 const contractEventNotifier = store => next => action => {
 	if (action.type !== EventActions.EVENT_FIRED) {
@@ -21,9 +22,11 @@ const contractEventNotifier = store => next => action => {
 
 		store.dispatch({
 			type: ADD_FIN4_TOKEN,
-			name: name,
-			symbol: symbol,
-			address: address
+			token: {
+				name: name,
+				symbol: symbol,
+				address: address
+			}
 		});
 	}
 
@@ -33,25 +36,26 @@ const contractEventNotifier = store => next => action => {
 
 const appMiddlewares = [contractEventNotifier];
 
-// action types
-const ADD_FIN4_TOKEN = 'ADD_FIN4_TOKEN';
-
 const initialState = {
 	fin4Tokens: []
 };
 
-function fin4tokensReducer(state = initialState, action) {
+function fin4StoreReducer(state = initialState, action) {
 	switch (action.type) {
 		case ADD_FIN4_TOKEN:
 			return Object.assign({}, state, {
-				fin4Tokens: [...state.fin4Tokens, action]
+				fin4Tokens: [...state.fin4Tokens, action.token]
+			});
+		case ADD_MULTIPLE_FIN4_TOKENS:
+			return Object.assign({}, state, {
+				fin4Tokens: [...state.fin4Tokens, ...action.tokenArr]
 			});
 		default:
 			return state;
 	}
 }
 
-const appReducers = { fin4Tokens: fin4tokensReducer };
+const appReducers = { fin4Store: fin4StoreReducer };
 
 export default generateStore({
 	drizzleOptions,
