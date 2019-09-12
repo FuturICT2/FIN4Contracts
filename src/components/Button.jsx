@@ -10,7 +10,6 @@ const Button = props => {
 			size="small"
 			color={props.color || 'primary'}
 			onClick={props.onClick}
-			hasIcon={props.icon ? true : false}
 			{...props}>
 			{props.icon && <props.icon style={{ marginRight: 7 }} />}
 			{props.children}
@@ -21,7 +20,7 @@ const Button = props => {
 
 const StyledButton = styled(Fab)`
 	height: 32px !important;
-	padding-left: ${props => (props.hasIcon ? '13px' : '20px')} !important;
+	padding-left: ${props => (props.icon ? '13px' : '20px')} !important;
 	padding-right: 20px !important;
 `;
 
