@@ -116,7 +116,7 @@ class ProofSubmission extends Component {
 					return (
 						<div key={index}>
 							{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
-							<Status isApproved={proofObj.isApproved}>
+							<Status isapproved={proofObj.isApproved ? 'true' : 'false'}>
 								{proofObj.isApproved
 									? `The proof "${proofObj.name}" was submitted successfully.`
 									: `Your claim requires you to fill out the following form: ${proofObj.description}`}
@@ -197,7 +197,7 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
 
 const Status = styled(Typography)`
 	&& {
-		background: ${props => (props.isApproved ? colors.true : colors.wrong)};
+		background: ${props => (props.isapproved === 'true' ? colors.true : colors.wrong)};
 		padding: 10px;
 		margin: 20px 0;
 		box-sizing: border-box;

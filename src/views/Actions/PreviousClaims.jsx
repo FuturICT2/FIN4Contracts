@@ -90,7 +90,7 @@ class PreviousClaims extends Component {
 								// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
 								date = moment.unix(Number(date.substring(0, date.length - 3))).calendar();
 								return (
-									<Claim isApproved={isApproved} key={`${actionTypeAddress}${claimId}`}>
+									<Claim isapproved={isApproved ? 'true' : 'false'} key={`${actionTypeAddress}${claimId}`}>
 										<div>
 											<Grid container alignItems="center">
 												<Grid item xs>
@@ -182,7 +182,7 @@ const Claim = styled(Paper)`
 		box-sizing: border-box;
 		margin: 15px 0;
 		padding: 15px;
-		background: ${props => (props.isApproved ? colors.true : colors.wrong)};
+		background: ${props => (props.isapproved === 'true' ? colors.true : colors.wrong)};
 	}
 `;
 
