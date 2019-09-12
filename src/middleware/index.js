@@ -5,14 +5,22 @@ import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
 
 const contractEventNotifier = store => next => action => {
-	if (action.type === EventActions.EVENT_FIRED) {
-		const contract = action.name;
-		const contractEvent = action.event.event;
-		const message = action.event.returnValues._message;
-		const display = `${contract}(${contractEvent}): ${message}`;
-
-		toast.success(display, { position: toast.POSITION.TOP_RIGHT });
+	if (action.type !== EventActions.EVENT_FIRED) {
+		return next(action);
 	}
+
+	const contract = action.name;
+	const contractEvent = action.event.event;
+	let display = `${contract}: ${contractEvent}`;
+
+	if (contractEvent === 'Fin4TokenCreated') {
+		let name = action.event.returnValues.name;
+		let symbol = action.event.returnValues.symbol;
+		display = 'New Fin4 token created: ' + name + ' [' + symbol + ']';
+	}
+
+	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
+
 	return next(action);
 };
 
