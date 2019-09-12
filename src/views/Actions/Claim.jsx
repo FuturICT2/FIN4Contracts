@@ -18,6 +18,13 @@ class Claim extends Component {
 		});
 	}
 
+	componentDidUpdate(prevProps) {
+		if (this.props.fin4Tokens === prevProps.fin4Tokens) {
+			return;
+		}
+		// TODO
+	}
+
 	render() {
 		return (
 			this.state.tokens.length > 0 && (
@@ -41,7 +48,8 @@ Claim.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts
+		contracts: state.contracts,
+		fin4Tokens: state.fin4Tokens
 	};
 };
 
