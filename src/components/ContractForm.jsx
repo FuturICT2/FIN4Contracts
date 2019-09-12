@@ -60,8 +60,17 @@ class ContractForm extends Component {
 			if (abi[i].name === this.props.method) {
 				this.inputs = abi[i].inputs;
 				for (var j = 0; j < this.inputs.length; j++) {
-					// set default date to today for date inputs
-					initialState[this.inputs[j].name] = this.inputs[j].name === 'date' ? moment().valueOf() : '';
+					let input = this.inputs[j];
+					let value = '';
+					if (input.name === 'date') {
+						// set default date to today for date inputs
+						value = moment().valueOf();
+					}
+					if (input.type.includes('[]')) {
+						// initialize array types as empty arrays
+						value = [];
+					}
+					initialState[input.name] = value;
 				}
 				break;
 			}
@@ -76,10 +85,10 @@ class ContractForm extends Component {
 		}
 		event.preventDefault();
 
-		if (this.props.multiSelectOptions && this.state.requiredProofTypes.length < 1) {
-			alert('At least one proof type must be selected.');
-			return;
-		}
+		//if (this.props.multiSelectOptions && this.state.requiredProofTypes.length < 1) {
+		//	alert('At least one proof type must be selected.');
+		//	return;
+		//}
 
 		if (this.props.singleSelectOptions && !this.state.tokenAddress) {
 			alert('An action type must be chosen.');
