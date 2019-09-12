@@ -3,7 +3,10 @@ import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { loadAllFin4TokensIntoStoreIfNotDoneYet } from '../../components/Contractor';
+import {
+	loadAllFin4TokensIntoStoreIfNotDoneYet,
+	getDropdownFormattedListOfFin4Tokens
+} from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses';
 
 class Claim extends Component {
@@ -21,16 +24,7 @@ class Claim extends Component {
 		if (this.props.fin4Tokens === prevProps.fin4Tokens) {
 			return;
 		}
-
-		// convert them to the Dropdown-suitable format
-		let tokens = this.props.fin4Tokens.map(token => {
-			return {
-				value: token.address,
-				label: `[${token.symbol}] ${token.name}`
-			};
-		});
-
-		this.setState({ tokens: tokens });
+		this.setState({ tokens: getDropdownFormattedListOfFin4Tokens(this.props.fin4Tokens) });
 	}
 
 	render() {

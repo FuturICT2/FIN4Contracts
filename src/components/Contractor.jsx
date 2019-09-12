@@ -50,6 +50,15 @@ const loadAllFin4TokensIntoStoreIfNotDoneYet = props => {
 		});
 };
 
+const getDropdownFormattedListOfFin4Tokens = fin4Tokens => {
+	return fin4Tokens.map(token => {
+		return {
+			value: token.address,
+			label: `[${token.symbol}] ${token.name}`
+		};
+	});
+};
+
 // DEPRECATED
 const getAllActionTypes = () => {
 	return getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
@@ -108,5 +117,6 @@ export {
 	getAllActionTypes,
 	getPollStatus,
 	PollStatus,
-	loadAllFin4TokensIntoStoreIfNotDoneYet
+	loadAllFin4TokensIntoStoreIfNotDoneYet,
+	getDropdownFormattedListOfFin4Tokens
 };
