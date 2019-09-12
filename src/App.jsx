@@ -10,6 +10,9 @@ import NavigationBar from './NavigationBar';
 import { createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from './config/colors-config';
+import store from './middleware';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class App extends Component {
 	render() {
@@ -17,8 +20,9 @@ class App extends Component {
 			<Router>
 				<ThemeProvider theme={globalTheme}>
 					<Container>
+						<ToastContainer />
 						<TopBar />
-						<DrizzleProvider options={drizzleConfig}>
+						<DrizzleProvider store={store} options={drizzleConfig}>
 							<LoadingContainer>
 								<>
 									{/* register menu routes */}

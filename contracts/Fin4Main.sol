@@ -5,6 +5,9 @@ import 'contracts/proof/Fin4BaseProofType.sol';
 
 contract Fin4Main {
 
+  // TODO do we need the indexed keyword for event params?
+  event Fin4TokenCreated(address addr, string name, string symbol);
+
   address[] public children; // all Action Types
   // mapping (address => bool) public officialChildren; // TODO for Sergiu's TCR
 
@@ -40,6 +43,9 @@ contract Fin4Main {
       }
     }
     children.push(address(newToken));
+
+    emit Fin4TokenCreated(address(newToken), name, symbol);
+
     return address(newToken);
   }
 
