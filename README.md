@@ -10,7 +10,7 @@
 <img src="public/project-logos/Fin4_logo_on_white.jpg" width="100">
 </td></tr></table>
 
-[![](http://img.youtube.com/vi/oNlKdHjvExo/0.jpg)](http://www.youtube.com/watch?v=oNlKdHjvExo "Finance 4.0")
+ℹ️ [Explanatory video](http://www.youtube.com/watch?v=oNlKdHjvExo)
 
 ## Description
 
@@ -21,7 +21,7 @@
 ### Install dependencies
 
 ```sh
-# make, python, gcc, ... (python needs to be in the $PATH afterwards)
+# the basics
 sudo apt-get install build-essential python
 
 # node v10
@@ -30,7 +30,7 @@ source ~/.bashrc
 nvm install 10.0.0
 nvm use 10.0.0
 
-# on macOS to prevent gyp related errors
+# on macOS, to prevent gyp related errors
 npm explore npm -g -- npm install node-gyp@latest
 
 # truffle
