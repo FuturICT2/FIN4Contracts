@@ -96,10 +96,10 @@ class Management extends Component {
 							}}
 						/>
 					</Table>
-					<Button onClick={this.toggleDelegateModal} center>
+					<Button onClick={this.toggleDelegateModal} center="true">
 						Delegate
 					</Button>
-					<Button onClick={this.toggleRefundDelegationModal} center>
+					<Button onClick={this.toggleRefundDelegationModal} center="true">
 						Refund delegation
 					</Button>
 					<Modal

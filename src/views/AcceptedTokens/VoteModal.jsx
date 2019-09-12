@@ -113,7 +113,7 @@ class VoteModal extends Component {
 						onChange={e => (this.voteModalValues.numbTokens = e.target.value)}
 						style={inputFieldStyle}
 					/>
-					<Button onClick={this.submitVoteModal} center>
+					<Button onClick={this.submitVoteModal} center="true">
 						Submit
 					</Button>
 					<center>

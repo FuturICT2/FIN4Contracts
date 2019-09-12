@@ -314,7 +314,7 @@ class Governance extends Component {
 						onChange={e => (this.proposeReparamModalValues.value = e.target.value)}
 						style={inputFieldStyle}
 					/>
-					<Button onClick={this.submitProposeReparamModal} center>
+					<Button onClick={this.submitProposeReparamModal} center="true">
 						Submit
 					</Button>
 					<center>
@@ -330,7 +330,7 @@ class Governance extends Component {
 					handleClose={this.toggleChallengeReparamModal}
 					title="Challenge proposed value"
 					width="400px">
-					<Button onClick={this.submitChallengeReparamModal} center>
+					<Button onClick={this.submitChallengeReparamModal} center="true">
 						Submit
 					</Button>
 					<center>

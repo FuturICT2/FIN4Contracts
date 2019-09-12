@@ -64,7 +64,7 @@ class OfferCreation extends Component {
 						const varName = fieldName.toLowerCase().replace(/\s+/g, '');
 						return <TextField name={varName} label={fieldName} style={inputFieldStyle} onChange={this.handleChange} />;
 					})}
-					<Button icon={AddIcon} onClick={this.handleSubmit} center>
+					<Button icon={AddIcon} onClick={this.handleSubmit} center="true">
 						Submit
 					</Button>
 				</form>

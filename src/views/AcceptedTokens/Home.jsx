@@ -392,7 +392,7 @@ class Home extends Component {
 						onChange={e => (this.applyModalValues.data = e.target.value)}
 						style={inputFieldStyle}
 					/>
-					<Button onClick={this.submitApplyModal} center>
+					<Button onClick={this.submitApplyModal} center="true">
 						Submit
 					</Button>
 					<center>
@@ -429,7 +429,7 @@ class Home extends Component {
 						onChange={e => (this.challengeModalValues.data = e.target.value)}
 						style={inputFieldStyle}
 					/>
-					<Button onClick={this.submitChallengeModal} center>
+					<Button onClick={this.submitChallengeModal} center="true">
 						Submit
 					</Button>
 					<center>

@@ -275,7 +275,7 @@ class ContractForm extends Component {
 									/>
 								);
 							})}
-					<Button onClick={this.closeModal} center>
+					<Button onClick={this.closeModal} center="true">
 						Apply
 					</Button>
 				</Modal>
@@ -385,7 +385,7 @@ class ContractForm extends Component {
 							/>
 						);
 					})}
-					<Button icon={AddIcon} onClick={this.handleSubmit} center>
+					<Button icon={AddIcon} onClick={this.handleSubmit} center="true">
 						{this.props.buttonLabel ? this.props.buttonLabel : 'Submit'}
 					</Button>
 				</form>
