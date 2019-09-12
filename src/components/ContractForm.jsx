@@ -262,6 +262,7 @@ class ContractForm extends Component {
 					{this.state.newValue &&
 						this.getProofTypeObj(this.state.newValue)
 							.paramsEncoded.split(',')
+							.filter(part => part.length > 0)
 							.map(part => {
 								const [paramType, paramName, unit] = part.split(':');
 								return (
