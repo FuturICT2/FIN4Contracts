@@ -3,9 +3,8 @@ import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../components/Contractor';
+import { loadAllFin4TokensIntoStoreIfNotDoneYet } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses';
-import { ADD_MULTIPLE_FIN4_TOKENS } from '../../middleware/actionTypes';
 
 class Claim extends Component {
 	constructor(props) {
@@ -15,26 +14,7 @@ class Claim extends Component {
 		};
 
 		// load all Fin4 tokens into the store
-
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
-			.then(tokens => {
-				return tokens.map(address => {
-					return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol }) => {
-						return {
-							name: name,
-							symbol: symbol,
-							address: address
-						};
-					});
-				});
-			})
-			.then(promises => Promise.all(promises))
-			.then(tokenArr => {
-				props.dispatch({
-					type: ADD_MULTIPLE_FIN4_TOKENS,
-					tokenArr: tokenArr
-				});
-			});
+		loadAllFin4TokensIntoStoreIfNotDoneYet(props);
 	}
 
 	componentDidUpdate(prevProps) {

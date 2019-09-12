@@ -1,4 +1,5 @@
 import { Fin4MainAddress, PLCRVotingAddress } from '../config/DeployedAddresses.js';
+import { ADD_MULTIPLE_FIN4_TOKENS } from '../middleware/actionTypes';
 const BN = require('bignumber.js');
 
 const getContract = (contractAddress, contractName) => {
@@ -21,6 +22,35 @@ const getContractData = (contract, contractJson, method, methodArgs = []) => {
 	});
 };
 
+let loadedAllFin4TokensIntoTheStore = false;
+
+const loadAllFin4TokensIntoStoreIfNotDoneYet = props => {
+	if (loadedAllFin4TokensIntoTheStore) {
+		return;
+	}
+	getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
+		.then(tokens => {
+			return tokens.map(address => {
+				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol }) => {
+					return {
+						name: name,
+						symbol: symbol,
+						address: address
+					};
+				});
+			});
+		})
+		.then(promises => Promise.all(promises))
+		.then(tokenArr => {
+			props.dispatch({
+				type: ADD_MULTIPLE_FIN4_TOKENS,
+				tokenArr: tokenArr
+			});
+			loadedAllFin4TokensIntoTheStore = true;
+		});
+};
+
+// DEPRECATED
 const getAllActionTypes = () => {
 	return getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
 		.then(tokens => {
@@ -72,4 +102,11 @@ const PollStatus = {
 	PAST_REVEAL_PERIOD: '-'
 };
 
-export { getContractData, getContract, getAllActionTypes, getPollStatus, PollStatus };
+export {
+	getContractData,
+	getContract,
+	getAllActionTypes,
+	getPollStatus,
+	PollStatus,
+	loadAllFin4TokensIntoStoreIfNotDoneYet
+};
