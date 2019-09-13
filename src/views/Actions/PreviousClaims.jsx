@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../components/Contractor';
+import { loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet } from '../../components/Contractor';
 import Box from '../../components/Box';
 import Currency from '../../components/Currency';
 import Modal from '../../components/Modal';
@@ -14,7 +14,6 @@ import DateIcon from '@material-ui/icons/AccessTime';
 import ProofIcon from '@material-ui/icons/Fingerprint';
 import moment from 'moment';
 import styled from 'styled-components';
-import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class PreviousClaims extends Component {
 	constructor(props) {
@@ -25,51 +24,10 @@ class PreviousClaims extends Component {
 			isProofModalOpen: false
 		};
 
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims')
-			.then(actionTypeAddresses => {
-				// action types
-				return actionTypeAddresses.map(actionTypeAddress => {
-					return getContractData(actionTypeAddress, 'Fin4Token', 'getMyClaimIds')
-						.then(({ 1: tokenName, 2: tokenSymbol, 3: claimIds }) => {
-							// claim ids per action type
-							return claimIds.map(claimId => {
-								return {
-									claimId: claimId,
-									actionTypeAddress: actionTypeAddress,
-									tokenName: tokenName,
-									tokenSymbol: tokenSymbol
-								};
-							});
-						})
-						.then(claims => {
-							return claims.map(({ claimId, actionTypeAddress, tokenName, tokenSymbol }) => {
-								return getContractData(actionTypeAddress, 'Fin4Token', 'getClaimInfo', [claimId]).then(
-									({ 1: isApproved, 2: quantity, 3: date, 4: comment }) => {
-										// claims per claim id per action type
-										return {
-											claimId: claimId,
-											actionTypeAddress: actionTypeAddress,
-											tokenName: tokenName,
-											tokenSymbol: tokenSymbol,
-											isApproved: isApproved,
-											quantity: quantity.toString(),
-											date: date.toString(),
-											comment: comment
-										};
-									}
-								);
-							});
-						});
-				});
-			})
-			.then(data => Promise.all(data))
-			.then(data => data.flat())
-			.then(data => Promise.all(data))
-			.then(data => {
-				data.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
-				this.setState({ claims: data });
-			});
 		this.resetProofModalValues();
+
+		// load all claims of the current user into the store
+		loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet(props);
 	}
 
 	resetProofModalValues() {
@@ -85,6 +43,39 @@ class PreviousClaims extends Component {
 		}
 		this.setState({ isProofModalOpen: !this.state.isProofModalOpen });
 	};
+
+	componentDidUpdate(prevProps) {
+		if (this.props.usersClaims === prevProps.usersClaims) {
+			return;
+		}
+		// TODO data.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+		let claims = this.props.usersClaims.map(claim => {
+			let token = this.findToken(this.props.fin4Tokens, claim.token);
+			return {
+				claimId: claim.claimId,
+				actionTypeAddress: claim.token,
+				tokenName: token.name,
+				tokenSymbol: token.symbol,
+				isApproved: claim.isApproved,
+				quantity: claim.quantity.toString(),
+				date: claim.date.toString(),
+				comment: claim.comment
+			};
+		});
+
+		this.setState({ claims: claims });
+	}
+
+	// TODO find a better way then looking it up each time! Map in store instead of array?
+	findToken(tokens, addr) {
+		for (var i = 0; i < tokens.length; i++) {
+			if (tokens[i].address === addr) {
+				return tokens[i];
+			}
+		}
+		return null;
+	}
 
 	render() {
 		return (
@@ -197,7 +188,9 @@ PreviousClaims.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts
+		contracts: state.contracts,
+		fin4Tokens: state.fin4Store.fin4Tokens,
+		usersClaims: state.fin4Store.usersClaims
 	};
 };
 

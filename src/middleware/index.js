@@ -3,7 +3,7 @@
 import { generateStore, EventActions } from 'drizzle';
 import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
-import { ADD_FIN4_TOKEN, ADD_MULTIPLE_FIN4_TOKENS } from './actionTypes';
+import { ADD_FIN4_TOKEN, ADD_MULTIPLE_FIN4_TOKENS, ADD_CLAIM, ADD_MULTIPLE_CLAIMS } from './actionTypes';
 
 const contractEventNotifier = store => next => action => {
 	if (action.type !== EventActions.EVENT_FIRED) {
@@ -37,7 +37,8 @@ const contractEventNotifier = store => next => action => {
 const appMiddlewares = [contractEventNotifier];
 
 const initialState = {
-	fin4Tokens: []
+	fin4Tokens: [],
+	usersClaims: []
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -49,6 +50,14 @@ function fin4StoreReducer(state = initialState, action) {
 		case ADD_MULTIPLE_FIN4_TOKENS:
 			return Object.assign({}, state, {
 				fin4Tokens: [...state.fin4Tokens, ...action.tokenArr]
+			});
+		case ADD_CLAIM:
+			return Object.assign({}, state, {
+				usersClaims: [...state.usersClaims, ...action.claim]
+			});
+		case ADD_MULTIPLE_CLAIMS:
+			return Object.assign({}, state, {
+				usersClaims: [...state.usersClaims, ...action.claimArr]
 			});
 		default:
 			return state;

@@ -1,5 +1,5 @@
 import { Fin4MainAddress, PLCRVotingAddress } from '../config/DeployedAddresses.js';
-import { ADD_MULTIPLE_FIN4_TOKENS } from '../middleware/actionTypes';
+import { ADD_MULTIPLE_FIN4_TOKENS, ADD_MULTIPLE_CLAIMS } from '../middleware/actionTypes';
 const BN = require('bignumber.js');
 
 const getContract = (contractAddress, contractName) => {
@@ -57,6 +57,54 @@ const getDropdownFormattedListOfFin4Tokens = fin4Tokens => {
 			label: `[${token.symbol}] ${token.name}`
 		};
 	});
+};
+
+let loadedAllCurrentUsersClaimsIntoTheStore = false;
+
+const loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet = props => {
+	if (loadedAllCurrentUsersClaimsIntoTheStore) {
+		return;
+	}
+	getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims')
+		.then(tokenAddresses => {
+			return tokenAddresses.map(tokenAddr => {
+				return getContractData(tokenAddr, 'Fin4Token', 'getMyClaimIds').then(claimIds => {
+					return claimIds.map(claimId => {
+						return getContractData(tokenAddr, 'Fin4Token', 'claims', [claimId]).then(
+							({
+								0: claimIdBN,
+								1: claimer,
+								2: isApproved,
+								3: quantityBN,
+								4: dateBN,
+								5: comment,
+								6: proof_statuses
+							}) => {
+								return {
+									token: tokenAddr,
+									claimId: new BN(claimIdBN).toNumber(),
+									claimer: claimer,
+									isApproved: isApproved,
+									quantity: new BN(quantityBN).toNumber(),
+									date: new BN(dateBN).toNumber(),
+									comment: comment
+								};
+							}
+						);
+					});
+				});
+			});
+		})
+		.then(promises => Promise.all(promises))
+		.then(data => data.flat())
+		.then(promises => Promise.all(promises))
+		.then(claimArr => {
+			props.dispatch({
+				type: ADD_MULTIPLE_CLAIMS,
+				claimArr: claimArr
+			});
+			loadedAllCurrentUsersClaimsIntoTheStore = true;
+		});
 };
 
 // DEPRECATED
@@ -118,5 +166,6 @@ export {
 	getPollStatus,
 	PollStatus,
 	loadAllFin4TokensIntoStoreIfNotDoneYet,
-	getDropdownFormattedListOfFin4Tokens
+	getDropdownFormattedListOfFin4Tokens,
+	loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet
 };
