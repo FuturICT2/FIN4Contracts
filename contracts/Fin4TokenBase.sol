@@ -5,6 +5,9 @@ import "contracts/proof/Fin4BaseProofType.sol";
 
 contract Fin4TokenBase { // abstract class
 
+  event ClaimSubmitted(uint claimId, address claimer, uint quantity, uint date, string comment);
+  event ClaimApproved(uint claimId);
+
   address public Fin4Main;
   address public actionTypeCreator;
 
@@ -51,6 +54,8 @@ contract Fin4TokenBase { // abstract class
       claim.proof_statuses[requiredProofs[i]] = false;
     }
     claim.isApproved = false;
+
+    emit ClaimSubmitted(nextClaimId, claimer, quantity, date, comment);
 
     if (requiredProofs.length == 0) {
       approveClaim(claimer, nextClaimId);
@@ -163,6 +168,7 @@ contract Fin4TokenBase { // abstract class
     // can alse be called from here (Fin4TokenBase) in case of no proof types required, therefore
     // Fin4TokenBase must also have the Minter role
     mint(claimer, claims[claimId].quantity);
+    emit ClaimApproved(claimId);
   }
 
   function isMinter(address account) public view returns (bool);
