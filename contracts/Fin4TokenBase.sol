@@ -84,11 +84,11 @@ contract Fin4TokenBase { // abstract class
       claims[claimId].quantity, claims[claimId].date, claims[claimId].comment);
   }
 
-  function getMyClaimIds() public view returns(address, string memory, string memory, uint[] memory) {
-    return (address(this), name(), symbol(), _getMyClaimIds(msg.sender));
+  function getMyClaimIds() public view returns(uint[] memory) {
+    return getClaimIds(msg.sender);
   }
 
-  function _getMyClaimIds(address claimer) private view returns(uint[] memory) {
+  function getClaimIds(address claimer) private view returns(uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
       if (claims[i].claimer == claimer) {
@@ -110,7 +110,7 @@ contract Fin4TokenBase { // abstract class
 
   // Used by the MinimumInterval proof type
   function getTimeBetweenThisClaimAndThatClaimersPreviousOne(address claimer, uint claimId) public view returns(uint) {
-    uint[] memory ids = _getMyClaimIds(claimer);
+    uint[] memory ids = getClaimIds(claimer);
     if (ids.length < 2 || ids[0] == claimId) {
       return 365 * 24 * 60 * 60 * 1000; // a year as indicator that it's not applicable (can't do -1 unfortunately)
     }
@@ -125,7 +125,7 @@ contract Fin4TokenBase { // abstract class
 
   // Used by the MaximumQuantityPerInterval proof type
   function sumUpQuantitiesWithinIntervalBeforeThisClaim(address claimer, uint claimId, uint interval) public view returns(uint, uint) {
-    uint[] memory ids = _getMyClaimIds(claimer);
+    uint[] memory ids = getClaimIds(claimer);
     if (ids.length < 2 || ids[0] == claimId) {
       return (0, claims[claimId].quantity);
     }
