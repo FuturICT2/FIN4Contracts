@@ -40,6 +40,7 @@ contract Fin4TokenBase { // abstract class
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
 	function submit(address claimer, uint quantity, uint date, string memory comment) public returns (uint) {
     Claim storage claim = claims[nextClaimId];
+    claim.claimId = nextClaimId;
     claim.claimer = claimer;
     claim.quantity = quantity;
     claim.date = date;
