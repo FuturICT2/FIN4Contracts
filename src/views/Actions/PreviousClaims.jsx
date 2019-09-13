@@ -22,8 +22,7 @@ class PreviousClaims extends Component {
 
 		this.state = {
 			claims: [],
-			actionTypeAddressForProofModal: '',
-			claimIdForProofModal: ''
+			isProofModalOpen: false
 		};
 
 		getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims')
@@ -70,14 +69,21 @@ class PreviousClaims extends Component {
 				data.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 				this.setState({ claims: data });
 			});
+		this.resetProofModalValues();
 	}
 
-	isProofModalOpen = () => {
-		return !!this.state.actionTypeAddressForProofModal && !!this.state.claimIdForProofModal;
-	};
+	resetProofModalValues() {
+		this.proofModalValues = {
+			actionTypeAddress: null,
+			claimId: null
+		};
+	}
 
-	closeProofModal = () => {
-		this.setState({ actionTypeAddressForProofModal: '', claimIdForProofModal: '' });
+	toggleProofModal = () => {
+		if (this.state.isProofModalOpen) {
+			this.resetProofModalValues();
+		}
+		this.setState({ isProofModalOpen: !this.state.isProofModalOpen });
 	};
 
 	render() {
@@ -124,10 +130,9 @@ class PreviousClaims extends Component {
 											<Button
 												icon={ProofIcon}
 												onClick={() => {
-													this.setState({
-														actionTypeAddressForProofModal: actionTypeAddress,
-														claimIdForProofModal: claimId
-													});
+													this.proofModalValues.actionTypeAddress = actionTypeAddress;
+													this.proofModalValues.claimId = claimId;
+													this.toggleProofModal();
 												}}
 												color={isApproved ? 'primary' : 'secondary'}
 												style={{ margin: '0 7px 7px 0' }}>
@@ -140,13 +145,13 @@ class PreviousClaims extends Component {
 						)}
 					</Box>
 					<Modal
-						isOpen={this.isProofModalOpen()}
-						handleClose={this.closeProofModal}
+						isOpen={this.state.isProofModalOpen}
+						handleClose={this.toggleProofModal}
 						title="Submit Proofs"
 						width="450px">
 						<ProofSubmission
-							tokenAddress={this.state.actionTypeAddressForProofModal}
-							claimId={this.state.claimIdForProofModal}
+							tokenAddress={this.proofModalValues.actionTypeAddress}
+							claimId={this.proofModalValues.claimId}
 						/>
 					</Modal>
 				</>
