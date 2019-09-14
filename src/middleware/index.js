@@ -18,6 +18,11 @@ const contractEventNotifier = store => next => action => {
 		let token = action.event.returnValues;
 		let address = token.addr;
 
+		// block duplicate events, seems easier this "definite" way then latest block?
+		if (store.getState().fin4Store.fin4Tokens[address]) {
+			return next(action);
+		}
+
 		let name = token.name;
 		let symbol = token.symbol;
 		display = 'New Fin4 token created: ' + name + ' [' + symbol + ']';
@@ -35,6 +40,11 @@ const contractEventNotifier = store => next => action => {
 	if (contractEvent === 'ClaimSubmitted') {
 		let claim = action.event.returnValues;
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId, just for frontend
+
+		// block duplicate events
+		if (store.getState().fin4Store.usersClaims[id]) {
+			return next(action);
+		}
 
 		display = 'New claim submitted';
 
@@ -56,6 +66,12 @@ const contractEventNotifier = store => next => action => {
 	if (contractEvent === 'ClaimApproved') {
 		let claim = action.event.returnValues;
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId
+
+		// block duplicate events, claim is already approved
+		if (store.getState().fin4Store.usersClaims[id] && store.getState().fin4Store.usersClaims[id].isApproved) {
+			return next(action);
+		}
+
 		display = 'Claim got approved';
 
 		store.dispatch({
