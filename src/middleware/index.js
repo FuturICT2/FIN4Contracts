@@ -15,9 +15,11 @@ const contractEventNotifier = store => next => action => {
 	let display = `${contract}: ${contractEvent}`;
 
 	if (contractEvent === 'Fin4TokenCreated') {
-		let address = action.event.returnValues.addr;
-		let name = action.event.returnValues.name;
-		let symbol = action.event.returnValues.symbol;
+		let token = action.event.returnValues;
+		let address = token.addr;
+
+		let name = token.name;
+		let symbol = token.symbol;
 		display = 'New Fin4 token created: ' + name + ' [' + symbol + ']';
 
 		store.dispatch({
@@ -31,8 +33,35 @@ const contractEventNotifier = store => next => action => {
 	}
 
 	if (contractEvent === 'ClaimSubmitted') {
+		let claim = action.event.returnValues;
+		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId, just for frontend
+
+		display = 'New claim submitted';
+
+		store.dispatch({
+			type: ADD_CLAIM,
+			claim: {
+				id: id,
+				token: claim.tokenAddr,
+				claimId: claim.claimId,
+				claimer: claim.claimer,
+				quantity: claim.quantity,
+				date: claim.date,
+				comment: claim.comment,
+				isApproved: false
+			}
+		});
 	}
+
 	if (contractEvent === 'ClaimApproved') {
+		let claim = action.event.returnValues;
+		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId
+		display = 'Claim got approved';
+
+		store.dispatch({
+			type: APPROVE_CLAIM,
+			id: id
+		});
 	}
 
 	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
@@ -42,28 +71,63 @@ const contractEventNotifier = store => next => action => {
 const appMiddlewares = [contractEventNotifier];
 
 const initialState = {
-	fin4Tokens: [],
-	usersClaims: []
+	fin4Tokens: {},
+	usersClaims: {}
 };
 
 function fin4StoreReducer(state = initialState, action) {
 	switch (action.type) {
 		case ADD_FIN4_TOKEN:
-			return Object.assign({}, state, {
-				fin4Tokens: [...state.fin4Tokens, action.token]
-			});
+			return {
+				...state,
+				fin4Tokens: {
+					...state.fin4Tokens,
+					[action.token.address]: action.token
+				}
+			};
 		case ADD_MULTIPLE_FIN4_TOKENS:
-			return Object.assign({}, state, {
-				fin4Tokens: [...state.fin4Tokens, ...action.tokenArr]
-			});
+			for (var i = 0; i < action.tokenArr.length; i++) {
+				let token = action.tokenArr[i];
+				state = {
+					...state,
+					fin4Tokens: {
+						...state.fin4Tokens,
+						[token.address]: token
+					}
+				};
+			}
+			return state;
 		case ADD_CLAIM:
-			return Object.assign({}, state, {
-				usersClaims: [...state.usersClaims, ...action.claim]
-			});
+			return {
+				...state,
+				usersClaims: {
+					...state.usersClaims,
+					[action.claim.id]: action.claim
+				}
+			};
 		case ADD_MULTIPLE_CLAIMS:
-			return Object.assign({}, state, {
-				usersClaims: [...state.usersClaims, ...action.claimArr]
-			});
+			for (var i = 0; i < action.claimArr.length; i++) {
+				let claim = action.claimArr[i];
+				state = {
+					...state,
+					usersClaims: {
+						...state.usersClaims,
+						[claim.id]: claim
+					}
+				};
+			}
+			return state;
+		case APPROVE_CLAIM:
+			return {
+				...state,
+				usersClaims: {
+					...state.usersClaims,
+					[action.id]: {
+						...state.usersClaims[action.id],
+						isApproved: true
+					}
+				}
+			};
 		default:
 			return state;
 	}

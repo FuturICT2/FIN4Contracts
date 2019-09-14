@@ -50,31 +50,22 @@ class PreviousClaims extends Component {
 		}
 		// TODO data.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
-		let claims = this.props.usersClaims.map(claim => {
-			let token = this.findToken(this.props.fin4Tokens, claim.token);
-			return {
-				claimId: claim.claimId,
-				actionTypeAddress: claim.token,
-				tokenName: token.name,
-				tokenSymbol: token.symbol,
-				isApproved: claim.isApproved,
-				quantity: claim.quantity.toString(),
-				date: claim.date.toString(),
-				comment: claim.comment
-			};
+		this.setState({
+			claims: Object.keys(this.props.usersClaims).map(id => {
+				let claim = this.props.usersClaims[id];
+				let token = this.props.fin4Tokens[claim.token];
+				return {
+					claimId: claim.claimId,
+					actionTypeAddress: claim.token,
+					tokenName: token.name,
+					tokenSymbol: token.symbol,
+					isApproved: claim.isApproved,
+					quantity: claim.quantity.toString(),
+					date: claim.date.toString(),
+					comment: claim.comment
+				};
+			})
 		});
-
-		this.setState({ claims: claims });
-	}
-
-	// TODO find a better way then looking it up each time! Map in store instead of array?
-	findToken(tokens, addr) {
-		for (var i = 0; i < tokens.length; i++) {
-			if (tokens[i].address === addr) {
-				return tokens[i];
-			}
-		}
-		return null;
 	}
 
 	render() {

@@ -51,10 +51,10 @@ const loadAllFin4TokensIntoStoreIfNotDoneYet = props => {
 };
 
 const getDropdownFormattedListOfFin4Tokens = fin4Tokens => {
-	return fin4Tokens.map(token => {
+	return Object.keys(fin4Tokens).map(addr => {
 		return {
-			value: token.address,
-			label: `[${token.symbol}] ${token.name}`
+			value: addr,
+			label: `[${fin4Tokens[addr].symbol}] ${fin4Tokens[addr].name}`
 		};
 	});
 };
@@ -80,9 +80,11 @@ const loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet = props => {
 								5: comment,
 								6: proof_statuses
 							}) => {
+								let claimId = new BN(claimIdBN).toNumber();
 								return {
+									id: tokenAddr + '_' + claimId, // pseudoId
 									token: tokenAddr,
-									claimId: new BN(claimIdBN).toNumber(),
+									claimId: claimId,
 									claimer: claimer,
 									isApproved: isApproved,
 									quantity: new BN(quantityBN).toNumber(),
