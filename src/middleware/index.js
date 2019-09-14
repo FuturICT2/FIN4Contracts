@@ -3,7 +3,7 @@
 import { generateStore, EventActions } from 'drizzle';
 import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
-import { ADD_FIN4_TOKEN, ADD_MULTIPLE_FIN4_TOKENS, ADD_CLAIM, ADD_MULTIPLE_CLAIMS } from './actionTypes';
+import { ADD_FIN4_TOKEN, ADD_MULTIPLE_FIN4_TOKENS, ADD_CLAIM, ADD_MULTIPLE_CLAIMS, APPROVE_CLAIM } from './actionTypes';
 
 const contractEventNotifier = store => next => action => {
 	if (action.type !== EventActions.EVENT_FIRED) {
