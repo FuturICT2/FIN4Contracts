@@ -1,8 +1,4 @@
 import Fin4Main from '../build/contracts/Fin4Main.json';
-//import { Fin4MainAddress } from './DeployedAddresses.js';
-
-//var Web3 = require('web3');
-//var web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:7545'));
 
 const drizzleConfig = {
 	web3: {
@@ -14,7 +10,7 @@ const drizzleConfig = {
 	},
 	contracts: [Fin4Main],
 	events: {
-		Fin4Main: ['Fin4TokenCreated']
+		Fin4Main: ['Fin4TokenCreated', 'ClaimSubmitted', 'ClaimApproved']
 	},
 	polls: {
 		accounts: 1500

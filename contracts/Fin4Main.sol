@@ -7,6 +7,8 @@ contract Fin4Main {
 
   // TODO do we need the indexed keyword for event params?
   event Fin4TokenCreated(address addr, string name, string symbol);
+  event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment);
+  event ClaimApproved(address tokenAddr, uint claimId);
 
   address[] public children; // all Action Types
   // mapping (address => bool) public officialChildren; // TODO for Sergiu's TCR
@@ -102,9 +104,15 @@ contract Fin4Main {
   }
 
   // used in Claim - could also happen directly on the Token, but that would complicate the workflow in the front end
-  function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public returns(uint) {
+  function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public {
     claimSubmissionPingback(msg.sender, tokenAddress);
-    return Fin4Token(tokenAddress).submit(msg.sender, quantity, date, comment);
+    uint claimId = Fin4Token(tokenAddress).submit(msg.sender, quantity, date, comment);
+    emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, date, comment);
+  }
+
+  // called from Fin4TokenBase
+  function claimApprovedPingback(address tokenAddress, uint claimId) public {
+    emit ClaimApproved(tokenAddress, claimId);
   }
 
   // ------------------------- PROOF TYPES -------------------------

@@ -30,6 +30,11 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	if (contractEvent === 'ClaimSubmitted') {
+	}
+	if (contractEvent === 'ClaimApproved') {
+	}
+
 	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
 	return next(action);
 };
