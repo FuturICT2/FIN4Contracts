@@ -131,6 +131,9 @@ function fin4StoreReducer(state = initialState, action) {
 		default:
 			return state;
 	}
+	//return Object.assign({}, state, {
+	//	usersClaims: [...state.usersClaims, ...action.claimArr]
+	//});
 }
 
 const appReducers = { fin4Store: fin4StoreReducer };
