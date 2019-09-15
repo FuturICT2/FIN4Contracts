@@ -29,17 +29,15 @@ class Claim extends Component {
 
 	render() {
 		return (
-			this.state.tokens.length > 0 && (
-				<Box title={'Claim an Action'}>
-					<ContractForm
-						contractAddress={Fin4MainAddress}
-						contractName="Fin4Main"
-						method="submitClaim"
-						labels={['Action type', 'Quantity', 'Date', 'Comment']}
-						singleSelectOptions={this.state.tokens}
-					/>
-				</Box>
-			)
+			<Box title={'Claim an Action'}>
+				<ContractForm
+					contractAddress={Fin4MainAddress}
+					contractName="Fin4Main"
+					method="submitClaim"
+					labels={['Action type', 'Quantity', 'Date', 'Comment']}
+					singleSelectOptions={this.state.tokens}
+				/>
+			</Box>
 		);
 	}
 }
