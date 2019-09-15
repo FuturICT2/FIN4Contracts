@@ -157,4 +157,22 @@ contract Fin4Main {
     return Fin4MessagesAddr;
   }
 
+// ------------------------- REP, GOV and TCR addresses -------------------------
+
+  address public REPToken;
+  address public GOVToken;
+  address public Registry;
+  address public PLCRVoting;
+
+  function setTCRaddresses(address _REPToken, address _GOVToken, address _Registry, address _PLCRVoting) public {
+    REPToken = _REPToken;
+    GOVToken = _GOVToken;
+    Registry = _Registry;
+    PLCRVoting = _PLCRVoting;
+  }
+
+  function getTCRaddresses() public view returns(address, address, address, address) {
+    return (REPToken, GOVToken, Registry, PLCRVoting);
+  }
+
 }

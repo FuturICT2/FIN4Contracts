@@ -92,6 +92,13 @@ module.exports = async function(deployer) {
 
 	const PLCRVotingAddress = await RegistryInstance.voting();
 
+	await Fin4MainInstance.setTCRaddresses(
+		Fin4ReputationInstance.address,
+		GOVTokenInstance.address,
+		RegistryInstance.address,
+		PLCRVotingAddress
+	);
+
 	// write Fin4Main and registry address to src/config/DeployedAddresses.js
 	let data =
 		"const RepTokenAddress = '" +
