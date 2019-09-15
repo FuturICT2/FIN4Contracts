@@ -44,6 +44,7 @@
 		"account": "account2"
 	},
 	"scripts": {
+		"start-deploy": "react-scripts start",
 		"start": "react-scripts start --hot",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
