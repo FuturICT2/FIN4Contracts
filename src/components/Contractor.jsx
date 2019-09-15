@@ -1,5 +1,5 @@
 import { Fin4MainAddress, PLCRVotingAddress } from '../config/DeployedAddresses.js';
-import { ADD_MULTIPLE_FIN4_TOKENS, ADD_MULTIPLE_CLAIMS } from '../middleware/actionTypes';
+import { ADD_MULTIPLE_FIN4_TOKENS, ADD_MULTIPLE_CLAIMS, ADD_ADDRESS } from '../middleware/actionTypes';
 const BN = require('bignumber.js');
 
 const getContract = (contractAddress, contractName) => {
@@ -20,6 +20,40 @@ const getContractData = (contract, contractJson, method, methodArgs = []) => {
 			from: currentAccount
 		});
 	});
+};
+
+let loadedAllInitalDataIntoTheStore = false;
+
+const loadInitialDataIntoStore = (props, callback) => {
+	if (loadedAllInitalDataIntoTheStore) {
+		return;
+	}
+	getContractData(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
+		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
+			props.dispatch({
+				type: ADD_ADDRESS,
+				name: 'REPToken',
+				address: REPToken
+			});
+			props.dispatch({
+				type: ADD_ADDRESS,
+				name: 'GOVToken',
+				address: GOVToken
+			});
+			props.dispatch({
+				type: ADD_ADDRESS,
+				name: 'Registry',
+				address: Registry
+			});
+			props.dispatch({
+				type: ADD_ADDRESS,
+				name: 'PLCRVoting',
+				address: PLCRVoting
+			});
+			loadedAllInitalDataIntoTheStore = true;
+			callback();
+		}
+	);
 };
 
 let loadedAllFin4TokensIntoTheStore = false;
@@ -43,7 +77,6 @@ const loadAllFin4TokensIntoStoreIfNotDoneYet = props => {
 		})
 		.then(promises => Promise.all(promises))
 		.then(tokenArr => {
-			console.log(tokenArr);
 			props.dispatch({
 				type: ADD_MULTIPLE_FIN4_TOKENS,
 				tokenArr: tokenArr
@@ -169,6 +202,7 @@ export {
 	getAllActionTypes,
 	getPollStatus,
 	PollStatus,
+	loadInitialDataIntoStore,
 	loadAllFin4TokensIntoStoreIfNotDoneYet,
 	getDropdownFormattedListOfFin4Tokens,
 	loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet

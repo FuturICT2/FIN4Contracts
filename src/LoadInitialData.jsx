@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { drizzleConnect } from 'drizzle-react';
+import { loadInitialDataIntoStore } from './components/Contractor';
 
 class LoadInitialData extends Component {
 	constructor(props) {
@@ -8,10 +9,11 @@ class LoadInitialData extends Component {
 			initialDataLoaded: true
 		};
 
-		// load all basic things into the store
-		// TODO
-		this.props.dataLoadedCallback();
-		// this.setState({ initialDataLoaded: true });
+		// load initial data into the store
+		loadInitialDataIntoStore(props, () => {
+			this.props.dataLoadedCallback();
+			this.setState({ initialDataLoaded: true });
+		});
 	}
 
 	render() {

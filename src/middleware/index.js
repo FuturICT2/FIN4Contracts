@@ -3,7 +3,14 @@
 import { generateStore, EventActions } from 'drizzle';
 import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
-import { ADD_FIN4_TOKEN, ADD_MULTIPLE_FIN4_TOKENS, ADD_CLAIM, ADD_MULTIPLE_CLAIMS, APPROVE_CLAIM } from './actionTypes';
+import {
+	ADD_FIN4_TOKEN,
+	ADD_MULTIPLE_FIN4_TOKENS,
+	ADD_CLAIM,
+	ADD_MULTIPLE_CLAIMS,
+	APPROVE_CLAIM,
+	ADD_ADDRESS
+} from './actionTypes';
 
 const contractEventNotifier = store => next => action => {
 	if (action.type !== EventActions.EVENT_FIRED) {
@@ -89,7 +96,8 @@ const appMiddlewares = [contractEventNotifier];
 
 const initialState = {
 	fin4Tokens: {},
-	usersClaims: {}
+	usersClaims: {},
+	addresses: {}
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -143,6 +151,14 @@ function fin4StoreReducer(state = initialState, action) {
 						...state.usersClaims[action.id],
 						isApproved: true
 					}
+				}
+			};
+		case ADD_ADDRESS:
+			return {
+				...state,
+				addresses: {
+					...state.addresses,
+					[action.name]: action.address
 				}
 			};
 		default:
