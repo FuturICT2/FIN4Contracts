@@ -99,6 +99,8 @@ module.exports = async function(deployer) {
 		PLCRVotingAddress
 	);
 
+	// TODO write only Fin4Main to file and fetch the other 4 from the drizzle store
+
 	// write Fin4Main and registry address to src/config/DeployedAddresses.js
 	let data =
 		"const RepTokenAddress = '" +
