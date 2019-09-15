@@ -65,14 +65,22 @@ class Home extends Component {
 				let listingsObj = {};
 				for (var i = 0; i < listingsKeys.length; i++) {
 					let address = '0x' + listingsKeys[i].substr(26, listingsKeys[i].length - 1);
+					let whitelisted = whitelistees[i];
+					let challengeID = new BN(challengeIDs[i]).toNumber();
+
+					if (!whitelisted && challengeID === 0) {
+						// has been voted out / rejected
+						continue;
+					}
+
 					listingsObj[address] = {
 						address: address,
 						listingKey: listingsKeys[i],
 						applicationExpiry: applicationExpiries[i],
-						whitelisted: whitelistees[i],
+						whitelisted: whitelisted,
 						owner: owners[i],
 						unstakedDeposit: unstakedDeposits[i],
-						challengeID: new BN(challengeIDs[i]).toNumber(),
+						challengeID: challengeID,
 						name: '',
 						status: '',
 						actionStatus: Action_Status.UNDEFINED,
