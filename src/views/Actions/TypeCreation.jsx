@@ -59,12 +59,12 @@ class TypeCreation extends Component {
 						contractName="Fin4Main"
 						method="createNewToken"
 						multiSelectOptions={this.state.proofTypes}
-						labels={['Name', 'Symbol', 'Proof Types']}
+						labels={['Name', 'Symbol', 'Description', 'Proof Types']}
 						hideArgs={{
 							paramValues: 'paramValues',
 							paramValuesIndices: 'paramValuesIndices'
 						}}
-						helperModalTriggers={[null, null, this.toggleModal]}
+						helperModalTriggers={[null, null, null, this.toggleModal]}
 					/>
 				</Box>
 				<Modal isOpen={this.state.isModalOpen} handleClose={this.toggleModal} title="Proof Types">

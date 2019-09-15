@@ -7,17 +7,19 @@ contract Fin4TokenBase { // abstract class
 
   address public Fin4Main;
   address public actionTypeCreator;
+  string public description;
 
-  constructor(address Fin4MainAddress, address actionTypeCreatorAddress) public {
+  constructor(address Fin4MainAddress, address actionTypeCreatorAddress, string memory _description) public {
     Fin4Main = Fin4MainAddress;
     actionTypeCreator = actionTypeCreatorAddress;
+    description = _description;
   }
 
   function name() public view returns(string memory);
   function symbol() public view returns(string memory);
 
-  function getInfo() public view returns(string memory, string memory) {
-    return (name(), symbol());
+  function getInfo() public view returns(string memory, string memory, string memory) {
+    return (name(), symbol(), description);
   }
 
   // ------------------------- CLAIM -------------------------

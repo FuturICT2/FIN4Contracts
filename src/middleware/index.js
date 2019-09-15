@@ -30,9 +30,10 @@ const contractEventNotifier = store => next => action => {
 		store.dispatch({
 			type: ADD_FIN4_TOKEN,
 			token: {
+				address: address,
 				name: name,
 				symbol: symbol,
-				address: address
+				description: token.description
 			}
 		});
 	}
