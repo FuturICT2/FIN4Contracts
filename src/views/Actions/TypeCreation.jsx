@@ -52,43 +52,41 @@ class TypeCreation extends Component {
 
 	render() {
 		return (
-			this.state.proofTypes.length > 0 && (
-				<>
-					<Box title="Create a New Action Type">
-						<ContractForm
-							contractAddress={Fin4MainAddress}
-							contractName="Fin4Main"
-							method="createNewToken"
-							multiSelectOptions={this.state.proofTypes}
-							labels={['Name', 'Symbol', 'Proof Types']}
-							hideArgs={{
-								paramValues: 'paramValues',
-								paramValuesIndices: 'paramValuesIndices'
-							}}
-							helperModalTriggers={[null, null, this.toggleModal]}
-						/>
-					</Box>
-					<Modal isOpen={this.state.isModalOpen} handleClose={this.toggleModal} title="Proof Types">
-						<Table headers={['Name', 'Description']}>
-							{this.state.proofTypes.length > 0 && (
-								<>
-									{this.state.proofTypes.map((item, index) => {
-										return (
-											<TableRow
-												key={index}
-												data={{
-													name: item.label,
-													description: item.description
-												}}
-											/>
-										);
-									})}
-								</>
-							)}
-						</Table>
-					</Modal>
-				</>
-			)
+			<>
+				<Box title="Create a New Action Type">
+					<ContractForm
+						contractAddress={Fin4MainAddress}
+						contractName="Fin4Main"
+						method="createNewToken"
+						multiSelectOptions={this.state.proofTypes}
+						labels={['Name', 'Symbol', 'Description', 'Proof Types']}
+						hideArgs={{
+							paramValues: 'paramValues',
+							paramValuesIndices: 'paramValuesIndices'
+						}}
+						helperModalTriggers={[null, null, null, this.toggleModal]}
+					/>
+				</Box>
+				<Modal isOpen={this.state.isModalOpen} handleClose={this.toggleModal} title="Proof Types">
+					<Table headers={['Name', 'Description']}>
+						{this.state.proofTypes.length > 0 && (
+							<>
+								{this.state.proofTypes.map((item, index) => {
+									return (
+										<TableRow
+											key={index}
+											data={{
+												name: item.label,
+												description: item.description
+											}}
+										/>
+									);
+								})}
+							</>
+						)}
+					</Table>
+				</Modal>
+			</>
 		);
 	}
 }

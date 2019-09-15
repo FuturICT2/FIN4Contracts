@@ -7,6 +7,10 @@ const useStyles = makeStyles(theme => ({
 	bar: {
 		background: colors.main,
 		marginBottom: 20,
+		'padding-top': 15,
+		'padding-bottom': 15,
+		'font-size': 'large',
+		'font-family': 'arial'
 	},
 	headerImage: {
 		maxHeight: 50,
@@ -18,12 +22,11 @@ const useStyles = makeStyles(theme => ({
 const TopBar = () => {
 	const classes = useStyles();
 	return (
-		<a href="/">
-			<AppBar position="static" className={classes.bar}>
-				<img src="/header.png" alt="header of finfoo" className={classes.headerImage} />
-			</AppBar>
-		</a>
+		<AppBar position="static" className={classes.bar}>
+			<center>FIN4XPLORER</center>
+		</AppBar>
 	);
 };
+// <a href="/"><img src="/header.png" alt="header of finfoo" className={classes.headerImage} />
 
 export default TopBar;

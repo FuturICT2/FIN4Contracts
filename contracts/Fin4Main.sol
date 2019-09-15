@@ -6,7 +6,7 @@ import 'contracts/proof/Fin4BaseProofType.sol';
 contract Fin4Main {
 
   // TODO do we need the indexed keyword for event params?
-  event Fin4TokenCreated(address addr, string name, string symbol);
+  event Fin4TokenCreated(address addr, string name, string symbol, string description);
   event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment);
   event ClaimApproved(address tokenAddr, uint claimId);
 
@@ -14,9 +14,9 @@ contract Fin4Main {
   // mapping (address => bool) public officialChildren; // TODO for Sergiu's TCR
 
   // This methods creates new action types and gets called from TypeCreation
-	function createNewToken(string memory name, string memory symbol, address[] memory requiredProofTypes,
+	function createNewToken(string memory name, string memory symbol, string memory description, address[] memory requiredProofTypes,
     uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
-    Fin4Token newToken = new Fin4Token(name, symbol, address(this), msg.sender);
+    Fin4Token newToken = new Fin4Token(name, symbol, description, address(this), msg.sender);
 
     for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the action type creator
       newToken.addRequiredProofType(requiredProofTypes[i]);
@@ -46,7 +46,7 @@ contract Fin4Main {
     }
     children.push(address(newToken));
 
-    emit Fin4TokenCreated(address(newToken), name, symbol);
+    emit Fin4TokenCreated(address(newToken), name, symbol, description);
 
     return address(newToken);
   }

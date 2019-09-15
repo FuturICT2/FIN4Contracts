@@ -1,5 +1,6 @@
 body {
-	background: lightblue url('/bg-trees.png') no-repeat center center fixed;
+	/*background: lightblue url('/bg-trees.png') no-repeat center center fixed;*/
+	background: lightgray;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;

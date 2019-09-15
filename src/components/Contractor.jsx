@@ -31,17 +31,19 @@ const loadAllFin4TokensIntoStoreIfNotDoneYet = props => {
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
 		.then(tokens => {
 			return tokens.map(address => {
-				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol }) => {
+				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
 					return {
+						address: address,
 						name: name,
 						symbol: symbol,
-						address: address
+						description: description
 					};
 				});
 			});
 		})
 		.then(promises => Promise.all(promises))
 		.then(tokenArr => {
+			console.log(tokenArr);
 			props.dispatch({
 				type: ADD_MULTIPLE_FIN4_TOKENS,
 				tokenArr: tokenArr
@@ -114,7 +116,7 @@ const getAllActionTypes = () => {
 	return getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
 		.then(tokens => {
 			return tokens.map(address => {
-				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol }) => {
+				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
 					return {
 						value: address,
 						label: `[${symbol}] ${name}`
