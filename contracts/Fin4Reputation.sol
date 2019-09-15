@@ -43,8 +43,8 @@ contract Fin4Reputation is ERC20Plus {
 
   // for deployment-dev only, make sure this can't be misused
   function getGOVFromReputation(address tokenHolder) public returns (bool) {
-    require(GOVToken.balanceOf(tokenHolder) < balanceOf(tokenHolder),
-      "Can't reset GOV balance because the user has more GOV than REP tokens.");
+    require(GOVToken.balanceOf(tokenHolder) + GOVToken.getAmountsDelegatedByAUser(tokenHolder) < balanceOf(tokenHolder),
+      "Can't reset GOV balance because the user has more GOV than REP tokens (including delegated tokens).");
     GOVToken.mint(tokenHolder, balanceOf(tokenHolder) - GOVToken.balanceOf(tokenHolder));
     return true;
   }
