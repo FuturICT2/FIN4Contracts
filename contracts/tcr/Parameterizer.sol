@@ -171,7 +171,7 @@ contract Parameterizer {
         return propID;
     }
 
-    function getProposalKeys() public returns (bytes32[] memory) {
+    function getProposalKeys() public view returns (bytes32[] memory) {
         return proposalKeys;
     }
 

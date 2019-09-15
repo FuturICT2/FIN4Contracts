@@ -50,7 +50,7 @@ contract GOV is ERC20Plus {
   }
   */
 
-  function getAmountsDelegatedToMe() public returns(uint256) {
+  function getAmountsDelegatedToMe() public view returns(uint256) {
     return (delegateeTokens[msg.sender]);
   }
 
