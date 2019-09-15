@@ -58,7 +58,7 @@ const loadInitialDataIntoStore = (props, callback) => {
 
 let loadedAllFin4TokensIntoTheStore = false;
 
-const loadAllFin4TokensIntoStoreIfNotDoneYet = props => {
+const loadAllFin4TokensIntoStoreIfNotDoneYet = (props, callback) => {
 	if (loadedAllFin4TokensIntoTheStore) {
 		return;
 	}
@@ -82,6 +82,9 @@ const loadAllFin4TokensIntoStoreIfNotDoneYet = props => {
 				tokenArr: tokenArr
 			});
 			loadedAllFin4TokensIntoTheStore = true;
+			if (callback) {
+				callback();
+			}
 		});
 };
 
