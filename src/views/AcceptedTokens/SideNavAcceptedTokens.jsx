@@ -12,11 +12,11 @@ class SideNavAcceptedTokens extends Component {
 				}}>
 				<SideNav.Toggle />
 				<SideNav.Nav defaultSelected="dashboard">
-					<NavItem eventKey="home">
+					<NavItem eventKey="listing">
 						<NavIcon>
 							<i className="fa fa-fw fa-home" style={{ fontSize: '1.75em' }} />
 						</NavIcon>
-						<NavText>Home</NavText>
+						<NavText>Listing</NavText>
 					</NavItem>
 					<NavItem eventKey="management">
 						<NavIcon>

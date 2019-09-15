@@ -18,7 +18,7 @@ import VoteModal from './VoteModal';
 import RevealModal from './RevealModal';
 const BN = require('bignumber.js');
 
-class Home extends Component {
+class Listing extends Component {
 	constructor(props) {
 		super(props);
 
@@ -468,4 +468,4 @@ const inputFieldStyle = {
 	marginBottom: '15px'
 };
 
-export default drizzleConnect(Home);
+export default drizzleConnect(Listing);

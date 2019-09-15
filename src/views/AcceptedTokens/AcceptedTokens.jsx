@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import SideNavAcceptedTokens from './SideNavAcceptedTokens';
 import Management from './Management';
-import Home from './Home';
+import Listing from './Listing';
 import Governance from './Governance';
 
 class AcceptedTokens extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { page: 'Home' };
+
+		this.state = { page: 'listing' };
+
 		this.componentholderStyle = {
 			position: 'fixed',
 			backgroundColor: 'green',
@@ -27,8 +29,8 @@ class AcceptedTokens extends Component {
 				<div style={this.componentholderStyle}>
 					{(() => {
 						switch (this.state.page) {
-							case 'home':
-								return <Home />;
+							case 'listing':
+								return <Listing />;
 							case 'governance':
 								return <Governance />;
 							case 'management':
