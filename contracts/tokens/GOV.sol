@@ -14,6 +14,8 @@ contract GOV is ERC20Plus {
   // The tokens that you delegated to someone else
   // mapping(address => address[]) private delegatorTokensIndexes;
   mapping(address => mapping(address => uint256)) private delegatorTokens;
+  // Total amount of tokens a user has delegated
+  mapping(address => uint256) private delegatorTokensTotal;
   // The tokens that have been delagated to you
   mapping(address => uint256) private delegateeTokens;
 
@@ -50,7 +52,11 @@ contract GOV is ERC20Plus {
   }
   */
 
-  function getAmountsDelegatedToMe() public view returns(uint256) {
+  function getAmountsDelegatedByAUser(address tokenHolder) public returns(uint256) {
+    return (delegatorTokensTotal[tokenHolder]);
+  }
+
+  function getAmountsDelegatedToMe() public returns(uint256) {
     return (delegateeTokens[msg.sender]);
   }
 
@@ -61,7 +67,7 @@ contract GOV is ERC20Plus {
     // delegatorTokensIndexes.push(to);
     delegatorTokens[msg.sender][to] += amount;
     delegateeTokens[to] += amount;
-
+    delegatorTokensTotal[msg.sender] += amount;
     _transfer(msg.sender, to, amount);
     return true;
   }
@@ -73,6 +79,8 @@ contract GOV is ERC20Plus {
     // TODO: remove from
     delegatorTokens[msg.sender][to] -= amount;
     delegateeTokens[to] -= amount;
+    delegatorTokensTotal[msg.sender] -= amount;
+
 
     _transfer(to, msg.sender, amount);
     return true;
