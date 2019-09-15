@@ -33,9 +33,11 @@ class NavigationBar extends Component {
 						this.setState({ value });
 					}}
 					showLabels>
-					{menuItems.map((route, i) => {
-						return <MenuItem key={i} component={Link} to={route.path} label={route.label} icon={<route.icon />} />;
-					})}
+					{menuItems
+						.filter(item => item.showInNavBar)
+						.map((route, i) => {
+							return <MenuItem key={i} component={Link} to={route.path} label={route.label} icon={<route.icon />} />;
+						})}
 				</MenuContainer>
 			</ThemeProvider>
 		);
