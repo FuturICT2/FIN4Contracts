@@ -12,9 +12,17 @@ import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from './config/colors-config';
 import store from './middleware';
 import { ToastContainer } from 'react-toastify';
+import LoadInitialData from './LoadInitialData';
 import 'react-toastify/dist/ReactToastify.css';
 
 class App extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			initialDataLoaded: false
+		};
+	}
+
 	render() {
 		return (
 			<Router>
@@ -25,10 +33,16 @@ class App extends Component {
 						<DrizzleProvider store={store} options={drizzleConfig}>
 							<LoadingContainer>
 								<>
+									<LoadInitialData
+										dataLoadedCallback={() => {
+											this.setState({ initialDataLoaded: true });
+										}}
+									/>
 									{/* register menu routes */}
-									{menuItems.map((route, i) => (
-										<Route exact key={i} render={() => <route.component />} path={route.path} />
-									))}
+									{this.state.initialDataLoaded &&
+										menuItems.map((route, i) => (
+											<Route exact key={i} render={() => <route.component />} path={route.path} />
+										))}
 								</>
 							</LoadingContainer>
 						</DrizzleProvider>
