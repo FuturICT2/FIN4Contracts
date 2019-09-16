@@ -45,7 +45,7 @@ const menu = [
 		path: '/AcceptedTokens',
 		label: 'Accepted Tokens',
 		icon: CheckIcon,
-		showInNavBar: true
+		showInNavBar: false
 	}
 ];
 
