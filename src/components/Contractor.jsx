@@ -28,6 +28,7 @@ const loadInitialDataIntoStore = (props, callback) => {
 	if (loadedAllInitalDataIntoTheStore) {
 		return;
 	}
+
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
 		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
 			props.dispatch({
@@ -50,8 +51,12 @@ const loadInitialDataIntoStore = (props, callback) => {
 				name: 'PLCRVoting',
 				address: PLCRVoting
 			});
-			loadedAllInitalDataIntoTheStore = true;
-			callback();
+
+			// load all Fin4 tokens into the store
+			loadAllFin4TokensIntoStoreIfNotDoneYet(props, () => {
+				loadedAllInitalDataIntoTheStore = true;
+				callback();
+			});
 		}
 	);
 };

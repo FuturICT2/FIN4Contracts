@@ -3,10 +3,7 @@ import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import {
-	loadAllFin4TokensIntoStoreIfNotDoneYet,
-	getDropdownFormattedListOfFin4Tokens
-} from '../../components/Contractor';
+import { getDropdownFormattedListOfFin4Tokens } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses';
 
 class Claim extends Component {
@@ -15,9 +12,6 @@ class Claim extends Component {
 		this.state = {
 			tokens: []
 		};
-
-		// load all Fin4 tokens into the store
-		loadAllFin4TokensIntoStoreIfNotDoneYet(props);
 	}
 
 	componentDidUpdate(prevProps) {

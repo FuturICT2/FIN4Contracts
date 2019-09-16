@@ -4,7 +4,6 @@ import Container from './../components/Container';
 import Messages from './Actions/Messages';
 import { getContractData } from './../components/Contractor';
 import { Fin4MainAddress } from './../config/DeployedAddresses.js';
-import { loadAllFin4TokensIntoStoreIfNotDoneYet } from './../components/Contractor';
 import Box from './../components/Box';
 import Table from './../components/Table';
 import TableRow from './../components/TableRow';
@@ -17,29 +16,26 @@ class Home extends Component {
 			tokenInfosAndBalances: []
 		};
 
-		// load all Fin4 tokens into the store
-		loadAllFin4TokensIntoStoreIfNotDoneYet(props, () => {
-			var currentAccount = window.web3.currentProvider.selectedAddress;
+		var currentAccount = window.web3.currentProvider.selectedAddress;
 
-			getContractData(Fin4MainAddress, 'Fin4Main', 'getChildrenWhereUserHasNonzeroBalance')
-				.then(tokenAddresses => {
-					return tokenAddresses.map(address => {
-						let token = this.props.store.getState().fin4Store.fin4Tokens[address];
-						return getContractData(address, 'Fin4Token', 'balanceOf', [currentAccount]).then(balance => {
-							return {
-								address: token.address,
-								name: token.name,
-								symbol: token.symbol,
-								balance: balance.toString()
-							};
-						});
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildrenWhereUserHasNonzeroBalance')
+			.then(tokenAddresses => {
+				return tokenAddresses.map(address => {
+					let token = this.props.store.getState().fin4Store.fin4Tokens[address];
+					return getContractData(address, 'Fin4Token', 'balanceOf', [currentAccount]).then(balance => {
+						return {
+							address: token.address,
+							name: token.name,
+							symbol: token.symbol,
+							balance: balance.toString()
+						};
 					});
-				})
-				.then(data => Promise.all(data))
-				.then(data => {
-					this.setState({ tokenInfosAndBalances: data });
 				});
-		});
+			})
+			.then(data => Promise.all(data))
+			.then(data => {
+				this.setState({ tokenInfosAndBalances: data });
+			});
 	}
 
 	render() {
