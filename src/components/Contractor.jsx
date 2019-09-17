@@ -1,4 +1,4 @@
-import { Fin4MainAddress, PLCRVotingAddress } from '../config/DeployedAddresses.js';
+import { Fin4MainAddress } from '../config/DeployedAddresses.js';
 import {
 	ADD_MULTIPLE_FIN4_TOKENS,
 	ADD_MULTIPLE_CLAIMS,
@@ -36,7 +36,7 @@ const loadInitialDataIntoStore = props => {
 	initialDataLoaded = true;
 
 	// TCR addresses
-	getTCRAddresses(props);
+	// getTCRAddresses(props);
 
 	// get tokens
 	getAllFin4Tokens(props, () => {
@@ -179,7 +179,7 @@ const getAllActionTypes = () => {
 
 const getPollStatus = pollID => {
 	// pollID is also called challengeID in Registry.sol
-	return getContractData(PLCRVotingAddress, 'PLCRVoting', 'pollMap', [pollID]).then(
+	return getContractData('PLCRVotingAddress-DUMMY', 'PLCRVoting', 'pollMap', [pollID]).then(
 		({ 0: commitEndDateBN, 1: revealEndDateBN, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
 			let commitEndDate = new BN(commitEndDateBN).toNumber() * 1000;
 			let revealEndDate = new BN(revealEndDateBN).toNumber() * 1000;

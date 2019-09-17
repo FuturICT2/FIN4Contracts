@@ -1,3 +1,6 @@
+const fs = require('fs');
+var path = require('path');
+
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4Messages = artifacts.require('Fin4Messages');
 const contracts = [
@@ -28,6 +31,11 @@ module.exports = async function(deployer) {
 	const proofTypeInstances = await Promise.all(contracts.map(contract => contract.deployed()));
 
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
+
+	let data = "const Fin4MainAddress = '" + Fin4MainInstance.address + "';\n" + 'export { Fin4MainAddress };\n';
+	fs.writeFile(path.join(__dirname, '../src/config/DeployedAddresses.js'), data, err => {
+		if (err) throw 'Error writing file: ' + err;
+	});
 
 	// temp: tokens to work on TCR dev
 	/*

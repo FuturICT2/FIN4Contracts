@@ -1,15 +1,12 @@
 //import ActionsIcon from '@material-ui/icons/DirectionsRun';
-import StarIcon from '@material-ui/icons/Star';
+//import StarIcon from '@material-ui/icons/Star';
+//import CheckIcon from '@material-ui/icons/CheckCircleOutline';
 import AddIcon from '@material-ui/icons/AddBox';
 import DoneIcon from '@material-ui/icons/Done';
-import CheckIcon from '@material-ui/icons/CheckCircleOutline';
 import HomeIcon from '@material-ui/icons/Home';
-
 import Home from '../views/Home';
 import Actions from '../views/Actions/Actions';
 import Create from '../views/Actions/Create';
-import More from '../views/More/More';
-import AcceptedTokens from '../views/AcceptedTokens/AcceptedTokens';
 
 const menu = [
 	{
@@ -32,8 +29,8 @@ const menu = [
 		label: 'Create',
 		icon: AddIcon,
 		showInNavBar: true
-	},
-	{
+	}
+	/*{
 		component: More,
 		path: '/more',
 		label: 'More',
@@ -46,7 +43,7 @@ const menu = [
 		label: 'Accepted Tokens',
 		icon: CheckIcon,
 		showInNavBar: false
-	}
+	}*/
 ];
 
 export default menu;
