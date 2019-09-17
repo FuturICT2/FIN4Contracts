@@ -52,11 +52,11 @@ contract GOV is ERC20Plus {
   }
   */
 
-  function getAmountsDelegatedByAUser(address tokenHolder) public returns(uint256) {
+  function getAmountsDelegatedByAUser(address tokenHolder) public view returns(uint256) {
     return (delegatorTokensTotal[tokenHolder]);
   }
 
-  function getAmountsDelegatedToMe() public returns(uint256) {
+  function getAmountsDelegatedToMe() public view returns(uint256) {
     return (delegateeTokens[msg.sender]);
   }
 
