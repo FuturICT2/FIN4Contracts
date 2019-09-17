@@ -5,7 +5,7 @@ import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { Fin4MainAddress } from '../../config/DeployedAddresses';
 
-class Claim extends Component {
+class ClaimToken extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -25,7 +25,7 @@ class Claim extends Component {
 	}
 }
 
-Claim.contextTypes = {
+ClaimToken.contextTypes = {
 	drizzle: PropTypes.object
 };
 
@@ -36,4 +36,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(Claim, mapStateToProps);
+export default drizzleConnect(ClaimToken, mapStateToProps);

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Container from '../../components/Container';
 import PreviousClaims from './PreviousClaims';
-import Claim from './Claim';
+import ClaimToken from './ClaimToken';
 
 class Actions extends Component {
 	render() {
 		return (
 			<Container>
 				<div>
-					<Claim />
+					<ClaimToken />
 				</div>
 				<PreviousClaims />
 			</Container>
