@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet } from '../../components/Contractor';
 import Box from '../../components/Box';
 import Currency from '../../components/Currency';
 import Modal from '../../components/Modal';
@@ -20,19 +19,15 @@ class PreviousClaims extends Component {
 		super(props);
 
 		this.state = {
-			claims: [],
 			isProofModalOpen: false
 		};
 
 		this.resetProofModalValues();
-
-		// load all claims of the current user into the store
-		loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet(props);
 	}
 
 	resetProofModalValues() {
 		this.proofModalValues = {
-			actionTypeAddress: null,
+			tokenAddress: null,
 			claimId: null
 		};
 	}
@@ -44,100 +39,68 @@ class PreviousClaims extends Component {
 		this.setState({ isProofModalOpen: !this.state.isProofModalOpen });
 	};
 
-	componentDidUpdate(prevProps) {
-		if (this.props.usersClaims === prevProps.usersClaims) {
-			return;
-		}
-		// TODO data.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
-
-		this.setState({
-			claims: Object.keys(this.props.usersClaims).map(id => {
-				let claim = this.props.usersClaims[id];
-				let token = this.props.fin4Tokens[claim.token];
-				return {
-					claimId: claim.claimId,
-					actionTypeAddress: claim.token,
-					tokenName: token.name,
-					tokenSymbol: token.symbol,
-					isApproved: claim.isApproved,
-					quantity: claim.quantity.toString(),
-					date: claim.date.toString(),
-					comment: claim.comment
-				};
-			})
-		});
-	}
-
 	render() {
 		return (
-			this.state.claims.length > 0 && (
-				<>
-					<Box title="My Previous Claims">
-						{this.state.claims.map(
-							({ claimId, actionTypeAddress, tokenName, tokenSymbol, isApproved, quantity, date, comment }) => {
-								// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
-								date = moment.unix(Number(date.substring(0, date.length - 3))).calendar();
-								return (
-									<Claim isapproved={isApproved ? 'true' : 'false'} key={`${actionTypeAddress}${claimId}`}>
-										<div>
-											<Grid container alignItems="center">
-												<Grid item xs>
-													<Typography gutterBottom variant="h5">
-														{tokenName}
-													</Typography>
-												</Grid>
-												<Grid item>
-													<Typography gutterBottom variant="h6">
-														{quantity} <Currency symbol={tokenSymbol} />
-													</Typography>
-												</Grid>
-											</Grid>
-											{comment && (
-												<Typography color="textSecondary" variant="body2">
-													{comment}
-												</Typography>
-											)}
-										</div>
-										<Divider style={{ margin: '10px 0' }} variant="middle" />
-										<ThemeProvider theme={chipTheme}>
-											<Chip
-												key="0"
-												color="primary"
-												icon={<DateIcon />}
-												label={date}
-												style={{ margin: '0 7px 7px 0' }}
-											/>
-										</ThemeProvider>
-										<ThemeProvider theme={buttonTheme}>
-											<Button
-												icon={ProofIcon}
-												onClick={() => {
-													this.proofModalValues.actionTypeAddress = actionTypeAddress;
-													this.proofModalValues.claimId = claimId;
-													this.toggleProofModal();
-												}}
-												color={isApproved ? 'primary' : 'secondary'}
-												style={{ margin: '0 7px 7px 0' }}>
-												{isApproved ? 'approved' : 'submit proof'}
-											</Button>
-										</ThemeProvider>
-									</Claim>
-								);
-							}
-						)}
-					</Box>
-					<Modal
-						isOpen={this.state.isProofModalOpen}
-						handleClose={this.toggleProofModal}
-						title="Submit Proofs"
-						width="450px">
-						<ProofSubmission
-							tokenAddress={this.proofModalValues.actionTypeAddress}
-							claimId={this.proofModalValues.claimId}
-						/>
-					</Modal>
-				</>
-			)
+			<>
+				<Box title="My Previous Claims">
+					{Object.keys(this.props.usersClaims).map(pseudoClaimId => {
+						let claim = this.props.usersClaims[pseudoClaimId];
+						let token = this.props.store.getState().fin4Store.fin4Tokens[claim.token];
+						let dateStr = claim.date.toString();
+
+						// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
+						// TODO divide by 1000 instead?
+						let date = moment.unix(Number(dateStr.substring(0, dateStr.length - 3))).calendar();
+						return (
+							<Claim isapproved={claim.isApproved ? 'true' : 'false'} key={`${claim.tokenAddress}${claim.claimId}`}>
+								<div>
+									<Grid container alignItems="center">
+										<Grid item xs>
+											<Typography gutterBottom variant="h5">
+												{token.name}
+											</Typography>
+										</Grid>
+										<Grid item>
+											<Typography gutterBottom variant="h6">
+												{claim.quantity} <Currency symbol={token.symbol} />
+											</Typography>
+										</Grid>
+									</Grid>
+									{claim.comment && (
+										<Typography color="textSecondary" variant="body2">
+											{claim.comment}
+										</Typography>
+									)}
+								</div>
+								<Divider style={{ margin: '10px 0' }} variant="middle" />
+								<ThemeProvider theme={chipTheme}>
+									<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ margin: '0 7px 7px 0' }} />
+								</ThemeProvider>
+								<ThemeProvider theme={buttonTheme}>
+									<Button
+										icon={ProofIcon}
+										onClick={() => {
+											this.proofModalValues.tokenAddress = claim.token;
+											this.proofModalValues.claimId = claim.claimId;
+											this.toggleProofModal();
+										}}
+										color={claim.isApproved ? 'primary' : 'secondary'}
+										style={{ margin: '0 7px 7px 0' }}>
+										{claim.isApproved ? 'approved' : 'submit proof'}
+									</Button>
+								</ThemeProvider>
+							</Claim>
+						);
+					})}
+				</Box>
+				<Modal
+					isOpen={this.state.isProofModalOpen}
+					handleClose={this.toggleProofModal}
+					title="Submit Proofs"
+					width="450px">
+					<ProofSubmission tokenAddress={this.proofModalValues.tokenAddress} claimId={this.proofModalValues.claimId} />
+				</Modal>
+			</>
 		);
 	}
 }
@@ -180,7 +143,6 @@ PreviousClaims.contextTypes = {
 const mapStateToProps = state => {
 	return {
 		contracts: state.contracts,
-		fin4Tokens: state.fin4Store.fin4Tokens,
 		usersClaims: state.fin4Store.usersClaims
 	};
 };

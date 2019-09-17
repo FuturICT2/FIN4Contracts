@@ -43,6 +43,7 @@ const loadInitialDataIntoStore = props => {
 	getAllFin4Tokens(props, () => {
 		// get current users nonzero balances, TODO how to handle change of user in MetaMask?
 		getMyNonzeroTokenBalances(props);
+		getAllCurrentUsersClaims(props);
 	});
 
 	// get proof types
@@ -145,12 +146,7 @@ const getAllProofTypes = props => {
 		});
 };
 
-let loadedAllCurrentUsersClaimsIntoTheStore = false;
-
-const loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet = props => {
-	if (loadedAllCurrentUsersClaimsIntoTheStore) {
-		return;
-	}
+const getAllCurrentUsersClaims = props => {
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims')
 		.then(tokenAddresses => {
 			return tokenAddresses.map(tokenAddr => {
@@ -191,7 +187,6 @@ const loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet = props => {
 				type: ADD_MULTIPLE_CLAIMS,
 				claimArr: claimArr
 			});
-			loadedAllCurrentUsersClaimsIntoTheStore = true;
 		});
 };
 
@@ -247,12 +242,4 @@ const PollStatus = {
 	PAST_REVEAL_PERIOD: '-'
 };
 
-export {
-	getContractData,
-	getContract,
-	getAllActionTypes,
-	getPollStatus,
-	PollStatus,
-	loadInitialDataIntoStore,
-	loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet
-};
+export { getContractData, getContract, getAllActionTypes, getPollStatus, PollStatus, loadInitialDataIntoStore };
