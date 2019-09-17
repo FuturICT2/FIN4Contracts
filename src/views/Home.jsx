@@ -7,6 +7,7 @@ import { Fin4MainAddress } from './../config/DeployedAddresses.js';
 import Box from './../components/Box';
 import Table from './../components/Table';
 import TableRow from './../components/TableRow';
+import styled from 'styled-components';
 
 class Home extends Component {
 	constructor(props) {
@@ -42,8 +43,10 @@ class Home extends Component {
 		return (
 			<Container>
 				<Messages />
-				<Box title="My Token Balances">
-					{this.state.tokenInfosAndBalances.length > 0 ? (
+				<Box title="Your token balances">
+					{this.state.tokenInfosAndBalances.length === 0 ? (
+						<NoTokens>You haven't sucessfully claimed any tokens yet.</NoTokens>
+					) : (
 						<Table headers={['Name', 'Symbol', 'Balance']}>
 							{this.state.tokenInfosAndBalances.map((entry, index) => {
 								return (
@@ -58,13 +61,17 @@ class Home extends Component {
 								);
 							})}
 						</Table>
-					) : (
-						<center>You have no balance on any token yet.</center>
 					)}
 				</Box>
 			</Container>
 		);
 	}
 }
+
+const NoTokens = styled.div`
+	font-family: arial;
+	text-align: center;
+	color: silver;
+`;
 
 export default drizzleConnect(Home);
