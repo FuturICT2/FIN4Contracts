@@ -31,6 +31,15 @@ const loadInitialDataIntoStore = props => {
 	initialDataLoaded = true;
 
 	// TCR addresses
+	getTCRAddresses(props);
+
+	// get tokens
+	getAllFin4Tokens(props, () => {
+		// ...
+	});
+};
+
+const getTCRAddresses = props => {
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
 		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
 			props.dispatch({
@@ -55,8 +64,9 @@ const loadInitialDataIntoStore = props => {
 			});
 		}
 	);
+};
 
-	// get tokens
+const getAllFin4Tokens = (props, callback) => {
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
 		.then(tokens => {
 			return tokens.map(address => {
@@ -76,6 +86,7 @@ const loadInitialDataIntoStore = props => {
 				type: ADD_MULTIPLE_FIN4_TOKENS,
 				tokenArr: tokenArr
 			});
+			callback();
 		});
 };
 
