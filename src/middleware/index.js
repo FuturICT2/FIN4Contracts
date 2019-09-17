@@ -9,7 +9,9 @@ import {
 	ADD_CLAIM,
 	ADD_MULTIPLE_CLAIMS,
 	APPROVE_CLAIM,
-	ADD_ADDRESS
+	ADD_ADDRESS,
+	UPDATE_BALANCE,
+	UPDATE_MULTIPLE_BALANCES
 } from './actionTypes';
 
 const contractEventNotifier = store => next => action => {
@@ -82,13 +84,15 @@ const contractEventNotifier = store => next => action => {
 
 		display = 'Claim got approved';
 
-		let claimer = claim.claimer;
-		let newBalance = claim.newBalance;
-		// TODO
-
 		store.dispatch({
 			type: APPROVE_CLAIM,
 			id: id
+		});
+
+		store.dispatch({
+			type: UPDATE_BALANCE,
+			tokenAddress: claim.tokenAddr,
+			balance: Number(claim.newBalance)
 		});
 	}
 
@@ -101,6 +105,7 @@ const appMiddlewares = [contractEventNotifier];
 const initialState = {
 	fin4Tokens: {},
 	usersClaims: {},
+	usersBalances: {},
 	addresses: {}
 };
 
@@ -165,6 +170,25 @@ function fin4StoreReducer(state = initialState, action) {
 					[action.name]: action.address
 				}
 			};
+		case UPDATE_BALANCE:
+			return {
+				...state,
+				usersBalances: {
+					...state.usersBalances,
+					[action.tokenAddress]: action.balance
+				}
+			};
+		case UPDATE_MULTIPLE_BALANCES:
+			for (var i = 0; i < action.tokenAddresses.length; i++) {
+				state = {
+					...state,
+					usersBalances: {
+						...state.usersBalances,
+						[action.tokenAddresses[i]]: action.balances[i]
+					}
+				};
+			}
+			return state;
 		default:
 			return state;
 	}

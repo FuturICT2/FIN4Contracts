@@ -54,6 +54,7 @@ contract Fin4Main {
 
   // ------------------------- BALANCE -------------------------
 
+  // DEPRECATED
   // used by More (the marketplace)
   function getFin4TokensWhereUserHasNonzeroBalance() public view returns(address[] memory) {
     uint count = 0;
@@ -73,6 +74,26 @@ contract Fin4Main {
 
   function getBalance(address user, address tokenAddress) public view returns(uint256) {
       return Fin4Token(tokenAddress).balanceOf(user);
+  }
+
+  function getMyNonzeroTokenBalances() public view returns(address[] memory, uint256[] memory) {
+    uint count = 0;
+    for (uint i = 0; i < allFin4Tokens.length; i ++) {
+      if (getBalance(msg.sender, allFin4Tokens[i]) > 0) {
+        count ++;
+      }
+    }
+    // combine this with actionsWhereUserHasClaims to toss the upper loop?
+    address[] memory nonzeroBalanceTokens = new address[](count);
+    uint256[] memory balances = new uint256[](count);
+    for (uint i = 0; i < count; i ++) {
+      uint256 balance = getBalance(msg.sender, allFin4Tokens[i]);
+      if (balance > 0) {
+        nonzeroBalanceTokens[i] = allFin4Tokens[i];
+        balances[i] = balance;
+      }
+    }
+    return (nonzeroBalanceTokens, balances);
   }
 
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------

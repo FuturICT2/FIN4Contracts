@@ -1,5 +1,10 @@
 import { Fin4MainAddress, PLCRVotingAddress } from '../config/DeployedAddresses.js';
-import { ADD_MULTIPLE_FIN4_TOKENS, ADD_MULTIPLE_CLAIMS, ADD_ADDRESS } from '../middleware/actionTypes';
+import {
+	ADD_MULTIPLE_FIN4_TOKENS,
+	ADD_MULTIPLE_CLAIMS,
+	ADD_ADDRESS,
+	UPDATE_MULTIPLE_BALANCES
+} from '../middleware/actionTypes';
 const BN = require('bignumber.js');
 
 const getContract = (contractAddress, contractName) => {
@@ -35,7 +40,8 @@ const loadInitialDataIntoStore = props => {
 
 	// get tokens
 	getAllFin4Tokens(props, () => {
-		// ...
+		// get current users nonzero balances, TODO how to handle change of user in MetaMask?
+		getMyNonzeroTokenBalances(props);
 	});
 };
 
@@ -88,6 +94,21 @@ const getAllFin4Tokens = (props, callback) => {
 			});
 			callback();
 		});
+};
+
+const getMyNonzeroTokenBalances = props => {
+	getContractData(Fin4MainAddress, 'Fin4Main', 'getMyNonzeroTokenBalances').then(
+		({ 0: nonzeroBalanceTokens, 1: balancesBN }) => {
+			if (nonzeroBalanceTokens.length === 0) {
+				return;
+			}
+			props.dispatch({
+				type: UPDATE_MULTIPLE_BALANCES,
+				tokenAddresses: nonzeroBalanceTokens,
+				balances: balancesBN.map(balanceBN => new BN(balanceBN).toNumber())
+			});
+		}
+	);
 };
 
 let loadedAllCurrentUsersClaimsIntoTheStore = false;
