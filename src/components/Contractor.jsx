@@ -3,7 +3,8 @@ import {
 	ADD_MULTIPLE_FIN4_TOKENS,
 	ADD_MULTIPLE_CLAIMS,
 	ADD_ADDRESS,
-	UPDATE_MULTIPLE_BALANCES
+	UPDATE_MULTIPLE_BALANCES,
+	ADD_MULTIPLE_PROOF_TYPES
 } from '../middleware/actionTypes';
 const BN = require('bignumber.js');
 
@@ -43,6 +44,9 @@ const loadInitialDataIntoStore = props => {
 		// get current users nonzero balances, TODO how to handle change of user in MetaMask?
 		getMyNonzeroTokenBalances(props);
 	});
+
+	// get proof types
+	getAllProofTypes(props);
 };
 
 const getTCRAddresses = props => {
@@ -109,6 +113,36 @@ const getMyNonzeroTokenBalances = props => {
 			});
 		}
 	);
+};
+
+const getAllProofTypes = props => {
+	getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes')
+		.then(proofTypeAddresses => {
+			return proofTypeAddresses.map(proofTypeAddress => {
+				return getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypeName', [proofTypeAddress]).then(
+					proofTypeName => {
+						return getContractData(proofTypeAddress, proofTypeName, 'getInfo').then(
+							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
+								return {
+									value: proofTypeAddress,
+									label: name,
+									description: description,
+									paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
+									paramValues: {}
+								};
+							}
+						);
+					}
+				);
+			});
+		})
+		.then(data => Promise.all(data))
+		.then(data => {
+			props.dispatch({
+				type: ADD_MULTIPLE_PROOF_TYPES,
+				proofTypesArr: data
+			});
+		});
 };
 
 let loadedAllCurrentUsersClaimsIntoTheStore = false;

@@ -6,7 +6,6 @@ import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class TypeCreation extends Component {
@@ -14,36 +13,8 @@ class TypeCreation extends Component {
 		super(props);
 
 		this.state = {
-			isModalOpen: false,
-			proofTypes: []
+			isModalOpen: false
 		};
-
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes')
-			.then(proofTypeAddresses => {
-				return proofTypeAddresses.map(proofTypeAddress => {
-					return getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypeName', [proofTypeAddress]).then(
-						proofTypeName => {
-							return getContractData(proofTypeAddress, proofTypeName, 'getInfo').then(
-								({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
-									return {
-										value: proofTypeAddress,
-										label: name,
-										description: description,
-										paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
-										paramValues: {}
-									};
-								}
-							);
-						}
-					);
-				});
-			})
-			.then(data => Promise.all(data))
-			.then(data => {
-				this.setState({
-					proofTypes: data
-				});
-			});
 	}
 
 	toggleModal = () => {
@@ -58,7 +29,7 @@ class TypeCreation extends Component {
 						contractAddress={Fin4MainAddress}
 						contractName="Fin4Main"
 						method="createNewToken"
-						multiSelectOptions={this.state.proofTypes}
+						multiSelectOptions={Object.keys(this.props.proofTypes).map(addr => this.props.proofTypes[addr])}
 						labels={['Name', 'Symbol', 'Description', 'Proof Types']}
 						hideArgs={{
 							paramValues: 'paramValues',
@@ -69,21 +40,20 @@ class TypeCreation extends Component {
 				</Box>
 				<Modal isOpen={this.state.isModalOpen} handleClose={this.toggleModal} title="Proof Types">
 					<Table headers={['Name', 'Description']}>
-						{this.state.proofTypes.length > 0 && (
-							<>
-								{this.state.proofTypes.map((item, index) => {
-									return (
-										<TableRow
-											key={'proof_' + index}
-											data={{
-												name: item.label,
-												description: item.description
-											}}
-										/>
-									);
-								})}
-							</>
-						)}
+						<>
+							{Object.keys(this.props.proofTypes).map((addr, index) => {
+								let proofType = this.props.proofTypes[addr];
+								return (
+									<TableRow
+										key={'proof_' + index}
+										data={{
+											name: proofType.label,
+											description: proofType.description
+										}}
+									/>
+								);
+							})}
+						</>
 					</Table>
 				</Modal>
 				<Box title="Manage tokens you created">
@@ -114,7 +84,8 @@ TypeCreation.contextTypes = {
 const mapStateToProps = state => {
 	return {
 		contracts: state.contracts,
-		fin4Tokens: state.fin4Store.fin4Tokens
+		fin4Tokens: state.fin4Store.fin4Tokens,
+		proofTypes: state.fin4Store.proofTypes
 	};
 };
 

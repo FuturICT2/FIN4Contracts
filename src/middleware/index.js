@@ -11,7 +11,8 @@ import {
 	APPROVE_CLAIM,
 	ADD_ADDRESS,
 	UPDATE_BALANCE,
-	UPDATE_MULTIPLE_BALANCES
+	UPDATE_MULTIPLE_BALANCES,
+	ADD_MULTIPLE_PROOF_TYPES
 } from './actionTypes';
 
 const contractEventNotifier = store => next => action => {
@@ -106,6 +107,7 @@ const initialState = {
 	fin4Tokens: {},
 	usersClaims: {},
 	usersBalances: {},
+	proofTypes: {},
 	addresses: {}
 };
 
@@ -185,6 +187,18 @@ function fin4StoreReducer(state = initialState, action) {
 					usersBalances: {
 						...state.usersBalances,
 						[action.tokenAddresses[i]]: action.balances[i]
+					}
+				};
+			}
+			return state;
+		case ADD_MULTIPLE_PROOF_TYPES:
+			for (var i = 0; i < action.proofTypesArr.length; i++) {
+				let proofType = action.proofTypesArr[i];
+				state = {
+					...state,
+					proofTypes: {
+						...state.proofTypes,
+						[proofType.value]: proofType // TODO change value to address and label to name
 					}
 				};
 			}
