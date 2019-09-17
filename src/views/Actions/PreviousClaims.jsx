@@ -52,7 +52,7 @@ class PreviousClaims extends Component {
 						// TODO divide by 1000 instead?
 						let date = moment.unix(Number(dateStr.substring(0, dateStr.length - 3))).calendar();
 						return (
-							<Claim isapproved={claim.isApproved ? 'true' : 'false'} key={`${claim.tokenAddress}${claim.claimId}`}>
+							<Claim isapproved={claim.isApproved ? 'true' : 'false'} key={`${claim.token}${claim.claimId}`}>
 								<div>
 									<Grid container alignItems="center">
 										<Grid item xs>
