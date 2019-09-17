@@ -18,9 +18,6 @@ import 'react-toastify/dist/ReactToastify.css';
 class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			initialDataLoaded: false
-		};
 	}
 
 	render() {
@@ -33,16 +30,11 @@ class App extends Component {
 						<DrizzleProvider store={store} options={drizzleConfig}>
 							<LoadingContainer>
 								<>
-									<LoadInitialData
-										dataLoadedCallback={() => {
-											this.setState({ initialDataLoaded: true });
-										}}
-									/>
+									<LoadInitialData />
 									{/* register menu routes */}
-									{this.state.initialDataLoaded &&
-										menuItems.map((route, i) => (
-											<Route exact key={i} render={() => <route.component />} path={route.path} />
-										))}
+									{menuItems.map((route, i) => (
+										<Route exact key={i} render={() => <route.component />} path={route.path} />
+									))}
 								</>
 							</LoadingContainer>
 						</DrizzleProvider>

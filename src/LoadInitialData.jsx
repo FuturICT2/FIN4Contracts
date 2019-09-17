@@ -5,19 +5,12 @@ import { loadInitialDataIntoStore } from './components/Contractor';
 class LoadInitialData extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			initialDataLoaded: true
-		};
-
 		// load initial data into the store
-		loadInitialDataIntoStore(props, () => {
-			this.props.dataLoadedCallback();
-			this.setState({ initialDataLoaded: true });
-		});
+		loadInitialDataIntoStore(props);
 	}
 
 	render() {
-		return this.state.initialDataLoaded ? null : <center>Loading initial data...</center>;
+		return null;
 	}
 }
 
