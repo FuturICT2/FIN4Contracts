@@ -216,7 +216,12 @@ const components = {
 	ValueContainer
 };
 
-const formatOptionLabel = ({ value, label, symbol }) => <Currency name={label} symbol={symbol} />;
+const formatOptionLabel = ({ value, label, symbol }) => {
+	if (symbol) {
+		return <Currency name={label} symbol={symbol} />;
+	}
+	return label;
+};
 
 const Dropdown = props => {
 	const classes = useStyles();
