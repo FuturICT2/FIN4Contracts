@@ -74,7 +74,7 @@ class TypeCreation extends Component {
 								{this.state.proofTypes.map((item, index) => {
 									return (
 										<TableRow
-											key={index}
+											key={'proof_' + index}
 											data={{
 												name: item.label,
 												description: item.description
@@ -86,6 +86,22 @@ class TypeCreation extends Component {
 						)}
 					</Table>
 				</Modal>
+				<Box title="Manage your Action Types">
+					<Table headers={['Name', 'Edit']}>
+						{Object.keys(this.props.fin4Tokens).map((addr, index) => {
+							let token = this.props.fin4Tokens[addr];
+							return (
+								<TableRow
+									key={'token_' + index}
+									data={{
+										name: token.name + ' [' + token.symbol + ']',
+										edit: 'TODO'
+									}}
+								/>
+							);
+						})}
+					</Table>
+				</Box>
 			</>
 		);
 	}
@@ -97,7 +113,8 @@ TypeCreation.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts
+		contracts: state.contracts,
+		fin4Tokens: state.fin4Store.fin4Tokens
 	};
 };
 
