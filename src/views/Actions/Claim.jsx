@@ -12,7 +12,7 @@ class Claim extends Component {
 
 	render() {
 		return (
-			<Box title={'Claim an Action'}>
+			<Box title={'Claim tokens'}>
 				<ContractForm
 					contractAddress={Fin4MainAddress}
 					contractName="Fin4Main"

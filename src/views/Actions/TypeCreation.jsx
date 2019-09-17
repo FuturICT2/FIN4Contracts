@@ -53,7 +53,7 @@ class TypeCreation extends Component {
 	render() {
 		return (
 			<>
-				<Box title="Create a New Action Type">
+				<Box title="Create a new token">
 					<ContractForm
 						contractAddress={Fin4MainAddress}
 						contractName="Fin4Main"
@@ -86,7 +86,7 @@ class TypeCreation extends Component {
 						)}
 					</Table>
 				</Modal>
-				<Box title="Manage your Action Types">
+				<Box title="Manage tokens you created">
 					<Table headers={['Name', 'Edit']}>
 						{Object.keys(this.props.fin4Tokens).map((addr, index) => {
 							let token = this.props.fin4Tokens[addr];
