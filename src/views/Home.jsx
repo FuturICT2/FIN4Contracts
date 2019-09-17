@@ -17,12 +17,21 @@ class Home extends Component {
 			tokenInfosAndBalances: []
 		};
 
+		this.updateTokenBalances();
+	}
+
+	updateTokenBalances() {
+		if (Object.keys(this.props.store.getState().fin4Store.fin4Tokens).length === 0) {
+			return;
+		}
+
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 
 		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildrenWhereUserHasNonzeroBalance')
 			.then(tokenAddresses => {
 				return tokenAddresses.map(address => {
 					let token = this.props.store.getState().fin4Store.fin4Tokens[address];
+					//if (token === undefined) { return null; }
 					return getContractData(address, 'Fin4Token', 'balanceOf', [currentAccount]).then(balance => {
 						return {
 							address: token.address,
@@ -34,6 +43,7 @@ class Home extends Component {
 				});
 			})
 			.then(data => Promise.all(data))
+			//.then(entries => entries.filter(v => v !== null)) // filter out null-entries
 			.then(data => {
 				this.setState({ tokenInfosAndBalances: data });
 			});
@@ -74,4 +84,10 @@ const NoTokens = styled.div`
 	color: silver;
 `;
 
-export default drizzleConnect(Home);
+const mapStateToProps = state => {
+	return {
+		fin4Tokens: state.fin4Store.fin4Tokens
+	};
+};
+
+export default drizzleConnect(Home, mapStateToProps);
