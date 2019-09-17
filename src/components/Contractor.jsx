@@ -22,13 +22,15 @@ const getContractData = (contract, contractJson, method, methodArgs = []) => {
 	});
 };
 
-let loadedAllInitalDataIntoTheStore = false;
+let initialDataLoaded = false;
 
-const loadInitialDataIntoStore = (props, callback) => {
-	if (loadedAllInitalDataIntoTheStore) {
+const loadInitialDataIntoStore = props => {
+	if (initialDataLoaded) {
 		return;
 	}
+	initialDataLoaded = true;
 
+	// TCR addresses
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
 		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
 			props.dispatch({
@@ -51,22 +53,10 @@ const loadInitialDataIntoStore = (props, callback) => {
 				name: 'PLCRVoting',
 				address: PLCRVoting
 			});
-
-			// load all Fin4 tokens into the store
-			loadAllFin4TokensIntoStoreIfNotDoneYet(props, () => {
-				loadedAllInitalDataIntoTheStore = true;
-				callback();
-			});
 		}
 	);
-};
 
-let loadedAllFin4TokensIntoTheStore = false;
-
-const loadAllFin4TokensIntoStoreIfNotDoneYet = (props, callback) => {
-	if (loadedAllFin4TokensIntoTheStore) {
-		return;
-	}
+	// get tokens
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
 		.then(tokens => {
 			return tokens.map(address => {
@@ -86,10 +76,6 @@ const loadAllFin4TokensIntoStoreIfNotDoneYet = (props, callback) => {
 				type: ADD_MULTIPLE_FIN4_TOKENS,
 				tokenArr: tokenArr
 			});
-			loadedAllFin4TokensIntoTheStore = true;
-			if (callback) {
-				callback();
-			}
 		});
 };
 
@@ -202,6 +188,5 @@ export {
 	getPollStatus,
 	PollStatus,
 	loadInitialDataIntoStore,
-	loadAllFin4TokensIntoStoreIfNotDoneYet,
 	loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet
 };
