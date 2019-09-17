@@ -14,6 +14,7 @@ import {
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES
 } from './actionTypes';
+const BN = require('bignumber.js');
 
 const contractEventNotifier = store => next => action => {
 	if (action.type !== EventActions.EVENT_FIRED) {
@@ -66,8 +67,8 @@ const contractEventNotifier = store => next => action => {
 				token: claim.tokenAddr,
 				claimId: claim.claimId,
 				claimer: claim.claimer,
-				quantity: claim.quantity,
-				date: claim.date,
+				quantity: new BN(claim.quantity).toNumber(),
+				date: new BN(claim.date).toNumber(),
 				comment: claim.comment,
 				isApproved: false
 			}
