@@ -93,15 +93,6 @@ const loadAllFin4TokensIntoStoreIfNotDoneYet = (props, callback) => {
 		});
 };
 
-const getDropdownFormattedListOfFin4Tokens = fin4Tokens => {
-	return Object.keys(fin4Tokens).map(addr => {
-		return {
-			value: addr,
-			label: `[${fin4Tokens[addr].symbol}] ${fin4Tokens[addr].name}`
-		};
-	});
-};
-
 let loadedAllCurrentUsersClaimsIntoTheStore = false;
 
 const loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet = props => {
@@ -212,6 +203,5 @@ export {
 	PollStatus,
 	loadInitialDataIntoStore,
 	loadAllFin4TokensIntoStoreIfNotDoneYet,
-	getDropdownFormattedListOfFin4Tokens,
 	loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet
 };

@@ -346,11 +346,18 @@ class ContractForm extends Component {
 						}
 
 						if (name === 'tokenAddress' && this.props.singleSelectOptions) {
+							let formattedSelectOptions = Object.keys(this.props.singleSelectOptions).map(addr => {
+								let token = this.props.singleSelectOptions[addr];
+								return {
+									value: token.address,
+									label: `[${token.symbol}] ${token.name}`
+								};
+							});
 							return (
 								<Dropdown
 									key={name}
 									onChange={this.handleSingleSelectInputChange}
-									options={this.props.singleSelectOptions}
+									options={formattedSelectOptions}
 									label={inputLabel}
 								/>
 							);

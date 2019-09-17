@@ -3,22 +3,11 @@ import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getDropdownFormattedListOfFin4Tokens } from '../../components/Contractor';
 import { Fin4MainAddress } from '../../config/DeployedAddresses';
 
 class Claim extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			tokens: []
-		};
-	}
-
-	componentDidUpdate(prevProps) {
-		if (this.props.fin4Tokens === prevProps.fin4Tokens) {
-			return;
-		}
-		this.setState({ tokens: getDropdownFormattedListOfFin4Tokens(this.props.fin4Tokens) });
 	}
 
 	render() {
@@ -29,7 +18,7 @@ class Claim extends Component {
 					contractName="Fin4Main"
 					method="submitClaim"
 					labels={['Action type', 'Quantity', 'Date', 'Comment']}
-					singleSelectOptions={this.state.tokens}
+					singleSelectOptions={this.props.fin4Tokens}
 				/>
 			</Box>
 		);
