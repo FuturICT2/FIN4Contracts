@@ -3,7 +3,7 @@ import Container from '../../components/Container';
 import PreviousClaims from './PreviousClaims';
 import ClaimToken from './ClaimToken';
 
-class Actions extends Component {
+class Claim extends Component {
 	render() {
 		return (
 			<Container>
@@ -16,4 +16,4 @@ class Actions extends Component {
 	}
 }
 
-export default Actions;
+export default Claim;

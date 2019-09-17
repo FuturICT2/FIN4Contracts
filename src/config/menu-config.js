@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/AddBox';
 import DoneIcon from '@material-ui/icons/Done';
 import HomeIcon from '@material-ui/icons/Home';
 import Home from '../views/Home';
-import Actions from '../views/Actions/Actions';
+import Claim from '../views/Actions/Claim';
 import Create from '../views/Actions/Create';
 
 const menu = [
@@ -17,7 +17,7 @@ const menu = [
 		showInNavBar: true
 	},
 	{
-		component: Actions,
+		component: Claim,
 		path: '/claim',
 		label: 'Claim',
 		icon: DoneIcon,
