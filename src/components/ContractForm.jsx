@@ -350,7 +350,8 @@ class ContractForm extends Component {
 								let token = this.props.singleSelectOptions[addr];
 								return {
 									value: token.address,
-									label: `[${token.symbol}] ${token.name}`
+									label: token.name,
+									symbol: token.symbol
 								};
 							});
 							return (

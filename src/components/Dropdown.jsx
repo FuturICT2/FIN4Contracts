@@ -6,6 +6,7 @@ import { Typography, TextField, Paper, Chip, MenuItem } from '@material-ui/core'
 import NoSsr from '@material-ui/core/NoSsr';
 import CancelIcon from '@material-ui/icons/Cancel';
 import PropTypes from 'prop-types';
+import Currency from './Currency';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -215,6 +216,8 @@ const components = {
 	ValueContainer
 };
 
+const formatOptionLabel = ({ value, label, symbol }) => <Currency name={label} symbol={symbol} />;
+
 const Dropdown = props => {
 	const classes = useStyles();
 	const theme = useTheme();
@@ -244,6 +247,7 @@ const Dropdown = props => {
 								shrink: true
 							}
 						}}
+						formatOptionLabel={formatOptionLabel}
 						options={props.options}
 						components={components}
 						onChange={props.onChange}

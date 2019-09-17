@@ -12,7 +12,7 @@ const Currency = props => {
 	return (
 		<>
 			<Symbol>{props.symbol}</Symbol>
-			{props.name && <span style={{ marginLeft: 15 }}>{props.name}</span>}
+			{props.name && <span style={{ marginLeft: 5 }}>{props.name}</span>}
 		</>
 	);
 };

@@ -6,9 +6,11 @@ import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
+import Currency from '../../components/Currency';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
 class TypeCreation extends Component {
+	// TODO rename
 	constructor(props) {
 		super(props);
 
@@ -64,7 +66,7 @@ class TypeCreation extends Component {
 								<TableRow
 									key={'token_' + index}
 									data={{
-										name: token.name + ' [' + token.symbol + ']',
+										name: <Currency symbol={token.symbol} name={token.name} />,
 										edit: 'TODO'
 									}}
 								/>
