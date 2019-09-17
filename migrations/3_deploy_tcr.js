@@ -143,10 +143,10 @@ module.exports = async function(deployer) {
 	});
 
 	// Token-TCR-Dev-1, Token-TCR-Dev-2, Token-TCR-Dev-3, Token-TCR-Dev-4, Token-TCR-Dev-5
-	//const children = await Fin4MainInstance.getChildren();
-	//await RegistryInstance.applyToken(children[0], 150, 'data');
-	//await RegistryInstance.applyToken(children[1], 150, 'data');
-	//await RegistryInstance.applyToken(children[2], 150, 'data');
-	//console.log("Token address: ", children[0])
+	//const allFin4Tokens = await Fin4MainInstance.getAllFin4Tokens();
+	//await RegistryInstance.applyToken(allFin4Tokens[0], 150, 'data');
+	//await RegistryInstance.applyToken(allFin4Tokens[1], 150, 'data');
+	//await RegistryInstance.applyToken(allFin4Tokens[2], 150, 'data');
+	//console.log("Token address: ", allFin4Tokens[0])
 	//console.log('hallo', await RegistryInstance.listings);
 };

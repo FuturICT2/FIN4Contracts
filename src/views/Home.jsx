@@ -27,7 +27,7 @@ class Home extends Component {
 
 		var currentAccount = window.web3.currentProvider.selectedAddress;
 
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getChildrenWhereUserHasNonzeroBalance')
+		getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4TokensWhereUserHasNonzeroBalance')
 			.then(tokenAddresses => {
 				return tokenAddresses.map(address => {
 					let token = this.props.store.getState().fin4Store.fin4Tokens[address];

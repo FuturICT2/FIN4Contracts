@@ -10,10 +10,9 @@ contract Fin4Main {
   event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment);
   event ClaimApproved(address tokenAddr, uint claimId);
 
-  address[] public children; // all Action Types
-  // mapping (address => bool) public officialChildren; // TODO for Sergiu's TCR
+  address[] public allFin4Tokens;
 
-  // This methods creates new action types and gets called from TypeCreation
+  // This methods creates new Fin4 tokens and gets called from TypeCreation
 	function createNewToken(string memory name, string memory symbol, string memory description, address[] memory requiredProofTypes,
     uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, description, address(this), msg.sender);
@@ -44,31 +43,29 @@ contract Fin4Main {
         Fin4BaseProofType(requiredProofTypes[i]).setParameters(address(newToken), params);
       }
     }
-    children.push(address(newToken));
-
+    allFin4Tokens.push(address(newToken));
     emit Fin4TokenCreated(address(newToken), name, symbol, description);
-
     return address(newToken);
   }
 
-  function getChildren() public view returns(address[] memory) {
-    return children;
+  function getAllFin4Tokens() public view returns(address[] memory) {
+    return allFin4Tokens;
   }
 
   // ------------------------- BALANCE -------------------------
 
   // used by More (the marketplace)
-  function getChildrenWhereUserHasNonzeroBalance() public view returns(address[] memory) {
+  function getFin4TokensWhereUserHasNonzeroBalance() public view returns(address[] memory) {
     uint count = 0;
-    for (uint i = 0; i < children.length; i ++) {
-      if (getBalance(msg.sender, children[i]) > 0) {
+    for (uint i = 0; i < allFin4Tokens.length; i ++) {
+      if (getBalance(msg.sender, allFin4Tokens[i]) > 0) {
         count ++;
       }
     }
     address[] memory nonzeroBalanceTokens = new address[](count);
     for (uint i = 0; i < count; i ++) {
-      if (getBalance(msg.sender, children[i]) > 0) {
-        nonzeroBalanceTokens[i] = children[i];
+      if (getBalance(msg.sender, allFin4Tokens[i]) > 0) {
+        nonzeroBalanceTokens[i] = allFin4Tokens[i];
       }
     }
     return nonzeroBalanceTokens;

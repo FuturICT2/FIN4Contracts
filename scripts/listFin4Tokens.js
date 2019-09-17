@@ -12,8 +12,8 @@ module.exports = done => {
 		let fin4MainAddress = config.Fin4MainAddress;
 
 		const Fin4MainInstance = await Fin4Main.at(fin4MainAddress);
-		const children = await Fin4MainInstance.getChildren();
-		console.log(children);
+		const allFin4Tokens = await Fin4MainInstance.getAllFin4Tokens();
+		console.log(allFin4Tokens);
 		return true;
 	}
 

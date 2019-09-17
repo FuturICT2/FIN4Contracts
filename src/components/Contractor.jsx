@@ -57,7 +57,7 @@ const loadInitialDataIntoStore = props => {
 	);
 
 	// get tokens
-	getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
+	getContractData(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
 		.then(tokens => {
 			return tokens.map(address => {
 				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
@@ -131,7 +131,7 @@ const loadAllCurrentUsersClaimsIntoStoreIfNotDoneYet = props => {
 
 // DEPRECATED
 const getAllActionTypes = () => {
-	return getContractData(Fin4MainAddress, 'Fin4Main', 'getChildren')
+	return getContractData(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
 		.then(tokens => {
 			return tokens.map(address => {
 				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
