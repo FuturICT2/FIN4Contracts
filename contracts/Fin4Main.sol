@@ -12,7 +12,7 @@ contract Fin4Main {
 
   address[] public allFin4Tokens;
 
-  // This methods creates new Fin4 tokens and gets called from TypeCreation
+  // This methods creates new Fin4 tokens and gets called from TokenCreation
 	function createNewToken(string memory name, string memory symbol, string memory description, address[] memory requiredProofTypes,
     uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
     Fin4Token newToken = new Fin4Token(name, symbol, description, address(this), msg.sender);

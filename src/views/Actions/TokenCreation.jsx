@@ -9,8 +9,7 @@ import PropTypes from 'prop-types';
 import Currency from '../../components/Currency';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 
-class TypeCreation extends Component {
-	// TODO rename
+class TokenCreation extends Component {
 	constructor(props) {
 		super(props);
 
@@ -79,7 +78,7 @@ class TypeCreation extends Component {
 	}
 }
 
-TypeCreation.contextTypes = {
+TokenCreation.contextTypes = {
 	drizzle: PropTypes.object
 };
 
@@ -91,4 +90,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(TypeCreation, mapStateToProps);
+export default drizzleConnect(TokenCreation, mapStateToProps);

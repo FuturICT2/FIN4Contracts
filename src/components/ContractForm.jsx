@@ -6,7 +6,7 @@
 // 		buttonLabel: to customize the submit-button at the end of the form
 // 		specialFields: this is used by the ProofSubmission class to customize the fields for requesting location access and for uploading a picture to IPFS
 // 		singleSelectOptions, multiSelectOptions: to supply options for a single- or multiselect dropdown list instead of an input field
-// 		helperModalTriggers: used in TypeCreation to pass the click on
+// 		helperModalTriggers: used in TokenCreation to pass the click on
 // TODO Some of the added functionality is very specific and should be restructured to be more generic
 
 import { drizzleConnect } from 'drizzle-react';
