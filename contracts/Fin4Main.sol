@@ -8,7 +8,7 @@ contract Fin4Main {
   // TODO do we need the indexed keyword for event params?
   event Fin4TokenCreated(address addr, string name, string symbol, string description);
   event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment);
-  event ClaimApproved(address tokenAddr, uint claimId);
+  event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
 
   address[] public allFin4Tokens;
 
@@ -108,8 +108,8 @@ contract Fin4Main {
   }
 
   // called from Fin4TokenBase
-  function claimApprovedPingback(address tokenAddress, uint claimId) public {
-    emit ClaimApproved(tokenAddress, claimId);
+  function claimApprovedPingback(address tokenAddress, address claimer, uint claimId) public {
+    emit ClaimApproved(tokenAddress, claimId, claimer, getBalance(claimer, tokenAddress));
   }
 
   // ------------------------- PROOF TYPES -------------------------

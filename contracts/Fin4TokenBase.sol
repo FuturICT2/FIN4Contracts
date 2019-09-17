@@ -165,7 +165,7 @@ contract Fin4TokenBase { // abstract class
     // can alse be called from here (Fin4TokenBase) in case of no proof types required, therefore
     // Fin4TokenBase must also have the Minter role
     mint(claimer, claims[claimId].quantity);
-    Fin4MainStub(Fin4Main).claimApprovedPingback(address(this), claimId);
+    Fin4MainStub(Fin4Main).claimApprovedPingback(address(this), claimer, claimId);
   }
 
   function isMinter(address account) public view returns (bool);

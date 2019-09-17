@@ -82,6 +82,10 @@ const contractEventNotifier = store => next => action => {
 
 		display = 'Claim got approved';
 
+		let claimer = claim.claimer;
+		let newBalance = claim.newBalance;
+		// TODO
+
 		store.dispatch({
 			type: APPROVE_CLAIM,
 			id: id
