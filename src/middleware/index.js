@@ -113,6 +113,7 @@ const initialState = {
 };
 
 function fin4StoreReducer(state = initialState, action) {
+	let i = 0;
 	switch (action.type) {
 		case ADD_FIN4_TOKEN:
 			return {
@@ -123,7 +124,7 @@ function fin4StoreReducer(state = initialState, action) {
 				}
 			};
 		case ADD_MULTIPLE_FIN4_TOKENS:
-			for (var i = 0; i < action.tokenArr.length; i++) {
+			for (i = 0; i < action.tokenArr.length; i++) {
 				let token = action.tokenArr[i];
 				state = {
 					...state,
@@ -143,7 +144,7 @@ function fin4StoreReducer(state = initialState, action) {
 				}
 			};
 		case ADD_MULTIPLE_CLAIMS:
-			for (var i = 0; i < action.claimArr.length; i++) {
+			for (i = 0; i < action.claimArr.length; i++) {
 				let claim = action.claimArr[i];
 				state = {
 					...state,
@@ -182,7 +183,7 @@ function fin4StoreReducer(state = initialState, action) {
 				}
 			};
 		case UPDATE_MULTIPLE_BALANCES:
-			for (var i = 0; i < action.tokenAddresses.length; i++) {
+			for (i = 0; i < action.tokenAddresses.length; i++) {
 				state = {
 					...state,
 					usersBalances: {
@@ -193,7 +194,7 @@ function fin4StoreReducer(state = initialState, action) {
 			}
 			return state;
 		case ADD_MULTIPLE_PROOF_TYPES:
-			for (var i = 0; i < action.proofTypesArr.length; i++) {
+			for (i = 0; i < action.proofTypesArr.length; i++) {
 				let proofType = action.proofTypesArr[i];
 				state = {
 					...state,

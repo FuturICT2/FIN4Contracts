@@ -2,7 +2,6 @@ import { Fin4MainAddress } from '../config/DeployedAddresses.js';
 import {
 	ADD_MULTIPLE_FIN4_TOKENS,
 	ADD_MULTIPLE_CLAIMS,
-	ADD_ADDRESS,
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES
 } from '../middleware/actionTypes';
@@ -50,7 +49,7 @@ const loadInitialDataIntoStore = props => {
 	getAllProofTypes(props);
 };
 
-const getTCRAddresses = props => {
+/* const getTCRAddresses = props => {
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
 		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
 			props.dispatch({
@@ -75,7 +74,7 @@ const getTCRAddresses = props => {
 			});
 		}
 	);
-};
+};*/
 
 const getAllFin4Tokens = (props, callback) => {
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')

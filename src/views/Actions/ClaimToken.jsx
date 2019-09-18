@@ -6,10 +6,6 @@ import PropTypes from 'prop-types';
 import { Fin4MainAddress } from '../../config/DeployedAddresses';
 
 class ClaimToken extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<Box title={'Claim tokens'}>

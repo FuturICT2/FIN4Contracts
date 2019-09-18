@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { loadInitialDataIntoStore } from './components/Contractor';
 

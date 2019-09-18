@@ -16,10 +16,6 @@ import LoadInitialData from './LoadInitialData';
 import 'react-toastify/dist/ReactToastify.css';
 
 class App extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<Router>

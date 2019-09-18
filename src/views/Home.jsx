@@ -9,10 +9,6 @@ import styled from 'styled-components';
 import Currency from '../components/Currency';
 
 class Home extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<Container>
