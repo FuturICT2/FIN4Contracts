@@ -7,6 +7,10 @@ import {
 } from '../middleware/actionTypes';
 const BN = require('bignumber.js');
 
+const getCurrentAccount = () => {
+	return window.web3.currentProvider.selectedAddress;
+};
+
 const getContract = (contractAddress, contractName) => {
 	const contract = require('truffle-contract');
 	const json = require('../build/contracts/' + contractName + '.json');
@@ -18,11 +22,9 @@ const getContract = (contractAddress, contractName) => {
 };
 
 const getContractData = (contract, contractJson, method, methodArgs = []) => {
-	const currentAccount = window.web3.currentProvider.selectedAddress;
-
 	return getContract(contract, contractJson).then(instance => {
 		return instance[method].call(...methodArgs, {
-			from: currentAccount
+			from: getCurrentAccount()
 		});
 	});
 };
@@ -241,4 +243,12 @@ const PollStatus = {
 	PAST_REVEAL_PERIOD: '-'
 };
 
-export { getContractData, getContract, getAllActionTypes, getPollStatus, PollStatus, loadInitialDataIntoStore };
+export {
+	getCurrentAccount,
+	getContractData,
+	getContract,
+	getAllActionTypes,
+	getPollStatus,
+	PollStatus,
+	loadInitialDataIntoStore
+};

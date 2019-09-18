@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PLCRVotingAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
-import { getContractData, getContract } from '../../components/Contractor';
+import { getCurrentAccount, getContractData, getContract } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';
@@ -32,7 +32,6 @@ class VoteModal extends Component {
 			return;
 		}
 
-		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let vote = this.voteModalValues.vote;
 		let salt = this.voteModalValues.salt;
 		let numbTokens = Number(this.voteModalValues.numbTokens);
@@ -49,14 +48,14 @@ class VoteModal extends Component {
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(PLCRVotingAddress, numbTokens, {
-					from: currentAccount
+					from: getCurrentAccount()
 				});
 			})
 			.then(function(result) {
 				console.log('GOV.approve Result: ', result);
 
 				getContractData(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
-					currentAccount,
+					getCurrentAccount(),
 					numbTokens,
 					pollID
 				]).then(prevPollIdBN => {
@@ -65,7 +64,7 @@ class VoteModal extends Component {
 					getContract(PLCRVotingAddress, 'PLCRVoting')
 						.then(function(instance) {
 							return instance.commitVote(pollID, secretHash, numbTokens, prevPollID, {
-								from: currentAccount
+								from: getCurrentAccount()
 							});
 						})
 						.then(function(result) {

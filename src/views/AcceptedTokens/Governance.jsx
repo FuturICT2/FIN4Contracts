@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
-import { getContractData, getContract, getPollStatus, PollStatus } from '../../components/Contractor';
+import {
+	getCurrentAccount,
+	getContractData,
+	getContract,
+	getPollStatus,
+	PollStatus
+} from '../../components/Contractor';
 import { drizzleConnect } from 'drizzle-react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
@@ -145,7 +151,6 @@ class Governance extends Component {
 	};
 
 	submitProposeReparamModal = () => {
-		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let name = this.selectedParam.name;
 		let value = Number(this.proposeReparamModalValues.value);
 		let pMinDeposit = this.state.paramValues['pMinDeposit'].value;
@@ -156,7 +161,7 @@ class Governance extends Component {
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(parameterizerAddr, pMinDeposit, {
-					from: currentAccount
+					from: getCurrentAccount()
 				});
 			})
 			.then(function(result) {
@@ -164,7 +169,7 @@ class Governance extends Component {
 				getContract(parameterizerAddr, 'Parameterizer')
 					.then(function(instance) {
 						return instance.proposeReparameterization(name, value, {
-							from: currentAccount
+							from: getCurrentAccount()
 						});
 					})
 					.then(function(result) {
@@ -199,7 +204,6 @@ class Governance extends Component {
 	};
 
 	submitChallengeReparamModal = () => {
-		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let propID = this.selectedParam.propID;
 		let propDeposit = this.selectedParam.propDeposit;
 		let parameterizerAddr = this.parameterizerAddress;
@@ -209,7 +213,7 @@ class Governance extends Component {
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(parameterizerAddr, propDeposit, {
-					from: currentAccount
+					from: getCurrentAccount()
 				});
 			})
 			.then(function(result) {
@@ -217,7 +221,7 @@ class Governance extends Component {
 				getContract(parameterizerAddr, 'Parameterizer')
 					.then(function(instance) {
 						return instance.challengeReparameterization(propID, {
-							from: currentAccount
+							from: getCurrentAccount()
 						});
 					})
 					.then(function(result) {
@@ -238,12 +242,11 @@ class Governance extends Component {
 
 	// same as Registry.updateStatus()
 	processProposal() {
-		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let propID = this.selectedParam.propID;
 		getContract(this.parameterizerAddress, 'Parameterizer')
 			.then(function(instance) {
 				return instance.processProposal(propID, {
-					from: currentAccount
+					from: getCurrentAccount()
 				});
 			})
 			.then(function(result) {

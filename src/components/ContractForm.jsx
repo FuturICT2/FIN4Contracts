@@ -21,7 +21,7 @@ import OpenIcon from '@material-ui/icons/OpenInNew';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { getContract } from './Contractor.jsx';
+import { getCurrentAccount, getContract } from './Contractor.jsx';
 
 const translateType = type => {
 	switch (true) {
@@ -151,14 +151,13 @@ class ContractForm extends Component {
 			return this.state[input.name];
 		});
 
-		var currentAccount = window.web3.currentProvider.selectedAddress;
-		var method = this.props.method;
+		let method = this.props.method;
 
 		let self = this;
 		getContract(this.contractAddress, this.contractName)
 			.then(function(instance) {
 				return instance[method](...convertedInputs, {
-					from: currentAccount
+					from: getCurrentAccount()
 				});
 			})
 			.then(function(result) {

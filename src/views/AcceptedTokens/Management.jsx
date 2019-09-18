@@ -22,13 +22,11 @@ class Management extends Component {
 			govTokenDelegateeBalance: '?'
 		};
 
-		let currentAccount = window.web3.currentProvider.selectedAddress;
-
-		getContractData(RepTokenAddress, 'Fin4Reputation', 'balanceOf', [currentAccount]).then(repTokenBalanceBN => {
+		getContractData(RepTokenAddress, 'Fin4Reputation', 'balanceOf', [getCurrentAccount()]).then(repTokenBalanceBN => {
 			this.setState({ repTokenBalance: new BN(repTokenBalanceBN).toNumber() });
 		});
 
-		getContractData(GOVTokenAddress, 'GOV', 'balanceOf', [currentAccount]).then(govTokenBalanceBN => {
+		getContractData(GOVTokenAddress, 'GOV', 'balanceOf', [getCurrentAccount()]).then(govTokenBalanceBN => {
 			this.setState({ govTokenBalance: new BN(govTokenBalanceBN).toNumber() });
 		});
 
@@ -38,12 +36,10 @@ class Management extends Component {
 	}
 
 	claimGOV() {
-		let currentAccount = window.web3.currentProvider.selectedAddress;
-
 		getContract(RepTokenAddress, 'Fin4Reputation')
 			.then(function(instance) {
-				return instance.getGOVFromReputation(currentAccount, {
-					from: currentAccount
+				return instance.getGOVFromReputation(getCurrentAccount(), {
+					from: getCurrentAccount()
 				});
 			})
 			.then(function(result) {

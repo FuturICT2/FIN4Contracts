@@ -4,6 +4,7 @@ import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import {
+	getCurrentAccount,
 	getContractData,
 	getAllActionTypes,
 	getContract,
@@ -186,7 +187,6 @@ class Listing extends Component {
 			return;
 		}
 
-		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let token = this.applyModalValues.token;
 		let deposit = Number(this.applyModalValues.deposit);
 		let data = this.applyModalValues.data;
@@ -204,7 +204,7 @@ class Listing extends Component {
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(RegistryAddress, deposit, {
-					from: currentAccount
+					from: getCurrentAccount()
 				});
 			})
 			.then(function(result) {
@@ -215,7 +215,7 @@ class Listing extends Component {
 				getContract(RegistryAddress, 'Registry')
 					.then(function(instance) {
 						return instance.applyToken(token, deposit, data, {
-							from: currentAccount
+							from: getCurrentAccount()
 						});
 					})
 					.then(function(result) {
@@ -260,7 +260,6 @@ class Listing extends Component {
 	};
 
 	submitChallengeModal = () => {
-		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let listingHash = this.selectedListing.listingKey;
 		let data = this.challengeModalValues.data;
 		let minDeposit = this.parameterizerValues.minDeposit;
@@ -270,7 +269,7 @@ class Listing extends Component {
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(RegistryAddress, minDeposit, {
-					from: currentAccount
+					from: getCurrentAccount()
 				});
 			})
 			.then(function(result) {
@@ -278,7 +277,7 @@ class Listing extends Component {
 				getContract(RegistryAddress, 'Registry')
 					.then(function(instance) {
 						return instance.challenge(listingHash, data, {
-							from: currentAccount
+							from: getCurrentAccount()
 						});
 					})
 					.then(function(result) {
@@ -298,12 +297,11 @@ class Listing extends Component {
 	// ----------
 
 	updateStatus() {
-		let currentAccount = window.web3.currentProvider.selectedAddress;
 		let listingKey = this.selectedListing.listingKey;
 		getContract(RegistryAddress, 'Registry')
 			.then(function(instance) {
 				return instance.updateStatus(listingKey, {
-					from: currentAccount
+					from: getCurrentAccount()
 				});
 			})
 			.then(function(result) {
