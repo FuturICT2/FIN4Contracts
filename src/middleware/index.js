@@ -1,5 +1,5 @@
 // originally from www.trufflesuite.com/tutorials/drizzle-and-contract-events
-
+import React from 'react';
 import { generateStore, EventActions } from 'drizzle';
 import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
@@ -60,7 +60,9 @@ const contractEventNotifier = store => next => action => {
 			return next(action);
 		}
 
-		display = 'New claim submitted';
+		let quantity = new BN(claim.quantity).toNumber();
+		let token = store.getState().fin4Store.fin4Tokens[claim.tokenAddr];
+		display = 'You are claiming ' + quantity + ' ' + token.name + ' [' + token.symbol + '] tokens';
 
 		store.dispatch({
 			type: ADD_CLAIM,
@@ -69,7 +71,7 @@ const contractEventNotifier = store => next => action => {
 				token: claim.tokenAddr,
 				claimId: claim.claimId,
 				claimer: claim.claimer,
-				quantity: new BN(claim.quantity).toNumber(),
+				quantity: quantity,
 				date: new BN(claim.date).toNumber(),
 				comment: claim.comment,
 				isApproved: false
@@ -88,7 +90,9 @@ const contractEventNotifier = store => next => action => {
 			return next(action);
 		}
 
-		display = 'Claim got approved';
+		let token = store.getState().fin4Store.fin4Tokens[claim.tokenAddr];
+		display =
+			'Claim approved: you got ' + usersClaims[id].quantity + ' ' + token.name + ' [' + token.symbol + '] tokens';
 
 		store.dispatch({
 			type: APPROVE_CLAIM,
