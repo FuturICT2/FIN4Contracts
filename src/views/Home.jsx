@@ -6,6 +6,7 @@ import Box from './../components/Box';
 import Table from './../components/Table';
 import TableRow from './../components/TableRow';
 import styled from 'styled-components';
+import Currency from '../components/Currency';
 
 class Home extends Component {
 	constructor(props) {
@@ -20,15 +21,14 @@ class Home extends Component {
 					{Object.keys(this.props.usersBalances).length === 0 ? (
 						<NoTokens>You haven't sucessfully claimed any tokens yet.</NoTokens>
 					) : (
-						<Table headers={['Name', 'Symbol', 'Balance']}>
+						<Table headers={['Name', 'Balance']}>
 							{Object.keys(this.props.usersBalances).map((tokenAddr, index) => {
 								let token = this.props.store.getState().fin4Store.fin4Tokens[tokenAddr];
 								return (
 									<TableRow
 										key={'balance_' + index}
 										data={{
-											name: token.name,
-											symbol: token.symbol,
+											name: <Currency symbol={token.symbol} name={token.name} />,
 											balance: this.props.usersBalances[tokenAddr]
 										}}
 									/>
