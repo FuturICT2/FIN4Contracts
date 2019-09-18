@@ -14,6 +14,7 @@ import {
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES
 } from './actionTypes';
+import { getCurrentAccount } from '../components/Contractor';
 const BN = require('bignumber.js');
 
 const contractEventNotifier = store => next => action => {
@@ -52,9 +53,10 @@ const contractEventNotifier = store => next => action => {
 	if (contractEvent === 'ClaimSubmitted') {
 		let claim = action.event.returnValues;
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId, just for frontend
+		let isCurrentUsersClaim = claim.claimer.toLowerCase() === getCurrentAccount();
 
-		// block duplicate events
-		if (store.getState().fin4Store.usersClaims[id]) {
+		// block: claim-event not caused by current user / duplicate events
+		if (!isCurrentUsersClaim || store.getState().fin4Store.usersClaims[id]) {
 			return next(action);
 		}
 
@@ -78,9 +80,11 @@ const contractEventNotifier = store => next => action => {
 	if (contractEvent === 'ClaimApproved') {
 		let claim = action.event.returnValues;
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId
+		let isCurrentUsersClaim = claim.claimer.toLowerCase() === getCurrentAccount();
 
-		// block duplicate events, claim is already approved
-		if (store.getState().fin4Store.usersClaims[id] && store.getState().fin4Store.usersClaims[id].isApproved) {
+		// block: claim-event not caused by current user / duplicate events / claim is already approved
+		let usersClaims = store.getState().fin4Store.usersClaims;
+		if (!isCurrentUsersClaim || (usersClaims[id] && usersClaims[id].isApproved)) {
 			return next(action);
 		}
 
