@@ -46,9 +46,18 @@ Add and fill this file: `src/config/deployment-config.json`
 ```json
 {
     "MNEMONIC": "",
-    "INFURA_API_KEY": ""
+    "INFURA_API_KEY": "",
+    "WEBSOCKET_PROVIDER": ""
 }
 ```
+
+The mnemonic gets used for deploying (e.g. `truffle migrate --network rinkeby`), therefore the account has to have sufficient funds on the respective network. The infura API key can be obtained by creating a project on infura.io: it is the "Project ID" under "View Project".
+
+The websocket provider might be one of the following:
+
+- local: `ws://localhost:7545`
+- rinkeby: `wss://rinkeby.infura.io/ws/v3/INFURA_API_KEY` (replace INFURA_API_KEY with your infura Project ID)
+- ...
 
 ### Compile and migrate the smart contracts
 
