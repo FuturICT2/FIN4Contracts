@@ -3,9 +3,10 @@ import styled from 'styled-components';
 
 const Symbol = styled.span`
 	text-transform: uppercase;
-	border: 1px solid grey;
+	border: 1px solid silver;
 	border-radius: 4px;
-	padding: 0 3px;
+	padding: 3px 3px 1px 3px;
+	color: gray;
 `;
 
 const Currency = props => {
