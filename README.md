@@ -41,8 +41,6 @@ npm install -g ganache-cli
 npm install # in this cloned repository
 ```
 
-BigchainDB requires `docker` and `docker-compose`: follow the installation instructions for **Docker** [here](https://docs.docker.com/engine/installation/) (don't forget the post-installation steps for Linux) and for **Docker Compose** [here](https://docs.docker.com/compose/install/).
-
 ### For deployment
 Add and fill this file: `src/config/ethereum-keys.json`
 ```json
@@ -58,13 +56,6 @@ Add and fill this file: `src/config/ethereum-keys.json`
 2. `ganache-cli --port=7545 --allowUnlimitedContractSize`
 3. `truffle migrate` to place the smart contract on the local blockchain
 4. install the [MetaMask](https://metamask.io/) browser extension, paste the `MNEMONIC` from Ganache into the `seed` input and create a network with `http://127.0.0.1:7545` as `custom RPC`
-
-### Start a local BigchainDB node
-Used for offers on the marketplace
-
-1. `git clone https://github.com/bigchaindb/bigchaindb.git`
-2. `cd bigchaindb`
-3. `make run`
 
 ### Use the app
 ```sh
