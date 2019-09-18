@@ -42,7 +42,7 @@ npm install # in this cloned repository
 ```
 
 ### For deployment
-Add and fill this file: `src/config/ethereum-keys.json`
+Add and fill this file: `src/config/deployment-config.json`
 ```json
 {
     "MNEMONIC": "",

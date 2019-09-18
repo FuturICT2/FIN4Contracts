@@ -1,11 +1,11 @@
 const path = require('path');
 var HDWalletProvider = require('truffle-hdwallet-provider');
 
-var keys;
+var config;
 try {
-	keys = require('./src/config/ethereum-keys.json');
+	config = require('./src/config/deployment-config.json');
 } catch (err) {
-	console.log('./src/config/ethereum-keys.json not found');
+	console.log('./src/config/deployment-config.json not found');
 }
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
 		},
 		ropsten: {
 			provider: function() {
-				return new HDWalletProvider(keys.MNEMONIC, 'https://ropsten.infura.io/v3/' + keys.INFURA_API_KEY);
+				return new HDWalletProvider(config.MNEMONIC, 'https://ropsten.infura.io/v3/' + config.INFURA_API_KEY);
 			},
 			network_id: 3,
 			gas: 4465030,
@@ -26,7 +26,7 @@ module.exports = {
 		},
 		rinkeby: {
 			provider: function() {
-				return new HDWalletProvider(keys.MNEMONIC, 'https://rinkeby.infura.io/v3/' + keys.INFURA_API_KEY);
+				return new HDWalletProvider(config.MNEMONIC, 'https://rinkeby.infura.io/v3/' + config.INFURA_API_KEY);
 			},
 			network_id: 4,
 			gas: 6465030,
@@ -34,7 +34,7 @@ module.exports = {
 		},
 		goerli: {
 			provider: function() {
-				return new HDWalletProvider(keys.MNEMONIC, 'https://goerli.infura.io/v3/' + keys.INFURA_API_KEY);
+				return new HDWalletProvider(config.MNEMONIC, 'https://goerli.infura.io/v3/' + config.INFURA_API_KEY);
 			},
 			network_id: 5,
 			gas: 7465030,

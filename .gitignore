@@ -1,7 +1,7 @@
 .env
 src/build/
 .idea/
-src/config/ethereum-keys.json
+src/config/deployment-config.json
 src/config/DeployedAddresses.js
 scripts/DeployedAddresses.json
 
