@@ -2,8 +2,10 @@ pragma solidity ^0.5.0;
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/proof/Fin4BaseProofType.sol';
+import "solidity-util/lib/Strings.sol";
 
 contract Fin4Main {
+  using Strings for string;
 
   // TODO do we need the indexed keyword for event params?
   event Fin4TokenCreated(address addr, string name, string symbol, string description);
@@ -11,11 +13,19 @@ contract Fin4Main {
   event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
 
   address[] public allFin4Tokens;
+  mapping (string => bool) public symbolIsUsed;
 
   // This methods creates new Fin4 tokens and gets called from TokenCreation
 	function createNewToken(string memory name, string memory symbol, string memory description, address[] memory requiredProofTypes,
     uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
-    Fin4Token newToken = new Fin4Token(name, symbol, description, address(this), msg.sender);
+
+    uint symLen = symbol.length();
+    require(symLen >= 3 && symLen <= 5, "Symbol must have between 3 and 5 characters");
+    string memory _symbol = symbol.upper();
+    require(!symbolIsUsed[_symbol], "Symbol is already in use");
+
+    Fin4Token newToken = new Fin4Token(name, _symbol, description, address(this), msg.sender);
+    symbolIsUsed[_symbol] = true;
 
     for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the action type creator
       newToken.addRequiredProofType(requiredProofTypes[i]);
@@ -44,7 +54,7 @@ contract Fin4Main {
       }
     }
     allFin4Tokens.push(address(newToken));
-    emit Fin4TokenCreated(address(newToken), name, symbol, description);
+    emit Fin4TokenCreated(address(newToken), name, _symbol, description);
     return address(newToken);
   }
 
