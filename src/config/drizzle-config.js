@@ -1,16 +1,8 @@
 import Fin4Main from '../build/contracts/Fin4Main.json';
 import { Fin4MainAddress } from './DeployedAddresses.js';
 
-let websocketProvider = 'ws://localhost:7545';
-try {
-	let config = require('./deployment-config.json');
-	websocketProvider = config.WEBSOCKET_PROVIDER;
-} catch (err) {
-	console.log('./deployment-config.json not found, using websocket provider ' + websocketProvider);
-}
-
 var Web3 = require('web3');
-var web3 = new Web3(new Web3.providers.WebsocketProvider(websocketProvider));
+var web3 = new Web3(window.web3.currentProvider);
 
 const drizzleConfig = {
 	web3: {
