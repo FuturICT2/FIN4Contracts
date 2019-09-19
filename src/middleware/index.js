@@ -1,5 +1,4 @@
 // originally from www.trufflesuite.com/tutorials/drizzle-and-contract-events
-import React from 'react';
 import { generateStore, EventActions } from 'drizzle';
 import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
