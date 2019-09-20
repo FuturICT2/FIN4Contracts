@@ -33,6 +33,13 @@ class Home extends Component {
 						</Table>
 					)}
 				</Box>
+				<Box title="About you">
+					<p style={{ fontFamily: 'arial' }}>
+						Your public address:
+						<br />
+						<small>{this.props.defaultAccount === null ? 'Info not yet available' : this.props.defaultAccount}</small>
+					</p>
+				</Box>
 			</Container>
 		);
 	}
@@ -46,7 +53,8 @@ const NoTokens = styled.div`
 
 const mapStateToProps = state => {
 	return {
-		usersBalances: state.fin4Store.usersBalances
+		usersBalances: state.fin4Store.usersBalances,
+		defaultAccount: state.fin4Store.defaultAccount
 	};
 };
 
