@@ -11,7 +11,8 @@ import {
 	ADD_ADDRESS,
 	UPDATE_BALANCE,
 	UPDATE_MULTIPLE_BALANCES,
-	ADD_MULTIPLE_PROOF_TYPES
+	ADD_MULTIPLE_PROOF_TYPES,
+	SET_DEFAULT_ACCOUNT
 } from './actionTypes';
 import { getCurrentAccount } from '../components/Contractor';
 const BN = require('bignumber.js');
@@ -116,7 +117,8 @@ const initialState = {
 	usersClaims: {},
 	usersBalances: {},
 	proofTypes: {},
-	addresses: {}
+	addresses: {},
+	defaultAccount: null
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -212,6 +214,11 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
+		case SET_DEFAULT_ACCOUNT:
+			return {
+				...state,
+				defaultAccount: action.account
+			};
 		default:
 			return state;
 	}
