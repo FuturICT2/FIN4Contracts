@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 import { DrizzleProvider } from 'drizzle-react';
-import { LoadingContainer } from 'drizzle-react-components';
 import styled from 'styled-components';
 import drizzleConfig from './config/drizzle-config';
 import menuItems from './config/menu-config';
@@ -24,15 +23,13 @@ class App extends Component {
 						<ToastContainer />
 						<TopBar />
 						<DrizzleProvider store={store} options={drizzleConfig}>
-							<LoadingContainer>
-								<>
-									<LoadInitialData />
-									{/* register menu routes */}
-									{menuItems.map((route, i) => (
-										<Route exact key={i} render={() => <route.component />} path={route.path} />
-									))}
-								</>
-							</LoadingContainer>
+							<>
+								<LoadInitialData />
+								{/* register menu routes */}
+								{menuItems.map((route, i) => (
+									<Route exact key={i} render={() => <route.component />} path={route.path} />
+								))}
+							</>
 						</DrizzleProvider>
 						<Spacer />
 					</Container>
