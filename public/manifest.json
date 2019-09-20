@@ -1,9 +1,9 @@
 {
-	"short_name": "FINFOO",
-	"name": "Prototype For Finance 4.0 #FUTURICT2 #TUM #fortiss",
+	"short_name": "FIN4XPLORER",
+	"name": "Demonstrator for #Finance4 #FuturICT2 www.finfour.net",
 	"icons": [
 		{
-			"src": "favicon.ico",
+			"src": "FIN4X_favicon.ico",
 			"sizes": "64x64 32x32 24x24 16x16",
 			"type": "image/x-icon"
 		}
