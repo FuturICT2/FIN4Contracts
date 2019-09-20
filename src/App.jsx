@@ -20,7 +20,6 @@ class App extends Component {
 			<Router>
 				<ThemeProvider theme={globalTheme}>
 					<Container>
-						<ToastContainer />
 						<TopBar />
 						<DrizzleProvider store={store} options={drizzleConfig}>
 							<>
@@ -33,6 +32,7 @@ class App extends Component {
 						</DrizzleProvider>
 						<Spacer />
 					</Container>
+					<ToastContainer />
 					<NavigationBar />
 				</ThemeProvider>
 			</Router>
