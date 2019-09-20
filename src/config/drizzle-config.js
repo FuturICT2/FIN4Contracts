@@ -1,8 +1,8 @@
 import Fin4Main from '../build/contracts/Fin4Main.json';
 import { Fin4MainAddress } from './DeployedAddresses.js';
 
-var Web3 = require('web3');
-var web3 = new Web3(window.web3.currentProvider);
+import Web3 from 'web3';
+const web3 = new Web3(window.ethereum);
 
 const drizzleConfig = {
 	web3: {

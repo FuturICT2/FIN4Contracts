@@ -5,28 +5,28 @@ import {
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES
 } from '../middleware/actionTypes';
+import Web3 from 'web3';
+
 const BN = require('bignumber.js');
+const web3 = new Web3(window.ethereum);
 
 const getCurrentAccount = () => {
-	return window.web3.currentProvider.selectedAddress;
+	return window.accounts[0];
 };
 
+// TODO reuse them instead of instantiating them repeatedly
 const getContract = (contractAddress, contractName) => {
-	const contract = require('truffle-contract');
 	const json = require('../build/contracts/' + contractName + '.json');
-	let Contractor = contract({
-		abi: json.abi
-	});
-	Contractor.setProvider(window.web3.currentProvider);
-	return Contractor.at(contractAddress);
+	return new web3.eth.Contract(json.abi, contractAddress);
 };
 
-const getContractData = (contract, contractJson, method, methodArgs = []) => {
-	return getContract(contract, contractJson).then(instance => {
-		return instance[method].call(...methodArgs, {
-			from: getCurrentAccount()
-		});
-	});
+const getContractData = (contractAddress, contractName, method, methodArgs) => {
+	let contract = getContract(contractAddress, contractName);
+	if (methodArgs) {
+		return contract.methods[method](methodArgs).call();
+	} else {
+		return contract.methods[method]().call();
+	}
 };
 
 let initialDataLoaded = false;
@@ -121,7 +121,7 @@ const getAllProofTypes = props => {
 	getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes')
 		.then(proofTypeAddresses => {
 			return proofTypeAddresses.map(proofTypeAddress => {
-				return getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypeName', [proofTypeAddress]).then(
+				return getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypeName', proofTypeAddress).then(
 					proofTypeName => {
 						return getContractData(proofTypeAddress, proofTypeName, 'getInfo').then(
 							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
@@ -153,7 +153,7 @@ const getAllCurrentUsersClaims = props => {
 			return tokenAddresses.map(tokenAddr => {
 				return getContractData(tokenAddr, 'Fin4Token', 'getMyClaimIds').then(claimIds => {
 					return claimIds.map(claimId => {
-						return getContractData(tokenAddr, 'Fin4Token', 'claims', [claimId]).then(
+						return getContractData(tokenAddr, 'Fin4Token', 'claims', claimId).then(
 							({
 								0: claimIdBN,
 								1: claimer,

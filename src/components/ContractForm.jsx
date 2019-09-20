@@ -151,20 +151,19 @@ class ContractForm extends Component {
 			return this.state[input.name];
 		});
 
-		let method = this.props.method;
-
 		let self = this;
+
 		getContract(this.contractAddress, this.contractName)
-			.then(function(instance) {
-				return instance[method](...convertedInputs, {
-					from: getCurrentAccount()
-				});
+			.methods[this.props.method](...convertedInputs)
+			.send({
+				from: getCurrentAccount()
 			})
 			.then(function(result) {
 				console.log('Results of submitting: ', result);
 				self.postSubmitCallback(true, result);
 			})
 			.catch(function(err) {
+				// TODO this syntax doesn't seem to work anymore, how else to detect error-returns?
 				console.log('Error: ', err.message);
 				self.postSubmitCallback(false, err);
 			});

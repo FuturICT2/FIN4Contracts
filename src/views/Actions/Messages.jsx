@@ -27,7 +27,7 @@ class Messages extends Component {
 						messageIndices.push(i);
 					}
 					return messageIndices.map(index => {
-						return getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', [index]).then(
+						return getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', index).then(
 							({
 								0: messageType,
 								1: sender,

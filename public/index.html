@@ -10,6 +10,17 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script>
+      window.addEventListener('load', async () => {
+        try {
+          window.accounts = await ethereum.enable();
+        } catch (error) {
+          alert("Could not enable DApp");
+          console.log("error", error);
+        }
+        // TODO support legacy browsers?
+      });
+    </script>
     <div id="root"></div>
   </body>
 </html>
