@@ -14,7 +14,6 @@ import {
 	ADD_MULTIPLE_PROOF_TYPES,
 	SET_DEFAULT_ACCOUNT
 } from './actionTypes';
-import { getCurrentAccount } from '../components/Contractor';
 const BN = require('bignumber.js');
 
 const contractEventNotifier = store => next => action => {
@@ -50,10 +49,12 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	let currentAccount = store.getState().fin4Store.defaultAccount;
+
 	if (contractEvent === 'ClaimSubmitted') {
 		let claim = action.event.returnValues;
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId, just for frontend
-		let isCurrentUsersClaim = claim.claimer.toLowerCase() === getCurrentAccount();
+		let isCurrentUsersClaim = claim.claimer.toLowerCase() === currentAccount;
 
 		// block: claim-event not caused by current user / duplicate events
 		if (!isCurrentUsersClaim || store.getState().fin4Store.usersClaims[id]) {
@@ -82,7 +83,7 @@ const contractEventNotifier = store => next => action => {
 	if (contractEvent === 'ClaimApproved') {
 		let claim = action.event.returnValues;
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId
-		let isCurrentUsersClaim = claim.claimer.toLowerCase() === getCurrentAccount();
+		let isCurrentUsersClaim = claim.claimer.toLowerCase() === currentAccount;
 
 		// block: claim-event not caused by current user / duplicate events / claim is already approved
 		let usersClaims = store.getState().fin4Store.usersClaims;

@@ -156,7 +156,7 @@ class ContractForm extends Component {
 		getContract(this.contractAddress, this.contractName)
 			.methods[this.props.method](...convertedInputs)
 			.send({
-				from: getCurrentAccount()
+				from: this.props.store.getState().fin4Store.defaultAccount
 			})
 			.then(function(result) {
 				console.log('Results of submitting: ', result);

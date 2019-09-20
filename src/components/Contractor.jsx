@@ -10,8 +10,9 @@ import Web3 from 'web3';
 const BN = require('bignumber.js');
 const web3 = new Web3(window.ethereum);
 
+// DEPRECATED
 const getCurrentAccount = () => {
-	return window.accounts[0];
+	return null;
 };
 
 // TODO reuse them instead of instantiating them repeatedly
