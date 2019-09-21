@@ -21,7 +21,7 @@ import OpenIcon from '@material-ui/icons/OpenInNew';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { getCurrentAccount, getContract } from './Contractor.jsx';
+import { getContract } from './Contractor.jsx';
 
 const translateType = type => {
 	switch (true) {
@@ -161,12 +161,12 @@ class ContractForm extends Component {
 			.then(function(result) {
 				console.log('Results of submitting: ', result);
 				self.postSubmitCallback(true, result);
-			})
-			.catch(function(err) {
+			});
+		/*.catch(function(err) {
 				// TODO this syntax doesn't seem to work anymore, how else to detect error-returns?
 				console.log('Error: ', err.message);
 				self.postSubmitCallback(false, err);
-			});
+			});*/
 	};
 
 	postSubmitCallback(success, result) {
