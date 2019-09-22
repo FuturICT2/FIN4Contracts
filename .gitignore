@@ -3,7 +3,8 @@ src/build/
 .idea/
 src/config/deployment-config.json
 src/config/DeployedAddresses.js
-scripts/DeployedAddresses.json
+scripts/TCR/DeployedAddresses.json
+scripts/*.csv
 
 package-lock.json
 
