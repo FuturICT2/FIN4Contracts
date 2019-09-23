@@ -79,7 +79,7 @@ class Messages extends Component {
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
 										{msg.attachment && msg.attachment.length > 0 && (
 											<Button
-												center
+												center="true"
 												icon={Photo}
 												onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
 												Click to see the image
