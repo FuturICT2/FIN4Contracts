@@ -151,8 +151,25 @@ class ContractForm extends Component {
 			return this.state[input.name];
 		});
 
-		let self = this;
+		// hackish... better to refactor ContractForm properly
+		if (this.props.method === 'createNewToken') {
+			let name = convertedInputs[0];
+			let symbol = convertedInputs[1];
 
+			// TODO check for letters only too?
+			if (name.trim().length === 0) {
+				alert("Name can't be empty");
+				return;
+			}
+
+			// TODO check for duplicate symbols in the frontend too?
+			if (symbol.length < 3 || symbol.length > 5) {
+				alert('Symbol must have between 3 and 5 characters');
+				return;
+			}
+		}
+
+		let self = this;
 		getContract(this.contractAddress, this.contractName)
 			.methods[this.props.method](...convertedInputs)
 			.send({
