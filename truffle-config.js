@@ -1,5 +1,5 @@
 const path = require('path');
-var HDWalletProvider = require('truffle-hdwallet-provider');
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 var config;
 try {
