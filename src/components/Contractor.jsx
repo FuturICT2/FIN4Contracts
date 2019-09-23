@@ -23,13 +23,14 @@ const getContract = (contractAddress, contractName) => {
 
 const getContractData = (props, contractAddress, contractName, method, methodArgs) => {
 	let contract = getContract(contractAddress, contractName);
-	if (methodArgs) {
-		return contract.methods[method](methodArgs).call({
-			from: props.store.getState().fin4Store.defaultAccount
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	if (methodArgs === undefined) {
+		return contract.methods[method]().call({
+			from: defaultAccount
 		});
 	} else {
-		return contract.methods[method]().call({
-			from: props.store.getState().fin4Store.defaultAccount
+		return contract.methods[method](methodArgs).call({
+			from: defaultAccount
 		});
 	}
 };
