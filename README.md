@@ -38,7 +38,7 @@ npm install -g truffle
 npm install -g ganache-cli
 
 # project
-npm install # in this cloned repository
+npm install # requires apparently more than 1GB of memory to run
 ```
 
 ### For deployment
