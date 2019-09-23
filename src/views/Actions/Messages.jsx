@@ -18,8 +18,8 @@ class Messages extends Component {
 			messages: []
 		};
 
-		getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
-			getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount')
+		getContractData(props, Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
+			getContractData(props, Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount')
 				.then(data => {
 					var messageCount = Number(data);
 					var messageIndices = [];
@@ -27,7 +27,7 @@ class Messages extends Component {
 						messageIndices.push(i);
 					}
 					return messageIndices.map(index => {
-						return getContractData(Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', index).then(
+						return getContractData(props, Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', index).then(
 							({
 								0: messageType,
 								1: sender,

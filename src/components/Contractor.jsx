@@ -21,12 +21,16 @@ const getContract = (contractAddress, contractName) => {
 	return new web3.eth.Contract(json.abi, contractAddress);
 };
 
-const getContractData = (contractAddress, contractName, method, methodArgs) => {
+const getContractData = (props, contractAddress, contractName, method, methodArgs) => {
 	let contract = getContract(contractAddress, contractName);
 	if (methodArgs) {
-		return contract.methods[method](methodArgs).call();
+		return contract.methods[method](methodArgs).call({
+			from: props.store.getState().fin4Store.defaultAccount
+		});
 	} else {
-		return contract.methods[method]().call();
+		return contract.methods[method]().call({
+			from: props.store.getState().fin4Store.defaultAccount
+		});
 	}
 };
 
@@ -80,17 +84,19 @@ const loadInitialDataIntoStore = props => {
 };*/
 
 const getAllFin4Tokens = (props, callback) => {
-	getContractData(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
+	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
 		.then(tokens => {
 			return tokens.map(address => {
-				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
-					return {
-						address: address,
-						name: name,
-						symbol: symbol,
-						description: description
-					};
-				});
+				return getContractData(props, address, 'Fin4Token', 'getInfo').then(
+					({ 0: name, 1: symbol, 2: description }) => {
+						return {
+							address: address,
+							name: name,
+							symbol: symbol,
+							description: description
+						};
+					}
+				);
 			});
 		})
 		.then(promises => Promise.all(promises))
@@ -104,7 +110,7 @@ const getAllFin4Tokens = (props, callback) => {
 };
 
 const getMyNonzeroTokenBalances = props => {
-	getContractData(Fin4MainAddress, 'Fin4Main', 'getMyNonzeroTokenBalances').then(
+	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getMyNonzeroTokenBalances').then(
 		({ 0: nonzeroBalanceTokens, 1: balancesBN }) => {
 			if (nonzeroBalanceTokens.length === 0) {
 				return;
@@ -119,12 +125,12 @@ const getMyNonzeroTokenBalances = props => {
 };
 
 const getAllProofTypes = props => {
-	getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypes')
+	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getProofTypes')
 		.then(proofTypeAddresses => {
 			return proofTypeAddresses.map(proofTypeAddress => {
-				return getContractData(Fin4MainAddress, 'Fin4Main', 'getProofTypeName', proofTypeAddress).then(
+				return getContractData(props, Fin4MainAddress, 'Fin4Main', 'getProofTypeName', proofTypeAddress).then(
 					proofTypeName => {
-						return getContractData(proofTypeAddress, proofTypeName, 'getInfo').then(
+						return getContractData(props, proofTypeAddress, proofTypeName, 'getInfo').then(
 							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
 								return {
 									value: proofTypeAddress,
@@ -149,12 +155,12 @@ const getAllProofTypes = props => {
 };
 
 const getAllCurrentUsersClaims = props => {
-	getContractData(Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims')
+	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims')
 		.then(tokenAddresses => {
 			return tokenAddresses.map(tokenAddr => {
-				return getContractData(tokenAddr, 'Fin4Token', 'getMyClaimIds').then(claimIds => {
+				return getContractData(props, tokenAddr, 'Fin4Token', 'getMyClaimIds').then(claimIds => {
 					return claimIds.map(claimId => {
-						return getContractData(tokenAddr, 'Fin4Token', 'claims', claimId).then(
+						return getContractData(props, tokenAddr, 'Fin4Token', 'claims', claimId).then(
 							({
 								0: claimIdBN,
 								1: claimer,
