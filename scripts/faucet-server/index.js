@@ -52,6 +52,7 @@ const sendEther = (recipient, amount, networkID, networkURL, res) => {
 	//let data = contract.methods.sendDrip('0xe975aF7AFAAe9E9e8aE7bd31A7FC10bB611Dd88A').encodeABI(); //.sendDrip('0xe975aF7AFAAe9E9e8aE7bd31A7FC10bB611Dd88A').encodeABI();
 
 	web3.eth.getTransactionCount(address).then(count => {
+		console.log('Transaction count: ' + count);
 		const rawTransaction = {
 			from: address,
 			//gasPrice: web3.utils.toHex(10000000000000),
@@ -66,6 +67,7 @@ const sendEther = (recipient, amount, networkID, networkURL, res) => {
 
 		var tx = new Tx(rawTransaction);
 		tx.sign(privateKey);
+		console.log('Transaction is signed');
 
 		web3.eth.sendSignedTransaction('0x' + tx.serialize().toString('hex')).on('receipt', receipt => {
 			let report = 'Sent ' + amount + ' ETH to ' + recipient + ' from ' + address;
@@ -79,11 +81,11 @@ const sendEther = (recipient, amount, networkID, networkURL, res) => {
 const getNetworkURL = networkID => {
 	switch (networkID) {
 		case '3':
-			return 'https://ropsten.infura.io/v3/' + config.INFURA_API_KEY;
+			return 'wss://ropsten.infura.io/ws/v3/' + config.INFURA_API_KEY;
 		case '4':
-			return 'https://rinkeby.infura.io/v3/' + config.INFURA_API_KEY;
+			return 'wss://rinkeby.infura.io/ws/v3/' + config.INFURA_API_KEY;
 		case '5':
-			return 'https://goerli.infura.io/v3/' + config.INFURA_API_KEY;
+			return 'wss://goerli.infura.io/ws/v3/' + config.INFURA_API_KEY;
 		case '5777':
 			return 'http://127.0.0.1:7545';
 	}
