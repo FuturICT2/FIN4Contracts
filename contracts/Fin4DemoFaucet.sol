@@ -50,4 +50,9 @@ contract Fin4DemoFaucet {
         require(!blacklisted[msg.sender], "Address is blacklisted");
         msg.sender.transfer(drip);
     }
+
+    function sendDrip(address payable recipient) public {
+        require(msg.sender == owner, "Only the faucet owner can send drips");
+        recipient.transfer(drip);
+    }
 }
