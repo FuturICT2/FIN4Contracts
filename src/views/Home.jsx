@@ -7,6 +7,8 @@ import Table from './../components/Table';
 import TableRow from './../components/TableRow';
 import styled from 'styled-components';
 import Currency from '../components/Currency';
+import Button from '../components/Button';
+const axios = require('axios');
 
 class Home extends Component {
 	render() {
@@ -39,6 +41,25 @@ class Home extends Component {
 						<br />
 						<small>{this.props.defaultAccount === null ? 'Info not yet available' : this.props.defaultAccount}</small>
 					</p>
+					<Button
+						onClick={() => {
+							let url = window.location.href;
+							if (url.endsWith(':3000/')) {
+								// TODO verify this works on deployment as expected
+								url = url.substr(0, url.length - 6);
+							}
+							axios
+								.get(url + ':4000/faucet')
+								.then(response => {
+									console.log('Successfully called faucet server. Response: ' + response.data);
+								})
+								.catch(error => {
+									console.log('Error calling faucet server', error);
+								})
+								.finally(() => {});
+						}}>
+						Faucet
+					</Button>
 				</Box>
 			</Container>
 		);
