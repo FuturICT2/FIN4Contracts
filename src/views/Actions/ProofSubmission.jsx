@@ -74,6 +74,9 @@ class ProofSubmission extends Component {
 			this.setState({ ipfsHash: hash });
 			alert('Upload of ' + sizeKB + ' KB to IPFS successful');
 			console.log('Upload of ' + sizeKB + ' KB to IPFS successful: ' + hash, 'https://gateway.ipfs.io/ipfs/' + hash);
+			//this.ipfsApi.pin.add(hash, function (err) {
+			//	console.log("Could not pin hash " + hash, err);
+			//});
 		});
 	};
 
