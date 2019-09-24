@@ -56,25 +56,19 @@ class ProofSubmission extends Component {
 	}
 
 	onUploadImageClick = event => {
-		event.stopPropagation();
-		event.preventDefault();
-		const file = event.target.files[0];
+		console.log('Started image-upload to IPFS...');
 		let reader = new window.FileReader();
-		reader.readAsArrayBuffer(file);
+		reader.readAsArrayBuffer(event.target.files[0]);
 		reader.onloadend = () => this.convertToBuffer(reader);
 	};
 
 	convertToBuffer = async reader => {
-		// file is converted to a buffer for upload to IPFS
 		const buffer = await Buffer.from(reader.result);
-		// set this buffer -using es6 syntax
-		this.setState({ buffer });
-		this.saveToIpfs();
+		this.saveToIpfs(buffer);
 	};
 
-	saveToIpfs = async () => {
-		//console.log('File....', this.ipfsApi);
-		this.ipfsApi.add(this.state.buffer, (err, ipfsHash) => {
+	saveToIpfs = async buffer => {
+		this.ipfsApi.add(buffer, (err, ipfsHash) => {
 			this.setState({ ipfsHash: ipfsHash[0].hash });
 			alert('Upload to IPFS successful');
 			console.log('Upload to IPFS successful: ' + ipfsHash[0].hash, 'https://gateway.ipfs.io/ipfs/' + ipfsHash[0].hash);
