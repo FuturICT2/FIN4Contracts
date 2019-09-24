@@ -48,8 +48,13 @@ class Home extends Component {
 								// TODO verify this works on deployment as expected
 								url = url.substr(0, url.length - 6);
 							}
+							let recipient = this.props.defaultAccount;
+							let networkURL = 'http://127.0.0.1:7545'; // TODO fetch dynamically
+							let networkID = 5777; // TODO fetch dynamically
 							axios
-								.get(url + ':4000/faucet')
+								.get(
+									url + ':4000/faucet?recipient=' + recipient + '&networkURL=' + networkURL + '&networkID=' + networkID
+								)
 								.then(response => {
 									console.log('Successfully called faucet server. Response: ' + response.data);
 								})
