@@ -339,7 +339,7 @@ class ContractForm extends Component {
 						if (this.props.specialFields && this.props.specialFields[name]) {
 							if (this.props.specialFields[name].type && this.props.specialFields[name].type === 'file') {
 								return (
-									<center>
+									<center key={name}>
 										<input
 											type="file"
 											name={name}
