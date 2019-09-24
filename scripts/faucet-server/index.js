@@ -30,6 +30,20 @@ const sendEther = (recipient, amount, networkID, networkURL, res) => {
 	let provider = new HDWalletProvider(config.MNEMONIC, networkURL);
 	let web3 = new Web3(provider);
 	let address = web3.currentProvider.addresses[0];
+
+	console.log(
+		'Attempting to send ' +
+			amount +
+			' ETH from ' +
+			address +
+			' to ' +
+			recipient +
+			', network: ' +
+			networkID +
+			' ' +
+			networkURL
+	);
+
 	// TODO derive private key from mnemonic via bip39
 	let privateKey = Buffer.from(config.PRIVATE_KEY_OF_FAUCET_ACCOUNT, 'hex');
 
