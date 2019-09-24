@@ -45,13 +45,16 @@ class Home extends Component {
 						onClick={() => {
 							let url = window.location.href;
 							if (url.endsWith(':3000/')) {
-								// TODO verify this works on deployment as expected
 								url = url.substr(0, url.length - 6);
+							} else {
+								url = url.substring(0, url.length - 1); // cut off the last /
 							}
 							let recipient = this.props.defaultAccount;
 							let networkID = window.ethereum.networkVersion;
+							let encodedURL = url + ':4000/faucet?recipient=' + recipient + '&networkID=' + networkID;
+							console.log('Calling faucet server: ' + encodedURL);
 							axios
-								.get(url + ':4000/faucet?recipient=' + recipient + '&networkID=' + networkID)
+								.get(encodedURL)
 								.then(response => {
 									console.log('Successfully called faucet server. Response: ' + response.data);
 								})
