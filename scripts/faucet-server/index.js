@@ -81,11 +81,11 @@ const sendEther = (recipient, amount, networkID, networkURL, res) => {
 const getNetworkURL = networkID => {
 	switch (networkID) {
 		case '3':
-			return 'wss://ropsten.infura.io/ws/v3/' + config.INFURA_API_KEY;
+			return 'https://ropsten.infura.io/v3/' + config.INFURA_API_KEY;
 		case '4':
-			return 'wss://rinkeby.infura.io/ws/v3/' + config.INFURA_API_KEY;
+			return 'https://rinkeby.infura.io/v3/' + config.INFURA_API_KEY;
 		case '5':
-			return 'wss://goerli.infura.io/ws/v3/' + config.INFURA_API_KEY;
+			return 'https://goerli.infura.io/v3/' + config.INFURA_API_KEY;
 		case '5777':
 			return 'http://127.0.0.1:7545';
 	}
