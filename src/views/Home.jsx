@@ -57,9 +57,11 @@ class Home extends Component {
 								.get(encodedURL)
 								.then(response => {
 									console.log('Successfully called faucet server. Response: ' + response.data);
+									alert(response.data);
 								})
 								.catch(error => {
 									console.log('Error calling faucet server', error);
+									alert('Failed to request Ether');
 								})
 								.finally(() => {});
 						}}>
