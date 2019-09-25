@@ -84,8 +84,8 @@ contract Fin4Main {
       if (balance > 0) {
         nonzeroBalanceTokens[count] = allFin4Tokens[i];
         balances[count] = balance;
+        count += 1;
       }
-      count += 1;
     }
     return (nonzeroBalanceTokens, balances);
   }
