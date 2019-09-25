@@ -41,7 +41,8 @@ class Home extends Component {
 						<br />
 						<small>{this.props.defaultAccount === null ? 'Info not yet available' : this.props.defaultAccount}</small>
 					</p>
-					<Button
+					<a
+						href="#"
 						onClick={() => {
 							let url = window.location.href;
 							if (url.endsWith(':3000/')) {
@@ -65,8 +66,8 @@ class Home extends Component {
 								})
 								.finally(() => {});
 						}}>
-						Faucet
-					</Button>
+						Request Ether
+					</a>
 				</Box>
 			</Container>
 		);
