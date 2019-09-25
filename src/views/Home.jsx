@@ -39,7 +39,16 @@ class Home extends Component {
 					<p style={{ fontFamily: 'arial' }}>
 						Your public address:
 						<br />
-						<small>{this.props.defaultAccount === null ? 'Info not yet available' : this.props.defaultAccount}</small>
+						<small>
+							{this.props.defaultAccount === null ? (
+								'Info not yet available'
+							) : (
+								// TODO make network-generic
+								<a href={'https://rinkeby.etherscan.io/address/' + this.props.defaultAccount} target="_blank">
+									{this.props.defaultAccount}
+								</a>
+							)}
+						</small>
 					</p>
 					<a
 						href="#"
