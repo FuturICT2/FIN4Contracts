@@ -7,7 +7,6 @@ import Table from './../components/Table';
 import TableRow from './../components/TableRow';
 import styled from 'styled-components';
 import Currency from '../components/Currency';
-import Button from '../components/Button';
 const axios = require('axios');
 
 class Home extends Component {
@@ -78,13 +77,19 @@ class Home extends Component {
 								})
 								.finally(() => {});
 						}}>
-						Request Ether
+						<RequestEth>Request Ether</RequestEth>
 					</a>
 				</Box>
 			</Container>
 		);
 	}
 }
+
+const RequestEth = styled.div`
+	font-family: arial;
+	font-size: small;
+	color: gray;
+`;
 
 const NoTokens = styled.div`
 	font-family: arial;
