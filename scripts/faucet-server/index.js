@@ -72,7 +72,7 @@ const sendEther = (recipient, amount, networkID, networkURL, res) => {
 			console.log('Transaction is signed');
 
 			web3.eth.sendSignedTransaction('0x' + tx.serialize().toString('hex')).on('receipt', receipt => {
-				let report = 'Sent ' + amount + ' ETH to ' + recipient + ' from ' + address;
+				let report = 'Sent ' + amount + ' ETH to ' + recipient; // + ' from ' + address;
 				console.log(report);
 				res.send(report);
 				//process.exit(0);
