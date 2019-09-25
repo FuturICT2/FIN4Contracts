@@ -42,7 +42,7 @@ class PreviousClaims extends Component {
 	render() {
 		return (
 			<>
-				<Box title="My Previous Claims">
+				<Box title="My previous claims">
 					{Object.keys(this.props.usersClaims).map(pseudoClaimId => {
 						let claim = this.props.usersClaims[pseudoClaimId];
 						let token = this.props.store.getState().fin4Store.fin4Tokens[claim.token];

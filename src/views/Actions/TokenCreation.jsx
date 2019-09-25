@@ -57,16 +57,16 @@ class TokenCreation extends Component {
 						</>
 					</Table>
 				</Modal>
-				<Box title="Manage tokens you created">
-					<Table headers={['Name', 'Edit']}>
+				<Box title="Tokens you created">
+					<Table headers={['Name']}>
 						{Object.keys(this.props.fin4Tokens).map((addr, index) => {
 							let token = this.props.fin4Tokens[addr];
 							return (
 								<TableRow
 									key={'token_' + index}
 									data={{
-										name: <Currency symbol={token.symbol} name={token.name} />,
-										edit: 'TODO'
+										name: <Currency symbol={token.symbol} name={token.name} />
+										// edit: 'TODO'
 									}}
 								/>
 							);
