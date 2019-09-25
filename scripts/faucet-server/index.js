@@ -6,7 +6,7 @@ app.use(cors());
 const title = 'FIN4XPLORER Demo Faucet Server';
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-const Tx = require('ethereumjs-tx').Transaction;
+const Tx = require('ethereumjs-tx'); // <-- for version 1.3.7, for version ^2.1.1 add .Transaction
 const Web3 = require('web3');
 const config = require('../../src/config/deployment-config.json');
 const dripAmount = 0.1; // unit: ether
