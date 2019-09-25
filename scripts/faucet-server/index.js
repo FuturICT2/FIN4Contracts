@@ -51,29 +51,32 @@ const sendEther = (recipient, amount, networkID, networkURL, res) => {
 	//const contract = new web3.eth.Contract(abi, '0xeAFCB3bad95Fc67385D51d9CD60119F227cc32dE');
 	//let data = contract.methods.sendDrip('0xe975aF7AFAAe9E9e8aE7bd31A7FC10bB611Dd88A').encodeABI(); //.sendDrip('0xe975aF7AFAAe9E9e8aE7bd31A7FC10bB611Dd88A').encodeABI();
 
-	web3.eth.getTransactionCount(address).then(count => {
-		console.log('Transaction count: ' + count);
-		const rawTransaction = {
-			from: address,
-			//gasPrice: web3.utils.toHex(10000000000000),
-			//gasLimit: web3.utils.toHex(210000),
-			gas: 200000, // TODO good value??
-			to: recipient,
-			value: web3.utils.toHex(web3.utils.toWei(amount, 'ether')), //'0x0',
-			network_id: networkID,
-			//data: data,
-			nonce: web3.utils.toHex(count)
-		};
+	web3.eth.getGasPrice(function(e, gasPrice) {
+		console.log('Got gas price: ' + gasPrice);
+		web3.eth.getTransactionCount(address).then(count => {
+			console.log('Transaction count: ' + count);
+			const rawTransaction = {
+				from: address,
+				//gasLimit: web3.utils.toHex(210000),
+				gas: web3.utils.toHex(100000), // 21000,
+				gasPrice: web3.utils.toHex(gasPrice * 2), // is * 2 a reasonable factor??
+				to: recipient,
+				value: web3.utils.toHex(web3.utils.toWei(amount, 'ether')), //'0x0',
+				chainId: networkID,
+				//data: data,
+				nonce: web3.utils.toHex(count)
+			};
 
-		var tx = new Tx(rawTransaction);
-		tx.sign(privateKey);
-		console.log('Transaction is signed');
+			var tx = new Tx(rawTransaction);
+			tx.sign(privateKey);
+			console.log('Transaction is signed');
 
-		web3.eth.sendSignedTransaction('0x' + tx.serialize().toString('hex')).on('receipt', receipt => {
-			let report = 'Sent ' + amount + ' ETH to ' + recipient + ' from ' + address;
-			console.log(report);
-			res.send(report);
-			//process.exit(0);
+			web3.eth.sendSignedTransaction('0x' + tx.serialize().toString('hex')).on('receipt', receipt => {
+				let report = 'Sent ' + amount + ' ETH to ' + recipient + ' from ' + address;
+				console.log(report);
+				res.send(report);
+				//process.exit(0);
+			});
 		});
 	});
 };
