@@ -54,12 +54,14 @@ class Home extends Component {
 						onClick={() => {
 							let url = window.location.href;
 							// TODO make this URL slicing nicer!
+							if (url.endsWith('#')) {
+								url = url.substring(0, url.length - 1);
+							}
 							if (url.endsWith(':3000/')) {
 								url = url.substr(0, url.length - 6);
-							} else if (url.endsWith(':3000/#')) {
-								url = url.substr(0, url.length - 7);
 							} else {
-								url = url.substring(0, url.length - 1); // cut off the last /
+								// = http://demo.finfour.net/
+								url = url.substring(0, url.length - 1);
 							}
 							let recipient = this.props.defaultAccount;
 							let networkID = window.ethereum.networkVersion;
