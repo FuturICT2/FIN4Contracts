@@ -62,7 +62,7 @@ const sendEther = (recipient, amount, networkID, networkURL, res) => {
 				gasPrice: web3.utils.toHex(gasPrice * 2), // is * 2 a reasonable factor??
 				to: recipient,
 				value: web3.utils.toHex(web3.utils.toWei(amount, 'ether')), //'0x0',
-				chainId: networkID,
+				chainId: '0x0' + networkID,
 				//data: data,
 				nonce: web3.utils.toHex(count)
 			};
