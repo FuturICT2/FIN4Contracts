@@ -45,8 +45,11 @@ class Home extends Component {
 						href="#"
 						onClick={() => {
 							let url = window.location.href;
+							// TODO make this URL slicing nicer!
 							if (url.endsWith(':3000/')) {
 								url = url.substr(0, url.length - 6);
+							} else if (url.endsWith(':3000/#')) {
+								url = url.substr(0, url.length - 7);
 							} else {
 								url = url.substring(0, url.length - 1); // cut off the last /
 							}
