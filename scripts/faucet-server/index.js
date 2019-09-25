@@ -10,27 +10,21 @@ const Tx = require('ethereumjs-tx'); // <-- for version 1.3.7, for version ^2.1.
 const Web3 = require('web3');
 const config = require('../../src/config/deployment-config.json');
 const dripAmount = 0.1; // unit: ether
+const networkURL = 'https://rinkeby.infura.io/v3/' + config.INFURA_API_KEY;
+const provider = new HDWalletProvider(config.MNEMONIC, networkURL);
+const web3 = new Web3(provider);
+const address = web3.currentProvider.addresses[0];
 
 app.get('/', (req, res) => res.send(title));
 
 app.get('/faucet', (req, res) => {
 	console.log('Received funding request: ', req.query);
-	sendEther(
-		req.query.recipient,
-		dripAmount.toString(),
-		req.query.networkID.toString(),
-		getNetworkURL(req.query.networkID),
-		res
-	);
+	sendEther(req.query.recipient, dripAmount.toString(), req.query.networkID.toString(), networkURL, res);
 });
 
 app.listen(port, () => console.log(title + 'listening on port ' + port));
 
-const sendEther = (recipient, amount, networkID, networkURL, res) => {
-	let provider = new HDWalletProvider(config.MNEMONIC, networkURL);
-	let web3 = new Web3(provider);
-	let address = web3.currentProvider.addresses[0];
-
+let sendEther = async function(recipient, amount, networkID, networkURL, res) {
 	console.log(
 		'Attempting to send ' +
 			amount +
@@ -81,6 +75,7 @@ const sendEther = (recipient, amount, networkID, networkURL, res) => {
 	});
 };
 
+/*
 const getNetworkURL = networkID => {
 	switch (networkID) {
 		case '3':
@@ -93,3 +88,4 @@ const getNetworkURL = networkID => {
 			return 'http://127.0.0.1:7545';
 	}
 };
+*/
