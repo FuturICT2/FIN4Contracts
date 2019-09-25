@@ -58,45 +58,46 @@ class Messages extends Component {
 	}
 
 	render() {
+		let hasNewMsgs =
+			this.state.messages.length > 0 && this.state.messages.filter(msg => !msg.hasBeenActedUpon).length > 0;
 		return (
-			this.state.messages.length > 0 && (
+			hasNewMsgs && (
 				<Box title="Messages">
-					{this.state.messages.map(msg => {
-						if (msg.hasBeenActedUpon) {
-							return '';
-						}
-						return (
-							<Message key={`${msg.proofTypeName}${msg.fulfillmentAddress}`}>
-								<Typography color="textSecondary" variant="body2">
-									{msg.message}.
-								</Typography>
-								{msg.messageType === '0' && (
-									<>
-										<Divider style={{ margin: '10px 0' }} variant="middle" />
-										<Typography color="textSecondary" variant="body2">
-											Requested by {msg.sender}
-										</Typography>
-										<Divider style={{ margin: '10px 0' }} variant="middle" />
-										{msg.attachment && msg.attachment.length > 0 && (
-											<Button
-												center="true"
-												icon={Photo}
-												onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
-												Click to see the image
-											</Button>
-										)}
-										<ContractForm
-											buttonLabel="approve"
-											contractAddress={msg.fulfillmentAddress}
-											// instead of passing the proofTypeName, make an extra getName() call for that?
-											contractName={msg.proofTypeName}
-											method="receiveApprovalFromSpecificAddress"
-										/>
-									</>
-								)}
-							</Message>
-						);
-					})}
+					{this.state.messages
+						.filter(msg => !msg.hasBeenActedUpon)
+						.map((msg, index) => {
+							return (
+								<Message key={`${msg.proofTypeName}_${msg.fulfillmentAddress}_${index}`}>
+									<Typography color="textSecondary" variant="body2">
+										{msg.message}.
+									</Typography>
+									{msg.messageType === '0' && (
+										<>
+											<Divider style={{ margin: '10px 0' }} variant="middle" />
+											<Typography color="textSecondary" variant="body2">
+												Requested by {msg.sender}
+											</Typography>
+											<Divider style={{ margin: '10px 0' }} variant="middle" />
+											{msg.attachment && msg.attachment.length > 0 && (
+												<Button
+													center="true"
+													icon={Photo}
+													onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
+													Click to see the image
+												</Button>
+											)}
+											<ContractForm
+												buttonLabel="approve"
+												contractAddress={msg.fulfillmentAddress}
+												// instead of passing the proofTypeName, make an extra getName() call for that?
+												contractName={msg.proofTypeName}
+												method="receiveApprovalFromSpecificAddress"
+											/>
+										</>
+									)}
+								</Message>
+							);
+						})}
 				</Box>
 			)
 		);
