@@ -66,7 +66,7 @@ contract Fin4BaseProofType is utils {
   // to the respective claim on a token
   function _sendApproval(address tokenAdrToReceiveProof, uint claimId) internal returns(bool) {
     // TODO ensure it can only be called from within this SC?
-    Fin4TokenStub(tokenAdrToReceiveProof).receiveProofApproval(msg.sender, claimId);
+    Fin4TokenStub(tokenAdrToReceiveProof).receiveProofApproval(claimId);
     return true;
   }
 

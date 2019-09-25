@@ -55,7 +55,7 @@ contract Fin4TokenBase { // abstract class
     claim.isApproved = false;
 
     if (requiredProofs.length == 0) {
-      approveClaim(claimer, nextClaimId);
+      approveClaim(nextClaimId);
     }
 
     nextClaimId ++;
@@ -149,23 +149,23 @@ contract Fin4TokenBase { // abstract class
   address[] public requiredProofTypes; // a subset of all existing ones linked to Fin4Main, defined by the action type creator
 
   // called from ProofType contracts, therefore msg.sender is the address of that SC
-  function receiveProofApproval(address claimer, uint claimId) public returns(bool) {
+  function receiveProofApproval(uint claimId) public returns(bool) {
     claims[claimId].proof_statuses[msg.sender] = true;
     if (_allProofTypesApprovedOnClaim(claimId)) {
-      approveClaim(claimer, claimId);
+      approveClaim(claimId);
     }
     return true;
   }
 
-  function approveClaim(address claimer, uint claimId) private {
+  function approveClaim(uint claimId) private {
     claims[claimId].isApproved = true;
     // here the minting happens, actual change of balance
     // requires the proof type calling this method to have the Minter role on this Token
     // that was granted him in Fin4Main.createNewToken()
     // can alse be called from here (Fin4TokenBase) in case of no proof types required, therefore
     // Fin4TokenBase must also have the Minter role
-    mint(claimer, claims[claimId].quantity);
-    Fin4MainStub(Fin4Main).claimApprovedPingback(address(this), claimer, claimId);
+    mint(claims[claimId].claimer, claims[claimId].quantity);
+    Fin4MainStub(Fin4Main).claimApprovedPingback(address(this), claims[claimId].claimer, claimId);
   }
 
   function isMinter(address account) public view returns (bool);
