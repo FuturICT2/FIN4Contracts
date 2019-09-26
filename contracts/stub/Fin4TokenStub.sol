@@ -4,7 +4,7 @@ contract Fin4TokenStub {
 
   function name() public view returns(string memory);
 
-  function receiveProofApproval(uint claimId) public returns(bool);
+  function receiveProofApproval(address proofTypeAddress, uint claimId) public returns(bool);
 
   function getTimeBetweenThisClaimAndThatClaimersPreviousOne(address claimer, uint claimId) public view returns(uint);
 

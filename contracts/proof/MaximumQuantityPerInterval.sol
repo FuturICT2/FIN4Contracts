@@ -16,7 +16,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
 
     function submitProof_MaximumQuantityPerInterval(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
       if (requirementMet(tokenAdrToReceiveProof, msg.sender, claimId)) {
-        _sendApproval(tokenAdrToReceiveProof, claimId);
+        _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
           Fin4TokenStub(tokenAdrToReceiveProof).name(),

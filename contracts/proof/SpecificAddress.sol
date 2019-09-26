@@ -50,7 +50,7 @@ contract SpecificAddress is Fin4BaseProofType {
   function receiveApprovalFromSpecificAddress() public returns(bool) {
     require(pendingApprovals[msg.sender].approver == msg.sender, "This address is not registered as approver for any pending approval");
     Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pendingApprovals[msg.sender].messageId);
-    _sendApproval(pendingApprovals[msg.sender].tokenAdrToReceiveProof, pendingApprovals[msg.sender].claimIdOnTokenToReceiveProof);
+    _sendApproval(address(this), pendingApprovals[msg.sender].tokenAdrToReceiveProof, pendingApprovals[msg.sender].claimIdOnTokenToReceiveProof);
     return true;
   }
 

@@ -17,7 +17,7 @@ contract Password is Fin4BaseProofType {
     function submitProof_Password(address tokenAdrToReceiveProof, uint claimId, uint password) public returns(bool) {
       //if (keccak256(abi.encodePacked((_password))) == keccak256(abi.encodePacked((password)))) { // via https://ethereum.stackexchange.com/a/30914
       if (password == _getPassword(tokenAdrToReceiveProof)) {
-        _sendApproval(tokenAdrToReceiveProof, claimId);
+        _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
           Fin4TokenStub(tokenAdrToReceiveProof).name(),

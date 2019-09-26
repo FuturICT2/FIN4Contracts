@@ -15,7 +15,7 @@ contract MinimumInterval is Fin4BaseProofType {
 
     function submitProof_MinimumInterval(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
       if (minimumIntervalRequirementMet(tokenAdrToReceiveProof, msg.sender, claimId)) {
-        _sendApproval(tokenAdrToReceiveProof, claimId);
+        _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
           Fin4TokenStub(tokenAdrToReceiveProof).name(),

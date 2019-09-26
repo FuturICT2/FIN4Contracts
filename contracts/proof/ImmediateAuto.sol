@@ -12,7 +12,7 @@ contract ImmediateAuto is Fin4BaseProofType {
     }
 
     function submitProof_ImmediateAuto(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
-      _sendApproval(tokenAdrToReceiveProof, claimId);
+      _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
       return true;
     }
 

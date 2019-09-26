@@ -148,9 +148,9 @@ contract Fin4TokenBase { // abstract class
 
   address[] public requiredProofTypes; // a subset of all existing ones linked to Fin4Main, defined by the action type creator
 
-  // called from ProofType contracts, therefore msg.sender is the address of that SC
-  function receiveProofApproval(uint claimId) public returns(bool) {
-    claims[claimId].proof_statuses[msg.sender] = true;
+  // called from ProofType contracts
+  function receiveProofApproval(address proofTypeAddress, uint claimId) public returns(bool) {
+    claims[claimId].proof_statuses[proofTypeAddress] = true;
     if (_allProofTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }

@@ -15,7 +15,7 @@ contract Location is Fin4BaseProofType {
     function submitProof_Location(address tokenAdrToReceiveProof, uint claimId,
       uint latitude, uint longitude, uint distanceToLocation) public returns(bool) {
       if (locationIsWithinMaxDistToSpecifiedLocation(tokenAdrToReceiveProof, distanceToLocation)) {
-        _sendApproval(tokenAdrToReceiveProof, claimId);
+        _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
         Fin4TokenStub(tokenAdrToReceiveProof).name(),
