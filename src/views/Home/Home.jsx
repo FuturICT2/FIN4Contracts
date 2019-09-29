@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { drizzleConnect } from 'drizzle-react';
-import Container from './../components/Container';
-import Messages from './Actions/Messages';
-import Box from './../components/Box';
-import Table from './../components/Table';
-import TableRow from './../components/TableRow';
+import Container from '../../components/Container';
+import Messages from '../Actions/Messages';
+import Box from '../../components/Box';
+import Table from '../../components/Table';
+import TableRow from '../../components/TableRow';
 import styled from 'styled-components';
-import Currency from '../components/Currency';
+import Currency from '../../components/Currency';
 const axios = require('axios');
 
 class Home extends Component {
