@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { useState, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
 import Box from '../../components/Box';
 import Currency from '../../components/Currency';
 import Modal from '../../components/Modal';
@@ -14,95 +13,83 @@ import ProofIcon from '@material-ui/icons/Fingerprint';
 import moment from 'moment';
 import styled from 'styled-components';
 
-class PreviousClaims extends Component {
-	constructor(props) {
-		super(props);
+function PreviousClaims(props) {
+	const proofModalValues = useRef({
+		tokenAddress: null,
+		claimId: null
+	});
 
-		this.state = {
-			isProofModalOpen: false
-		};
+	const [isProofModalOpen, setIsProofModalOpen] = useState(false);
 
-		this.resetProofModalValues();
-	}
-
-	resetProofModalValues() {
-		this.proofModalValues = {
-			tokenAddress: null,
-			claimId: null
-		};
-	}
-
-	toggleProofModal = () => {
-		if (this.state.isProofModalOpen) {
-			this.resetProofModalValues();
+	const toggleProofModal = () => {
+		if (isProofModalOpen) {
+			proofModalValues.current.tokenAddress = null;
+			proofModalValues.current.claimId = null;
 		}
-		this.setState({ isProofModalOpen: !this.state.isProofModalOpen });
+		setIsProofModalOpen(!isProofModalOpen);
 	};
 
-	render() {
-		return (
-			<>
-				<Box title="My previous claims">
-					{Object.keys(this.props.usersClaims).map(pseudoClaimId => {
-						let claim = this.props.usersClaims[pseudoClaimId];
-						let token = this.props.store.getState().fin4Store.fin4Tokens[claim.token];
-						let dateStr = claim.date.toString();
+	return (
+		<>
+			<Box title="My previous claims">
+				{Object.keys(props.usersClaims).map(pseudoClaimId => {
+					let claim = props.usersClaims[pseudoClaimId];
+					let token = props.store.getState().fin4Store.fin4Tokens[claim.token];
+					let dateStr = claim.date.toString();
 
-						// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
-						// TODO divide by 1000 instead?
-						let date = moment.unix(Number(dateStr.substring(0, dateStr.length - 3))).calendar();
-						return (
-							<Claim isapproved={claim.isApproved ? 'true' : 'false'} key={`${claim.token}${claim.claimId}`}>
-								<div>
-									<Grid container alignItems="center">
-										<Grid item xs>
-											<Typography gutterBottom variant="h5">
-												{token.name}
-											</Typography>
-										</Grid>
-										<Grid item>
-											<Typography gutterBottom variant="h6">
-												{claim.quantity} <Currency symbol={token.symbol} />
-											</Typography>
-										</Grid>
-									</Grid>
-									{claim.comment && (
-										<Typography color="textSecondary" variant="body2">
-											{claim.comment}
+					// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
+					// TODO divide by 1000 instead?
+					let date = moment.unix(Number(dateStr.substring(0, dateStr.length - 3))).calendar();
+					return (
+						<Claim isapproved={claim.isApproved ? 'true' : 'false'} key={`${claim.token}${claim.claimId}`}>
+							<div>
+								<Grid container alignItems="center">
+									<Grid item xs>
+										<Typography gutterBottom variant="h5">
+											{token.name}
 										</Typography>
-									)}
-								</div>
-								<Divider style={{ margin: '10px 0' }} variant="middle" />
-								<ThemeProvider theme={chipTheme}>
-									<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ margin: '0 7px 7px 0' }} />
-								</ThemeProvider>
-								<ThemeProvider theme={buttonTheme}>
-									<Button
-										icon={ProofIcon}
-										onClick={() => {
-											this.proofModalValues.tokenAddress = claim.token;
-											this.proofModalValues.claimId = claim.claimId;
-											this.toggleProofModal();
-										}}
-										color={claim.isApproved ? 'primary' : 'secondary'}
-										style={{ margin: '0 7px 7px 0' }}>
-										{claim.isApproved ? 'approved' : 'submit proof'}
-									</Button>
-								</ThemeProvider>
-							</Claim>
-						);
-					})}
-				</Box>
-				<Modal
-					isOpen={this.state.isProofModalOpen}
-					handleClose={this.toggleProofModal}
-					title="Submit Proofs"
-					width="450px">
-					<ProofSubmission tokenAddress={this.proofModalValues.tokenAddress} claimId={this.proofModalValues.claimId} />
-				</Modal>
-			</>
-		);
-	}
+									</Grid>
+									<Grid item>
+										<Typography gutterBottom variant="h6">
+											{claim.quantity} <Currency symbol={token.symbol} />
+										</Typography>
+									</Grid>
+								</Grid>
+								{claim.comment && (
+									<Typography color="textSecondary" variant="body2">
+										{claim.comment}
+									</Typography>
+								)}
+							</div>
+							<Divider style={{ margin: '10px 0' }} variant="middle" />
+							<ThemeProvider theme={chipTheme}>
+								<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ margin: '0 7px 7px 0' }} />
+							</ThemeProvider>
+							<ThemeProvider theme={buttonTheme}>
+								<Button
+									icon={ProofIcon}
+									onClick={() => {
+										proofModalValues.current.tokenAddress = claim.token;
+										proofModalValues.current.claimId = claim.claimId;
+										toggleProofModal();
+									}}
+									color={claim.isApproved ? 'primary' : 'secondary'}
+									style={{ margin: '0 7px 7px 0' }}>
+									{claim.isApproved ? 'approved' : 'submit proof'}
+								</Button>
+							</ThemeProvider>
+						</Claim>
+					);
+				})}
+			</Box>
+			<Modal isOpen={isProofModalOpen} handleClose={toggleProofModal} title="Submit Proofs" width="450px">
+				<ProofSubmission
+					tokenAddress={proofModalValues.current.tokenAddress}
+					claimId={proofModalValues.current.claimId}
+				/>
+			</Modal>
+		</>
+	);
 }
 
 const chipTheme = createMuiTheme({
@@ -135,10 +122,6 @@ const Claim = styled(Paper)`
 		background: ${props => (props.isapproved === 'true' ? colors.true : colors.wrong)};
 	}
 `;
-
-PreviousClaims.contextTypes = {
-	drizzle: PropTypes.object
-};
 
 const mapStateToProps = state => {
 	return {
