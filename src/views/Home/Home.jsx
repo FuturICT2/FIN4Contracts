@@ -54,15 +54,6 @@ function Home(props) {
 				<a
 					href="#"
 					onClick={() => {
-						i18n.changeLanguage('de', () => {
-							console.log('callbacK');
-						});
-					}}>
-					de
-				</a>
-				<a
-					href="#"
-					onClick={() => {
 						let url = window.location.href;
 						// TODO make this URL slicing nicer!
 						if (url.endsWith('#')) {
