@@ -13,5 +13,11 @@
 	"proof-name": "Name",
 	"description": "Beschreibung",
 	"token-symbol": "Symbol",
-	"proof-types": "Beweistypen"
+	"proof-types": "Beweistypen",
+
+	"claim-tokens": "Fordere Tokens ein",
+	"token-type": "Token Typ",
+	"quantity": "Quantität",
+	"date": "Datum",
+	"comment": "Kommentar"
 }

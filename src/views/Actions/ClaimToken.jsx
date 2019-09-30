@@ -2,28 +2,23 @@ import React, { Component } from 'react';
 import ContractForm from '../../components/ContractForm';
 import Box from '../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
 import { Fin4MainAddress } from '../../config/DeployedAddresses';
+import { useTranslation } from 'react-i18next';
 
-class ClaimToken extends Component {
-	render() {
-		return (
-			<Box title={'Claim tokens'}>
-				<ContractForm
-					contractAddress={Fin4MainAddress}
-					contractName="Fin4Main"
-					method="submitClaim"
-					labels={['Action type', 'Quantity', 'Date', 'Comment']}
-					singleSelectOptions={this.props.fin4Tokens}
-				/>
-			</Box>
-		);
-	}
+function TokenCreation(props) {
+	const { t, i18n } = useTranslation();
+	return (
+		<Box title={t('claim-tokens')}>
+			<ContractForm
+				contractAddress={Fin4MainAddress}
+				contractName="Fin4Main"
+				method="submitClaim"
+				labels={[t('token-type'), t('quantity'), t('date'), t('comment')]}
+				singleSelectOptions={props.fin4Tokens}
+			/>
+		</Box>
+	);
 }
-
-ClaimToken.contextTypes = {
-	drizzle: PropTypes.object
-};
 
 const mapStateToProps = state => {
 	return {
@@ -32,4 +27,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(ClaimToken, mapStateToProps);
+export default drizzleConnect(TokenCreation, mapStateToProps);
