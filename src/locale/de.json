@@ -14,7 +14,7 @@
 	"description": "Beschreibung",
 	"token-symbol": "Symbol",
 	"proof-types": "Beweistypen",
-	"unit-of-measurement": "Einheit der Quantität",
+	"unit-of-measurement": "Einheit der Mengenangabe (z.B. \"Zeit in Minuten\")",
 
 	"claim-tokens": "Fordere Tokens ein",
 	"token-type": "Token Typ",

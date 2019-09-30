@@ -14,7 +14,7 @@
 	"description": "Description",
 	"token-symbol": "Symbol",
 	"proof-types": "Proof Types",
-	"unit-of-measurement": "Unit of measuring the quantity",
+	"unit-of-measurement": "Unit of measurement (e.g. \"time in min\")",
 
 	"claim-tokens": "Claim Tokens",
 	"token-type": "Token Type",

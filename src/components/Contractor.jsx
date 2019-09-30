@@ -103,7 +103,6 @@ const getAllFin4Tokens = (props, callback) => {
 		})
 		.then(promises => Promise.all(promises))
 		.then(tokenArr => {
-			console.log(tokenArr);
 			props.dispatch({
 				type: ADD_MULTIPLE_FIN4_TOKENS,
 				tokenArr: tokenArr
