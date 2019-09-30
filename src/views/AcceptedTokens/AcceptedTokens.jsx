@@ -10,7 +10,7 @@ class AcceptedTokens extends Component {
 		this.state = { page: 'Home' };
 		this.componentholderStyle = {
 			position: 'fixed',
-			backgroundColor: 'green',
+			'overflow-y': 'auto',
 			left: '64px',
 			top: '70px',
 			bottom: '56px',

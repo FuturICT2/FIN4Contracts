@@ -109,8 +109,11 @@ contract Parameterizer {
         // percentage of losing party's deposit distributed to winning party in parameterizer
         set("pDispensationPct", _parameters[9]);
 
-        // type of majority out of 100 necessary for candidate success
-        set("voteQuorum", _parameters[10]);
+        // type of majority out of 100 necessary for candidate review success
+        set("reviewVoteQuorum", _parameters[10]);
+
+        // type of majority out of 100 necessary for candidate challenge success
+        set("challengeVoteQuorum", _parameters[10]);
 
         // type of majority out of 100 necessary for proposal success in parameterizer
         set("pVoteQuorum", _parameters[11]);

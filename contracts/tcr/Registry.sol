@@ -218,7 +218,7 @@ contract Registry {
 
         // Starts poll
         uint pollID = voting.startPoll(
-            parameterizer.get("voteQuorum"),
+            parameterizer.get("challengeVoteQuorum"),
             parameterizer.get("commitStageLen"),
             parameterizer.get("revealStageLen")
         );
@@ -500,7 +500,7 @@ contract Registry {
 
         // Starts poll
         uint pollID = voting.startPoll(
-            parameterizer.get("voteQuorum"),
+            parameterizer.get("reviewVoteQuorum"),
             parameterizer.get("applyStageLen").div(2),
             parameterizer.get("applyStageLen").div(2)
         );

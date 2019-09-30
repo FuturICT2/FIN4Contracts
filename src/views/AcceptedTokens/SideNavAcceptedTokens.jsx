@@ -11,7 +11,7 @@ class SideNavAcceptedTokens extends Component {
 					this.props.changePage(selected);
 				}}>
 				<SideNav.Toggle />
-				<SideNav.Nav defaultSelected="dashboard">
+				<SideNav.Nav style={{ 'overflow-y': 'auto' }} defaultSelected="home">
 					<NavItem eventKey="home">
 						<NavIcon>
 							<i className="fa fa-fw fa-home" style={{ fontSize: '1.75em' }} />
