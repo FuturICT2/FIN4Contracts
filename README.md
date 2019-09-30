@@ -52,9 +52,9 @@ Add and fill this file: `src/config/deployment-config.json`
 
 The mnemonic gets used for deploying (e.g. `truffle migrate --network rinkeby`), therefore the account has to have sufficient funds on the respective network. The infura API key can be obtained by creating a project on infura.io: it is the "Project ID" under "View Project".
 
-#### Mapping port 3000 to 80
+#### Mapping port 3000 to 80 (optional)
 
-To serve your application on the default port `80` (and therefore have the port number dissapear in the browser) instead of `3000`, use `nginx` in the following way (copied from [here](https://link.medium.com/MW5iaxQ96Z)):
+To serve your application on the default port `80` (and therefore have the port number dissapear in the browser) instead of `3000`, you can use `nginx` in the following way (copied from [here](https://link.medium.com/MW5iaxQ96Z)):
 ```sh
 sudo apt-get install nginx
 sudo rm /etc/nginx/sites-enabled/default
