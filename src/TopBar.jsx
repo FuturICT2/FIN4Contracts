@@ -23,6 +23,12 @@ const useStyles = makeStyles(theme => ({
 		'font-size': 'small',
 		'text-align': 'right',
 		'padding-right': '20px'
+	},
+	lngLink: {
+		'text-decoration': 'none'
+	},
+	activeLng: {
+		'font-weight': 'bold'
 	}
 }));
 
@@ -34,6 +40,7 @@ const TopBar = () => {
 			<center>FIN4XPLORER</center>
 			<div className={classes.flags}>
 				<a
+					className={`${classes.lngLink} ${i18n.language === 'en' ? classes.activeLng : ''}`}
 					href="#"
 					onClick={() => {
 						i18n.changeLanguage('en', () => {
@@ -44,6 +51,7 @@ const TopBar = () => {
 				</a>
 				{' / '}
 				<a
+					className={`${classes.lngLink} ${i18n.language === 'de' ? classes.activeLng : ''}`}
 					href="#"
 					onClick={() => {
 						i18n.changeLanguage('de', () => {
