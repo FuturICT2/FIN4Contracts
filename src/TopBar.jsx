@@ -43,8 +43,9 @@ const TopBar = () => {
 					className={`${classes.lngLink} ${i18n.language === 'en' ? classes.activeLng : ''}`}
 					href="#"
 					onClick={() => {
+						let lng = i18n.language;
 						i18n.changeLanguage('en', () => {
-							console.log('Language changed to English');
+							console.log('Language changed: from ' + lng + ' to en');
 						});
 					}}>
 					EN
@@ -54,8 +55,9 @@ const TopBar = () => {
 					className={`${classes.lngLink} ${i18n.language === 'de' ? classes.activeLng : ''}`}
 					href="#"
 					onClick={() => {
+						let lng = i18n.language;
 						i18n.changeLanguage('de', () => {
-							console.log('Language changed to German');
+							console.log('Language changed: from ' + lng + ' to de');
 						});
 					}}>
 					DE
