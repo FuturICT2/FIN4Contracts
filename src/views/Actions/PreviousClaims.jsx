@@ -12,6 +12,7 @@ import DateIcon from '@material-ui/icons/AccessTime';
 import ProofIcon from '@material-ui/icons/Fingerprint';
 import moment from 'moment';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 function PreviousClaims(props) {
 	const proofModalValues = useRef({
@@ -20,6 +21,8 @@ function PreviousClaims(props) {
 	});
 
 	const [isProofModalOpen, setIsProofModalOpen] = useState(false);
+
+	const { t, i18n } = useTranslation();
 
 	const toggleProofModal = () => {
 		if (isProofModalOpen) {
@@ -31,7 +34,7 @@ function PreviousClaims(props) {
 
 	return (
 		<>
-			<Box title="My previous claims">
+			<Box title={t('my-previous-claims')}>
 				{Object.keys(props.usersClaims).map(pseudoClaimId => {
 					let claim = props.usersClaims[pseudoClaimId];
 					let token = props.store.getState().fin4Store.fin4Tokens[claim.token];
@@ -75,14 +78,14 @@ function PreviousClaims(props) {
 									}}
 									color={claim.isApproved ? 'primary' : 'secondary'}
 									style={{ margin: '0 7px 7px 0' }}>
-									{claim.isApproved ? 'approved' : 'submit proof'}
+									{claim.isApproved ? t('approved') : t('submit-proof-short')}
 								</Button>
 							</ThemeProvider>
 						</Claim>
 					);
 				})}
 			</Box>
-			<Modal isOpen={isProofModalOpen} handleClose={toggleProofModal} title="Submit Proofs" width="450px">
+			<Modal isOpen={isProofModalOpen} handleClose={toggleProofModal} title={t('submit-proof-long')} width="450px">
 				<ProofSubmission
 					tokenAddress={proofModalValues.current.tokenAddress}
 					claimId={proofModalValues.current.claimId}

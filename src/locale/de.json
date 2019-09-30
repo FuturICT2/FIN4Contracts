@@ -19,5 +19,10 @@
 	"token-type": "Token Typ",
 	"quantity": "Quantität",
 	"date": "Datum",
-	"comment": "Kommentar"
+	"comment": "Kommentar",
+
+	"my-previous-claims": "Meine bisherigen Ansprüche",
+	"approved": "Bestätigt",
+	"submit-proof-short": "beweise",
+	"submit-proof-long": "Beweise einreichen"
 }

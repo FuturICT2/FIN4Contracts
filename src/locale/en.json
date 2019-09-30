@@ -19,5 +19,10 @@
 	"token-type": "Token Type",
 	"quantity": "Quantity",
 	"date": "Date",
-	"comment": "Comment"
+	"comment": "Comment",
+
+	"my-previous-claims": "My previous claims",
+	"approved": "Approved",
+	"submit-proof-short": "Submit Proof",
+	"submit-proof-long": "Submit Proof"
 }
