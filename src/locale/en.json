@@ -1,3 +1,10 @@
 {
-	"test": "that works"
+	"no-tokens-yet": "You haven't sucessfully claimed any tokens yet.",
+	"token-name": "Name",
+	"token-balance": "Balance",
+	"info-not-yet-available": "Info not yet available",
+	"your-public-address": "Your public address:",
+	"about-you": "About you",
+	"request-ether": "Request Ether",
+	"your-token-balances": "Your token balances"
 }

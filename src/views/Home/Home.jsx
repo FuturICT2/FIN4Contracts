@@ -14,13 +14,12 @@ function Home(props) {
 	const { t, i18n } = useTranslation();
 	return (
 		<Container>
-			<h1>{t('test')}</h1>
 			<Messages />
-			<Box title="Your token balances">
+			<Box title={t('your-token-balances')}>
 				{Object.keys(props.usersBalances).length === 0 ? (
-					<NoTokens>You haven't sucessfully claimed any tokens yet.</NoTokens>
+					<NoTokens>{t('no-tokens-yet')}</NoTokens>
 				) : (
-					<Table headers={['Name', 'Balance']}>
+					<Table headers={[t('token-name'), t('token-balance')]}>
 						{Object.keys(props.usersBalances).map((tokenAddr, index) => {
 							let token = props.store.getState().fin4Store.fin4Tokens[tokenAddr];
 							return (
@@ -36,13 +35,13 @@ function Home(props) {
 					</Table>
 				)}
 			</Box>
-			<Box title="About you">
+			<Box title={t('about-you')}>
 				<p style={{ fontFamily: 'arial' }}>
-					Your public address:
+					{t('your-public-address')}
 					<br />
 					<small>
 						{props.defaultAccount === null ? (
-							'Info not yet available'
+							t('info-not-yet-available')
 						) : (
 							// TODO make network-generic
 							<a href={'https://rinkeby.etherscan.io/address/' + props.defaultAccount} target="_blank">
@@ -81,7 +80,7 @@ function Home(props) {
 							})
 							.finally(() => {});
 					}}>
-					<RequestEth>Request Ether</RequestEth>
+					<RequestEth>{t('request-ether')}</RequestEth>
 				</a>
 			</Box>
 		</Container>

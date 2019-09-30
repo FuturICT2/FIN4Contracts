@@ -1,3 +1,10 @@
 {
-	"test": "das funktioniert"
+	"no-tokens-yet": "Du hast noch keine Tokens erfolgreich eingefordert.",
+	"token-name": "Name",
+	"token-balance": "Guthaben",
+	"info-not-yet-available": "Info noch nicht verfügbar",
+	"your-public-address": "Deine öffentliche Adresse:",
+	"about-you": "Über dich",
+	"request-ether": "Fordere Ether an",
+	"your-token-balances": "Deine Token Guthaben"
 }
