@@ -6,5 +6,12 @@
 	"your-public-address": "Your public address:",
 	"about-you": "About you",
 	"request-ether": "Request Ether",
-	"your-token-balances": "Your token balances"
+	"your-token-balances": "Your token balances",
+
+	"create-new-token": "Create a new token",
+	"tokens-you-created": "Tokens you created",
+	"proof-name": "Name",
+	"description": "Description",
+	"token-symbol": "Symbol",
+	"proof-types": "Proof Types"
 }

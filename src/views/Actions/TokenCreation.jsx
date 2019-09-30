@@ -8,8 +8,11 @@ import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import Currency from '../../components/Currency';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
+import { useTranslation } from 'react-i18next';
 
 function TokenCreation(props) {
+	const { t, i18n } = useTranslation();
+
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const toggleModal = () => {
@@ -18,13 +21,13 @@ function TokenCreation(props) {
 
 	return (
 		<>
-			<Box title="Create a new token">
+			<Box title={t('create-new-token')}>
 				<ContractForm
 					contractAddress={Fin4MainAddress}
 					contractName="Fin4Main"
 					method="createNewToken"
 					multiSelectOptions={Object.keys(props.proofTypes).map(addr => props.proofTypes[addr])}
-					labels={['Name', 'Symbol', 'Description', 'Proof Types']}
+					labels={[t('token-name'), t('token-symbol'), t('description'), t('proof-types')]}
 					hideArgs={{
 						paramValues: 'paramValues',
 						paramValuesIndices: 'paramValuesIndices'
@@ -33,7 +36,7 @@ function TokenCreation(props) {
 				/>
 			</Box>
 			<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Proof Types">
-				<Table headers={['Name', 'Description']}>
+				<Table headers={[t('proof-name'), t('description')]}>
 					<>
 						{Object.keys(props.proofTypes).map((addr, index) => {
 							let proofType = props.proofTypes[addr];
@@ -50,22 +53,24 @@ function TokenCreation(props) {
 					</>
 				</Table>
 			</Modal>
-			<Box title="Tokens you created">
-				<Table headers={['Name']}>
-					{Object.keys(props.fin4Tokens).map((addr, index) => {
-						let token = props.fin4Tokens[addr];
-						return (
-							<TableRow
-								key={'token_' + index}
-								data={{
-									name: <Currency symbol={token.symbol} name={token.name} />
-									// edit: 'TODO'
-								}}
-							/>
-						);
-					})}
-				</Table>
-			</Box>
+			{Object.keys(props.fin4Tokens).length > 0 && (
+				<Box title={t('tokens-you-created')}>
+					<Table headers={[t('token-name')]}>
+						{Object.keys(props.fin4Tokens).map((addr, index) => {
+							let token = props.fin4Tokens[addr];
+							return (
+								<TableRow
+									key={'token_' + index}
+									data={{
+										name: <Currency symbol={token.symbol} name={token.name} />
+										// edit: 'TODO'
+									}}
+								/>
+							);
+						})}
+					</Table>
+				</Box>
+			)}
 		</>
 	);
 }

@@ -6,5 +6,12 @@
 	"your-public-address": "Deine öffentliche Adresse:",
 	"about-you": "Über dich",
 	"request-ether": "Fordere Ether an",
-	"your-token-balances": "Deine Token Guthaben"
+	"your-token-balances": "Deine Token Guthaben",
+
+	"create-new-token": "Erstelle einen neuen Token",
+	"tokens-you-created": "Tokens die du erstellt hast",
+	"proof-name": "Name",
+	"description": "Beschreibung",
+	"token-symbol": "Symbol",
+	"proof-types": "Beweistypen"
 }
