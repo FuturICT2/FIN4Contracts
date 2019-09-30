@@ -29,6 +29,10 @@ const useStyles = makeStyles(theme => ({
 	},
 	activeLng: {
 		'font-weight': 'bold'
+	},
+	logoText: {
+		'text-decoration': 'none',
+		color: 'white'
 	}
 }));
 
@@ -37,7 +41,11 @@ const TopBar = () => {
 	const classes = useStyles();
 	return (
 		<AppBar position="static" className={classes.bar}>
-			<center>FIN4XPLORER</center>
+			<center>
+				<a className={classes.logoText} href="/">
+					FIN4XPLORER
+				</a>
+			</center>
 			<div className={classes.flags}>
 				<a
 					className={`${classes.lngLink} ${i18n.language === 'en' ? classes.activeLng : ''}`}
