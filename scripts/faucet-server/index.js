@@ -22,7 +22,7 @@ app.get('/faucet', (req, res) => {
 	sendEther(req.query.recipient, dripAmount.toString(), req.query.networkID.toString(), networkURL, res);
 });
 
-app.listen(port, () => console.log(title + 'listening on port ' + port));
+app.listen(port, () => console.log(title + ' listening on port ' + port));
 
 let sendEther = async function(recipient, amount, networkID, networkURL, res) {
 	console.log(
