@@ -14,7 +14,7 @@ function Home(props) {
 	const { t, i18n } = useTranslation();
 	return (
 		<Container>
-			<h1>{t('Welcome to React')}</h1>
+			<h1>{t('test')}</h1>
 			<Messages />
 			<Box title="Your token balances">
 				{Object.keys(props.usersBalances).length === 0 ? (
@@ -51,6 +51,15 @@ function Home(props) {
 						)}
 					</small>
 				</p>
+				<a
+					href="#"
+					onClick={() => {
+						i18n.changeLanguage('de', () => {
+							console.log('callbacK');
+						});
+					}}>
+					de
+				</a>
 				<a
 					href="#"
 					onClick={() => {
