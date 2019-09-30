@@ -7,11 +7,14 @@ import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import styled from 'styled-components';
 import Currency from '../../components/Currency';
+import { useTranslation } from 'react-i18next';
 const axios = require('axios');
 
 function Home(props) {
+	const { t, i18n } = useTranslation();
 	return (
 		<Container>
+			<h1>{t('Welcome to React')}</h1>
 			<Messages />
 			<Box title="Your token balances">
 				{Object.keys(props.usersBalances).length === 0 ? (
