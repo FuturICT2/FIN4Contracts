@@ -8,6 +8,7 @@ contract Fin4TokenBase { // abstract class
   address public Fin4Main;
   address public actionTypeCreator;
   string public description;
+  string public unit;
 
   constructor(address Fin4MainAddress, address actionTypeCreatorAddress, string memory _description) public {
     Fin4Main = Fin4MainAddress;
@@ -15,11 +16,15 @@ contract Fin4TokenBase { // abstract class
     description = _description;
   }
 
+  function setUnit(string memory _unit) public {
+    unit = _unit;
+  }
+
   function name() public view returns(string memory);
   function symbol() public view returns(string memory);
 
-  function getInfo() public view returns(string memory, string memory, string memory) {
-    return (name(), symbol(), description);
+  function getInfo() public view returns(string memory, string memory, string memory, string memory) {
+    return (name(), symbol(), description, unit);
   }
 
   // ------------------------- CLAIM -------------------------

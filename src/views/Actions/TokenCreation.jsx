@@ -27,12 +27,12 @@ function TokenCreation(props) {
 					contractName="Fin4Main"
 					method="createNewToken"
 					multiSelectOptions={Object.keys(props.proofTypes).map(addr => props.proofTypes[addr])}
-					labels={[t('token-name'), t('token-symbol'), t('description'), t('proof-types')]}
+					labels={[t('token-name'), t('token-symbol'), t('description'), t('unit-of-measurement'), t('proof-types')]}
 					hideArgs={{
 						paramValues: 'paramValues',
 						paramValuesIndices: 'paramValuesIndices'
 					}}
-					helperModalTriggers={[null, null, null, toggleModal]}
+					helperModalTriggers={[null, null, null, null, toggleModal]}
 				/>
 			</Box>
 			<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Proof Types">

@@ -89,12 +89,13 @@ const getAllFin4Tokens = (props, callback) => {
 		.then(tokens => {
 			return tokens.map(address => {
 				return getContractData(props, address, 'Fin4Token', 'getInfo').then(
-					({ 0: name, 1: symbol, 2: description }) => {
+					({ 0: name, 1: symbol, 2: description, 3: unit }) => {
 						return {
 							address: address,
 							name: name,
 							symbol: symbol,
-							description: description
+							description: description,
+							unit: unit
 						};
 					}
 				);
@@ -102,6 +103,7 @@ const getAllFin4Tokens = (props, callback) => {
 		})
 		.then(promises => Promise.all(promises))
 		.then(tokenArr => {
+			console.log(tokenArr);
 			props.dispatch({
 				type: ADD_MULTIPLE_FIN4_TOKENS,
 				tokenArr: tokenArr

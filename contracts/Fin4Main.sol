@@ -8,7 +8,7 @@ contract Fin4Main {
   using Strings for string;
 
   // TODO do we need the indexed keyword for event params?
-  event Fin4TokenCreated(address addr, string name, string symbol, string description);
+  event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit);
   event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment);
   event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
 
@@ -16,8 +16,8 @@ contract Fin4Main {
   mapping (string => bool) public symbolIsUsed;
 
   // This methods creates new Fin4 tokens and gets called from TokenCreation
-	function createNewToken(string memory name, string memory symbol, string memory description, address[] memory requiredProofTypes,
-    uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
+	function createNewToken(string memory name, string memory symbol, string memory description, string memory unit,
+    address[] memory requiredProofTypes, uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
 
     uint symLen = symbol.length();
     require(symLen >= 3 && symLen <= 5, "Symbol must have between 3 and 5 characters");
@@ -25,6 +25,7 @@ contract Fin4Main {
     require(!symbolIsUsed[_symbol], "Symbol is already in use");
 
     Fin4Token newToken = new Fin4Token(name, _symbol, description, address(this), msg.sender);
+    newToken.setUnit(unit);
     symbolIsUsed[_symbol] = true;
 
     for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the action type creator
@@ -54,7 +55,7 @@ contract Fin4Main {
       }
     }
     allFin4Tokens.push(address(newToken));
-    emit Fin4TokenCreated(address(newToken), name, _symbol, description);
+    emit Fin4TokenCreated(address(newToken), name, _symbol, description, unit);
     return address(newToken);
   }
 
