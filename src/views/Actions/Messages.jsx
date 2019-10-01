@@ -18,6 +18,10 @@ class Messages extends Component {
 			messages: []
 		};
 
+		if (props.store.getState().fin4Store.defaultAccount === null) {
+			return;
+		}
+
 		getContractData(props, Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
 			getContractData(props, Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount')
 				.then(data => {
