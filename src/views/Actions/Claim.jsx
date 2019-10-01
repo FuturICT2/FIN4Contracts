@@ -49,7 +49,8 @@ function Claim(props) {
 						key="token-dropdown"
 						onChange={e => {
 							values.current.tokenAddress = e.value;
-							// setUnit('');
+							let unit = props.fin4Tokens[values.current.tokenAddress].unit;
+							setUnit(unit.length > 0 ? unit : t('quantity'));
 						}}
 						options={getFormattedSelectOptions()}
 						label={t('token-type')}
