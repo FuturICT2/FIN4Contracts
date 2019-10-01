@@ -11,7 +11,8 @@ const contracts = [
 	artifacts.require('MaximumQuantityPerInterval'),
 	artifacts.require('Password'),
 	artifacts.require('Picture'),
-	artifacts.require('Location')
+	artifacts.require('Location'),
+	artifacts.require('SelfieTogether')
 ];
 
 module.exports = async function(deployer) {
