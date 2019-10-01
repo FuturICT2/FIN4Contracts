@@ -22,7 +22,7 @@
 
 ```sh
 # the basics
-sudo git apt-get install build-essential python
+sudo apt-get install git build-essential python
 
 # node v10
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
