@@ -266,13 +266,19 @@ class ContractForm extends Component {
 	};
 
 	handleParamChange = (proofTypeObj, event) => {
-		var name = event.target.name;
-		var value = Number(event.target.value);
-		if (name === 'latitude' || name === 'longitude') {
+		let name = event.target.name;
+		if (name === 'latitude / longitude') {
+			// 'latitude' || name === 'longitude') {
 			var multiplier = 10000000;
-			value = Math.round(value * multiplier);
+			let lat = Number(event.target.value.split(',')[0].trim());
+			let lon = Number(event.target.value.split(',')[1].trim());
+			lat = Math.round(lat * multiplier);
+			lon = Math.round(lon * multiplier);
+			proofTypeObj.paramValues['latitude'] = lat;
+			proofTypeObj.paramValues['longitude'] = lon;
+			return;
 		}
-		proofTypeObj.paramValues[name] = value;
+		proofTypeObj.paramValues[name] = Number(event.target.value);
 	};
 
 	render() {
