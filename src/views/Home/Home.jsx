@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import Container from '../../components/Container';
 import Messages from '../Actions/Messages';

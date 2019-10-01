@@ -22,7 +22,7 @@ class LoadInitialData extends Component {
 			// load initial data into the store
 			loadInitialDataIntoStore(props);
 		} catch (error) {
-			alert('Could not enable DApp');
+			//alert('Could not enable DApp');
 			console.log('error', error);
 		}
 	}

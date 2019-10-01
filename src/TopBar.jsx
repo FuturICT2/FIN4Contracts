@@ -3,6 +3,7 @@ import colors from './config/colors-config';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import { useTranslation } from 'react-i18next';
+import { drizzleConnect } from 'drizzle-react';
 
 const useStyles = makeStyles(theme => ({
 	bar: {
@@ -33,10 +34,14 @@ const useStyles = makeStyles(theme => ({
 	logoText: {
 		'text-decoration': 'none',
 		color: 'white'
+	},
+	noWeb3Warning: {
+		color: 'yellow',
+		'font-family': 'arial'
 	}
 }));
 
-const TopBar = () => {
+function TopBar(props) {
 	const { t, i18n } = useTranslation();
 	const classes = useStyles();
 	return (
@@ -71,9 +76,31 @@ const TopBar = () => {
 					DE
 				</a>
 			</div>
+			{props.store.getState().fin4Store.defaultAccount === null && (
+				<center className={classes.noWeb3Warning}>
+					<div className={classes.activeLng}>Could not enable DApp: no connection to the Ethereum Blockchain</div>
+					<div>
+						Use the{' '}
+						<a className={classes.noWeb3Warning} href="https://metamask.io/">
+							MetaMask extension
+						</a>{' '}
+						in desktop browsers
+						<br />
+						Try{' '}
+						<a className={classes.noWeb3Warning} href="https://link.medium.com/zdWtIl7Pq0">
+							MetaMask Mobile
+						</a>
+						&nbsp;or{' '}
+						<a className={classes.noWeb3Warning} href="https://status.im/get/">
+							Status
+						</a>{' '}
+						on mobile
+					</div>
+				</center>
+			)}
 		</AppBar>
 	);
-};
+}
 // <a href="/"><img src="/header.png" alt="header of finfoo" className={classes.headerImage} />
 
-export default TopBar;
+export default drizzleConnect(TopBar);

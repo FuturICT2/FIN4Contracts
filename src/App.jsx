@@ -20,9 +20,9 @@ class App extends Component {
 			<Router>
 				<ThemeProvider theme={globalTheme}>
 					<Container>
-						<TopBar />
 						<DrizzleProvider store={store} options={drizzleConfig}>
 							<>
+								<TopBar />
 								<LoadInitialData />
 								{/* register menu routes */}
 								{menuItems.map((route, i) => (
