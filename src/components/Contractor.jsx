@@ -172,8 +172,12 @@ const getAllCurrentUsersClaims = props => {
 								5: dateBN,
 								6: comment,
 								7: requiredProofTypes,
-								8: proof_statuses
+								8: proofStatusesBool
 							}) => {
+								let proofStatusesObj = {};
+								for (let i = 0; i < requiredProofTypes.length; i++) {
+									proofStatusesObj[requiredProofTypes[i]] = proofStatusesBool[i];
+								}
 								return {
 									id: tokenAddr + '_' + claimId, // pseudoId
 									token: tokenAddr,
@@ -182,7 +186,8 @@ const getAllCurrentUsersClaims = props => {
 									isApproved: isApproved,
 									quantity: new BN(quantityBN).toNumber(),
 									date: new BN(dateBN).toNumber(),
-									comment: comment
+									comment: comment,
+									proofStatuses: proofStatusesObj
 								};
 							}
 						);
