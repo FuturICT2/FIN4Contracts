@@ -84,6 +84,9 @@ class ProofSubmission extends Component {
 		const positionCallback = position => {
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
+
+			alert('Captured location ' + latitude + ' / ' + longitude);
+
 			var multiplier = 10000000;
 
 			var tokenCreatorLatitude = Number(specialFieldObj.data.paramValues[0]) / multiplier;
