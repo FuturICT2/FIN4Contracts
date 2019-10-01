@@ -44,7 +44,6 @@ const useStyles = makeStyles(theme => ({
 function TopBar(props) {
 	const { t, i18n } = useTranslation();
 	const classes = useStyles();
-	console.log(props.store.getState().fin4Store.defaultAccount);
 	return (
 		<AppBar position="static" className={classes.bar}>
 			<center>
