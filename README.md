@@ -46,7 +46,9 @@ Add and fill this file: `src/config/deployment-config.json`
 ```json
 {
     "MNEMONIC": "",
-    "INFURA_API_KEY": ""
+    "INFURA_API_KEY": "",
+    "PRIVATE_KEY_OF_FAUCET_ACCOUNT": "",
+    "FAUCET_URL": ""
 }
 ```
 
