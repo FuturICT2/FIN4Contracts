@@ -21,7 +21,7 @@ function Claim(props) {
 
 	const values = useRef({
 		tokenAddress: null,
-		quantity: 0, // or null and avoid submitting it? TODO --> conceptual decision
+		quantity: 0, // or null and avoid submitting it? TODO --> #ConceptualDecision
 		date: moment().valueOf(),
 		comment: ''
 	});
