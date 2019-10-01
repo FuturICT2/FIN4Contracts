@@ -23,6 +23,23 @@ class ProofSubmission extends Component {
 			gasUsed: '',
 			txReceipt: ''
 		};
+		/*
+		let pseudoClaimId = this.props.tokenAddress + '_' + this.props.claimId;
+		let claim = props.usersClaims[pseudoClaimId];
+		Object.keys(claim.proofStatuses).map(proofTypeAddr => {
+			let isApproved = claim.proofStatuses[proofTypeAddr];
+			getContractData(props, proofTypeAddr, 'Fin4BaseProofType', 'getParameterizedInfo', this.props.tokenAddress)
+				.then(({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
+					return {
+						address: proofTypeAddr,
+						name: name,
+						description: parameterizedDescription,
+						paramValues: paramValues,
+						isApproved: isApproved
+					};
+				})
+		});
+		*/
 
 		getContractData(props, this.props.tokenAddress, 'Fin4Token', 'getClaim', this.props.claimId)
 			.then(({ 7: requiredProofTypes, 8: proofTypeStatuses }) => {
@@ -218,7 +235,8 @@ ProofSubmission.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts
+		contracts: state.contracts,
+		usersClaims: state.fin4Store.usersClaims
 	};
 };
 
