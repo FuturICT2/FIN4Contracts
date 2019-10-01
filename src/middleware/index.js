@@ -66,6 +66,11 @@ const contractEventNotifier = store => next => action => {
 		let token = store.getState().fin4Store.fin4Tokens[claim.tokenAddr];
 		display = 'You are claiming ' + quantity + ' ' + token.name + ' [' + token.symbol + '] tokens';
 
+		let proofStatusesObj = {};
+		for (let i = 0; i < claim.requiredProofTypes.length; i++) {
+			proofStatusesObj[claim.requiredProofTypes[i]] = false;
+		}
+
 		store.dispatch({
 			type: ADD_CLAIM,
 			claim: {
@@ -73,10 +78,11 @@ const contractEventNotifier = store => next => action => {
 				token: claim.tokenAddr,
 				claimId: claim.claimId,
 				claimer: claim.claimer,
+				isApproved: false,
 				quantity: quantity,
 				date: new BN(claim.date).toNumber(),
 				comment: claim.comment,
-				isApproved: false
+				proofStatuses: proofStatusesObj
 			}
 		});
 	}

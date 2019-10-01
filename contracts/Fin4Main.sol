@@ -9,7 +9,7 @@ contract Fin4Main {
 
   // TODO do we need the indexed keyword for event params?
   event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit);
-  event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment);
+  event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment, address[] requiredProofTypes);
   event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
 
   address[] public allFin4Tokens;
@@ -119,8 +119,10 @@ contract Fin4Main {
   // used in Claim - could also happen directly on the Token, but that would complicate the workflow in the front end
   function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public {
     claimSubmissionPingback(msg.sender, tokenAddress);
-    uint claimId = Fin4Token(tokenAddress).submit(msg.sender, quantity, date, comment);
-    emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, date, comment);
+    uint claimId;
+    address[] memory requiredProofTypes;
+    (claimId, requiredProofTypes) = Fin4Token(tokenAddress).submit(msg.sender, quantity, date, comment);
+    emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, date, comment, requiredProofTypes);
   }
 
   // called from Fin4TokenBase

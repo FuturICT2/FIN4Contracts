@@ -46,7 +46,7 @@ contract Fin4TokenBase { // abstract class
 
   // Called by submitClaim in Fin4Main
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
-	function submit(address claimer, uint quantity, uint date, string memory comment) public returns (uint) {
+	function submit(address claimer, uint quantity, uint date, string memory comment) public returns (uint, address[] memory) {
     Claim storage claim = claims[nextClaimId];
     claim.claimId = nextClaimId;
     claim.claimer = claimer;
@@ -68,7 +68,7 @@ contract Fin4TokenBase { // abstract class
     }
 
     nextClaimId ++;
-    return nextClaimId - 1;
+    return (nextClaimId - 1, claim.requiredProofTypes);
   }
 
   // Used by ProofSubmission
