@@ -162,17 +162,18 @@ const getAllCurrentUsersClaims = props => {
 			return tokenAddresses.map(tokenAddr => {
 				return getContractData(props, tokenAddr, 'Fin4Token', 'getMyClaimIds').then(claimIds => {
 					return claimIds.map(claimId => {
-						return getContractData(props, tokenAddr, 'Fin4Token', 'claims', claimId).then(
+						return getContractData(props, tokenAddr, 'Fin4Token', 'getClaim', claimId).then(
 							({
-								0: claimIdBN,
-								1: claimer,
-								2: isApproved,
-								3: quantityBN,
-								4: dateBN,
-								5: comment,
-								6: proof_statuses
+								0: tokenName,
+								1: tokenSymbol,
+								2: claimer,
+								3: isApproved,
+								4: quantityBN,
+								5: dateBN,
+								6: comment,
+								7: requiredProofTypes,
+								8: proof_statuses
 							}) => {
-								let claimId = new BN(claimIdBN).toNumber();
 								return {
 									id: tokenAddr + '_' + claimId, // pseudoId
 									token: tokenAddr,
