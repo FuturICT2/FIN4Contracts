@@ -12,7 +12,8 @@ import {
 	UPDATE_BALANCE,
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES,
-	SET_DEFAULT_ACCOUNT
+	SET_DEFAULT_ACCOUNT,
+	ONE_PROOF_ON_CLAIM_APPROVAL
 } from './actionTypes';
 const BN = require('bignumber.js');
 
@@ -92,7 +93,7 @@ const contractEventNotifier = store => next => action => {
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId
 		let isCurrentUsersClaim = claim.claimer.toLowerCase() === currentAccount;
 
-		// block: claim-event not caused by current user / duplicate events / claim is already approved
+		// block: current user is not claimer / duplicate events / claim is already approved
 		let usersClaims = store.getState().fin4Store.usersClaims;
 		if (!isCurrentUsersClaim || (usersClaims[id] && usersClaims[id].isApproved)) {
 			return next(action);
@@ -116,9 +117,28 @@ const contractEventNotifier = store => next => action => {
 
 	if (contractEvent === 'OneProofOnClaimApproval') {
 		let approvedProof = action.event.returnValues;
-		console.log(approvedProof);
-		// OneProofOnClaimApproval(tokenAdrToReceiveProof, proofTypeAddress, claimId, claimer);
-		// TODO guard against multiple events
+		let belongsToCurrentUsersClaim = approvedProof.claimer.toLowerCase() === currentAccount;
+		let pseudoClaimId = approvedProof.tokenAdrToReceiveProof + '_' + approvedProof.claimId;
+
+		let usersClaims = store.getState().fin4Store.usersClaims;
+		if (!usersClaims[pseudoClaimId]) {
+			console.log('Dev: this should not happen! Investigate why');
+			return next(action);
+		}
+
+		let claim = usersClaims[pseudoClaimId];
+		// block: proof-approval belongs to claim not of current user / duplicate events / proof on claim is already approved
+		if (!belongsToCurrentUsersClaim || claim.proofStatuses[approvedProof.proofTypeAddress] === true) {
+			return next(action);
+		}
+
+		display = 'One proof of your claim got approved'; // TODO show more info
+
+		store.dispatch({
+			type: ONE_PROOF_ON_CLAIM_APPROVAL,
+			pseudoClaimId: pseudoClaimId,
+			proofType: approvedProof.proofTypeAddress
+		});
 	}
 
 	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
@@ -233,6 +253,20 @@ function fin4StoreReducer(state = initialState, action) {
 			return {
 				...state,
 				defaultAccount: action.account
+			};
+		case ONE_PROOF_ON_CLAIM_APPROVAL:
+			return {
+				...state,
+				usersClaims: {
+					...state.usersClaims,
+					[action.pseudoClaimId]: {
+						...state.usersClaims[action.pseudoClaimId],
+						proofStatuses: {
+							...state.usersClaims[action.pseudoClaimId].proofStatuses,
+							[action.proofType]: true
+						}
+					}
+				}
 			};
 		default:
 			return state;
