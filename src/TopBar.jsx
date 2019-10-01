@@ -44,6 +44,7 @@ const useStyles = makeStyles(theme => ({
 function TopBar(props) {
 	const { t, i18n } = useTranslation();
 	const classes = useStyles();
+	console.log(props.store.getState().fin4Store.defaultAccount);
 	return (
 		<AppBar position="static" className={classes.bar}>
 			<center>
@@ -76,7 +77,7 @@ function TopBar(props) {
 					DE
 				</a>
 			</div>
-			{props.store.getState().fin4Store.defaultAccount === null && (
+			{props.defaultAccount === null && (
 				<center className={classes.noWeb3Warning}>
 					<div className={classes.activeLng}>Could not enable DApp: no connection to the Ethereum Blockchain</div>
 					<div>
@@ -86,7 +87,7 @@ function TopBar(props) {
 						</a>{' '}
 						in desktop browsers
 						<br />
-						Try{' '}
+						Or try{' '}
 						<a className={classes.noWeb3Warning} href="https://link.medium.com/zdWtIl7Pq0">
 							MetaMask Mobile
 						</a>
@@ -103,4 +104,10 @@ function TopBar(props) {
 }
 // <a href="/"><img src="/header.png" alt="header of finfoo" className={classes.headerImage} />
 
-export default drizzleConnect(TopBar);
+const mapStateToProps = state => {
+	return {
+		defaultAccount: state.fin4Store.defaultAccount
+	};
+};
+
+export default drizzleConnect(TopBar, mapStateToProps);
