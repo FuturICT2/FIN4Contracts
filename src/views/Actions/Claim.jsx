@@ -12,6 +12,7 @@ import PreviousClaims from './PreviousClaims';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import { Fin4MainAddress } from '../../config/DeployedAddresses';
+import { getContract } from '../../components/Contractor.jsx';
 
 function Claim(props) {
 	const { t } = useTranslation();
@@ -20,14 +21,25 @@ function Claim(props) {
 
 	const values = useRef({
 		tokenAddress: null,
-		quantity: null,
-		comment: null,
-		date: moment().valueOf()
+		quantity: 0, // or null and avoid submitting it? TODO --> conceptual decision
+		date: moment().valueOf(),
+		comment: ''
 	});
 
 	const submitClaim = () => {
-		// TODO
-		console.log(values.current);
+		let val = values.current;
+		if (val.tokenAddress === null) {
+			alert('Token must be selected');
+			return;
+		}
+		getContract(Fin4MainAddress, 'Fin4Main')
+			.methods.submitClaim(val.tokenAddress, val.quantity, val.date, val.comment)
+			.send({
+				from: props.store.getState().fin4Store.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
 	};
 
 	const getFormattedSelectOptions = () => {
