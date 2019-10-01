@@ -160,7 +160,9 @@ contract Fin4TokenBase { // abstract class
 
   // called from ProofType contracts
   function receiveProofApproval(address proofTypeAddress, uint claimId) public returns(bool) {
+    // TODO require something as guard?
     claims[claimId].proof_statuses[proofTypeAddress] = true;
+    Fin4MainStub(Fin4Main).proofApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
     if (_allProofTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }

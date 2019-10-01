@@ -11,6 +11,7 @@ contract Fin4Main {
   event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit);
   event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment, address[] requiredProofTypes);
   event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
+  event OneProofOnClaimApproval(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
 
   address[] public allFin4Tokens;
   mapping (string => bool) public symbolIsUsed;
@@ -157,6 +158,11 @@ contract Fin4Main {
       }
     }
     return false;
+  }
+
+  function proofApprovalPingback(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public {
+    // TODO this should come from the token! I was just avoiding registering event listeners everywhere dynamically...
+    emit OneProofOnClaimApproval(tokenAdrToReceiveProof, proofTypeAddress, claimId, claimer);
   }
 
   // ------------------------- MESSAGES -------------------------

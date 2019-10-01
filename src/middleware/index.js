@@ -114,6 +114,13 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	if (contractEvent === 'OneProofOnClaimApproval') {
+		let approvedProof = action.event.returnValues;
+		console.log(approvedProof);
+		// OneProofOnClaimApproval(tokenAdrToReceiveProof, proofTypeAddress, claimId, claimer);
+		// TODO guard against multiple events
+	}
+
 	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
 	return next(action);
 };
