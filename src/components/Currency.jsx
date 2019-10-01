@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { makeStyles } from '@material-ui/core/styles';
 
 const Symbol = styled.span`
 	text-transform: uppercase;
@@ -9,13 +10,52 @@ const Symbol = styled.span`
 	color: gray;
 `;
 
+const useStyles = makeStyles(theme => ({
+	unstyledLink: {
+		'text-decoration': 'none'
+	}
+}));
+
 const Currency = props => {
-	return (
-		<>
-			<Symbol>{props.symbol}</Symbol>
-			{props.name && <span style={{ marginLeft: 5 }}>{props.name}</span>}
-		</>
-	);
+	const classes = useStyles();
+
+	const symbol = () => {
+		return <Symbol>{props.symbol}</Symbol>;
+	};
+
+	const nameWithoutLink = () => {
+		return <span style={{ marginLeft: 5 }}>{props.name}</span>;
+	};
+
+	const nameWithLink = () => {
+		return (
+			<span style={{ marginLeft: 5 }}>
+				<a className={classes.unstyledLink} href={props.href}>
+					{props.name}
+				</a>
+			</span>
+		);
+	};
+
+	if (props.name) {
+		if (props.href) {
+			return (
+				<>
+					{symbol()}
+					{nameWithLink()}
+				</>
+			);
+		} else {
+			return (
+				<>
+					{symbol()}
+					{nameWithoutLink()}
+				</>
+			);
+		}
+	} else {
+		return symbol();
+	}
 };
 
 export default Currency;

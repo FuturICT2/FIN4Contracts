@@ -26,7 +26,13 @@ function Home(props) {
 								<TableRow
 									key={'balance_' + index}
 									data={{
-										name: <Currency symbol={token.symbol} name={token.name} />,
+										name: (
+											<Currency
+												symbol={token.symbol}
+												name={token.name}
+												href={'https://rinkeby.etherscan.io/address/' + tokenAddr}
+											/>
+										),
 										balance: props.usersBalances[tokenAddr]
 									}}
 								/>
