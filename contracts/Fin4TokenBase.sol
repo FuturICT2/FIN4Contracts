@@ -38,6 +38,7 @@ contract Fin4TokenBase { // abstract class
     uint quantity;
     uint date;
     string comment;
+    address[] requiredProofTypes;
     mapping(address => bool) proof_statuses;
   }
 
@@ -52,14 +53,17 @@ contract Fin4TokenBase { // abstract class
     claim.quantity = quantity;
     claim.date = date;
     claim.comment = comment;
-    address[] memory requiredProofs = getRequiredProofTypes();
+    // make a deep copy because the token creator might change the required proof types, but throughout the lifecycle of a claim they should stay fix
+    // TODO should they? --> #ConceptualDecision
+    claim.requiredProofTypes = getRequiredProofTypes();
     // initialize all the proofs required by the action type creator with false
-    for (uint i = 0; i < requiredProofs.length; i ++) {
-      claim.proof_statuses[requiredProofs[i]] = false;
+    // TODO isn't the default initialization false?
+    for (uint i = 0; i < claim.requiredProofTypes.length; i ++) {
+      claim.proof_statuses[claim.requiredProofTypes[i]] = false;
     }
     claim.isApproved = false;
 
-    if (requiredProofs.length == 0) {
+    if (claim.requiredProofTypes.length == 0) {
       approveClaim(nextClaimId);
     }
 
@@ -69,6 +73,7 @@ contract Fin4TokenBase { // abstract class
 
   // Used by ProofSubmission
   // TODO only the last two arrays are being used in the frontend, reduce this methods return values or split off a slimmer method?
+  // TODO todo above outdated, maybe kick out name() and symbol()
   function getClaim(uint claimId) public view returns(string memory, string memory,
     address, bool, uint, uint, string memory, address[] memory, bool[] memory) {
     // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
