@@ -46,9 +46,11 @@ class Home extends Component {
 		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			getContractData(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
 				this.parameterizerValues.minDeposit = new BN(minDepositBN).toNumber();
+				console.log(new BN(minDepositBN).toNumber());
 			});
 			getContractData(parameterizerAddress, 'Parameterizer', 'get', ['reviewTax']).then(reviewTaxBN => {
 				this.parameterizerValues.reviewTax = new BN(reviewTaxBN).toNumber();
+				console.log('reviewtax:' + new BN(reviewTaxBN).toNumber());
 			});
 		});
 

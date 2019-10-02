@@ -113,22 +113,22 @@ contract Parameterizer {
         set("reviewVoteQuorum", _parameters[10]);
 
         // type of majority out of 100 necessary for candidate challenge success
-        set("challengeVoteQuorum", _parameters[10]);
+        set("challengeVoteQuorum", _parameters[11]);
 
         // type of majority out of 100 necessary for proposal success in parameterizer
-        set("pVoteQuorum", _parameters[11]);
+        set("pVoteQuorum", _parameters[12]);
 
         // minimum length of time user has to wait to exit the registry
-        set("exitTimeDelay", _parameters[12]);
+        set("exitTimeDelay", _parameters[13]);
 
         // maximum length of time user can wait to exit the registry
-        set("exitPeriodLen", _parameters[13]);
+        set("exitPeriodLen", _parameters[14]);
 
         // fee for the reviewers
-        set("reviewTax", _parameters[14]);
+        set("reviewTax", _parameters[15]);
 
         // minimum amount of needed reputation for users to be able to participate in governance
-        set("pminReputation", _parameters[15]);
+        set("pminReputation", _parameters[16]);
     }
 
     // -----------------------
