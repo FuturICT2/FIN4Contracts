@@ -78,23 +78,28 @@ function TopBar(props) {
 			</div>
 			{props.defaultAccount === null && (
 				<center className={classes.noWeb3Warning}>
-					<div className={classes.activeLng}>Could not enable DApp: no connection to the Ethereum Blockchain</div>
+					<div className={classes.activeLng}>
+						Not connected to the Ethereum Rinkeby network. Is MetaMask installed and connected?
+					</div>
 					<div>
-						Use the{' '}
+						Get the{' '}
 						<a className={classes.noWeb3Warning} href="https://metamask.io/">
 							MetaMask extension
 						</a>{' '}
-						in desktop browsers
-						<br />
-						Or try{' '}
+						for your desktop browser or try
+						<br />{' '}
 						<a className={classes.noWeb3Warning} href="https://link.medium.com/zdWtIl7Pq0">
 							MetaMask Mobile
-						</a>
-						&nbsp;or{' '}
+						</a>{' '}
+						or{' '}
 						<a className={classes.noWeb3Warning} href="https://status.im/get/">
 							Status
 						</a>{' '}
-						on mobile
+						on your mobile phone. Need help{' '}
+						<a className={classes.noWeb3Warning} title="TODO" href="#">
+							getting started
+						</a>
+						?
 					</div>
 				</center>
 			)}
