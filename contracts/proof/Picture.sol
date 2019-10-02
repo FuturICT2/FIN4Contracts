@@ -29,7 +29,8 @@ contract Picture is SpecificAddress {
 
   // @Override
   function getMessageText() public pure returns(string memory) {
-    return "You were requested to approve the proof type Picture on the action type ";
+    // TODO include the quantity into the message
+    return "Please check this picture proof and approve the correct amount of this token: ";
   }
 
   function getAttachment() public view returns(string memory) {

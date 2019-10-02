@@ -51,11 +51,11 @@ contract SelfieTogether is SpecificAddress {
 
   // @Override
   function getMessageText() public pure returns(string memory) {
-    return "You were requested to approve a picture on the action type ";
+    return "Please check this picture proof and approve the correct amount of this token: ";
   }
 
   function getMessageTextForTokenCreator() public pure returns(string memory) {
-    return "You as the token creator were requested to approve a picture on the action type ";
+    return "As token creator, please check this picture proof and approve the correct amount of this token: ";
   }
 
   function getAttachment() public view returns(string memory) {
