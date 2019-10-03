@@ -5,6 +5,7 @@ src/config/deployment-config.json
 src/config/DeployedAddresses.js
 scripts/TCR/DeployedAddresses.json
 scripts/*.csv
+docs/_build/
 
 package-lock.json
 
