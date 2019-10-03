@@ -7,6 +7,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import Home from '../views/Home/Home';
 import Claim from '../views/Actions/Claim';
 import Create from '../views/Actions/Create';
+import TokenView from '../views/Actions/TokenView';
 
 const menu = [
 	{
@@ -31,6 +32,12 @@ const menu = [
 		label: 'Create',
 		icon: AddIcon,
 		showInNavBar: true,
+		exact: false
+	},
+	{
+		component: TokenView,
+		path: '/token/view/:tokenSymbol',
+		showInNavBar: false,
 		exact: false
 	}
 	/*{
