@@ -4,11 +4,13 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import Currency from '../../components/Currency';
+import { getContractData } from '../../components/Contractor';
 
 function TokenView(props) {
 	const { t, i18n } = useTranslation();
 
 	const [token, setToken] = useState(null);
+	const [details, setDetails] = useState(null);
 
 	const findTokenBySymbol = symbol => {
 		let keys = Object.keys(props.fin4Tokens);
@@ -21,12 +23,35 @@ function TokenView(props) {
 		return null;
 	};
 
+	const fetchDetailedTokenInfo = tok => {
+		getContractData(props, tok.address, 'Fin4Token', 'getDetailedInfo').then(
+			({ 0: userIsTokenCreator, 1: requiredProofTypes, 2: claimsCount, 3: usersBalance, 4: totalSupply }) => {
+				setDetails({
+					userIsTokenCreator: userIsTokenCreator,
+					requiredProofTypes: requiredProofTypes,
+					claimsCount: claimsCount,
+					usersBalance: usersBalance,
+					totalSupply: totalSupply // how much of this token has been minted
+				});
+			}
+		);
+	};
+
+	const getProofTypesStr = () => {
+		let str = '';
+		for (let i = 0; i < details.requiredProofTypes.length; i++) {
+			str += props.proofTypes[details.requiredProofTypes[i]].label + ', ';
+		}
+		return str.substring(0, str.length - 2);
+	};
+
 	useEffect(() => {
 		if (!token && Object.keys(props.fin4Tokens).length > 0) {
 			// best approach to avoid duplicate and get timing right?
-			let token = findTokenBySymbol(props.match.params.tokenSymbol);
-			if (token) {
-				setToken(token);
+			let tok = findTokenBySymbol(props.match.params.tokenSymbol);
+			if (tok) {
+				setToken(tok);
+				fetchDetailedTokenInfo(tok);
 			}
 		}
 	});
@@ -46,6 +71,18 @@ function TokenView(props) {
 						</p>
 						<p>Description: {token.description}</p>
 						<p>Unit: {token.unit}</p>
+						<hr />
+						{!details ? (
+							'Loading details...'
+						) : (
+							<>
+								<p>You are the token creator: {details.userIsTokenCreator ? 'yes' : 'no'}</p>
+								<p>Proof types: {getProofTypesStr()}</p>
+								<p>Total number of claims: {details.claimsCount}</p>
+								<p>Your balance: {details.usersBalance}</p>
+								<p>Total supply: {details.totalSupply}</p>
+							</>
+						)}
 					</>
 				)}
 			</Box>
@@ -55,7 +92,8 @@ function TokenView(props) {
 
 const mapStateToProps = state => {
 	return {
-		fin4Tokens: state.fin4Store.fin4Tokens
+		fin4Tokens: state.fin4Store.fin4Tokens,
+		proofTypes: state.fin4Store.proofTypes
 	};
 };
 
