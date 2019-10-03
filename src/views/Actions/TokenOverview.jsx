@@ -13,14 +13,10 @@ function TokenOverview(props) {
 	return (
 		<>
 			{Object.keys(props.fin4Tokens).length > 0 && (
-				<Box title={t('all-tokens')} width="600px">
-					<Table headers={[t('token-name'), 'Description', 'Unit', 'Proof types', 'Manage']}>
+				<Box title={t('all-tokens')} width="500px">
+					<Table headers={[t('token-name'), 'Description', 'Unit', 'Manage']}>
 						{Object.keys(props.fin4Tokens).map((addr, index) => {
 							let token = props.fin4Tokens[addr];
-							let proofTypesStr = '';
-							for (let i = 0; i < token.requiredProofTypes.length; i++) {
-								proofTypesStr += props.proofTypes[token.requiredProofTypes[i]].label + ', ';
-							}
 							let tokenSite = '/token/view/' + token.symbol;
 							return (
 								<TableRow
@@ -33,7 +29,6 @@ function TokenOverview(props) {
 											</small>
 										),
 										unit: <small>{token.unit}</small>,
-										proofTypes: <small>{proofTypesStr.substring(0, proofTypesStr.length - 2)}</small>,
 										action: (
 											<Button
 												title={'go to ' + tokenSite}
@@ -56,8 +51,7 @@ function TokenOverview(props) {
 
 const mapStateToProps = state => {
 	return {
-		fin4Tokens: state.fin4Store.fin4Tokens,
-		proofTypes: state.fin4Store.proofTypes
+		fin4Tokens: state.fin4Store.fin4Tokens
 	};
 };
 
