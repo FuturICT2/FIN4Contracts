@@ -24,7 +24,6 @@ class App extends Component {
 							<>
 								<TopBar />
 								<LoadInitialData />
-								{/* register menu routes */}
 								{menuItems.map((route, i) => (
 									<Route exact={route.exact} key={i} render={() => <route.component />} path={route.path} />
 								))}
