@@ -53,24 +53,6 @@ function TokenCreation(props) {
 					</>
 				</Table>
 			</Modal>
-			{Object.keys(props.fin4Tokens).length > 0 && (
-				<Box title={t('tokens-you-created')}>
-					<Table headers={[t('token-name')]}>
-						{Object.keys(props.fin4Tokens).map((addr, index) => {
-							let token = props.fin4Tokens[addr];
-							return (
-								<TableRow
-									key={'token_' + index}
-									data={{
-										name: <Currency symbol={token.symbol} name={token.name} />
-										// edit: 'TODO'
-									}}
-								/>
-							);
-						})}
-					</Table>
-				</Box>
-			)}
 		</>
 	);
 }
@@ -82,7 +64,6 @@ TokenCreation.contextTypes = {
 const mapStateToProps = state => {
 	return {
 		contracts: state.contracts,
-		fin4Tokens: state.fin4Store.fin4Tokens,
 		proofTypes: state.fin4Store.proofTypes
 	};
 };
