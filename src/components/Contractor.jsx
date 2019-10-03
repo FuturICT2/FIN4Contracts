@@ -49,15 +49,15 @@ const loadInitialDataIntoStore = props => {
 
 	getUsersBalance(props);
 
-	// get tokens
-	getAllFin4Tokens(props, () => {
-		// get current users nonzero balances, TODO how to handle change of user in MetaMask?
-		getMyNonzeroTokenBalances(props);
-		getAllCurrentUsersClaims(props);
-	});
-
 	// get proof types
-	getAllProofTypes(props);
+	getAllProofTypes(props, () => {
+		// get tokens
+		getAllFin4Tokens(props, () => {
+			// get current users nonzero balances, TODO how to handle change of user in MetaMask?
+			getMyNonzeroTokenBalances(props);
+			getAllCurrentUsersClaims(props);
+		});
+	});
 };
 
 const getUsersBalance = props => {
@@ -144,7 +144,7 @@ const getMyNonzeroTokenBalances = props => {
 	);
 };
 
-const getAllProofTypes = props => {
+const getAllProofTypes = (props, callback) => {
 	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getProofTypes')
 		.then(proofTypeAddresses => {
 			return proofTypeAddresses.map(proofTypeAddress => {
@@ -171,6 +171,7 @@ const getAllProofTypes = props => {
 				type: ADD_MULTIPLE_PROOF_TYPES,
 				proofTypesArr: data
 			});
+			callback();
 		});
 };
 
