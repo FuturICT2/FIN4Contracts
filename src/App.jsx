@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Router } from 'react-router-dom';
+import history from './components/history';
 import { DrizzleProvider } from 'drizzle-react';
 import styled from 'styled-components';
 import drizzleConfig from './config/drizzle-config';
@@ -17,7 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 class App extends Component {
 	render() {
 		return (
-			<Router>
+			<Router history={history}>
 				<ThemeProvider theme={globalTheme}>
 					<Container>
 						<DrizzleProvider store={store} options={drizzleConfig}>
