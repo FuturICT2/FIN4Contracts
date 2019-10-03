@@ -8,7 +8,7 @@ contract Fin4Main {
   using Strings for string;
 
   // TODO do we need the indexed keyword for event params?
-  event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit);
+  event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address[] requiredProofTypes);
   event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment, address[] requiredProofTypes);
   event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
   event OneProofOnClaimApproval(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
@@ -56,7 +56,7 @@ contract Fin4Main {
       }
     }
     allFin4Tokens.push(address(newToken));
-    emit Fin4TokenCreated(address(newToken), name, _symbol, description, unit);
+    emit Fin4TokenCreated(address(newToken), name, _symbol, description, unit, requiredProofTypes);
     return address(newToken);
   }
 

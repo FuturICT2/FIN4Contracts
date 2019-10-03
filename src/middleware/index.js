@@ -47,7 +47,8 @@ const contractEventNotifier = store => next => action => {
 				name: name,
 				symbol: symbol,
 				description: token.description,
-				unit: token.unit
+				unit: token.unit,
+				requiredProofTypes: token.requiredProofTypes
 			}
 		});
 	}

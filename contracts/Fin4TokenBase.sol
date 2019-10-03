@@ -23,8 +23,8 @@ contract Fin4TokenBase { // abstract class
   function name() public view returns(string memory);
   function symbol() public view returns(string memory);
 
-  function getInfo() public view returns(string memory, string memory, string memory, string memory) {
-    return (name(), symbol(), description, unit);
+  function getInfo() public view returns(string memory, string memory, string memory, string memory, address[] memory) {
+    return (name(), symbol(), description, unit, requiredProofTypes);
   }
 
   // ------------------------- CLAIM -------------------------

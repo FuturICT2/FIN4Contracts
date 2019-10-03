@@ -106,13 +106,14 @@ const getAllFin4Tokens = (props, callback) => {
 		.then(tokens => {
 			return tokens.map(address => {
 				return getContractData(props, address, 'Fin4Token', 'getInfo').then(
-					({ 0: name, 1: symbol, 2: description, 3: unit }) => {
+					({ 0: name, 1: symbol, 2: description, 3: unit, 4: requiredProofTypes }) => {
 						return {
 							address: address,
 							name: name,
 							symbol: symbol,
 							description: description,
-							unit: unit
+							unit: unit,
+							requiredProofTypes: requiredProofTypes
 						};
 					}
 				);
