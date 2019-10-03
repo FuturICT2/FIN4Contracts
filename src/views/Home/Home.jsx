@@ -57,36 +57,44 @@ function Home(props) {
 						)}
 					</small>
 				</p>
-				<p style={{ fontFamily: 'arial' }}>
+				<div style={{ fontFamily: 'arial' }}>
 					Your balance:{' '}
 					{props.usersEthBalance === null
 						? t('info-not-yet-available')
 						: // TODO dynamic rounding / unit?
 						  Math.round(props.usersEthBalance * 1000) / 1000}{' '}
 					ETH
-				</p>
+				</div>
+				{props.usersEthBalance === 0 && (
+					<div style={{ fontFamily: 'arial', color: 'red' }}>
+						<small>Without Ether you are limited to read-only interactions</small>
+					</div>
+				)}
 				{config.FAUCET_URL && (
-					<a
-						href="#"
-						onClick={() => {
-							let recipient = props.defaultAccount;
-							let networkID = window.ethereum.networkVersion;
-							let encodedURL = config.FAUCET_URL + '/faucet?recipient=' + recipient + '&networkID=' + networkID;
-							console.log('Calling faucet server: ' + encodedURL);
-							axios
-								.get(encodedURL)
-								.then(response => {
-									console.log('Successfully called faucet server. Response: ' + response.data);
-									alert(response.data);
-								})
-								.catch(error => {
-									console.log('Error calling faucet server', error);
-									alert('Failed to request Ether');
-								})
-								.finally(() => {});
-						}}>
-						<RequestEth>{t('request-ether')}</RequestEth>
-					</a>
+					<>
+						<br />
+						<a
+							href="#"
+							onClick={() => {
+								let recipient = props.defaultAccount;
+								let networkID = window.ethereum.networkVersion;
+								let encodedURL = config.FAUCET_URL + '/faucet?recipient=' + recipient + '&networkID=' + networkID;
+								console.log('Calling faucet server: ' + encodedURL);
+								axios
+									.get(encodedURL)
+									.then(response => {
+										console.log('Successfully called faucet server. Response: ' + response.data);
+										alert(response.data);
+									})
+									.catch(error => {
+										console.log('Error calling faucet server', error);
+										alert('Failed to request Ether');
+									})
+									.finally(() => {});
+							}}>
+							<RequestEth>{t('request-ether')}</RequestEth>
+						</a>
+					</>
 				)}
 			</Box>
 		</Container>
