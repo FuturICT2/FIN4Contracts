@@ -26,7 +26,7 @@ class App extends Component {
 								<LoadInitialData />
 								{/* register menu routes */}
 								{menuItems.map((route, i) => (
-									<Route exact key={i} render={() => <route.component />} path={route.path} />
+									<Route exact={route.exact} key={i} render={() => <route.component />} path={route.path} />
 								))}
 							</>
 						</DrizzleProvider>

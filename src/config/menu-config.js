@@ -14,21 +14,24 @@ const menu = [
 		path: '/',
 		label: 'Home',
 		icon: HomeIcon,
-		showInNavBar: true
+		showInNavBar: true,
+		exact: true
 	},
 	{
 		component: Claim,
 		path: '/claim',
 		label: 'Claim',
 		icon: DoneIcon,
-		showInNavBar: true
+		showInNavBar: true,
+		exact: false
 	},
 	{
 		component: Create,
 		path: '/create',
 		label: 'Create',
 		icon: AddIcon,
-		showInNavBar: true
+		showInNavBar: true,
+		exact: false
 	}
 	/*{
 		component: More,
