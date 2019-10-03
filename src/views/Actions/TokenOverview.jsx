@@ -12,7 +12,7 @@ function TokenOverview(props) {
 	return (
 		<>
 			{Object.keys(props.fin4Tokens).length > 0 && (
-				<Box title={t('tokens-you-created')}>
+				<Box title={t('all-tokens')}>
 					<Table headers={[t('token-name')]}>
 						{Object.keys(props.fin4Tokens).map((addr, index) => {
 							let token = props.fin4Tokens[addr];
