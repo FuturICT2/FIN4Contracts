@@ -39,6 +39,11 @@ function TokenView(props) {
 				) : (
 					<>
 						<Currency symbol={token.symbol} name={token.name} />
+						<p>
+							<small>
+								<a href={'https://rinkeby.etherscan.io/address/' + token.address}>{token.address}</a>
+							</small>
+						</p>
 						<p>Description: {token.description}</p>
 						<p>Unit: {token.unit}</p>
 					</>
