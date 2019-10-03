@@ -1,4 +1,4 @@
-# FIN4XPLORER
+# FIN4Xplorer
 
 ## Context
 
