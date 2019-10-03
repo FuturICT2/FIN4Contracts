@@ -5,8 +5,6 @@ import Modal from '../../components/Modal';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
-import Currency from '../../components/Currency';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 import { useTranslation } from 'react-i18next';
 
@@ -57,13 +55,8 @@ function TokenCreation(props) {
 	);
 }
 
-TokenCreation.contextTypes = {
-	drizzle: PropTypes.object
-};
-
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts,
 		proofTypes: state.fin4Store.proofTypes
 	};
 };
