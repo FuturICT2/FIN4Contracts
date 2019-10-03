@@ -5,6 +5,7 @@ import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import Currency from '../../components/Currency';
 import { useTranslation } from 'react-i18next';
+import Button from '../../components/Button';
 
 function TokenOverview(props) {
 	const { t, i18n } = useTranslation();
@@ -13,13 +14,14 @@ function TokenOverview(props) {
 		<>
 			{Object.keys(props.fin4Tokens).length > 0 && (
 				<Box title={t('all-tokens')} width="600px">
-					<Table headers={[t('token-name'), 'Description', 'Unit', 'Proof types', 'Action']}>
+					<Table headers={[t('token-name'), 'Description', 'Unit', 'Proof types', 'Manage']}>
 						{Object.keys(props.fin4Tokens).map((addr, index) => {
 							let token = props.fin4Tokens[addr];
 							let proofTypesStr = '';
 							for (let i = 0; i < token.requiredProofTypes.length; i++) {
 								proofTypesStr += props.proofTypes[token.requiredProofTypes[i]].label + ', ';
 							}
+							let tokenSite = '/token/view/' + token.symbol;
 							return (
 								<TableRow
 									key={'token_' + index}
@@ -32,7 +34,15 @@ function TokenOverview(props) {
 										),
 										unit: <small>{token.unit}</small>,
 										proofTypes: <small>{proofTypesStr.substring(0, proofTypesStr.length - 2)}</small>,
-										action: 'TODO'
+										action: (
+											<Button
+												title={'go to ' + tokenSite}
+												onClick={() => {
+													window.location.href = tokenSite;
+												}}>
+												More
+											</Button>
+										)
 									}}
 								/>
 							);
