@@ -13,7 +13,8 @@ import {
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES,
 	SET_DEFAULT_ACCOUNT,
-	ONE_PROOF_ON_CLAIM_APPROVAL
+	ONE_PROOF_ON_CLAIM_APPROVAL,
+	SET_USERS_ETH_BALANCE
 } from './actionTypes';
 const BN = require('bignumber.js');
 
@@ -153,7 +154,8 @@ const initialState = {
 	usersBalances: {},
 	proofTypes: {},
 	addresses: {},
-	defaultAccount: null
+	defaultAccount: null,
+	usersEthBalance: null
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -267,6 +269,11 @@ function fin4StoreReducer(state = initialState, action) {
 						}
 					}
 				}
+			};
+		case SET_USERS_ETH_BALANCE:
+			return {
+				...state,
+				usersEthBalance: action.balance
 			};
 		default:
 			return state;

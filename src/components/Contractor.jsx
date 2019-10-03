@@ -3,7 +3,8 @@ import {
 	ADD_MULTIPLE_FIN4_TOKENS,
 	ADD_MULTIPLE_CLAIMS,
 	UPDATE_MULTIPLE_BALANCES,
-	ADD_MULTIPLE_PROOF_TYPES
+	ADD_MULTIPLE_PROOF_TYPES,
+	SET_USERS_ETH_BALANCE
 } from '../middleware/actionTypes';
 import Web3 from 'web3';
 
@@ -46,6 +47,8 @@ const loadInitialDataIntoStore = props => {
 	// TCR addresses
 	// getTCRAddresses(props);
 
+	getUsersBalance(props);
+
 	// get tokens
 	getAllFin4Tokens(props, () => {
 		// get current users nonzero balances, TODO how to handle change of user in MetaMask?
@@ -55,6 +58,20 @@ const loadInitialDataIntoStore = props => {
 
 	// get proof types
 	getAllProofTypes(props);
+};
+
+const getUsersBalance = props => {
+	let currentAccount = props.store.getState().fin4Store.defaultAccount;
+	window.web3.eth.getBalance(currentAccount, (err, res) => {
+		if (err) {
+			return;
+		}
+		let eth = window.web3.toDecimal(window.web3.fromWei(res, 'ether'));
+		props.dispatch({
+			type: SET_USERS_ETH_BALANCE,
+			balance: eth
+		});
+	});
 };
 
 /* const getTCRAddresses = props => {

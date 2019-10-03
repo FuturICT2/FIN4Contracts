@@ -57,6 +57,14 @@ function Home(props) {
 						)}
 					</small>
 				</p>
+				<p style={{ fontFamily: 'arial' }}>
+					Your balance:{' '}
+					{props.usersEthBalance === null
+						? t('info-not-yet-available')
+						: // TODO dynamic rounding / unit?
+						  Math.round(props.usersEthBalance * 1000) / 1000}{' '}
+					ETH
+				</p>
 				{config.FAUCET_URL && (
 					<a
 						href="#"
@@ -100,7 +108,8 @@ const NoTokens = styled.div`
 const mapStateToProps = state => {
 	return {
 		usersBalances: state.fin4Store.usersBalances,
-		defaultAccount: state.fin4Store.defaultAccount
+		defaultAccount: state.fin4Store.defaultAccount,
+		usersEthBalance: state.fin4Store.usersEthBalance
 	};
 };
 
