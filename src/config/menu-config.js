@@ -29,11 +29,17 @@ const menu = [
 	},
 	{
 		component: Claim,
+		path: '/token/claim/:tokenSymbol',
+		showInNavBar: false,
+		exact: false
+	},
+	{
+		component: Claim,
 		path: '/token/claim',
 		label: 'Claim',
 		icon: CheckIcon,
 		showInNavBar: true,
-		exact: false
+		exact: true
 	},
 	{
 		component: TokenCreation,

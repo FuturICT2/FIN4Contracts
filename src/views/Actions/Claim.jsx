@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Container from '../../components/Container';
 import Box from '../../components/Box';
 import Button from '../../components/Button';
@@ -12,11 +12,12 @@ import PreviousClaims from './PreviousClaims';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import { Fin4MainAddress } from '../../config/DeployedAddresses';
-import { getContract } from '../../components/Contractor.jsx';
+import { getContract, findTokenBySymbol } from '../../components/Contractor.jsx';
 
 function Claim(props) {
 	const { t } = useTranslation();
 
+	const [tokenViaURL, setTokenViaURL] = useState(null);
 	const [unit, setUnit] = useState(t('quantity'));
 
 	const values = useRef({
@@ -53,19 +54,43 @@ function Claim(props) {
 		});
 	};
 
+	useEffect(() => {
+		let symbol = props.match.params.tokenSymbol;
+		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0 && symbol) {
+			let token = findTokenBySymbol(props, symbol);
+			if (token) {
+				setTokenViaURL(token);
+				updateSelectedOption(token.address);
+			} else {
+				console.log(symbol + ' was passed as token-symbol via URL but does not match a known token');
+			}
+		}
+	});
+
+	const updateSelectedOption = tokenAddr => {
+		values.current.tokenAddress = tokenAddr;
+		let unit = props.fin4Tokens[values.current.tokenAddress].unit;
+		setUnit(unit.length > 0 ? unit : t('quantity'));
+	};
+
 	return (
 		<Container>
 			<div>
 				<Box title={t('claim-tokens')}>
 					<Dropdown
 						key="token-dropdown"
-						onChange={e => {
-							values.current.tokenAddress = e.value;
-							let unit = props.fin4Tokens[values.current.tokenAddress].unit;
-							setUnit(unit.length > 0 ? unit : t('quantity'));
-						}}
+						onChange={e => updateSelectedOption(e.value)}
 						options={getFormattedSelectOptions()}
 						label={t('token-type')}
+						defaultValue={
+							tokenViaURL
+								? {
+										value: tokenViaURL.address,
+										label: tokenViaURL.name,
+										symbol: tokenViaURL.symbol
+								  }
+								: null
+						}
 					/>
 					<TextField
 						key="quantity-field"
@@ -129,7 +154,6 @@ const inputFieldStyle = {
 
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts,
 		fin4Tokens: state.fin4Store.fin4Tokens
 	};
 };
