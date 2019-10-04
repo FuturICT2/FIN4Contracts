@@ -257,6 +257,7 @@ const Dropdown = props => {
 						components={components}
 						onChange={props.onChange}
 						isMulti={props.multipleChoice}
+						defaultValue={props.defaultValue ? props.defaultValue : null}
 					/>
 				</NoSsr>
 			</div>
