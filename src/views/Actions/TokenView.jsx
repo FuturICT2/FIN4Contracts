@@ -9,7 +9,7 @@ import { getContractData } from '../../components/Contractor';
 function TokenView(props) {
 	const { t, i18n } = useTranslation();
 
-	const [token, setToken] = useState(null);
+	const [tokenViaURL, setTokenViaURL] = useState(null);
 	const [details, setDetails] = useState(null);
 
 	const findTokenBySymbol = symb => {
@@ -24,8 +24,8 @@ function TokenView(props) {
 		return null;
 	};
 
-	const fetchDetailedTokenInfo = tok => {
-		getContractData(props, tok.address, 'Fin4Token', 'getDetailedInfo').then(
+	const fetchDetailedTokenInfo = token => {
+		getContractData(props, token.address, 'Fin4Token', 'getDetailedInfo').then(
 			({ 0: userIsTokenCreator, 1: requiredProofTypes, 2: claimsCount, 3: usersBalance, 4: totalSupply }) => {
 				setDetails({
 					userIsTokenCreator: userIsTokenCreator,
@@ -47,12 +47,12 @@ function TokenView(props) {
 	};
 
 	useEffect(() => {
-		if (!token && Object.keys(props.fin4Tokens).length > 0) {
+		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0) {
 			// best approach to avoid duplicate and get timing right?
-			let tok = findTokenBySymbol(props.match.params.tokenSymbol);
-			if (tok) {
-				setToken(tok);
-				fetchDetailedTokenInfo(tok);
+			let token = findTokenBySymbol(props.match.params.tokenSymbol);
+			if (token) {
+				setTokenViaURL(token);
+				fetchDetailedTokenInfo(token);
 			}
 		}
 	});
@@ -60,7 +60,7 @@ function TokenView(props) {
 	return (
 		<Container>
 			<Box title="Token View">
-				{!token ? (
+				{!tokenViaURL ? (
 					props.match.params.tokenSymbol ? (
 						'No token with symbol ' + props.match.params.tokenSymbol + ' found'
 					) : (
@@ -68,14 +68,14 @@ function TokenView(props) {
 					)
 				) : (
 					<>
-						<Currency symbol={token.symbol} name={token.name} />
+						<Currency symbol={tokenViaURL.symbol} name={tokenViaURL.name} />
 						<p>
 							<small>
-								<a href={'https://rinkeby.etherscan.io/address/' + token.address}>{token.address}</a>
+								<a href={'https://rinkeby.etherscan.io/address/' + tokenViaURL.address}>{tokenViaURL.address}</a>
 							</small>
 						</p>
-						<p>Description: {token.description}</p>
-						<p>Unit: {token.unit}</p>
+						<p>Description: {tokenViaURL.description}</p>
+						<p>Unit: {tokenViaURL.unit}</p>
 						<hr />
 						{!details ? (
 							'Loading details...'
