@@ -6,9 +6,9 @@ import AddIcon from '@material-ui/icons/AddBox';
 import HomeIcon from '@material-ui/icons/Home';
 import Home from '../views/Home/Home';
 import Claim from '../views/Actions/Claim';
-import Create from '../views/Actions/Create';
 import TokenView from '../views/Actions/TokenView';
 import Token from '../views/Actions/Token';
+import TokenCreation from '../views/Actions/TokenCreation';
 
 const menu = [
 	{
@@ -36,7 +36,7 @@ const menu = [
 		exact: false
 	},
 	{
-		component: Create,
+		component: TokenCreation,
 		path: '/token/create',
 		label: 'Create',
 		icon: AddIcon,

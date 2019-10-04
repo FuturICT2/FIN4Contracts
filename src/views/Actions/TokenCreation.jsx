@@ -7,6 +7,7 @@ import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
 import { useTranslation } from 'react-i18next';
+import Container from '../../components/Container';
 
 function TokenCreation(props) {
 	const { t, i18n } = useTranslation();
@@ -18,7 +19,7 @@ function TokenCreation(props) {
 	};
 
 	return (
-		<>
+		<Container>
 			<Box title={t('create-new-token')}>
 				<ContractForm
 					contractAddress={Fin4MainAddress}
@@ -51,7 +52,7 @@ function TokenCreation(props) {
 					</>
 				</Table>
 			</Modal>
-		</>
+		</Container>
 	);
 }
 
