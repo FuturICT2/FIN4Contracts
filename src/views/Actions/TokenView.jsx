@@ -12,7 +12,8 @@ function TokenView(props) {
 	const [token, setToken] = useState(null);
 	const [details, setDetails] = useState(null);
 
-	const findTokenBySymbol = symbol => {
+	const findTokenBySymbol = symb => {
+		let symbol = symb.toUpperCase();
 		let keys = Object.keys(props.fin4Tokens);
 		for (let i = 0; i < keys.length; i++) {
 			let token = props.fin4Tokens[keys[i]];
@@ -60,7 +61,11 @@ function TokenView(props) {
 		<Container>
 			<Box title="Token View">
 				{!token ? (
-					'No token with symbol ' + props.match.params.tokenSymbol + ' found'
+					props.match.params.tokenSymbol ? (
+						'No token with symbol ' + props.match.params.tokenSymbol + ' found'
+					) : (
+						'No token-symbol passed via URL'
+					)
 				) : (
 					<>
 						<Currency symbol={token.symbol} name={token.name} />

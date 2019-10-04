@@ -48,6 +48,12 @@ const menu = [
 		path: '/token/view/:tokenSymbol',
 		showInNavBar: false,
 		exact: false
+	},
+	{
+		component: TokenView,
+		path: '/token/view/',
+		showInNavBar: false,
+		exact: true
 	}
 	/*{
 		component: More,
