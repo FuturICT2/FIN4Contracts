@@ -1,13 +1,14 @@
-//import ActionsIcon from '@material-ui/icons/DirectionsRun';
-//import StarIcon from '@material-ui/icons/Star';
-//import CheckIcon from '@material-ui/icons/CheckCircleOutline';
+// import ActionsIcon from '@material-ui/icons/DirectionsRun';
+// import DoneIcon from '@material-ui/icons/Done';
+import StarIcon from '@material-ui/icons/Star';
+import CheckIcon from '@material-ui/icons/CheckCircleOutline';
 import AddIcon from '@material-ui/icons/AddBox';
-import DoneIcon from '@material-ui/icons/Done';
 import HomeIcon from '@material-ui/icons/Home';
 import Home from '../views/Home/Home';
 import Claim from '../views/Actions/Claim';
 import Create from '../views/Actions/Create';
 import TokenView from '../views/Actions/TokenView';
+import Token from '../views/Actions/Token';
 
 const menu = [
 	{
@@ -19,20 +20,28 @@ const menu = [
 		exact: true
 	},
 	{
+		component: Token,
+		path: '/token/',
+		label: 'Tokens',
+		icon: StarIcon,
+		showInNavBar: true,
+		exact: true
+	},
+	{
 		component: Claim,
-		path: '/claim',
+		path: '/token/claim',
 		label: 'Claim',
-		icon: DoneIcon,
+		icon: CheckIcon,
 		showInNavBar: true,
 		exact: false
 	},
 	{
 		component: Create,
-		path: '/create',
+		path: '/token/create',
 		label: 'Create',
 		icon: AddIcon,
-		showInNavBar: true,
-		exact: false
+		showInNavBar: false,
+		exact: true
 	},
 	{
 		component: TokenView,
