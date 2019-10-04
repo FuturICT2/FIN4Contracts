@@ -5,7 +5,6 @@ import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import Currency from '../../components/Currency';
 import { useTranslation } from 'react-i18next';
-import history from '../../components/history';
 import { Link } from 'react-router-dom';
 
 function TokenOverview(props) {

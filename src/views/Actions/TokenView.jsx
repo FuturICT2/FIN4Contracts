@@ -47,7 +47,7 @@ function TokenView(props) {
 	};
 
 	useEffect(() => {
-		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0) {
+		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0 && props.match.params.tokenSymbol) {
 			// best approach to avoid duplicate and get timing right?
 			let token = findTokenBySymbol(props.match.params.tokenSymbol);
 			if (token) {
