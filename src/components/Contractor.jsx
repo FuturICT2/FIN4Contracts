@@ -224,6 +224,18 @@ const getAllCurrentUsersClaims = props => {
 		});
 };
 
+const findTokenBySymbol = (props, symb) => {
+	let symbol = symb.toUpperCase();
+	let keys = Object.keys(props.fin4Tokens);
+	for (let i = 0; i < keys.length; i++) {
+		let token = props.fin4Tokens[keys[i]];
+		if (token.symbol === symbol) {
+			return token;
+		}
+	}
+	return null;
+};
+
 // DEPRECATED
 const getAllActionTypes = () => {
 	return getContractData(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
@@ -283,5 +295,6 @@ export {
 	getAllActionTypes,
 	getPollStatus,
 	PollStatus,
-	loadInitialDataIntoStore
+	loadInitialDataIntoStore,
+	findTokenBySymbol
 };

@@ -4,25 +4,13 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import Currency from '../../components/Currency';
-import { getContractData } from '../../components/Contractor';
+import { getContractData, findTokenBySymbol } from '../../components/Contractor';
 
 function TokenView(props) {
 	const { t, i18n } = useTranslation();
 
 	const [tokenViaURL, setTokenViaURL] = useState(null);
 	const [details, setDetails] = useState(null);
-
-	const findTokenBySymbol = symb => {
-		let symbol = symb.toUpperCase();
-		let keys = Object.keys(props.fin4Tokens);
-		for (let i = 0; i < keys.length; i++) {
-			let token = props.fin4Tokens[keys[i]];
-			if (token.symbol === symbol) {
-				return token;
-			}
-		}
-		return null;
-	};
 
 	const fetchDetailedTokenInfo = token => {
 		getContractData(props, token.address, 'Fin4Token', 'getDetailedInfo').then(
@@ -47,9 +35,10 @@ function TokenView(props) {
 	};
 
 	useEffect(() => {
-		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0 && props.match.params.tokenSymbol) {
+		let symbol = props.match.params.tokenSymbol;
+		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0 && symbol) {
 			// best approach to avoid duplicate and get timing right?
-			let token = findTokenBySymbol(props.match.params.tokenSymbol);
+			let token = findTokenBySymbol(props, symbol);
 			if (token) {
 				setTokenViaURL(token);
 				fetchDetailedTokenInfo(token);
