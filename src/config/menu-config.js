@@ -9,6 +9,7 @@ import Claim from '../views/token/claim/Claim';
 import TokenView from '../views/token/view/TokenView';
 import Token from '../views/token/Token';
 import TokenCreation from '../views/token/create/TokenCreation';
+import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
 
 const menu = [
 	{
@@ -31,7 +32,13 @@ const menu = [
 		component: Claim,
 		path: '/token/claim/:tokenSymbol',
 		showInNavBar: false,
-		exact: false
+		exact: true
+	},
+	{
+		component: ProofSubmission,
+		path: '/token/claim/:tokenSymbol/proof/:claimId',
+		showInNavBar: false,
+		exact: true
 	},
 	{
 		component: Claim,
@@ -53,7 +60,7 @@ const menu = [
 		component: TokenView,
 		path: '/token/view/:tokenSymbol',
 		showInNavBar: false,
-		exact: false
+		exact: true
 	},
 	{
 		component: TokenView,
