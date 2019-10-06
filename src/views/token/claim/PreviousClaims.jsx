@@ -4,7 +4,7 @@ import Box from '../../../components/Box';
 import Currency from '../../../components/Currency';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
-import ProofSubmission from './ProofSubmission';
+import ProofSubmission from './proof/ProofSubmission';
 import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../../config/colors-config';
