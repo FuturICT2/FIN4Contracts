@@ -1,10 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import Box from '../../../components/Box';
 import Currency from '../../../components/Currency';
-import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
-import ProofSubmission from './proof/ProofSubmission';
 import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../../config/colors-config';
@@ -13,24 +11,10 @@ import ProofIcon from '@material-ui/icons/Fingerprint';
 import moment from 'moment';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import history from '../../../components/history';
 
 function PreviousClaims(props) {
-	const proofModalValues = useRef({
-		tokenAddress: null,
-		claimId: null
-	});
-
-	const [isProofModalOpen, setIsProofModalOpen] = useState(false);
-
 	const { t, i18n } = useTranslation();
-
-	const toggleProofModal = () => {
-		if (isProofModalOpen) {
-			proofModalValues.current.tokenAddress = null;
-			proofModalValues.current.claimId = null;
-		}
-		setIsProofModalOpen(!isProofModalOpen);
-	};
 
 	return (
 		<>
@@ -39,6 +23,8 @@ function PreviousClaims(props) {
 					let claim = props.usersClaims[pseudoClaimId];
 					let token = props.store.getState().fin4Store.fin4Tokens[claim.token];
 					let dateStr = claim.date.toString();
+					let symbol = props.fin4Tokens[claim.token].symbol; // of token that gets claimed
+					let proofSite = '/token/claim/' + symbol + '/proof/' + claim.claimId;
 
 					// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
 					// TODO divide by 1000 instead?
@@ -71,11 +57,7 @@ function PreviousClaims(props) {
 							<ThemeProvider theme={buttonTheme}>
 								<Button
 									icon={ProofIcon}
-									onClick={() => {
-										proofModalValues.current.tokenAddress = claim.token;
-										proofModalValues.current.claimId = claim.claimId;
-										toggleProofModal();
-									}}
+									onClick={() => history.push(proofSite)}
 									color={claim.isApproved ? 'primary' : 'secondary'}
 									style={{ margin: '0 7px 7px 0' }}>
 									{claim.isApproved ? t('approved') : t('submit-proof-short')}
@@ -85,12 +67,6 @@ function PreviousClaims(props) {
 					);
 				})}
 			</Box>
-			<Modal isOpen={isProofModalOpen} handleClose={toggleProofModal} title={t('submit-proof-long')} width="450px">
-				<ProofSubmission
-					tokenAddress={proofModalValues.current.tokenAddress}
-					claimId={proofModalValues.current.claimId}
-				/>
-			</Modal>
 		</>
 	);
 }
@@ -129,7 +105,8 @@ const Claim = styled(Paper)`
 const mapStateToProps = state => {
 	return {
 		contracts: state.contracts,
-		usersClaims: state.fin4Store.usersClaims
+		usersClaims: state.fin4Store.usersClaims,
+		fin4Tokens: state.fin4Store.fin4Tokens
 	};
 };
 
