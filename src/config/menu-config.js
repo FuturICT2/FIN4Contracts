@@ -8,7 +8,7 @@ import Home from '../views/Home/Home';
 import Claim from '../views/token/Claim';
 import TokenView from '../views/token/TokenView';
 import Token from '../views/token/Token';
-import TokenCreation from '../views/token/TokenCreation';
+import TokenCreation from '../views/token/create/TokenCreation';
 
 const menu = [
 	{

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import ContractForm from '../../components/ContractForm';
-import Box from '../../components/Box';
-import Modal from '../../components/Modal';
-import Table from '../../components/Table';
-import TableRow from '../../components/TableRow';
+import ContractForm from '../../../components/ContractForm';
+import Box from '../../../components/Box';
+import Modal from '../../../components/Modal';
+import Table from '../../../components/Table';
+import TableRow from '../../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
-import { Fin4MainAddress } from '../../config/DeployedAddresses.js';
+import { Fin4MainAddress } from '../../../config/DeployedAddresses.js';
 import { useTranslation } from 'react-i18next';
-import Container from '../../components/Container';
+import Container from '../../../components/Container';
 
 function TokenCreation(props) {
 	const { t, i18n } = useTranslation();
