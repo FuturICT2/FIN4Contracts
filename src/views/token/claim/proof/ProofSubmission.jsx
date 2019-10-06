@@ -7,6 +7,8 @@ import { drizzleConnect } from 'drizzle-react';
 import { getContractData, findTokenBySymbol } from '../../../../components/Contractor';
 import ipfs from '../../../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
+import Box from '../../../../components/Box';
+import Container from '../../../../components/Container';
 
 function ProofSubmission(props) {
 	const [proofData, setProofData] = useState(null);
@@ -135,66 +137,68 @@ function ProofSubmission(props) {
 
 	return (
 		proofData !== null && (
-			<>
-				{proofData.map((proofObj, index) => {
-					return (
-						<div key={index}>
-							{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
-							<Status isapproved={proofObj.isApproved ? 'true' : 'false'}>
-								{proofObj.isApproved
-									? `The proof "${proofObj.name}" was submitted successfully.`
-									: `Your claim requires you to fill out the following form: ${proofObj.description}`}
-							</Status>
-							{!proofObj.isApproved && (
-								<ContractForm
-									contractAddress={proofObj.address}
-									contractName={proofObj.name}
-									method={'submitProof_' + proofObj.name}
-									staticArgs={{
-										tokenAdrToReceiveProof: tokenViaURL.address,
-										claimId: claimViaURL.claimId + ''
-									}}
-									hideArgs={{
-										longitude: 'longitude',
-										distanceToLocation: 'distanceToLocation'
-									}}
-									buttonLabel="Initiate proof"
-									specialFields={{
-										// location: "location" // TODO latitude/longitude... ?!
-										IPFShash: {
-											type: 'file',
-											buttonText: 'Upload image to IPFS',
-											buttonIcon: null,
-											onClick: onUploadImageClick,
-											values: {
-												IPFShash: ipfsHash
+			<Container>
+				<Box title="Proof Submission">
+					{proofData.map((proofObj, index) => {
+						return (
+							<div key={index}>
+								{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
+								<Status isapproved={proofObj.isApproved ? 'true' : 'false'}>
+									{proofObj.isApproved
+										? `The proof "${proofObj.name}" was submitted successfully.`
+										: `Your claim requires you to fill out the following form: ${proofObj.description}`}
+								</Status>
+								{!proofObj.isApproved && (
+									<ContractForm
+										contractAddress={proofObj.address}
+										contractName={proofObj.name}
+										method={'submitProof_' + proofObj.name}
+										staticArgs={{
+											tokenAdrToReceiveProof: tokenViaURL.address,
+											claimId: claimViaURL.claimId + ''
+										}}
+										hideArgs={{
+											longitude: 'longitude',
+											distanceToLocation: 'distanceToLocation'
+										}}
+										buttonLabel="Initiate proof"
+										specialFields={{
+											// location: "location" // TODO latitude/longitude... ?!
+											IPFShash: {
+												type: 'file',
+												buttonText: 'Upload image to IPFS',
+												buttonIcon: null,
+												onClick: onUploadImageClick,
+												values: {
+													IPFShash: ipfsHash
+												}
+												//state: this.state
+											},
+											latitude: {
+												buttonText: 'Submit location',
+												buttonIcon: AddLocation,
+												onClick: onSubmitLocationClick,
+												data: proofObj,
+												values: {
+													latitude: '0',
+													longitude: '0',
+													distanceToLocation: '999999'
+												}
+											},
+											longitude: {
+												belongsTo: 'latitude'
+											},
+											distanceToLocation: {
+												belongsTo: 'latitude'
 											}
-											//state: this.state
-										},
-										latitude: {
-											buttonText: 'Submit location',
-											buttonIcon: AddLocation,
-											onClick: onSubmitLocationClick,
-											data: proofObj,
-											values: {
-												latitude: '0',
-												longitude: '0',
-												distanceToLocation: '999999'
-											}
-										},
-										longitude: {
-											belongsTo: 'latitude'
-										},
-										distanceToLocation: {
-											belongsTo: 'latitude'
-										}
-									}}
-								/>
-							)}
-						</div>
-					);
-				})}
-			</>
+										}}
+									/>
+								)}
+							</div>
+						);
+					})}
+				</Box>
+			</Container>
 		)
 	);
 }
