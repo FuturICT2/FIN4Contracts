@@ -21,7 +21,7 @@ import OpenIcon from '@material-ui/icons/OpenInNew';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { getContract } from './Contractor.jsx';
+import { getContract, findTokenBySymbol } from './Contractor.jsx';
 
 const translateType = type => {
 	switch (true) {
@@ -165,6 +165,11 @@ class ContractForm extends Component {
 			// TODO check for duplicate symbols in the frontend too?
 			if (symbol.length < 3 || symbol.length > 5) {
 				alert('Symbol must have between 3 and 5 characters');
+				return;
+			}
+
+			if (findTokenBySymbol(this.props, symbol) !== null) {
+				alert('Symbol is already in use');
 				return;
 			}
 		}
@@ -466,7 +471,8 @@ ContractForm.propTypes = {
 
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts
+		contracts: state.contracts,
+		fin4Tokens: state.fin4Store.fin4Tokens
 	};
 };
 
