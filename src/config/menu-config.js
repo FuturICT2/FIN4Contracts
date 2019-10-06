@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/AddBox';
 import HomeIcon from '@material-ui/icons/Home';
 import Home from '../views/Home/Home';
 import Claim from '../views/token/claim/Claim';
-import TokenView from '../views/token/TokenView';
+import TokenView from '../views/token/view/TokenView';
 import Token from '../views/token/Token';
 import TokenCreation from '../views/token/create/TokenCreation';
 

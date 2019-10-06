@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Box from '../../components/Box';
+import Box from '../../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
-import Container from '../../components/Container';
-import Currency from '../../components/Currency';
-import { getContractData, findTokenBySymbol } from '../../components/Contractor';
+import Container from '../../../components/Container';
+import Currency from '../../../components/Currency';
+import { getContractData, findTokenBySymbol } from '../../../components/Contractor';
 
 function TokenView(props) {
 	const { t, i18n } = useTranslation();
