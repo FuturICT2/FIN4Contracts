@@ -12,37 +12,35 @@ function TokenOverview(props) {
 
 	return (
 		<>
-			{Object.keys(props.fin4Tokens).length > 0 && (
-				<Box title={t('all-tokens')} width="500px">
-					<Table headers={[t('token-name'), 'Description', 'Unit', 'Actions']}>
-						{Object.keys(props.fin4Tokens).map((addr, index) => {
-							let token = props.fin4Tokens[addr];
-							let tokenSite = '/token/view/' + token.symbol;
-							return (
-								<TableRow
-									key={'token_' + index}
-									data={{
-										name: <Currency symbol={token.symbol} name={token.name} />,
-										description: (
-											<small>
-												{token.description.length > 20 ? token.description.substring(0, 20) + '...' : token.description}
-											</small>
-										),
-										unit: <small>{token.unit}</small>,
-										actions: (
-											<small style={{ color: 'blue', textDecoration: 'underline' }}>
-												<Link to={'/token/view/' + token.symbol}>Details</Link>
-												<br />
-												<Link to={'/token/claim/' + token.symbol}>Claim</Link>
-											</small>
-										)
-									}}
-								/>
-							);
-						})}
-					</Table>
-				</Box>
-			)}
+			<Box title={t('all-tokens')} width="500px">
+				<Table headers={[t('token-name'), 'Description', 'Unit', 'Actions']}>
+					{Object.keys(props.fin4Tokens).map((addr, index) => {
+						let token = props.fin4Tokens[addr];
+						let tokenSite = '/token/view/' + token.symbol;
+						return (
+							<TableRow
+								key={'token_' + index}
+								data={{
+									name: <Currency symbol={token.symbol} name={token.name} />,
+									description: (
+										<small>
+											{token.description.length > 20 ? token.description.substring(0, 20) + '...' : token.description}
+										</small>
+									),
+									unit: <small>{token.unit}</small>,
+									actions: (
+										<small style={{ color: 'blue', textDecoration: 'underline' }}>
+											<Link to={'/token/view/' + token.symbol}>Details</Link>
+											<br />
+											<Link to={'/token/claim/' + token.symbol}>Claim</Link>
+										</small>
+									)
+								}}
+							/>
+						);
+					})}
+				</Table>
+			</Box>
 		</>
 	);
 }
