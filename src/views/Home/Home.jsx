@@ -62,12 +62,16 @@ function Home(props) {
 					{props.usersEthBalance === null
 						? t('info-not-yet-available')
 						: // TODO dynamic rounding / unit?
-						  Math.round(props.usersEthBalance * 1000) / 1000}{' '}
-					ETH
+						  `${Math.round(props.usersEthBalance * 1000) / 1000} ETH`}
 				</div>
 				{props.usersEthBalance === 0 && (
 					<div style={{ fontFamily: 'arial', color: 'red' }}>
-						<small>Without Ether you are limited to read-only interactions</small>
+						<small>Without Ether you are limited to read-only interactions.</small>
+					</div>
+				)}
+				{(props.usersEthBalance === null || props.usersEthBalance === 0) && (
+					<div style={{ fontFamily: 'arial', color: 'red' }}>
+						<small>Are you connected to the correct network?</small>
 					</div>
 				)}
 				{config.FAUCET_URL && (
