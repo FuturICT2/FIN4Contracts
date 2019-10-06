@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
-import Box from '../../components/Box';
-import Currency from '../../components/Currency';
-import Modal from '../../components/Modal';
-import Button from '../../components/Button';
+import Box from '../../../components/Box';
+import Currency from '../../../components/Currency';
+import Modal from '../../../components/Modal';
+import Button from '../../../components/Button';
 import ProofSubmission from './ProofSubmission';
 import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
-import colors from '../../config/colors-config';
+import colors from '../../../config/colors-config';
 import DateIcon from '@material-ui/icons/AccessTime';
 import ProofIcon from '@material-ui/icons/Fingerprint';
 import moment from 'moment';

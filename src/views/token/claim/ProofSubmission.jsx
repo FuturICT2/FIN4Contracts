@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Typography, Divider } from '@material-ui/core';
-import ContractForm from '../../components/ContractForm';
+import ContractForm from '../../../components/ContractForm';
 import styled from 'styled-components';
-import colors from '../../config/colors-config';
+import colors from '../../../config/colors-config';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../../components/Contractor';
-import ipfs from '../../ipfs';
+import { getContractData } from '../../../components/Contractor';
+import ipfs from '../../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
 
 class ProofSubmission extends Component {
