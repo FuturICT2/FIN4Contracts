@@ -1,7 +1,7 @@
 import React from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import Container from '../../components/Container';
-import Messages from '../Actions/Messages';
+import Messages from '../Messages';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';

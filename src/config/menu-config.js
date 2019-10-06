@@ -5,10 +5,10 @@ import CheckIcon from '@material-ui/icons/CheckCircleOutline';
 import AddIcon from '@material-ui/icons/AddBox';
 import HomeIcon from '@material-ui/icons/Home';
 import Home from '../views/Home/Home';
-import Claim from '../views/Actions/Claim';
-import TokenView from '../views/Actions/TokenView';
-import Token from '../views/Actions/Token';
-import TokenCreation from '../views/Actions/TokenCreation';
+import Claim from '../views/token/Claim';
+import TokenView from '../views/token/TokenView';
+import Token from '../views/token/Token';
+import TokenCreation from '../views/token/TokenCreation';
 
 const menu = [
 	{
