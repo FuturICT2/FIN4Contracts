@@ -10,6 +10,7 @@ import TokenView from '../views/token/view/TokenView';
 import Token from '../views/token/Token';
 import TokenCreation from '../views/token/create/TokenCreation';
 import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
+import FilterCreation from '../views/token/filter/FilterCreation';
 
 const menu = [
 	{
@@ -65,6 +66,12 @@ const menu = [
 	{
 		component: TokenView,
 		path: '/token/view/',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: FilterCreation,
+		path: '/token/filter/create/',
 		showInNavBar: false,
 		exact: true
 	}

@@ -21,6 +21,15 @@ function Token(props) {
 						}}>
 						New Token
 					</Button>
+					<br />
+					<br />
+					<Button
+						icon={AddIcon}
+						onClick={() => {
+							history.push('/token/filter/create/');
+						}}>
+						New Filter
+					</Button>
 				</center>
 			</Box>
 			<TokenOverview />
