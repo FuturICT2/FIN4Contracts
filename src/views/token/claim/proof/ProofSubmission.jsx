@@ -1,28 +1,35 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Divider } from '@material-ui/core';
 import ContractForm from '../../../../components/ContractForm';
 import styled from 'styled-components';
 import colors from '../../../../config/colors-config';
 import { drizzleConnect } from 'drizzle-react';
-import PropTypes from 'prop-types';
-import { getContractData } from '../../../../components/Contractor';
+import { getContractData, findTokenBySymbol } from '../../../../components/Contractor';
 import ipfs from '../../../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
 
-class ProofSubmission extends Component {
-	constructor(props) {
-		super(props);
-		this.ipfsApi = ipfs;
-		this.state = {
-			proofData: null,
-			ipfsHash: null,
-			buffer: '',
-			ethAddress: '',
-			blockNumber: '',
-			transactionHash: '',
-			gasUsed: '',
-			txReceipt: ''
-		};
+function ProofSubmission(props) {
+	const [proofData, setProofData] = useState(null);
+	const [ipfsHash, setIpfsHash] = useState(null);
+	const [tokenViaURL, setTokenViaURL] = useState(null);
+	const [claimViaURL, setClaimViaURL] = useState(null);
+
+	useEffect(() => {
+		let symbol = props.match.params.tokenSymbol;
+		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0 && symbol) {
+			let token = findTokenBySymbol(props, symbol);
+			let claimId = props.match.params.claimId;
+			let pseudoClaimId = token.address + '_' + claimId;
+			let claim = props.usersClaims[pseudoClaimId];
+			if (token && claim) {
+				setTokenViaURL(token);
+				setClaimViaURL(claim);
+				fetchClaimProofingDetails(token.address, claimId);
+			}
+		}
+	});
+
+	const fetchClaimProofingDetails = (tokenAddress, claimId) => {
 		/*
 		let pseudoClaimId = this.props.tokenAddress + '_' + this.props.claimId;
 		let claim = props.usersClaims[pseudoClaimId];
@@ -41,63 +48,59 @@ class ProofSubmission extends Component {
 		});
 		*/
 
-		getContractData(props, this.props.tokenAddress, 'Fin4Token', 'getClaim', this.props.claimId)
+		getContractData(props, tokenAddress, 'Fin4Token', 'getClaim', claimId)
 			.then(({ 7: requiredProofTypes, 8: proofTypeStatuses }) => {
 				var proofTypeStatusesObj = {};
 				for (var i = 0; i < requiredProofTypes.length; i++) {
 					proofTypeStatusesObj[requiredProofTypes[i]] = {};
 					proofTypeStatusesObj[requiredProofTypes[i]].isApproved = proofTypeStatuses[i];
 				}
-				return requiredProofTypes.map((address, index) => {
-					return getContractData(
-						props,
-						address,
-						'Fin4BaseProofType',
-						'getParameterizedInfo',
-						this.props.tokenAddress
-					).then(({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
-						return {
-							address: address,
-							name: name,
-							description: parameterizedDescription,
-							paramValues: paramValues,
-							isApproved: proofTypeStatusesObj[address].isApproved
-						};
-					});
+				return requiredProofTypes.map(address => {
+					return getContractData(props, address, 'Fin4BaseProofType', 'getParameterizedInfo', tokenAddress).then(
+						({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
+							return {
+								address: address,
+								name: name,
+								description: parameterizedDescription,
+								paramValues: paramValues,
+								isApproved: proofTypeStatusesObj[address].isApproved
+							};
+						}
+					);
 				});
 			})
 			.then(data => Promise.all(data))
 			.then(data => {
-				this.setState({ proofData: data });
+				setProofData(data);
 			});
-	}
+	};
 
-	onUploadImageClick = event => {
+	const onUploadImageClick = event => {
 		console.log('Started upload to IPFS...');
 		let reader = new window.FileReader();
 		reader.readAsArrayBuffer(event.target.files[0]);
-		reader.onloadend = () => this.convertToBuffer(reader);
+		reader.onloadend = () => convertToBuffer(reader);
 	};
 
-	convertToBuffer = async reader => {
+	const convertToBuffer = async reader => {
 		const buffer = await Buffer.from(reader.result);
-		this.saveToIpfs(buffer);
+		saveToIpfs(buffer);
 	};
 
-	saveToIpfs = async buffer => {
-		this.ipfsApi.add(buffer, (err, result) => {
+	const saveToIpfs = async buffer => {
+		ipfs.add(buffer, (err, result) => {
 			let hash = result[0].hash;
 			let sizeKB = Math.round(result[0].size / 1000);
-			this.setState({ ipfsHash: hash });
+			setIpfsHash(hash);
 			alert('Upload of ' + sizeKB + ' KB to IPFS successful');
 			console.log('Upload of ' + sizeKB + ' KB to IPFS successful: ' + hash, 'https://gateway.ipfs.io/ipfs/' + hash);
-			//this.ipfsApi.pin.add(hash, function (err) {
+			//ipfs.pin.add(hash, function (err) {
 			//	console.log("Could not pin hash " + hash, err);
 			//});
 		});
 	};
 
-	onSubmitLocationClick = specialFieldObj => {
+	const onSubmitLocationClick = specialFieldObj => {
 		const positionCallback = position => {
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
@@ -130,13 +133,10 @@ class ProofSubmission extends Component {
 		}
 	};
 
-	render() {
-		if (this.state.proofData === null) {
-			return '';
-		}
-		return (
+	return (
+		proofData !== null && (
 			<>
-				{this.state.proofData.map((proofObj, index) => {
+				{proofData.map((proofObj, index) => {
 					return (
 						<div key={index}>
 							{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
@@ -151,8 +151,8 @@ class ProofSubmission extends Component {
 									contractName={proofObj.name}
 									method={'submitProof_' + proofObj.name}
 									staticArgs={{
-										tokenAdrToReceiveProof: this.props.tokenAddress,
-										claimId: this.props.claimId + ''
+										tokenAdrToReceiveProof: tokenViaURL.address,
+										claimId: claimViaURL.claimId + ''
 									}}
 									hideArgs={{
 										longitude: 'longitude',
@@ -165,16 +165,16 @@ class ProofSubmission extends Component {
 											type: 'file',
 											buttonText: 'Upload image to IPFS',
 											buttonIcon: null,
-											onClick: this.onUploadImageClick,
+											onClick: onUploadImageClick,
 											values: {
-												IPFShash: this.state.ipfsHash
-											},
-											state: this.state
+												IPFShash: ipfsHash
+											}
+											//state: this.state
 										},
 										latitude: {
 											buttonText: 'Submit location',
 											buttonIcon: AddLocation,
-											onClick: this.onSubmitLocationClick,
+											onClick: onSubmitLocationClick,
 											data: proofObj,
 											values: {
 												latitude: '0',
@@ -195,8 +195,8 @@ class ProofSubmission extends Component {
 					);
 				})}
 			</>
-		);
-	}
+		)
+	);
 }
 
 function degreesToRadians(degrees) {
@@ -229,14 +229,10 @@ const Status = styled(Typography)`
 	}
 `;
 
-ProofSubmission.contextTypes = {
-	drizzle: PropTypes.object
-};
-
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts,
-		usersClaims: state.fin4Store.usersClaims
+		usersClaims: state.fin4Store.usersClaims,
+		fin4Tokens: state.fin4Store.fin4Tokens
 	};
 };
 
