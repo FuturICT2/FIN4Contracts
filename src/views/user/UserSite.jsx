@@ -25,7 +25,6 @@ function UserSite(props) {
 		<Container>
 			<Box title="Send message to user">
 				<center>
-					<div>To user </div>
 					<AddressQRreader />
 					<br />
 					<TextField
