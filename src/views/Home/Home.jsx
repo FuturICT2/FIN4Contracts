@@ -8,7 +8,13 @@ import TableRow from '../../components/TableRow';
 import styled from 'styled-components';
 import Currency from '../../components/Currency';
 import { useTranslation } from 'react-i18next';
-const config = require('../../config/deployment-config.json');
+let config = null;
+try {
+	config = require('../../config/deployment-config.json');
+} catch (err) {
+	console.log('deployment-config.json not found');
+}
+
 const axios = require('axios');
 
 function Home(props) {
@@ -74,7 +80,7 @@ function Home(props) {
 						<small>Are you connected to the correct network?</small>
 					</div>
 				)}
-				{config.FAUCET_URL && (
+				{config && config.FAUCET_URL && (
 					<>
 						<br />
 						<a
