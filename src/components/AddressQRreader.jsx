@@ -27,8 +27,13 @@ function AddressQRreader(props) {
 		codeReader.current
 			.decodeFromInputVideoDevice(undefined, 'qr_vid')
 			.then(result => {
-				console.log('QR code read: ' + result.text);
-				setScannedAddress(result.text);
+				let addr = result.text;
+				// apparently MetaMask prepends this to their generated QR codes
+				if (addr.startsWith('ethereum:')) {
+					addr = addr.substring(9, addr.length);
+				}
+				console.log('QR code read: ' + addr);
+				setScannedAddress(addr);
 				setIsQRModalOpen(false);
 			})
 			.catch(err => {
