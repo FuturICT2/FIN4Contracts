@@ -11,6 +11,7 @@ import Token from '../views/token/Token';
 import TokenCreation from '../views/token/create/TokenCreation';
 import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
 import FilterCreation from '../views/token/filter/FilterCreation';
+import UserSite from '../views/user/UserSite';
 
 const menu = [
 	{
@@ -72,6 +73,12 @@ const menu = [
 	{
 		component: FilterCreation,
 		path: '/token/filter/create/',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: UserSite,
+		path: '/user/:userAddress',
 		showInNavBar: false,
 		exact: true
 	}
