@@ -23,7 +23,8 @@ function AddressQRreader(props) {
 		setIsQRModalOpen(!isQRModalOpen);
 	};
 
-	async function getAddressFromQRCode(callback) {
+	async function getAddressFromQRCode() {
+		// via https://github.com/zxing-js/library
 		codeReader.current
 			.decodeFromInputVideoDevice(undefined, 'qr_vid')
 			.then(result => {
