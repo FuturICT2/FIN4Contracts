@@ -3,7 +3,7 @@ const app = express();
 const port = 4000;
 const cors = require('cors');
 app.use(cors());
-const title = 'FIN4XPLORER Demo Faucet Server';
+const title = 'FIN4Xplorer Demo Faucet Server';
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const Tx = require('ethereumjs-tx'); // <-- for version 1.3.7, for version ^2.1.1 add .Transaction
