@@ -78,7 +78,13 @@ const menu = [
 	},
 	{
 		component: UserSite,
-		path: '/user/:userAddress',
+		path: '/user/message/:userAddress',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: UserSite,
+		path: '/user/message/',
 		showInNavBar: false,
 		exact: true
 	}
