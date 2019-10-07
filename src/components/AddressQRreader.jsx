@@ -36,10 +36,12 @@ function AddressQRreader(props) {
 				console.log('QR code read: ' + addr);
 				setScannedAddress(addr);
 				setIsQRModalOpen(false);
+				codeReader.current.stopStreams();
 			})
 			.catch(err => {
 				console.error(err);
 				setIsQRModalOpen(false);
+				codeReader.current.stopStreams();
 			});
 	}
 
