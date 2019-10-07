@@ -6,6 +6,7 @@ import Container from '../../components/Container';
 import Button from '../../components/Button';
 import TextField from '@material-ui/core/TextField';
 import MessageIcon from '@material-ui/icons/Message';
+import AddressQRreader from '../../components/AddressQRreader';
 
 function UserSite(props) {
 	const { t, i18n } = useTranslation();
@@ -24,7 +25,8 @@ function UserSite(props) {
 		<Container>
 			<Box title="Send message to user">
 				<center>
-					<div>To user {userAddressViaURL}</div>
+					<div>To user </div>
+					<AddressQRreader />
 					<br />
 					<TextField
 						label="Message text"
