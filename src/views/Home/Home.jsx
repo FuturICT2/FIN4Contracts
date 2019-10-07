@@ -8,6 +8,7 @@ import TableRow from '../../components/TableRow';
 import styled from 'styled-components';
 import Currency from '../../components/Currency';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 let config = null;
 try {
 	config = require('../../config/deployment-config.json');
@@ -106,6 +107,9 @@ function Home(props) {
 						</a>
 					</>
 				)}
+				<RequestEth>
+					<Link to={'/user/message/'}>Message user</Link>
+				</RequestEth>
 			</Box>
 		</Container>
 	);
