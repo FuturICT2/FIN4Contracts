@@ -3,6 +3,7 @@ var path = require('path');
 
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4Messages = artifacts.require('Fin4Messages');
+const Fin4Claiming = artifacts.require('Fin4Claiming');
 const contracts = [
 	artifacts.require('ImmediateAuto'),
 	artifacts.require('SpecificAddress'),
@@ -21,8 +22,10 @@ module.exports = async function(deployer) {
 
 	await deployer.deploy(Fin4Main);
 	await deployer.deploy(Fin4Messages);
-
 	const Fin4MainInstance = await Fin4Main.deployed();
+	await deployer.deploy(Fin4Claiming, Fin4MainInstance.address);
+	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
+	await Fin4MainInstance.setFin4ClaimingAddress(Fin4ClaimingInstance.address);
 
 	const Fin4MessagesInstance = await Fin4Messages.deployed();
 	await Fin4MainInstance.setFin4MessagesAddress(Fin4MessagesInstance.address);

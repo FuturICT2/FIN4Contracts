@@ -92,6 +92,18 @@ contract Fin4Main {
     return (nonzeroBalanceTokens, balances);
   }
 
+  // ------------------------- CLAIMING -------------------------
+
+  address public Fin4ClaimingAddr;
+
+  function setFin4ClaimingAddress(address addr) public {
+    Fin4ClaimingAddr = addr;
+  }
+
+  function getFin4ClaimingAddress() public view returns(address) {
+    return Fin4ClaimingAddr;
+  }
+
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
 
   // to keep track on which action types the user has claims (independent of their approval-statuses)
