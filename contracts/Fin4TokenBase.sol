@@ -5,13 +5,13 @@ import "contracts/proof/Fin4BaseProofType.sol";
 
 contract Fin4TokenBase { // abstract class
 
-  address public Fin4Main;
+  address public Fin4MainAddress;
   address public actionTypeCreator;
   string public description;
   string public unit;
 
-  constructor(address Fin4MainAddress, address actionTypeCreatorAddress, string memory _description) public {
-    Fin4Main = Fin4MainAddress;
+  constructor(address Fin4MainAddr, address actionTypeCreatorAddress, string memory _description) public {
+    Fin4MainAddress = Fin4MainAddr;
     actionTypeCreator = actionTypeCreatorAddress;
     description = _description;
   }
@@ -162,7 +162,7 @@ contract Fin4TokenBase { // abstract class
   function receiveProofApproval(address proofTypeAddress, uint claimId) public returns(bool) {
     // TODO require something as guard?
     claims[claimId].proof_statuses[proofTypeAddress] = true;
-    Fin4MainStub(Fin4Main).proofApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
+    Fin4MainStub(Fin4MainAddress).proofApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
     if (_allProofTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }
@@ -177,7 +177,7 @@ contract Fin4TokenBase { // abstract class
     // can alse be called from here (Fin4TokenBase) in case of no proof types required, therefore
     // Fin4TokenBase must also have the Minter role
     mint(claims[claimId].claimer, claims[claimId].quantity);
-    Fin4MainStub(Fin4Main).claimApprovedPingback(address(this), claims[claimId].claimer, claimId);
+    Fin4MainStub(Fin4MainAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId);
   }
 
   function isMinter(address account) public view returns (bool);
@@ -201,7 +201,7 @@ contract Fin4TokenBase { // abstract class
 
   // called for each proof type from Fin4Main.createNewToken()
   function addRequiredProofType(address proofType) public returns(bool) {
-    require(Fin4MainStub(Fin4Main).proofTypeIsRegistered(proofType),
+    require(Fin4MainStub(Fin4MainAddress).proofTypeIsRegistered(proofType),
       "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
     Fin4BaseProofType(proofType).registerActionTypeCreator(actionTypeCreator);
