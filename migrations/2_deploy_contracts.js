@@ -4,7 +4,7 @@ var path = require('path');
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4Messages = artifacts.require('Fin4Messages');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
-const contracts = [
+const proofTypeContracts = [
 	artifacts.require('ImmediateAuto'),
 	artifacts.require('SpecificAddress'),
 	artifacts.require('ActionTypeCreator'),
@@ -30,9 +30,9 @@ module.exports = async function(deployer) {
 	const Fin4MessagesInstance = await Fin4Messages.deployed();
 	await Fin4MainInstance.setFin4MessagesAddress(Fin4MessagesInstance.address);
 
-	await Promise.all(contracts.map(contract => deployer.deploy(contract, Fin4MainInstance.address)));
+	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MainInstance.address)));
 
-	const proofTypeInstances = await Promise.all(contracts.map(contract => contract.deployed()));
+	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
 
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
 
