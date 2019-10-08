@@ -9,9 +9,6 @@ contract Fin4Main {
 
   // TODO do we need the indexed keyword for event params?
   event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit);
-  event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment, address[] requiredProofTypes);
-  event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
-  event OneProofOnClaimApproval(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
 
   address[] public allFin4Tokens;
   mapping (string => bool) public symbolIsUsed;
@@ -25,8 +22,8 @@ contract Fin4Main {
     string memory _symbol = symbol.upper();
     require(!symbolIsUsed[_symbol], "Symbol is already in use");
 
-    Fin4Token newToken = new Fin4Token(name, _symbol, description, address(this), msg.sender);
-    newToken.setUnit(unit);
+    Fin4Token newToken = new Fin4Token(name, _symbol, description, unit, msg.sender);
+    newToken.setAddresses(address(this), Fin4ClaimingAddress);
     symbolIsUsed[_symbol] = true;
 
     for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the action type creator
@@ -94,14 +91,14 @@ contract Fin4Main {
 
   // ------------------------- CLAIMING -------------------------
 
-  address public Fin4ClaimingAddr;
+  address public Fin4ClaimingAddress;
 
   function setFin4ClaimingAddress(address addr) public {
-    Fin4ClaimingAddr = addr;
+    Fin4ClaimingAddress = addr;
   }
 
   function getFin4ClaimingAddress() public view returns(address) {
-    return Fin4ClaimingAddr;
+    return Fin4ClaimingAddress;
   }
 
   // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
@@ -127,20 +124,6 @@ contract Fin4Main {
     if (!_userClaimedOnThisActionAlready(claimer, token)) {
       actionsWhereUserHasClaims[claimer].push(token);
     }
-  }
-
-  // used in Claim - could also happen directly on the Token, but that would complicate the workflow in the front end
-  function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public {
-    claimSubmissionPingback(msg.sender, tokenAddress);
-    uint claimId;
-    address[] memory requiredProofTypes;
-    (claimId, requiredProofTypes) = Fin4Token(tokenAddress).submit(msg.sender, quantity, date, comment);
-    emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, date, comment, requiredProofTypes);
-  }
-
-  // called from Fin4TokenBase
-  function claimApprovedPingback(address tokenAddress, address claimer, uint claimId) public {
-    emit ClaimApproved(tokenAddress, claimId, claimer, getBalance(claimer, tokenAddress));
   }
 
   // ------------------------- PROOF TYPES -------------------------
@@ -170,11 +153,6 @@ contract Fin4Main {
       }
     }
     return false;
-  }
-
-  function proofApprovalPingback(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public {
-    // TODO this should come from the token! I was just avoiding registering event listeners everywhere dynamically...
-    emit OneProofOnClaimApproval(tokenAdrToReceiveProof, proofTypeAddress, claimId, claimer);
   }
 
   // ------------------------- MESSAGES -------------------------

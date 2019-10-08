@@ -2,22 +2,25 @@ pragma solidity ^0.5.0;
 
 import 'contracts/stub/Fin4MainStub.sol';
 import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/stub/Fin4ClaimingStub.sol";
 
 contract Fin4TokenBase { // abstract class
 
   address public Fin4MainAddress;
+  address public Fin4ClaimingAddress;
   address public actionTypeCreator;
   string public description;
   string public unit;
 
-  constructor(address Fin4MainAddr, address actionTypeCreatorAddress, string memory _description) public {
-    Fin4MainAddress = Fin4MainAddr;
-    actionTypeCreator = actionTypeCreatorAddress;
+  constructor(string memory _description, string memory _unit, address _actionTypeCreator) public {
     description = _description;
+    unit = _unit;
+    actionTypeCreator = _actionTypeCreator;
   }
 
-  function setUnit(string memory _unit) public {
-    unit = _unit;
+  function setAddresses(address Fin4MainAddr, address Fin4ClaimingAddr) public {
+    Fin4MainAddress = Fin4MainAddr;
+    Fin4ClaimingAddress = Fin4ClaimingAddr;
   }
 
   function name() public view returns(string memory);
@@ -162,7 +165,7 @@ contract Fin4TokenBase { // abstract class
   function receiveProofApproval(address proofTypeAddress, uint claimId) public returns(bool) {
     // TODO require something as guard?
     claims[claimId].proof_statuses[proofTypeAddress] = true;
-    Fin4MainStub(Fin4MainAddress).proofApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
+    Fin4ClaimingStub(Fin4ClaimingAddress).proofApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
     if (_allProofTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }
@@ -177,7 +180,7 @@ contract Fin4TokenBase { // abstract class
     // can alse be called from here (Fin4TokenBase) in case of no proof types required, therefore
     // Fin4TokenBase must also have the Minter role
     mint(claims[claimId].claimer, claims[claimId].quantity);
-    Fin4MainStub(Fin4MainAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId);
+    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId);
   }
 
   function isMinter(address account) public view returns (bool);

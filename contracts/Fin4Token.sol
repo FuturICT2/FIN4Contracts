@@ -5,9 +5,9 @@ import 'contracts/Fin4TokenBase.sol';
 
 contract Fin4Token is Fin4TokenBase, ERC20Plus {
 
-  constructor(string memory name, string memory symbol, string memory description, address Fin4MainAddress, address actionTypeCreatorAddress)
+  constructor(string memory name, string memory symbol, string memory description, string memory unit, address actionTypeCreatorAddress)
     ERC20Plus(name, symbol, 0, actionTypeCreatorAddress, false, true, true, 0)
-    Fin4TokenBase(Fin4MainAddress, actionTypeCreatorAddress, description)
+    Fin4TokenBase(description, unit, actionTypeCreatorAddress)
     public {}
 
   function getInfoAndBalance() public view returns(string memory, string memory, uint256) {
