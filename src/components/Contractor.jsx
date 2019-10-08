@@ -4,7 +4,8 @@ import {
 	ADD_MULTIPLE_CLAIMS,
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES,
-	SET_USERS_ETH_BALANCE
+	SET_USERS_ETH_BALANCE,
+	ADD_ADDRESS
 } from '../middleware/actionTypes';
 import Web3 from 'web3';
 
@@ -64,14 +65,14 @@ const loadInitialDataIntoStore = props => {
 };
 
 const getAddresses = props => {
-	getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
+	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
 		props.dispatch({
 			type: ADD_ADDRESS,
 			name: 'Fin4MessagesAddress',
 			address: Fin4MessagesAddress
 		});
 	});
-	getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
+	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
 		props.dispatch({
 			type: ADD_ADDRESS,
 			name: 'Fin4ClaimingAddress',

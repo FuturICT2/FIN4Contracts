@@ -19,7 +19,7 @@ const drizzleConfig = {
 		}
 	],
 	events: {
-		Fin4Main: ['Fin4TokenCreated', 'ClaimSubmitted', 'ClaimApproved', 'OneProofOnClaimApproval']
+		Fin4Main: ['Fin4TokenCreated']
 	},
 	polls: {
 		accounts: 1500
