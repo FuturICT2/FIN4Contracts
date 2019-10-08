@@ -44,6 +44,9 @@ const loadInitialDataIntoStore = props => {
 	}
 	initialDataLoaded = true;
 
+	// Get addresses of Fin4Messages and Fin4Claiming
+	getAddresses(props);
+
 	// TCR addresses
 	// getTCRAddresses(props);
 
@@ -56,6 +59,23 @@ const loadInitialDataIntoStore = props => {
 			// get current users nonzero balances, TODO how to handle change of user in MetaMask?
 			getMyNonzeroTokenBalances(props);
 			getAllCurrentUsersClaims(props);
+		});
+	});
+};
+
+const getAddresses = props => {
+	getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
+		props.dispatch({
+			type: ADD_ADDRESS,
+			name: 'Fin4MessagesAddress',
+			address: Fin4MessagesAddress
+		});
+	});
+	getContractData(Fin4MainAddress, 'Fin4Main', 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
+		props.dispatch({
+			type: ADD_ADDRESS,
+			name: 'Fin4ClaimingAddress',
+			address: Fin4ClaimingAddress
 		});
 	});
 };
