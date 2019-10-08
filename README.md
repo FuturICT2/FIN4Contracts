@@ -90,3 +90,21 @@ sudo service nginx restart
 ```sh
 npm start
 ```
+
+## Docs
+
+Our documentation is located at [fin4xplorer.readthedocs.io](https://fin4xplorer.readthedocs.io/en/latest/) in English and German.
+
+To update the `.po` files for the German translation in `docs/locales/de` run:
+
+```sh
+sphinx-intl update -p _build/gettext -l de
+```
+
+If you haven't done so before or if it doesn't update properly, delete the `_build` folder and run this `build` command:
+
+```sh
+sphinx-build -b gettext . _build/gettex
+```
+
+Then run the `update` command again.
