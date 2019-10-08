@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FIN4Xplorer \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-03 14:19+0200\n"
+"POT-Creation-Date: 2019-10-08 10:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,22 +27,26 @@ msgid "SectionA"
 msgstr "BereichA"
 
 #: ../../index.rst:7
+msgid "More to follow soon!"
+msgstr "Mehr kommt bald!"
+
+#: ../../index.rst:9
 msgid "Some text here..."
 msgstr "Etwas Text hier..."
 
-#: ../../index.rst:17
+#: ../../index.rst:19
 msgid "Indices and tables"
 msgstr "Indizes und Tabellen"
 
-#: ../../index.rst:19
+#: ../../index.rst:21
 msgid ":ref:`genindex`"
 msgstr ""
 
-#: ../../index.rst:20
+#: ../../index.rst:22
 msgid ":ref:`modindex`"
 msgstr ""
 
-#: ../../index.rst:21
+#: ../../index.rst:23
 msgid ":ref:`search`"
 msgstr ""
 
