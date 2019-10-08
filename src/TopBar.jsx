@@ -44,6 +44,11 @@ const useStyles = makeStyles(theme => ({
 function TopBar(props) {
 	const { t, i18n } = useTranslation();
 	const classes = useStyles();
+
+	const langIsEN = () => {
+		return i18n.language === 'en';
+	};
+
 	return (
 		<AppBar position="static" className={classes.bar}>
 			<center>
@@ -53,7 +58,7 @@ function TopBar(props) {
 			</center>
 			<div className={classes.flags}>
 				<a
-					className={`${classes.lngLink} ${i18n.language === 'en' ? classes.activeLng : ''}`}
+					className={`${classes.lngLink} ${langIsEN() ? classes.activeLng : ''}`}
 					href="#"
 					onClick={() => {
 						let lng = i18n.language;
@@ -65,7 +70,7 @@ function TopBar(props) {
 				</a>
 				{' / '}
 				<a
-					className={`${classes.lngLink} ${i18n.language === 'de' ? classes.activeLng : ''}`}
+					className={`${classes.lngLink} ${!langIsEN() ? classes.activeLng : ''}`}
 					href="#"
 					onClick={() => {
 						let lng = i18n.language;
@@ -96,7 +101,14 @@ function TopBar(props) {
 							Status
 						</a>{' '}
 						on your mobile phone. Need help{' '}
-						<a className={classes.noWeb3Warning} title="TODO" href="#">
+						<a
+							className={classes.noWeb3Warning}
+							href={
+								langIsEN()
+									? 'https://fin4xplorer.readthedocs.io/en/latest'
+									: 'https://fin4xplorer.readthedocs.io/de/latest/'
+							}
+							target="_blank">
 							getting started
 						</a>
 						?
