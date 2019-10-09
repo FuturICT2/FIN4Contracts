@@ -8,7 +8,6 @@ import {
 	ADD_CLAIM,
 	ADD_MULTIPLE_CLAIMS,
 	APPROVE_CLAIM,
-	ADD_ADDRESS,
 	UPDATE_BALANCE,
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES,
@@ -152,7 +151,6 @@ const initialState = {
 	usersClaims: {},
 	usersBalances: {},
 	proofTypes: {},
-	addresses: {},
 	defaultAccount: null,
 	usersEthBalance: null
 };
@@ -220,14 +218,6 @@ function fin4StoreReducer(state = initialState, action) {
 						...state.usersClaims[action.id],
 						isApproved: true
 					}
-				}
-			};
-		case ADD_ADDRESS:
-			return {
-				...state,
-				addresses: {
-					...state.addresses,
-					[action.name]: action.address
 				}
 			};
 		case UPDATE_BALANCE:
