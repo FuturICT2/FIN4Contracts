@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Box from '../components/Box';
-import ContractForm from '../components/ContractForm';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import { getContractData } from '../components/Contractor';
@@ -42,19 +41,17 @@ function Messages(props, context) {
 						({
 							0: messageType,
 							1: sender,
-							2: message,
-							3: fulfillmentAddress,
-							4: proofTypeName,
-							5: hasBeenActedUpon,
-							6: attachment,
-							7: pendingApprovalId
+							2: senderStr,
+							3: message,
+							4: hasBeenActedUpon,
+							5: attachment,
+							6: pendingApprovalId
 						}) => {
 							return {
 								messageType: messageType.toString(),
 								sender: sender,
+								proofTypeName: senderStr,
 								message: message,
-								fulfillmentAddress: fulfillmentAddress,
-								proofTypeName: proofTypeName,
 								hasBeenActedUpon: hasBeenActedUpon,
 								attachment: attachment,
 								pendingApprovalId: pendingApprovalId
@@ -88,7 +85,7 @@ function Messages(props, context) {
 					.filter(msg => !msg.hasBeenActedUpon)
 					.map((msg, index) => {
 						return (
-							<Message key={`${msg.proofTypeName}_${msg.fulfillmentAddress}_${index}`}>
+							<Message key={`${msg.proofTypeName}_${msg.pendingApprovalId}_${index}`}>
 								<Typography color="textSecondary" variant="body2">
 									{msg.message}.
 								</Typography>

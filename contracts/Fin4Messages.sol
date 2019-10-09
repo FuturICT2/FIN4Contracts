@@ -9,9 +9,9 @@ contract Fin4Messages {
   struct Message {
     uint messageType; // is an Enum in Fin4BaseProofType
     address sender;
+    string senderStr;
     address receiver;
     string message;
-    address fulfillmentAddress; // where to go and do something
     bool hasBeenActedUpon;
     string attachment;
     uint pendingApprovalId;
@@ -29,9 +29,9 @@ contract Fin4Messages {
     return messages[receiver].length - 1;
   }
 
-  function addPendingApprovalMessage(address sender, address receiver, string memory message,
-    address fulfillmentAddress, string memory attachment, uint pendingApprovalId) public returns(uint) {
-    Message memory m = Message(uint(MessageType.APPROVAL), sender, receiver, message, fulfillmentAddress, false, attachment, pendingApprovalId);
+  function addPendingApprovalMessage(address sender, string memory senderStr, address receiver, string memory message,
+    string memory attachment, uint pendingApprovalId) public returns(uint) {
+    Message memory m = Message(uint(MessageType.APPROVAL), sender, senderStr, receiver, message, false, attachment, pendingApprovalId);
     messages[receiver].push(m);
     return messages[receiver].length - 1;
   }
@@ -41,10 +41,9 @@ contract Fin4Messages {
   }
 
   // have to get messages one by one because returning string arrays is not possible
-  function getMyMessage(uint index) public view returns(uint, address, string memory, address, string memory, bool, string memory, uint) {
+  function getMyMessage(uint index) public view returns(uint, address, string memory, string memory, bool, string memory, uint) {
     Message memory m = messages[msg.sender][index];
-    return (m.messageType, m.sender, m.message, m.fulfillmentAddress,
-      Fin4BaseProofTypeStub(m.fulfillmentAddress).getName(), m.hasBeenActedUpon, m.attachment, m.pendingApprovalId);
+    return (m.messageType, m.sender, m.senderStr, m.message, m.hasBeenActedUpon, m.attachment, m.pendingApprovalId);
   }
 
   // after a picture is approved for instance, the message doesn't need to be shown to the approver anymore

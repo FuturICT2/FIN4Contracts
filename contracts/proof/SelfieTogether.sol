@@ -29,7 +29,7 @@ contract SelfieTogether is SpecificAddress {
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
     pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(
-      msg.sender, approver, message, address(this), IPFShash, pa.pendingApprovalId);
+      msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
 
     // to token-creator
     address tokenCreator = getCreatorOfToken(tokenAdrToReceiveProof);
@@ -45,7 +45,7 @@ contract SelfieTogether is SpecificAddress {
     string memory messageTC = string(abi.encodePacked(getMessageTextForTokenCreator(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
     paTC.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(
-      msg.sender, tokenCreator, messageTC, address(this), IPFShash, paTC.pendingApprovalId);
+      msg.sender, name, tokenCreator, messageTC, IPFShash, paTC.pendingApprovalId);
 
     // connect the two PendingApprovals
     pa.isApproved = false;

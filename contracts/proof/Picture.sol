@@ -26,7 +26,7 @@ contract Picture is SpecificAddress {
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
     pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(
-      msg.sender, approver, message, address(this), IPFShash, pa.pendingApprovalId);
+      msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
     pendingApprovals[approver].push(pa);
     return true;
   }

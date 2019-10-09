@@ -44,8 +44,7 @@ contract SpecificAddress is Fin4BaseProofType {
 
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
-    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(
-        msg.sender, approver, message, address(this), "", pa.pendingApprovalId);
+    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(msg.sender, name, approver, message, "", pa.pendingApprovalId);
 
     pendingApprovals[approver].push(pa);
     return true;
