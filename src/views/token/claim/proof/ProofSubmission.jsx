@@ -4,13 +4,14 @@ import ContractForm from '../../../../components/ContractForm';
 import styled from 'styled-components';
 import colors from '../../../../config/colors-config';
 import { drizzleConnect } from 'drizzle-react';
-import { getContractData_deprecated, findTokenBySymbol } from '../../../../components/Contractor';
+import { getContractData, findTokenBySymbol } from '../../../../components/Contractor';
 import ipfs from '../../../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
 import Box from '../../../../components/Box';
 import Container from '../../../../components/Container';
+import PropTypes from 'prop-types';
 
-function ProofSubmission(props) {
+function ProofSubmission(props, context) {
 	const [proofData, setProofData] = useState(null);
 	const [ipfsHash, setIpfsHash] = useState(null);
 	const [tokenViaURL, setTokenViaURL] = useState(null);
@@ -31,7 +32,18 @@ function ProofSubmission(props) {
 		}
 	});
 
-	const fetchClaimProofingDetails = (tokenAddress, claimId) => {
+	const getProofContractByAddress = proofContractAddr => {
+		let contractKeys = Object.keys(context.drizzle.contracts);
+		for (let i = 0; i < contractKeys.length; i++) {
+			let contract = context.drizzle.contracts[contractKeys[i]];
+			if (contract.address === proofContractAddr) {
+				return contract;
+			}
+		}
+		return null;
+	};
+
+	const fetchClaimProofingDetails = (tokenAddr, claimId) => {
 		/*
 		let pseudoClaimId = this.props.tokenAddress + '_' + this.props.claimId;
 		let claim = props.usersClaims[pseudoClaimId];
@@ -50,29 +62,29 @@ function ProofSubmission(props) {
 		});
 		*/
 
-		getContractData_deprecated(props, tokenAddress, 'Fin4Token', 'getClaim', claimId)
-			.then(({ 5: requiredProofTypes, 6: proofTypeStatuses }) => {
+		let Fin4ClaimingContract = context.drizzle.contracts.Fin4Claiming;
+		let currentAccount = props.store.getState().fin4Store.defaultAccount;
+
+		getContractData(Fin4ClaimingContract, currentAccount, 'getClaimOnThisToken', tokenAddr, claimId)
+			.then(({ 5: reqProofTypes, 6: proofTypeStatuses }) => {
 				var proofTypeStatusesObj = {};
-				for (var i = 0; i < requiredProofTypes.length; i++) {
-					proofTypeStatusesObj[requiredProofTypes[i]] = {};
-					proofTypeStatusesObj[requiredProofTypes[i]].isApproved = proofTypeStatuses[i];
+				for (var i = 0; i < reqProofTypes.length; i++) {
+					proofTypeStatusesObj[reqProofTypes[i]] = {};
+					proofTypeStatusesObj[reqProofTypes[i]].isApproved = proofTypeStatuses[i];
 				}
-				return requiredProofTypes.map(address => {
-					return getContractData_deprecated(
-						props,
-						address,
-						'Fin4BaseProofType',
-						'getParameterizedInfo',
-						tokenAddress
-					).then(({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
-						return {
-							address: address,
-							name: name,
-							description: parameterizedDescription,
-							paramValues: paramValues,
-							isApproved: proofTypeStatusesObj[address].isApproved
-						};
-					});
+				return reqProofTypes.map(proofTypeAddr => {
+					let proofContract = getProofContractByAddress(proofTypeAddr);
+					return getContractData(proofContract, currentAccount, 'getParameterizedInfo', tokenAddr).then(
+						({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
+							return {
+								address: proofTypeAddr,
+								name: name,
+								description: parameterizedDescription,
+								paramValues: paramValues,
+								isApproved: proofTypeStatusesObj[proofTypeAddr].isApproved
+							};
+						}
+					);
 				});
 			})
 			.then(data => Promise.all(data))
@@ -236,6 +248,10 @@ const Status = styled(Typography)`
 		border-radius: 4px;
 	}
 `;
+
+ProofSubmission.contextTypes = {
+	drizzle: PropTypes.object
+};
 
 const mapStateToProps = state => {
 	return {
