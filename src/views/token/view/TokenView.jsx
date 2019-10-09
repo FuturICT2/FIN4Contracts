@@ -4,7 +4,7 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../../components/Container';
 import Currency from '../../../components/Currency';
-import { getContractData, findTokenBySymbol } from '../../../components/Contractor';
+import { getContractData_deprecated, findTokenBySymbol } from '../../../components/Contractor';
 
 function TokenView(props) {
 	const { t, i18n } = useTranslation();
@@ -13,7 +13,7 @@ function TokenView(props) {
 	const [details, setDetails] = useState(null);
 
 	const fetchDetailedTokenInfo = token => {
-		getContractData(props, token.address, 'Fin4Token', 'getDetailedInfo').then(
+		getContractData_deprecated(props, token.address, 'Fin4Token', 'getDetailedInfo').then(
 			({ 0: userIsTokenCreator, 1: requiredProofTypes, 2: claimsCount, 3: usersBalance, 4: totalSupply }) => {
 				setDetails({
 					userIsTokenCreator: userIsTokenCreator,

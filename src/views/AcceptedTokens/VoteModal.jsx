@@ -54,7 +54,7 @@ class VoteModal extends Component {
 			.then(function(result) {
 				console.log('GOV.approve Result: ', result);
 
-				getContractData(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
+				getContractData_deprecated(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
 					getCurrentAccount(),
 					numbTokens,
 					pollID

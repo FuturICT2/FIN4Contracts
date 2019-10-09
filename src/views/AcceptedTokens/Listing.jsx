@@ -44,16 +44,16 @@ class Listing extends Component {
 			reviewTax: null
 		};
 
-		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
-			getContractData(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
+		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
+			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
 				this.parameterizerValues.minDeposit = new BN(minDepositBN).toNumber();
 			});
-			getContractData(parameterizerAddress, 'Parameterizer', 'get', ['reviewTax']).then(reviewTaxBN => {
+			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['reviewTax']).then(reviewTaxBN => {
 				this.parameterizerValues.reviewTax = new BN(reviewTaxBN).toNumber();
 			});
 		});
 
-		getContractData(RegistryAddress, 'Registry', 'getListings').then(
+		getContractData_deprecated(RegistryAddress, 'Registry', 'getListings').then(
 			({
 				0: listingsKeys,
 				1: applicationExpiries,
@@ -89,7 +89,7 @@ class Listing extends Component {
 					};
 				}
 
-				getContractData(RegistryAddress, 'Registry', 'getChallenges').then(
+				getContractData_deprecated(RegistryAddress, 'Registry', 'getChallenges').then(
 					({ 0: challengeIDs, 1: rewardPools, 2: challengers, 3: isReviews, 4: isResolveds, 5: totalTokenss }) => {
 						let challengesObj = {};
 						for (var i = 0; i < challengeIDs.length; i++) {

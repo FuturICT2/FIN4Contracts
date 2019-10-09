@@ -22,15 +22,17 @@ class Management extends Component {
 			govTokenDelegateeBalance: '?'
 		};
 
-		getContractData(RepTokenAddress, 'Fin4Reputation', 'balanceOf', [getCurrentAccount()]).then(repTokenBalanceBN => {
-			this.setState({ repTokenBalance: new BN(repTokenBalanceBN).toNumber() });
-		});
+		getContractData_deprecated(RepTokenAddress, 'Fin4Reputation', 'balanceOf', [getCurrentAccount()]).then(
+			repTokenBalanceBN => {
+				this.setState({ repTokenBalance: new BN(repTokenBalanceBN).toNumber() });
+			}
+		);
 
-		getContractData(GOVTokenAddress, 'GOV', 'balanceOf', [getCurrentAccount()]).then(govTokenBalanceBN => {
+		getContractData_deprecated(GOVTokenAddress, 'GOV', 'balanceOf', [getCurrentAccount()]).then(govTokenBalanceBN => {
 			this.setState({ govTokenBalance: new BN(govTokenBalanceBN).toNumber() });
 		});
 
-		getContractData(GOVTokenAddress, 'GOV', 'getAmountsDelegatedToMe').then(govTokenDelegateeBalanceBN => {
+		getContractData_deprecated(GOVTokenAddress, 'GOV', 'getAmountsDelegatedToMe').then(govTokenDelegateeBalanceBN => {
 			this.setState({ govTokenDelegateeBalance: new BN(govTokenDelegateeBalanceBN).toNumber() });
 		});
 	}

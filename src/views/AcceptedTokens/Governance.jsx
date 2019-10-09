@@ -34,12 +34,12 @@ class Governance extends Component {
 		this.parameterizerAddress = null;
 		this.resetProposeReparamModalValues();
 
-		getContractData(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
+		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			this.parameterizerAddress = parameterizerAddress;
 
 			// get all parameters
 
-			getContractData(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
+			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
 				let paramValues = {};
 				for (var i = 0; i < params.length; i++) {
 					let entry = {
@@ -55,9 +55,9 @@ class Governance extends Component {
 
 				// get proposals
 
-				getContractData(parameterizerAddress, 'Parameterizer', 'getProposalKeys').then(proposalKeys => {
+				getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'getProposalKeys').then(proposalKeys => {
 					let allPromises = proposalKeys.map(key => {
-						return getContractData(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(
+						return getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(
 							({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
 								if (!this.state.paramValues[name]) {
 									// is this correct? TODO
@@ -101,7 +101,9 @@ class Governance extends Component {
 											param.status = Param_Action_Status.REVEAL;
 											return;
 										case PollStatus.PAST_REVEAL_PERIOD:
-											return getContractData(parameterizerAddress, 'Parameterizer', 'challenges', [challengeID]).then(
+											return getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'challenges', [
+												challengeID
+											]).then(
 												({
 													0: rewardPoolBN,
 													1: challenger,

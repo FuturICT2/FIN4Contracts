@@ -30,10 +30,10 @@ class More extends React.Component {
 		};
 		this.getOfferData();
 
-		getContractData(props, Fin4MainAddress, 'Fin4Main', 'getFin4TokensWhereUserHasNonzeroBalance')
+		getContractData_deprecated(props, Fin4MainAddress, 'Fin4Main', 'getFin4TokensWhereUserHasNonzeroBalance')
 			.then(tokenAddresses => {
 				return tokenAddresses.map(address => {
-					return getContractData(props, address, 'Fin4Token', 'getInfoAndBalance').then(
+					return getContractData_deprecated(props, address, 'Fin4Token', 'getInfoAndBalance').then(
 						({ 0: name, 1: symbol, 2: balance }) => {
 							return {
 								address: address,

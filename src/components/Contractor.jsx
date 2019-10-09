@@ -23,7 +23,7 @@ const getContract = (contractAddress, contractName) => {
 	return new web3.eth.Contract(json.abi, contractAddress);
 };
 
-const getContractData = (props, contractAddress, contractName, method, methodArgs) => {
+const getContractData_deprecated = (props, contractAddress, contractName, method, methodArgs) => {
 	let contract = getContract(contractAddress, contractName);
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	if (methodArgs === undefined) {

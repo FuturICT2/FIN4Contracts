@@ -4,7 +4,7 @@ import ContractForm from '../../../../components/ContractForm';
 import styled from 'styled-components';
 import colors from '../../../../config/colors-config';
 import { drizzleConnect } from 'drizzle-react';
-import { getContractData, findTokenBySymbol } from '../../../../components/Contractor';
+import { getContractData_deprecated, findTokenBySymbol } from '../../../../components/Contractor';
 import ipfs from '../../../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
 import Box from '../../../../components/Box';
@@ -37,7 +37,7 @@ function ProofSubmission(props) {
 		let claim = props.usersClaims[pseudoClaimId];
 		Object.keys(claim.proofStatuses).map(proofTypeAddr => {
 			let isApproved = claim.proofStatuses[proofTypeAddr];
-			getContractData(props, proofTypeAddr, 'Fin4BaseProofType', 'getParameterizedInfo', this.props.tokenAddress)
+			getContractData_deprecated(props, proofTypeAddr, 'Fin4BaseProofType', 'getParameterizedInfo', this.props.tokenAddress)
 				.then(({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
 					return {
 						address: proofTypeAddr,
@@ -50,25 +50,29 @@ function ProofSubmission(props) {
 		});
 		*/
 
-		getContractData(props, tokenAddress, 'Fin4Token', 'getClaim', claimId)
-			.then(({ 7: requiredProofTypes, 8: proofTypeStatuses }) => {
+		getContractData_deprecated(props, tokenAddress, 'Fin4Token', 'getClaim', claimId)
+			.then(({ 5: requiredProofTypes, 6: proofTypeStatuses }) => {
 				var proofTypeStatusesObj = {};
 				for (var i = 0; i < requiredProofTypes.length; i++) {
 					proofTypeStatusesObj[requiredProofTypes[i]] = {};
 					proofTypeStatusesObj[requiredProofTypes[i]].isApproved = proofTypeStatuses[i];
 				}
 				return requiredProofTypes.map(address => {
-					return getContractData(props, address, 'Fin4BaseProofType', 'getParameterizedInfo', tokenAddress).then(
-						({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
-							return {
-								address: address,
-								name: name,
-								description: parameterizedDescription,
-								paramValues: paramValues,
-								isApproved: proofTypeStatusesObj[address].isApproved
-							};
-						}
-					);
+					return getContractData_deprecated(
+						props,
+						address,
+						'Fin4BaseProofType',
+						'getParameterizedInfo',
+						tokenAddress
+					).then(({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
+						return {
+							address: address,
+							name: name,
+							description: parameterizedDescription,
+							paramValues: paramValues,
+							isApproved: proofTypeStatusesObj[address].isApproved
+						};
+					});
 				});
 			})
 			.then(data => Promise.all(data))

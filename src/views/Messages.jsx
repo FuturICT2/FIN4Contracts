@@ -3,7 +3,7 @@ import Box from '../components/Box';
 import ContractForm from '../components/ContractForm';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../components/Contractor';
+import { getContractData_deprecated } from '../components/Contractor';
 import Button from '../components/Button';
 import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
@@ -22,43 +22,45 @@ class Messages extends Component {
 			return;
 		}
 
-		getContractData(props, Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
-			getContractData(props, Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount')
-				.then(data => {
-					var messageCount = Number(data);
-					var messageIndices = [];
-					for (var i = 0; i < messageCount; i++) {
-						messageIndices.push(i);
-					}
-					return messageIndices.map(index => {
-						return getContractData(props, Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', index).then(
-							({
-								0: messageType,
-								1: sender,
-								2: message,
-								3: fulfillmentAddress,
-								4: proofTypeName,
-								5: hasBeenActedUpon,
-								6: attachment
-							}) => {
-								return {
-									messageType: messageType.toString(),
-									sender: sender,
-									message: message,
-									fulfillmentAddress: fulfillmentAddress,
-									proofTypeName: proofTypeName,
-									hasBeenActedUpon: hasBeenActedUpon,
-									attachment: attachment
-								};
-							}
-						);
+		getContractData_deprecated(props, Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(
+			Fin4MessagesAddress => {
+				getContractData_deprecated(props, Fin4MessagesAddress, 'Fin4Messages', 'getMyMessagesCount')
+					.then(data => {
+						var messageCount = Number(data);
+						var messageIndices = [];
+						for (var i = 0; i < messageCount; i++) {
+							messageIndices.push(i);
+						}
+						return messageIndices.map(index => {
+							return getContractData_deprecated(props, Fin4MessagesAddress, 'Fin4Messages', 'getMyMessage', index).then(
+								({
+									0: messageType,
+									1: sender,
+									2: message,
+									3: fulfillmentAddress,
+									4: proofTypeName,
+									5: hasBeenActedUpon,
+									6: attachment
+								}) => {
+									return {
+										messageType: messageType.toString(),
+										sender: sender,
+										message: message,
+										fulfillmentAddress: fulfillmentAddress,
+										proofTypeName: proofTypeName,
+										hasBeenActedUpon: hasBeenActedUpon,
+										attachment: attachment
+									};
+								}
+							);
+						});
+					})
+					.then(data => Promise.all(data))
+					.then(data => {
+						this.setState({ messages: data });
 					});
-				})
-				.then(data => Promise.all(data))
-				.then(data => {
-					this.setState({ messages: data });
-				});
-		});
+			}
+		);
 	}
 
 	render() {
