@@ -63,9 +63,9 @@ function ProofSubmission(props, context) {
 		*/
 
 		let Fin4ClaimingContract = context.drizzle.contracts.Fin4Claiming;
-		let currentAccount = props.store.getState().fin4Store.defaultAccount;
+		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 
-		getContractData(Fin4ClaimingContract, currentAccount, 'getClaimOnThisToken', tokenAddr, claimId)
+		getContractData(Fin4ClaimingContract, defaultAccount, 'getClaimOnThisToken', tokenAddr, claimId)
 			.then(({ 5: reqProofTypes, 6: proofTypeStatuses }) => {
 				var proofTypeStatusesObj = {};
 				for (var i = 0; i < reqProofTypes.length; i++) {
@@ -74,7 +74,7 @@ function ProofSubmission(props, context) {
 				}
 				return reqProofTypes.map(proofTypeAddr => {
 					let proofContract = getProofContractByAddress(proofTypeAddr);
-					return getContractData(proofContract, currentAccount, 'getParameterizedInfo', tokenAddr).then(
+					return getContractData(proofContract, defaultAccount, 'getParameterizedInfo', tokenAddr).then(
 						({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
 							return {
 								address: proofTypeAddr,
