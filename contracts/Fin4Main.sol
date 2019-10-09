@@ -63,8 +63,14 @@ contract Fin4Main {
     return allFin4Tokens;
   }
 
+  // relay-functions to not have to call Fin4Token contracts directly from the frontend
+
   function getTokenInfo(address tokenAddr) public view returns(string memory, string memory, string memory, string memory) {
       return Fin4Token(tokenAddr).getInfo();
+  }
+
+  function getDetailedTokenInfo(address tokenAddr) public view returns(bool, address[] memory, uint, uint256, uint256) {
+      return Fin4Token(tokenAddr).getDetailedInfo(msg.sender);
   }
 
   // ------------------------- BALANCE -------------------------
