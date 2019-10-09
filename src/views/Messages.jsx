@@ -80,7 +80,7 @@ function Messages(props, context) {
 								<Typography color="textSecondary" variant="body2">
 									{msg.message}.
 								</Typography>
-								{msg.messageType === '0' && (
+								{msg.messageType === '1' && ( // --> enum MessageType { INFO, APPROVAL }
 									<>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
 										<Typography color="textSecondary" variant="body2">
