@@ -3,9 +3,7 @@ import {
 	ADD_MULTIPLE_FIN4_TOKENS,
 	ADD_MULTIPLE_CLAIMS,
 	UPDATE_MULTIPLE_BALANCES,
-	ADD_MULTIPLE_PROOF_TYPES,
-	SET_USERS_ETH_BALANCE,
-	ADD_ADDRESS
+	ADD_MULTIPLE_PROOF_TYPES
 } from '../middleware/actionTypes';
 import Web3 from 'web3';
 
@@ -94,33 +92,6 @@ const getUsersBalance = props => {
 		});
 	});
 };
-
-/* const getTCRAddresses = props => {
-	getContractData(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
-		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'REPToken',
-				address: REPToken
-			});
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'GOVToken',
-				address: GOVToken
-			});
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'Registry',
-				address: Registry
-			});
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'PLCRVoting',
-				address: PLCRVoting
-			});
-		}
-	);
-};*/
 
 const getAllFin4Tokens = (props, callback) => {
 	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
@@ -257,12 +228,13 @@ const findTokenBySymbol = (props, symb) => {
 	return null;
 };
 
+/*
 // DEPRECATED
 const getAllActionTypes = () => {
-	return getContractData(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
+	return getContractData_deprecated(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
 		.then(tokens => {
 			return tokens.map(address => {
-				return getContractData(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
+				return getContractData_deprecated(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
 					return {
 						value: address,
 						label: `[${symbol}] ${name}`
@@ -275,7 +247,7 @@ const getAllActionTypes = () => {
 
 const getPollStatus = pollID => {
 	// pollID is also called challengeID in Registry.sol
-	return getContractData('PLCRVotingAddress-DUMMY', 'PLCRVoting', 'pollMap', [pollID]).then(
+	return getContractData_deprecated('PLCRVotingAddress-DUMMY', 'PLCRVoting', 'pollMap', [pollID]).then(
 		({ 0: commitEndDateBN, 1: revealEndDateBN, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
 			let commitEndDate = new BN(commitEndDateBN).toNumber() * 1000;
 			let revealEndDate = new BN(revealEndDateBN).toNumber() * 1000;
@@ -303,19 +275,46 @@ const getPollStatus = pollID => {
 	);
 };
 
+
+const getTCRAddresses = props => {
+	getContractData_deprecated(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
+		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
+			props.dispatch({
+				type: ADD_ADDRESS,
+				name: 'REPToken',
+				address: REPToken
+			});
+			props.dispatch({
+				type: ADD_ADDRESS,
+				name: 'GOVToken',
+				address: GOVToken
+			});
+			props.dispatch({
+				type: ADD_ADDRESS,
+				name: 'Registry',
+				address: Registry
+			});
+			props.dispatch({
+				type: ADD_ADDRESS,
+				name: 'PLCRVoting',
+				address: PLCRVoting
+			});
+		}
+	);
+};
+
 const PollStatus = {
 	IN_COMMIT_PERIOD: 'Commit Vote',
 	IN_REVEAL_PERIOD: 'Reveal',
 	PAST_REVEAL_PERIOD: '-'
 };
+*/
 
 export {
 	getCurrentAccount,
 	getContractData,
+	getContractData_deprecated,
 	getContract,
-	getAllActionTypes,
-	getPollStatus,
-	PollStatus,
 	loadInitialDataIntoStore,
 	findTokenBySymbol
 };
