@@ -19,9 +19,19 @@ contract Fin4Messages {
 
   mapping (address => Message[]) public messages;
 
-  function addMessage(uint messageType, address sender, address receiver,
-    string memory message, address fulfillmentAddress, string memory attachment) public returns(uint) {
-    Message memory m = Message(messageType, sender, receiver, message, fulfillmentAddress, false, attachment);
+  function addMessage(address sender, address receiver, string memory message) public returns(uint) {
+    Message memory m;
+    m.messageType = uint(MessageType.INFO);
+    m.sender = sender;
+    m.receiver = receiver;
+    m.message = message;
+    messages[receiver].push(m);
+    return messages[receiver].length - 1;
+  }
+
+  function addPendingApprovalMessage(address sender, address receiver, string memory message,
+    address fulfillmentAddress, string memory attachment, uint pendingApprovalId) public returns(uint) {
+    Message memory m = Message(uint(MessageType.APPROVAL), sender, receiver, message, fulfillmentAddress, false, attachment, pendingApprovalId);
     messages[receiver].push(m);
     return messages[receiver].length - 1;
   }
