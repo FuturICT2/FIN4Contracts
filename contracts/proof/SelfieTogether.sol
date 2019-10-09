@@ -18,35 +18,45 @@ contract SelfieTogether is SpecificAddress {
     string memory IPFShash) public returns(bool) {
 
     // to user-chosen approver
-    PendingApproval storage pa = pendingApprovals[approver];
+    PendingApproval memory pa;
     pa.tokenAdrToReceiveProof = tokenAdrToReceiveProof;
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
     pa.approver = approver;
     pa.attachment = IPFShash;
+    pa.pendingApprovalId = pendingApprovals[approver].length - 1;
+
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
-    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, approver, message, address(this), IPFShash);
+    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(
+      msg.sender, approver, message, address(this), IPFShash, pa.pendingApprovalId);
 
     // to token-creator
     address tokenCreator = getCreatorOfToken(tokenAdrToReceiveProof);
 
-    PendingApproval storage paTC = pendingApprovals[tokenCreator];
+    PendingApproval memory paTC;
     paTC.tokenAdrToReceiveProof = tokenAdrToReceiveProof;
     paTC.claimIdOnTokenToReceiveProof = claimId;
     paTC.requester = msg.sender;
     paTC.approver = tokenCreator;
     paTC.attachment = IPFShash;
+    paTC.pendingApprovalId = pendingApprovals[tokenCreator].length - 1;
+
     string memory messageTC = string(abi.encodePacked(getMessageTextForTokenCreator(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
-    paTC.messageId = Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType),
-      msg.sender, tokenCreator, messageTC, address(this), IPFShash);
+    paTC.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(
+      msg.sender, tokenCreator, messageTC, address(this), IPFShash, paTC.pendingApprovalId);
 
     // connect the two PendingApprovals
     pa.isApproved = false;
     paTC.isApproved = false;
     pa.linkedWith = tokenCreator;
+    pa.linkedWithPendingApprovalId = paTC.pendingApprovalId;
     paTC.linkedWith = approver;
+    paTC.linkedWithPendingApprovalId = pa.pendingApprovalId;
+
+    pendingApprovals[approver].push(pa);
+    pendingApprovals[tokenCreator].push(paTC);
   }
 
   // @Override
@@ -58,20 +68,22 @@ contract SelfieTogether is SpecificAddress {
     return "As token creator, please check this picture proof and approve the correct amount of this token: ";
   }
 
-  function getAttachment() public view returns(string memory) {
-    return pendingApprovals[msg.sender].attachment;
+  function getAttachment(uint pendingApprovalId) public view returns(string memory) {
+    return pendingApprovals[msg.sender][pendingApprovalId].attachment;
   }
 
   // @Override
-  function receiveApprovalFromSpecificAddress() public returns(bool) {
-    require(pendingApprovals[msg.sender].approver == msg.sender, "This address is not registered as approver for any pending approval");
-    Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pendingApprovals[msg.sender].messageId);
+  function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
+    PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
+    require(pa.approver == msg.sender, "This address is not registered as approver for any pending approval");
+    Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pa.messageId);
 
-    pendingApprovals[msg.sender].isApproved = true;
-    address otherApprover = pendingApprovals[msg.sender].linkedWith;
+    pa.isApproved = true;
+    address otherApprover = pa.linkedWith;
+    uint otherApproversPendingApprovalId = pa.linkedWithPendingApprovalId;
 
-    if (pendingApprovals[otherApprover].isApproved) {
-        _sendApproval(address(this), pendingApprovals[msg.sender].tokenAdrToReceiveProof, pendingApprovals[msg.sender].claimIdOnTokenToReceiveProof);
+    if (pendingApprovals[otherApprover][otherApproversPendingApprovalId].isApproved) {
+        _sendApproval(address(this), pa.tokenAdrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
         return true;
     }
 

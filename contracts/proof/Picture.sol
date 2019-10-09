@@ -16,15 +16,19 @@ contract Picture is SpecificAddress {
 
   function submitProof_Picture(address tokenAdrToReceiveProof, uint claimId, address approver, string memory IPFShash) public returns(bool) {
     // TODO minimize duplicate code by reusing super method
-    PendingApproval storage pa = pendingApprovals[approver];
+    PendingApproval memory pa;
     pa.tokenAdrToReceiveProof = tokenAdrToReceiveProof;
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
     pa.approver = approver;
     pa.attachment = IPFShash;
+    pa.pendingApprovalId = pendingApprovals[approver].length - 1;
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
-    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addMessage(uint(messageType), msg.sender, approver, message, address(this), IPFShash);
+    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(
+      msg.sender, approver, message, address(this), IPFShash, pa.pendingApprovalId);
+    pendingApprovals[approver].push(pa);
+    return true;
   }
 
   // @Override
@@ -33,8 +37,8 @@ contract Picture is SpecificAddress {
     return "Please check this picture proof and approve the correct amount of this token: ";
   }
 
-  function getAttachment() public view returns(string memory) {
-    return pendingApprovals[msg.sender].attachment;
+  function getAttachment(uint pendingApprovalId) public view returns(string memory) {
+    return pendingApprovals[msg.sender][pendingApprovalId].attachment;
   }
 
 }
