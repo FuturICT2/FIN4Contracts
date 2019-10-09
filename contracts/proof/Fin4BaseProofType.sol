@@ -11,9 +11,6 @@ contract Fin4BaseProofType is utils {
   string public description;
   address public Fin4Main;
 
-  enum MessageType { APPROVAL, INFO } // diferent types of message types, determine how they get rendered in the front end
-  MessageType public messageType;
-
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
   mapping (address => uint[]) public fin4TokenToParametersSetOnThisProofType; // holds the token-specific parameters for each proof type
                                                                               // (one proof type is used by multiple action types)

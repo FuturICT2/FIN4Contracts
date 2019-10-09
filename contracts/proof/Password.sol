@@ -10,7 +10,6 @@ contract Password is Fin4BaseProofType {
       name = "Password";
       description = "A numeric password (PIN), which the token creator set, needs to be provided.";
       // _password = 1234;
-      messageType = MessageType.INFO;
     }
 
     // TODO support string parameters to be able to use a string-password here

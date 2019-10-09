@@ -9,7 +9,6 @@ contract SpecificAddress is Fin4BaseProofType {
     Fin4BaseProofType(Fin4MainAddress)
     public {
       setNameAndDescription();
-      messageType = MessageType.APPROVAL;
     }
 
   function setNameAndDescription() public returns(bool) {

@@ -4,9 +4,7 @@ import 'contracts/stub/Fin4BaseProofTypeStub.sol';
 
 contract Fin4Messages {
 
-  constructor() public {
-    // Fin4Main = Fin4MainAddress;
-  }
+  enum MessageType { INFO, APPROVAL } // diferent types of message types, determine how they get rendered in the front end
 
   struct Message {
     uint messageType; // is an Enum in Fin4BaseProofType
