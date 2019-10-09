@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Container from '../../../components/Container';
 
 function FilterCreation(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	return (
 		<Container>

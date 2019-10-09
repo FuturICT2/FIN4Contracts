@@ -8,7 +8,7 @@ import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { BrowserQRCodeReader } from '@zxing/library';
 
 function AddressQRreader(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [isQRModalOpen, setIsQRModalOpen] = useState(false);
 	const [iconIsHovered, setIconHovered] = useState(false);

@@ -9,7 +9,7 @@ import history from '../../components/history';
 import AddIcon from '@material-ui/icons/Add'; // <AddIcon/>
 
 function Token(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 	return (
 		<Container>
 			<Box title="Create">

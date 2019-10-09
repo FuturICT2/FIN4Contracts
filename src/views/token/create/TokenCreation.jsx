@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import Container from '../../../components/Container';
 
 function TokenCreation(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 

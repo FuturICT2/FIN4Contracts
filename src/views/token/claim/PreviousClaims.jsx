@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import history from '../../../components/history';
 
 function PreviousClaims(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	return (
 		<>
@@ -104,7 +104,6 @@ const Claim = styled(Paper)`
 
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts,
 		usersClaims: state.fin4Store.usersClaims,
 		fin4Tokens: state.fin4Store.fin4Tokens
 	};

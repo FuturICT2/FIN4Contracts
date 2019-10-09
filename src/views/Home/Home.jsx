@@ -19,7 +19,7 @@ try {
 const axios = require('axios');
 
 function Home(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 	return (
 		<Container>
 			<Messages />

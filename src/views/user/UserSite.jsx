@@ -9,7 +9,7 @@ import MessageIcon from '@material-ui/icons/Message';
 import AddressQRreader from '../../components/AddressQRreader';
 
 function UserSite(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [userAddressViaURL, setUserAddressViaURL] = useState(null);
 	const msgText = useRef('');
