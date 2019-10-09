@@ -4,16 +4,20 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../../components/Container';
 import Currency from '../../../components/Currency';
-import { getContractData_deprecated, findTokenBySymbol } from '../../../components/Contractor';
+import { getContractData, findTokenBySymbol } from '../../../components/Contractor';
+import PropTypes from 'prop-types';
 
-function TokenView(props) {
-	const { t, i18n } = useTranslation();
+function TokenView(props, context) {
+	const { t } = useTranslation();
 
 	const [tokenViaURL, setTokenViaURL] = useState(null);
 	const [details, setDetails] = useState(null);
 
 	const fetchDetailedTokenInfo = token => {
-		getContractData_deprecated(props, token.address, 'Fin4Token', 'getDetailedInfo').then(
+		let Fin4MainContract = context.drizzle.contracts.Fin4Main;
+		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+
+		getContractData(Fin4MainContract, defaultAccount, 'getDetailedTokenInfo', token.address).then(
 			({ 0: userIsTokenCreator, 1: requiredProofTypes, 2: claimsCount, 3: usersBalance, 4: totalSupply }) => {
 				setDetails({
 					userIsTokenCreator: userIsTokenCreator,
@@ -83,6 +87,10 @@ function TokenView(props) {
 		</Container>
 	);
 }
+
+TokenView.contextTypes = {
+	drizzle: PropTypes.object
+};
 
 const mapStateToProps = state => {
 	return {
