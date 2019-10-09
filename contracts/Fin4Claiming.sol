@@ -1,7 +1,6 @@
 pragma solidity ^0.5.0;
 
 import 'contracts/Fin4Token.sol';
-import 'contracts/Fin4Main.sol';
 
 contract Fin4Claiming {
 
@@ -24,7 +23,9 @@ contract Fin4Claiming {
     mapping (string => ClaimRef) public claimRefs;
 
     function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public {
-        Fin4Main(Fin4MainAddress).claimSubmissionPingback(msg.sender, tokenAddress);
+        if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {
+            actionsWhereUserHasClaims[msg.sender].push(tokenAddress);
+        }
         uint claimId;
         address[] memory requiredProofTypes;
         (claimId, requiredProofTypes) = Fin4Token(tokenAddress).submit(msg.sender, quantity, date, comment);
@@ -38,6 +39,36 @@ contract Fin4Claiming {
     // called from Fin4TokenBase
     function claimApprovedPingback(address tokenAddress, address claimer, uint claimId) public {
         emit ClaimApproved(tokenAddress, claimId, claimer, Fin4Token(tokenAddress).balanceOf(claimer));
+    }
+
+    // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
+
+    // to keep track on which action types the user has claims (independent of their approval-statuses)
+    mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
+
+    function userClaimedOnThisActionAlready(address user, address action) private view returns (bool) {
+        for (uint i = 0; i < actionsWhereUserHasClaims[user].length; i++) {
+            if (actionsWhereUserHasClaims[user][i] == action) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // used in PreviousClaims
+    function getActionsWhereUserHasClaims() public view returns(address[] memory) {
+        return actionsWhereUserHasClaims[msg.sender];
+    }
+
+    // ------------------------- CLAIM IDS -------------------------
+
+    function getMyClaimIdsOnThisToken(address token) public view returns(uint[] memory) {
+        return Fin4Token(token).getClaimIds(msg.sender);
+    }
+
+    function getClaimOnThisToken(address token, uint claimId) public view
+        returns(address, bool, uint, uint, string memory, address[] memory, bool[] memory) {
+        return Fin4Token(token).getClaim(claimId);
     }
 
 }

@@ -11,9 +11,10 @@ import Dropdown from '../../../components/Dropdown';
 import PreviousClaims from './PreviousClaims';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
-import { getContract, findTokenBySymbol } from '../../../components/Contractor.jsx';
+import { findTokenBySymbol } from '../../../components/Contractor.jsx';
+import PropTypes from 'prop-types';
 
-function Claim(props) {
+function Claim(props, context) {
 	const { t } = useTranslation();
 
 	const [tokenViaURL, setTokenViaURL] = useState(null);
@@ -32,13 +33,10 @@ function Claim(props) {
 			alert('Token must be selected');
 			return;
 		}
-
-		let fin4Store = props.store.getState().fin4Store;
-
-		getContract(fin4Store.addresses.Fin4ClaimingAddress, 'Fin4Claiming')
-			.methods.submitClaim(val.tokenAddress, val.quantity, val.date, val.comment)
+		context.drizzle.contracts.Fin4Claiming.methods
+			.submitClaim(val.tokenAddress, val.quantity, val.date, val.comment)
 			.send({
-				from: fin4Store.defaultAccount
+				from: props.store.getState().fin4Store.defaultAccount
 			})
 			.then(function(result) {
 				console.log('Results of submitting: ', result);
@@ -152,6 +150,10 @@ const dateFormat = 'YYYY-MM-DD HH:mm';
 const inputFieldStyle = {
 	width: '100%',
 	marginBottom: '15px'
+};
+
+Claim.contextTypes = {
+	drizzle: PropTypes.object
 };
 
 const mapStateToProps = state => {

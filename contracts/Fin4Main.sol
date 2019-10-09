@@ -7,6 +7,8 @@ import "solidity-util/lib/Strings.sol";
 contract Fin4Main {
   using Strings for string;
 
+  // ------------------------- FIN4TOKENS -------------------------
+
   // TODO do we need the indexed keyword for event params?
   event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit);
 
@@ -61,6 +63,10 @@ contract Fin4Main {
     return allFin4Tokens;
   }
 
+  function getTokenInfo(address tokenAddr) public view returns(string memory, string memory, string memory, string memory) {
+      return Fin4Token(tokenAddr).getInfo();
+  }
+
   // ------------------------- BALANCE -------------------------
 
   function getBalance(address user, address tokenAddress) public view returns(uint256) {
@@ -101,31 +107,6 @@ contract Fin4Main {
     return Fin4ClaimingAddress;
   }
 
-  // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
-
-  // to keep track on which action types the user has claims (independent of their approval-statuses)
-  mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
-
-  function _userClaimedOnThisActionAlready(address user, address action) private view returns (bool) {
-    for (uint i = 0; i < actionsWhereUserHasClaims[user].length; i++) {
-      if (actionsWhereUserHasClaims[user][i] == action) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // used in PreviousClaims
-  function getActionsWhereUserHasClaims() public view returns(address[] memory) {
-    return actionsWhereUserHasClaims[msg.sender];
-  }
-
-  function claimSubmissionPingback(address claimer, address token) public returns(bool) {
-    if (!_userClaimedOnThisActionAlready(claimer, token)) {
-      actionsWhereUserHasClaims[claimer].push(token);
-    }
-  }
-
   // ------------------------- PROOF TYPES -------------------------
 
   // all the proof types that action type creators can use
@@ -140,9 +121,9 @@ contract Fin4Main {
     return proofTypes;
   }
 
-  function getProofTypeName(address proofType) public view returns(string memory) {
-    require(proofTypeIsRegistered(proofType), "Address is not registered as proof type on Fin4Main");
-    return Fin4BaseProofType(proofType).getName();
+  function getProofTypeInfo(address proofType) public view returns(string memory, string memory, string memory) {
+    // require(proofTypeIsRegistered(proofType), "Address is not registered as proof type on Fin4Main");
+    return Fin4BaseProofType(proofType).getInfo();
   }
 
   // called from Fin4Token instances to ensure the required proof types there are a subset of the proofTypes here

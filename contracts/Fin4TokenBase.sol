@@ -74,11 +74,7 @@ contract Fin4TokenBase { // abstract class
     return (nextClaimId - 1, claim.requiredProofTypes);
   }
 
-  // Used by ProofSubmission
-  // TODO only the last two arrays are being used in the frontend, reduce this methods return values or split off a slimmer method?
-  // TODO todo above outdated, maybe kick out name() and symbol()
-  function getClaim(uint claimId) public view returns(string memory, string memory,
-    address, bool, uint, uint, string memory, address[] memory, bool[] memory) {
+  function getClaim(uint claimId) public view returns(address, bool, uint, uint, string memory, address[] memory, bool[] memory) {
     // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
 
     Claim storage claim = claims[claimId];
@@ -90,8 +86,7 @@ contract Fin4TokenBase { // abstract class
       proofTypeStatuses[i] = claim.proof_statuses[requiredProofTypes[i]];
     }
 
-    return (name(), symbol(), claim.claimer, claim.isApproved,
-      claim.quantity, claim.date, claim.comment, requiredProofTypes, proofTypeStatuses);
+    return (claim.claimer, claim.isApproved, claim.quantity, claim.date, claim.comment, requiredProofTypes, proofTypeStatuses);
   }
 
   function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory) {
@@ -99,11 +94,7 @@ contract Fin4TokenBase { // abstract class
       claims[claimId].quantity, claims[claimId].date, claims[claimId].comment);
   }
 
-  function getMyClaimIds() public view returns(uint[] memory) {
-    return getClaimIds(msg.sender);
-  }
-
-  function getClaimIds(address claimer) private view returns(uint[] memory) {
+  function getClaimIds(address claimer) public view returns(uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
       if (claims[i].claimer == claimer) {

@@ -1,4 +1,3 @@
-import { Fin4MainAddress } from '../config/DeployedAddresses.js';
 import {
 	ADD_MULTIPLE_FIN4_TOKENS,
 	ADD_MULTIPLE_CLAIMS,
@@ -35,72 +34,61 @@ const getContractData_deprecated = (props, contractAddress, contractName, method
 	}
 };
 
-let initialDataLoaded = false;
-
-const loadInitialDataIntoStore = props => {
-	if (initialDataLoaded) {
-		return;
+const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
+	if (methodArgs.length === 0) {
+		return contract.methods[method]().call({
+			from: defaultAccount
+		});
+	} else {
+		return contract.methods[method](...methodArgs).call({
+			from: defaultAccount
+		});
 	}
-	initialDataLoaded = true;
+};
 
-	// Get addresses of Fin4Messages and Fin4Claiming
-	getAddresses(props);
+const loadInitialDataIntoStore = (props, drizzle) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 
-	// TCR addresses
-	// getTCRAddresses(props);
+	addContracts(props, drizzle, defaultAccount);
 
-	getUsersBalance(props);
-
-	// get proof types
-	getAllProofTypes(props, () => {
-		// get tokens
-		getAllFin4Tokens(props, () => {
-			// get current users nonzero balances, TODO how to handle change of user in MetaMask?
-			getMyNonzeroTokenBalances(props);
-			getAllCurrentUsersClaims(props);
+	getAndAddAllProofTypes(props, drizzle, defaultAccount, () => {
+		getAllFin4Tokens(props, drizzle.contracts.Fin4Main, defaultAccount, () => {
+			getMyNonzeroTokenBalances(props, drizzle.contracts.Fin4Main, defaultAccount);
+			getAllCurrentUsersClaims(props, drizzle.contracts.Fin4Claiming, defaultAccount);
 		});
 	});
 };
 
-const getAddresses = props => {
-	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
-		props.dispatch({
-			type: ADD_ADDRESS,
-			name: 'Fin4MessagesAddress',
-			address: Fin4MessagesAddress
-		});
+const addContract = (props, drizzle, name, address, events) => {
+	const json = require('../build/contracts/' + name + '.json');
+	let contractConfig = {
+		contractName: name,
+		web3Contract: new web3.eth.Contract(json.abi, address)
+	};
+	props.dispatch({ type: 'ADD_CONTRACT', drizzle, contractConfig, events, web3 });
+};
+
+const addContracts = (props, drizzle, defaultAccount) => {
+	getContractData(drizzle.contracts.Fin4Main, defaultAccount, 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
+		addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, []);
 	});
-	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
-		props.dispatch({
-			type: ADD_ADDRESS,
-			name: 'Fin4ClaimingAddress',
-			address: Fin4ClaimingAddress
-		});
+	getContractData(drizzle.contracts.Fin4Main, defaultAccount, 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
+		addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
+			'ClaimSubmitted',
+			'ClaimApproved',
+			'OneProofOnClaimApproval'
+		]);
 	});
 };
 
-const getUsersBalance = props => {
-	let currentAccount = props.store.getState().fin4Store.defaultAccount;
-	window.web3.eth.getBalance(currentAccount, (err, res) => {
-		if (err) {
-			return;
-		}
-		let eth = window.web3.toDecimal(window.web3.fromWei(res, 'ether'));
-		props.dispatch({
-			type: SET_USERS_ETH_BALANCE,
-			balance: eth
-		});
-	});
-};
-
-const getAllFin4Tokens = (props, callback) => {
-	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
+const getAllFin4Tokens = (props, Fin4MainContract, defaultAccount, callback) => {
+	getContractData(Fin4MainContract, defaultAccount, 'getAllFin4Tokens')
 		.then(tokens => {
-			return tokens.map(address => {
-				return getContractData(props, address, 'Fin4Token', 'getInfo').then(
+			return tokens.map(tokenAddr => {
+				return getContractData(Fin4MainContract, defaultAccount, 'getTokenInfo', tokenAddr).then(
 					({ 0: name, 1: symbol, 2: description, 3: unit }) => {
 						return {
-							address: address,
+							address: tokenAddr,
 							name: name,
 							symbol: symbol,
 							description: description,
@@ -120,8 +108,8 @@ const getAllFin4Tokens = (props, callback) => {
 		});
 };
 
-const getMyNonzeroTokenBalances = props => {
-	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getMyNonzeroTokenBalances').then(
+const getMyNonzeroTokenBalances = (props, Fin4MainContract, defaultAccount) => {
+	getContractData(Fin4MainContract, defaultAccount, 'getMyNonzeroTokenBalances').then(
 		({ 0: nonzeroBalanceTokens, 1: balancesBN }) => {
 			if (nonzeroBalanceTokens.length === 0) {
 				return;
@@ -135,23 +123,21 @@ const getMyNonzeroTokenBalances = props => {
 	);
 };
 
-const getAllProofTypes = (props, callback) => {
-	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getProofTypes')
+const getAndAddAllProofTypes = (props, drizzle, defaultAccount, callback) => {
+	let Fin4MainContract = drizzle.contracts.Fin4Main;
+	getContractData(Fin4MainContract, defaultAccount, 'getProofTypes')
 		.then(proofTypeAddresses => {
 			return proofTypeAddresses.map(proofTypeAddress => {
-				return getContractData(props, Fin4MainAddress, 'Fin4Main', 'getProofTypeName', proofTypeAddress).then(
-					proofTypeName => {
-						return getContractData(props, proofTypeAddress, proofTypeName, 'getInfo').then(
-							({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
-								return {
-									value: proofTypeAddress,
-									label: name,
-									description: description,
-									paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
-									paramValues: {}
-								};
-							}
-						);
+				return getContractData(Fin4MainContract, defaultAccount, 'getProofTypeInfo', proofTypeAddress).then(
+					({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
+						addContract(props, drizzle, name, proofTypeAddress, []);
+						return {
+							value: proofTypeAddress,
+							label: name,
+							description: description,
+							paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
+							paramValues: {}
+						};
 					}
 				);
 			});
@@ -166,43 +152,49 @@ const getAllProofTypes = (props, callback) => {
 		});
 };
 
-const getAllCurrentUsersClaims = props => {
-	getContractData(props, Fin4MainAddress, 'Fin4Main', 'getActionsWhereUserHasClaims')
+const getAllCurrentUsersClaims = (props, Fin4ClaimingContract, defaultAccount) => {
+	getContractData(Fin4ClaimingContract, defaultAccount, 'getActionsWhereUserHasClaims')
 		.then(tokenAddresses => {
 			return tokenAddresses.map(tokenAddr => {
-				return getContractData(props, tokenAddr, 'Fin4Token', 'getMyClaimIds').then(claimIds => {
-					return claimIds.map(claimId => {
-						return getContractData(props, tokenAddr, 'Fin4Token', 'getClaim', claimId).then(
-							({
-								0: tokenName,
-								1: tokenSymbol,
-								2: claimer,
-								3: isApproved,
-								4: quantityBN,
-								5: dateBN,
-								6: comment,
-								7: requiredProofTypes,
-								8: proofStatusesBool
-							}) => {
-								let proofStatusesObj = {};
-								for (let i = 0; i < requiredProofTypes.length; i++) {
-									proofStatusesObj[requiredProofTypes[i]] = proofStatusesBool[i];
+				return getContractData(Fin4ClaimingContract, defaultAccount, 'getMyClaimIdsOnThisToken', tokenAddr).then(
+					claimIds => {
+						return claimIds.map(claimId => {
+							return getContractData(
+								Fin4ClaimingContract,
+								defaultAccount,
+								'getClaimOnThisToken',
+								tokenAddr,
+								claimId
+							).then(
+								({
+									0: claimer,
+									1: isApproved,
+									2: quantityBN,
+									3: dateBN,
+									4: comment,
+									5: requiredProofTypes,
+									6: proofStatusesBool
+								}) => {
+									let proofStatusesObj = {};
+									for (let i = 0; i < requiredProofTypes.length; i++) {
+										proofStatusesObj[requiredProofTypes[i]] = proofStatusesBool[i];
+									}
+									return {
+										id: tokenAddr + '_' + claimId, // pseudoId
+										token: tokenAddr,
+										claimId: claimId,
+										claimer: claimer,
+										isApproved: isApproved,
+										quantity: new BN(quantityBN).toNumber(),
+										date: new BN(dateBN).toNumber(),
+										comment: comment,
+										proofStatuses: proofStatusesObj
+									};
 								}
-								return {
-									id: tokenAddr + '_' + claimId, // pseudoId
-									token: tokenAddr,
-									claimId: claimId,
-									claimer: claimer,
-									isApproved: isApproved,
-									quantity: new BN(quantityBN).toNumber(),
-									date: new BN(dateBN).toNumber(),
-									comment: comment,
-									proofStatuses: proofStatusesObj
-								};
-							}
-						);
-					});
-				});
+							);
+						});
+					}
+				);
 			});
 		})
 		.then(promises => Promise.all(promises))
