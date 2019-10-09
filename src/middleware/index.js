@@ -147,6 +147,7 @@ const contractEventNotifier = store => next => action => {
 const appMiddlewares = [contractEventNotifier];
 
 const initialState = {
+	drizzleInitialized: false,
 	fin4Tokens: {},
 	usersClaims: {},
 	usersBalances: {},
@@ -164,6 +165,11 @@ function fin4StoreReducer(state = initialState, action) {
 				...state,
 				defaultAccount: action.account,
 				usersEthBalance: window.web3.toDecimal(window.web3.fromWei(action.accountBalance, 'ether'))
+			};
+		case 'DRIZZLE_INITIALIZED':
+			return {
+				...state,
+				drizzleInitialized: true
 			};
 		case ADD_FIN4_TOKEN:
 			return {

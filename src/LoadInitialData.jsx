@@ -1,23 +1,17 @@
 import { Component } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { loadInitialDataIntoStore } from './components/Contractor';
+import PropTypes from 'prop-types';
 
 class LoadInitialData extends Component {
-	constructor(props) {
+	constructor(props, context) {
 		super(props);
-
-		this.unlockAccount(props);
+		this.drizzle = context.drizzle;
 	}
 
-	async unlockAccount(props) {
-		try {
-			let accounts = await window.ethereum.enable();
-
-			// load initial data into the store
-			loadInitialDataIntoStore(props);
-		} catch (error) {
-			//alert('Could not enable DApp');
-			console.log('error', error);
+	componentWillReceiveProps(nextProps) {
+		if (this.props.drizzleInitialized !== nextProps.drizzleInitialized) {
+			loadInitialDataIntoStore(nextProps, this.drizzle);
 		}
 	}
 
@@ -26,4 +20,14 @@ class LoadInitialData extends Component {
 	}
 }
 
-export default drizzleConnect(LoadInitialData);
+LoadInitialData.contextTypes = {
+	drizzle: PropTypes.object
+};
+
+const mapStateToProps = state => {
+	return {
+		drizzleInitialized: state.fin4Store.drizzleInitialized
+	};
+};
+
+export default drizzleConnect(LoadInitialData, mapStateToProps);
