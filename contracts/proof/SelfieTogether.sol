@@ -24,7 +24,7 @@ contract SelfieTogether is SpecificAddress {
     pa.requester = msg.sender;
     pa.approver = approver;
     pa.attachment = IPFShash;
-    pa.pendingApprovalId = pendingApprovals[approver].length - 1;
+    pa.pendingApprovalId = pendingApprovals[approver].length;
 
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
@@ -40,7 +40,7 @@ contract SelfieTogether is SpecificAddress {
     paTC.requester = msg.sender;
     paTC.approver = tokenCreator;
     paTC.attachment = IPFShash;
-    paTC.pendingApprovalId = pendingApprovals[tokenCreator].length - 1;
+    paTC.pendingApprovalId = pendingApprovals[tokenCreator].length;
 
     string memory messageTC = string(abi.encodePacked(getMessageTextForTokenCreator(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
