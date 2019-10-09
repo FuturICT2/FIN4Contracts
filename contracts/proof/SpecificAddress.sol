@@ -28,6 +28,7 @@ contract SpecificAddress is Fin4BaseProofType {
     uint messageId;
     bool isApproved;
     address linkedWith; // key in pendingApprovals that is linked with this one. only if both are approved, send the overall approval
+    uint pendingApprovalId;
   }
 
   // This assumes only one pending approval per address, TODO value must be an array!

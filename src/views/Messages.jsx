@@ -45,7 +45,8 @@ function Messages(props, context) {
 							3: fulfillmentAddress,
 							4: proofTypeName,
 							5: hasBeenActedUpon,
-							6: attachment
+							6: attachment,
+							7: pendingApprovalId
 						}) => {
 							return {
 								messageType: messageType.toString(),
@@ -54,7 +55,8 @@ function Messages(props, context) {
 								fulfillmentAddress: fulfillmentAddress,
 								proofTypeName: proofTypeName,
 								hasBeenActedUpon: hasBeenActedUpon,
-								attachment: attachment
+								attachment: attachment,
+								pendingApprovalId: pendingApprovalId
 							};
 						}
 					);
