@@ -54,7 +54,7 @@ const contractEventNotifier = store => next => action => {
 	if (contractEvent === 'ClaimSubmitted') {
 		let claim = action.event.returnValues;
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId, just for frontend
-		let isCurrentUsersClaim = claim.claimer.toLowerCase() === defaultAccount;
+		let isCurrentUsersClaim = claim.claimer === defaultAccount;
 
 		// block: claim-event not caused by current user / duplicate events
 		if (!isCurrentUsersClaim || store.getState().fin4Store.usersClaims[id]) {
@@ -89,7 +89,7 @@ const contractEventNotifier = store => next => action => {
 	if (contractEvent === 'ClaimApproved') {
 		let claim = action.event.returnValues;
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId
-		let isCurrentUsersClaim = claim.claimer.toLowerCase() === defaultAccount;
+		let isCurrentUsersClaim = claim.claimer === defaultAccount;
 
 		// block: current user is not claimer / duplicate events / claim is already approved
 		let usersClaims = store.getState().fin4Store.usersClaims;
@@ -115,7 +115,7 @@ const contractEventNotifier = store => next => action => {
 
 	if (contractEvent === 'OneProofOnClaimApproval') {
 		let approvedProof = action.event.returnValues;
-		let belongsToCurrentUsersClaim = approvedProof.claimer.toLowerCase() === defaultAccount;
+		let belongsToCurrentUsersClaim = approvedProof.claimer === defaultAccount;
 		let pseudoClaimId = approvedProof.tokenAdrToReceiveProof + '_' + approvedProof.claimId;
 
 		let usersClaims = store.getState().fin4Store.usersClaims;
