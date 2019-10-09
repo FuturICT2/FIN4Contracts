@@ -9,6 +9,7 @@ import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import AddIcon from '@material-ui/icons/Add';
 
 function Messages(props, context) {
 	const { t } = useTranslation();
@@ -68,6 +69,17 @@ function Messages(props, context) {
 			});
 	};
 
+	const submitApproval = (proofTypeName, pendingApprovalId) => {
+		context.drizzle.contracts[proofTypeName].methods
+			.receiveApprovalFromSpecificAddress(pendingApprovalId)
+			.send({
+				from: props.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
+	};
+
 	return (
 		messages.length > 0 &&
 		messages.filter(msg => !msg.hasBeenActedUpon).length > 0 && (
@@ -95,13 +107,12 @@ function Messages(props, context) {
 												Click to see the image
 											</Button>
 										)}
-										<ContractForm
-											buttonLabel="approve"
-											contractAddress={msg.fulfillmentAddress}
-											// instead of passing the proofTypeName, make an extra getName() call for that?
-											contractName={msg.proofTypeName}
-											method="receiveApprovalFromSpecificAddress"
-										/>
+										<Button
+											icon={AddIcon}
+											onClick={() => submitApproval(msg.proofTypeName, msg.pendingApprovalId)}
+											center="true">
+											Approve
+										</Button>
 									</>
 								)}
 							</Message>
