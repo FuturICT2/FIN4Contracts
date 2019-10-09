@@ -15,12 +15,14 @@ contract Fin4Claiming {
         Fin4MainAddress = Fin4MainAddr;
     }
 
+    /*
     struct ClaimRef {
         address token;
         uint claimId;
     }
 
     mapping (string => ClaimRef) public claimRefs;
+    */
 
     function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public {
         if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {
