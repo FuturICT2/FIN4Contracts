@@ -9,12 +9,6 @@ import Web3 from 'web3';
 const BN = require('bignumber.js');
 const web3 = new Web3(window.ethereum);
 
-// DEPRECATED
-const getCurrentAccount = () => {
-	return null;
-};
-
-// TODO reuse them instead of instantiating them repeatedly
 const getContract = (contractAddress, contractName) => {
 	const json = require('../build/contracts/' + contractName + '.json');
 	return new web3.eth.Contract(json.abi, contractAddress);
@@ -46,6 +40,8 @@ const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
 	}
 };
 
+// --------------------- ENTRY POINT ---------------------
+
 const loadInitialDataIntoStore = (props, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 
@@ -58,6 +54,8 @@ const loadInitialDataIntoStore = (props, drizzle) => {
 		});
 	});
 };
+
+// -------------------------------------------------------
 
 const addContract = (props, drizzle, name, address, events) => {
 	const json = require('../build/contracts/' + name + '.json');
@@ -130,6 +128,7 @@ const getAndAddAllProofTypes = (props, drizzle, defaultAccount, callback) => {
 			return proofTypeAddresses.map(proofTypeAddress => {
 				return getContractData(Fin4MainContract, defaultAccount, 'getProofTypeInfo', proofTypeAddress).then(
 					({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
+						// add Contract objects to drizzle
 						addContract(props, drizzle, name, proofTypeAddress, []);
 						return {
 							value: proofTypeAddress,
@@ -302,11 +301,4 @@ const PollStatus = {
 };
 */
 
-export {
-	getCurrentAccount,
-	getContractData,
-	getContractData_deprecated,
-	getContract,
-	loadInitialDataIntoStore,
-	findTokenBySymbol
-};
+export { getContractData, getContractData_deprecated, getContract, loadInitialDataIntoStore, findTokenBySymbol };
