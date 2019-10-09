@@ -12,9 +12,7 @@ import {
 	UPDATE_BALANCE,
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES,
-	SET_DEFAULT_ACCOUNT,
-	ONE_PROOF_ON_CLAIM_APPROVAL,
-	SET_USERS_ETH_BALANCE
+	ONE_PROOF_ON_CLAIM_APPROVAL
 } from './actionTypes';
 const BN = require('bignumber.js');
 
@@ -161,6 +159,12 @@ const initialState = {
 function fin4StoreReducer(state = initialState, action) {
 	let i = 0;
 	switch (action.type) {
+		case 'ACCOUNT_BALANCE_FETCHED':
+			return {
+				...state,
+				defaultAccount: action.account,
+				usersEthBalance: window.web3.toDecimal(window.web3.fromWei(action.accountBalance, 'ether'))
+			};
 		case ADD_FIN4_TOKEN:
 			return {
 				...state,
@@ -251,11 +255,6 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
-		case SET_DEFAULT_ACCOUNT:
-			return {
-				...state,
-				defaultAccount: action.account
-			};
 		case ONE_PROOF_ON_CLAIM_APPROVAL:
 			return {
 				...state,
@@ -269,11 +268,6 @@ function fin4StoreReducer(state = initialState, action) {
 						}
 					}
 				}
-			};
-		case SET_USERS_ETH_BALANCE:
-			return {
-				...state,
-				usersEthBalance: action.balance
 			};
 		default:
 			return state;
