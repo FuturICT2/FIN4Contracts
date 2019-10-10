@@ -43,15 +43,17 @@ const fetchMessages = (props, Fin4MessagesContract) => {
 			return messageIndices.map(index => {
 				return getContractData(Fin4MessagesContract, defaultAccount, 'getMyMessage', index).then(
 					({
-						0: messageType,
-						1: sender,
-						2: senderStr,
-						3: message,
-						4: hasBeenActedUpon,
-						5: attachment,
-						6: pendingApprovalId
+						0: messageId,
+						1: messageType,
+						2: sender,
+						3: senderStr,
+						4: message,
+						5: hasBeenActedUpon,
+						6: attachment,
+						7: pendingApprovalId
 					}) => {
 						return {
+							messageId: messageId.toString(),
 							messageType: messageType.toString(),
 							sender: sender,
 							proofTypeName: senderStr,

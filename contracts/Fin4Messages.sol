@@ -4,9 +4,12 @@ import 'contracts/stub/Fin4BaseProofTypeStub.sol';
 
 contract Fin4Messages {
 
+  event NewMessage(address receiver, uint messageId);
+
   enum MessageType { INFO, APPROVAL } // diferent types of message types, determine how they get rendered in the front end
 
   struct Message {
+    uint messageId;
     uint messageType; // is an Enum in Fin4BaseProofType
     address sender;
     string senderStr;
@@ -26,14 +29,19 @@ contract Fin4Messages {
     m.receiver = receiver;
     m.message = message;
     messages[receiver].push(m);
-    return messages[receiver].length - 1;
+    m.messageId = messages[receiver].length - 1;
+    emit NewMessage(receiver, m.messageId);
+    return m.messageId;
   }
 
   function addPendingApprovalMessage(address sender, string memory senderStr, address receiver, string memory message,
     string memory attachment, uint pendingApprovalId) public returns(uint) {
-    Message memory m = Message(uint(MessageType.APPROVAL), sender, senderStr, receiver, message, false, attachment, pendingApprovalId);
+    uint messageId = messages[receiver].length - 1;
+    Message memory m = Message(
+      messageId, uint(MessageType.APPROVAL), sender, senderStr, receiver, message, false, attachment, pendingApprovalId);
     messages[receiver].push(m);
-    return messages[receiver].length - 1;
+    emit NewMessage(receiver, messageId);
+    return messageId;
   }
 
   function getMyMessagesCount() public view returns(uint) {

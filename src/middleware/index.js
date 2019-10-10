@@ -128,6 +128,30 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	if (contractEvent === 'NewMessage') {
+		let msg = action.event.returnValues;
+		if (msg.receiver !== defaultAccount) {
+			// user is not recipient: ignore
+			return next(action);
+		}
+
+		display = 'You got a new message';
+
+		store.dispatch({
+			type: 'ADD_MESSAGE_STUB',
+			oneMessage: {
+				messageId: msg.messageId.toString(),
+				messageType: null,
+				sender: null,
+				proofTypeName: null,
+				message: null,
+				hasBeenActedUpon: null,
+				attachment: null,
+				pendingApprovalId: null
+			}
+		});
+	}
+
 	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
 	return next(action);
 };
@@ -258,6 +282,10 @@ function fin4StoreReducer(state = initialState, action) {
 		case 'ADD_MULTIPLE_MESSAGES':
 			return Object.assign({}, state, {
 				messages: [...state.messages, ...action.messagesArr]
+			});
+		case 'ADD_MESSAGE_STUB':
+			return Object.assign({}, state, {
+				messages: [...state.messages, ...action.oneMessage]
 			});
 		default:
 			return state;

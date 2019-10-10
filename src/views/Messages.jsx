@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Box from '../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
@@ -12,6 +12,10 @@ import AddIcon from '@material-ui/icons/Add';
 function Messages(props, context) {
 	const { t } = useTranslation();
 
+	useEffect(() => {
+		// TODO fetch full message in case of stub
+	});
+
 	const submitApproval = (proofTypeName, pendingApprovalId) => {
 		context.drizzle.contracts[proofTypeName].methods
 			.receiveApprovalFromSpecificAddress(pendingApprovalId)
@@ -24,10 +28,10 @@ function Messages(props, context) {
 	};
 
 	return (
-		props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 && (
+		props.messages.filter(msg => !msg.hasBeenActedUpon && msg.messageType).length > 0 && (
 			<Box title="Messages">
 				{props.messages
-					.filter(msg => !msg.hasBeenActedUpon)
+					.filter(msg => !msg.hasBeenActedUpon && msg.messageType)
 					.map((msg, index) => {
 						return (
 							<Message key={`${msg.proofTypeName}_${msg.pendingApprovalId}_${index}`}>
