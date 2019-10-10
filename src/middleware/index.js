@@ -153,6 +153,20 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	if (contractEvent === 'MessageMarkedAsRead') {
+		let msg = action.event.returnValues;
+		if (msg.receiver !== defaultAccount) {
+			return next(action);
+		}
+
+		display = 'Message marked as read';
+
+		store.dispatch({
+			type: 'MESSAGE_MARKED_AS_READ',
+			messageId: msg.messageId.toString()
+		});
+	}
+
 	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
 	return next(action);
 };
@@ -300,6 +314,14 @@ function fin4StoreReducer(state = initialState, action) {
 						hasBeenActedUpon: { $set: msg.hasBeenActedUpon },
 						attachment: { $set: msg.attachment },
 						pendingApprovalId: { $set: msg.pendingApprovalId }
+					}
+				}
+			});
+		case 'MESSAGE_MARKED_AS_READ':
+			return update(state, {
+				messages: {
+					[action.messageId]: {
+						hasBeenActedUpon: { $set: true }
 					}
 				}
 			});

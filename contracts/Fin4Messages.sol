@@ -5,6 +5,7 @@ import 'contracts/stub/Fin4BaseProofTypeStub.sol';
 contract Fin4Messages {
 
   event NewMessage(address receiver, uint messageId);
+  event MessageMarkedAsRead(address receiver, uint messageId);
 
   enum MessageType { INFO, APPROVAL, USER2USER } // diferent types of message types, determine how they get rendered in the front end
 
@@ -67,8 +68,9 @@ contract Fin4Messages {
   }
 
   // after a picture is approved for instance, the message doesn't need to be shown to the approver anymore
-  function markMessageAsActedUpon(address approver, uint messageId) public {
-    messages[approver][messageId].hasBeenActedUpon = true;
+  function markMessageAsActedUpon(address receiver, uint messageId) public {
+    messages[receiver][messageId].hasBeenActedUpon = true;
+    emit MessageMarkedAsRead(receiver, messageId);
   }
 
 }
