@@ -22,7 +22,7 @@ contract Password is Fin4BaseProofType {
           Fin4TokenStub(tokenAdrToReceiveProof).name(),
           ": The password you provided is not matching the one set by the action type creator."
         ));
-        Fin4Messages(_Fin4MessagesAddr()).addMessage(address(this), msg.sender, message);
+        Fin4Messages(_Fin4MessagesAddr()).addInfoMessage(address(this), msg.sender, message);
       }
       return true;
     }

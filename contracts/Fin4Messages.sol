@@ -6,7 +6,7 @@ contract Fin4Messages {
 
   event NewMessage(address receiver, uint messageId);
 
-  enum MessageType { INFO, APPROVAL } // diferent types of message types, determine how they get rendered in the front end
+  enum MessageType { INFO, APPROVAL, USER2USER } // diferent types of message types, determine how they get rendered in the front end
 
   struct Message {
     uint messageId;
@@ -22,26 +22,38 @@ contract Fin4Messages {
 
   mapping (address => Message[]) public messages;
 
-  function addMessage(address sender, address receiver, string memory message) public returns(uint) {
+  function addMessage(uint messageType, address sender, address receiver, string memory message)
+    private returns (Message memory messageObj) {
     Message memory m;
-    m.messageType = uint(MessageType.INFO);
+    m.messageType = messageType;
     m.sender = sender;
     m.receiver = receiver;
     m.message = message;
     m.messageId = messages[receiver].length;
     messages[receiver].push(m);
+    return m;
+  }
+
+  function addUserMessage(address receiver, string memory message) public returns(uint) {
+    Message memory m = addMessage(uint(MessageType.USER2USER), msg.sender, receiver, message);
+    emit NewMessage(receiver, m.messageId);
+  }
+
+  function addInfoMessage(address sender, address receiver, string memory message) public returns(uint) {
+    Message memory m = addMessage(uint(MessageType.INFO), sender, receiver, message);
     emit NewMessage(receiver, m.messageId);
     return m.messageId;
   }
 
   function addPendingApprovalMessage(address sender, string memory senderStr, address receiver, string memory message,
     string memory attachment, uint pendingApprovalId) public returns(uint) {
-    uint messageId = messages[receiver].length;
-    Message memory m = Message(
-      messageId, uint(MessageType.APPROVAL), sender, senderStr, receiver, message, false, attachment, pendingApprovalId);
-    messages[receiver].push(m);
-    emit NewMessage(receiver, messageId);
-    return messageId;
+    Message memory m = addMessage(uint(MessageType.APPROVAL), sender, receiver, message);
+    m.senderStr = senderStr;
+    m.hasBeenActedUpon = false;
+    m.attachment = attachment;
+    m.pendingApprovalId = pendingApprovalId;
+    emit NewMessage(receiver, m.messageId);
+    return m.messageId;
   }
 
   function getMyMessagesCount() public view returns(uint) {
