@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import Box from '../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import PropTypes from 'prop-types';
-import { getContractData } from '../components/Contractor';
 import Button from '../components/Button';
 import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
@@ -12,9 +11,6 @@ import AddIcon from '@material-ui/icons/Add';
 
 function Messages(props, context) {
 	const { t } = useTranslation();
-
-	const [messages, setMessages] = useState([]);
-	// TODO
 
 	const submitApproval = (proofTypeName, pendingApprovalId) => {
 		context.drizzle.contracts[proofTypeName].methods
@@ -28,10 +24,10 @@ function Messages(props, context) {
 	};
 
 	return (
-		messages.length > 0 &&
-		messages.filter(msg => !msg.hasBeenActedUpon).length > 0 && (
+		props.messages.length > 0 &&
+		props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 && (
 			<Box title="Messages">
-				{messages
+				{props.messages
 					.filter(msg => !msg.hasBeenActedUpon)
 					.map((msg, index) => {
 						return (
@@ -85,8 +81,8 @@ Messages.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts,
-		defaultAccount: state.fin4Store.defaultAccount
+		defaultAccount: state.fin4Store.defaultAccount,
+		messages: state.fin4Store.messages
 	};
 };
 
