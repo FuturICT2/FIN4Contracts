@@ -141,8 +141,8 @@ const fetchUsersNonzeroTokenBalances = (props, Fin4MainContract) => {
 	);
 };
 
-const getAndAddAllProofTypes = (props, drizzle, defaultAccount, callback) => {
-	let Fin4MainContract = drizzle.contracts.Fin4Main;
+const fetchAndAddAllProofTypes = (props, Fin4MainContract, drizzle) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4MainContract, defaultAccount, 'getProofTypes')
 		.then(proofTypeAddresses => {
 			return proofTypeAddresses.map(proofTypeAddress => {
@@ -167,7 +167,6 @@ const getAndAddAllProofTypes = (props, drizzle, defaultAccount, callback) => {
 				type: 'ADD_MULTIPLE_PROOF_TYPES',
 				proofTypesArr: data
 			});
-			callback();
 		});
 };
 
@@ -329,5 +328,6 @@ export {
 	fetchAllTokens,
 	fetchUsersNonzeroTokenBalances,
 	fetchCurrentUsersClaims,
+	fetchAndAddAllProofTypes,
 	findTokenBySymbol
 };
