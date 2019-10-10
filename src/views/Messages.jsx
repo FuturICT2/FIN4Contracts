@@ -14,57 +14,7 @@ function Messages(props, context) {
 	const { t } = useTranslation();
 
 	const [messages, setMessages] = useState([]);
-	const messagesFetched = useRef(false);
-
-	useEffect(() => {
-		if (props.defaultAccount === null || !props.contracts.Fin4Messages || !props.contracts.Fin4Messages.initialized) {
-			return;
-		}
-		if (!messagesFetched.current) {
-			fetchMessages();
-		}
-	});
-
-	const fetchMessages = () => {
-		messagesFetched.current = true;
-		let Fin4MessagesContract = context.drizzle.contracts.Fin4Messages;
-
-		getContractData(Fin4MessagesContract, props.defaultAccount, 'getMyMessagesCount')
-			.then(data => {
-				var messageCount = Number(data);
-				var messageIndices = [];
-				for (var i = 0; i < messageCount; i++) {
-					messageIndices.push(i);
-				}
-				return messageIndices.map(index => {
-					return getContractData(Fin4MessagesContract, props.defaultAccount, 'getMyMessage', index).then(
-						({
-							0: messageType,
-							1: sender,
-							2: senderStr,
-							3: message,
-							4: hasBeenActedUpon,
-							5: attachment,
-							6: pendingApprovalId
-						}) => {
-							return {
-								messageType: messageType.toString(),
-								sender: sender,
-								proofTypeName: senderStr,
-								message: message,
-								hasBeenActedUpon: hasBeenActedUpon,
-								attachment: attachment,
-								pendingApprovalId: pendingApprovalId
-							};
-						}
-					);
-				});
-			})
-			.then(data => Promise.all(data))
-			.then(data => {
-				setMessages(data);
-			});
-	};
+	// TODO
 
 	const submitApproval = (proofTypeName, pendingApprovalId) => {
 		context.drizzle.contracts[proofTypeName].methods

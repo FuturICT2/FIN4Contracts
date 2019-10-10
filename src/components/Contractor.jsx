@@ -2,7 +2,8 @@ import {
 	ADD_MULTIPLE_FIN4_TOKENS,
 	ADD_MULTIPLE_CLAIMS,
 	UPDATE_MULTIPLE_BALANCES,
-	ADD_MULTIPLE_PROOF_TYPES
+	ADD_MULTIPLE_PROOF_TYPES,
+	ADD_MULTIPLE_MESSAGES
 } from '../middleware/actionTypes';
 import Web3 from 'web3';
 
@@ -35,6 +36,48 @@ const addSatelliteContracts = (props, drizzle) => {
 			'OneProofOnClaimApproval'
 		]);
 	});
+};
+
+const fetchMessages = (props, Fin4MessagesContract) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	getContractData(Fin4MessagesContract, defaultAccount, 'getMyMessagesCount')
+		.then(data => {
+			var messageCount = Number(data);
+			var messageIndices = [];
+			for (var i = 0; i < messageCount; i++) {
+				messageIndices.push(i);
+			}
+			return messageIndices.map(index => {
+				return getContractData(Fin4MessagesContract, defaultAccount, 'getMyMessage', index).then(
+					({
+						0: messageType,
+						1: sender,
+						2: senderStr,
+						3: message,
+						4: hasBeenActedUpon,
+						5: attachment,
+						6: pendingApprovalId
+					}) => {
+						return {
+							messageType: messageType.toString(),
+							sender: sender,
+							proofTypeName: senderStr,
+							message: message,
+							hasBeenActedUpon: hasBeenActedUpon,
+							attachment: attachment,
+							pendingApprovalId: pendingApprovalId
+						};
+					}
+				);
+			});
+		})
+		.then(messages => Promise.all(messages))
+		.then(messages => {
+			props.dispatch({
+				type: ADD_MULTIPLE_MESSAGES,
+				messagesArr: messages
+			});
+		});
 };
 
 const loadInitialDataIntoStore = (props, drizzle) => {
@@ -281,4 +324,4 @@ const PollStatus = {
 };
 */
 
-export { getContractData, addSatelliteContracts, findTokenBySymbol };
+export { getContractData, addSatelliteContracts, fetchMessages, findTokenBySymbol };

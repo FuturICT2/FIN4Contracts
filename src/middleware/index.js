@@ -11,7 +11,8 @@ import {
 	UPDATE_BALANCE,
 	UPDATE_MULTIPLE_BALANCES,
 	ADD_MULTIPLE_PROOF_TYPES,
-	ONE_PROOF_ON_CLAIM_APPROVAL
+	ONE_PROOF_ON_CLAIM_APPROVAL,
+	ADD_MULTIPLE_MESSAGES
 } from './actionTypes';
 const BN = require('bignumber.js');
 
@@ -152,7 +153,8 @@ const initialState = {
 	usersBalances: {},
 	proofTypes: {},
 	defaultAccount: null,
-	usersEthBalance: null
+	usersEthBalance: null,
+	messages: []
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -265,12 +267,13 @@ function fin4StoreReducer(state = initialState, action) {
 					}
 				}
 			};
+		case ADD_MULTIPLE_MESSAGES:
+			return Object.assign({}, state, {
+				messages: [...state.messages, ...action.messagesArr]
+			});
 		default:
 			return state;
 	}
-	//return Object.assign({}, state, {
-	//	usersClaims: [...state.usersClaims, ...action.claimArr]
-	//});
 }
 
 const appReducers = { fin4Store: fin4StoreReducer };
