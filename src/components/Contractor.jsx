@@ -17,12 +17,12 @@ const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
 
 // --------------------- ENTRY POINT ---------------------
 
-const addSatelliteContracts = (props, drizzle) => {
+const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-	getContractData(drizzle.contracts.Fin4Main, defaultAccount, 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
+	getContractData(Fin4MainContract, defaultAccount, 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
 		addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, []);
 	});
-	getContractData(drizzle.contracts.Fin4Main, defaultAccount, 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
+	getContractData(Fin4MainContract, defaultAccount, 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
 		addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
 			'ClaimSubmitted',
 			'ClaimApproved',
@@ -97,7 +97,8 @@ const addContract = (props, drizzle, name, address, events) => {
 	props.dispatch({ type: 'ADD_CONTRACT', drizzle, contractConfig, events, web3 });
 };
 
-const getAllFin4Tokens = (props, Fin4MainContract, defaultAccount, callback) => {
+const fetchAllTokens = (props, Fin4MainContract, callback) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4MainContract, defaultAccount, 'getAllFin4Tokens')
 		.then(tokens => {
 			return tokens.map(tokenAddr => {
@@ -124,7 +125,8 @@ const getAllFin4Tokens = (props, Fin4MainContract, defaultAccount, callback) => 
 		});
 };
 
-const getMyNonzeroTokenBalances = (props, Fin4MainContract, defaultAccount) => {
+const fetchUsersNonzeroTokenBalances = (props, Fin4MainContract) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4MainContract, defaultAccount, 'getMyNonzeroTokenBalances').then(
 		({ 0: nonzeroBalanceTokens, 1: balancesBN }) => {
 			if (nonzeroBalanceTokens.length === 0) {
@@ -319,4 +321,11 @@ const PollStatus = {
 };
 */
 
-export { getContractData, addSatelliteContracts, fetchMessages, findTokenBySymbol };
+export {
+	getContractData,
+	addSatelliteContracts,
+	fetchMessages,
+	fetchAllTokens,
+	fetchUsersNonzeroTokenBalances,
+	findTokenBySymbol
+};

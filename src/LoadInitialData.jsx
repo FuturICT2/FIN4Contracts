@@ -1,6 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
-import { addSatelliteContracts, fetchMessages } from './components/Contractor';
+import {
+	addSatelliteContracts,
+	fetchMessages,
+	fetchAllTokens,
+	fetchUsersNonzeroTokenBalances
+} from './components/Contractor';
 import PropTypes from 'prop-types';
 
 function LoadInitialData(props, context) {
@@ -17,12 +22,18 @@ function LoadInitialData(props, context) {
 
 		if (!isInit.current.Fin4Main && props.contracts.Fin4Main.initialized) {
 			isInit.current.Fin4Main = true;
-			addSatelliteContracts(props, context.drizzle); // = Fin4Messages and Fin4Claiming
+			let Fin4MainContract = context.drizzle.contracts.Fin4Main;
+			// can happen in parallel once Fin4Main is ready:
+			addSatelliteContracts(props, Fin4MainContract, context.drizzle); // = Fin4Messages and Fin4Claiming
+			fetchAllTokens(props, Fin4MainContract, () => {});
+			fetchUsersNonzeroTokenBalances(props, Fin4MainContract);
 		}
 
 		if (!isInit.current.Fin4Messages && props.contracts.Fin4Messages && props.contracts.Fin4Messages.initialized) {
 			isInit.current.Fin4Messages = true;
 			fetchMessages(props, context.drizzle.contracts.Fin4Messages);
+
+			// TODO message stubs
 		}
 
 		// TODO
