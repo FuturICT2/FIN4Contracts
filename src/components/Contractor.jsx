@@ -37,6 +37,16 @@ const findTokenBySymbol = (props, symb) => {
 	return null;
 };
 
+const isValidPublicAddress = addr => {
+	try {
+		let address = web3.utils.toChecksumAddress(addr);
+		return true;
+	} catch (e) {
+		console.error(e.message);
+		return false;
+	}
+};
+
 const fetchMessage = (Fin4MessagesContract, defaultAccount, messageId) => {
 	return getContractData(Fin4MessagesContract, defaultAccount, 'getMyMessage', messageId).then(
 		({
@@ -242,7 +252,8 @@ export {
 	fetchUsersNonzeroTokenBalances,
 	fetchCurrentUsersClaims,
 	fetchAndAddAllProofTypes,
-	findTokenBySymbol
+	findTokenBySymbol,
+	isValidPublicAddress
 };
 
 /*

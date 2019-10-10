@@ -7,6 +7,7 @@ import Button from '../../components/Button';
 import TextField from '@material-ui/core/TextField';
 import MessageIcon from '@material-ui/icons/Message';
 import AddressQRreader from '../../components/AddressQRreader';
+import { isValidPublicAddress } from '../../components/Contractor';
 
 function UserSite(props) {
 	const { t } = useTranslation();
@@ -41,7 +42,11 @@ function UserSite(props) {
 					<Button
 						icon={MessageIcon}
 						onClick={() => {
-							alert('TODO: Send ' + msgText.current);
+							if (!isValidPublicAddress(addressValue.current)) {
+								alert('Invalid Ethereum public address');
+								return;
+							}
+							// TODO
 						}}>
 						Send
 					</Button>
