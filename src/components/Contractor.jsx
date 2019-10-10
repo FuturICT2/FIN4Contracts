@@ -101,7 +101,7 @@ const fetchMessages = (props, Fin4MessagesContract) => {
 		});
 };
 
-const fetchAllTokens = (props, Fin4MainContract) => {
+const fetchAllTokens = (props, Fin4MainContract, callback) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4MainContract, defaultAccount, 'getAllFin4Tokens')
 		.then(tokens => {
@@ -125,6 +125,7 @@ const fetchAllTokens = (props, Fin4MainContract) => {
 				type: 'ADD_MULTIPLE_FIN4_TOKENS',
 				tokenArr: tokenArr
 			});
+			callback();
 		});
 };
 

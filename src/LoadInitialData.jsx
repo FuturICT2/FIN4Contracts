@@ -15,7 +15,8 @@ function LoadInitialData(props, context) {
 		// "once" flags
 		Fin4Main: false,
 		Fin4Messages: false,
-		Fin4Claiming: false
+		Fin4Claiming: false,
+		tokensFetched: false
 	});
 
 	useEffect(() => {
@@ -28,8 +29,10 @@ function LoadInitialData(props, context) {
 			let Fin4MainContract = context.drizzle.contracts.Fin4Main;
 			// can happen in parallel once Fin4Main is ready:
 			addSatelliteContracts(props, Fin4MainContract, context.drizzle); // = Fin4Messages and Fin4Claiming
-			fetchAllTokens(props, Fin4MainContract);
-			fetchUsersNonzeroTokenBalances(props, Fin4MainContract);
+			fetchAllTokens(props, Fin4MainContract, () => {
+				isInit.current.tokensFetched = true;
+				fetchUsersNonzeroTokenBalances(props, Fin4MainContract);
+			});
 			fetchAndAddAllProofTypes(props, Fin4MainContract, context.drizzle);
 		}
 
@@ -38,7 +41,12 @@ function LoadInitialData(props, context) {
 			fetchMessages(props, context.drizzle.contracts.Fin4Messages);
 		}
 
-		if (!isInit.current.Fin4Claiming && props.contracts.Fin4Claiming && props.contracts.Fin4Claiming.initialized) {
+		if (
+			!isInit.current.Fin4Claiming &&
+			props.contracts.Fin4Claiming &&
+			props.contracts.Fin4Claiming.initialized &&
+			isInit.current.tokensFetched
+		) {
 			isInit.current.Fin4Claiming = true;
 			fetchCurrentUsersClaims(props, context.drizzle.contracts.Fin4Claiming);
 		}
