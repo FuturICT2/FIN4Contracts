@@ -42,7 +42,7 @@ const findTokenBySymbol = (props, symb) => {
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4MainContract, defaultAccount, 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
-		addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, []);
+		addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, ['NewMessage']);
 	});
 	getContractData(Fin4MainContract, defaultAccount, 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
 		addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [

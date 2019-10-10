@@ -285,7 +285,7 @@ function fin4StoreReducer(state = initialState, action) {
 			});
 		case 'ADD_MESSAGE_STUB':
 			return Object.assign({}, state, {
-				messages: [...state.messages, ...action.oneMessage]
+				messages: [...state.messages, action.oneMessage]
 			});
 		default:
 			return state;
