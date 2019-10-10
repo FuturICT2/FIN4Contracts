@@ -9,25 +9,6 @@ import Web3 from 'web3';
 const BN = require('bignumber.js');
 const web3 = new Web3(window.ethereum);
 
-const getContract = (contractAddress, contractName) => {
-	const json = require('../build/contracts/' + contractName + '.json');
-	return new web3.eth.Contract(json.abi, contractAddress);
-};
-
-const getContractData_deprecated = (props, contractAddress, contractName, method, methodArgs) => {
-	let contract = getContract(contractAddress, contractName);
-	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-	if (methodArgs === undefined) {
-		return contract.methods[method]().call({
-			from: defaultAccount
-		});
-	} else {
-		return contract.methods[method](methodArgs).call({
-			from: defaultAccount
-		});
-	}
-};
-
 const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
 	if (methodArgs.length === 0) {
 		return contract.methods[method]().call({
@@ -301,4 +282,4 @@ const PollStatus = {
 };
 */
 
-export { getContractData, getContractData_deprecated, getContract, loadInitialDataIntoStore, findTokenBySymbol };
+export { getContractData, loadInitialDataIntoStore, findTokenBySymbol };
