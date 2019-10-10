@@ -37,6 +37,32 @@ const findTokenBySymbol = (props, symb) => {
 	return null;
 };
 
+const fetchMessage = (Fin4MessagesContract, defaultAccount, messageId) => {
+	return getContractData(Fin4MessagesContract, defaultAccount, 'getMyMessage', messageId).then(
+		({
+			0: messageId,
+			1: messageType,
+			2: sender,
+			3: senderStr,
+			4: message,
+			5: hasBeenActedUpon,
+			6: attachment,
+			7: pendingApprovalId
+		}) => {
+			return {
+				messageId: messageId.toString(),
+				messageType: messageType.toString(),
+				sender: sender,
+				proofTypeName: senderStr,
+				message: message,
+				hasBeenActedUpon: hasBeenActedUpon,
+				attachment: attachment,
+				pendingApprovalId: pendingApprovalId
+			};
+		}
+	);
+};
+
 // --------------------- LOAD INITIAL DATA ---------------------
 
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
@@ -63,29 +89,7 @@ const fetchMessages = (props, Fin4MessagesContract) => {
 				messageIndices.push(i);
 			}
 			return messageIndices.map(index => {
-				return getContractData(Fin4MessagesContract, defaultAccount, 'getMyMessage', index).then(
-					({
-						0: messageId,
-						1: messageType,
-						2: sender,
-						3: senderStr,
-						4: message,
-						5: hasBeenActedUpon,
-						6: attachment,
-						7: pendingApprovalId
-					}) => {
-						return {
-							messageId: messageId.toString(),
-							messageType: messageType.toString(),
-							sender: sender,
-							proofTypeName: senderStr,
-							message: message,
-							hasBeenActedUpon: hasBeenActedUpon,
-							attachment: attachment,
-							pendingApprovalId: pendingApprovalId
-						};
-					}
-				);
+				return fetchMessage(Fin4MessagesContract, defaultAccount, index);
 			});
 		})
 		.then(messages => Promise.all(messages))
