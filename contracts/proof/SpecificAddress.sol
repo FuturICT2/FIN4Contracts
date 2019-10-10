@@ -67,7 +67,7 @@ contract SpecificAddress is Fin4BaseProofType {
     require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
     Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pa.messageId);
 
-    string memory message = string(abi.encodePacked("User ", pa.approver,
+    string memory message = string(abi.encodePacked("User ", addressToString(pa.approver),
       " has rejected your approval request for ", Fin4TokenBase(pa.tokenAdrToReceiveProof).name()));
     Fin4Messages(_Fin4MessagesAddr()).addInfoMessage(address(this), pa.requester, message);
 
