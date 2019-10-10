@@ -8,8 +8,9 @@ import TextField from '@material-ui/core/TextField';
 import MessageIcon from '@material-ui/icons/Message';
 import AddressQRreader from '../../components/AddressQRreader';
 import { isValidPublicAddress } from '../../components/Contractor';
+import PropTypes from 'prop-types';
 
-function UserSite(props) {
+function UserSite(props, context) {
 	const { t } = useTranslation();
 
 	const [userAddressViaURL, setUserAddressViaURL] = useState(null);
@@ -22,6 +23,17 @@ function UserSite(props) {
 			setUserAddressViaURL(userAddress);
 		}
 	});
+
+	const sendMessage = () => {
+		context.drizzle.contracts.Fin4Messages.methods
+			.addUserMessage(addressValue.current, msgText.current)
+			.send({
+				from: props.store.getState().fin4Store.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
+	};
 
 	return (
 		<Container>
@@ -46,7 +58,7 @@ function UserSite(props) {
 								alert('Invalid Ethereum public address');
 								return;
 							}
-							// TODO
+							sendMessage();
 						}}>
 						Send
 					</Button>
@@ -58,8 +70,8 @@ function UserSite(props) {
 	);
 }
 
-const mapStateToProps = state => {
-	return {};
+UserSite.contextTypes = {
+	drizzle: PropTypes.object
 };
 
-export default drizzleConnect(UserSite, mapStateToProps);
+export default drizzleConnect(UserSite);
