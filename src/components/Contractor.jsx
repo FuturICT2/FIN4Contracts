@@ -23,10 +23,22 @@ const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
 
 // --------------------- ENTRY POINT ---------------------
 
+const addSatelliteContracts = (props, drizzle) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	getContractData(drizzle.contracts.Fin4Main, defaultAccount, 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
+		addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, []);
+	});
+	getContractData(drizzle.contracts.Fin4Main, defaultAccount, 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
+		addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
+			'ClaimSubmitted',
+			'ClaimApproved',
+			'OneProofOnClaimApproval'
+		]);
+	});
+};
+
 const loadInitialDataIntoStore = (props, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-
-	addContracts(props, drizzle, defaultAccount);
 
 	getAndAddAllProofTypes(props, drizzle, defaultAccount, () => {
 		getAllFin4Tokens(props, drizzle.contracts.Fin4Main, defaultAccount, () => {
@@ -45,19 +57,6 @@ const addContract = (props, drizzle, name, address, events) => {
 		web3Contract: new web3.eth.Contract(json.abi, address)
 	};
 	props.dispatch({ type: 'ADD_CONTRACT', drizzle, contractConfig, events, web3 });
-};
-
-const addContracts = (props, drizzle, defaultAccount) => {
-	getContractData(drizzle.contracts.Fin4Main, defaultAccount, 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
-		addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, []);
-	});
-	getContractData(drizzle.contracts.Fin4Main, defaultAccount, 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
-		addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
-			'ClaimSubmitted',
-			'ClaimApproved',
-			'OneProofOnClaimApproval'
-		]);
-	});
 };
 
 const getAllFin4Tokens = (props, Fin4MainContract, defaultAccount, callback) => {
@@ -282,4 +281,4 @@ const PollStatus = {
 };
 */
 
-export { getContractData, loadInitialDataIntoStore, findTokenBySymbol };
+export { getContractData, addSatelliteContracts, findTokenBySymbol };

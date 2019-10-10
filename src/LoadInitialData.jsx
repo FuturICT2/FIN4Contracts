@@ -1,18 +1,25 @@
 import React, { useEffect, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
-import { loadInitialDataIntoStore } from './components/Contractor';
+import { addSatelliteContracts } from './components/Contractor';
 import PropTypes from 'prop-types';
 
 function LoadInitialData(props, context) {
-	const onceFlags = useRef({
-		drizzleInit: false
+	const isInit = useRef({
+		// "once" flags
+		Fin4Main: false
 	});
 
 	useEffect(() => {
-		if (!onceFlags.current.drizzleInit && props.drizzleInitialized) {
-			onceFlags.current.drizzleInit = true;
-			loadInitialDataIntoStore(props, context.drizzle);
+		if (!props.drizzleInitialized) {
+			return; // we don't move a muscle until that is done
 		}
+
+		if (!isInit.current.Fin4Main && props.contracts.Fin4Main.initialized) {
+			isInit.current.Fin4Main = true;
+			addSatelliteContracts(props, context.drizzle); // = Fin4Messages and Fin4Claiming
+		}
+
+		// TODO
 	});
 
 	return null;
@@ -24,6 +31,7 @@ LoadInitialData.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
+		contracts: state.contracts,
 		drizzleInitialized: state.fin4Store.drizzleInitialized
 	};
 };
