@@ -24,7 +24,6 @@ function Messages(props, context) {
 	};
 
 	return (
-		props.messages.length > 0 &&
 		props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 && (
 			<Box title="Messages">
 				{props.messages
