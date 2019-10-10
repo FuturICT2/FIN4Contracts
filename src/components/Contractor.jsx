@@ -1,7 +1,8 @@
 import Web3 from 'web3';
-
 const BN = require('bignumber.js');
 const web3 = new Web3(window.ethereum);
+
+// --------------------- HELPER METHODS ---------------------
 
 const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
 	if (methodArgs.length === 0) {
@@ -15,7 +16,28 @@ const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
 	}
 };
 
-// --------------------- ENTRY POINT ---------------------
+const addContract = (props, drizzle, name, address, events) => {
+	const json = require('../build/contracts/' + name + '.json');
+	let contractConfig = {
+		contractName: name,
+		web3Contract: new web3.eth.Contract(json.abi, address)
+	};
+	props.dispatch({ type: 'ADD_CONTRACT', drizzle, contractConfig, events, web3 });
+};
+
+const findTokenBySymbol = (props, symb) => {
+	let symbol = symb.toUpperCase();
+	let keys = Object.keys(props.fin4Tokens);
+	for (let i = 0; i < keys.length; i++) {
+		let token = props.fin4Tokens[keys[i]];
+		if (token.symbol === symbol) {
+			return token;
+		}
+	}
+	return null;
+};
+
+// --------------------- LOAD INITIAL DATA ---------------------
 
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
@@ -73,15 +95,6 @@ const fetchMessages = (props, Fin4MessagesContract) => {
 				messagesArr: messages
 			});
 		});
-};
-
-const addContract = (props, drizzle, name, address, events) => {
-	const json = require('../build/contracts/' + name + '.json');
-	let contractConfig = {
-		contractName: name,
-		web3Contract: new web3.eth.Contract(json.abi, address)
-	};
-	props.dispatch({ type: 'ADD_CONTRACT', drizzle, contractConfig, events, web3 });
 };
 
 const fetchAllTokens = (props, Fin4MainContract) => {
@@ -213,16 +226,17 @@ const fetchCurrentUsersClaims = (props, Fin4ClaimingContract) => {
 		});
 };
 
-const findTokenBySymbol = (props, symb) => {
-	let symbol = symb.toUpperCase();
-	let keys = Object.keys(props.fin4Tokens);
-	for (let i = 0; i < keys.length; i++) {
-		let token = props.fin4Tokens[keys[i]];
-		if (token.symbol === symbol) {
-			return token;
-		}
-	}
-	return null;
+// -------------------------------------------------------------
+
+export {
+	getContractData,
+	addSatelliteContracts,
+	fetchMessages,
+	fetchAllTokens,
+	fetchUsersNonzeroTokenBalances,
+	fetchCurrentUsersClaims,
+	fetchAndAddAllProofTypes,
+	findTokenBySymbol
 };
 
 /*
@@ -272,7 +286,6 @@ const getPollStatus = pollID => {
 	);
 };
 
-
 const getTCRAddresses = props => {
 	getContractData_deprecated(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
 		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
@@ -306,14 +319,3 @@ const PollStatus = {
 	PAST_REVEAL_PERIOD: '-'
 };
 */
-
-export {
-	getContractData,
-	addSatelliteContracts,
-	fetchMessages,
-	fetchAllTokens,
-	fetchUsersNonzeroTokenBalances,
-	fetchCurrentUsersClaims,
-	fetchAndAddAllProofTypes,
-	findTokenBySymbol
-};
