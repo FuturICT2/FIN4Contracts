@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
-import Modal from './Modal';
-import { TextField, InputAdornment, IconButton } from '@material-ui/core';
+import { TextField, InputAdornment } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { BrowserQRCodeReader } from '@zxing/library';
@@ -10,20 +9,14 @@ import { BrowserQRCodeReader } from '@zxing/library';
 function AddressQRreader(props) {
 	const { t } = useTranslation();
 
-	const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+	const [videoElementVisible, setVideoElementVisible] = useState(false);
+	const [scannedAddress, setScannedAddress] = useState(null);
 	const [iconIsHovered, setIconHovered] = useState(false);
 
 	const codeReader = useRef(new BrowserQRCodeReader());
-	const [scannedAddress, setScannedAddress] = useState(null);
-
-	const toggleModal = () => {
-		if (isQRModalOpen) {
-			codeReader.current.stopStreams();
-		}
-		setIsQRModalOpen(!isQRModalOpen);
-	};
 
 	async function getAddressFromQRCode() {
+		setVideoElementVisible(true);
 		// via https://github.com/zxing-js/library
 		codeReader.current
 			.decodeFromInputVideoDevice(undefined, 'qr_vid')
@@ -35,13 +28,13 @@ function AddressQRreader(props) {
 				}
 				console.log('QR code read: ' + addr);
 				setScannedAddress(addr);
-				setIsQRModalOpen(false);
-				codeReader.current.stopStreams();
 			})
 			.catch(err => {
 				console.error(err);
-				setIsQRModalOpen(false);
+			})
+			.finally(() => {
 				codeReader.current.stopStreams();
+				setVideoElementVisible(false);
 			});
 	}
 
@@ -62,7 +55,6 @@ function AddressQRreader(props) {
 								style={iconIsHovered ? styles.QRiconHover : styles.QRicon}
 								icon={faQrcode}
 								onClick={() => {
-									toggleModal();
 									getAddressFromQRCode();
 								}}
 								onMouseEnter={() => setIconHovered(true)}
@@ -72,11 +64,11 @@ function AddressQRreader(props) {
 					)
 				}}
 			/>
-			<Modal isOpen={isQRModalOpen} handleClose={toggleModal} title="Scan QR Code" width="324px">
+			{videoElementVisible && (
 				<center>
 					<video id="qr_vid" width="300" height="200"></video>
 				</center>
-			</Modal>
+			)}
 		</>
 	);
 }
