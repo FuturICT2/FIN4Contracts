@@ -28,15 +28,15 @@ contract Fin4Messages {
     m.sender = sender;
     m.receiver = receiver;
     m.message = message;
+    m.messageId = messages[receiver].length;
     messages[receiver].push(m);
-    m.messageId = messages[receiver].length - 1;
     emit NewMessage(receiver, m.messageId);
     return m.messageId;
   }
 
   function addPendingApprovalMessage(address sender, string memory senderStr, address receiver, string memory message,
     string memory attachment, uint pendingApprovalId) public returns(uint) {
-    uint messageId = messages[receiver].length - 1;
+    uint messageId = messages[receiver].length;
     Message memory m = Message(
       messageId, uint(MessageType.APPROVAL), sender, senderStr, receiver, message, false, attachment, pendingApprovalId);
     messages[receiver].push(m);
