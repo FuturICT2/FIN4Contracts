@@ -44,6 +44,17 @@ function Messages(props, context) {
 			});
 	};
 
+	const markAsRead = messageId => {
+		context.drizzle.contracts.Fin4Messages.methods
+			.markMessageAsActedUpon(props.defaultAccount, messageId)
+			.send({
+				from: props.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
+	};
+
 	const getIntroText = messageType => {
 		switch (messageType) {
 			case '0':
@@ -111,7 +122,7 @@ function Messages(props, context) {
 								)}
 								<Divider style={{ margin: '10px 0' }} variant="middle" />
 								<center>
-									<MsgResponseLink onClick={() => {}}>MARK AS READ</MsgResponseLink>
+									<MsgResponseLink onClick={() => markAsRead(msg.messageId)}>MARK AS READ</MsgResponseLink>
 									{msg.messageType !== '0' && (
 										<>
 											&nbsp;&nbsp;&nbsp;
