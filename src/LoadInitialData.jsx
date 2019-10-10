@@ -1,23 +1,21 @@
-import { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { loadInitialDataIntoStore } from './components/Contractor';
 import PropTypes from 'prop-types';
 
-class LoadInitialData extends Component {
-	constructor(props, context) {
-		super(props);
-		this.drizzle = context.drizzle;
-	}
+function LoadInitialData(props, context) {
+	const onceFlags = useRef({
+		drizzleInit: false
+	});
 
-	componentWillReceiveProps(nextProps) {
-		if (this.props.drizzleInitialized !== nextProps.drizzleInitialized) {
-			loadInitialDataIntoStore(nextProps, this.drizzle);
+	useEffect(() => {
+		if (!onceFlags.current.drizzleInit && props.drizzleInitialized) {
+			onceFlags.current.drizzleInit = true;
+			loadInitialDataIntoStore(props, context.drizzle);
 		}
-	}
+	});
 
-	render() {
-		return null;
-	}
+	return null;
 }
 
 LoadInitialData.contextTypes = {
