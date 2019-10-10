@@ -24,7 +24,7 @@ contract Fin4Messages {
   mapping (address => Message[]) public messages;
 
   function addMessage(uint messageType, address sender, address receiver, string memory message)
-    private returns (Message memory messageObj) {
+    private returns (uint) {
     Message memory m;
     m.messageType = messageType;
     m.sender = sender;
@@ -32,29 +32,30 @@ contract Fin4Messages {
     m.message = message;
     m.messageId = messages[receiver].length;
     messages[receiver].push(m);
-    return m;
+    return m.messageId;
   }
 
   function addUserMessage(address receiver, string memory message) public returns(uint) {
-    Message memory m = addMessage(uint(MessageType.USER2USER), msg.sender, receiver, message);
-    emit NewMessage(receiver, m.messageId);
+    uint messageId = addMessage(uint(MessageType.USER2USER), msg.sender, receiver, message);
+    emit NewMessage(receiver, messageId);
   }
 
   function addInfoMessage(address sender, address receiver, string memory message) public returns(uint) {
-    Message memory m = addMessage(uint(MessageType.INFO), sender, receiver, message);
-    emit NewMessage(receiver, m.messageId);
-    return m.messageId;
+    uint messageId = addMessage(uint(MessageType.INFO), sender, receiver, message);
+    emit NewMessage(receiver, messageId);
+    return messageId;
   }
 
   function addPendingApprovalMessage(address sender, string memory senderStr, address receiver, string memory message,
     string memory attachment, uint pendingApprovalId) public returns(uint) {
-    Message memory m = addMessage(uint(MessageType.APPROVAL), sender, receiver, message);
+    uint messageId = addMessage(uint(MessageType.APPROVAL), sender, receiver, message);
+    Message storage m = messages[receiver][messageId];
     m.senderStr = senderStr;
     m.hasBeenActedUpon = false;
     m.attachment = attachment;
     m.pendingApprovalId = pendingApprovalId;
-    emit NewMessage(receiver, m.messageId);
-    return m.messageId;
+    emit NewMessage(receiver, messageId);
+    return messageId;
   }
 
   function getMyMessagesCount() public view returns(uint) {
