@@ -2,18 +2,6 @@
 import { generateStore, EventActions } from 'drizzle';
 import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
-import {
-	ADD_FIN4_TOKEN,
-	ADD_MULTIPLE_FIN4_TOKENS,
-	ADD_CLAIM,
-	ADD_MULTIPLE_CLAIMS,
-	APPROVE_CLAIM,
-	UPDATE_BALANCE,
-	UPDATE_MULTIPLE_BALANCES,
-	ADD_MULTIPLE_PROOF_TYPES,
-	ONE_PROOF_ON_CLAIM_APPROVAL,
-	ADD_MULTIPLE_MESSAGES
-} from './actionTypes';
 const BN = require('bignumber.js');
 
 const contractEventNotifier = store => next => action => {
@@ -39,7 +27,7 @@ const contractEventNotifier = store => next => action => {
 		display = 'New Fin4 token created: ' + name + ' [' + symbol + ']';
 
 		store.dispatch({
-			type: ADD_FIN4_TOKEN,
+			type: 'ADD_FIN4_TOKEN',
 			token: {
 				address: address,
 				name: name,
@@ -72,7 +60,7 @@ const contractEventNotifier = store => next => action => {
 		}
 
 		store.dispatch({
-			type: ADD_CLAIM,
+			type: 'ADD_CLAIM',
 			claim: {
 				id: id,
 				token: claim.tokenAddr,
@@ -103,12 +91,12 @@ const contractEventNotifier = store => next => action => {
 			'Claim approved: you got ' + usersClaims[id].quantity + ' ' + token.name + ' [' + token.symbol + '] tokens';
 
 		store.dispatch({
-			type: APPROVE_CLAIM,
+			type: 'APPROVE_CLAIM',
 			id: id
 		});
 
 		store.dispatch({
-			type: UPDATE_BALANCE,
+			type: 'UPDATE_BALANCE',
 			tokenAddress: claim.tokenAddr,
 			balance: Number(claim.newBalance)
 		});
@@ -134,7 +122,7 @@ const contractEventNotifier = store => next => action => {
 		display = 'One proof of your claim got approved'; // TODO show more info
 
 		store.dispatch({
-			type: ONE_PROOF_ON_CLAIM_APPROVAL,
+			type: 'ONE_PROOF_ON_CLAIM_APPROVAL',
 			pseudoClaimId: pseudoClaimId,
 			proofType: approvedProof.proofTypeAddress
 		});
@@ -171,7 +159,7 @@ function fin4StoreReducer(state = initialState, action) {
 				...state,
 				drizzleInitialized: true
 			};
-		case ADD_FIN4_TOKEN:
+		case 'ADD_FIN4_TOKEN':
 			return {
 				...state,
 				fin4Tokens: {
@@ -179,7 +167,7 @@ function fin4StoreReducer(state = initialState, action) {
 					[action.token.address]: action.token
 				}
 			};
-		case ADD_MULTIPLE_FIN4_TOKENS:
+		case 'ADD_MULTIPLE_FIN4_TOKENS':
 			for (i = 0; i < action.tokenArr.length; i++) {
 				let token = action.tokenArr[i];
 				state = {
@@ -191,7 +179,7 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
-		case ADD_CLAIM:
+		case 'ADD_CLAIM':
 			return {
 				...state,
 				usersClaims: {
@@ -199,7 +187,7 @@ function fin4StoreReducer(state = initialState, action) {
 					[action.claim.id]: action.claim
 				}
 			};
-		case ADD_MULTIPLE_CLAIMS:
+		case 'ADD_MULTIPLE_CLAIMS':
 			for (i = 0; i < action.claimArr.length; i++) {
 				let claim = action.claimArr[i];
 				state = {
@@ -211,7 +199,7 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
-		case APPROVE_CLAIM:
+		case 'APPROVE_CLAIM':
 			return {
 				...state,
 				usersClaims: {
@@ -222,7 +210,7 @@ function fin4StoreReducer(state = initialState, action) {
 					}
 				}
 			};
-		case UPDATE_BALANCE:
+		case 'UPDATE_BALANCE':
 			return {
 				...state,
 				usersBalances: {
@@ -230,7 +218,7 @@ function fin4StoreReducer(state = initialState, action) {
 					[action.tokenAddress]: action.balance
 				}
 			};
-		case UPDATE_MULTIPLE_BALANCES:
+		case 'UPDATE_MULTIPLE_BALANCES':
 			for (i = 0; i < action.tokenAddresses.length; i++) {
 				state = {
 					...state,
@@ -241,7 +229,7 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
-		case ADD_MULTIPLE_PROOF_TYPES:
+		case 'ADD_MULTIPLE_PROOF_TYPES':
 			for (i = 0; i < action.proofTypesArr.length; i++) {
 				let proofType = action.proofTypesArr[i];
 				state = {
@@ -253,7 +241,7 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
-		case ONE_PROOF_ON_CLAIM_APPROVAL:
+		case 'ONE_PROOF_ON_CLAIM_APPROVAL':
 			return {
 				...state,
 				usersClaims: {
@@ -267,7 +255,7 @@ function fin4StoreReducer(state = initialState, action) {
 					}
 				}
 			};
-		case ADD_MULTIPLE_MESSAGES:
+		case 'ADD_MULTIPLE_MESSAGES':
 			return Object.assign({}, state, {
 				messages: [...state.messages, ...action.messagesArr]
 			});

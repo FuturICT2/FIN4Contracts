@@ -1,10 +1,3 @@
-import {
-	ADD_MULTIPLE_FIN4_TOKENS,
-	ADD_MULTIPLE_CLAIMS,
-	UPDATE_MULTIPLE_BALANCES,
-	ADD_MULTIPLE_PROOF_TYPES,
-	ADD_MULTIPLE_MESSAGES
-} from '../middleware/actionTypes';
 import Web3 from 'web3';
 
 const BN = require('bignumber.js');
@@ -74,7 +67,7 @@ const fetchMessages = (props, Fin4MessagesContract) => {
 		.then(messages => Promise.all(messages))
 		.then(messages => {
 			props.dispatch({
-				type: ADD_MULTIPLE_MESSAGES,
+				type: 'ADD_MULTIPLE_MESSAGES',
 				messagesArr: messages
 			});
 		});
@@ -122,7 +115,7 @@ const getAllFin4Tokens = (props, Fin4MainContract, defaultAccount, callback) => 
 		.then(promises => Promise.all(promises))
 		.then(tokenArr => {
 			props.dispatch({
-				type: ADD_MULTIPLE_FIN4_TOKENS,
+				type: 'ADD_MULTIPLE_FIN4_TOKENS',
 				tokenArr: tokenArr
 			});
 			callback();
@@ -136,7 +129,7 @@ const getMyNonzeroTokenBalances = (props, Fin4MainContract, defaultAccount) => {
 				return;
 			}
 			props.dispatch({
-				type: UPDATE_MULTIPLE_BALANCES,
+				type: 'UPDATE_MULTIPLE_BALANCES',
 				tokenAddresses: nonzeroBalanceTokens,
 				balances: balancesBN.map(balanceBN => new BN(balanceBN).toNumber())
 			});
@@ -167,7 +160,7 @@ const getAndAddAllProofTypes = (props, drizzle, defaultAccount, callback) => {
 		.then(data => Promise.all(data))
 		.then(data => {
 			props.dispatch({
-				type: ADD_MULTIPLE_PROOF_TYPES,
+				type: 'ADD_MULTIPLE_PROOF_TYPES',
 				proofTypesArr: data
 			});
 			callback();
@@ -224,7 +217,7 @@ const getAllCurrentUsersClaims = (props, Fin4ClaimingContract, defaultAccount) =
 		.then(promises => Promise.all(promises))
 		.then(claimArr => {
 			props.dispatch({
-				type: ADD_MULTIPLE_CLAIMS,
+				type: 'ADD_MULTIPLE_CLAIMS',
 				claimArr: claimArr
 			});
 		});
