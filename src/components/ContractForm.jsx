@@ -21,7 +21,7 @@ import OpenIcon from '@material-ui/icons/OpenInNew';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { getContract, findTokenBySymbol } from './Contractor.jsx';
+import { findTokenBySymbol } from './Contractor.jsx';
 
 const translateType = type => {
 	switch (true) {
@@ -37,8 +37,10 @@ const translateType = type => {
 };
 
 class ContractForm extends Component {
-	constructor(props) {
+	constructor(props, context) {
 		super(props);
+
+		this.drizzle = context.drizzle;
 
 		this.newValue = null;
 
@@ -175,8 +177,7 @@ class ContractForm extends Component {
 		}
 
 		let self = this;
-		getContract(this.contractAddress, this.contractName)
-			.methods[this.props.method](...convertedInputs)
+		this.drizzle.contracts[this.contractName].methods[this.props.method](...convertedInputs)
 			.send({
 				from: this.props.store.getState().fin4Store.defaultAccount
 			})
