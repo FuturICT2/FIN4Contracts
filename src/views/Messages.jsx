@@ -54,7 +54,7 @@ function Messages(props, context) {
 									{msg.message}.
 								</Typography>
 								{/* Fin4Messages.sol: enum MessageType { INFO, APPROVAL, USER2USER } */}
-								{msg.messageType === '0' && TODO}
+								{msg.messageType === '0' && <div>TODO</div>}
 								{msg.messageType === '1' && (
 									<>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
@@ -78,7 +78,7 @@ function Messages(props, context) {
 										</Button>
 									</>
 								)}
-								{msg.messageType === '2' && TODO}
+								{msg.messageType === '2' && <div>TODO</div>}
 							</Message>
 						);
 					})}
