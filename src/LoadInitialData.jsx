@@ -36,8 +36,6 @@ function LoadInitialData(props, context) {
 		if (!isInit.current.Fin4Messages && props.contracts.Fin4Messages && props.contracts.Fin4Messages.initialized) {
 			isInit.current.Fin4Messages = true;
 			fetchMessages(props, context.drizzle.contracts.Fin4Messages);
-
-			// TODO message stubs
 		}
 
 		if (!isInit.current.Fin4Claiming && props.contracts.Fin4Claiming && props.contracts.Fin4Claiming.initialized) {

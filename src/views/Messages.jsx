@@ -8,12 +8,27 @@ import { Typography, Divider, Paper } from '@material-ui/core';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@material-ui/icons/Add';
+import { fetchMessage } from '../components/Contractor';
 
 function Messages(props, context) {
 	const { t } = useTranslation();
 
 	useEffect(() => {
-		// TODO fetch full message in case of stub
+		// missing messageType = indicator that this is only a message stub
+		props.messages
+			.filter(msg => !msg.messageType)
+			.map(msg => {
+				fetchMessage(
+					context.drizzle.contracts.Fin4Messages,
+					props.store.getState().fin4Store.defaultAccount,
+					msg.messageId
+				).then(message => {
+					props.dispatch({
+						type: 'UPDATE_STUB_MESSAGE',
+						message: message
+					});
+				});
+			});
 	});
 
 	const submitApproval = (proofTypeName, pendingApprovalId) => {

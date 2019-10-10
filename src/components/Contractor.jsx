@@ -235,6 +235,7 @@ const fetchCurrentUsersClaims = (props, Fin4ClaimingContract) => {
 export {
 	getContractData,
 	addSatelliteContracts,
+	fetchMessage,
 	fetchMessages,
 	fetchAllTokens,
 	fetchUsersNonzeroTokenBalances,

@@ -2,6 +2,7 @@
 import { generateStore, EventActions } from 'drizzle';
 import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
+import update from 'react-addons-update';
 const BN = require('bignumber.js');
 
 const contractEventNotifier = store => next => action => {
@@ -286,6 +287,21 @@ function fin4StoreReducer(state = initialState, action) {
 		case 'ADD_MESSAGE_STUB':
 			return Object.assign({}, state, {
 				messages: [...state.messages, action.oneMessage]
+			});
+		case 'UPDATE_STUB_MESSAGE':
+			let msg = action.message;
+			return update(state, {
+				messages: {
+					[msg.messageId]: {
+						messageType: { $set: msg.messageType },
+						sender: { $set: msg.sender },
+						proofTypeName: { $set: msg.proofTypeName },
+						message: { $set: msg.message },
+						hasBeenActedUpon: { $set: msg.hasBeenActedUpon },
+						attachment: { $set: msg.attachment },
+						pendingApprovalId: { $set: msg.pendingApprovalId }
+					}
+				}
 			});
 		default:
 			return state;
