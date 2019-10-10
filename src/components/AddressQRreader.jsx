@@ -38,14 +38,14 @@ function AddressQRreader(props) {
 				console.log('QR code read: ' + addr);
 				setAddressValue(addr);
 			})
-			.catch(err => {
-				console.error(err);
-			})
-			.finally(() => {
-				codeReader.current.stopStreams();
-				setVideoElementVisible(false);
-			});
+			.catch(err => console.error(err))
+			.finally(() => stopScanning());
 	}
+
+	const stopScanning = () => {
+		codeReader.current.stopStreams();
+		setVideoElementVisible(false);
+	};
 
 	return (
 		<>
@@ -76,6 +76,10 @@ function AddressQRreader(props) {
 			{videoElementVisible && (
 				<center>
 					<video id="qr_vid" width="300" height="200"></video>
+					<br />
+					<a style={styles.cancelLink} onClick={() => stopScanning()}>
+						Cancel
+					</a>
 				</center>
 			)}
 		</>
@@ -99,6 +103,11 @@ const styles = {
 		marginBottom: '15px'
 	},
 	smallFont: {
+		fontSize: 'small'
+	},
+	cancelLink: {
+		color: 'red',
+		fontFamily: 'arial',
 		fontSize: 'small'
 	}
 };
