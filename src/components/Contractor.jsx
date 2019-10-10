@@ -75,19 +75,6 @@ const fetchMessages = (props, Fin4MessagesContract) => {
 		});
 };
 
-const loadInitialDataIntoStore = (props, drizzle) => {
-	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-
-	getAndAddAllProofTypes(props, drizzle, defaultAccount, () => {
-		getAllFin4Tokens(props, drizzle.contracts.Fin4Main, defaultAccount, () => {
-			getMyNonzeroTokenBalances(props, drizzle.contracts.Fin4Main, defaultAccount);
-			getAllCurrentUsersClaims(props, drizzle.contracts.Fin4Claiming, defaultAccount);
-		});
-	});
-};
-
-// -------------------------------------------------------
-
 const addContract = (props, drizzle, name, address, events) => {
 	const json = require('../build/contracts/' + name + '.json');
 	let contractConfig = {
@@ -97,7 +84,7 @@ const addContract = (props, drizzle, name, address, events) => {
 	props.dispatch({ type: 'ADD_CONTRACT', drizzle, contractConfig, events, web3 });
 };
 
-const fetchAllTokens = (props, Fin4MainContract, callback) => {
+const fetchAllTokens = (props, Fin4MainContract) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4MainContract, defaultAccount, 'getAllFin4Tokens')
 		.then(tokens => {
@@ -121,7 +108,6 @@ const fetchAllTokens = (props, Fin4MainContract, callback) => {
 				type: 'ADD_MULTIPLE_FIN4_TOKENS',
 				tokenArr: tokenArr
 			});
-			callback();
 		});
 };
 
