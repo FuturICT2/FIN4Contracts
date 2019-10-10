@@ -20,7 +20,7 @@ function AddressQRreader(props) {
 	useEffect(() => {
 		if (props.initialValue && !initialValueAdopted.current) {
 			initialValueAdopted.current = true;
-			setAddressValue(props.initialValue);
+			updateAddressValue(props.initialValue);
 		}
 	});
 
@@ -36,11 +36,16 @@ function AddressQRreader(props) {
 					addr = addr.substring(9, addr.length);
 				}
 				console.log('QR code read: ' + addr);
-				setAddressValue(addr);
+				updateAddressValue(addr);
 			})
 			.catch(err => console.error(err))
 			.finally(() => stopScanning());
 	}
+
+	const updateAddressValue = val => {
+		setAddressValue(val);
+		props.onChange(val);
+	};
 
 	const stopScanning = () => {
 		codeReader.current.stopStreams();
@@ -55,7 +60,7 @@ function AddressQRreader(props) {
 				style={styles.inputField}
 				variant="outlined"
 				value={addressValue ? addressValue : ''}
-				onChange={e => setAddressValue(e.target.value)}
+				onChange={e => updateAddressValue(e.target.value)}
 				InputProps={{
 					style: { fontSize: 'small' },
 					endAdornment: (

@@ -13,6 +13,7 @@ function UserSite(props) {
 
 	const [userAddressViaURL, setUserAddressViaURL] = useState(null);
 	const msgText = useRef('');
+	const addressValue = useRef('');
 
 	useEffect(() => {
 		let userAddress = props.match.params.userAddress;
@@ -25,7 +26,7 @@ function UserSite(props) {
 		<Container>
 			<Box title="Send message to user">
 				<center>
-					<AddressQRreader initialValue={userAddressViaURL} />
+					<AddressQRreader initialValue={userAddressViaURL} onChange={val => (addressValue.current = val)} />
 					<br />
 					<TextField
 						label="Message text"
