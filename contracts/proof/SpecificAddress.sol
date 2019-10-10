@@ -56,9 +56,23 @@ contract SpecificAddress is Fin4BaseProofType {
 
   function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
     PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
-    require(pa.approver == msg.sender, "This address is not registered as approver for any pending approval");
+    require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
     Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pa.messageId);
     _sendApproval(address(this), pa.tokenAdrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
+    return true;
+  }
+
+  function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
+    PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
+    require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
+    Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pa.messageId);
+
+    string memory message = string(abi.encodePacked("User ", pa.approver,
+      " has rejected your approval request for ", Fin4TokenBase(pa.tokenAdrToReceiveProof).name()));
+    Fin4Messages(_Fin4MessagesAddr()).addInfoMessage(address(this), pa.requester, message);
+
+    // TODO boolean flag in PendingApproval? #ConceptualDecision
+
     return true;
   }
 

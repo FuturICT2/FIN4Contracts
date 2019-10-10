@@ -33,9 +33,20 @@ function Messages(props, context) {
 			});
 	});
 
-	const submitApproval = (proofTypeName, pendingApprovalId) => {
+	const approveRequest = (proofTypeName, pendingApprovalId) => {
 		context.drizzle.contracts[proofTypeName].methods
 			.receiveApprovalFromSpecificAddress(pendingApprovalId)
+			.send({
+				from: props.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
+	};
+
+	const rejectRequest = (proofTypeName, pendingApprovalId) => {
+		context.drizzle.contracts[proofTypeName].methods
+			.receiveRejectionFromSpecificAddress(pendingApprovalId)
 			.send({
 				from: props.defaultAccount
 			})
@@ -106,13 +117,16 @@ function Messages(props, context) {
 												<Button
 													color="inherit"
 													icon={ThumbUpIcon}
-													onClick={() => submitApproval(msg.proofTypeName, msg.pendingApprovalId)}>
+													onClick={() => approveRequest(msg.proofTypeName, msg.pendingApprovalId)}>
 													Approve
 												</Button>
 											</span>
 											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											<span style={{ color: 'red' }}>
-												<Button color="inherit" icon={ThumbDownIcon} onClick={() => {}}>
+												<Button
+													color="inherit"
+													icon={ThumbDownIcon}
+													onClick={() => rejectRequest(msg.proofTypeName, msg.pendingApprovalId)}>
 													Reject
 												</Button>
 											</span>
