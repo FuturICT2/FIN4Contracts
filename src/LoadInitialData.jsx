@@ -4,7 +4,8 @@ import {
 	addSatelliteContracts,
 	fetchMessages,
 	fetchAllTokens,
-	fetchUsersNonzeroTokenBalances
+	fetchUsersNonzeroTokenBalances,
+	fetchCurrentUsersClaims
 } from './components/Contractor';
 import PropTypes from 'prop-types';
 
@@ -12,7 +13,8 @@ function LoadInitialData(props, context) {
 	const isInit = useRef({
 		// "once" flags
 		Fin4Main: false,
-		Fin4Messages: false
+		Fin4Messages: false,
+		Fin4Claiming: false
 	});
 
 	useEffect(() => {
@@ -36,7 +38,12 @@ function LoadInitialData(props, context) {
 			// TODO message stubs
 		}
 
-		// TODO
+		if (!isInit.current.Fin4Claiming && props.contracts.Fin4Claiming && props.contracts.Fin4Claiming.initialized) {
+			isInit.current.Fin4Claiming = true;
+			fetchCurrentUsersClaims(props, context.drizzle.contracts.Fin4Claiming);
+		}
+
+		// TODO proofs
 	});
 
 	return null;
