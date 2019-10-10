@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { fetchMessage } from '../components/Contractor';
+import history from '../components/history';
 
 function Messages(props, context) {
 	const { t } = useTranslation();
@@ -114,7 +115,12 @@ function Messages(props, context) {
 									{msg.messageType !== '0' && (
 										<>
 											&nbsp;&nbsp;&nbsp;
-											<MsgResponseLink onClick={() => {}}>REPLY</MsgResponseLink>
+											<MsgResponseLink
+												onClick={() => {
+													history.push('/user/message/' + msg.sender);
+												}}>
+												REPLY
+											</MsgResponseLink>
 										</>
 									)}
 								</center>
