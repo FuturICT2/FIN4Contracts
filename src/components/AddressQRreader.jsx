@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import { TextField, InputAdornment } from '@material-ui/core';
@@ -10,10 +10,19 @@ function AddressQRreader(props) {
 	const { t } = useTranslation();
 
 	const [videoElementVisible, setVideoElementVisible] = useState(false);
-	const [scannedAddress, setScannedAddress] = useState(null);
+	const [addressValue, setAddressValue] = useState(null);
 	const [iconIsHovered, setIconHovered] = useState(false);
 
 	const codeReader = useRef(new BrowserQRCodeReader());
+
+	const initialValueAdopted = useRef(false);
+
+	useEffect(() => {
+		if (props.initialValue && !initialValueAdopted.current) {
+			initialValueAdopted.current = true;
+			setAddressValue(props.initialValue);
+		}
+	});
 
 	async function getAddressFromQRCode() {
 		setVideoElementVisible(true);
@@ -27,7 +36,7 @@ function AddressQRreader(props) {
 					addr = addr.substring(9, addr.length);
 				}
 				console.log('QR code read: ' + addr);
-				setScannedAddress(addr);
+				setAddressValue(addr);
 			})
 			.catch(err => {
 				console.error(err);
@@ -45,8 +54,8 @@ function AddressQRreader(props) {
 				label="Public address"
 				style={styles.inputField}
 				variant="outlined"
-				value={scannedAddress ? scannedAddress : ''}
-				onChange={e => setScannedAddress(e.target.value)}
+				value={addressValue ? addressValue : ''}
+				onChange={e => setAddressValue(e.target.value)}
 				InputProps={{
 					style: { fontSize: 'small' },
 					endAdornment: (

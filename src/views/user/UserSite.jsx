@@ -25,7 +25,7 @@ function UserSite(props) {
 		<Container>
 			<Box title="Send message to user">
 				<center>
-					<AddressQRreader />
+					<AddressQRreader initialValue={userAddressViaURL} />
 					<br />
 					<TextField
 						label="Message text"
