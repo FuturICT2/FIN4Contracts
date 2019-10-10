@@ -7,7 +7,8 @@ import Photo from '@material-ui/icons/Photo';
 import { Typography, Divider, Paper } from '@material-ui/core';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import AddIcon from '@material-ui/icons/Add';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { fetchMessage } from '../components/Contractor';
 
 function Messages(props, context) {
@@ -42,6 +43,17 @@ function Messages(props, context) {
 			});
 	};
 
+	const getIntroText = messageType => {
+		switch (messageType) {
+			case '0':
+				return 'Info';
+			case '1':
+				return 'Approval Request';
+			case '2':
+				return 'From User';
+		}
+	};
+
 	return (
 		props.messages.filter(msg => !msg.hasBeenActedUpon && msg.messageType).length > 0 && (
 			<Box title="Messages">
@@ -50,35 +62,62 @@ function Messages(props, context) {
 					.map((msg, index) => {
 						return (
 							<Message key={`${msg.proofTypeName}_${msg.pendingApprovalId}_${index}`}>
+								<span style={{ color: 'gray' }}>
+									<Typography color="inherit" variant="body2">
+										<b>{getIntroText(msg.messageType).toUpperCase()}</b>
+									</Typography>
+								</span>
 								<Typography color="textSecondary" variant="body2">
-									{msg.message}.
+									{msg.message}
 								</Typography>
 								{/* Fin4Messages.sol: enum MessageType { INFO, APPROVAL, USER2USER } */}
-								{msg.messageType === '0' && <div>TODO</div>}
 								{msg.messageType === '1' && (
 									<>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />
 										<Typography color="textSecondary" variant="body2">
 											Requested by {msg.sender}
 										</Typography>
-										<Divider style={{ margin: '10px 0' }} variant="middle" />
+										<br />
 										{msg.attachment && msg.attachment.length > 0 && (
-											<Button
-												center="true"
-												icon={Photo}
-												onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
-												Click to see the image
-											</Button>
+											<>
+												<Button
+													center="true"
+													icon={Photo}
+													onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
+													Click to see the image
+												</Button>
+												<br />
+											</>
 										)}
-										<Button
-											icon={AddIcon}
-											onClick={() => submitApproval(msg.proofTypeName, msg.pendingApprovalId)}
-											center="true">
-											Approve
-										</Button>
+										<center>
+											<span style={{ color: 'green' }}>
+												<Button
+													color="inherit"
+													icon={ThumbUpIcon}
+													onClick={() => submitApproval(msg.proofTypeName, msg.pendingApprovalId)}>
+													Approve
+												</Button>
+											</span>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											<span style={{ color: 'red' }}>
+												<Button color="inherit" icon={ThumbDownIcon} onClick={() => {}}>
+													Reject
+												</Button>
+											</span>
+										</center>
+										<br />
 									</>
 								)}
-								{msg.messageType === '2' && <div>TODO</div>}
+								<Divider style={{ margin: '10px 0' }} variant="middle" />
+								<center>
+									<MsgResponseLink onClick={() => {}}>MARK AS READ</MsgResponseLink>
+									{msg.messageType !== '0' && (
+										<>
+											&nbsp;&nbsp;&nbsp;
+											<MsgResponseLink onClick={() => {}}>REPLY</MsgResponseLink>
+										</>
+									)}
+								</center>
 							</Message>
 						);
 					})}
@@ -86,6 +125,13 @@ function Messages(props, context) {
 		)
 	);
 }
+
+const MsgResponseLink = styled.a`
+	font-family: arial;
+	color: gray;
+	font-size: small;
+	text-decoration: underline;
+`;
 
 const Message = styled(Paper)`
 	&& {
