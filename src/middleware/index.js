@@ -109,9 +109,9 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
-	// ------------------------------ OneProofOnClaimApproval ------------------------------
+	// ------------------------------ ProofApproved ------------------------------
 
-	if (contractEvent === 'OneProofOnClaimApproval') {
+	if (contractEvent === 'ProofApproved') {
 		let approvedProof = action.event.returnValues;
 		let belongsToCurrentUsersClaim = approvedProof.claimer === defaultAccount;
 		let pseudoClaimId = approvedProof.tokenAdrToReceiveProof + '_' + approvedProof.claimId;
@@ -131,7 +131,7 @@ const contractEventNotifier = store => next => action => {
 		display = 'One proof of your claim got approved'; // TODO show more info
 
 		store.dispatch({
-			type: 'ONE_PROOF_ON_CLAIM_APPROVAL',
+			type: 'APPROVE_PROOF',
 			pseudoClaimId: pseudoClaimId,
 			proofType: approvedProof.proofTypeAddress
 		});
@@ -294,7 +294,7 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
-		case 'ONE_PROOF_ON_CLAIM_APPROVAL':
+		case 'APPROVE_PROOF':
 			return {
 				...state,
 				usersClaims: {

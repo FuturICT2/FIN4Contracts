@@ -7,7 +7,7 @@ contract Fin4Claiming {
     event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment,
         address[] requiredProofTypes);
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
-    event OneProofOnClaimApproval(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
+    event ProofApproved(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
 
     address public Fin4MainAddress;
 
@@ -35,7 +35,7 @@ contract Fin4Claiming {
     }
 
     function proofApprovalPingback(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public {
-        emit OneProofOnClaimApproval(tokenAdrToReceiveProof, proofTypeAddress, claimId, claimer);
+        emit ProofApproved(tokenAdrToReceiveProof, proofTypeAddress, claimId, claimer);
     }
 
     // called from Fin4TokenBase
