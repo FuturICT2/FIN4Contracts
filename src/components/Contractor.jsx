@@ -169,7 +169,7 @@ const fetchAndAddAllProofTypes = (props, Fin4MainContract, drizzle) => {
 							label: name,
 							description: description,
 							paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
-							paramValues: {}
+							paramValues: {} // TODO remove this weird placeholder to be used in ContractForm
 						};
 					}
 				);

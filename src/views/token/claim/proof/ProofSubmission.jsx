@@ -12,22 +12,26 @@ import Container from '../../../../components/Container';
 import PropTypes from 'prop-types';
 
 function ProofSubmission(props, context) {
-	const [proofData, setProofData] = useState(null);
 	const [ipfsHash, setIpfsHash] = useState(null);
-	const [tokenViaURL, setTokenViaURL] = useState(null);
-	const [claimViaURL, setClaimViaURL] = useState(null);
+	const [pseudoClaimId, setPseudoClaimId] = useState(null);
 
 	useEffect(() => {
 		let symbol = props.match.params.tokenSymbol;
-		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0 && symbol) {
+		if (
+			!pseudoClaimId &&
+			Object.keys(props.fin4Tokens).length > 0 &&
+			Object.keys(props.proofTypes).length > 0 &&
+			symbol
+		) {
 			let token = findTokenBySymbol(props, symbol);
+			if (!token) {
+				return;
+			}
 			let claimId = props.match.params.claimId;
-			let pseudoClaimId = token.address + '_' + claimId;
-			let claim = props.usersClaims[pseudoClaimId];
-			if (token && claim) {
-				setTokenViaURL(token);
-				setClaimViaURL(claim);
-				fetchClaimProofingDetails(token.address, claimId);
+			let _pseudoClaimId = token.address + '_' + claimId;
+			if (props.usersClaims[_pseudoClaimId]) {
+				// acts as barrier to wait until usersClaims is available
+				setPseudoClaimId(_pseudoClaimId);
 			}
 		}
 	});
@@ -43,55 +47,18 @@ function ProofSubmission(props, context) {
 		return null;
 	};
 
-	const fetchClaimProofingDetails = (tokenAddr, claimId) => {
-		/*
-		let pseudoClaimId = this.props.tokenAddress + '_' + this.props.claimId;
-		let claim = props.usersClaims[pseudoClaimId];
-		Object.keys(claim.proofStatuses).map(proofTypeAddr => {
-			let isApproved = claim.proofStatuses[proofTypeAddr];
-			getContractData_deprecated(props, proofTypeAddr, 'Fin4BaseProofType', 'getParameterizedInfo', this.props.tokenAddress)
-				.then(({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
-					return {
-						address: proofTypeAddr,
-						name: name,
-						description: parameterizedDescription,
-						paramValues: paramValues,
-						isApproved: isApproved
-					};
-				})
-		});
-		*/
-
-		let Fin4ClaimingContract = context.drizzle.contracts.Fin4Claiming;
-		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-
-		getContractData(Fin4ClaimingContract, defaultAccount, 'getClaimOnThisToken', tokenAddr, claimId)
-			.then(({ 5: reqProofTypes, 6: proofTypeStatuses }) => {
-				var proofTypeStatusesObj = {};
-				for (var i = 0; i < reqProofTypes.length; i++) {
-					proofTypeStatusesObj[reqProofTypes[i]] = {};
-					proofTypeStatusesObj[reqProofTypes[i]].isApproved = proofTypeStatuses[i];
-				}
-				return reqProofTypes.map(proofTypeAddr => {
-					let proofContract = getProofContractByAddress(proofTypeAddr);
-					return getContractData(proofContract, defaultAccount, 'getParameterizedInfo', tokenAddr).then(
-						({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
-							return {
-								address: proofTypeAddr,
-								name: name,
-								description: parameterizedDescription,
-								paramValues: paramValues,
-								isApproved: proofTypeStatusesObj[proofTypeAddr].isApproved
-							};
-						}
-					);
-				});
-			})
-			.then(data => Promise.all(data))
-			.then(data => {
-				setProofData(data);
-			});
-	};
+	/*// ... fetchClaimProofingDetails()
+	return getContractData(proofContract, defaultAccount, 'getParameterizedInfo', tokenAddr).then(
+		({ 0: name, 1: parameterizedDescription, 2: paramValues }) => {
+			return {
+				address: proofTypeAddr,
+				name: name,
+				description: parameterizedDescription,
+				paramValues: paramValues,
+				isApproved: proofTypeStatusesObj[proofTypeAddr].isApproved
+			};
+		}
+	);*/
 
 	const onUploadImageClick = event => {
 		console.log('Started upload to IPFS...');
@@ -152,26 +119,28 @@ function ProofSubmission(props, context) {
 	};
 
 	return (
-		proofData !== null && (
+		pseudoClaimId && (
 			<Container>
 				<Box title="Proof Submission">
-					{proofData.map((proofObj, index) => {
+					{Object.keys(props.usersClaims[pseudoClaimId].proofStatuses).map((proofTypeAddr, index) => {
+						let claim = props.usersClaims[pseudoClaimId];
+						let proofIsApproved = claim.proofStatuses[proofTypeAddr];
+						let proofType = props.proofTypes[proofTypeAddr];
 						return (
 							<div key={index}>
 								{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
-								<Status isapproved={proofObj.isApproved ? 'true' : 'false'}>
-									{proofObj.isApproved
-										? `The proof "${proofObj.name}" was submitted successfully.`
-										: `Your claim requires you to fill out the following form: ${proofObj.description}`}
+								<Status isapproved={proofIsApproved ? 'true' : 'false'}>
+									{proofIsApproved
+										? `The proof "${proofType.label}" was submitted successfully.`
+										: `Your claim requires you to fill out the following form: ${proofType.description}`}
 								</Status>
-								{!proofObj.isApproved && (
+								{!proofIsApproved && (
 									<ContractForm
-										contractAddress={proofObj.address}
-										contractName={proofObj.name}
-										method={'submitProof_' + proofObj.name}
+										contractName={proofType.label}
+										method={'submitProof_' + proofType.label}
 										staticArgs={{
-											tokenAdrToReceiveProof: tokenViaURL.address,
-											claimId: claimViaURL.claimId + ''
+											tokenAdrToReceiveProof: claim.token,
+											claimId: claim.claimId + ''
 										}}
 										hideArgs={{
 											longitude: 'longitude',
@@ -194,7 +163,7 @@ function ProofSubmission(props, context) {
 												buttonText: 'Submit location',
 												buttonIcon: AddLocation,
 												onClick: onSubmitLocationClick,
-												data: proofObj,
+												data: null, // TODO
 												values: {
 													latitude: '0',
 													longitude: '0',
@@ -256,7 +225,8 @@ ProofSubmission.contextTypes = {
 const mapStateToProps = state => {
 	return {
 		usersClaims: state.fin4Store.usersClaims,
-		fin4Tokens: state.fin4Store.fin4Tokens
+		fin4Tokens: state.fin4Store.fin4Tokens,
+		proofTypes: state.fin4Store.proofTypes
 	};
 };
 
