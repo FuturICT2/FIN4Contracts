@@ -47,6 +47,17 @@ const isValidPublicAddress = addr => {
 	}
 };
 
+const getFin4TokensFormattedForSelectOptions = fin4Tokens => {
+	return Object.keys(fin4Tokens).map(addr => {
+		let token = fin4Tokens[addr];
+		return {
+			value: token.address,
+			label: token.name,
+			symbol: token.symbol
+		};
+	});
+};
+
 const fetchMessage = (Fin4MessagesContract, defaultAccount, messageId) => {
 	return getContractData(Fin4MessagesContract, defaultAccount, 'getMyMessage', messageId).then(
 		({
@@ -253,7 +264,8 @@ export {
 	fetchCurrentUsersClaims,
 	fetchAndAddAllProofTypes,
 	findTokenBySymbol,
-	isValidPublicAddress
+	isValidPublicAddress,
+	getFin4TokensFormattedForSelectOptions
 };
 
 /*
