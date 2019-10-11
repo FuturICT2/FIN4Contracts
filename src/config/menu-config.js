@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/AddBox';
 import HomeIcon from '@material-ui/icons/Home';
 import Home from '../views/Home/Home';
 import Claim from '../views/token/claim/Claim';
-import TokenView from '../views/token/view/TokenView';
+import TokenDetails from '../views/token/view/TokenDetails';
 import Token from '../views/token/Token';
 import TokenCreation from '../views/token/create/TokenCreation';
 import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
@@ -59,14 +59,14 @@ const menu = [
 		exact: true
 	},
 	{
-		component: TokenView,
-		path: '/token/view/:tokenSymbol',
+		component: TokenDetails,
+		path: '/token/details/:tokenSymbol',
 		showInNavBar: false,
 		exact: true
 	},
 	{
-		component: TokenView,
-		path: '/token/view/',
+		component: TokenDetails,
+		path: '/token/details/',
 		showInNavBar: false,
 		exact: true
 	},

@@ -16,7 +16,6 @@ function TokenOverview(props) {
 				<Table headers={[t('token-name'), 'Description', 'Unit', 'Actions']}>
 					{Object.keys(props.fin4Tokens).map((addr, index) => {
 						let token = props.fin4Tokens[addr];
-						let tokenSite = '/token/view/' + token.symbol;
 						return (
 							<TableRow
 								key={'token_' + index}
@@ -30,7 +29,7 @@ function TokenOverview(props) {
 									unit: <small>{token.unit}</small>,
 									actions: (
 										<small style={{ color: 'blue', textDecoration: 'underline' }}>
-											<Link to={'/token/view/' + token.symbol}>Details</Link>
+											<Link to={'/token/details/' + token.symbol}>Details</Link>
 											<br />
 											<Link to={'/token/claim/' + token.symbol}>Claim</Link>
 										</small>

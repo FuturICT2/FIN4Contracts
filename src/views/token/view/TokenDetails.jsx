@@ -7,7 +7,7 @@ import Currency from '../../../components/Currency';
 import { getContractData, findTokenBySymbol } from '../../../components/Contractor';
 import PropTypes from 'prop-types';
 
-function TokenView(props, context) {
+function TokenDetails(props, context) {
 	const { t } = useTranslation();
 
 	const [tokenViaURL, setTokenViaURL] = useState(null);
@@ -52,7 +52,7 @@ function TokenView(props, context) {
 
 	return (
 		<Container>
-			<Box title="Token View">
+			<Box title="Token Details">
 				{!tokenViaURL ? (
 					props.match.params.tokenSymbol ? (
 						'No token with symbol ' + props.match.params.tokenSymbol + ' found'
@@ -88,7 +88,7 @@ function TokenView(props, context) {
 	);
 }
 
-TokenView.contextTypes = {
+TokenDetails.contextTypes = {
 	drizzle: PropTypes.object
 };
 
@@ -99,4 +99,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(TokenView, mapStateToProps);
+export default drizzleConnect(TokenDetails, mapStateToProps);
