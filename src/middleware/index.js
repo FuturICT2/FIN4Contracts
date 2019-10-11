@@ -14,6 +14,8 @@ const contractEventNotifier = store => next => action => {
 	const contractEvent = action.event.event;
 	let display = `${contract}: ${contractEvent}`;
 
+	// ------------------------------ Fin4TokenCreated ------------------------------
+
 	if (contractEvent === 'Fin4TokenCreated') {
 		let token = action.event.returnValues;
 		let address = token.addr;
@@ -40,6 +42,8 @@ const contractEventNotifier = store => next => action => {
 	}
 
 	let defaultAccount = store.getState().fin4Store.defaultAccount;
+
+	// ------------------------------ ClaimSubmitted ------------------------------
 
 	if (contractEvent === 'ClaimSubmitted') {
 		let claim = action.event.returnValues;
@@ -76,6 +80,8 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	// ------------------------------ ClaimApproved ------------------------------
+
 	if (contractEvent === 'ClaimApproved') {
 		let claim = action.event.returnValues;
 		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId
@@ -103,6 +109,8 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	// ------------------------------ OneProofOnClaimApproval ------------------------------
+
 	if (contractEvent === 'OneProofOnClaimApproval') {
 		let approvedProof = action.event.returnValues;
 		let belongsToCurrentUsersClaim = approvedProof.claimer === defaultAccount;
@@ -129,6 +137,8 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	// ------------------------------ NewMessage ------------------------------
+
 	if (contractEvent === 'NewMessage') {
 		let msg = action.event.returnValues;
 		if (msg.receiver !== defaultAccount) {
@@ -153,6 +163,8 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	// ------------------------------ MessageMarkedAsRead ------------------------------
+
 	if (contractEvent === 'MessageMarkedAsRead') {
 		let msg = action.event.returnValues;
 		if (msg.receiver !== defaultAccount) {
@@ -166,6 +178,8 @@ const contractEventNotifier = store => next => action => {
 			messageId: msg.messageId.toString()
 		});
 	}
+
+	// ------------------------------------------------------------
 
 	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
 	return next(action);
