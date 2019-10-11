@@ -4,6 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import { useTranslation } from 'react-i18next';
 import { drizzleConnect } from 'drizzle-react';
+import NoNotificationsIcon from '@material-ui/icons/NotificationsNone';
+import NewNotificationsIcon from '@material-ui/icons/NotificationsActive';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
 	bar: {
@@ -38,6 +41,9 @@ const useStyles = makeStyles(theme => ({
 	noWeb3Warning: {
 		color: 'yellow',
 		'font-family': 'arial'
+	},
+	newNotification: {
+		color: 'yellow'
 	}
 }));
 
@@ -57,6 +63,13 @@ function TopBar(props) {
 				</a>
 			</center>
 			<div className={classes.flags}>
+				<Link to={'/'}>
+					{props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 ? (
+						<NewNotificationsIcon className={classes.newNotification} />
+					) : (
+						<NoNotificationsIcon />
+					)}
+				</Link>{' '}
 				<a
 					className={`${classes.lngLink} ${langIsEN() ? classes.activeLng : ''}`}
 					href="#"
@@ -122,7 +135,8 @@ function TopBar(props) {
 
 const mapStateToProps = state => {
 	return {
-		defaultAccount: state.fin4Store.defaultAccount
+		defaultAccount: state.fin4Store.defaultAccount,
+		messages: state.fin4Store.messages
 	};
 };
 
