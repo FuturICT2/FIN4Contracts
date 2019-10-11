@@ -12,6 +12,7 @@ import TokenCreation from '../views/token/create/TokenCreation';
 import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
 import FilterCreation from '../views/token/filter/FilterCreation';
 import UserMessage from '../views/user/UserMessage';
+import UserTransfer from '../views/user/UserTransfer';
 import Settings from '../views/Settings';
 
 const menu = [
@@ -86,6 +87,24 @@ const menu = [
 	{
 		component: UserMessage,
 		path: '/user/message/',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: UserTransfer,
+		path: '/user/transfer/',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: UserTransfer,
+		path: '/user/transfer/:userAddress',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: UserTransfer,
+		path: '/user/transfer/:userAddress/:tokenSymbol',
 		showInNavBar: false,
 		exact: true
 	},
