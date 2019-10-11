@@ -47,9 +47,9 @@ function TopBar(props) {
 	return (
 		<AppBar position="static" className={classes.bar}>
 			<center>
-				<a className={classes.logoText} href="/">
-					FIN4Xplorer
-				</a>
+				<Link to={'/'} className={classes.logoText}>
+					<b>FIN4Xplorer</b>
+				</Link>
 			</center>
 			<div className={classes.alignRight}>
 				<Link to={'/'}>
