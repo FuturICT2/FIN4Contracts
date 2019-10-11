@@ -12,6 +12,7 @@ import TokenCreation from '../views/token/create/TokenCreation';
 import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
 import FilterCreation from '../views/token/filter/FilterCreation';
 import UserSite from '../views/user/UserSite';
+import Settings from '../views/Settings';
 
 const menu = [
 	{
@@ -85,6 +86,12 @@ const menu = [
 	{
 		component: UserSite,
 		path: '/user/message/',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: Settings,
+		path: '/settings/',
 		showInNavBar: false,
 		exact: true
 	}

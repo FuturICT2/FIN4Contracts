@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { drizzleConnect } from 'drizzle-react';
 import NoNotificationsIcon from '@material-ui/icons/NotificationsNone';
 import NewNotificationsIcon from '@material-ui/icons/NotificationsActive';
+import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -22,17 +23,9 @@ const useStyles = makeStyles(theme => ({
 		width: 300,
 		margin: '10px auto'
 	},
-	flags: {
-		'font-family': 'arial',
-		'font-size': 'small',
+	alignRight: {
 		'text-align': 'right',
 		'padding-right': '20px'
-	},
-	lngLink: {
-		'text-decoration': 'none'
-	},
-	activeLng: {
-		'font-weight': 'bold'
 	},
 	logoText: {
 		'text-decoration': 'none',
@@ -51,10 +44,6 @@ function TopBar(props) {
 	const { t, i18n } = useTranslation();
 	const classes = useStyles();
 
-	const langIsEN = () => {
-		return i18n.language === 'en';
-	};
-
 	return (
 		<AppBar position="static" className={classes.bar}>
 			<center>
@@ -62,7 +51,7 @@ function TopBar(props) {
 					FIN4Xplorer
 				</a>
 			</center>
-			<div className={classes.flags}>
+			<div className={classes.alignRight}>
 				<Link to={'/'}>
 					{props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 ? (
 						<NewNotificationsIcon className={classes.newNotification} />
@@ -70,29 +59,9 @@ function TopBar(props) {
 						<NoNotificationsIcon />
 					)}
 				</Link>{' '}
-				<a
-					className={`${classes.lngLink} ${langIsEN() ? classes.activeLng : ''}`}
-					href="#"
-					onClick={() => {
-						let lng = i18n.language;
-						i18n.changeLanguage('en', () => {
-							console.log('Language changed: from ' + lng + ' to en');
-						});
-					}}>
-					EN
-				</a>
-				{' / '}
-				<a
-					className={`${classes.lngLink} ${!langIsEN() ? classes.activeLng : ''}`}
-					href="#"
-					onClick={() => {
-						let lng = i18n.language;
-						i18n.changeLanguage('de', () => {
-							console.log('Language changed: from ' + lng + ' to de');
-						});
-					}}>
-					DE
-				</a>
+				<Link to={'/settings/'}>
+					<SettingsIcon />
+				</Link>
 			</div>
 			{props.defaultAccount === null && (
 				<center className={classes.noWeb3Warning}>
@@ -117,7 +86,7 @@ function TopBar(props) {
 						<a
 							className={classes.noWeb3Warning}
 							href={
-								langIsEN()
+								i18n.language === 'en'
 									? 'https://fin4xplorer.readthedocs.io/en/latest'
 									: 'https://fin4xplorer.readthedocs.io/de/latest/'
 							}
