@@ -10,7 +10,7 @@ import AddressQRreader from '../../components/AddressQRreader';
 import { isValidPublicAddress } from '../../components/Contractor';
 import PropTypes from 'prop-types';
 
-function UserSite(props, context) {
+function UserMessage(props, context) {
 	const { t } = useTranslation();
 
 	const [userAddressViaURL, setUserAddressViaURL] = useState(null);
@@ -75,8 +75,8 @@ function UserSite(props, context) {
 	);
 }
 
-UserSite.contextTypes = {
+UserMessage.contextTypes = {
 	drizzle: PropTypes.object
 };
 
-export default drizzleConnect(UserSite);
+export default drizzleConnect(UserMessage);

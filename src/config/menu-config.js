@@ -11,7 +11,7 @@ import Token from '../views/token/Token';
 import TokenCreation from '../views/token/create/TokenCreation';
 import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
 import FilterCreation from '../views/token/filter/FilterCreation';
-import UserSite from '../views/user/UserSite';
+import UserMessage from '../views/user/UserMessage';
 import Settings from '../views/Settings';
 
 const menu = [
@@ -78,13 +78,13 @@ const menu = [
 		exact: true
 	},
 	{
-		component: UserSite,
+		component: UserMessage,
 		path: '/user/message/:userAddress',
 		showInNavBar: false,
 		exact: true
 	},
 	{
-		component: UserSite,
+		component: UserMessage,
 		path: '/user/message/',
 		showInNavBar: false,
 		exact: true
