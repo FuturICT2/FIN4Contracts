@@ -50,6 +50,11 @@ function UserSite(props, context) {
 						onChange={e => (msgText.current = e.target.value)}
 					/>
 					<br />
+					<small style={{ color: 'gray', fontFamily: 'arial' }}>
+						Note that messages are not encrypted. With some effort they can be retrieved in plain text from the
+						blockchain.
+					</small>
+					<br />
 					<br />
 					<Button
 						icon={MessageIcon}
