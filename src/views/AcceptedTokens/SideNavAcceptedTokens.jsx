@@ -26,7 +26,7 @@ class SideNavAcceptedTokens extends Component {
 						<NavIcon>
 							<TokenButton style={{ width: '3.1em', height: 'auto' }} />
 						</NavIcon>
-						<NavText>Management</NavText>
+						<NavText>Token Management</NavText>
 					</NavItem>
 					<NavItem eventKey="governance">
 						<NavIcon>

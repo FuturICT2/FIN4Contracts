@@ -62,7 +62,7 @@ contract GOV is ERC20Plus {
 
   function delegate(address to, uint256 amount) public returns (bool){
     require(msg.sender != to, "You cannot delegate to yourself");
-    require(balanceOf(msg.sender) >= amount, "You do not have enough tokens for this transaction");
+    require(balanceOf(msg.sender) - delegateeTokens[msg.sender] >= amount, "You do not have enough tokens for this transaction");
 
     // delegatorTokensIndexes.push(to);
     delegatorTokens[msg.sender][to] += amount;
