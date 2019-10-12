@@ -10,7 +10,8 @@
 <img src="public/project-logos/Fin4_logo_on_white.jpg" width="100">
 </td></tr></table>
 
-ℹ️ [Explanatory video](http://www.youtube.com/watch?v=oNlKdHjvExo)
+ℹ️ [Explanatory video FIN4](http://www.youtube.com/watch?v=oNlKdHjvExo)
+ℹ️ [Explanatory video Accepted Tokens](https://www.youtube.com/watch?v=1bircSUBNm0)
 
 ## Description
 
