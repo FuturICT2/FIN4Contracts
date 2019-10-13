@@ -31,6 +31,8 @@ function UserTransfer(props, context) {
 		amount: null
 	});
 
+	const waitingForContract = useRef(null);
+
 	useEffect(() => {
 		let userAddress = props.match.params.userAddress;
 		let tokenSymbol = props.match.params.tokenSymbol;
@@ -67,15 +69,29 @@ function UserTransfer(props, context) {
 			data.current.amount = transferAmount;
 		}
 
-		// TODO
+		if (waitingForContract.current && contractReady(waitingForContract.current)) {
+			waitingForContract.current = null;
+			doSendTransfer();
+		}
 	});
 
+	const contractReady = name => {
+		return props.contracts[name] && props.contracts[name].initialized;
+	};
+
 	const sendTransfer = () => {
-		let user = data.userAddress;
+		let user = data.current.userAddress;
 		let token = props.fin4Tokens[data.current.tokenAddress];
 		let tokenNameSuffixed = 'Fin4Token_' + token.symbol;
-		addContract(props, context.drizzle, 'Fin4Token', data.tokenAddress, [], tokenNameSuffixed);
+		if (contractReady(tokenNameSuffixed)) {
+			doSendTransfer();
+		} else {
+			waitingForContract.current = tokenNameSuffixed;
+			addContract(props, context.drizzle, 'Fin4Token', data.tokenAddress, [], tokenNameSuffixed);
+		}
+	};
 
+	const doSendTransfer = () => {
 		// TODO
 	};
 
