@@ -28,6 +28,10 @@ contract Fin4Collections {
     mapping (uint => Collection) public collections;
     mapping (string => bool) public identifiers;
 
+    function getCollectionsCount() public view returns(uint) {
+        return nextCollectionId;
+    }
+
     function createCollection(string memory name, string memory identifier, string memory description) public returns(uint) {
         // TODO also check for alphanumeric? How?
         require(identifier.length() > 2, "Identifier is too short"); // TODO #ConceptualDecision
@@ -43,10 +47,18 @@ contract Fin4Collections {
         return nextCollectionId;
     }
 
-    function getCollection(uint collectionId) public view returns(address, address[] memory, address[] memory,
+    function getCollectionInfo(uint collectionId) public view returns(address, uint,
         string memory, string memory, string memory, string memory, string memory) {
         Collection memory col = collections[collectionId];
-        return(col.creator, col.admins, col.tokens, col.name, col.identifier, col.description, col.color, col.logoURL);
+        return(col.creator, col.tokens.length, col.name, col.identifier, col.description, col.color, col.logoURL);
+    }
+
+    function getCollectionTokens(uint collectionId) public view returns(address[] memory) {
+        collections[collectionId].tokens;
+    }
+
+    function getCollectionAdmins(uint collectionId) public view returns(address[] memory) {
+        collections[collectionId].admins;
     }
 
     function addAdmin(uint collectionId, address newAdmin) public {

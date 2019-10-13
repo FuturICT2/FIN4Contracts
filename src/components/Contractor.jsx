@@ -255,6 +255,35 @@ const fetchCurrentUsersClaims = (props, Fin4ClaimingContract) => {
 		});
 };
 
+const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	getContractData(Fin4CollectionsContract, defaultAccount, 'getCollectionsCount')
+		.then(collectionsCount => {
+			return Array(new BN(collectionsCount).toNumber())
+				.fill()
+				.map((x, i) => i)
+				.map(collectionId => {
+					return getContractData(Fin4CollectionsContract, defaultAccount, 'getCollectionInfo', collectionId).then(
+						({ 0: creator, 1: tokensCount, 2: name, 3: identifier, 4: description, 5: color, 6: logoURL }) => {
+							return {
+								creator: creator,
+								tokensCount: new BN(tokensCount).toNumber(),
+								name: name,
+								identifier: identifier,
+								description: description,
+								color: color,
+								logoURL: logoURL
+							};
+						}
+					);
+				});
+		})
+		.then(promises => Promise.all(promises))
+		.then(data => {
+			// TODO
+		});
+};
+
 // -------------------------------------------------------------
 
 export {
@@ -269,7 +298,8 @@ export {
 	fetchAndAddAllProofTypes,
 	findTokenBySymbol,
 	isValidPublicAddress,
-	getFin4TokensFormattedForSelectOptions
+	getFin4TokensFormattedForSelectOptions,
+	fetchCollectionsInfo
 };
 
 /*

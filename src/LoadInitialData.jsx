@@ -6,7 +6,8 @@ import {
 	fetchAllTokens,
 	fetchUsersNonzeroTokenBalances,
 	fetchCurrentUsersClaims,
-	fetchAndAddAllProofTypes
+	fetchAndAddAllProofTypes,
+	fetchCollectionsInfo
 } from './components/Contractor';
 import PropTypes from 'prop-types';
 
@@ -48,7 +49,7 @@ function LoadInitialData(props, context) {
 			props.contracts.Fin4Collections.initialized
 		) {
 			isInit.current.Fin4Collections = true;
-			// TODO fetch collections
+			fetchCollectionsInfo(props, context.drizzle.contracts.Fin4Collections);
 		}
 
 		if (
