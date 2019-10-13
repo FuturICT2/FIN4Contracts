@@ -103,7 +103,7 @@ function UserTransfer(props, context) {
 
 	return (
 		<Container>
-			<Box title="Send tokens to user">
+			<Box title="Transfer tokens to user">
 				<center>
 					<AddressQRreader initialValue={dataViaURL.userAddress} onChange={val => (data.current.userAddress = val)} />
 					<Dropdown

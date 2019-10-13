@@ -4,6 +4,7 @@ import StarIcon from '@material-ui/icons/Star';
 import CheckIcon from '@material-ui/icons/CheckCircleOutline';
 import AddIcon from '@material-ui/icons/AddBox';
 import HomeIcon from '@material-ui/icons/Home';
+import UserIcon from '@material-ui/icons/Person';
 import Home from '../views/Home/Home';
 import Claim from '../views/token/claim/Claim';
 import TokenDetails from '../views/token/view/TokenDetails';
@@ -13,6 +14,7 @@ import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
 import FilterCreation from '../views/token/filter/FilterCreation';
 import UserMessage from '../views/user/UserMessage';
 import UserTransfer from '../views/user/UserTransfer';
+import User from '../views/user/User';
 import Settings from '../views/Settings';
 
 const menu = [
@@ -76,6 +78,14 @@ const menu = [
 		component: FilterCreation,
 		path: '/token/filter/create/',
 		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: User,
+		path: '/user',
+		label: 'Users',
+		icon: UserIcon,
+		showInNavBar: true,
 		exact: true
 	},
 	{

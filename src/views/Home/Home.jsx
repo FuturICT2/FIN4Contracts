@@ -107,9 +107,6 @@ function Home(props) {
 						</a>
 					</>
 				)}
-				<RequestEth>
-					<Link to={'/user/message/'}>Message user</Link>
-				</RequestEth>
 			</Box>
 		</Container>
 	);
