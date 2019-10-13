@@ -1,17 +1,18 @@
 import React from 'react';
-import Box from '../../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../../components/Container';
 import PropTypes from 'prop-types';
+import CreateCollection from './CreateCollection';
+import ListCollections from './ListCollections';
 
 function Collections(props) {
 	const { t } = useTranslation();
 
 	return (
 		<Container>
-			<Box title="Create a new collection"></Box>
-			<Box title="Existing collections"></Box>
+			<CreateCollection />
+			<ListCollections />
 		</Container>
 	);
 }
@@ -21,9 +22,7 @@ Collections.contextTypes = {
 };
 
 const mapStateToProps = state => {
-	return {
-		fin4Tokens: state.fin4Store.fin4Tokens
-	};
+	return {};
 };
 
 export default drizzleConnect(Collections, mapStateToProps);
