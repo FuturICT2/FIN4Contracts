@@ -16,10 +16,10 @@ const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
 	}
 };
 
-const addContract = (props, drizzle, name, address, events, symbol = null) => {
+const addContract = (props, drizzle, name, address, events, tokenNameSuffixed) => {
 	const json = require('../build/contracts/' + name + '.json');
 	let contractConfig = {
-		contractName: name + (symbol ? '_' + symbol : ''),
+		contractName: tokenNameSuffixed ? tokenNameSuffixed : name,
 		web3Contract: new web3.eth.Contract(json.abi, address)
 	};
 	props.dispatch({ type: 'ADD_CONTRACT', drizzle, contractConfig, events, web3 });

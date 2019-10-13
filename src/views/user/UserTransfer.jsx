@@ -73,7 +73,8 @@ function UserTransfer(props, context) {
 	const sendTransfer = () => {
 		let user = data.userAddress;
 		let token = props.fin4Tokens[data.current.tokenAddress];
-		addContract(props, context.drizzle, 'Fin4Token', data.tokenAddress, [], token.symbol);
+		let tokenNameSuffixed = 'Fin4Token_' + token.symbol;
+		addContract(props, context.drizzle, 'Fin4Token', data.tokenAddress, [], tokenNameSuffixed);
 
 		// TODO
 	};
