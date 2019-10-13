@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "solidity-util/lib/Strings.sol";
 
 contract Fin4Collections {
+    using Strings for string;
 
     address public Fin4MainAddress;
 
