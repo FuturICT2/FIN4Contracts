@@ -12,6 +12,8 @@ import Token from '../views/token/Token';
 import TokenCreation from '../views/token/create/TokenCreation';
 import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
 import Collections from '../views/token/collection/Collections';
+import CollectionView from '../views/token/collection/CollectionView';
+import CollectionEdit from '../views/token/collection/CollectionEdit';
 import UserMessage from '../views/user/UserMessage';
 import UserTransfer from '../views/user/UserTransfer';
 import User from '../views/user/User';
@@ -77,6 +79,18 @@ const menu = [
 	{
 		component: Collections,
 		path: '/token/collection/',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: CollectionView,
+		path: '/token/collection/:collectionIdentifier',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: CollectionEdit,
+		path: '/token/collection/:collectionIdentifier/edit',
 		showInNavBar: false,
 		exact: true
 	},

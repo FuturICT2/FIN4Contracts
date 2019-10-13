@@ -5,13 +5,14 @@ import TableRow from '../../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 function ListCollections(props) {
 	const { t } = useTranslation();
 
 	return (
 		<Box title="Existing collections">
-			<Table headers={['Identifier', 'Name', 'Description', 'Tokens count']}>
+			<Table headers={['Identifier', 'Name', 'Description', 'Tokens count', 'Actions']}>
 				{Object.keys(props.collections).map((identifier, index) => {
 					let collection = props.collections[identifier];
 					return (
@@ -21,7 +22,14 @@ function ListCollections(props) {
 								identifier: identifier,
 								name: collection.name,
 								description: <small>{collection.description}</small>,
-								tokensCount: collection.tokensCount
+								tokensCount: collection.tokensCount,
+								actions: (
+									<small style={{ color: 'blue', textDecoration: 'underline' }}>
+										<Link to={'/token/collection/' + identifier}>Visit</Link>
+										<br />
+										<Link to={'/token/collection/' + identifier + '/edit'}>Edit</Link>
+									</small>
+								)
 							}}
 						/>
 					);
