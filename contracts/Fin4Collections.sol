@@ -48,12 +48,13 @@ contract Fin4Collections {
         return nextCollectionId;
     }
 
-    function getCollectionInfo(uint collectionId) public view returns(address, uint,
+    function getCollection(uint collectionId) public view returns(address, address[] memory,
         string memory, string memory, string memory, string memory, string memory) {
         Collection memory col = collections[collectionId];
-        return(col.creator, col.tokens.length, col.name, col.identifier, col.description, col.color, col.logoURL);
+        return(col.creator, col.tokens, col.name, col.identifier, col.description, col.color, col.logoURL);
     }
 
+    // obsolete?
     function getCollectionTokens(uint collectionId) public view returns(address[] memory) {
         collections[collectionId].tokens;
     }

@@ -22,7 +22,7 @@ function ListCollections(props) {
 								identifier: identifier,
 								name: collection.name,
 								description: <small>{collection.description}</small>,
-								tokensCount: collection.tokensCount,
+								tokensCount: collection.tokens.length,
 								actions: (
 									<small style={{ color: 'blue', textDecoration: 'underline' }}>
 										<Link to={'/token/collection/' + identifier}>Visit</Link>

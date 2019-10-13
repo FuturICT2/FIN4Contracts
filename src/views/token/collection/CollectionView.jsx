@@ -31,7 +31,7 @@ function CollectionView(props, drizzle) {
 						<br />
 						{collectionViaURL.description}
 						<br />
-						{collectionViaURL.tokensCount}
+						{collectionViaURL.tokens.length}
 					</>
 				)}
 			</Box>

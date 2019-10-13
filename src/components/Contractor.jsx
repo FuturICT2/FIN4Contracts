@@ -263,11 +263,11 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 				.fill()
 				.map((x, i) => i)
 				.map(collectionId => {
-					return getContractData(Fin4CollectionsContract, defaultAccount, 'getCollectionInfo', collectionId).then(
-						({ 0: creator, 1: tokensCount, 2: name, 3: identifier, 4: description, 5: color, 6: logoURL }) => {
+					return getContractData(Fin4CollectionsContract, defaultAccount, 'getCollection', collectionId).then(
+						({ 0: creator, 1: tokens, 2: name, 3: identifier, 4: description, 5: color, 6: logoURL }) => {
 							return {
 								creator: creator,
-								tokensCount: new BN(tokensCount).toNumber(),
+								tokens: tokens,
 								name: name,
 								identifier: identifier,
 								description: description,
