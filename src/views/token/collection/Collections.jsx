@@ -3,16 +3,22 @@ import Box from '../../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../../components/Container';
+import PropTypes from 'prop-types';
 
-function FilterCreation(props) {
+function Collections(props) {
 	const { t } = useTranslation();
 
 	return (
 		<Container>
-			<Box title="Create a new filter">TODO</Box>
+			<Box title="Create a new collection"></Box>
+			<Box title="Existing collections"></Box>
 		</Container>
 	);
 }
+
+Collections.contextTypes = {
+	drizzle: PropTypes.object
+};
 
 const mapStateToProps = state => {
 	return {
@@ -20,4 +26,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(FilterCreation, mapStateToProps);
+export default drizzleConnect(Collections, mapStateToProps);

@@ -5,31 +5,23 @@ import Container from '../../components/Container';
 import TokenOverview from './TokenOverview';
 import Box from '../../components/Box';
 import Button from '../../components/Button';
-import history from '../../components/history';
 import AddIcon from '@material-ui/icons/Add'; // <AddIcon/>
+import { Link } from 'react-router-dom';
 
 function Token(props) {
 	const { t } = useTranslation();
 	return (
 		<Container>
-			<Box title="Create">
+			<Box title="Options">
 				<center>
-					<Button
-						icon={AddIcon}
-						onClick={() => {
-							history.push('/token/create/');
-						}}>
-						New Token
-					</Button>
+					<Link to={'/token/create/'}>
+						<Button icon={AddIcon}>New Token</Button>
+					</Link>
 					<br />
 					<br />
-					<Button
-						icon={AddIcon}
-						onClick={() => {
-							history.push('/token/filter/create/');
-						}}>
-						New Filter
-					</Button>
+					<Link to={'/token/collection/'}>
+						<Button>See collections</Button>
+					</Link>
 				</center>
 			</Box>
 			<TokenOverview />

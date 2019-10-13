@@ -11,7 +11,7 @@ import TokenDetails from '../views/token/view/TokenDetails';
 import Token from '../views/token/Token';
 import TokenCreation from '../views/token/create/TokenCreation';
 import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
-import FilterCreation from '../views/token/filter/FilterCreation';
+import Collections from '../views/token/collection/Collections';
 import UserMessage from '../views/user/UserMessage';
 import UserTransfer from '../views/user/UserTransfer';
 import User from '../views/user/User';
@@ -75,8 +75,8 @@ const menu = [
 		exact: true
 	},
 	{
-		component: FilterCreation,
-		path: '/token/filter/create/',
+		component: Collections,
+		path: '/token/collection/',
 		showInNavBar: false,
 		exact: true
 	},
