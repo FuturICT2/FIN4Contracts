@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Container from '../../../components/Container';
 import Box from '../../../components/Box';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 function CollectionView(props, drizzle) {
 	const { t } = useTranslation();
@@ -32,6 +33,12 @@ function CollectionView(props, drizzle) {
 						{collectionViaURL.description}
 						<br />
 						{collectionViaURL.tokens.length}
+						{(collectionViaURL.userIsCreator || collectionViaURL.userIsAdmin) && (
+							<>
+								<br />
+								<Link to={'/token/collection/' + collectionViaURL.identifier + '/edit'}>Edit</Link>
+							</>
+						)}
 					</>
 				)}
 			</Box>
