@@ -1,5 +1,7 @@
 pragma solidity ^0.5.0;
 
+import "solidity-util/lib/Strings.sol";
+
 contract Fin4Collections {
 
     address public Fin4MainAddress;
@@ -24,8 +26,12 @@ contract Fin4Collections {
     uint private INVALID_INDEX = 9999;
 
     mapping (uint => Collection) public collections;
+    mapping (string => bool) public identifiers;
 
     function createCollection(string memory name, string memory identifier, string memory description) public returns(uint) {
+        // TODO also check for alphanumeric? How?
+        require(identifier.length() > 2, "Identifier is too short"); // TODO #ConceptualDecision
+        require(!identifiers[identifier], "Identifier already in use");
         Collection storage col = collections[nextCollectionId];
         col.creator = msg.sender;
         col.admins.push(msg.sender);
@@ -33,6 +39,7 @@ contract Fin4Collections {
         col.identifier = identifier;
         col.description = description;
         nextCollectionId ++;
+        identifiers[identifier] = true;
         return nextCollectionId;
     }
 
