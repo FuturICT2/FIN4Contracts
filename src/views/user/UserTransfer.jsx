@@ -18,37 +18,62 @@ import { isValidPublicAddress } from '../../components/Contractor';
 function UserTransfer(props, context) {
 	const { t } = useTranslation();
 
-	const [userAddressViaURL, setUserAddressViaURL] = useState(null);
-	const [tokenViaURL, setTokenViaURL] = useState(null); // formatted for Select-Dropdown
-	const userAddressValue = useRef(null);
-	const tokenAddressValue = useRef(null);
-	const amount = useRef(null);
+	const [dataViaURL, setDataViaURL] = useState({
+		tokenTriple: null, // formatted for DropdownSelect
+		userAddress: null,
+		amount: null
+	});
+
+	const data = useRef({
+		// via editing
+		tokenAddress: null,
+		userAddress: null,
+		amount: null
+	});
 
 	useEffect(() => {
 		let userAddress = props.match.params.userAddress;
-		if (userAddress && !userAddressViaURL) {
-			setUserAddressViaURL(userAddress);
-			userAddressValue.current = userAddress;
-		}
 		let tokenSymbol = props.match.params.tokenSymbol;
-		if (!tokenViaURL && tokenSymbol) {
+		let transferAmount = props.match.params.transferAmount;
+
+		if (userAddress && !dataViaURL.userAddress) {
+			setDataViaURL({
+				...dataViaURL,
+				userAddress: userAddress
+			});
+			data.current.userAddress = userAddress;
+		}
+
+		if (tokenSymbol && !dataViaURL.tokenTriple) {
 			let token = findTokenBySymbol(props, tokenSymbol);
 			if (token) {
-				setTokenViaURL({
-					value: token.address,
-					label: token.name,
-					symbol: token.symbol
+				setDataViaURL({
+					...dataViaURL,
+					tokenTriple: {
+						value: token.address,
+						label: token.name,
+						symbol: token.symbol
+					}
 				});
-				tokenAddressValue.current = token.address;
+				data.current.tokenAddress = token.address;
 			}
 		}
+
+		if (transferAmount && !dataViaURL.amount) {
+			setDataViaURL({
+				...dataViaURL,
+				amount: transferAmount
+			});
+			data.current.amount = transferAmount;
+		}
+
 		// TODO
 	});
 
 	const sendTransfer = () => {
-		let user = userAddressValue.current;
-		let token = props.fin4Tokens[tokenAddressValue.current];
-		addContract(props, context.drizzle, 'Fin4Token', tokenAddressValue.current, [], token.symbol);
+		let user = data.userAddress;
+		let token = props.fin4Tokens[data.current.tokenAddress];
+		addContract(props, context.drizzle, 'Fin4Token', data.tokenAddress, [], token.symbol);
 
 		// TODO
 	};
@@ -57,34 +82,35 @@ function UserTransfer(props, context) {
 		<Container>
 			<Box title="Send tokens to user">
 				<center>
-					<AddressQRreader initialValue={userAddressViaURL} onChange={val => (userAddressValue.current = val)} />
+					<AddressQRreader initialValue={dataViaURL.userAddress} onChange={val => (data.current.userAddress = val)} />
 					<Dropdown
 						key="token-dropdown"
-						onChange={e => (tokenAddressValue.current = e.value)}
+						onChange={e => (data.current.tokenAddress = e.value)}
 						options={getFin4TokensFormattedForSelectOptions(props.fin4Tokens)}
 						label={t('token-type')}
-						defaultValue={tokenViaURL}
+						defaultValue={dataViaURL.tokenTriple}
 					/>
 					<TextField
 						key="amount-field"
 						type="number"
 						label="Amount"
-						onChange={e => (amount.current = e.target.value)}
+						onChange={e => (data.current.amount = e.target.value)}
 						style={inputFieldStyle}
+						defaultValue={dataViaURL.amount}
 					/>
 					<br />
 					<br />
 					<Button
 						onClick={() => {
-							if (!isValidPublicAddress(userAddressValue.current)) {
+							if (!isValidPublicAddress(data.current.userAddress)) {
 								alert('Invalid Ethereum public address');
 								return;
 							}
-							if (!props.fin4Tokens[tokenAddressValue.current]) {
+							if (!props.fin4Tokens[data.current.tokenAddress]) {
 								alert('No token selected');
 								return;
 							}
-							if (amount.current <= 0) {
+							if (data.current.amount <= 0) {
 								alert('Amount to transfer must bigger than 0');
 								return;
 							}
