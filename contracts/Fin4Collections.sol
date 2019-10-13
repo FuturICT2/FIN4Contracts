@@ -48,10 +48,11 @@ contract Fin4Collections {
         return nextCollectionId;
     }
 
-    function getCollection(uint collectionId) public view returns(address, address[] memory,
+    function getCollection(uint collectionId) public view returns(bool, bool, address[] memory,
         string memory, string memory, string memory, string memory, string memory) {
         Collection memory col = collections[collectionId];
-        return(col.creator, col.tokens, col.name, col.identifier, col.description, col.color, col.logoURL);
+        return(col.creator == msg.sender, getIndexOfAdmin(collectionId, msg.sender) != INVALID_INDEX, col.tokens,
+            col.name, col.identifier, col.description, col.color, col.logoURL);
     }
 
     // obsolete?

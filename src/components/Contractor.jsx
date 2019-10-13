@@ -264,9 +264,19 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 				.map((x, i) => i)
 				.map(collectionId => {
 					return getContractData(Fin4CollectionsContract, defaultAccount, 'getCollection', collectionId).then(
-						({ 0: creator, 1: tokens, 2: name, 3: identifier, 4: description, 5: color, 6: logoURL }) => {
+						({
+							0: userIsCreator,
+							1: userIsAdmin,
+							2: tokens,
+							3: name,
+							4: identifier,
+							5: description,
+							6: color,
+							7: logoURL
+						}) => {
 							return {
-								creator: creator,
+								userIsCreator: userIsCreator,
+								userIsAdmin: userIsAdmin,
 								tokens: tokens,
 								name: name,
 								identifier: identifier,
