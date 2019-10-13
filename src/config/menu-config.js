@@ -109,6 +109,12 @@ const menu = [
 		exact: true
 	},
 	{
+		component: UserTransfer,
+		path: '/user/transfer/:userAddress/:tokenSymbol/:transferAmount',
+		showInNavBar: false,
+		exact: true
+	},
+	{
 		component: Settings,
 		path: '/settings/',
 		showInNavBar: false,
