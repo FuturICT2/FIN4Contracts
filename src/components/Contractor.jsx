@@ -280,7 +280,10 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 		})
 		.then(promises => Promise.all(promises))
 		.then(data => {
-			// TODO
+			props.dispatch({
+				type: 'ADD_MULTIPLE_COLLECTIONS',
+				collectionsArr: data
+			});
 		});
 };
 

@@ -195,7 +195,8 @@ const initialState = {
 	proofTypes: {},
 	defaultAccount: null,
 	usersEthBalance: null,
-	messages: []
+	messages: [],
+	collections: {}
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -339,6 +340,18 @@ function fin4StoreReducer(state = initialState, action) {
 					}
 				}
 			});
+		case 'ADD_MULTIPLE_COLLECTIONS':
+			for (i = 0; i < action.collectionsArr.length; i++) {
+				let collection = action.collectionsArr[i];
+				state = {
+					...state,
+					collections: {
+						...state.collections,
+						[collection.identifier]: collection
+					}
+				};
+			}
+			return state;
 		default:
 			return state;
 	}
