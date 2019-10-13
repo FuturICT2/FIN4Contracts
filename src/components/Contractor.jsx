@@ -98,6 +98,9 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 			'ProofApproved'
 		]);
 	});
+	getContractData(Fin4MainContract, defaultAccount, 'getFin4CollectionsAddress').then(Fin4CollectionsAddress => {
+		addContract(props, drizzle, 'Fin4Collections', Fin4CollectionsAddress, []);
+	});
 };
 
 const fetchMessages = (props, Fin4MessagesContract) => {

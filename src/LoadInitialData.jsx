@@ -16,6 +16,7 @@ function LoadInitialData(props, context) {
 		Fin4Main: false,
 		Fin4Messages: false,
 		Fin4Claiming: false,
+		Fin4Collections: false,
 		tokensFetched: false
 	});
 
@@ -28,7 +29,7 @@ function LoadInitialData(props, context) {
 			isInit.current.Fin4Main = true;
 			let Fin4MainContract = context.drizzle.contracts.Fin4Main;
 			// can happen in parallel once Fin4Main is ready:
-			addSatelliteContracts(props, Fin4MainContract, context.drizzle); // = Fin4Messages and Fin4Claiming
+			addSatelliteContracts(props, Fin4MainContract, context.drizzle); // = Fin4Messages, Fin4Claiming and Fin4Collections
 			fetchAllTokens(props, Fin4MainContract, () => {
 				isInit.current.tokensFetched = true;
 				fetchUsersNonzeroTokenBalances(props, Fin4MainContract);
@@ -39,6 +40,15 @@ function LoadInitialData(props, context) {
 		if (!isInit.current.Fin4Messages && props.contracts.Fin4Messages && props.contracts.Fin4Messages.initialized) {
 			isInit.current.Fin4Messages = true;
 			fetchMessages(props, context.drizzle.contracts.Fin4Messages);
+		}
+
+		if (
+			!isInit.current.Fin4Collections &&
+			props.contracts.Fin4Collections &&
+			props.contracts.Fin4Collections.initialized
+		) {
+			isInit.current.Fin4Collections = true;
+			// TODO fetch collections
 		}
 
 		if (

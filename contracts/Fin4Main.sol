@@ -172,6 +172,18 @@ contract Fin4Main {
     return Fin4MessagesAddr;
   }
 
+  // ------------------------- COLLECTIONS -------------------------
+
+  address public Fin4CollectionsAddr;
+
+  function setFin4CollectionsAddress(address addr) public {
+    Fin4CollectionsAddr = addr;
+  }
+
+  function getFin4CollectionsAddress() public view returns(address) {
+    return Fin4CollectionsAddr;
+  }
+
 // ------------------------- REP, GOV and TCR addresses -------------------------
 
   address public REPToken;
