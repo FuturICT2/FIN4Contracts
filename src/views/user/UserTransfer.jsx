@@ -70,8 +70,8 @@ function UserTransfer(props, context) {
 		}
 
 		if (waitingForContract.current && contractReady(waitingForContract.current)) {
+			doSendTransfer(waitingForContract.current);
 			waitingForContract.current = null;
-			doSendTransfer();
 		}
 	});
 
@@ -80,19 +80,25 @@ function UserTransfer(props, context) {
 	};
 
 	const sendTransfer = () => {
-		let user = data.current.userAddress;
 		let token = props.fin4Tokens[data.current.tokenAddress];
 		let tokenNameSuffixed = 'Fin4Token_' + token.symbol;
 		if (contractReady(tokenNameSuffixed)) {
-			doSendTransfer();
+			doSendTransfer(tokenNameSuffixed);
 		} else {
 			waitingForContract.current = tokenNameSuffixed;
-			addContract(props, context.drizzle, 'Fin4Token', data.tokenAddress, [], tokenNameSuffixed);
+			addContract(props, context.drizzle, 'Fin4Token', data.current.tokenAddress, [], tokenNameSuffixed);
 		}
 	};
 
-	const doSendTransfer = () => {
-		// TODO
+	const doSendTransfer = name => {
+		context.drizzle.contracts[name].methods
+			.transfer(data.current.userAddress, data.current.amount)
+			.send({
+				from: props.store.getState().fin4Store.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
 	};
 
 	return (
