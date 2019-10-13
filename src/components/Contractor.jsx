@@ -16,10 +16,10 @@ const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
 	}
 };
 
-const addContract = (props, drizzle, name, address, events) => {
+const addContract = (props, drizzle, name, address, events, symbol = null) => {
 	const json = require('../build/contracts/' + name + '.json');
 	let contractConfig = {
-		contractName: name,
+		contractName: name + (symbol ? '_' + symbol : ''),
 		web3Contract: new web3.eth.Contract(json.abi, address)
 	};
 	props.dispatch({ type: 'ADD_CONTRACT', drizzle, contractConfig, events, web3 });
@@ -256,6 +256,7 @@ const fetchCurrentUsersClaims = (props, Fin4ClaimingContract) => {
 
 export {
 	getContractData,
+	addContract,
 	addSatelliteContracts,
 	fetchMessage,
 	fetchMessages,

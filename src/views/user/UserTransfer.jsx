@@ -4,7 +4,11 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import PropTypes from 'prop-types';
-import { findTokenBySymbol, getFin4TokensFormattedForSelectOptions } from '../../components/Contractor.jsx';
+import {
+	findTokenBySymbol,
+	getFin4TokensFormattedForSelectOptions,
+	addContract
+} from '../../components/Contractor.jsx';
 import AddressQRreader from '../../components/AddressQRreader';
 import Dropdown from '../../components/Dropdown';
 import { TextField } from '@material-ui/core';
@@ -15,7 +19,7 @@ function UserTransfer(props, context) {
 	const { t } = useTranslation();
 
 	const [userAddressViaURL, setUserAddressViaURL] = useState(null);
-	const [tokenViaURL, setTokenViaURL] = useState(null);
+	const [tokenViaURL, setTokenViaURL] = useState(null); // formatted for Select-Dropdown
 	const userAddressValue = useRef(null);
 	const tokenAddressValue = useRef(null);
 	const amount = useRef(null);
@@ -30,14 +34,21 @@ function UserTransfer(props, context) {
 		if (!tokenViaURL && tokenSymbol) {
 			let token = findTokenBySymbol(props, tokenSymbol);
 			if (token) {
-				setTokenViaURL(token);
+				setTokenViaURL({
+					value: token.address,
+					label: token.name,
+					symbol: token.symbol
+				});
 				tokenAddressValue.current = token.address;
 			}
 		}
+		// TODO
 	});
 
 	const sendTransfer = () => {
-		console.log(userAddressValue.current, tokenAddressValue.current, amount.current);
+		let user = userAddressValue.current;
+		let token = props.fin4Tokens[tokenAddressValue.current];
+		addContract(props, context.drizzle, 'Fin4Token', tokenAddressValue.current, [], token.symbol);
 
 		// TODO
 	};
@@ -52,15 +63,7 @@ function UserTransfer(props, context) {
 						onChange={e => (tokenAddressValue.current = e.value)}
 						options={getFin4TokensFormattedForSelectOptions(props.fin4Tokens)}
 						label={t('token-type')}
-						defaultValue={
-							tokenViaURL
-								? {
-										value: tokenViaURL.address,
-										label: tokenViaURL.name,
-										symbol: tokenViaURL.symbol
-								  }
-								: null
-						}
+						defaultValue={tokenViaURL}
 					/>
 					<TextField
 						key="amount-field"
@@ -109,6 +112,7 @@ UserTransfer.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
+		contracts: state.contracts,
 		fin4Tokens: state.fin4Store.fin4Tokens
 	};
 };
