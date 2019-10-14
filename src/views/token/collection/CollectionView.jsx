@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import Container from '../../../components/Container';
 import Box from '../../../components/Box';
 import PropTypes from 'prop-types';
+import Table from '../../../components/Table';
+import TableRow from '../../../components/TableRow';
+import Currency from '../../../components/Currency';
 
 function CollectionView(props, drizzle) {
 	const { t } = useTranslation();
@@ -24,15 +27,35 @@ function CollectionView(props, drizzle) {
 		<Container>
 			<Box title={(collection ? collection.name : '') + ' collection'}>
 				{collection && (
-					<span style={{ fontFamily: 'arial' }}>
-						<center>
-							<b style={{ fontSize: 'large' }}>{collection.name}</b>
+					<>
+						<span style={{ fontFamily: 'arial' }}>
+							<center>
+								<b style={{ fontSize: 'large' }}>{collection.name}</b>
+								<br />
+								<span style={{ color: 'gray' }}>{collection.description}</span>
+							</center>
 							<br />
-							<span style={{ color: 'gray' }}>{collection.description}</span>
-						</center>
-						<br />
-						Contains {collection.tokens.length} tokens
-					</span>
+							Contains {collection.tokens.length} tokens:
+						</span>
+						<Table headers={['Token', 'Actions']}>
+							{collection.tokens.map((tokenAddr, index) => {
+								let token = props.fin4Tokens[tokenAddr];
+								if (!token) {
+									// in case fin4Tokens not loaded yet, not sure if that can happen
+									return null;
+								}
+								return (
+									<TableRow
+										key={'token_' + index}
+										data={{
+											token: <Currency name={token.name} symbol={token.symbol} />,
+											actions: 'TODO'
+										}}
+									/>
+								);
+							})}
+						</Table>
+					</>
 				)}
 			</Box>
 		</Container>
