@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '../../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import ContractForm from '../../../components/ContractForm';
 
 function CreateCollection(props, context) {
 	const { t } = useTranslation();
+	const [showHint, setShowHint] = useState(false);
 
 	return (
 		<Box title="Create a new collection">
@@ -14,7 +15,11 @@ function CreateCollection(props, context) {
 				contractName="Fin4Collections"
 				method="createCollection"
 				labels={['Collection-Name', 'Short-name (e.g. "ethz" for "ETH Zürich")', 'Description']}
+				postSubmitCallback={() => setShowHint(true)}
 			/>
+			{showHint && (
+				<center style={{ color: 'gray', fontFamily: 'arial' }}>Reload the page to see your new collection.</center>
+			)}
 		</Box>
 	);
 }
