@@ -8,7 +8,6 @@ import Button from '../../../components/Button';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 import Dropdown from '../../../components/Dropdown';
-import { Typography, Divider } from '@material-ui/core';
 
 function CollectionEdit(props, context) {
 	const { t } = useTranslation();
@@ -79,31 +78,22 @@ function CollectionEdit(props, context) {
 	};
 
 	return (
-		<Container>
-			<Box title="Edit collection">
-				{collectionViaURL && (
-					<>
+		<>
+			{collectionViaURL && (
+				<Container>
+					<Box title="Edit collection">
 						<center style={{ fontFamily: 'arial' }}>
-							<span style={{ color: 'gray' }}>{collectionViaURL.identifier}: </span> <b>{collectionViaURL.name}</b>
-						</center>
-						<br />
-						<br />
-
-						{!collectionViaURL.userIsCreator && !collectionViaURL.userIsAdmin && (
-							<>
+							<b style={{ fontSize: 'large' }}>{collectionViaURL.name}</b>
+							<br />
+							<br />
+							{!collectionViaURL.userIsCreator && !collectionViaURL.userIsAdmin && (
 								<span style={{ color: 'red' }}>You don't have editing rights on this collection.</span>
-								<br />
-								<br />
-							</>
-						)}
-
-						{collectionViaURL.userIsAdmin && (
+							)}
+						</center>
+					</Box>
+					{collectionViaURL.userIsAdmin && (
+						<Box title="Manage tokens">
 							<center>
-								<Divider style={{ margin: '10px 0' }} variant="middle" />
-								<Typography color="textSecondary" variant="body1">
-									Manage tokens
-								</Typography>
-								<br />
 								<Dropdown
 									key="add_tokens_select"
 									multipleChoice
@@ -123,18 +113,12 @@ function CollectionEdit(props, context) {
 								<Button icon={DeleteIcon} onClick={() => {}}>
 									Remove token
 								</Button>
-								<br />
-								<br />
 							</center>
-						)}
-
-						{collectionViaURL.userIsCreator && (
+						</Box>
+					)}
+					{collectionViaURL.userIsCreator && (
+						<Box title="Manage admins">
 							<center>
-								<Divider style={{ margin: '10px 0' }} variant="middle" />
-								<Typography color="textSecondary" variant="body1">
-									Manage admins
-								</Typography>
-								<br />
 								<Button icon={AddIcon} onClick={() => {}}>
 									Add admin
 								</Button>
@@ -143,14 +127,12 @@ function CollectionEdit(props, context) {
 								<Button icon={DeleteIcon} onClick={() => {}}>
 									Remove admin
 								</Button>
-								<br />
-								<br />
 							</center>
-						)}
-					</>
-				)}
-			</Box>
-		</Container>
+						</Box>
+					)}
+				</Container>
+			)}
+		</>
 	);
 }
 
