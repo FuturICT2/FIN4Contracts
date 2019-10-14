@@ -15,6 +15,7 @@ function CollectionEdit(props, context) {
 
 	const [collectionViaURL, setCollectionViaURL] = useState(null);
 	const tokensToAddArr = useRef(null);
+	const tokenToRemove = useRef(null);
 
 	useEffect(() => {
 		let collectionIdentifier = props.match.params.collectionIdentifier;
@@ -26,6 +27,17 @@ function CollectionEdit(props, context) {
 			}
 		}
 	});
+
+	const getFormattedTokensInCollection = () => {
+		return collectionViaURL.tokens.map(tokenAddr => {
+			let token = props.fin4Tokens[tokenAddr];
+			return {
+				value: token.address,
+				label: token.name,
+				symbol: token.symbol
+			};
+		});
+	};
 
 	const collectionContainsToken = token => {
 		for (let i = 0; i < collectionViaURL.tokens.length; i++) {
@@ -105,8 +117,8 @@ function CollectionEdit(props, context) {
 								<br />
 								<Dropdown
 									key="remove_token_select"
-									//onChange={}
-									//options={}
+									onChange={e => (tokenToRemove.current = e.value)}
+									options={getFormattedTokensInCollection()}
 								/>
 								<Button icon={DeleteIcon} onClick={() => {}}>
 									Remove token
