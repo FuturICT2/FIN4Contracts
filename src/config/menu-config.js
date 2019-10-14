@@ -6,6 +6,7 @@ import CheckIcon from '@material-ui/icons/CheckCircle';
 import AddIcon from '@material-ui/icons/AddBox';
 import HomeIcon from '@material-ui/icons/Home';
 import UsersIcon from '@material-ui/icons/Group';
+import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import Home from '../views/Home/Home';
 import Claim from '../views/token/claim/Claim';
 import TokenDetails from '../views/token/view/TokenDetails';
@@ -79,8 +80,10 @@ const menu = [
 	},
 	{
 		component: Collections,
-		path: '/token/collection/',
-		showInNavBar: false,
+		path: '/collections/',
+		label: 'Collections',
+		icon: CollectionsIcon,
+		showInNavBar: true,
 		exact: true
 	},
 	{
