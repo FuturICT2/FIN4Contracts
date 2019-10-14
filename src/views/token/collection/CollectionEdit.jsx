@@ -8,6 +8,7 @@ import Button from '../../../components/Button';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 import Dropdown from '../../../components/Dropdown';
+import { Link } from 'react-router-dom';
 
 function CollectionEdit(props, context) {
 	const { t } = useTranslation();
@@ -85,10 +86,15 @@ function CollectionEdit(props, context) {
 						<center style={{ fontFamily: 'arial' }}>
 							<b style={{ fontSize: 'large' }}>{collectionViaURL.name}</b>
 							<br />
-							<br />
 							{!collectionViaURL.userIsCreator && !collectionViaURL.userIsAdmin && (
-								<span style={{ color: 'red' }}>You don't have editing rights on this collection.</span>
+								<>
+									<br />
+									<span style={{ color: 'red' }}>You don't have editing rights on this collection.</span>
+									<br />
+								</>
 							)}
+							<br />
+							<Link to={'/collection/' + collectionViaURL.identifier}>View collection</Link>
 						</center>
 					</Box>
 					{collectionViaURL.userIsAdmin && (
