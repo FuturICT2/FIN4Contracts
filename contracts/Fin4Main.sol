@@ -21,28 +21,29 @@ import 'contracts/proof/Fin4BaseProofType.sol';
 
 contract Fin4Main {
 
-  // ------------------------- FIN4TOKENS -------------------------
+  address public Fin4MainCreator;
+  constructor() public {
+      Fin4MainCreator = msg.sender;
+  }
+
+  // ------------------------- SATELLITE CONTRACTS -------------------------
 
   address public Fin4TokenManagementAddress;
-
-  function setFin4TokenManagementAddress(address addr) public {
-    Fin4TokenManagementAddress = addr;
-  }
-
-  function getFin4TokenManagementAddress() public view returns(address) {
-    return Fin4TokenManagementAddress;
-  }
-
-  // ------------------------- CLAIMING -------------------------
-
   address public Fin4ClaimingAddress;
+  address public Fin4CollectionsAddress;
+  address public Fin4MessagesAddress;
 
-  function setFin4ClaimingAddress(address addr) public {
-    Fin4ClaimingAddress = addr;
+  function setSatelliteAddresses(address tokenManagement, address claiming, address collections, address messages) public {
+    // TODO use TCR instead of giving this right only to the creator of Fin4Main? #ConceptualDecision
+    require (msg.sender == Fin4MainCreator, "Only the creator of Fin4Main can set satellite addresses");
+    Fin4TokenManagementAddress = tokenManagement;
+    Fin4ClaimingAddress = claiming;
+    Fin4CollectionsAddress = collections;
+    Fin4MessagesAddress = messages;
   }
 
-  function getFin4ClaimingAddress() public view returns(address) {
-    return Fin4ClaimingAddress;
+  function getSatelliteAddresses() public view returns(address, address, address, address) {
+    return (Fin4TokenManagementAddress, Fin4ClaimingAddress, Fin4CollectionsAddress, Fin4MessagesAddress);
   }
 
   // ------------------------- PROOF TYPES -------------------------
@@ -72,31 +73,6 @@ contract Fin4Main {
       }
     }
     return false;
-  }
-
-  // ------------------------- MESSAGES -------------------------
-
-  // contract handling messages to the user is outsourced
-  address public Fin4MessagesAddr;
-
-  function setFin4MessagesAddress(address addr) public {
-    Fin4MessagesAddr = addr;
-  }
-
-  function getFin4MessagesAddress() public view returns(address) {
-    return Fin4MessagesAddr;
-  }
-
-  // ------------------------- COLLECTIONS -------------------------
-
-  address public Fin4CollectionsAddr;
-
-  function setFin4CollectionsAddress(address addr) public {
-    Fin4CollectionsAddr = addr;
-  }
-
-  function getFin4CollectionsAddress() public view returns(address) {
-    return Fin4CollectionsAddr;
   }
 
 // ------------------------- REP, GOV and TCR addresses -------------------------

@@ -9,12 +9,6 @@ contract Fin4Claiming {
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
     event ProofApproved(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
 
-    address public Fin4MainAddress;
-
-    constructor(address Fin4MainAddr) public {
-        Fin4MainAddress = Fin4MainAddr;
-    }
-
     /*
     struct ClaimRef {
         address token;

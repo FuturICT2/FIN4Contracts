@@ -5,12 +5,6 @@ import "solidity-util/lib/Strings.sol";
 contract Fin4Collections {
     using Strings for string;
 
-    address public Fin4MainAddress;
-
-    constructor(address Fin4MainAddr) public {
-        Fin4MainAddress = Fin4MainAddr;
-    }
-
     struct Collection {
         uint collectionId;
         address creator;

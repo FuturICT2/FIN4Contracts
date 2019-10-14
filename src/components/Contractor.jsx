@@ -88,24 +88,18 @@ const fetchMessage = (Fin4MessagesContract, defaultAccount, messageId) => {
 
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-	getContractData(Fin4MainContract, defaultAccount, 'getFin4TokenManagementAddress').then(
-		Fin4TokenManagementAddress => {
+	getContractData(Fin4MainContract, defaultAccount, 'getSatelliteAddresses').then(
+		({ 0: Fin4TokenManagementAddress, 1: Fin4ClaimingAddress, 2: Fin4CollectionsAddress, 3: Fin4MessagesAddress }) => {
 			addContract(props, drizzle, 'Fin4TokenManagement', Fin4TokenManagementAddress, ['Fin4TokenCreated']);
+			addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, ['NewMessage', 'MessageMarkedAsRead']);
+			addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
+				'ClaimSubmitted',
+				'ClaimApproved',
+				'ProofApproved'
+			]);
+			addContract(props, drizzle, 'Fin4Collections', Fin4CollectionsAddress, []);
 		}
 	);
-	getContractData(Fin4MainContract, defaultAccount, 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
-		addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, ['NewMessage', 'MessageMarkedAsRead']);
-	});
-	getContractData(Fin4MainContract, defaultAccount, 'getFin4ClaimingAddress').then(Fin4ClaimingAddress => {
-		addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
-			'ClaimSubmitted',
-			'ClaimApproved',
-			'ProofApproved'
-		]);
-	});
-	getContractData(Fin4MainContract, defaultAccount, 'getFin4CollectionsAddress').then(Fin4CollectionsAddress => {
-		addContract(props, drizzle, 'Fin4Collections', Fin4CollectionsAddress, []);
-	});
 };
 
 const fetchMessages = (props, Fin4MessagesContract) => {

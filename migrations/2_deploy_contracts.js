@@ -2,10 +2,10 @@ const fs = require('fs');
 var path = require('path');
 
 const Fin4Main = artifacts.require('Fin4Main');
-const Fin4Messages = artifacts.require('Fin4Messages');
+const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
-const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
+const Fin4Messages = artifacts.require('Fin4Messages');
 const proofTypeContracts = [
 	artifacts.require('ImmediateAuto'),
 	artifacts.require('SpecificAddress'),
@@ -19,47 +19,41 @@ const proofTypeContracts = [
 ];
 
 module.exports = async function(deployer) {
-	// via https://ethereum.stackexchange.com/a/30579
-	// TODO make a nice loop here through all ProofTypes in /contracts/proof without having to list them specifically?
+	// FIN4MAIN
 
 	await deployer.deploy(Fin4Main);
 	const Fin4MainInstance = await Fin4Main.deployed();
 
-	// satellite contracts
+	// SATELLITE CONTRACTS
 
-	await deployer.deploy(Fin4Claiming, Fin4MainInstance.address);
+	await deployer.deploy(Fin4Claiming);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
-	await Fin4MainInstance.setFin4ClaimingAddress(Fin4ClaimingInstance.address);
-
-	await deployer.deploy(Fin4Collections, Fin4MainInstance.address);
-	const Fin4CollectionsInstance = await Fin4Collections.deployed();
-	await Fin4MainInstance.setFin4CollectionsAddress(Fin4CollectionsInstance.address);
-
 	await deployer.deploy(Fin4TokenManagement, Fin4MainInstance.address, Fin4ClaimingInstance.address);
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
-	await Fin4MainInstance.setFin4TokenManagementAddress(Fin4TokenManagementInstance.address);
-
+	await deployer.deploy(Fin4Collections);
+	const Fin4CollectionsInstance = await Fin4Collections.deployed();
 	await deployer.deploy(Fin4Messages);
 	const Fin4MessagesInstance = await Fin4Messages.deployed();
-	await Fin4MainInstance.setFin4MessagesAddress(Fin4MessagesInstance.address);
+
+	await Fin4MainInstance.setSatelliteAddresses(
+		Fin4TokenManagementInstance.address,
+		Fin4ClaimingInstance.address,
+		Fin4CollectionsInstance.address,
+		Fin4MessagesInstance.address
+	);
+
+	// PROOF TYPES
 
 	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MainInstance.address)));
-
 	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
-
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
+
+	// Write Fin4Main address to src/config/DeployedAddresses.js
 
 	let data = "const Fin4MainAddress = '" + Fin4MainInstance.address + "';\n" + 'export { Fin4MainAddress };\n';
 	fs.writeFile(path.join(__dirname, '../src/config/DeployedAddresses.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
-	// temp: tokens to work on TCR dev
-	/*
-	await Fin4MainInstance.createNewToken('Token-TCR-Dev-1', 'TD1', [], [], []);
-	await Fin4MainInstance.createNewToken('Token-TCR-Dev-2', 'TD2', [], [], []);
-	await Fin4MainInstance.createNewToken('Token-TCR-Dev-3', 'TD3', [], [], []);
-	await Fin4MainInstance.createNewToken('Token-TCR-Dev-4', 'TD4', [], [], []);
-	await Fin4MainInstance.createNewToken('Token-TCR-Dev-5', 'TD5', [], [], []);
-	*/
+	// await Fin4MainInstance.createNewToken('Token-Dev-1', 'TD1', [], [], []);
 };
