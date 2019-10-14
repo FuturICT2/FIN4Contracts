@@ -8,30 +8,30 @@ import PropTypes from 'prop-types';
 function CollectionView(props, drizzle) {
 	const { t } = useTranslation();
 
-	const [collectionViaURL, setCollectionViaURL] = useState(null);
+	const [collection, setCollection] = useState(null);
 
 	useEffect(() => {
 		let collectionIdentifier = props.match.params.collectionIdentifier;
-		if (collectionIdentifier && !collectionViaURL) {
-			let collection = props.collections[collectionIdentifier];
-			if (collection) {
-				setCollectionViaURL(collection);
+		if (collectionIdentifier && !collection) {
+			let col = props.collections[collectionIdentifier];
+			if (col) {
+				setCollection(col);
 			}
 		}
 	});
 
 	return (
 		<Container>
-			<Box title={(collectionViaURL ? collectionViaURL.name : '') + ' collection'}>
-				{collectionViaURL && (
+			<Box title={(collection ? collection.name : '') + ' collection'}>
+				{collection && (
 					<span style={{ fontFamily: 'arial' }}>
 						<center>
-							<b style={{ fontSize: 'large' }}>{collectionViaURL.name}</b>
+							<b style={{ fontSize: 'large' }}>{collection.name}</b>
 							<br />
-							<span style={{ color: 'gray' }}>{collectionViaURL.description}</span>
+							<span style={{ color: 'gray' }}>{collection.description}</span>
 						</center>
 						<br />
-						Contains {collectionViaURL.tokens.length} tokens
+						Contains {collection.tokens.length} tokens
 					</span>
 				)}
 			</Box>
