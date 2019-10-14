@@ -41,12 +41,8 @@ class ContractForm extends Component {
 		super(props);
 
 		this.drizzle = context.drizzle;
-
 		this.newValue = null;
-
-		this.contractAddress = this.props.contractAddress;
 		this.contractName = this.props.contractName;
-
 		this.inputs = [];
 
 		var initialState = {

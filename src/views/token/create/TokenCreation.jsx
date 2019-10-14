@@ -21,8 +21,7 @@ function TokenCreation(props) {
 		<>
 			<Box title={t('create-new-token')}>
 				<ContractForm
-					contractAddress={Fin4MainAddress}
-					contractName="Fin4Main"
+					contractName="Fin4TokenManagement"
 					method="createNewToken"
 					multiSelectOptions={Object.keys(props.proofTypes).map(addr => props.proofTypes[addr])}
 					labels={[t('token-name'), t('token-symbol'), t('description'), t('unit-of-measurement'), t('proof-types')]}
