@@ -51,7 +51,7 @@ function UserMessage(props, context) {
 					/>
 					<br />
 					<small style={{ color: 'gray', fontFamily: 'arial' }}>
-						Note that messages are not encrypted. With some effort they can be retrieved in plain text from the
+						Note that messages are <i>not</i> encrypted. With some effort they can be retrieved in plain text from the
 						blockchain.
 					</small>
 					<br />
