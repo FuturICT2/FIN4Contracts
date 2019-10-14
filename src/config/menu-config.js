@@ -1,10 +1,11 @@
 // import ActionsIcon from '@material-ui/icons/DirectionsRun';
 // import DoneIcon from '@material-ui/icons/Done';
-import StarIcon from '@material-ui/icons/Star';
-import CheckIcon from '@material-ui/icons/CheckCircleOutline';
+//import StarIcon from '@material-ui/icons/Star';
+import ListIcon from '@material-ui/icons/List';
+import CheckIcon from '@material-ui/icons/CheckCircle';
 import AddIcon from '@material-ui/icons/AddBox';
 import HomeIcon from '@material-ui/icons/Home';
-import UserIcon from '@material-ui/icons/Person';
+import UsersIcon from '@material-ui/icons/Group';
 import Home from '../views/Home/Home';
 import Claim from '../views/token/claim/Claim';
 import TokenDetails from '../views/token/view/TokenDetails';
@@ -32,7 +33,7 @@ const menu = [
 		component: Token,
 		path: '/token/',
 		label: 'Tokens',
-		icon: StarIcon,
+		icon: ListIcon,
 		showInNavBar: true,
 		exact: true
 	},
@@ -51,7 +52,7 @@ const menu = [
 	{
 		component: Claim,
 		path: '/token/claim',
-		label: 'Claim',
+		label: 'Claims',
 		icon: CheckIcon,
 		showInNavBar: true,
 		exact: true
@@ -98,7 +99,7 @@ const menu = [
 		component: User,
 		path: '/user',
 		label: 'Users',
-		icon: UserIcon,
+		icon: UsersIcon,
 		showInNavBar: true,
 		exact: true
 	},
