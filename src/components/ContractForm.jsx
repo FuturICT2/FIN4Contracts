@@ -17,7 +17,7 @@ import Modal from './Modal';
 import Dropdown from './Dropdown';
 import Button from './Button';
 import AddIcon from '@material-ui/icons/Add';
-import OpenIcon from '@material-ui/icons/OpenInNew';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -447,7 +447,7 @@ const inputFieldStyle = {
 const HelperModalTrigger = props => {
 	return (
 		<span {...props} style={{ cursor: 'pointer' }}>
-			{props.children} (Learn More <OpenIcon style={{ verticalAlign: 'middle' }} />)
+			{props.children} (Learn More <InfoIcon style={{ verticalAlign: 'middle' }} />)
 		</span>
 	);
 };
