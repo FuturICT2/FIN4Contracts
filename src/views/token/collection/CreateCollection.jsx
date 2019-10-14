@@ -10,7 +10,11 @@ function CreateCollection(props, context) {
 
 	return (
 		<Box title="Create a new collection">
-			<ContractForm contractName="Fin4Collections" method="createCollection" />
+			<ContractForm
+				contractName="Fin4Collections"
+				method="createCollection"
+				labels={['Collection-Name', 'Short-name (e.g. "ethz" for "ETH Zürich")', 'Description']}
+			/>
 		</Box>
 	);
 }
