@@ -5,6 +5,7 @@ const Fin4Main = artifacts.require('Fin4Main');
 const Fin4Messages = artifacts.require('Fin4Messages');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
+const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const proofTypeContracts = [
 	artifacts.require('ImmediateAuto'),
 	artifacts.require('SpecificAddress'),
@@ -22,8 +23,9 @@ module.exports = async function(deployer) {
 	// TODO make a nice loop here through all ProofTypes in /contracts/proof without having to list them specifically?
 
 	await deployer.deploy(Fin4Main);
-	await deployer.deploy(Fin4Messages);
 	const Fin4MainInstance = await Fin4Main.deployed();
+
+	// satellite contracts
 
 	await deployer.deploy(Fin4Claiming, Fin4MainInstance.address);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
@@ -33,6 +35,11 @@ module.exports = async function(deployer) {
 	const Fin4CollectionsInstance = await Fin4Collections.deployed();
 	await Fin4MainInstance.setFin4CollectionsAddress(Fin4CollectionsInstance.address);
 
+	await deployer.deploy(Fin4TokenManagement, Fin4MainInstance.address, Fin4ClaimingInstance.address);
+	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
+	await Fin4MainInstance.setFin4TokenManagementAddress(Fin4TokenManagementInstance.address);
+
+	await deployer.deploy(Fin4Messages);
 	const Fin4MessagesInstance = await Fin4Messages.deployed();
 	await Fin4MainInstance.setFin4MessagesAddress(Fin4MessagesInstance.address);
 

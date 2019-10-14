@@ -88,6 +88,11 @@ const fetchMessage = (Fin4MessagesContract, defaultAccount, messageId) => {
 
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	getContractData(Fin4MainContract, defaultAccount, 'getFin4TokenManagementAddress').then(
+		Fin4TokenManagementAddress => {
+			addContract(props, drizzle, 'Fin4TokenManagement', Fin4TokenManagementAddress, ['Fin4TokenCreated']);
+		}
+	);
 	getContractData(Fin4MainContract, defaultAccount, 'getFin4MessagesAddress').then(Fin4MessagesAddress => {
 		addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, ['NewMessage', 'MessageMarkedAsRead']);
 	});
@@ -125,12 +130,12 @@ const fetchMessages = (props, Fin4MessagesContract) => {
 		});
 };
 
-const fetchAllTokens = (props, Fin4MainContract, callback) => {
+const fetchAllTokens = (props, Fin4TokenManagementContract, callback) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-	getContractData(Fin4MainContract, defaultAccount, 'getAllFin4Tokens')
+	getContractData(Fin4TokenManagementContract, defaultAccount, 'getAllFin4Tokens')
 		.then(tokens => {
 			return tokens.map(tokenAddr => {
-				return getContractData(Fin4MainContract, defaultAccount, 'getTokenInfo', tokenAddr).then(
+				return getContractData(Fin4TokenManagementContract, defaultAccount, 'getTokenInfo', tokenAddr).then(
 					({ 0: name, 1: symbol, 2: description, 3: unit }) => {
 						return {
 							address: tokenAddr,
@@ -153,9 +158,9 @@ const fetchAllTokens = (props, Fin4MainContract, callback) => {
 		});
 };
 
-const fetchUsersNonzeroTokenBalances = (props, Fin4MainContract) => {
+const fetchUsersNonzeroTokenBalances = (props, Fin4TokenManagementContract) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-	getContractData(Fin4MainContract, defaultAccount, 'getMyNonzeroTokenBalances').then(
+	getContractData(Fin4TokenManagementContract, defaultAccount, 'getMyNonzeroTokenBalances').then(
 		({ 0: nonzeroBalanceTokens, 1: balancesBN }) => {
 			if (nonzeroBalanceTokens.length === 0) {
 				return;

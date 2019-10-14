@@ -14,20 +14,22 @@ function TokenDetails(props, context) {
 	const [details, setDetails] = useState(null);
 
 	const fetchDetailedTokenInfo = token => {
-		let Fin4MainContract = context.drizzle.contracts.Fin4Main;
 		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 
-		getContractData(Fin4MainContract, defaultAccount, 'getDetailedTokenInfo', token.address).then(
-			({ 0: userIsTokenCreator, 1: requiredProofTypes, 2: claimsCount, 3: usersBalance, 4: totalSupply }) => {
-				setDetails({
-					userIsTokenCreator: userIsTokenCreator,
-					requiredProofTypes: requiredProofTypes,
-					claimsCount: claimsCount,
-					usersBalance: usersBalance,
-					totalSupply: totalSupply // how much of this token has been minted
-				});
-			}
-		);
+		getContractData(
+			context.drizzle.contracts.Fin4TokenManagement,
+			defaultAccount,
+			'getDetailedTokenInfo',
+			token.address
+		).then(({ 0: userIsTokenCreator, 1: requiredProofTypes, 2: claimsCount, 3: usersBalance, 4: totalSupply }) => {
+			setDetails({
+				userIsTokenCreator: userIsTokenCreator,
+				requiredProofTypes: requiredProofTypes,
+				claimsCount: claimsCount,
+				usersBalance: usersBalance,
+				totalSupply: totalSupply // how much of this token has been minted
+			});
+		});
 	};
 
 	const getProofTypesStr = () => {

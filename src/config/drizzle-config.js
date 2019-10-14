@@ -18,9 +18,7 @@ const drizzleConfig = {
 			web3Contract: new web3.eth.Contract(Fin4Main.abi, Fin4MainAddress)
 		}
 	],
-	events: {
-		Fin4Main: ['Fin4TokenCreated']
-	},
+	events: {},
 	polls: {
 		accounts: 1500
 	}
