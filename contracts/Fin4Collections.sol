@@ -81,6 +81,7 @@ contract Fin4Collections {
         uint adminIndex = getIndexOfAdmin(collectionId, msg.sender);
         require(adminIndex != INVALID_INDEX, "Only collection-admins can add tokens");
         for (uint i = 0; i < newTokens.length; i ++) {
+            // TODO don't add if its already there
             col.tokens.push(newTokens[i]);
         }
     }

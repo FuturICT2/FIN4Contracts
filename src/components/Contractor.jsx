@@ -275,6 +275,7 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 							7: logoURL
 						}) => {
 							return {
+								collectionId: collectionId,
 								userIsCreator: userIsCreator,
 								userIsAdmin: userIsAdmin,
 								tokens: tokens,
