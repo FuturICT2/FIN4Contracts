@@ -26,12 +26,7 @@ class App extends Component {
 								<TopBar />
 								<LoadInitialData />
 								{menuItems.map((route, i) => (
-									<Route
-										exact={route.exact}
-										key={i}
-										render={props => <route.component {...props} />}
-										path={route.path}
-									/>
+									<Route exact key={i} render={props => <route.component {...props} />} path={route.path} />
 								))}
 							</>
 						</DrizzleProvider>
