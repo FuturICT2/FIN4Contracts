@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import Button from '../../../components/Button';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
+import Dropdown from '../../../components/Dropdown';
+import { Typography, Divider } from '@material-ui/core';
 
 function CollectionEdit(props, drizzle) {
 	const { t } = useTranslation();
@@ -19,6 +21,7 @@ function CollectionEdit(props, drizzle) {
 			let collection = props.collections[collectionIdentifier];
 			if (collection) {
 				setCollectionViaURL(collection);
+				// TODO fetch admins
 			}
 		}
 	});
@@ -28,9 +31,9 @@ function CollectionEdit(props, drizzle) {
 			<Box title="Edit collection">
 				{collectionViaURL && (
 					<>
-						<div>
-							{collectionViaURL.identifier}: {collectionViaURL.name}
-						</div>
+						<center style={{ fontFamily: 'arial' }}>
+							<span style={{ color: 'gray' }}>{collectionViaURL.identifier}: </span> <b>{collectionViaURL.name}</b>
+						</center>
 						<br />
 						<br />
 
@@ -43,29 +46,54 @@ function CollectionEdit(props, drizzle) {
 						)}
 
 						{collectionViaURL.userIsAdmin && (
-							<>
+							<center>
+								<Divider style={{ margin: '10px 0' }} variant="middle" />
+								<Typography color="textSecondary" variant="body1">
+									Manage tokens
+								</Typography>
+								<br />
+								<Dropdown
+									key="add_tokens_select"
+									multipleChoice
+									//onChange={}
+									//options={}
+								/>
 								<Button icon={AddIcon} onClick={() => {}}>
-									Add token(s)
+									Add tokens
 								</Button>
+								<br />
+								<br />
+								<Dropdown
+									key="remove_token_select"
+									//onChange={}
+									//options={}
+								/>
 								<Button icon={DeleteIcon} onClick={() => {}}>
 									Remove token
 								</Button>
 								<br />
 								<br />
-							</>
+							</center>
 						)}
 
 						{collectionViaURL.userIsCreator && (
-							<>
+							<center>
+								<Divider style={{ margin: '10px 0' }} variant="middle" />
+								<Typography color="textSecondary" variant="body1">
+									Manage admins
+								</Typography>
+								<br />
 								<Button icon={AddIcon} onClick={() => {}}>
 									Add admin
 								</Button>
+								<br />
+								<br />
 								<Button icon={DeleteIcon} onClick={() => {}}>
 									Remove admin
 								</Button>
 								<br />
 								<br />
-							</>
+							</center>
 						)}
 					</>
 				)}
