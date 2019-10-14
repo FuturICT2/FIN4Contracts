@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Table from '../../../components/Table';
 import TableRow from '../../../components/TableRow';
 import Currency from '../../../components/Currency';
+import { Link } from 'react-router-dom';
 
 function CollectionView(props, drizzle) {
 	const { t } = useTranslation();
@@ -49,7 +50,13 @@ function CollectionView(props, drizzle) {
 										key={'token_' + index}
 										data={{
 											token: <Currency name={token.name} symbol={token.symbol} />,
-											actions: 'TODO'
+											actions: (
+												<small style={{ color: 'blue', textDecoration: 'underline' }}>
+													<Link to={'/token/details/' + token.symbol}>Details</Link>
+													<br />
+													<Link to={'/claim/' + token.symbol}>Claim</Link>
+												</small>
+											)
 										}}
 									/>
 								);
