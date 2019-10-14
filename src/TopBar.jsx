@@ -59,7 +59,7 @@ function TopBar(props) {
 						<NoNotificationsIcon />
 					)}
 				</Link>{' '}
-				<Link to={'/settings/'}>
+				<Link to={'/settings'}>
 					<SettingsIcon />
 				</Link>
 			</div>

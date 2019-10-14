@@ -31,7 +31,7 @@ function TokenOverview(props) {
 										<small style={{ color: 'blue', textDecoration: 'underline' }}>
 											<Link to={'/token/details/' + token.symbol}>Details</Link>
 											<br />
-											<Link to={'/token/claim/' + token.symbol}>Claim</Link>
+											<Link to={'/claim/' + token.symbol}>Claim</Link>
 										</small>
 									)
 								}}

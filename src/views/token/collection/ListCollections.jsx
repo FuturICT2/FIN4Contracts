@@ -25,11 +25,11 @@ function ListCollections(props) {
 								tokensCount: collection.tokens.length,
 								actions: (
 									<small style={{ color: 'blue', textDecoration: 'underline' }}>
-										<Link to={'/token/collection/' + identifier}>View</Link>
+										<Link to={'/collection/' + identifier}>View</Link>
 										{(collection.userIsCreator || collection.userIsAdmin) && (
 											<>
 												<br />
-												<Link to={'/token/collection/' + identifier + '/edit'}>Edit</Link>
+												<Link to={'/collection/edit/' + identifier}>Edit</Link>
 											</>
 										)}
 									</small>

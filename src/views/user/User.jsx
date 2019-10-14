@@ -14,12 +14,12 @@ function User(props, context) {
 		<Container>
 			<Box title="User actions">
 				<center>
-					<Link to={'/user/message/'}>
+					<Link to={'/user/message'}>
 						<Button>Message user</Button>
 					</Link>
 					<br />
 					<br />
-					<Link to={'/user/transfer/'}>
+					<Link to={'/user/transfer'}>
 						<Button>Transfer tokens to user</Button>
 					</Link>
 				</center>

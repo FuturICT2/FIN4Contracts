@@ -30,31 +30,12 @@ const menu = [
 		showInNavBar: true,
 		exact: true
 	},
+	// ------------------ TOKENS ------------------
 	{
 		component: Token,
-		path: '/token/',
+		path: '/tokens',
 		label: 'Tokens',
 		icon: ListIcon,
-		showInNavBar: true,
-		exact: true
-	},
-	{
-		component: Claim,
-		path: '/token/claim/:tokenSymbol',
-		showInNavBar: false,
-		exact: true
-	},
-	{
-		component: ProofSubmission,
-		path: '/token/claim/:tokenSymbol/proof/:claimId',
-		showInNavBar: false,
-		exact: true
-	},
-	{
-		component: Claim,
-		path: '/token/claim',
-		label: 'Claims',
-		icon: CheckIcon,
 		showInNavBar: true,
 		exact: true
 	},
@@ -68,16 +49,38 @@ const menu = [
 	},
 	{
 		component: TokenDetails,
-		path: '/token/details/:tokenSymbol',
+		path: '/token/details/',
 		showInNavBar: false,
 		exact: true
 	},
 	{
 		component: TokenDetails,
-		path: '/token/details/',
+		path: '/token/details/:tokenSymbol',
 		showInNavBar: false,
 		exact: true
 	},
+	// ------------------ CLAIMS ------------------
+	{
+		component: Claim,
+		path: '/claims',
+		label: 'Claims',
+		icon: CheckIcon,
+		showInNavBar: true,
+		exact: true
+	},
+	{
+		component: Claim,
+		path: '/claim/:tokenSymbol',
+		showInNavBar: false,
+		exact: true
+	},
+	{
+		component: ProofSubmission,
+		path: '/claim/:tokenSymbol/proof/:claimId',
+		showInNavBar: false,
+		exact: true
+	},
+	// ------------------ COLLECTIONS ------------------
 	{
 		component: Collections,
 		path: '/collections/',
@@ -88,22 +91,29 @@ const menu = [
 	},
 	{
 		component: CollectionView,
-		path: '/token/collection/:collectionIdentifier',
+		path: '/collection/:collectionIdentifier',
 		showInNavBar: false,
 		exact: true
 	},
 	{
 		component: CollectionEdit,
-		path: '/token/collection/:collectionIdentifier/edit',
+		path: '/collection/edit/:collectionIdentifier',
 		showInNavBar: false,
 		exact: true
 	},
+	// ------------------ USERS ------------------
 	{
 		component: User,
-		path: '/user',
+		path: '/users',
 		label: 'Users',
 		icon: UsersIcon,
 		showInNavBar: true,
+		exact: true
+	},
+	{
+		component: UserMessage,
+		path: '/user/message',
+		showInNavBar: false,
 		exact: true
 	},
 	{
@@ -113,14 +123,8 @@ const menu = [
 		exact: true
 	},
 	{
-		component: UserMessage,
-		path: '/user/message/',
-		showInNavBar: false,
-		exact: true
-	},
-	{
 		component: UserTransfer,
-		path: '/user/transfer/',
+		path: '/user/transfer',
 		showInNavBar: false,
 		exact: true
 	},
@@ -142,9 +146,10 @@ const menu = [
 		showInNavBar: false,
 		exact: true
 	},
+	// ------------------ SETTINGS ------------------
 	{
 		component: Settings,
-		path: '/settings/',
+		path: '/settings',
 		showInNavBar: false,
 		exact: true
 	}

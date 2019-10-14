@@ -36,7 +36,7 @@ function CollectionView(props, drizzle) {
 						{(collectionViaURL.userIsCreator || collectionViaURL.userIsAdmin) && (
 							<>
 								<br />
-								<Link to={'/token/collection/' + collectionViaURL.identifier + '/edit'}>Edit</Link>
+								<Link to={'/collection/edit/' + collectionViaURL.identifier}>Edit</Link>
 							</>
 						)}
 					</>

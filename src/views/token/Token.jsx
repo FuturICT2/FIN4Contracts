@@ -17,11 +17,6 @@ function Token(props) {
 					<Link to={'/token/create/'}>
 						<Button icon={AddIcon}>New Token</Button>
 					</Link>
-					<br />
-					<br />
-					<Link to={'/token/collection/'}>
-						<Button>See collections</Button>
-					</Link>
 				</center>
 			</Box>
 			<TokenOverview />
