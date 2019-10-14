@@ -6,8 +6,4 @@ contract Fin4MainStub {
 
   function getFin4MessagesAddress() public view returns(address);
 
-  function claimApprovedPingback(address tokenAddress, address claimer, uint claimId) public;
-
-  function proofApprovalPingback(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public;
-
 }
