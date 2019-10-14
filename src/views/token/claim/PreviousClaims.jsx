@@ -24,7 +24,7 @@ function PreviousClaims(props) {
 					let token = props.store.getState().fin4Store.fin4Tokens[claim.token];
 					let dateStr = claim.date.toString();
 					let symbol = props.fin4Tokens[claim.token].symbol; // of token that gets claimed
-					let proofSite = '/token/claim/' + symbol + '/proof/' + claim.claimId;
+					let proofSite = '/claim/' + symbol + '/proof/' + claim.claimId;
 
 					// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
 					// TODO divide by 1000 instead?
