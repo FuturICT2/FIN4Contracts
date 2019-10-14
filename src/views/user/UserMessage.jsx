@@ -39,7 +39,11 @@ function UserMessage(props, context) {
 		<Container>
 			<Box title="Send message to user">
 				<center>
-					<AddressQRreader initialValue={userAddressViaURL} onChange={val => (addressValue.current = val)} />
+					<AddressQRreader
+						initialValue={userAddressViaURL}
+						onChange={val => (addressValue.current = val)}
+						label="Public address of message-receiver"
+					/>
 					<br />
 					<TextField
 						label="Message text"

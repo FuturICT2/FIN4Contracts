@@ -56,7 +56,7 @@ function AddressQRreader(props) {
 		<>
 			<TextField
 				type="text"
-				label="Public address"
+				label={props.label ? props.label : 'Public address'}
 				style={styles.inputField}
 				variant="outlined"
 				value={addressValue ? addressValue : ''}
