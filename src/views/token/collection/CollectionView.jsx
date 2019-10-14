@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import Container from '../../../components/Container';
 import Box from '../../../components/Box';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 function CollectionView(props, drizzle) {
 	const { t } = useTranslation();
@@ -23,23 +22,17 @@ function CollectionView(props, drizzle) {
 
 	return (
 		<Container>
-			<Box title="View collection">
+			<Box title={(collectionViaURL ? collectionViaURL.name : '') + ' collection'}>
 				{collectionViaURL && (
-					<>
-						{collectionViaURL.identifier}
+					<span style={{ fontFamily: 'arial' }}>
+						<center>
+							<b style={{ fontSize: 'large' }}>{collectionViaURL.name}</b>
+							<br />
+							<span style={{ color: 'gray' }}>{collectionViaURL.description}</span>
+						</center>
 						<br />
-						{collectionViaURL.name}
-						<br />
-						{collectionViaURL.description}
-						<br />
-						{collectionViaURL.tokens.length}
-						{(collectionViaURL.userIsCreator || collectionViaURL.userIsAdmin) && (
-							<>
-								<br />
-								<Link to={'/collection/edit/' + collectionViaURL.identifier}>Edit</Link>
-							</>
-						)}
-					</>
+						Contains {collectionViaURL.tokens.length} tokens
+					</span>
 				)}
 			</Box>
 		</Container>
@@ -52,6 +45,7 @@ CollectionView.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
+		fin4Tokens: state.fin4Store.fin4Tokens,
 		collections: state.fin4Store.collections
 	};
 };
