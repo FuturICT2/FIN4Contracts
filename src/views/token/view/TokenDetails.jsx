@@ -6,6 +6,7 @@ import Container from '../../../components/Container';
 import Currency from '../../../components/Currency';
 import { getContractData, findTokenBySymbol } from '../../../components/Contractor';
 import PropTypes from 'prop-types';
+import { Divider } from '@material-ui/core';
 
 function TokenDetails(props, context) {
 	const { t } = useTranslation();
@@ -54,7 +55,7 @@ function TokenDetails(props, context) {
 
 	return (
 		<Container>
-			<Box title="Token Details">
+			<Box>
 				{!tokenViaURL ? (
 					props.match.params.tokenSymbol ? (
 						'No token with symbol ' + props.match.params.tokenSymbol + ' found'
@@ -62,30 +63,46 @@ function TokenDetails(props, context) {
 						'No token-symbol passed via URL'
 					)
 				) : (
-					<>
-						<Currency symbol={tokenViaURL.symbol} name={tokenViaURL.name} />
+					<span style={{ fontFamily: 'arial' }}>
+						<center>
+							<Currency symbol={tokenViaURL.symbol} name={<b>{tokenViaURL.name}</b>} />
+							<br />
+							<span style={{ fontSize: 'x-small' }}>
+								<a href={'https://rinkeby.etherscan.io/address/' + tokenViaURL.address} target="_blank">
+									{tokenViaURL.address}
+								</a>
+							</span>
+						</center>
 						<p>
-							<small>
-								<a href={'https://rinkeby.etherscan.io/address/' + tokenViaURL.address}>{tokenViaURL.address}</a>
-							</small>
+							<span style={{ color: 'gray' }}>Description:</span> {tokenViaURL.description}
 						</p>
-						<p>Description: {tokenViaURL.description}</p>
-						<p>Unit: {tokenViaURL.unit}</p>
-						<hr />
-						{!details ? (
-							'Loading details...'
-						) : (
-							<>
-								<p>You are the token creator: {details.userIsTokenCreator ? 'yes' : 'no'}</p>
-								<p>Proof types: {getProofTypesStr()}</p>
-								<p>Total number of claims: {details.claimsCount}</p>
-								<p>Your balance: {details.usersBalance}</p>
-								<p>Total supply: {details.totalSupply}</p>
-							</>
-						)}
-					</>
+						<p>
+							<span style={{ color: 'gray' }}>Unit:</span> {tokenViaURL.unit}
+						</p>
+					</span>
 				)}
 			</Box>
+			{!details ? (
+				'Loading details...'
+			) : (
+				<Box title="Details">
+					<span style={{ fontFamily: 'arial' }}>
+						<p>
+							<span style={{ color: 'gray' }}>Your balance:</span> {details.usersBalance}
+						</p>
+						<Divider style={{ margin: '10px 0' }} variant="middle" />
+						<p>
+							<span style={{ color: 'gray' }}>Proof types:</span> {getProofTypesStr()}
+						</p>
+						<p>
+							<span style={{ color: 'gray' }}>Total number of claims:</span> {details.claimsCount}
+						</p>
+						<p>
+							<span style={{ color: 'gray' }}>Total supply:</span> {details.totalSupply}
+						</p>
+					</span>
+				</Box>
+			)}
 		</Container>
 	);
 }
