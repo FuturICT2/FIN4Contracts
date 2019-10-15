@@ -3,7 +3,7 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import TokenOverview from './TokenOverview';
-import TokenCreation from './create/TokenCreation';
+import TokenCreation from './TokenCreation';
 
 function Token(props) {
 	const { t } = useTranslation();

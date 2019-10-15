@@ -5,7 +5,7 @@ import UsersIcon from '@material-ui/icons/Group';
 import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import Home from '../views/Home/Home';
 import Claim from '../views/claim/Claim';
-import TokenDetails from '../views/token/view/TokenDetails';
+import TokenDetails from '../views/token/TokenDetails';
 import TokenEdit from '../views/token/TokenEdit';
 import Token from '../views/token/Token';
 import ProofSubmission from '../views/claim/proof/ProofSubmission';
