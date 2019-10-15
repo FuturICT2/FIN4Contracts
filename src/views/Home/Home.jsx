@@ -26,7 +26,7 @@ function Home(props) {
 				{Object.keys(props.usersBalances).length === 0 ? (
 					<NoTokens>{t('no-tokens-yet')}</NoTokens>
 				) : (
-					<Table headers={[t('token-name'), t('token-balance')]}>
+					<Table headers={[t('token-name'), t('token-balance')]} colWidths={[85, 15]}>
 						{Object.keys(props.usersBalances).map((tokenAddr, index) => {
 							let token = props.store.getState().fin4Store.fin4Tokens[tokenAddr];
 							return (

@@ -38,7 +38,7 @@ function CollectionView(props, drizzle) {
 							<br />
 							Contains {collection.tokens.length} tokens:
 						</span>
-						<Table headers={['Token', 'Actions']}>
+						<Table headers={['Token', 'Actions']} colWidths={[85, 15]}>
 							{collection.tokens.map((tokenAddr, index) => {
 								let token = props.fin4Tokens[tokenAddr];
 								if (!token) {
