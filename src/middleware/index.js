@@ -30,7 +30,6 @@ const contractEventNotifier = store => next => action => {
 		let name = token.name;
 		let symbol = token.symbol;
 		display = 'New Fin4 token created: ' + name + ' [' + symbol + ']';
-		let userIsCreator = token.creator === defaultAccount;
 
 		store.dispatch({
 			type: 'ADD_FIN4_TOKEN',
@@ -40,8 +39,8 @@ const contractEventNotifier = store => next => action => {
 				symbol: symbol,
 				description: token.description,
 				unit: token.unit,
-				userIsCreator: userIsCreator,
-				userIsAdmin: userIsCreator
+				userIsCreator: token.creator === defaultAccount,
+				userIsAdmin: false
 			}
 		});
 	}
