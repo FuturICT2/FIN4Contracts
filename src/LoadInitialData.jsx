@@ -18,8 +18,7 @@ function LoadInitialData(props, context) {
 		Fin4TokenManagement: false,
 		Fin4Messages: false,
 		Fin4Claiming: false,
-		Fin4Collections: false,
-		tokensFetched: false
+		Fin4Collections: false
 	});
 
 	useEffect(() => {
@@ -43,7 +42,6 @@ function LoadInitialData(props, context) {
 			isInit.current.Fin4TokenManagement = true;
 			let Fin4TokenManagementContract = context.drizzle.contracts.Fin4TokenManagement;
 			fetchAllTokens(props, Fin4TokenManagementContract, () => {
-				isInit.current.tokensFetched = true;
 				fetchUsersNonzeroTokenBalances(props, Fin4TokenManagementContract);
 			});
 		}
@@ -62,12 +60,7 @@ function LoadInitialData(props, context) {
 			fetchCollectionsInfo(props, context.drizzle.contracts.Fin4Collections);
 		}
 
-		if (
-			!isInit.current.Fin4Claiming &&
-			props.contracts.Fin4Claiming &&
-			props.contracts.Fin4Claiming.initialized &&
-			isInit.current.tokensFetched
-		) {
+		if (!isInit.current.Fin4Claiming && props.contracts.Fin4Claiming && props.contracts.Fin4Claiming.initialized) {
 			isInit.current.Fin4Claiming = true;
 			fetchCurrentUsersClaims(props, context.drizzle.contracts.Fin4Claiming);
 		}
