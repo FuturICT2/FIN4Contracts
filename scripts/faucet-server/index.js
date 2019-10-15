@@ -15,14 +15,37 @@ const provider = new HDWalletProvider(config.MNEMONIC, networkURL);
 const web3 = new Web3(provider);
 const address = web3.currentProvider.addresses[0];
 
+app.listen(port, () => console.log(title + ' listening on port ' + port));
+
 app.get('/', (req, res) => res.send(title));
 
 app.get('/faucet', (req, res) => {
 	console.log('Received funding request: ', req.query);
-	sendEther(req.query.recipient, dripAmount.toString(), req.query.networkID.toString(), networkURL, res);
+
+	checkUsersBalance(req.query.recipient, res, () => {
+		sendEther(req.query.recipient, dripAmount.toString(), req.query.networkID.toString(), networkURL, res);
+	});
 });
 
-app.listen(port, () => console.log(title + ' listening on port ' + port));
+let checkUsersBalance = async function(recipient, res, callback) {
+	console.log('Checking ETH balance of user ' + recipient);
+	web3.eth.getBalance(recipient, (err, res) => {
+		if (err) {
+			let report = 'Failed to check users balance, not sending Ether.';
+			console.log(report);
+			res.send(report);
+			return;
+		}
+		let eth = window.web3.toDecimal(window.web3.fromWei(res, 'ether'));
+		if (eth >= 1) {
+			let report = 'User has more than 1 ETH (' + eth + '), not sending Ether.';
+			console.log(report);
+			res.send(report);
+			return;
+		}
+		callback();
+	});
+};
 
 let sendEther = async function(recipient, amount, networkID, networkURL, res) {
 	console.log(
