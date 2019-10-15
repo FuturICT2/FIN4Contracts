@@ -54,6 +54,12 @@ function CollectionView(props, drizzle) {
 												<small style={{ color: 'blue', textDecoration: 'underline' }}>
 													<Link to={'/token/details/' + token.symbol}>Details</Link>
 													<br />
+													{(token.userIsCreator || token.userIsAdmin) && (
+														<>
+															<Link to={'/token/edit/' + token.symbol}>Edit</Link>
+															<br />
+														</>
+													)}
 													<Link to={'/claim/' + token.symbol}>Claim</Link>
 												</small>
 											)

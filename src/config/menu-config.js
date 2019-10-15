@@ -6,6 +6,7 @@ import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import Home from '../views/Home/Home';
 import Claim from '../views/token/claim/Claim';
 import TokenDetails from '../views/token/view/TokenDetails';
+import TokenEdit from '../views/token/TokenEdit';
 import Token from '../views/token/Token';
 import ProofSubmission from '../views/token/claim/proof/ProofSubmission';
 import Collections from '../views/token/collection/Collections';
@@ -41,6 +42,11 @@ const menu = [
 	{
 		component: TokenDetails,
 		path: '/token/details/:tokenSymbol',
+		showInNavBar: false
+	},
+	{
+		component: TokenEdit,
+		path: '/token/edit/:tokenSymbol',
 		showInNavBar: false
 	},
 	// ------------------ CLAIMS ------------------
