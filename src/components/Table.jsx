@@ -8,7 +8,11 @@ const Fin4Table = props => {
 			<TableHead>
 				<TableRow>
 					{props.headers.map((key, index) => {
-						return <TableCell key={index}>{key}</TableCell>;
+						return (
+							<TableCell width={(props.colWidths ? props.colWidths[index] : '100') + '%'} key={index}>
+								{key}
+							</TableCell>
+						);
 					})}
 				</TableRow>
 			</TableHead>
