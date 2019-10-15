@@ -10,8 +10,8 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
     Fin4TokenBase(description, unit, actionTypeCreatorAddress)
     public {}
 
-  function getDetailedInfo(address user) public view returns(bool, address[] memory, uint, uint256, uint256) {
-    return (user == actionTypeCreator, requiredProofTypes, nextClaimId, balanceOf(user), totalSupply());
+  function getDetailedTokenInfo(address user) public view returns(address[] memory, uint, uint256, uint256) {
+    return (requiredProofTypes, nextClaimId, balanceOf(user), totalSupply());
   }
 
 }

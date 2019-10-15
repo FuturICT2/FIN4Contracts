@@ -22,9 +22,8 @@ function TokenDetails(props, context) {
 			defaultAccount,
 			'getDetailedTokenInfo',
 			token.address
-		).then(({ 0: userIsTokenCreator, 1: requiredProofTypes, 2: claimsCount, 3: usersBalance, 4: totalSupply }) => {
+		).then(({ 0: requiredProofTypes, 1: claimsCount, 2: usersBalance, 3: totalSupply }) => {
 			setDetails({
-				userIsTokenCreator: userIsTokenCreator,
 				requiredProofTypes: requiredProofTypes,
 				claimsCount: claimsCount,
 				usersBalance: usersBalance,
