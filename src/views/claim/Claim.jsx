@@ -1,17 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Container from '../../../components/Container';
-import Box from '../../../components/Box';
-import Button from '../../../components/Button';
+import Container from '../../components/Container';
+import Box from '../../components/Box';
+import Button from '../../components/Button';
 import { TextField } from '@material-ui/core';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import AddIcon from '@material-ui/icons/Add';
-import Dropdown from '../../../components/Dropdown';
+import Dropdown from '../../components/Dropdown';
 import PreviousClaims from './PreviousClaims';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
-import { findTokenBySymbol } from '../../../components/Contractor.jsx';
+import { findTokenBySymbol } from '../../components/Contractor.jsx';
 import PropTypes from 'prop-types';
 
 function Claim(props, context) {

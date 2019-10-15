@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Divider } from '@material-ui/core';
-import ContractForm from '../../../../components/ContractForm';
+import ContractForm from '../../../components/ContractForm';
 import styled from 'styled-components';
-import colors from '../../../../config/colors-config';
+import colors from '../../../config/colors-config';
 import { drizzleConnect } from 'drizzle-react';
-import { findTokenBySymbol } from '../../../../components/Contractor';
-import ipfs from '../../../../ipfs';
+import { findTokenBySymbol } from '../../../components/Contractor';
+import ipfs from '../../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
-import Box from '../../../../components/Box';
-import Container from '../../../../components/Container';
+import Box from '../../../components/Box';
+import Container from '../../../components/Container';
 import PropTypes from 'prop-types';
 
 function ProofSubmission(props, context) {
