@@ -14,12 +14,24 @@ const resources = {
 	}
 };
 
+// i18n have their own i18next-browser-languagedetector
+// I tried it but it didn't switch languages as expected and so I am doing it manually
+// for now, TODO for some point: figure out how to use their plugin properly
+let defaultLanguage = 'en';
+let browserLanguage = window.navigator.userLanguage || window.navigator.language;
+if (browserLanguage.startsWith('de')) {
+	defaultLanguage = 'de';
+}
+if (!(defaultLanguage == 'en' || defaultLanguage == 'de')) {
+	console.error(
+		'Your browsers preferred language ' + browserLanguage + ' is not supported yet. Falling back to English.'
+	);
+}
+
 i18n.use(initReactI18next).init({
 	resources,
-	lng: 'en',
-
+	lng: defaultLanguage,
 	keySeparator: false,
-
 	interpolation: {
 		escapeValue: false
 	}
