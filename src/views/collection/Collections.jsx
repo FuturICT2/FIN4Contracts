@@ -1,7 +1,7 @@
 import React from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
-import Container from '../../../components/Container';
+import Container from '../../components/Container';
 import PropTypes from 'prop-types';
 import CreateCollection from './CreateCollection';
 import ListCollections from './ListCollections';

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
-import Container from '../../../components/Container';
-import Box from '../../../components/Box';
+import Container from '../../components/Container';
+import Box from '../../components/Box';
 import PropTypes from 'prop-types';
-import Button from '../../../components/Button';
+import Button from '../../components/Button';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
-import Dropdown from '../../../components/Dropdown';
+import Dropdown from '../../components/Dropdown';
 import { Link } from 'react-router-dom';
 
 function CollectionEdit(props, context) {

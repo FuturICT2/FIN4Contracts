@@ -1,7 +1,7 @@
 import React from 'react';
-import Box from '../../../components/Box';
-import Table from '../../../components/Table';
-import TableRow from '../../../components/TableRow';
+import Box from '../../components/Box';
+import Table from '../../components/Table';
+import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';

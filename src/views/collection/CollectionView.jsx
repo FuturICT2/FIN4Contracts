@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
-import Container from '../../../components/Container';
-import Box from '../../../components/Box';
+import Container from '../../components/Container';
+import Box from '../../components/Box';
 import PropTypes from 'prop-types';
-import Table from '../../../components/Table';
-import TableRow from '../../../components/TableRow';
-import Currency from '../../../components/Currency';
+import Table from '../../components/Table';
+import TableRow from '../../components/TableRow';
+import Currency from '../../components/Currency';
 import { Link } from 'react-router-dom';
 
 function CollectionView(props, drizzle) {
