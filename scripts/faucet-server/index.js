@@ -37,13 +37,14 @@ let checkUsersBalance = async function(recipient, res, callback) {
 			res.send(report);
 			return;
 		}
-		let eth = window.web3.toDecimal(window.web3.fromWei(res, 'ether'));
+		let eth = web3.utils.fromWei(res, 'ether');
 		if (eth >= 1) {
 			let report = 'User has more than 1 ETH (' + eth + '), not sending Ether.';
 			console.log(report);
 			res.send(report);
 			return;
 		}
+		console.log('User has ' + eth + ' ETH');
 		callback();
 	});
 };
