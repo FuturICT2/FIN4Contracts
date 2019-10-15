@@ -5,6 +5,7 @@ import Container from '../../components/Container';
 import Box from '../../components/Box';
 import PropTypes from 'prop-types';
 import { findTokenBySymbol } from '../../components/Contractor';
+import Currency from '../../components/Currency';
 
 function TokenEdit(props, context) {
 	const { t } = useTranslation();
@@ -24,7 +25,19 @@ function TokenEdit(props, context) {
 	return (
 		<>
 			<Container>
-				<Box title="Edit token"></Box>
+				{tokenViaURL && (
+					<>
+						<Box>
+							<span style={{ fontFamily: 'arial' }}>
+								<center>
+									<Currency symbol={tokenViaURL.symbol} name={<b>{tokenViaURL.name}</b>} />
+								</center>
+							</span>
+						</Box>
+						{tokenViaURL.userIsAdmin && <Box title="Manage proof types"></Box>}
+						{tokenViaURL.userIsCreator && <Box title="Manage admins"></Box>}
+					</>
+				)}
 			</Container>
 		</>
 	);
