@@ -26,8 +26,9 @@ contract Fin4TokenBase { // abstract class
   function name() public view returns(string memory);
   function symbol() public view returns(string memory);
 
-  function getInfo() public view returns(string memory, string memory, string memory, string memory) {
-    return (name(), symbol(), description, unit);
+  function getTokenInfo(address user) public view returns(bool, bool, string memory, string memory, string memory, string memory) {
+    bool userIsAdmin = false; // TODO
+    return (user == actionTypeCreator, userIsAdmin, name(), symbol(), description, unit);
   }
 
   // ------------------------- CLAIM -------------------------

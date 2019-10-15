@@ -14,6 +14,8 @@ const contractEventNotifier = store => next => action => {
 	const contractEvent = action.event.event;
 	let display = `${contract}: ${contractEvent}`;
 
+	let defaultAccount = store.getState().fin4Store.defaultAccount;
+
 	// ------------------------------ Fin4TokenCreated ------------------------------
 
 	if (contractEvent === 'Fin4TokenCreated') {
@@ -28,6 +30,7 @@ const contractEventNotifier = store => next => action => {
 		let name = token.name;
 		let symbol = token.symbol;
 		display = 'New Fin4 token created: ' + name + ' [' + symbol + ']';
+		let userIsCreator = token.creator === defaultAccount;
 
 		store.dispatch({
 			type: 'ADD_FIN4_TOKEN',
@@ -36,12 +39,12 @@ const contractEventNotifier = store => next => action => {
 				name: name,
 				symbol: symbol,
 				description: token.description,
-				unit: token.unit
+				unit: token.unit,
+				userIsCreator: userIsCreator,
+				userIsAdmin: userIsCreator
 			}
 		});
 	}
-
-	let defaultAccount = store.getState().fin4Store.defaultAccount;
 
 	// ------------------------------ ClaimSubmitted ------------------------------
 
