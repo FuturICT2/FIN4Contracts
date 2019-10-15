@@ -12,17 +12,26 @@ function ListCollections(props) {
 
 	return (
 		<Box title="Existing collections">
-			<Table headers={['Identifier', 'Name', 'Description', 'Tokens count', 'Actions']}>
+			<Table headers={['Name', 'Actions']} colWidths={[85, 15]}>
 				{Object.keys(props.collections).map((identifier, index) => {
 					let collection = props.collections[identifier];
 					return (
 						<TableRow
 							key={'collection_' + index}
 							data={{
-								identifier: identifier,
-								name: collection.name,
-								description: <small>{collection.description}</small>,
-								tokensCount: collection.tokens.length,
+								name: (
+									<span
+										title={
+											'Short-name: ' +
+											identifier +
+											'\nDescription: ' +
+											collection.description +
+											'\nTokens: ' +
+											collection.tokens.length
+										}>
+										{collection.name}
+									</span>
+								),
 								actions: (
 									<small style={{ color: 'blue', textDecoration: 'underline' }}>
 										<Link to={'/collection/' + identifier}>View</Link>
