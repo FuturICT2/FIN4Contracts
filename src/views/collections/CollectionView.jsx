@@ -26,7 +26,7 @@ function CollectionView(props, drizzle) {
 
 	return (
 		<Container>
-			<Box title={(collection ? collection.name : '') + ' collection'}>
+			<Box>
 				{collection && (
 					<>
 						<span style={{ fontFamily: 'arial' }}>

@@ -82,7 +82,7 @@ function CollectionEdit(props, context) {
 		<>
 			{collectionViaURL && (
 				<Container>
-					<Box title="Edit collection">
+					<Box>
 						<center style={{ fontFamily: 'arial' }}>
 							<b style={{ fontSize: 'large' }}>{collectionViaURL.name}</b>
 							<br />
