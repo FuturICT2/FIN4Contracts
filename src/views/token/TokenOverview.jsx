@@ -12,21 +12,19 @@ function TokenOverview(props) {
 
 	return (
 		<>
-			<Box title={t('all-tokens')} width="500px">
-				<Table headers={[t('token-name'), 'Description', 'Unit', 'Actions']}>
+			<Box title={t('all-tokens')}>
+				<Table headers={[t('token-name'), 'Actions']}>
 					{Object.keys(props.fin4Tokens).map((addr, index) => {
 						let token = props.fin4Tokens[addr];
 						return (
 							<TableRow
 								key={'token_' + index}
 								data={{
-									name: <Currency symbol={token.symbol} name={token.name} />,
-									description: (
-										<small>
-											{token.description.length > 20 ? token.description.substring(0, 20) + '...' : token.description}
-										</small>
+									name: (
+										<span title={'Description: ' + token.description + '\nUnit:' + token.unit}>
+											<Currency symbol={token.symbol} name={token.name} />
+										</span>
 									),
-									unit: <small>{token.unit}</small>,
 									actions: (
 										<small style={{ color: 'blue', textDecoration: 'underline' }}>
 											<Link to={'/token/details/' + token.symbol}>Details</Link>
