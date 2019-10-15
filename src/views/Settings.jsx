@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Container from '../components/Container';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles(theme => ({
 	font: {
@@ -39,6 +40,8 @@ function Settings(props, context) {
 							let lng = i18n.language;
 							i18n.changeLanguage('en', () => {
 								console.log('Language changed: from ' + lng + ' to en');
+								Cookies.set('language', 'en', { expires: 7 });
+								// TODO is 7 a good expiry date for cookies? #ConceptualDecision
 							});
 						}}>
 						EN
@@ -51,6 +54,7 @@ function Settings(props, context) {
 							let lng = i18n.language;
 							i18n.changeLanguage('de', () => {
 								console.log('Language changed: from ' + lng + ' to de');
+								Cookies.set('language', 'de', { expires: 7 });
 							});
 						}}>
 						DE

@@ -2,6 +2,7 @@
 
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import Cookies from 'js-cookie';
 const en = require('./en.json');
 const de = require('./de.json');
 
@@ -14,23 +15,27 @@ const resources = {
 	}
 };
 
-// i18n have their own i18next-browser-languagedetector
-// I tried it but it didn't switch languages as expected and so I am doing it manually
-// for now, TODO for some point: figure out how to use their plugin properly
-let defaultLanguage = 'en';
-let browserLanguage = window.navigator.userLanguage || window.navigator.language;
-if (browserLanguage.startsWith('de')) {
-	defaultLanguage = 'de';
+// Determine which language to set at start: first check cookie, then preferred browser-language. Fallback: en
+let language = 'en';
+if (Cookies.get('language')) {
+	language = Cookies.get('language');
+} else {
+	let browserLanguage = window.navigator.userLanguage || window.navigator.language;
+	if (browserLanguage.startsWith('de')) {
+		language = 'de';
+	}
 }
-if (!(defaultLanguage == 'en' || defaultLanguage == 'de')) {
+if (!(language == 'en' || language == 'de')) {
 	console.error(
-		'Your browsers preferred language ' + browserLanguage + ' is not supported yet. Falling back to English.'
+		'Language setting in cookie or preferred browser language are not English or German. ' +
+			'Falling back to English. More languages are coming! You are welcome to help translating :)'
 	);
+	language = 'en';
 }
 
 i18n.use(initReactI18next).init({
 	resources,
-	lng: defaultLanguage,
+	lng: language,
 	keySeparator: false,
 	interpolation: {
 		escapeValue: false
