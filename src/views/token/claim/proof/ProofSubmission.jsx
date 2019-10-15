@@ -4,7 +4,7 @@ import ContractForm from '../../../../components/ContractForm';
 import styled from 'styled-components';
 import colors from '../../../../config/colors-config';
 import { drizzleConnect } from 'drizzle-react';
-import { getContractData, findTokenBySymbol } from '../../../../components/Contractor';
+import { findTokenBySymbol } from '../../../../components/Contractor';
 import ipfs from '../../../../ipfs';
 import AddLocation from '@material-ui/icons/AddLocation';
 import Box from '../../../../components/Box';
