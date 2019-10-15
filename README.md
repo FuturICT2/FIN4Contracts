@@ -15,7 +15,7 @@
 
 ## Description
 
-**FIN4XPLORER** allows any person, organisation, and public institution to create tokens, which stand for a positive action. Users can claim and prove these actions, for which they receive said tokens. By designing the system to be open to markets tailored to the respective actions, incentives are generated. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach. As part of my Master's thesis, I have extended the project with a token curation system.
+**FIN4XPLORER** allows any person, organisation, and public institution to create tokens, which stand for a positive action. Users can claim and prove these actions, for which they receive said tokens. By designing the system to be open to markets tailored to the respective actions, incentives are generated. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach. As part of my Master's thesis, I have extended the project with curation system for the Fin4 tokens.
 
 ## Quick start
 
@@ -52,3 +52,12 @@ npm install # in this cloned repository
 ```sh
 npm start
 ```
+
+### Project Structure
+
+`contracts/` contains the developed smart contracts (e.g Fin4Reputation)
+`contracts/tcr` contains the TCR of the list of accepted tokens
+`contracts/tokens` contains the GOV token and ERC20Plus
+`migrations/3_deploy_tcr.js` contains the deployment script for the tcr
+`scripts` contains scripts that can be used for testing the tcr. However, now that we have a front-end app, they are not needed anymore
+`src` contains the web app
