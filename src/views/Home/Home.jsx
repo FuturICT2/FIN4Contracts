@@ -34,11 +34,9 @@ function Home(props) {
 									key={'balance_' + index}
 									data={{
 										name: (
-											<Currency
-												symbol={token.symbol}
-												name={token.name}
-												href={'https://rinkeby.etherscan.io/address/' + tokenAddr}
-											/>
+											<span title={'Description: ' + token.description + '\nUnit:' + token.unit}>
+												<Currency symbol={token.symbol} name={token.name} linkTo={'/token/details/' + token.symbol} />
+											</span>
 										),
 										balance: props.usersBalances[tokenAddr]
 									}}

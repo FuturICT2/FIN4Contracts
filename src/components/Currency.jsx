@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 
 const Symbol = styled.span`
 	text-transform: uppercase;
@@ -30,15 +31,15 @@ const Currency = props => {
 	const nameWithLink = () => {
 		return (
 			<span style={{ marginLeft: 5 }}>
-				<a className={classes.unstyledLink} href={props.href}>
+				<Link className={classes.unstyledLink} to={props.linkTo}>
 					{props.name}
-				</a>
+				</Link>
 			</span>
 		);
 	};
 
 	if (props.name) {
-		if (props.href) {
+		if (props.linkTo) {
 			return (
 				<>
 					{symbol()}
