@@ -8,7 +8,7 @@ import Claim from '../views/claim/Claim';
 import TokenDetails from '../views/token/TokenDetails';
 import TokenEdit from '../views/token/TokenEdit';
 import Token from '../views/token/Token';
-import ProofSubmission from '../views/claim/proof/ProofSubmission';
+import ProofSubmission from '../views/claim/ProofSubmission';
 import Collections from '../views/collection/Collections';
 import CollectionView from '../views/collection/CollectionView';
 import CollectionEdit from '../views/collection/CollectionEdit';
