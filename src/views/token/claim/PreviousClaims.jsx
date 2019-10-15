@@ -19,7 +19,7 @@ function PreviousClaims(props) {
 	return (
 		<>
 			<Box title={t('my-previous-claims')}>
-				{Object.keys(props.fin4Tokens).length > 0 ? (
+				{Object.keys(props.fin4Tokens).length > 0 &&
 					Object.keys(props.usersClaims).map(pseudoClaimId => {
 						let claim = props.usersClaims[pseudoClaimId];
 						let token = props.store.getState().fin4Store.fin4Tokens[claim.token];
@@ -66,10 +66,7 @@ function PreviousClaims(props) {
 								</ThemeProvider>
 							</Claim>
 						);
-					})
-				) : (
-					<span style={{ fontFamily: 'arial', color: 'gray' }}>Loading...</span>
-				)}
+					})}
 			</Box>
 		</>
 	);

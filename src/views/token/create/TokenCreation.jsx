@@ -5,7 +5,6 @@ import Modal from '../../../components/Modal';
 import Table from '../../../components/Table';
 import TableRow from '../../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
-import { Fin4MainAddress } from '../../../config/DeployedAddresses.js';
 import { useTranslation } from 'react-i18next';
 
 function TokenCreation(props) {
