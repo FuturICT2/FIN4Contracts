@@ -23,6 +23,7 @@ app.get('/faucet', (req, res) => {
 	console.log('Received funding request: ', req.query);
 
 	checkUsersBalance(req.query.recipient, res, () => {
+		// TODO also limit total/timeframed amount of requests per user? Or is total amount enough #ConceptualDecision
 		sendEther(req.query.recipient, dripAmount.toString(), req.query.networkID.toString(), networkURL, res);
 	});
 });
@@ -61,12 +62,8 @@ let sendEther = async function(recipient, amount, networkID, networkURL, res) {
 			networkURL
 	);
 
-	// TODO derive private key from mnemonic via bip39
+	// TODO derive private key from mnemonic via bip39... if possible?
 	let privateKey = Buffer.from(config.PRIVATE_KEY_OF_FAUCET_ACCOUNT, 'hex');
-
-	//const abi = require('../src/build/contracts/Fin4DemoFaucet').abi;
-	//const contract = new web3.eth.Contract(abi, '0xeAFCB3bad95Fc67385D51d9CD60119F227cc32dE');
-	//let data = contract.methods.sendDrip('0xe975aF7AFAAe9E9e8aE7bd31A7FC10bB611Dd88A').encodeABI(); //.sendDrip('0xe975aF7AFAAe9E9e8aE7bd31A7FC10bB611Dd88A').encodeABI();
 
 	web3.eth.getGasPrice(function(e, gasPrice) {
 		console.log('Got gas price: ' + gasPrice);
