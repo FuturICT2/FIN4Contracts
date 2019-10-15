@@ -7,6 +7,7 @@ import { drizzleConnect } from 'drizzle-react';
 import NoNotificationsIcon from '@material-ui/icons/NotificationsNone';
 import NewNotificationsIcon from '@material-ui/icons/NotificationsActive';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -61,6 +62,9 @@ function TopBar(props) {
 				</Link>{' '}
 				<Link to={'/settings'}>
 					<SettingsIcon />
+				</Link>{' '}
+				<Link to={'/about'}>
+					<InfoIcon />
 				</Link>
 			</div>
 			{props.defaultAccount === null && (

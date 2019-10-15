@@ -15,6 +15,7 @@ import UserMessage from '../views/user/UserMessage';
 import UserTransfer from '../views/user/UserTransfer';
 import User from '../views/user/User';
 import Settings from '../views/Settings';
+import About from '../views/About';
 
 const menu = [
 	{
@@ -120,6 +121,12 @@ const menu = [
 	{
 		component: Settings,
 		path: '/settings',
+		showInNavBar: false
+	},
+	// ------------------ ABOUT ------------------
+	{
+		component: About,
+		path: '/about',
 		showInNavBar: false
 	}
 ];
