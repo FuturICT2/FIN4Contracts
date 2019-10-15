@@ -19,29 +19,29 @@ app.listen(port, () => console.log(title + ' listening on port ' + port));
 
 app.get('/', (req, res) => res.send(title));
 
-app.get('/faucet', (req, res) => {
-	console.log('Received funding request: ', req.query);
+app.get('/faucet', (request, response) => {
+	console.log('Received funding request: ', request.query);
 
-	checkUsersBalance(req.query.recipient, res, () => {
+	checkUsersBalance(request.query.recipient, response, () => {
 		// TODO also limit total/timeframed amount of requests per user? Or is total amount enough #ConceptualDecision
-		sendEther(req.query.recipient, dripAmount.toString(), req.query.networkID.toString(), networkURL, res);
+		sendEther(request.query.recipient, dripAmount.toString(), request.query.networkID.toString(), networkURL, response);
 	});
 });
 
-let checkUsersBalance = async function(recipient, res, callback) {
+let checkUsersBalance = async function(recipient, response, callback) {
 	console.log('Checking ETH balance of user ' + recipient);
 	web3.eth.getBalance(recipient, (err, res) => {
 		if (err) {
 			let report = 'Failed to check users balance, not sending Ether.';
 			console.log(report);
-			res.send(report);
+			response.send(report);
 			return;
 		}
 		let eth = web3.utils.fromWei(res, 'ether');
 		if (eth >= 1) {
 			let report = 'User has more than 1 ETH (' + eth + '), not sending Ether.';
 			console.log(report);
-			res.send(report);
+			response.send(report);
 			return;
 		}
 		console.log('User has ' + eth + ' ETH');
@@ -49,7 +49,7 @@ let checkUsersBalance = async function(recipient, res, callback) {
 	});
 };
 
-let sendEther = async function(recipient, amount, networkID, networkURL, res) {
+let sendEther = async function(recipient, amount, networkID, networkURL, response) {
 	console.log(
 		'Attempting to send ' +
 			amount +
@@ -89,7 +89,7 @@ let sendEther = async function(recipient, amount, networkID, networkURL, res) {
 			web3.eth.sendSignedTransaction('0x' + tx.serialize().toString('hex')).on('receipt', receipt => {
 				let report = 'Sent ' + amount + ' ETH to ' + recipient; // + ' from ' + address;
 				console.log(report);
-				res.send(report);
+				response.send(report);
 				//process.exit(0);
 			});
 		});
