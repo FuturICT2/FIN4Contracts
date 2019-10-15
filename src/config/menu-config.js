@@ -12,9 +12,9 @@ import ProofSubmission from '../views/claims/ProofSubmission';
 import Collections from '../views/collections/Collections';
 import CollectionView from '../views/collections/CollectionView';
 import CollectionEdit from '../views/collections/CollectionEdit';
-import UserMessage from '../views/user/UserMessage';
-import UserTransfer from '../views/user/UserTransfer';
-import User from '../views/user/User';
+import UserMessage from '../views/users/UserMessage';
+import UserTransfer from '../views/users/UserTransfer';
+import User from '../views/users/User';
 import Settings from '../views/Settings';
 import About from '../views/About';
 
