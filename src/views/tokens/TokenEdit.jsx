@@ -6,6 +6,7 @@ import Box from '../../components/Box';
 import PropTypes from 'prop-types';
 import { findTokenBySymbol } from '../../components/Contractor';
 import Currency from '../../components/Currency';
+import { Link } from 'react-router-dom';
 
 function TokenEdit(props, context) {
 	const { t } = useTranslation();
@@ -28,11 +29,19 @@ function TokenEdit(props, context) {
 				{tokenViaURL && (
 					<>
 						<Box>
-							<span style={{ fontFamily: 'arial' }}>
-								<center>
-									<Currency symbol={tokenViaURL.symbol} name={<b>{tokenViaURL.name}</b>} />
-								</center>
-							</span>
+							<center style={{ fontFamily: 'arial' }}>
+								<Currency symbol={tokenViaURL.symbol} name={<b>{tokenViaURL.name}</b>} />
+								<br />
+								{!(tokenViaURL.userIsCreator || tokenViaURL.userIsAdmin) && (
+									<>
+										<br />
+										<span style={{ color: 'red' }}>You don't have editing rights on this token.</span>
+										<br />
+									</>
+								)}
+								<br />
+								<Link to={'/token/details/' + tokenViaURL.symbol}>Token details</Link>
+							</center>
 						</Box>
 						{tokenViaURL.userIsAdmin && <Box title="Manage proof types"></Box>}
 						{tokenViaURL.userIsCreator && <Box title="Manage admins"></Box>}
