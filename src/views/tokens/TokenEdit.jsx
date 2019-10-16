@@ -23,6 +23,10 @@ function TokenEdit(props, context) {
 		}
 	});
 
+	const exportTokenData = () => {
+		alert('TODO');
+	};
+
 	return (
 		<>
 			<Container>
@@ -32,15 +36,19 @@ function TokenEdit(props, context) {
 							<center style={{ fontFamily: 'arial' }}>
 								<Currency symbol={tokenViaURL.symbol} name={<b>{tokenViaURL.name}</b>} />
 								<br />
-								{!(tokenViaURL.userIsCreator || tokenViaURL.userIsAdmin) && (
-									<>
-										<br />
-										<span style={{ color: 'red' }}>You don't have editing rights on this token.</span>
-										<br />
-									</>
-								)}
 								<br />
 								<Link to={'/token/view/' + tokenViaURL.symbol}>View token</Link>
+								<br />
+								<br />
+								{tokenViaURL.userIsCreator || tokenViaURL.userIsAdmin ? (
+									<Link
+										title="Compiles all data from this token into a CSV file that gets downloaded"
+										onClick={() => exportTokenData()}>
+										Export token data
+									</Link>
+								) : (
+									<span style={{ color: 'red' }}>You don't have editing rights on this token.</span>
+								)}
 							</center>
 						</Box>
 						{tokenViaURL.userIsAdmin && <Box title="Manage proof types"></Box>}
