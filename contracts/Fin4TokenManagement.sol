@@ -73,7 +73,7 @@ contract Fin4TokenManagement {
         return Fin4Token(tokenAddr).getTokenInfo(msg.sender);
     }
 
-    function getDetailedTokenInfo(address tokenAddr) public view returns(address[] memory, uint, uint256, uint256) {
+    function getDetailedTokenInfo(address tokenAddr) public view returns(address[] memory, uint, uint256, uint256, uint) {
         return Fin4Token(tokenAddr).getDetailedTokenInfo(msg.sender);
     }
 

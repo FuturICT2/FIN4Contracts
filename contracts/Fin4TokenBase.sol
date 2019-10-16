@@ -11,11 +11,13 @@ contract Fin4TokenBase { // abstract class
   address public actionTypeCreator;
   string public description;
   string public unit;
+  uint public tokenCreationTime;
 
   constructor(string memory _description, string memory _unit, address _actionTypeCreator) public {
     description = _description;
     unit = _unit;
     actionTypeCreator = _actionTypeCreator;
+    tokenCreationTime = now;
   }
 
   function setAddresses(address Fin4MainAddr, address Fin4ClaimingAddr) public {

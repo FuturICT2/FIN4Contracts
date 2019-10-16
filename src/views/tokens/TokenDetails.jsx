@@ -22,12 +22,13 @@ function TokenDetails(props, context) {
 			defaultAccount,
 			'getDetailedTokenInfo',
 			token.address
-		).then(({ 0: requiredProofTypes, 1: claimsCount, 2: usersBalance, 3: totalSupply }) => {
+		).then(({ 0: requiredProofTypes, 1: claimsCount, 2: usersBalance, 3: totalSupply, 4: tokenCreationTime }) => {
 			setDetails({
 				requiredProofTypes: requiredProofTypes,
 				claimsCount: claimsCount,
 				usersBalance: usersBalance,
-				totalSupply: totalSupply // how much of this token has been minted
+				totalSupply: totalSupply, // how much of this token has been minted
+				tokenCreationTime: tokenCreationTime
 			});
 		});
 	};
@@ -90,6 +91,9 @@ function TokenDetails(props, context) {
 							<span style={{ color: 'gray' }}>Your balance:</span> {details.usersBalance}
 						</p>
 						<Divider style={{ margin: '10px 0' }} variant="middle" />
+						<p>
+							<span style={{ color: 'gray' }}>Created at:</span> {details.tokenCreationTime}
+						</p>
 						<p>
 							<span style={{ color: 'gray' }}>Proof types:</span> {getProofTypesStr()}
 						</p>
