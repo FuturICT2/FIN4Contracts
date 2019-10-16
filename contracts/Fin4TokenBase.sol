@@ -45,7 +45,7 @@ contract Fin4TokenBase { // abstract class
     uint date;
     string comment;
     address[] requiredProofTypes;
-    mapping(address => bool) proof_statuses;
+    mapping(address => bool) proofStatuses;
     mapping(address => uint) proofApprovalTimes;
     uint claimCreationTime;
     uint claimApprovalTime;
@@ -68,7 +68,7 @@ contract Fin4TokenBase { // abstract class
     // initialize all the proofs required by the action type creator with false
     // TODO isn't the default initialization false?
     for (uint i = 0; i < claim.requiredProofTypes.length; i ++) {
-      claim.proof_statuses[claim.requiredProofTypes[i]] = false;
+      claim.proofStatuses[claim.requiredProofTypes[i]] = false;
     }
     claim.isApproved = false;
 
@@ -89,7 +89,7 @@ contract Fin4TokenBase { // abstract class
     address[] memory requiredProofTypes = getRequiredProofTypes();
     bool[] memory proofTypeStatuses = new bool[](requiredProofTypes.length);
     for (uint i = 0; i < requiredProofTypes.length; i ++) {
-      proofTypeStatuses[i] = claim.proof_statuses[requiredProofTypes[i]];
+      proofTypeStatuses[i] = claim.proofStatuses[requiredProofTypes[i]];
     }
 
     return (claim.claimer, claim.isApproved, claim.quantity, claim.date, claim.comment, requiredProofTypes, proofTypeStatuses);
@@ -161,7 +161,7 @@ contract Fin4TokenBase { // abstract class
   // called from ProofType contracts
   function receiveProofApproval(address proofTypeAddress, uint claimId) public returns(bool) {
     // TODO require something as guard?
-    claims[claimId].proof_statuses[proofTypeAddress] = true;
+    claims[claimId].proofStatuses[proofTypeAddress] = true;
     claims[claimId].proofApprovalTimes[proofTypeAddress] = now;
     Fin4ClaimingStub(Fin4ClaimingAddress).proofApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
     if (_allProofTypesApprovedOnClaim(claimId)) {
@@ -190,7 +190,7 @@ contract Fin4TokenBase { // abstract class
 
   function _allProofTypesApprovedOnClaim(uint claimId) private view returns(bool) {
     for (uint i = 0; i < requiredProofTypes.length; i ++) {
-      if (!claims[claimId].proof_statuses[requiredProofTypes[i]]) {
+      if (!claims[claimId].proofStatuses[requiredProofTypes[i]]) {
         return false;
       }
     }
