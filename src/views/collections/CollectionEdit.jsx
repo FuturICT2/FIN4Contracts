@@ -13,23 +13,23 @@ import { Link } from 'react-router-dom';
 function CollectionEdit(props, context) {
 	const { t } = useTranslation();
 
-	const [collectionViaURL, setCollectionViaURL] = useState(null);
+	const [collection, setCollection] = useState(null);
 	const tokensToAddArr = useRef(null);
 	const tokenToRemove = useRef(null);
 
 	useEffect(() => {
-		let collectionIdentifier = props.match.params.collectionIdentifier;
-		if (collectionIdentifier && !collectionViaURL) {
-			let collection = props.collections[collectionIdentifier];
-			if (collection) {
-				setCollectionViaURL(collection);
+		let collIdentifier = props.match.params.collectionIdentifier;
+		if (collIdentifier && !collection) {
+			let coll = props.collections[collIdentifier];
+			if (coll) {
+				setCollection(coll);
 				// TODO fetch admins
 			}
 		}
 	});
 
 	const getFormattedTokensInCollection = () => {
-		return collectionViaURL.tokens.map(tokenAddr => {
+		return collection.tokens.map(tokenAddr => {
 			let token = props.fin4Tokens[tokenAddr];
 			return {
 				value: token.address,
@@ -40,8 +40,8 @@ function CollectionEdit(props, context) {
 	};
 
 	const collectionContainsToken = token => {
-		for (let i = 0; i < collectionViaURL.tokens.length; i++) {
-			let tokenAddr = collectionViaURL.tokens[i];
+		for (let i = 0; i < collection.tokens.length; i++) {
+			let tokenAddr = collection.tokens[i];
 			if (tokenAddr === token) {
 				return true;
 			}
@@ -69,7 +69,7 @@ function CollectionEdit(props, context) {
 		}
 
 		context.drizzle.contracts.Fin4Collections.methods
-			.addTokens(collectionViaURL.collectionId, tokensToAddArr.current)
+			.addTokens(collection.collectionId, tokensToAddArr.current)
 			.send({
 				from: props.store.getState().fin4Store.defaultAccount
 			})
@@ -80,13 +80,13 @@ function CollectionEdit(props, context) {
 
 	return (
 		<>
-			{collectionViaURL && (
+			{collection && (
 				<Container>
 					<Box>
 						<center style={{ fontFamily: 'arial' }}>
-							<b style={{ fontSize: 'large' }}>{collectionViaURL.name}</b>
+							<b style={{ fontSize: 'large' }}>{collection.name}</b>
 							<br />
-							{!(collectionViaURL.userIsCreator || collectionViaURL.userIsAdmin) && (
+							{!(collection.userIsCreator || collection.userIsAdmin) && (
 								<>
 									<br />
 									<span style={{ color: 'red' }}>You don't have editing rights on this collection.</span>
@@ -94,10 +94,10 @@ function CollectionEdit(props, context) {
 								</>
 							)}
 							<br />
-							<Link to={'/collection/' + collectionViaURL.identifier}>View collection</Link>
+							<Link to={'/collection/' + collection.identifier}>View collection</Link>
 						</center>
 					</Box>
-					{collectionViaURL.userIsAdmin && (
+					{collection.userIsAdmin && (
 						<Box title="Manage tokens">
 							<center>
 								<Dropdown
@@ -122,7 +122,7 @@ function CollectionEdit(props, context) {
 							</center>
 						</Box>
 					)}
-					{collectionViaURL.userIsCreator && (
+					{collection.userIsCreator && (
 						<Box title="Manage admins">
 							<center>
 								<Button icon={AddIcon} onClick={() => {}}>
