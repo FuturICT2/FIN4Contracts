@@ -24,7 +24,7 @@ contract Fin4Claiming {
         }
         uint claimId;
         address[] memory requiredProofTypes;
-        (claimId, requiredProofTypes) = Fin4Token(tokenAddress).submit(msg.sender, quantity, date, comment);
+        (claimId, requiredProofTypes) = Fin4Token(tokenAddress).submitClaim(msg.sender, quantity, date, comment);
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, date, comment, requiredProofTypes);
     }
 

@@ -48,9 +48,8 @@ contract Fin4TokenBase { // abstract class
 
 	mapping (uint => Claim) public claims;
 
-  // Called by submitClaim in Fin4Main
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
-	function submit(address claimer, uint quantity, uint date, string memory comment) public returns (uint, address[] memory) {
+	function submitClaim(address claimer, uint quantity, uint date, string memory comment) public returns (uint, address[] memory) {
     Claim storage claim = claims[nextClaimId];
     claim.claimId = nextClaimId;
     claim.claimer = claimer;
