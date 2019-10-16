@@ -7,6 +7,7 @@ import Currency from '../../components/Currency';
 import { getContractData, findTokenBySymbol } from '../../components/Contractor';
 import PropTypes from 'prop-types';
 import { Divider } from '@material-ui/core';
+import moment from 'moment';
 
 function TokenDetails(props, context) {
 	const { t } = useTranslation();
@@ -28,7 +29,7 @@ function TokenDetails(props, context) {
 				claimsCount: claimsCount,
 				usersBalance: usersBalance,
 				totalSupply: totalSupply, // how much of this token has been minted
-				tokenCreationTime: tokenCreationTime
+				tokenCreationTime: moment.unix(tokenCreationTime).calendar()
 			});
 		});
 	};
