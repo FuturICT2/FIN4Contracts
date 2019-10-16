@@ -36,6 +36,12 @@ function CollectionView(props, drizzle) {
 								<span style={{ color: 'gray' }}>{collection.description}</span>
 							</center>
 							<br />
+							{(collection.userIsCreator || collection.userIsAdmin) && (
+								<center>
+									<br />
+									<Link to={'/collection/edit/' + collection.identifier}>Edit collection</Link>
+								</center>
+							)}
 							Contains {collection.tokens.length} tokens:
 						</span>
 						<Table headers={['Token', 'Actions']} colWidths={[85, 15]}>

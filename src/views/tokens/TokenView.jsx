@@ -8,6 +8,7 @@ import { getContractData, findTokenBySymbol } from '../../components/Contractor'
 import PropTypes from 'prop-types';
 import { Divider } from '@material-ui/core';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 function TokenView(props, context) {
 	const { t } = useTranslation();
@@ -80,6 +81,12 @@ function TokenView(props, context) {
 						<p>
 							<span style={{ color: 'gray' }}>Unit:</span> {tokenViaURL.unit}
 						</p>
+						{(tokenViaURL.userIsCreator || tokenViaURL.userIsAdmin) && (
+							<center>
+								<br />
+								<Link to={'/token/edit/' + tokenViaURL.symbol}>Edit token</Link>
+							</center>
+						)}
 					</span>
 				)}
 			</Box>
