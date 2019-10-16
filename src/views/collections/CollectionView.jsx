@@ -52,7 +52,7 @@ function CollectionView(props, drizzle) {
 											token: <Currency name={token.name} symbol={token.symbol} />,
 											actions: (
 												<small style={{ color: 'blue', textDecoration: 'underline' }}>
-													<Link to={'/token/details/' + token.symbol}>Details</Link>
+													<Link to={'/token/view/' + token.symbol}>View</Link>
 													<br />
 													{(token.userIsCreator || token.userIsAdmin) && (
 														<>

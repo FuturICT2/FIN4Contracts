@@ -35,7 +35,7 @@ function Home(props) {
 									data={{
 										name: (
 											<span title={'Description: ' + token.description + '\nUnit:' + token.unit}>
-												<Currency symbol={token.symbol} name={token.name} linkTo={'/token/details/' + token.symbol} />
+												<Currency symbol={token.symbol} name={token.name} linkTo={'/token/view/' + token.symbol} />
 											</span>
 										),
 										balance: props.usersBalances[tokenAddr]

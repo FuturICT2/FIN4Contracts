@@ -5,7 +5,7 @@ import UsersIcon from '@material-ui/icons/Group';
 import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import Home from '../views/Home/Home';
 import Claim from '../views/claims/Claim';
-import TokenDetails from '../views/tokens/TokenDetails';
+import TokenView from '../views/tokens/TokenView';
 import TokenEdit from '../views/tokens/TokenEdit';
 import Token from '../views/tokens/Token';
 import ProofSubmission from '../views/claims/ProofSubmission';
@@ -35,13 +35,13 @@ const menu = [
 		showInNavBar: true // SHOW IN NAVBAR
 	},
 	{
-		component: TokenDetails,
-		path: '/token/details/',
+		component: TokenView,
+		path: '/token/view/',
 		showInNavBar: false
 	},
 	{
-		component: TokenDetails,
-		path: '/token/details/:tokenSymbol',
+		component: TokenView,
+		path: '/token/view/:tokenSymbol',
 		showInNavBar: false
 	},
 	{

@@ -40,7 +40,7 @@ function TokenEdit(props, context) {
 									</>
 								)}
 								<br />
-								<Link to={'/token/details/' + tokenViaURL.symbol}>Token details</Link>
+								<Link to={'/token/view/' + tokenViaURL.symbol}>View token</Link>
 							</center>
 						</Box>
 						{tokenViaURL.userIsAdmin && <Box title="Manage proof types"></Box>}

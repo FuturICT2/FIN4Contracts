@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { Divider } from '@material-ui/core';
 import moment from 'moment';
 
-function TokenDetails(props, context) {
+function TokenView(props, context) {
 	const { t } = useTranslation();
 
 	const [tokenViaURL, setTokenViaURL] = useState(null);
@@ -111,7 +111,7 @@ function TokenDetails(props, context) {
 	);
 }
 
-TokenDetails.contextTypes = {
+TokenView.contextTypes = {
 	drizzle: PropTypes.object
 };
 
@@ -122,4 +122,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(TokenDetails, mapStateToProps);
+export default drizzleConnect(TokenView, mapStateToProps);

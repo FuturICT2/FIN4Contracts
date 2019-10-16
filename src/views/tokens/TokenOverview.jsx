@@ -27,7 +27,7 @@ function TokenOverview(props) {
 									),
 									actions: (
 										<small style={{ color: 'blue', textDecoration: 'underline' }}>
-											<Link to={'/token/details/' + token.symbol}>Details</Link>
+											<Link to={'/token/view/' + token.symbol}>View</Link>
 											<br />
 											{(token.userIsCreator || token.userIsAdmin) && (
 												<>
