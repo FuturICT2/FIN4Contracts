@@ -86,7 +86,7 @@ function CollectionEdit(props, context) {
 						<center style={{ fontFamily: 'arial' }}>
 							<b style={{ fontSize: 'large' }}>{collectionViaURL.name}</b>
 							<br />
-							{!collectionViaURL.userIsCreator && !collectionViaURL.userIsAdmin && (
+							{!(collectionViaURL.userIsCreator || collectionViaURL.userIsAdmin) && (
 								<>
 									<br />
 									<span style={{ color: 'red' }}>You don't have editing rights on this collection.</span>
