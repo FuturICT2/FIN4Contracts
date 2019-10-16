@@ -28,55 +28,60 @@ function CollectionView(props, drizzle) {
 		<Container>
 			<Box>
 				{collection && (
-					<>
-						<span style={{ fontFamily: 'arial' }}>
+					<span style={{ fontFamily: 'arial' }}>
+						<center>
+							<b style={{ fontSize: 'large' }}>{collection.name}</b>
+						</center>
+						<br />
+						<br />
+						<span style={{ color: 'gray' }}>Description:</span> {collection.description}
+						<br />
+						<br />
+						<span style={{ color: 'gray' }}>Number of tokens:</span> {collection.tokens.length}
+						{(collection.userIsCreator || collection.userIsAdmin) && (
 							<center>
-								<b style={{ fontSize: 'large' }}>{collection.name}</b>
 								<br />
-								<span style={{ color: 'gray' }}>{collection.description}</span>
+								<Link to={'/collection/edit/' + collection.identifier}>Edit collection</Link>
+								<br />
 							</center>
-							<br />
-							{(collection.userIsCreator || collection.userIsAdmin) && (
-								<center>
-									<br />
-									<Link to={'/collection/edit/' + collection.identifier}>Edit collection</Link>
-								</center>
-							)}
-							Contains {collection.tokens.length} tokens:
-						</span>
-						<Table headers={['Token', 'Actions']} colWidths={[85, 15]}>
-							{collection.tokens.map((tokenAddr, index) => {
-								let token = props.fin4Tokens[tokenAddr];
-								if (!token) {
-									// in case fin4Tokens not loaded yet, not sure if that can happen
-									return null;
-								}
-								return (
-									<TableRow
-										key={'token_' + index}
-										data={{
-											token: <Currency name={token.name} symbol={token.symbol} />,
-											actions: (
-												<small style={{ color: 'blue', textDecoration: 'underline' }}>
-													<Link to={'/token/view/' + token.symbol}>View</Link>
-													<br />
-													{(token.userIsCreator || token.userIsAdmin) && (
-														<>
-															<Link to={'/token/edit/' + token.symbol}>Edit</Link>
-															<br />
-														</>
-													)}
-													<Link to={'/claim/' + token.symbol}>Claim</Link>
-												</small>
-											)
-										}}
-									/>
-								);
-							})}
-						</Table>
-					</>
+						)}
+					</span>
 				)}
 			</Box>
+			{collection && (
+				<Box title="Tokens in collection">
+					<Table headers={['Token', 'Actions']} colWidths={[85, 15]}>
+						{collection.tokens.map((tokenAddr, index) => {
+							let token = props.fin4Tokens[tokenAddr];
+							if (!token) {
+								// in case fin4Tokens not loaded yet, not sure if that can happen
+								return null;
+							}
+							return (
+								<TableRow
+									key={'token_' + index}
+									data={{
+										token: <Currency name={token.name} symbol={token.symbol} />,
+										actions: (
+											<small style={{ color: 'blue', textDecoration: 'underline' }}>
+												<Link to={'/token/view/' + token.symbol}>View</Link>
+												<br />
+												{(token.userIsCreator || token.userIsAdmin) && (
+													<>
+														<Link to={'/token/edit/' + token.symbol}>Edit</Link>
+														<br />
+													</>
+												)}
+												<Link to={'/claim/' + token.symbol}>Claim</Link>
+											</small>
+										)
+									}}
+								/>
+							);
+						})}
+					</Table>
+				</Box>
+			)}
 		</Container>
 	);
 }
