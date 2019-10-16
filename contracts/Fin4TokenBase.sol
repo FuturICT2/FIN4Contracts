@@ -46,6 +46,9 @@ contract Fin4TokenBase { // abstract class
     string comment;
     address[] requiredProofTypes;
     mapping(address => bool) proof_statuses;
+    mapping(address => uint) proofApprovalTimes;
+    uint claimCreationTime;
+    uint claimApprovalTime;
   }
 
 	mapping (uint => Claim) public claims;
@@ -53,6 +56,7 @@ contract Fin4TokenBase { // abstract class
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
 	function submitClaim(address claimer, uint quantity, uint date, string memory comment) public returns (uint, address[] memory) {
     Claim storage claim = claims[nextClaimId];
+    claim.claimCreationTime = now;
     claim.claimId = nextClaimId;
     claim.claimer = claimer;
     claim.quantity = quantity;
@@ -158,6 +162,7 @@ contract Fin4TokenBase { // abstract class
   function receiveProofApproval(address proofTypeAddress, uint claimId) public returns(bool) {
     // TODO require something as guard?
     claims[claimId].proof_statuses[proofTypeAddress] = true;
+    claims[claimId].proofApprovalTimes[proofTypeAddress] = now;
     Fin4ClaimingStub(Fin4ClaimingAddress).proofApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
     if (_allProofTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
@@ -167,6 +172,7 @@ contract Fin4TokenBase { // abstract class
 
   function approveClaim(uint claimId) private {
     claims[claimId].isApproved = true;
+    claims[claimId].claimApprovalTime = now;
     // here the minting happens, actual change of balance
     // requires the proof type calling this method to have the Minter role on this Token
     // that was granted him in Fin4Main.createNewToken()
