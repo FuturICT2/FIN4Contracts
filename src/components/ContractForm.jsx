@@ -267,6 +267,7 @@ class ContractForm extends Component {
 		});
 	};
 
+	// DEPRECATED ?
 	handleParamChange = (proofTypeObj, event) => {
 		let name = event.target.name;
 		if (name === 'latitude / longitude') {
@@ -344,6 +345,7 @@ class ContractForm extends Component {
 							);
 						}
 
+						// DEPRECATED ?
 						if (this.props.specialFields && this.props.specialFields[name]) {
 							if (this.props.specialFields[name].type && this.props.specialFields[name].type === 'file') {
 								return (
