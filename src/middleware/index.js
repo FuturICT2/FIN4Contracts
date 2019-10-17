@@ -124,6 +124,8 @@ const contractEventNotifier = store => next => action => {
 			return next(action);
 		}
 
+		display = null;
+
 		store.dispatch({
 			type: 'UPDATE_TOTAL_SUPPLY',
 			tokenAddress: tokenAddr,
@@ -215,7 +217,9 @@ const contractEventNotifier = store => next => action => {
 
 	// ------------------------------------------------------------
 
-	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
+	if (display) {
+		toast.success(display, { position: toast.POSITION.TOP_RIGHT });
+	}
 	return next(action);
 };
 
