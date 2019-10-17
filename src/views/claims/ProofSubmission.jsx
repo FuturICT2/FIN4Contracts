@@ -120,19 +120,19 @@ function ProofSubmission(props, context) {
 		}
 	};
 
-	const buildProofSubmissionForm = (proofType, index) => {
+	const buildProofSubmissionForm = (proofObj, index) => {
 		let claim = props.usersClaims[pseudoClaimId];
 
-		switch (proofType.label) {
+		switch (proofObj.label) {
 			case 'Location':
-				return <LocationProof key={'loc_' + index} />;
+				return <LocationProof key={'loc_' + index} proofObj={proofObj} />;
 			case 'SelfieTogether':
-				return <SelfieTogetherProof key={'selfie_' + index} />;
+				return <SelfieTogetherProof key={'selfie_' + index} proofObj={proofObj} />;
 			default:
 				return (
 					<ContractForm
-						contractName={proofType.label}
-						method={'submitProof_' + proofType.label}
+						contractName={proofObj.label}
+						method={'submitProof_' + proofObj.label}
 						staticArgs={{
 							tokenAdrToReceiveProof: claim.token,
 							claimId: claim.claimId + ''
@@ -184,19 +184,19 @@ function ProofSubmission(props, context) {
 					{Object.keys(props.usersClaims[pseudoClaimId].proofStatuses).map((proofTypeAddr, index) => {
 						let claim = props.usersClaims[pseudoClaimId];
 						let proofIsApproved = claim.proofStatuses[proofTypeAddr];
-						let proofType = props.proofTypes[proofTypeAddr];
+						let proofObj = props.proofTypes[proofTypeAddr];
 
 						return (
 							<div key={index}>
 								{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
 								{proofIsApproved ? (
-									<Status isapproved="true">{'The proof ' + proofType.label + ' was submitted successfully.'}</Status>
+									<Status isapproved="true">{'The proof ' + proofObj.label + ' was submitted successfully.'}</Status>
 								) : (
 									<>
 										<Status isapproved="false">
-											{'Your claim requires you to provide the following proof: ' + proofType.description}
+											{'Your claim requires you to provide the following proof: ' + proofObj.description}
 										</Status>
-										{buildProofSubmissionForm(proofType, index)}
+										{buildProofSubmissionForm(proofObj, index)}
 									</>
 								)}
 							</div>
