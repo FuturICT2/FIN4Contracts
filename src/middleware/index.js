@@ -148,12 +148,18 @@ const contractEventNotifier = store => next => action => {
 			return next(action);
 		}
 
+		let messageId = msg.messageId.toString();
+		if (messageIdAlreadyExists(store, messageId)) {
+			// block duplicate events
+			return next(action);
+		}
+
 		display = 'You got a new message';
 
 		store.dispatch({
 			type: 'ADD_MESSAGE_STUB',
 			oneMessage: {
-				messageId: msg.messageId.toString(),
+				messageId: messageId,
 				messageType: null,
 				sender: null,
 				proofTypeName: null,
@@ -173,6 +179,12 @@ const contractEventNotifier = store => next => action => {
 			return next(action);
 		}
 
+		let messageId = msg.messageId.toString();
+		if (messageHasBeenActedUpon(store, messageId)) {
+			// block duplicate events
+			return next(action);
+		}
+
 		display = 'Message marked as read';
 
 		store.dispatch({
@@ -185,6 +197,26 @@ const contractEventNotifier = store => next => action => {
 
 	toast.success(display, { position: toast.POSITION.TOP_RIGHT });
 	return next(action);
+};
+
+const messageIdAlreadyExists = (store, messageId) => {
+	let messages = store.getState().fin4Store.messages;
+	for (let i = 0; i < messages.length; i++) {
+		if (messages[i].messageId === messageId) {
+			return true;
+		}
+	}
+	return false;
+};
+
+const messageHasBeenActedUpon = (store, messageId) => {
+	let messages = store.getState().fin4Store.messages;
+	for (let i = 0; i < messages.length; i++) {
+		if (messages[i].messageId === messageId) {
+			return messages[i].hasBeenActedUpon;
+		}
+	}
+	return false;
 };
 
 const appMiddlewares = [contractEventNotifier];
