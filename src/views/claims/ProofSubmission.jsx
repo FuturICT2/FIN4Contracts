@@ -120,6 +120,63 @@ function ProofSubmission(props, context) {
 		}
 	};
 
+	const buildProofSubmissionForm = (proofType, index) => {
+		let claim = props.usersClaims[pseudoClaimId];
+
+		switch (proofType.label) {
+			case 'Location':
+				return <LocationProof key={'loc_' + index} />;
+			case 'SelfieTogether':
+				return <SelfieTogetherProof key={'selfie_' + index} />;
+			default:
+				return (
+					<ContractForm
+						contractName={proofType.label}
+						method={'submitProof_' + proofType.label}
+						staticArgs={{
+							tokenAdrToReceiveProof: claim.token,
+							claimId: claim.claimId + ''
+						}}
+						hideArgs={{
+							longitude: 'longitude',
+							distanceToLocation: 'distanceToLocation'
+						}}
+						buttonLabel="Initiate proof"
+						specialFields={{
+							// location: "location" // TODO latitude/longitude... ?!
+							IPFShash: {
+								type: 'file',
+								buttonText: 'Upload image to IPFS',
+								buttonIcon: null,
+								onClick: onUploadImageClick,
+								values: {
+									IPFShash: ipfsHash
+								}
+								//state: this.state
+							},
+							latitude: {
+								buttonText: 'Submit location',
+								buttonIcon: AddLocation,
+								onClick: onSubmitLocationClick,
+								data: null, // TODO
+								values: {
+									latitude: '0',
+									longitude: '0',
+									distanceToLocation: '999999'
+								}
+							},
+							longitude: {
+								belongsTo: 'latitude'
+							},
+							distanceToLocation: {
+								belongsTo: 'latitude'
+							}
+						}}
+					/>
+				);
+		}
+	};
+
 	return (
 		pseudoClaimId && (
 			<Container>
@@ -128,68 +185,22 @@ function ProofSubmission(props, context) {
 						let claim = props.usersClaims[pseudoClaimId];
 						let proofIsApproved = claim.proofStatuses[proofTypeAddr];
 						let proofType = props.proofTypes[proofTypeAddr];
-						switch (proofType.label) {
-							case 'Location':
-								return <LocationProof key={index} />;
-							case 'SelfieTogether':
-								return <SelfieTogetherProof key={index} />;
-							default:
-								return (
-									<div key={index}>
-										{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
-										<Status isapproved={proofIsApproved ? 'true' : 'false'}>
-											{proofIsApproved
-												? `The proof "${proofType.label}" was submitted successfully.`
-												: `Your claim requires you to fill out the following form: ${proofType.description}`}
+
+						return (
+							<div key={index}>
+								{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
+								{proofIsApproved ? (
+									<Status isapproved="true">{'The proof ' + proofType.label + ' was submitted successfully.'}</Status>
+								) : (
+									<>
+										<Status isapproved="false">
+											{'Your claim requires you to provide the following proof: ' + proofType.description}
 										</Status>
-										{!proofIsApproved && (
-											<ContractForm
-												contractName={proofType.label}
-												method={'submitProof_' + proofType.label}
-												staticArgs={{
-													tokenAdrToReceiveProof: claim.token,
-													claimId: claim.claimId + ''
-												}}
-												hideArgs={{
-													longitude: 'longitude',
-													distanceToLocation: 'distanceToLocation'
-												}}
-												buttonLabel="Initiate proof"
-												specialFields={{
-													// location: "location" // TODO latitude/longitude... ?!
-													IPFShash: {
-														type: 'file',
-														buttonText: 'Upload image to IPFS',
-														buttonIcon: null,
-														onClick: onUploadImageClick,
-														values: {
-															IPFShash: ipfsHash
-														}
-														//state: this.state
-													},
-													latitude: {
-														buttonText: 'Submit location',
-														buttonIcon: AddLocation,
-														onClick: onSubmitLocationClick,
-														data: null, // TODO
-														values: {
-															latitude: '0',
-															longitude: '0',
-															distanceToLocation: '999999'
-														}
-													},
-													longitude: {
-														belongsTo: 'latitude'
-													},
-													distanceToLocation: {
-														belongsTo: 'latitude'
-													}
-												}}
-											/>
-										)}
-									</div>
-								);
-						}
+										{buildProofSubmissionForm(proofType, index)}
+									</>
+								)}
+							</div>
+						);
 					})}
 				</Box>
 			</Container>
