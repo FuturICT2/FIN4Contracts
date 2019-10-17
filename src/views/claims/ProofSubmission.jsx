@@ -10,6 +10,8 @@ import AddLocation from '@material-ui/icons/AddLocation';
 import Box from '../../components/Box';
 import Container from '../../components/Container';
 import PropTypes from 'prop-types';
+import LocationProof from './proofs/LocationProof';
+import SelfieTogetherProof from './proofs/SelfieTogetherProof';
 
 function ProofSubmission(props, context) {
 	const [ipfsHash, setIpfsHash] = useState(null);
@@ -126,61 +128,68 @@ function ProofSubmission(props, context) {
 						let claim = props.usersClaims[pseudoClaimId];
 						let proofIsApproved = claim.proofStatuses[proofTypeAddr];
 						let proofType = props.proofTypes[proofTypeAddr];
-						return (
-							<div key={index}>
-								{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
-								<Status isapproved={proofIsApproved ? 'true' : 'false'}>
-									{proofIsApproved
-										? `The proof "${proofType.label}" was submitted successfully.`
-										: `Your claim requires you to fill out the following form: ${proofType.description}`}
-								</Status>
-								{!proofIsApproved && (
-									<ContractForm
-										contractName={proofType.label}
-										method={'submitProof_' + proofType.label}
-										staticArgs={{
-											tokenAdrToReceiveProof: claim.token,
-											claimId: claim.claimId + ''
-										}}
-										hideArgs={{
-											longitude: 'longitude',
-											distanceToLocation: 'distanceToLocation'
-										}}
-										buttonLabel="Initiate proof"
-										specialFields={{
-											// location: "location" // TODO latitude/longitude... ?!
-											IPFShash: {
-												type: 'file',
-												buttonText: 'Upload image to IPFS',
-												buttonIcon: null,
-												onClick: onUploadImageClick,
-												values: {
-													IPFShash: ipfsHash
-												}
-												//state: this.state
-											},
-											latitude: {
-												buttonText: 'Submit location',
-												buttonIcon: AddLocation,
-												onClick: onSubmitLocationClick,
-												data: null, // TODO
-												values: {
-													latitude: '0',
-													longitude: '0',
-													distanceToLocation: '999999'
-												}
-											},
-											longitude: {
-												belongsTo: 'latitude'
-											},
-											distanceToLocation: {
-												belongsTo: 'latitude'
-											}
-										}}
-									/>
-								)}
-							</div>
-						);
+						switch (proofType) {
+							case 'Location':
+								return <LocationProof />;
+							case 'SelfieTogether':
+								return <SelfieTogetherProof />;
+							default:
+								return (
+									<div key={index}>
+										{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
+										<Status isapproved={proofIsApproved ? 'true' : 'false'}>
+											{proofIsApproved
+												? `The proof "${proofType.label}" was submitted successfully.`
+												: `Your claim requires you to fill out the following form: ${proofType.description}`}
+										</Status>
+										{!proofIsApproved && (
+											<ContractForm
+												contractName={proofType.label}
+												method={'submitProof_' + proofType.label}
+												staticArgs={{
+													tokenAdrToReceiveProof: claim.token,
+													claimId: claim.claimId + ''
+												}}
+												hideArgs={{
+													longitude: 'longitude',
+													distanceToLocation: 'distanceToLocation'
+												}}
+												buttonLabel="Initiate proof"
+												specialFields={{
+													// location: "location" // TODO latitude/longitude... ?!
+													IPFShash: {
+														type: 'file',
+														buttonText: 'Upload image to IPFS',
+														buttonIcon: null,
+														onClick: onUploadImageClick,
+														values: {
+															IPFShash: ipfsHash
+														}
+														//state: this.state
+													},
+													latitude: {
+														buttonText: 'Submit location',
+														buttonIcon: AddLocation,
+														onClick: onSubmitLocationClick,
+														data: null, // TODO
+														values: {
+															latitude: '0',
+															longitude: '0',
+															distanceToLocation: '999999'
+														}
+													},
+													longitude: {
+														belongsTo: 'latitude'
+													},
+													distanceToLocation: {
+														belongsTo: 'latitude'
+													}
+												}}
+											/>
+										)}
+									</div>
+								);
+						}
 					})}
 				</Box>
 			</Container>
