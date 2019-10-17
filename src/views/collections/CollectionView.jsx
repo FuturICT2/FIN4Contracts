@@ -50,7 +50,7 @@ function CollectionView(props, drizzle) {
 			</Box>
 			{collection && (
 				<Box title="Tokens in collection">
-					<Table headers={['Token', 'Actions']} colWidths={[85, 15]}>
+					<Table headers={['Token', 'Total supply', 'Actions']} colWidths={[75, 10, 15]}>
 						{collection.tokens.map((tokenAddr, index) => {
 							let token = props.fin4Tokens[tokenAddr];
 							if (!token) {
@@ -62,6 +62,7 @@ function CollectionView(props, drizzle) {
 									key={'token_' + index}
 									data={{
 										token: <Currency name={token.name} symbol={token.symbol} />,
+										totalSupply: token.totalSupply,
 										actions: (
 											<small style={{ color: 'blue', textDecoration: 'underline' }}>
 												<Link to={'/token/view/' + token.symbol}>View</Link>

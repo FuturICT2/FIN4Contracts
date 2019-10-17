@@ -40,7 +40,8 @@ const contractEventNotifier = store => next => action => {
 				description: token.description,
 				unit: token.unit,
 				userIsCreator: token.creator === defaultAccount,
-				userIsAdmin: false
+				userIsAdmin: false,
+				totalSupply: 0
 			}
 		});
 	}
@@ -118,7 +119,6 @@ const contractEventNotifier = store => next => action => {
 		let totalSupply = new BN(action.event.returnValues.totalSupply).toNumber();
 
 		let token = store.getState().fin4Store.fin4Tokens[tokenAddr];
-
 		if (token.totalSupply === totalSupply) {
 			// block duplicate events, not sure if this can happen, but just to be sure
 			return next(action);
@@ -342,8 +342,8 @@ function fin4StoreReducer(state = initialState, action) {
 				...state,
 				fin4Tokens: {
 					...state.fin4Tokens,
-					[action.tokenAddr]: {
-						...state.fin4Tokens[action.tokenAddr],
+					[action.tokenAddress]: {
+						...state.fin4Tokens[action.tokenAddress],
 						totalSupply: action.totalSupply
 					}
 				}
