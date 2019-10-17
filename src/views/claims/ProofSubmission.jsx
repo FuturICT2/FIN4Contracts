@@ -128,11 +128,11 @@ function ProofSubmission(props, context) {
 						let claim = props.usersClaims[pseudoClaimId];
 						let proofIsApproved = claim.proofStatuses[proofTypeAddr];
 						let proofType = props.proofTypes[proofTypeAddr];
-						switch (proofType) {
+						switch (proofType.label) {
 							case 'Location':
-								return <LocationProof />;
+								return <LocationProof key={index} />;
 							case 'SelfieTogether':
-								return <SelfieTogetherProof />;
+								return <SelfieTogetherProof key={index} />;
 							default:
 								return (
 									<div key={index}>
