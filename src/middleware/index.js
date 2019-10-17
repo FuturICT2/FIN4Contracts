@@ -111,6 +111,26 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	// ------------------------------ UpdatedTotalSupply ------------------------------
+
+	if (contractEvent === 'UpdatedTotalSupply') {
+		let tokenAddr = action.event.returnValues.tokenAddr;
+		let totalSupply = new BN(action.event.returnValues.totalSupply).toNumber();
+
+		let token = store.getState().fin4Store.fin4Tokens[tokenAddr];
+
+		if (token.totalSupply === totalSupply) {
+			// block duplicate events, not sure if this can happen, but just to be sure
+			return next(action);
+		}
+
+		store.dispatch({
+			type: 'UPDATE_TOTAL_SUPPLY',
+			tokenAddress: tokenAddr,
+			totalSupply: totalSupply
+		});
+	}
+
 	// ------------------------------ ProofApproved ------------------------------
 
 	if (contractEvent === 'ProofApproved') {
@@ -317,6 +337,17 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
+		case 'UPDATE_TOTAL_SUPPLY':
+			return {
+				...state,
+				fin4Tokens: {
+					...state.fin4Tokens,
+					[action.tokenAddr]: {
+						...state.fin4Tokens[action.tokenAddr],
+						totalSupply: action.totalSupply
+					}
+				}
+			};
 		case 'ADD_MULTIPLE_PROOF_TYPES':
 			for (i = 0; i < action.proofTypesArr.length; i++) {
 				let proofType = action.proofTypesArr[i];

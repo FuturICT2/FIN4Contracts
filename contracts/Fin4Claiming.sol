@@ -8,6 +8,7 @@ contract Fin4Claiming {
         address[] requiredProofTypes);
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
     event ProofApproved(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
+    event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
 
     /*
     struct ClaimRef {
@@ -35,6 +36,9 @@ contract Fin4Claiming {
     // called from Fin4TokenBase
     function claimApprovedPingback(address tokenAddress, address claimer, uint claimId) public {
         emit ClaimApproved(tokenAddress, claimId, claimer, Fin4Token(tokenAddress).balanceOf(claimer));
+        // can changes to totalSupply happen at other places too though? Definitely if we use the
+        // AllPurpose contract with burning for instance... #ConceptualDecision
+        emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
     }
 
     // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------

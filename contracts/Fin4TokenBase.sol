@@ -28,11 +28,6 @@ contract Fin4TokenBase { // abstract class
   function name() public view returns(string memory);
   function symbol() public view returns(string memory);
 
-  function getTokenInfo(address user) public view returns(bool, bool, string memory, string memory, string memory, string memory) {
-    bool userIsAdmin = false; // TODO
-    return (user == actionTypeCreator, userIsAdmin, name(), symbol(), description, unit);
-  }
-
   // ------------------------- CLAIM -------------------------
 
   uint nextClaimId = 0;

@@ -95,7 +95,8 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 			addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
 				'ClaimSubmitted',
 				'ClaimApproved',
-				'ProofApproved'
+				'ProofApproved',
+				'UpdatedTotalSupply'
 			]);
 			addContract(props, drizzle, 'Fin4Collections', Fin4CollectionsAddress, []);
 		}
@@ -130,7 +131,7 @@ const fetchAllTokens = (props, Fin4TokenManagementContract, callback) => {
 		.then(tokens => {
 			return tokens.map(tokenAddr => {
 				return getContractData(Fin4TokenManagementContract, defaultAccount, 'getTokenInfo', tokenAddr).then(
-					({ 0: userIsCreator, 1: userIsAdmin, 2: name, 3: symbol, 4: description, 5: unit }) => {
+					({ 0: userIsCreator, 1: userIsAdmin, 2: name, 3: symbol, 4: description, 5: unit, 6: totalSupply }) => {
 						return {
 							userIsCreator: userIsCreator,
 							userIsAdmin: userIsAdmin,
@@ -138,7 +139,8 @@ const fetchAllTokens = (props, Fin4TokenManagementContract, callback) => {
 							name: name,
 							symbol: symbol,
 							description: description,
-							unit: unit
+							unit: unit,
+							totalSupply: new BN(totalSupply).toNumber()
 						};
 					}
 				);
