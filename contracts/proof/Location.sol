@@ -11,7 +11,7 @@ contract Location is Fin4BaseProofType {
       description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";
     }
 
-    function submitProof_Location(address tokenAdrToReceiveProof, uint claimId, uint distanceToLocation) public returns(bool) {
+    function submitProof_Location(address tokenAdrToReceiveProof, uint claimId, uint distanceToLocation) public {
       if (locationIsWithinMaxDistToSpecifiedLocation(tokenAdrToReceiveProof, distanceToLocation)) {
         _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
       } else {
@@ -20,7 +20,6 @@ contract Location is Fin4BaseProofType {
         ": Your location is not within the allowed distance to the defined location."));
         Fin4Messages(_Fin4MessagesAddr()).addInfoMessage(address(this), msg.sender, message);
       }
-      return true;
     }
 
     // TODO calculate distance here instead of trusting the front end?

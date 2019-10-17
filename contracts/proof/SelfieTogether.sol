@@ -15,7 +15,7 @@ contract SelfieTogether is SpecificAddress {
   }
 
   function submitProof_SelfieTogether(address tokenAdrToReceiveProof, uint claimId, address approver,
-    string memory IPFShash) public returns(bool) {
+    string memory IPFShash) public {
 
     // to user-chosen approver
     PendingApproval memory pa;
