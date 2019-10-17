@@ -4,6 +4,4 @@ contract Fin4MainStub {
 
   function proofTypeIsRegistered(address proofTypeToCheck) public view returns(bool);
 
-  function getFin4MessagesAddress() public view returns(address);
-
 }

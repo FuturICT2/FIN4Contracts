@@ -28,7 +28,7 @@ contract SelfieTogether is SpecificAddress {
 
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
-    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(
+    pa.messageId = Fin4Messages(Fin4MessagesAddress).addPendingApprovalMessage(
       msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
 
     // to token-creator
@@ -44,7 +44,7 @@ contract SelfieTogether is SpecificAddress {
 
     string memory messageTC = string(abi.encodePacked(getMessageTextForTokenCreator(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
-    paTC.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(
+    paTC.messageId = Fin4Messages(Fin4MessagesAddress).addPendingApprovalMessage(
       msg.sender, name, tokenCreator, messageTC, IPFShash, paTC.pendingApprovalId);
 
     // connect the two PendingApprovals
@@ -76,7 +76,7 @@ contract SelfieTogether is SpecificAddress {
   function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
     PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
     require(pa.approver == msg.sender, "This address is not registered as approver for any pending approval");
-    Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pa.messageId);
+    Fin4Messages(Fin4MessagesAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
 
     pa.isApproved = true;
     address otherApprover = pa.linkedWith;

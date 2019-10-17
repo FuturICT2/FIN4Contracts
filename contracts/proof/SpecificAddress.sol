@@ -44,7 +44,7 @@ contract SpecificAddress is Fin4BaseProofType {
 
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
-    pa.messageId = Fin4Messages(_Fin4MessagesAddr()).addPendingApprovalMessage(msg.sender, name, approver, message, "", pa.pendingApprovalId);
+    pa.messageId = Fin4Messages(Fin4MessagesAddress).addPendingApprovalMessage(msg.sender, name, approver, message, "", pa.pendingApprovalId);
 
     pendingApprovals[approver].push(pa);
     return true;
@@ -57,7 +57,7 @@ contract SpecificAddress is Fin4BaseProofType {
   function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
     PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
     require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
-    Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pa.messageId);
+    Fin4Messages(Fin4MessagesAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
     _sendApproval(address(this), pa.tokenAdrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
     return true;
   }
@@ -65,11 +65,11 @@ contract SpecificAddress is Fin4BaseProofType {
   function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
     PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
     require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
-    Fin4Messages(_Fin4MessagesAddr()).markMessageAsActedUpon(msg.sender, pa.messageId);
+    Fin4Messages(Fin4MessagesAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
 
     string memory message = string(abi.encodePacked("User ", addressToString(pa.approver),
       " has rejected your approval request for ", Fin4TokenBase(pa.tokenAdrToReceiveProof).name()));
-    Fin4Messages(_Fin4MessagesAddr()).addInfoMessage(address(this), pa.requester, message);
+    Fin4Messages(Fin4MessagesAddress).addInfoMessage(address(this), pa.requester, message);
 
     // TODO boolean flag in PendingApproval? #ConceptualDecision
 

@@ -1,7 +1,6 @@
 pragma solidity ^0.5.0;
 
 import "contracts/stub/Fin4TokenStub.sol";
-import 'contracts/stub/Fin4MainStub.sol';
 import "contracts/Fin4Messages.sol";
 import "contracts/util/utils.sol";
 
@@ -9,18 +8,14 @@ contract Fin4BaseProofType is utils {
 
   string public name;
   string public description;
-  address public Fin4Main;
+  address public Fin4MessagesAddress;
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
   mapping (address => uint[]) public fin4TokenToParametersSetOnThisProofType; // holds the token-specific parameters for each proof type
                                                                               // (one proof type is used by multiple action types)
 
-  constructor(address Fin4MainAddress) public {
-    Fin4Main = Fin4MainAddress;
-  }
-
-  function _Fin4MessagesAddr() public view returns(address) {
-    return Fin4MainStub(Fin4Main).getFin4MessagesAddress();
+  constructor(address Fin4MessagesAddr) public {
+    Fin4MessagesAddress = Fin4MessagesAddr;
   }
 
   function getName() public view returns(string memory) {

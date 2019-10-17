@@ -21,7 +21,7 @@ contract MinimumInterval is Fin4BaseProofType {
           ": The time between your previous claim and this one is shorter than the minimum required timespan of ",
           uint2str(_getMinimumInterval(tokenAdrToReceiveProof) / 1000), "s."
         ));
-        Fin4Messages(_Fin4MessagesAddr()).addInfoMessage(address(this), msg.sender, message);
+        Fin4Messages(Fin4MessagesAddress).addInfoMessage(address(this), msg.sender, message);
       }
       return true;
     }

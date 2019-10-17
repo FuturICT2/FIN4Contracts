@@ -44,7 +44,7 @@ module.exports = async function(deployer) {
 
 	// PROOF TYPES
 
-	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MainInstance.address)));
+	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagesInstance.address)));
 	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
 
