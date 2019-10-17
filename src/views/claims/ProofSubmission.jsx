@@ -5,15 +5,13 @@ import styled from 'styled-components';
 import colors from '../../config/colors-config';
 import { drizzleConnect } from 'drizzle-react';
 import { findTokenBySymbol } from '../../components/Contractor';
-import ipfs from '../../ipfs';
 import Box from '../../components/Box';
 import Container from '../../components/Container';
 import PropTypes from 'prop-types';
 import LocationProof from './proofs/LocationProof';
 import SelfieTogetherProof from './proofs/SelfieTogetherProof';
 
-function ProofSubmission(props, context) {
-	const [ipfsHash, setIpfsHash] = useState(null);
+function ProofSubmission(props) {
 	const [pseudoClaimId, setPseudoClaimId] = useState(null);
 
 	useEffect(() => {
@@ -37,31 +35,6 @@ function ProofSubmission(props, context) {
 		}
 	});
 
-	const onUploadImageClick = event => {
-		console.log('Started upload to IPFS...');
-		let reader = new window.FileReader();
-		reader.readAsArrayBuffer(event.target.files[0]);
-		reader.onloadend = () => convertToBuffer(reader);
-	};
-
-	const convertToBuffer = async reader => {
-		const buffer = await Buffer.from(reader.result);
-		saveToIpfs(buffer);
-	};
-
-	const saveToIpfs = async buffer => {
-		ipfs.add(buffer, (err, result) => {
-			let hash = result[0].hash;
-			let sizeKB = Math.round(result[0].size / 1000);
-			setIpfsHash(hash);
-			alert('Upload of ' + sizeKB + ' KB to IPFS successful');
-			console.log('Upload of ' + sizeKB + ' KB to IPFS successful: ' + hash, 'https://gateway.ipfs.io/ipfs/' + hash);
-			//ipfs.pin.add(hash, function (err) {
-			//	console.log("Could not pin hash " + hash, err);
-			//});
-		});
-	};
-
 	const buildProofSubmissionForm = (proofTypeName, tokenAddrToReceiveProof, claimId, index) => {
 		switch (proofTypeName) {
 			case 'Location':
@@ -78,18 +51,6 @@ function ProofSubmission(props, context) {
 							claimId: claimId + ''
 						}}
 						buttonLabel="Initiate proof"
-						specialFields={{
-							IPFShash: {
-								type: 'file',
-								buttonText: 'Upload image to IPFS',
-								buttonIcon: null,
-								onClick: onUploadImageClick,
-								values: {
-									IPFShash: ipfsHash
-								}
-								//state: this.state
-							}
-						}}
 					/>
 				);
 		}
