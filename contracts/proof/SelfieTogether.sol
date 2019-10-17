@@ -40,7 +40,9 @@ contract SelfieTogether is SpecificAddress {
     paTC.requester = msg.sender;
     paTC.approver = tokenCreator;
     paTC.attachment = IPFShash;
-    paTC.pendingApprovalId = pendingApprovals[tokenCreator].length;
+    uint idx = pendingApprovals[tokenCreator].length;
+    // otherwise it doesn't work if tokenCreator and approver are the same user - they would get the same pendingApprovalId
+    paTC.pendingApprovalId = tokenCreator == approver ? idx + 1 : idx;
 
     string memory messageTC = string(abi.encodePacked(getMessageTextForTokenCreator(),
       Fin4TokenBase(tokenAdrToReceiveProof).name()));
@@ -74,7 +76,7 @@ contract SelfieTogether is SpecificAddress {
 
   // @Override
   function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
-    PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
+    PendingApproval storage pa = pendingApprovals[msg.sender][pendingApprovalId];
     require(pa.approver == msg.sender, "This address is not registered as approver for any pending approval");
     Fin4Messages(Fin4MessagesAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
 
