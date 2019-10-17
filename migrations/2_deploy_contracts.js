@@ -7,7 +7,7 @@ const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
 const Fin4Messages = artifacts.require('Fin4Messages');
 const proofTypeContracts = [
-	artifacts.require('ImmediateAuto'),
+	artifacts.require('SelfApprove'),
 	artifacts.require('SpecificAddress'),
 	artifacts.require('ActionTypeCreator'),
 	artifacts.require('MinimumInterval'),

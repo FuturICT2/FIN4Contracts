@@ -2,16 +2,16 @@ pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
 
-contract ImmediateAuto is Fin4BaseProofType {
+contract SelfApprove is Fin4BaseProofType {
 
   constructor(address Fin4MainAddress)
     Fin4BaseProofType(Fin4MainAddress)
     public {
-      name = "ImmediateAuto";
-      description = "Sends the approval immediately, no checks.";
+      name = "SelfApprove";
+      description = "Claimers approve their own claim.";
     }
 
-    function submitProof_ImmediateAuto(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
+    function submitProof_SelfApprove(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
       _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
       return true;
     }
