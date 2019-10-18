@@ -13,7 +13,7 @@ function TokenOverview(props) {
 	return (
 		<>
 			<Box title={t('all-tokens')}>
-				<Table headers={[t('token-name'), 'Total supply', 'Actions']} colWidths={[75, 10, 15]}>
+				<Table headers={[t('token-name'), 'Total supply', 'Actions']} colWidths={[65, 20, 15]}>
 					{Object.keys(props.fin4Tokens).map((addr, index) => {
 						let token = props.fin4Tokens[addr];
 						return (
