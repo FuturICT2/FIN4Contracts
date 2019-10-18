@@ -10,6 +10,7 @@ import Container from '../../components/Container';
 import PropTypes from 'prop-types';
 import LocationProof from './proofs/LocationProof';
 import SelfieTogetherProof from './proofs/SelfieTogetherProof';
+import PictureProof from './proofs/PictureProof';
 
 function ProofSubmission(props) {
 	const [pseudoClaimId, setPseudoClaimId] = useState(null);
@@ -41,6 +42,8 @@ function ProofSubmission(props) {
 				return <LocationProof key={'loc_' + index} tokenAddr={tokenAddrToReceiveProof} claimId={claimId} />;
 			case 'SelfieTogether':
 				return <SelfieTogetherProof key={'selfie_' + index} tokenAddr={tokenAddrToReceiveProof} claimId={claimId} />;
+			case 'Picture':
+				return <PictureProof key={'pic_' + index} tokenAddr={tokenAddrToReceiveProof} claimId={claimId} />;
 			default:
 				return (
 					<ContractForm
