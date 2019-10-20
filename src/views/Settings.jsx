@@ -61,6 +61,23 @@ function Settings(props, context) {
 					</a>
 				</div>
 			</Box>
+			<Box title="System parameters">
+				<div className={classes.font}>
+					Address of the Fin4Main smart contract:
+					<br />
+					{props.contracts.Fin4Main && props.contracts.Fin4Main.initialized && context.drizzle.contracts.Fin4Main ? (
+						<small>
+							<a
+								href={'https://rinkeby.etherscan.io/address/' + context.drizzle.contracts.Fin4Main.address}
+								target="_blank">
+								{context.drizzle.contracts.Fin4Main.address}
+							</a>
+						</small>
+					) : (
+						'Loading...'
+					)}
+				</div>
+			</Box>
 		</Container>
 	);
 }
@@ -69,4 +86,10 @@ Settings.contextTypes = {
 	drizzle: PropTypes.object
 };
 
-export default drizzleConnect(Settings);
+const mapStateToProps = state => {
+	return {
+		contracts: state.contracts
+	};
+};
+
+export default drizzleConnect(Settings, mapStateToProps);
