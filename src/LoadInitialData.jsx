@@ -16,7 +16,7 @@ function LoadInitialData(props, context) {
 		// "once" flags
 		Fin4Main: false,
 		Fin4TokenManagement: false,
-		Fin4Messages: false,
+		Fin4Messaging: false,
 		Fin4Claiming: false,
 		Fin4Collections: false
 	});
@@ -30,7 +30,7 @@ function LoadInitialData(props, context) {
 			isInit.current.Fin4Main = true;
 			let Fin4MainContract = context.drizzle.contracts.Fin4Main;
 			// can happen in parallel once Fin4Main is ready:
-			addSatelliteContracts(props, Fin4MainContract, context.drizzle); // = Fin4Messages, Fin4Claiming and Fin4Collections
+			addSatelliteContracts(props, Fin4MainContract, context.drizzle); // = Fin4Messaging, Fin4Claiming and Fin4Collections
 			fetchAndAddAllProofTypes(props, Fin4MainContract, context.drizzle);
 		}
 
@@ -46,9 +46,9 @@ function LoadInitialData(props, context) {
 			});
 		}
 
-		if (!isInit.current.Fin4Messages && props.contracts.Fin4Messages && props.contracts.Fin4Messages.initialized) {
-			isInit.current.Fin4Messages = true;
-			fetchMessages(props, context.drizzle.contracts.Fin4Messages);
+		if (!isInit.current.Fin4Messaging && props.contracts.Fin4Messaging && props.contracts.Fin4Messaging.initialized) {
+			isInit.current.Fin4Messaging = true;
+			fetchMessages(props, context.drizzle.contracts.Fin4Messaging);
 		}
 
 		if (

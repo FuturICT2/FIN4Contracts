@@ -21,7 +21,7 @@ function Messages(props, context) {
 			.filter(msg => !msg.messageType)
 			.map(msg => {
 				fetchMessage(
-					context.drizzle.contracts.Fin4Messages,
+					context.drizzle.contracts.Fin4Messaging,
 					props.store.getState().fin4Store.defaultAccount,
 					msg.messageId
 				).then(message => {
@@ -56,7 +56,7 @@ function Messages(props, context) {
 	};
 
 	const markAsRead = messageId => {
-		context.drizzle.contracts.Fin4Messages.methods
+		context.drizzle.contracts.Fin4Messaging.methods
 			.markMessageAsActedUpon(props.defaultAccount, messageId)
 			.send({
 				from: props.defaultAccount
@@ -93,7 +93,7 @@ function Messages(props, context) {
 								<Typography color="textSecondary" variant="body2">
 									{msg.message}
 								</Typography>
-								{/* Fin4Messages.sol: enum MessageType { INFO, APPROVAL, USER2USER } */}
+								{/* Fin4Messaging.sol: enum MessageType { INFO, APPROVAL, USER2USER } */}
 								{msg.messageType === '1' && (
 									<>
 										<Divider style={{ margin: '10px 0' }} variant="middle" />

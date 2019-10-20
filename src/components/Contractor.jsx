@@ -58,8 +58,8 @@ const getFin4TokensFormattedForSelectOptions = fin4Tokens => {
 	});
 };
 
-const fetchMessage = (Fin4MessagesContract, defaultAccount, messageId) => {
-	return getContractData(Fin4MessagesContract, defaultAccount, 'getMyMessage', messageId).then(
+const fetchMessage = (Fin4MessagingContract, defaultAccount, messageId) => {
+	return getContractData(Fin4MessagingContract, defaultAccount, 'getMyMessage', messageId).then(
 		({
 			0: messageId,
 			1: messageType,
@@ -89,9 +89,9 @@ const fetchMessage = (Fin4MessagesContract, defaultAccount, messageId) => {
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4MainContract, defaultAccount, 'getSatelliteAddresses').then(
-		({ 0: Fin4TokenManagementAddress, 1: Fin4ClaimingAddress, 2: Fin4CollectionsAddress, 3: Fin4MessagesAddress }) => {
+		({ 0: Fin4TokenManagementAddress, 1: Fin4ClaimingAddress, 2: Fin4CollectionsAddress, 3: Fin4MessagingAddress }) => {
 			addContract(props, drizzle, 'Fin4TokenManagement', Fin4TokenManagementAddress, ['Fin4TokenCreated']);
-			addContract(props, drizzle, 'Fin4Messages', Fin4MessagesAddress, ['NewMessage', 'MessageMarkedAsRead']);
+			addContract(props, drizzle, 'Fin4Messaging', Fin4MessagingAddress, ['NewMessage', 'MessageMarkedAsRead']);
 			addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
 				'ClaimSubmitted',
 				'ClaimApproved',
@@ -103,9 +103,9 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 	);
 };
 
-const fetchMessages = (props, Fin4MessagesContract) => {
+const fetchMessages = (props, Fin4MessagingContract) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-	getContractData(Fin4MessagesContract, defaultAccount, 'getMyMessagesCount')
+	getContractData(Fin4MessagingContract, defaultAccount, 'getMyMessagesCount')
 		.then(data => {
 			var messageCount = Number(data);
 			var messageIndices = [];
@@ -113,7 +113,7 @@ const fetchMessages = (props, Fin4MessagesContract) => {
 				messageIndices.push(i);
 			}
 			return messageIndices.map(index => {
-				return fetchMessage(Fin4MessagesContract, defaultAccount, index);
+				return fetchMessage(Fin4MessagingContract, defaultAccount, index);
 			});
 		})
 		.then(messages => Promise.all(messages))

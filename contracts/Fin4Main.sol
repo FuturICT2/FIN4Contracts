@@ -31,19 +31,19 @@ contract Fin4Main {
   address public Fin4TokenManagementAddress;
   address public Fin4ClaimingAddress;
   address public Fin4CollectionsAddress;
-  address public Fin4MessagesAddress;
+  address public Fin4MessagingAddress;
 
-  function setSatelliteAddresses(address tokenManagement, address claiming, address collections, address messages) public {
+  function setSatelliteAddresses(address tokenManagement, address claiming, address collections, address messaging) public {
     // TODO use TCR instead of giving this right only to the creator of Fin4Main? #ConceptualDecision
     require (msg.sender == Fin4MainCreator, "Only the creator of Fin4Main can set satellite addresses");
     Fin4TokenManagementAddress = tokenManagement;
     Fin4ClaimingAddress = claiming;
     Fin4CollectionsAddress = collections;
-    Fin4MessagesAddress = messages;
+    Fin4MessagingAddress = messaging;
   }
 
   function getSatelliteAddresses() public view returns(address, address, address, address) {
-    return (Fin4TokenManagementAddress, Fin4ClaimingAddress, Fin4CollectionsAddress, Fin4MessagesAddress);
+    return (Fin4TokenManagementAddress, Fin4ClaimingAddress, Fin4CollectionsAddress, Fin4MessagingAddress);
   }
 
   // ------------------------- PROOF TYPES -------------------------

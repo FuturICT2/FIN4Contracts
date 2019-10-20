@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 import 'contracts/stub/Fin4BaseProofTypeStub.sol';
 
-contract Fin4Messages {
+contract Fin4Messaging {
 
   event NewMessage(address receiver, uint messageId);
   event MessageMarkedAsRead(address receiver, uint messageId);

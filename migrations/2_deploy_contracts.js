@@ -5,7 +5,7 @@ const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
-const Fin4Messages = artifacts.require('Fin4Messages');
+const Fin4Messaging = artifacts.require('Fin4Messaging');
 const proofTypeContracts = [
 	artifacts.require('SelfApprove'),
 	artifacts.require('SpecificAddress'),
@@ -32,19 +32,19 @@ module.exports = async function(deployer) {
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
 	await deployer.deploy(Fin4Collections);
 	const Fin4CollectionsInstance = await Fin4Collections.deployed();
-	await deployer.deploy(Fin4Messages);
-	const Fin4MessagesInstance = await Fin4Messages.deployed();
+	await deployer.deploy(Fin4Messaging);
+	const Fin4MessagingInstance = await Fin4Messaging.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
 		Fin4TokenManagementInstance.address,
 		Fin4ClaimingInstance.address,
 		Fin4CollectionsInstance.address,
-		Fin4MessagesInstance.address
+		Fin4MessagingInstance.address
 	);
 
 	// PROOF TYPES
 
-	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagesInstance.address)));
+	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagingInstance.address)));
 	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
 

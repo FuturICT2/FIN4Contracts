@@ -25,7 +25,7 @@ function UserMessage(props, context) {
 	});
 
 	const sendMessage = () => {
-		context.drizzle.contracts.Fin4Messages.methods
+		context.drizzle.contracts.Fin4Messaging.methods
 			.addUserMessage(addressValue.current, msgText.current)
 			.send({
 				from: props.store.getState().fin4Store.defaultAccount
