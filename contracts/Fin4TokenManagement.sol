@@ -29,7 +29,7 @@ contract Fin4TokenManagement {
         require(!symbolIsUsed[_symbol], "Symbol is already in use");
 
         Fin4Token newToken = new Fin4Token(name, _symbol, description, unit, msg.sender);
-        newToken.setAddresses(Fin4ProofingAddress, Fin4ClaimingAddress);
+        newToken.setAddresses(Fin4ClaimingAddress, Fin4ProofingAddress);
         symbolIsUsed[_symbol] = true;
 
         for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the action type creator
