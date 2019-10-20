@@ -4,8 +4,8 @@ import "contracts/proof/SpecificAddress.sol";
 
 contract ActionTypeCreator is SpecificAddress {
 
-  constructor(address Fin4MainAddress)
-    SpecificAddress(Fin4MainAddress)
+  constructor(address Fin4MessagingAddress)
+    SpecificAddress(Fin4MessagingAddress)
     public {}
 
   // @Override

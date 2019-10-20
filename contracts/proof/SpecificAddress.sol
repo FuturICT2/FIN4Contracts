@@ -5,8 +5,8 @@ import "contracts/Fin4TokenBase.sol";
 
 contract SpecificAddress is Fin4BaseProofType {
 
-  constructor(address Fin4MainAddress)
-    Fin4BaseProofType(Fin4MainAddress)
+  constructor(address Fin4MessagingAddress)
+    Fin4BaseProofType(Fin4MessagingAddress)
     public {
       setNameAndDescription();
     }

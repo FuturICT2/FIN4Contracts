@@ -4,8 +4,8 @@ import "contracts/proof/Fin4BaseProofType.sol";
 
 contract SelfApprove is Fin4BaseProofType {
 
-  constructor(address Fin4MainAddress)
-    Fin4BaseProofType(Fin4MainAddress)
+  constructor(address Fin4MessagingAddress)
+    Fin4BaseProofType(Fin4MessagingAddress)
     public {
       name = "SelfApprove";
       description = "Claimers approve their own claim.";

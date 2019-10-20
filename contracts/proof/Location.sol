@@ -4,8 +4,8 @@ import "contracts/proof/Fin4BaseProofType.sol";
 
 contract Location is Fin4BaseProofType {
 
-  constructor(address Fin4MainAddress)
-    Fin4BaseProofType(Fin4MainAddress)
+  constructor(address Fin4MessagingAddress)
+    Fin4BaseProofType(Fin4MessagingAddress)
     public {
       name = "Location";
       description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";

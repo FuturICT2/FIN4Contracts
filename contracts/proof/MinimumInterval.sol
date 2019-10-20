@@ -4,8 +4,8 @@ import "contracts/proof/Fin4BaseProofType.sol";
 
 contract MinimumInterval is Fin4BaseProofType {
 
-  constructor(address Fin4MainAddress)
-    Fin4BaseProofType(Fin4MainAddress)
+  constructor(address Fin4MessagingAddress)
+    Fin4BaseProofType(Fin4MessagingAddress)
     public {
       name = "MinimumInterval";
       description = "Defines a minimum time that has to pass between claims.";

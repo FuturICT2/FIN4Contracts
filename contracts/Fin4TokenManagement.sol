@@ -12,7 +12,7 @@ contract Fin4TokenManagement {
     address public Fin4ClaimingAddress;
     address public Fin4ProofingAddress;
 
-    constructor(address Fin4ClaimingAddr, Fin4ProofingAddr) public {
+    constructor(address Fin4ClaimingAddr, address Fin4ProofingAddr) public {
         Fin4ClaimingAddress = Fin4ClaimingAddr;
         Fin4ProofingAddress = Fin4ProofingAddr;
     }
