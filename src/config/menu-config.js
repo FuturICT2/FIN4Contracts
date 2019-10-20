@@ -17,6 +17,7 @@ import UserTransfer from '../views/users/UserTransfer';
 import User from '../views/users/User';
 import Settings from '../views/Settings';
 import About from '../views/About';
+import Groups from '../views/users/Groups';
 
 const menu = [
 	{
@@ -121,6 +122,11 @@ const menu = [
 	{
 		component: UserTransfer,
 		path: '/user/transfer/:userAddress/:tokenSymbol/:transferAmount',
+		showInNavBar: false
+	},
+	{
+		component: Groups,
+		path: '/users/groups/',
 		showInNavBar: false
 	},
 	// ------------------ SETTINGS ------------------

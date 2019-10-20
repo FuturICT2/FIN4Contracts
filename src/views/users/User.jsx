@@ -22,6 +22,11 @@ function User(props, context) {
 					<Link to={'/user/transfer'}>
 						<Button>Transfer tokens to user</Button>
 					</Link>
+					<br />
+					<br />
+					<Link to={'/users/groups'}>
+						<Button>See user groups</Button>
+					</Link>
 				</center>
 			</Box>
 		</Container>
