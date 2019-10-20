@@ -6,6 +6,7 @@ const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
 const Fin4Messaging = artifacts.require('Fin4Messaging');
+const Fin4Proofing = artifacts.require('Fin4Proofing');
 const proofTypeContracts = [
 	artifacts.require('SelfApprove'),
 	artifacts.require('SpecificAddress'),
@@ -26,9 +27,11 @@ module.exports = async function(deployer) {
 
 	// SATELLITE CONTRACTS
 
+	await deployer.deploy(Fin4Proofing);
+	const Fin4ProofingInstance = await Fin4Proofing.deployed();
 	await deployer.deploy(Fin4Claiming);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
-	await deployer.deploy(Fin4TokenManagement, Fin4MainInstance.address, Fin4ClaimingInstance.address);
+	await deployer.deploy(Fin4TokenManagement, Fin4ClaimingInstance.address, Fin4ProofingInstance.address);
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
 	await deployer.deploy(Fin4Collections);
 	const Fin4CollectionsInstance = await Fin4Collections.deployed();
@@ -39,14 +42,15 @@ module.exports = async function(deployer) {
 		Fin4TokenManagementInstance.address,
 		Fin4ClaimingInstance.address,
 		Fin4CollectionsInstance.address,
-		Fin4MessagingInstance.address
+		Fin4MessagingInstance.address,
+		Fin4ProofingInstance.address
 	);
 
 	// PROOF TYPES
 
 	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagingInstance.address)));
 	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
-	await Promise.all(proofTypeInstances.map(({ address }) => Fin4MainInstance.addProofType(address)));
+	await Promise.all(proofTypeInstances.map(({ address }) => Fin4ProofingInstance.addProofType(address)));
 
 	// Write Fin4Main address to src/config/DeployedAddresses.js
 

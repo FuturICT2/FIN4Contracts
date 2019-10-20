@@ -1,13 +1,13 @@
 pragma solidity ^0.5.0;
 
-import 'contracts/stub/Fin4MainStub.sol';
+import 'contracts/Fin4Proofing.sol';
 import "contracts/proof/Fin4BaseProofType.sol";
 import "contracts/stub/Fin4ClaimingStub.sol";
 
 contract Fin4TokenBase { // abstract class
 
-  address public Fin4MainAddress;
   address public Fin4ClaimingAddress;
+  address public Fin4ProofingAddress;
   address public actionTypeCreator;
   string public description;
   string public unit;
@@ -20,9 +20,9 @@ contract Fin4TokenBase { // abstract class
     tokenCreationTime = now;
   }
 
-  function setAddresses(address Fin4MainAddr, address Fin4ClaimingAddr) public {
-    Fin4MainAddress = Fin4MainAddr;
+  function setAddresses(address Fin4ClaimingAddr, address Fin4ProofingAddr) public {
     Fin4ClaimingAddress = Fin4ClaimingAddr;
+    Fin4ProofingAddress = Fin4ProofingAddr;
   }
 
   function name() public view returns(string memory);
@@ -198,7 +198,7 @@ contract Fin4TokenBase { // abstract class
 
   // called for each proof type from Fin4Main.createNewToken()
   function addRequiredProofType(address proofType) public returns(bool) {
-    require(Fin4MainStub(Fin4MainAddress).proofTypeIsRegistered(proofType),
+    require(Fin4Proofing(Fin4ProofingAddress).proofTypeIsRegistered(proofType),
       "This address is not registered as proof type in Fin4Main");
     requiredProofTypes.push(proofType);
     Fin4BaseProofType(proofType).registerActionTypeCreator(actionTypeCreator);

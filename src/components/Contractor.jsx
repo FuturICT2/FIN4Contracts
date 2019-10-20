@@ -89,7 +89,13 @@ const fetchMessage = (Fin4MessagingContract, defaultAccount, messageId) => {
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4MainContract, defaultAccount, 'getSatelliteAddresses').then(
-		({ 0: Fin4TokenManagementAddress, 1: Fin4ClaimingAddress, 2: Fin4CollectionsAddress, 3: Fin4MessagingAddress }) => {
+		({
+			0: Fin4TokenManagementAddress,
+			1: Fin4ClaimingAddress,
+			2: Fin4CollectionsAddress,
+			3: Fin4MessagingAddress,
+			4: Fin4ProofingAddress
+		}) => {
 			addContract(props, drizzle, 'Fin4TokenManagement', Fin4TokenManagementAddress, ['Fin4TokenCreated']);
 			addContract(props, drizzle, 'Fin4Messaging', Fin4MessagingAddress, ['NewMessage', 'MessageMarkedAsRead']);
 			addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
@@ -99,6 +105,7 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 				'UpdatedTotalSupply'
 			]);
 			addContract(props, drizzle, 'Fin4Collections', Fin4CollectionsAddress, []);
+			addContract(props, drizzle, 'Fin4Proofing', Fin4ProofingAddress, []);
 		}
 	);
 };
@@ -172,12 +179,12 @@ const fetchUsersNonzeroTokenBalances = (props, Fin4TokenManagementContract) => {
 	);
 };
 
-const fetchAndAddAllProofTypes = (props, Fin4MainContract, drizzle) => {
+const fetchAndAddAllProofTypes = (props, Fin4ProofingContract, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-	getContractData(Fin4MainContract, defaultAccount, 'getProofTypes')
+	getContractData(Fin4ProofingContract, defaultAccount, 'getProofTypes')
 		.then(proofTypeAddresses => {
 			return proofTypeAddresses.map(proofTypeAddress => {
-				return getContractData(Fin4MainContract, defaultAccount, 'getProofTypeInfo', proofTypeAddress).then(
+				return getContractData(Fin4ProofingContract, defaultAccount, 'getProofTypeInfo', proofTypeAddress).then(
 					({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
 						// add Contract objects to drizzle
 						addContract(props, drizzle, name, proofTypeAddress, []);

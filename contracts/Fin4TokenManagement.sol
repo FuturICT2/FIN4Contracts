@@ -9,12 +9,12 @@ contract Fin4TokenManagement {
     // TODO do we need the indexed keyword for event params?
     event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator);
 
-    address public Fin4MainAddress;
     address public Fin4ClaimingAddress;
+    address public Fin4ProofingAddress;
 
-    constructor(address Fin4MainAddr, address Fin4ClaimingAddr) public {
-        Fin4MainAddress = Fin4MainAddr;
+    constructor(address Fin4ClaimingAddr, Fin4ProofingAddr) public {
         Fin4ClaimingAddress = Fin4ClaimingAddr;
+        Fin4ProofingAddress = Fin4ProofingAddr;
     }
 
     address[] public allFin4Tokens;
@@ -29,7 +29,7 @@ contract Fin4TokenManagement {
         require(!symbolIsUsed[_symbol], "Symbol is already in use");
 
         Fin4Token newToken = new Fin4Token(name, _symbol, description, unit, msg.sender);
-        newToken.setAddresses(Fin4MainAddress, Fin4ClaimingAddress);
+        newToken.setAddresses(Fin4ProofingAddress, Fin4ClaimingAddress);
         symbolIsUsed[_symbol] = true;
 
         for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the action type creator
