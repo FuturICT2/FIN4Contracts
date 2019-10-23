@@ -7,6 +7,7 @@ const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
 const Fin4Messaging = artifacts.require('Fin4Messaging');
 const Fin4Proofing = artifacts.require('Fin4Proofing');
+const Fin4Groups = artifacts.require('Fin4Groups');
 const proofTypeContracts = [
 	artifacts.require('SelfApprove'),
 	artifacts.require('SpecificAddress'),
@@ -37,13 +38,16 @@ module.exports = async function(deployer) {
 	const Fin4CollectionsInstance = await Fin4Collections.deployed();
 	await deployer.deploy(Fin4Messaging);
 	const Fin4MessagingInstance = await Fin4Messaging.deployed();
+	await deployer.deploy(Fin4Groups);
+	const Fin4GroupsInstance = await Fin4Groups.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
 		Fin4TokenManagementInstance.address,
 		Fin4ClaimingInstance.address,
 		Fin4CollectionsInstance.address,
 		Fin4MessagingInstance.address,
-		Fin4ProofingInstance.address
+		Fin4ProofingInstance.address,
+		Fin4GroupsInstance.address
 	);
 
 	// PROOF TYPES
