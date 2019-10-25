@@ -8,30 +8,25 @@ contract Fin4Groups {
         address[] members;
         mapping(address => bool) membersSet;
         string name;
-        string identifier;
     }
 
     uint public nextGroupId = 0;
     uint private INVALID_INDEX = 9999;
 
     mapping (uint => Group) public groups;
-    mapping (string => bool) public identifiers;
 
     function getGroupsCount() public view returns(uint) {
         return nextGroupId;
     }
 
-    function createGroup(string memory name, string memory identifier, bool addCreatorAsMember) public returns(uint) {
-        require(!identifiers[identifier], "Identifier already in use");
+    function createGroup(string memory name, bool addCreatorAsMember) public returns(uint) {
         Group storage group = groups[nextGroupId];
         group.creator = msg.sender;
         if (addCreatorAsMember) {
             group.members.push(msg.sender);
         }
         group.name = name;
-        group.identifier = identifier;
         nextGroupId ++;
-        identifiers[identifier] = true;
         return nextGroupId - 1;
     }
 
