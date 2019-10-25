@@ -24,6 +24,7 @@ contract Fin4Groups {
         group.creator = msg.sender;
         if (addCreatorAsMember) {
             group.members.push(msg.sender);
+            group.membersSet[msg.sender] = true;
         }
         group.name = name;
         nextGroupId ++;
