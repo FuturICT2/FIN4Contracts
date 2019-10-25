@@ -29,7 +29,7 @@ function Groups(props, context) {
 
 	const fetchGroups = () => {
 		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-		getContractData(context.drizzle.contracts.Fin4Groups, defaultAccount, 'getGroupsInfoAboutUser').then(
+		getContractData(context.drizzle.contracts.Fin4Groups, defaultAccount, 'getGroupsInfo').then(
 			({ 0: userIsCreatorArr, 1: userIsMemberArr }) => {
 				let groupsArr = [];
 				for (let i = 0; i < userIsCreatorArr.length; i++) {
@@ -40,7 +40,8 @@ function Groups(props, context) {
 							groupId: i,
 							userIsCreator: userIsCreator,
 							userIsMember: userIsMember,
-							name: null
+							name: null,
+							creator: null
 						});
 					}
 				}
@@ -50,10 +51,11 @@ function Groups(props, context) {
 						getContractData(
 							context.drizzle.contracts.Fin4Groups,
 							defaultAccount,
-							'getGroupName',
+							'getGroupNameAndCreator',
 							groupsArr[i].groupId
-						).then(groupName => {
+						).then(({ 0: groupName, 1: groupCreator }) => {
 							groupsArr[i].name = groupName;
+							groupsArr[i].creator = groupCreator;
 						})
 					);
 				}
