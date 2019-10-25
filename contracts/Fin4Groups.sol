@@ -15,8 +15,18 @@ contract Fin4Groups {
 
     mapping (uint => Group) public groups;
 
-    function getGroupsCount() public view returns(uint) {
-        return nextGroupId;
+    function getGroupName(uint groupId) public view returns(string memory) {
+        return groups[groupId].name;
+    }
+
+    function getGroupsInfoAboutUser() public view returns(bool[] memory, bool[] memory) {
+        bool[] memory userIsCreator = new bool[](nextGroupId);
+        bool[] memory userIsMember = new bool[](nextGroupId);
+        for (uint i = 0; i < nextGroupId; i ++) {
+            userIsCreator[i] = groups[i].creator == msg.sender;
+            userIsMember[i] = groups[i].membersSet[msg.sender];
+        }
+        return (userIsCreator, userIsMember);
     }
 
     function createGroup(string memory name, bool addCreatorAsMember) public returns(uint) {

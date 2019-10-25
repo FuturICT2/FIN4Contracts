@@ -6,11 +6,15 @@ import Container from '../../components/Container';
 import PropTypes from 'prop-types';
 import { TextField, Checkbox, FormControlLabel } from '@material-ui/core';
 import Button from '../../components/Button';
+import { getContractData } from '../../components/Contractor';
+import Table from '../../components/Table';
+import TableRow from '../../components/TableRow';
 
 function Groups(props, context) {
 	const { t } = useTranslation();
 	const groupsContractReady = useRef(false);
 	const [showHint, setShowHint] = useState(false);
+	const [groups, setGroups] = useState([]);
 	const values = useRef({
 		name: null,
 		addCreator: false
@@ -24,7 +28,40 @@ function Groups(props, context) {
 	});
 
 	const fetchGroups = () => {
-		// TODO
+		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+		getContractData(context.drizzle.contracts.Fin4Groups, defaultAccount, 'getGroupsInfoAboutUser').then(
+			({ 0: userIsCreatorArr, 1: userIsMemberArr }) => {
+				let groupsArr = [];
+				for (let i = 0; i < userIsCreatorArr.length; i++) {
+					let userIsCreator = userIsCreatorArr[i];
+					let userIsMember = userIsMemberArr[i];
+					if (userIsCreator || userIsMember) {
+						groupsArr.push({
+							groupId: i,
+							userIsCreator: userIsCreator,
+							userIsMember: userIsMember,
+							name: null
+						});
+					}
+				}
+				let promises = [];
+				for (let i = 0; i < groupsArr.length; i++) {
+					promises.push(
+						getContractData(
+							context.drizzle.contracts.Fin4Groups,
+							defaultAccount,
+							'getGroupName',
+							groupsArr[i].groupId
+						).then(groupName => {
+							groupsArr[i].name = groupName;
+						})
+					);
+				}
+				// TODO multiple setGroups would be nicer to show stuff early and let names load asynchron
+				// didn't figure it out in reasonable time though
+				Promise.all(promises).then(() => setGroups(groupsArr));
+			}
+		);
 	};
 
 	const submitNewGroup = () => {
@@ -73,8 +110,44 @@ function Groups(props, context) {
 					<center style={{ color: 'gray', fontFamily: 'arial' }}>Reload the page to see your new group.</center>
 				)}
 			</Box>
-			<Box title="Groups you created"></Box>
-			<Box title="Groups you are a member of"></Box>
+			{groups.filter(group => group.userIsCreator).length > 0 && (
+				<Box title="Groups you created">
+					<Table headers={['Group name', 'Actions']} colWidths={[85, 15]}>
+						{groups
+							.filter(g => g.userIsCreator)
+							.map((group, index) => {
+								return (
+									<TableRow
+										key={'groupCreator_' + index}
+										data={{
+											name: group.name,
+											actions: 'TODO'
+										}}
+									/>
+								);
+							})}
+					</Table>
+				</Box>
+			)}
+			{groups.filter(group => group.userIsMember).length > 0 && (
+				<Box title="Groups you are a member of">
+					<Table headers={['Group name', 'Actions']} colWidths={[85, 15]}>
+						{groups
+							.filter(g => g.userIsMember)
+							.map((group, index) => {
+								return (
+									<TableRow
+										key={'groupMember_' + index}
+										data={{
+											name: group.name,
+											actions: 'TODO'
+										}}
+									/>
+								);
+							})}
+					</Table>
+				</Box>
+			)}
 		</Container>
 	);
 }
