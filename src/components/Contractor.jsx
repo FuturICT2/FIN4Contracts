@@ -2,6 +2,10 @@ import Web3 from 'web3';
 const BN = require('bignumber.js');
 const web3 = new Web3(window.ethereum);
 
+// --------------------- CONSTANTS ---------------------
+
+const zeroAddress = '0x0000000000000000000000000000000000000000';
+
 // --------------------- HELPER METHODS ---------------------
 
 const getContractData = (contract, defaultAccount, method, ...methodArgs) => {
@@ -325,7 +329,8 @@ export {
 	findTokenBySymbol,
 	isValidPublicAddress,
 	getFin4TokensFormattedForSelectOptions,
-	fetchCollectionsInfo
+	fetchCollectionsInfo,
+	zeroAddress
 };
 
 /*
