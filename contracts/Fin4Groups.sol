@@ -15,6 +15,15 @@ contract Fin4Groups {
 
     mapping (uint => Group) public groups;
 
+    function transferOwnership(uint groupId, address newOwner) public {
+        require(msg.sender == groups[groupId].creator, "Only the group creator can transfer ownership");
+        groups[groupId].creator = newOwner;
+    }
+
+    function getGroup(uint groupId) public view returns(address, address[] memory, string memory) {
+        return (groups[groupId].creator, groups[groupId].members, groups[groupId].name);
+    }
+
     function getGroupNameAndCreator(uint groupId) public view returns(string memory, address) {
         return (groups[groupId].name, groups[groupId].creator);
     }
