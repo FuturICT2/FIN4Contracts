@@ -9,6 +9,7 @@ import Button from '../../components/Button';
 import { getContractData } from '../../components/Contractor';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
+import { Link } from 'react-router-dom';
 
 function Groups(props, context) {
 	const { t } = useTranslation();
@@ -114,7 +115,7 @@ function Groups(props, context) {
 			</Box>
 			{groups.filter(group => group.userIsCreator).length > 0 && (
 				<Box title="Groups you created">
-					<Table headers={['Group name', 'Actions']} colWidths={[85, 15]}>
+					<Table headers={['Group name', 'Action']} colWidths={[85, 15]}>
 						{groups
 							.filter(g => g.userIsCreator)
 							.map((group, index) => {
@@ -123,7 +124,11 @@ function Groups(props, context) {
 										key={'groupCreator_' + index}
 										data={{
 											name: group.name,
-											actions: 'TODO'
+											actions: (
+												<small style={{ color: 'blue', textDecoration: 'underline' }}>
+													<Link to={'/user/message/' + group.creator}>Edit</Link>
+												</small>
+											)
 										}}
 									/>
 								);
@@ -133,7 +138,7 @@ function Groups(props, context) {
 			)}
 			{groups.filter(group => group.userIsMember).length > 0 && (
 				<Box title="Groups you are a member of">
-					<Table headers={['Group name', 'Actions']} colWidths={[85, 15]}>
+					<Table headers={['Group name', 'Action']} colWidths={[85, 15]}>
 						{groups
 							.filter(g => g.userIsMember)
 							.map((group, index) => {
@@ -142,7 +147,13 @@ function Groups(props, context) {
 										key={'groupMember_' + index}
 										data={{
 											name: group.name,
-											actions: 'TODO'
+											actions: group.userIsCreator ? (
+												<small>You are creator</small>
+											) : (
+												<small style={{ color: 'blue', textDecoration: 'underline' }}>
+													<Link to={'/user/message/' + group.creator}>Message creator</Link>
+												</small>
+											)
 										}}
 									/>
 								);
