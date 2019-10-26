@@ -8,7 +8,29 @@ import PropTypes from 'prop-types';
 function GroupEdit(props, context) {
 	const { t } = useTranslation();
 
-	useEffect(() => {});
+	const groupsContractReady = useRef(false);
+	const [groupId, setGroupId] = useState(null);
+
+	useEffect(() => {
+		let groupIdViaURL = props.match.params.groupId;
+		if (!groupId && groupIdViaURL) {
+			setGroupId(groupIdViaURL);
+		}
+
+		if (
+			groupId &&
+			!groupsContractReady.current &&
+			props.contracts.Fin4Groups &&
+			props.contracts.Fin4Groups.initialized
+		) {
+			groupsContractReady.current = true;
+			fetchGroup(groupId);
+		}
+	});
+
+	const fetchGroup = gId => {
+		// TODO
+	};
 
 	return (
 		<Container>
