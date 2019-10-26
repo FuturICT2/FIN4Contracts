@@ -18,6 +18,7 @@ import User from '../views/users/User';
 import Settings from '../views/Settings';
 import About from '../views/About';
 import Groups from '../views/users/Groups';
+import GroupEdit from '../views/users/GroupEdit';
 
 const menu = [
 	{
@@ -127,6 +128,11 @@ const menu = [
 	{
 		component: Groups,
 		path: '/users/groups/',
+		showInNavBar: false
+	},
+	{
+		component: GroupEdit,
+		path: '/users/group/edit/:groupId',
 		showInNavBar: false
 	},
 	// ------------------ SETTINGS ------------------

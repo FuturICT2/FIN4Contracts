@@ -126,7 +126,7 @@ function Groups(props, context) {
 											name: group.name,
 											actions: (
 												<small style={{ color: 'blue', textDecoration: 'underline' }}>
-													<Link to={'/user/message/' + group.creator}>Edit</Link>
+													<Link to={'/users/group/edit/' + group.groupId}>Edit</Link>
 												</small>
 											)
 										}}
