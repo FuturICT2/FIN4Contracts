@@ -7,6 +7,9 @@ import PropTypes from 'prop-types';
 import { getContractData, zeroAddress } from '../../components/Contractor';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
+import { Radio, RadioGroup, FormControlLabel, TextField } from '@material-ui/core';
+import AddressQRreader from '../../components/AddressQRreader';
+import Button from '../../components/Button';
 
 function GroupEdit(props, context) {
 	const { t } = useTranslation();
@@ -19,6 +22,8 @@ function GroupEdit(props, context) {
 		name: null,
 		userIsCreator: null
 	});
+	const [addMemberMode, setAddMemberMode] = useState('addOne');
+	const newMembersString = useRef('');
 
 	useEffect(() => {
 		let groupIdViaURL = props.match.params.groupId;
@@ -51,6 +56,10 @@ function GroupEdit(props, context) {
 		);
 	};
 
+	const addMembers = () => {
+		// TODO
+	};
+
 	return (
 		<Container>
 			<Box title="Edit group">
@@ -61,7 +70,9 @@ function GroupEdit(props, context) {
 						<span style={{ color: 'red' }}>Invalid group Id: {groupId}</span>
 					) : (
 						<>
-							<b>{groupData.name}</b>
+							<span style={{ fontSize: 'x-large' }}>
+								<b>{groupData.name}</b>
+							</span>
 							<br />
 							<br />
 							{groupData.userIsCreator ? (
@@ -83,7 +94,37 @@ function GroupEdit(props, context) {
 									</Table>
 									<br />
 									<br />
-									Add new member(s)
+									<RadioGroup
+										row={true}
+										onChange={e => {
+											setAddMemberMode(e.target.value);
+											newMembersString.current = '';
+										}}
+										value={addMemberMode}>
+										<FormControlLabel value="addOne" control={<Radio />} label="Add a member" />
+										<FormControlLabel value="addMultiple" control={<Radio />} label="Add multiple members" />
+									</RadioGroup>
+									<br />
+									{addMemberMode === 'addOne' ? (
+										<AddressQRreader
+											onChange={val => (newMembersString.current = val)}
+											label="Public address of new member"
+										/>
+									) : (
+										<TextField
+											label="Public addresses of new members"
+											multiline
+											rows="4"
+											fullWidth
+											variant="outlined"
+											onChange={e => (newMembersString.current = e.target.value)}
+										/>
+									)}
+									<br />
+									<br />
+									<Button onClick={() => addMembers()}>Add</Button>
+									<br />
+									<br />
 								</>
 							) : (
 								<span style={{ color: 'red' }}>You have no editing rights for this group</span>
