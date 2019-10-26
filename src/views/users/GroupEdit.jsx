@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import PropTypes from 'prop-types';
 import { getContractData, zeroAddress } from '../../components/Contractor';
+import Table from '../../components/Table';
+import TableRow from '../../components/TableRow';
 
 function GroupEdit(props, context) {
 	const { t } = useTranslation();
@@ -63,7 +65,26 @@ function GroupEdit(props, context) {
 							<br />
 							<br />
 							{groupData.userIsCreator ? (
-								<span>TODO</span>
+								<>
+									<span>Your group has {groupData.members.length} members:</span>
+									<br />
+									<Table headers={['Member', 'Action']} colWidths={[85, 15]}>
+										{groupData.members.map((memberAddress, index) => {
+											return (
+												<TableRow
+													key={'member_' + index}
+													data={{
+														member: <small>{memberAddress}</small>,
+														actions: <small style={{ color: 'blue', textDecoration: 'underline' }}>Remove</small>
+													}}
+												/>
+											);
+										})}
+									</Table>
+									<br />
+									<br />
+									Add new member(s)
+								</>
 							) : (
 								<span style={{ color: 'red' }}>You have no editing rights for this group</span>
 							)}
