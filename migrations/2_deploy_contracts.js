@@ -17,7 +17,8 @@ const proofTypeContracts = [
 	artifacts.require('Password'),
 	artifacts.require('Picture'),
 	artifacts.require('Location'),
-	artifacts.require('SelfieTogether')
+	artifacts.require('SelfieTogether'),
+	artifacts.require('ApprovalByGroupMember')
 ];
 
 module.exports = async function(deployer) {
