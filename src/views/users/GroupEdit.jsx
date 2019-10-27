@@ -106,13 +106,10 @@ function GroupEdit(props, context) {
 									</RadioGroup>
 									<br />
 									{addMemberMode === 'addOne' ? (
-										<AddressQRreader
-											onChange={val => (newMembersString.current = val)}
-											label="Public address of new member"
-										/>
+										<AddressQRreader onChange={val => (newMembersString.current = val)} label="Public address" />
 									) : (
 										<TextField
-											label="Public addresses of new members"
+											label="Public addresses, comma separated"
 											multiline
 											rows="4"
 											fullWidth
