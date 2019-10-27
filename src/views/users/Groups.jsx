@@ -115,7 +115,7 @@ function Groups(props, context) {
 			</Box>
 			{groups.filter(group => group.userIsCreator).length > 0 && (
 				<Box title="Groups you created">
-					<Table headers={['Group name', 'Action']} colWidths={[85, 15]}>
+					<Table headers={['Group name', 'Id', 'Action']} colWidths={[75, 10, 15]}>
 						{groups
 							.filter(g => g.userIsCreator)
 							.map((group, index) => {
@@ -124,6 +124,7 @@ function Groups(props, context) {
 										key={'groupCreator_' + index}
 										data={{
 											name: group.name,
+											id: group.groupId,
 											actions: (
 												<small style={{ color: 'blue', textDecoration: 'underline' }}>
 													<Link to={'/users/group/edit/' + group.groupId}>Edit</Link>
@@ -138,7 +139,7 @@ function Groups(props, context) {
 			)}
 			{groups.filter(group => group.userIsMember).length > 0 && (
 				<Box title="Groups you are a member of">
-					<Table headers={['Group name', 'Action']} colWidths={[85, 15]}>
+					<Table headers={['Group name', 'Id', 'Action']} colWidths={[75, 5, 20]}>
 						{groups
 							.filter(g => g.userIsMember)
 							.map((group, index) => {
@@ -147,6 +148,7 @@ function Groups(props, context) {
 										key={'groupMember_' + index}
 										data={{
 											name: group.name,
+											id: group.groupId,
 											actions: group.userIsCreator ? (
 												<small>You are creator</small>
 											) : (
