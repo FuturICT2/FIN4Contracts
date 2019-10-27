@@ -4,7 +4,7 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import PropTypes from 'prop-types';
-import { getContractData, zeroAddress } from '../../components/Contractor';
+import { getContractData, zeroAddress, isValidPublicAddress } from '../../components/Contractor';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { Radio, RadioGroup, FormControlLabel, TextField } from '@material-ui/core';
@@ -56,8 +56,37 @@ function GroupEdit(props, context) {
 		);
 	};
 
+	const removeMember = address => {
+		context.drizzle.contracts.Fin4Groups.methods
+			.removeMember(groupId, address)
+			.send({
+				from: props.store.getState().fin4Store.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
+	};
+
 	const addMembers = () => {
-		// TODO
+		if (!newMembersString.current || newMembersString.current.length === 0) {
+			alert('No public addresses found');
+			return;
+		}
+		let addresses = newMembersString.current.split(',').map(str => str.trim());
+		for (let i = 0; i < addresses.length; i++) {
+			if (!isValidPublicAddress(addresses[i])) {
+				alert('Contains invalid public addresses: ' + addresses[i]);
+				return;
+			}
+		}
+		context.drizzle.contracts.Fin4Groups.methods
+			.addMembers(groupId, addresses)
+			.send({
+				from: props.store.getState().fin4Store.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
 	};
 
 	return (
@@ -86,7 +115,13 @@ function GroupEdit(props, context) {
 													key={'member_' + index}
 													data={{
 														member: <small>{memberAddress}</small>,
-														actions: <small style={{ color: 'blue', textDecoration: 'underline' }}>Remove</small>
+														actions: (
+															<small
+																onClick={() => removeMember(memberAddress)}
+																style={{ color: 'blue', textDecoration: 'underline' }}>
+																Remove
+															</small>
+														)
 													}}
 												/>
 											);

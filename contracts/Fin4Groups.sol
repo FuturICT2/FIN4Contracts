@@ -51,15 +51,11 @@ contract Fin4Groups {
     }
 
     function addMembers(uint groupId, address[] memory newMembers) public {
-        for (uint i = 0; i < newMembers.length; i ++) {
-            addMember(groupId, newMembers[i]);
-        }
-    }
-
-    function addMember(uint groupId, address newMember) public {
         require(groups[groupId].creator == msg.sender, "Only the group creator can add members");
-        groups[groupId].members.push(newMember);
-        groups[groupId].membersSet[newMember] = true;
+        for (uint i = 0; i < newMembers.length; i ++) {
+            groups[groupId].members.push(newMembers[i]);
+            groups[groupId].membersSet[newMembers[i]] = true;
+        }
     }
 
     function removeMember(uint groupId, address memberToRemove) public {
