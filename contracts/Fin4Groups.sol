@@ -15,6 +15,10 @@ contract Fin4Groups {
 
     mapping (uint => Group) public groups;
 
+    function groupExists(uint groupId) public view returns(bool) {
+        return groupId < nextGroupId; // in the future, consider group deletion? #ConceptualDecision
+    }
+
     function transferOwnership(uint groupId, address newOwner) public {
         require(msg.sender == groups[groupId].creator, "Only the group creator can transfer ownership");
         groups[groupId].creator = newOwner;

@@ -51,7 +51,13 @@ contract Fin4BaseProofType is utils {
   // into portions for the respective proof types
   function setParameters(address token, uint[] memory params) public returns(bool) {
     // TODO require: only token creator can set this
+    require(parametersSanityCheck(params), 'Parameters did not pass the sanity check');
     fin4TokenToParametersSetOnThisProofType[token] = params;
+  }
+
+  // to be overwritten on demand by proof types
+  function parametersSanityCheck(uint[] memory params) public view returns(bool) {
+    return true;
   }
 
   // Helper method for all proof types to go through the same method when sending their approvals

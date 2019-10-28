@@ -31,4 +31,17 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         return "You are a member of a user group that was appointed for approving this claim on the action type ";
     }
 
+    // @Override
+    function getParameterForActionTypeCreatorToSetEncoded() public pure returns(string memory) {
+      return "uint:Group Id:can be found in the overview of groups";
+    }
+
+    // @Override
+    function parametersSanityCheck(uint[] memory params) public view returns(bool) {
+        return Fin4Groups(Fin4GroupsAddress).groupExists(params[0]);
+    }
+
+    function _getGroupId(address token) private view returns(uint) {
+        return fin4TokenToParametersSetOnThisProofType[token][0];
+    }
 }
