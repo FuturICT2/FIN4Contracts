@@ -19,6 +19,8 @@ import Settings from '../views/Settings';
 import About from '../views/About';
 import Groups from '../views/users/Groups';
 import GroupEdit from '../views/users/GroupEdit';
+import AcceptedTokens from '../views/AcceptedTokens/AcceptedTokens';
+import CheckIcon2 from '@material-ui/icons/CheckCircleOutline';
 
 const menu = [
 	{
@@ -134,6 +136,14 @@ const menu = [
 		component: GroupEdit,
 		path: '/users/group/edit/:groupId',
 		showInNavBar: false
+	},
+	// ------------------ GOVERNANCE ------------------
+	{
+		component: AcceptedTokens,
+		path: '/AcceptedTokens',
+		label: 'Accepted Tokens',
+		icon: CheckIcon2,
+		showInNavBar: true // SHOW IN NAVBAR
 	},
 	// ------------------ SETTINGS ------------------
 	{
