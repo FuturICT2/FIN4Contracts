@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { PLCRVotingAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
+//import { PLCRVotingAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import { getCurrentAccount, getContractData, getContract } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
@@ -44,7 +44,7 @@ class VoteModal extends Component {
 
 		this.resetVoteModalValues();
 		this.props.handleClose();
-
+		/*
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(PLCRVotingAddress, numbTokens, {
@@ -80,6 +80,7 @@ class VoteModal extends Component {
 				console.log('GOV.approve Error: ', err.message);
 				alert(err.message);
 			});
+*/
 	};
 
 	render() {

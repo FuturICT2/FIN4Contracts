@@ -34,6 +34,9 @@ contract Fin4Reputation is ERC20Plus {
     return super.mint(to, value);
   }
 
+  /**
+    @dev                Used to mint GOV tokens based on existing REP tokens 
+  */
   function getGOVFromReputation() public returns (bool) {
     Parameterizer parameterizer = GOVToken.parameterizer();
     require(balanceOf(msg.sender) > parameterizer.get("pminReputation"), "user has less than pminReputation");
@@ -41,7 +44,7 @@ contract Fin4Reputation is ERC20Plus {
     return true;
   }
 
-  // for deployment-dev only, make sure this can't be misused
+  // for deployment-dev only, make sure this can't be misused => change access modifier to internal or private
   function getGOVFromReputation(address tokenHolder) public returns (bool) {
     require(GOVToken.balanceOf(tokenHolder) + GOVToken.getAmountsDelegatedByAUser(tokenHolder) < balanceOf(tokenHolder),
       "Can't reset GOV balance because the user has more GOV than REP tokens (including delegated tokens).");

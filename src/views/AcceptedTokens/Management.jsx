@@ -4,7 +4,7 @@ import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import Button from '../../components/Button';
-import { RepTokenAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
+//import { RepTokenAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import { getContractData, getContract } from '../../components/Contractor';
 import Modal from '../../components/Modal';
 import ContractForm from '../../components/ContractForm';
@@ -21,7 +21,7 @@ class Management extends Component {
 			govTokenBalance: '?',
 			govTokenDelegateeBalance: '?'
 		};
-
+		/*
 		getContractData_deprecated(RepTokenAddress, 'Fin4Reputation', 'balanceOf', [getCurrentAccount()]).then(
 			repTokenBalanceBN => {
 				this.setState({ repTokenBalance: new BN(repTokenBalanceBN).toNumber() });
@@ -35,9 +35,11 @@ class Management extends Component {
 		getContractData_deprecated(GOVTokenAddress, 'GOV', 'getAmountsDelegatedToMe').then(govTokenDelegateeBalanceBN => {
 			this.setState({ govTokenDelegateeBalance: new BN(govTokenDelegateeBalanceBN).toNumber() });
 		});
+*/
 	}
 
 	claimGOV() {
+		/*
 		getContract(RepTokenAddress, 'Fin4Reputation')
 			.then(function(instance) {
 				return instance.getGOVFromReputation(getCurrentAccount(), {
@@ -51,6 +53,7 @@ class Management extends Component {
 				console.log('Fin4Reputation.getGOVFromReputation Error: ', err.message);
 				alert(err.message);
 			});
+*/
 	}
 
 	toggleDelegateModal = () => {
@@ -106,7 +109,7 @@ class Management extends Component {
 						title="Delegate GOV tokens"
 						width="400px">
 						<ContractForm
-							contractAddress={GOVTokenAddress}
+							//contractAddress={GOVTokenAddress}
 							contractName="GOV"
 							method="delegate"
 							labels={['Delegator address', 'Amount']}
@@ -124,7 +127,7 @@ class Management extends Component {
 						title="Refund delegated GOV tokens"
 						width="400px">
 						<ContractForm
-							contractAddress={GOVTokenAddress}
+							//contractAddress={GOVTokenAddress}
 							contractName="GOV"
 							method="refundDelegation"
 							labels={['Delegator address', 'Amount']}
