@@ -218,7 +218,7 @@ contract Registry {
 
         // Starts poll
         uint pollID = voting.startPoll(
-            parameterizer.get("voteQuorum"),
+            parameterizer.get("challengeVoteQuorum"),
             parameterizer.get("commitStageLen"),
             parameterizer.get("revealStageLen")
         );
@@ -480,6 +480,9 @@ contract Registry {
             resolved, totalTokens);
     }
 
+    /**
+    @dev Getter used for testing
+    */
     function whoAmI() public view returns (address) {
         return msg.sender;
     }
@@ -489,9 +492,8 @@ contract Registry {
     // ----------------
 
 /**
-    @dev Starts a poll for a listingHash which is either in the apply stage.
-        Tokens are taken from the challenger and the applicant's deposits are locked.
-    @param _listingHash The listingHash being challenged, whether listed or in application
+    @dev Starts a poll for a listingHash which is in the apply stage.
+    @param _listingHash The listingHash being reviewed
     */
     function review(bytes32 _listingHash) internal returns (uint reviewID) {
         Listing storage listing = listings[_listingHash];
@@ -500,7 +502,7 @@ contract Registry {
 
         // Starts poll
         uint pollID = voting.startPoll(
-            parameterizer.get("voteQuorum"),
+            parameterizer.get("reviewVoteQuorum"),
             parameterizer.get("applyStageLen").div(2),
             parameterizer.get("applyStageLen").div(2)
         );

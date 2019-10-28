@@ -414,8 +414,12 @@ const params = [
 		description: "percentage of losing party's deposit distributed to winning party in parameterizer"
 	},
 	{
-		name: 'voteQuorum',
-		description: 'type of majority out of 100 necessary for candidate success'
+		name: 'reviewVoteQuorum',
+		description: 'type of majority out of 100 necessary for candidate review success'
+	},
+	{
+		name: 'challengeVoteQuorum',
+		description: 'type of majority out of 100 necessary for candidate challenge success'
 	},
 	{
 		name: 'pVoteQuorum',

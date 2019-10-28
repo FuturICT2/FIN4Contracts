@@ -47,9 +47,11 @@ class Listing extends Component {
 		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
 				this.parameterizerValues.minDeposit = new BN(minDepositBN).toNumber();
+				console.log(new BN(minDepositBN).toNumber());
 			});
 			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['reviewTax']).then(reviewTaxBN => {
 				this.parameterizerValues.reviewTax = new BN(reviewTaxBN).toNumber();
+				console.log('reviewtax:' + new BN(reviewTaxBN).toNumber());
 			});
 		});
 

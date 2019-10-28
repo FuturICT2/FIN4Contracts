@@ -11,8 +11,6 @@ import "./../tcr/PLCR/PLCRVoting.sol";
  */
 contract GOV is ERC20Plus {
 
-  // The tokens that you delegated to someone else
-  // mapping(address => address[]) private delegatorTokensIndexes;
   mapping(address => mapping(address => uint256)) private delegatorTokens;
   // Total amount of tokens a user has delegated
   mapping(address => uint256) private delegatorTokensTotal;
@@ -42,29 +40,29 @@ contract GOV is ERC20Plus {
       voting = PLCRVoting(_voting);
   }
 
-  /* TODO:
-  function getAmountsIDelegatedToOthers() public returns(address[] memory, uint256[] memory) {
-    uint256[] memory tokens = new uint256[](delegatorTokensIndexes[msg.sender].length);
-    for (uint i = 0; i<delegatorTokensIndexes[msg.sender].length; i++){
-        tokens[i] = delegatorTokens[msg.sender][delegatorTokensIndexes[msg.sender][i]];
-    }
-    return (delegatorTokensIndexes[msg.sender], tokens);
-  }
-  */
-
-  function getAmountsDelegatedByAUser(address tokenHolder) public view returns(uint256) {
-    return (delegatorTokensTotal[tokenHolder]);
+    /**
+    @dev                Returns the amount of tokens delegated by the specified _tokenHolder 
+    */
+  function getAmountsDelegatedByAUser(address _tokenHolder) public returns(uint256) {
+    return (delegatorTokensTotal[_tokenHolder]);
   }
 
-  function getAmountsDelegatedToMe() public view returns(uint256) {
+    /**
+    @dev                Returns the amount of tokens delegated to the caller
+    */
+  function getAmountsDelegatedToMe() public returns(uint256) {
     return (delegateeTokens[msg.sender]);
   }
 
+    /**
+    @dev                Delegates tokens to an address
+    @param to           Address of the user who should receive the amount of tokens
+    @param amount       Amount of tokens received 
+    */
   function delegate(address to, uint256 amount) public returns (bool){
     require(msg.sender != to, "You cannot delegate to yourself");
-    require(balanceOf(msg.sender) >= amount, "You do not have enough tokens for this transaction");
+    require(balanceOf(msg.sender) - delegateeTokens[msg.sender] >= amount, "You do not have enough tokens for this transaction");
 
-    // delegatorTokensIndexes.push(to);
     delegatorTokens[msg.sender][to] += amount;
     delegateeTokens[to] += amount;
     delegatorTokensTotal[msg.sender] += amount;
@@ -72,11 +70,15 @@ contract GOV is ERC20Plus {
     return true;
   }
 
+    /**
+    @dev                Refunds delegated tokens from an address
+    @param to           Address of the user who received delegated tokens
+    @param amount       Amount of tokens to refund
+    */
   function refundDelegation(address to, uint256 amount) public returns (bool){
     require(balanceOf(to) >= amount, "The balance of reciver is too low");
     require(delegatorTokens[msg.sender][to] >= amount, "You do not have that much delegation for this account");
 
-    // TODO: remove from
     delegatorTokens[msg.sender][to] -= amount;
     delegateeTokens[to] -= amount;
     delegatorTokensTotal[msg.sender] -= amount;
@@ -86,6 +88,9 @@ contract GOV is ERC20Plus {
     return true;
   }
 
+    /**
+    @dev                Overriding the ERC20 transfer function to limit transferability
+    */
   function transfer(address recipient, uint256 amount) public returns (bool) {
     require (balanceOf(msg.sender) > amount, "transfer: Not enough balance");
     if(msg.sender != address(voting) && msg.sender != address(parameterizer) && msg.sender != address(registry)){
@@ -95,6 +100,9 @@ contract GOV is ERC20Plus {
     return super.transfer(recipient, amount);
   }
 
+    /**
+    @dev                Overriding the ERC20 transferFrom function to limit transferability
+    */
   function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
     require (balanceOf(sender) >= amount, "transferFrom: Not enough balance");
     if(sender != address(voting) && sender != address(parameterizer) && sender != address(registry)){

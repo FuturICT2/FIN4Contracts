@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
+import { ReactComponent as HomeButton } from './assets/home-button.svg';
+import { ReactComponent as TokenButton } from './assets/token.svg';
+import { ReactComponent as GovernanceButton } from './assets/governance.svg';
+
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
 class SideNavAcceptedTokens extends Component {
@@ -11,22 +15,22 @@ class SideNavAcceptedTokens extends Component {
 					this.props.changePage(selected);
 				}}>
 				<SideNav.Toggle />
-				<SideNav.Nav defaultSelected="dashboard">
-					<NavItem eventKey="listing">
+				<SideNav.Nav defaultSelected="home">
+					<NavItem eventKey="home">
 						<NavIcon>
-							<i className="fa fa-fw fa-home" style={{ fontSize: '1.75em' }} />
+							<HomeButton style={{ width: '3.1em', height: 'auto' }} />
 						</NavIcon>
 						<NavText>Listing</NavText>
 					</NavItem>
 					<NavItem eventKey="management">
 						<NavIcon>
-							<i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
+							<TokenButton style={{ width: '3.1em', height: 'auto' }} />
 						</NavIcon>
-						<NavText>Management</NavText>
+						<NavText>Token Management</NavText>
 					</NavItem>
 					<NavItem eventKey="governance">
 						<NavIcon>
-							<i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
+							<GovernanceButton style={{ width: '3.1em', height: 'auto' }} />
 						</NavIcon>
 						<NavText>Governance</NavText>
 					</NavItem>
