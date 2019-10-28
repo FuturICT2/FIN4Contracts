@@ -14,6 +14,10 @@ class SideNavAcceptedTokens extends Component {
 				onSelect={selected => {
 					this.props.changePage(selected);
 				}}>
+				<br />
+				<br />
+				<br />
+				<br />
 				<SideNav.Toggle />
 				<SideNav.Nav defaultSelected="listing">
 					<NavItem eventKey="listing">
