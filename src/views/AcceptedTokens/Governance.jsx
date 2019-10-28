@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
+//import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import {
 	getCurrentAccount,
 	getContractData,
@@ -33,7 +33,7 @@ class Governance extends Component {
 		this.selectedParam = null;
 		this.parameterizerAddress = null;
 		this.resetProposeReparamModalValues();
-
+		/*
 		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			this.parameterizerAddress = parameterizerAddress;
 
@@ -135,6 +135,7 @@ class Governance extends Component {
 				});
 			});
 		});
+*/
 	}
 
 	// ---------- ProposeReparam ----------
@@ -159,7 +160,7 @@ class Governance extends Component {
 		let parameterizerAddr = this.parameterizerAddress;
 
 		this.toggleProposeReparamModal();
-
+		/*
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(parameterizerAddr, pMinDeposit, {
@@ -186,6 +187,7 @@ class Governance extends Component {
 				console.log('GOV.approve Error: ', err.message);
 				alert(err.message);
 			});
+*/
 	};
 	// ---------- VoteModal ----------
 
@@ -211,7 +213,7 @@ class Governance extends Component {
 		let parameterizerAddr = this.parameterizerAddress;
 
 		this.toggleChallengeReparamModal();
-
+		/*
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(parameterizerAddr, propDeposit, {
@@ -238,12 +240,14 @@ class Governance extends Component {
 				console.log('GOV.approve Error: ', err.message);
 				alert(err.message);
 			});
+*/
 	};
 
 	// ----------
 
 	// same as Registry.updateStatus()
 	processProposal() {
+		/*
 		let propID = this.selectedParam.propID;
 		getContract(this.parameterizerAddress, 'Parameterizer')
 			.then(function(instance) {
@@ -258,6 +262,7 @@ class Governance extends Component {
 				console.log('Parameterizer.processProposal Error: ', err.message);
 				alert(err.message);
 			});
+*/
 	}
 
 	render() {

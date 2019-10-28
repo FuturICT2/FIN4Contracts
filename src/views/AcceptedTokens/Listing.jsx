@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
+//import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import {
 	getCurrentAccount,
 	getContractData,
@@ -44,6 +44,7 @@ class Listing extends Component {
 			reviewTax: null
 		};
 
+		/*
 		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
 				this.parameterizerValues.minDeposit = new BN(minDepositBN).toNumber();
@@ -164,6 +165,7 @@ class Listing extends Component {
 				});
 			}
 		);
+*/
 	}
 
 	// ---------- ApplyModal ----------
@@ -202,7 +204,7 @@ class Listing extends Component {
 		this.toggleApplyModal();
 
 		// Step 1: approve
-
+		/*
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(RegistryAddress, deposit, {
@@ -232,6 +234,7 @@ class Listing extends Component {
 				console.log('GOV.approve Error: ', err.message);
 				alert(err.message);
 			});
+*/
 	};
 
 	// ---------- VoteModal ----------
@@ -267,7 +270,7 @@ class Listing extends Component {
 		let minDeposit = this.parameterizerValues.minDeposit;
 
 		this.toggleChallengeModal();
-
+		/*
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
 				return instance.approve(RegistryAddress, minDeposit, {
@@ -294,11 +297,13 @@ class Listing extends Component {
 				console.log('GOV.approve Error: ', err.message);
 				alert(err.message);
 			});
+*/
 	};
 
 	// ----------
 
 	updateStatus() {
+		/*
 		let listingKey = this.selectedListing.listingKey;
 		getContract(RegistryAddress, 'Registry')
 			.then(function(instance) {
@@ -313,6 +318,7 @@ class Listing extends Component {
 				console.log('RegistryAddress.updateStatus Error: ', err.message);
 				alert(err.message);
 			});
+*/
 	}
 
 	render() {
@@ -360,16 +366,17 @@ class Listing extends Component {
 				</Box>
 				<Box title="Unlisted Fin4 Tokens">
 					<Table headers={['Name', 'Apply']}>
-						{this.state.unlistedFin4Tokens.map((entry, index) => {
+						{Object.keys(this.props.fin4Tokens).map((key, index) => {
+							let token = this.props.fin4Tokens[key];
 							return (
 								<TableRow
 									key={index}
 									data={{
-										name: entry.label,
+										name: token.name,
 										apply: (
 											<Button
 												onClick={() => {
-													this.applyModalValues.token = entry.value;
+													this.applyModalValues.token = token.address;
 													this.toggleApplyModal();
 												}}>
 												Apply
@@ -468,4 +475,10 @@ const inputFieldStyle = {
 	marginBottom: '15px'
 };
 
-export default drizzleConnect(Listing);
+const mapStateToProps = state => {
+	return {
+		fin4Tokens: state.fin4Store.fin4Tokens
+	};
+};
+
+export default drizzleConnect(Listing, mapStateToProps);
