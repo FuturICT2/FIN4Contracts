@@ -12,7 +12,7 @@ class AcceptedTokens extends Component {
 
 		this.componentholderStyle = {
 			position: 'fixed',
-			'overflow-y': 'auto',
+			overflowY: 'auto',
 			left: '64px',
 			top: '70px',
 			bottom: '56px',
