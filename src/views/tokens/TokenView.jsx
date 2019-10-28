@@ -15,6 +15,7 @@ function TokenView(props, context) {
 
 	const [tokenViaURL, setTokenViaURL] = useState(null);
 	const [details, setDetails] = useState(null);
+	const [proofTypesLoaded, setProofTypesLoaded] = useState(false);
 
 	const fetchDetailedTokenInfo = token => {
 		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
@@ -52,6 +53,9 @@ function TokenView(props, context) {
 				setTokenViaURL(token);
 				fetchDetailedTokenInfo(token);
 			}
+		}
+		if (!proofTypesLoaded && Object.keys(props.proofTypes).length > 0) {
+			setProofTypesLoaded(true);
 		}
 	});
 
@@ -103,7 +107,7 @@ function TokenView(props, context) {
 							<span style={{ color: 'gray' }}>Created at:</span> {details.tokenCreationTime}
 						</p>
 						<p>
-							<span style={{ color: 'gray' }}>Proof types:</span> {getProofTypesStr()}
+							<span style={{ color: 'gray' }}>Proof types:</span> {proofTypesLoaded ? getProofTypesStr() : 'Loading...'}
 						</p>
 						<p>
 							<span style={{ color: 'gray' }}>Total number of claims:</span> {details.claimsCount}
