@@ -2,6 +2,7 @@ pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
 import "contracts/Fin4TokenBase.sol";
+import "contracts/Fin4Groups.sol";
 
 contract ApprovalByGroupMember is Fin4BaseProofType {
 
@@ -10,6 +11,12 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         public {
             setNameAndDescription();
         }
+
+    address public Fin4GroupsAddress;
+
+    function setFin4GroupsAddress(address Fin4GroupsAddr) public {
+        Fin4GroupsAddress = Fin4GroupsAddr;
+    }
 
     function setNameAndDescription() public returns(bool) {
         name = "ApprovalByGroupMember";
