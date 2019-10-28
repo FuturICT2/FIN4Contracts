@@ -23,10 +23,6 @@ function TokenEdit(props, context) {
 		}
 	});
 
-	const exportTokenData = () => {
-		alert('TODO');
-	};
-
 	return (
 		<>
 			<Container>
@@ -41,11 +37,7 @@ function TokenEdit(props, context) {
 								<br />
 								<br />
 								{tokenViaURL.userIsCreator || tokenViaURL.userIsAdmin ? (
-									<Link
-										title="Compiles all data from this token into a CSV file that gets downloaded"
-										onClick={() => exportTokenData()}>
-										Export token data
-									</Link>
+									''
 								) : (
 									<span style={{ color: 'red' }}>You don't have editing rights on this token.</span>
 								)}
