@@ -78,10 +78,6 @@ function CollectionEdit(props, context) {
 			});
 	};
 
-	const exportCollectionData = () => {
-		alert('TODO');
-	};
-
 	return (
 		<>
 			{collection && (
@@ -95,11 +91,7 @@ function CollectionEdit(props, context) {
 							<br />
 							<br />
 							{collection.userIsCreator || collection.userIsAdmin ? (
-								<Link
-									title="Compiles all data from this token into a CSV file that gets downloaded"
-									onClick={() => exportCollectionData()}>
-									Export collection data
-								</Link>
+								''
 							) : (
 								<span style={{ color: 'red' }}>You don't have editing rights on this collection.</span>
 							)}
