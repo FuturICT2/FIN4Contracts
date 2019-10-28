@@ -10,8 +10,7 @@
 <img src="public/project-logos/Fin4_logo_on_white.jpg" width="100">
 </td></tr></table>
 
-ℹ️ [Explanatory video FIN4](http://www.youtube.com/watch?v=oNlKdHjvExo)
-ℹ️ [Explanatory video Accepted Tokens](https://www.youtube.com/watch?v=1bircSUBNm0)
+ℹ️ [Explanatory video](http://www.youtube.com/watch?v=oNlKdHjvExo)
 
 ## Description
 
@@ -28,8 +27,8 @@ sudo apt-get install git build-essential python
 # node v10
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 source ~/.bashrc
-nvm install 10.16.0
-nvm use 10.16.0
+nvm install 10.0.0
+nvm use 10.0.0
 
 # on macOS, to prevent gyp related errors
 npm explore npm -g -- npm install node-gyp@latest
@@ -82,8 +81,9 @@ sudo service nginx restart
 
 ### Compile and migrate the smart contracts
 
-1. `npm run start-ganache`
-2. `npm run migrate`
+1. `truffle compile`
+2. `ganache-cli --port=7545 --allowUnlimitedContractSize`
+3. `truffle migrate` to place the smart contract on the local blockchain
 4. install the [MetaMask](https://metamask.io/) browser extension, paste the `MNEMONIC` from Ganache into the `seed` input and create a network with `http://127.0.0.1:7545` as `custom RPC`
 
 ### Use the app
