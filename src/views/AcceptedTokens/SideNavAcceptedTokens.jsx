@@ -15,8 +15,8 @@ class SideNavAcceptedTokens extends Component {
 					this.props.changePage(selected);
 				}}>
 				<SideNav.Toggle />
-				<SideNav.Nav defaultSelected="home">
-					<NavItem eventKey="home">
+				<SideNav.Nav defaultSelected="listing">
+					<NavItem eventKey="listing">
 						<NavIcon>
 							<HomeButton style={{ width: '3.1em', height: 'auto' }} />
 						</NavIcon>
