@@ -23,13 +23,18 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         description = "The token creator specifies one or more user groups, of which one member has to approve.";
     }
 
+    struct MemberMessage {
+        address memberAddress;
+        uint messageId;
+    }
+
     struct PendingApproval {
         uint pendingApprovalId;
         address tokenAddrToReceiveProof;
         uint claimIdOnTokenToReceiveProof;
         address requester;
         uint approverGroupId;
-        uint[] messageIds;
+        MemberMessage[] memberMessages;
     }
 
     uint public nextPendingApprovalId = 0;
@@ -52,8 +57,9 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
             if (members[i] == address(0)) {
                 continue;
             }
-            pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
+            uint messageId = Fin4Messaging(Fin4MessagingAddress)
                 .addPendingApprovalMessage(msg.sender, name, members[i], message, "", pa.pendingApprovalId);
+            pa.memberMessages[i] = MemberMessage(members[i], messageId);
         }
 
         pendingApprovals[nextPendingApprovalId] = pa;
