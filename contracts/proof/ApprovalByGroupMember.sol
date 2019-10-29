@@ -77,7 +77,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         return Fin4Groups(Fin4GroupsAddress).groupExists(params[0]);
     }
 
-    function _getGroupId(address token) private view returns(uint) {
+    function _getGroupId(address token) public view returns(uint) {
         return fin4TokenToParametersSetOnThisProofType[token][0];
     }
 
@@ -102,7 +102,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
     }
 
-    function markMessagesAsRead(uint pendingApprovalId) private {
+    function markMessagesAsRead(uint pendingApprovalId) public {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         for (uint i = 0; i < pa.messageIds.length; i ++) {
             Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(pa.groupMemberAddresses[i], pa.messageIds[i]);
