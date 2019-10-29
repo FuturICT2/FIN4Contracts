@@ -87,10 +87,31 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
     // copied method signature from SpecificAddress, then nothing has to be changed in Messages.jsx
 
     function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public {
-        // TODO
+        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+        require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
+        markMessagesAsRead(pendingApprovalId);
+
+        _sendApproval(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
     }
 
     function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
-        // TODO
+        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+        require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
+        markMessagesAsRead(pendingApprovalId);
+
+        string memory message = string(abi.encodePacked(
+            "A member of the appointed approver group has rejected your approval request for ",
+            Fin4TokenBase(pa.tokenAddrToReceiveProof).name()));
+        Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
+    }
+
+    function markMessagesAsRead(uint pendingApprovalId) private {
+        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+        for (uint i = 0; i < pa.memberMessages.length; i ++) {
+            Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(
+                pa.memberMessages[i].memberAddress,
+                pa.memberMessages[i].messageId
+            );
+        }
     }
 }
