@@ -29,8 +29,8 @@ contract Fin4Collections {
 
     function createCollection(string memory name, string memory identifier, string memory description) public returns(uint) {
         // TODO also check for alphanumeric? How?
-        require(identifier.length() > 2, "Identifier is too short"); // TODO #ConceptualDecision
         require(!identifiers[identifier], "Identifier already in use");
+        require(identifier.length() > 2, "Identifier is too short"); // TODO #ConceptualDecision
         Collection storage col = collections[nextCollectionId];
         col.creator = msg.sender;
         col.admins.push(msg.sender);
@@ -47,11 +47,6 @@ contract Fin4Collections {
         Collection memory col = collections[collectionId];
         return(col.creator == msg.sender, getIndexOfAdmin(collectionId, msg.sender) != INVALID_INDEX, col.tokens,
             col.name, col.identifier, col.description, col.color, col.logoURL);
-    }
-
-    // obsolete?
-    function getCollectionTokens(uint collectionId) public view returns(address[] memory) {
-        collections[collectionId].tokens;
     }
 
     function getCollectionAdmins(uint collectionId) public view returns(address[] memory) {
