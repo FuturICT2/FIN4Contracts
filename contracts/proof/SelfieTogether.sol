@@ -22,6 +22,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     pa.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
+    pa.groupMemberAddresses = new address[](1);
     pa.groupMemberAddresses[0] = approver;
     pa.attachment = IPFShash;
     pa.pendingApprovalId = nextPendingApprovalId;
@@ -29,6 +30,7 @@ contract SelfieTogether is ApprovalByGroupMember {
 
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAddrToReceiveProof).name()));
+    pa.messageIds = new uint[](1);
     pa.messageIds[0] = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
       msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
 
