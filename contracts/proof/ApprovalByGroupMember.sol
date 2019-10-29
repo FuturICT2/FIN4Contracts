@@ -51,26 +51,13 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
 
         address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
 
-        // TODO mayber easier to avoid zero-entries in members in the first place
-        uint nonZeroMemberCount = 0;
+        pa.groupMemberAddresses = new address[](members.length);
+        pa.messageIds = new uint[](members.length);
         for (uint i = 0; i < members.length; i ++) {
-            if (members[i] != address(0)) {
-                nonZeroMemberCount ++;
-            }
+            pa.groupMemberAddresses[i] = members[i];
+            pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
+                .addPendingApprovalMessage(msg.sender, name, members[i], message, "", pa.pendingApprovalId);
         }
-        address[] memory nonZeroMembers = new address[](nonZeroMemberCount);
-        uint[] memory msgIds = new uint[](nonZeroMemberCount);
-        uint count = 0;
-        for (uint i = 0; i < members.length; i ++) {
-            if (members[i] != address(0)) {
-                nonZeroMembers[count] = members[i];
-                msgIds[count] = Fin4Messaging(Fin4MessagingAddress)
-                    .addPendingApprovalMessage(msg.sender, name, members[i], message, "", pa.pendingApprovalId);
-                count ++;
-            }
-        }
-        pa.groupMemberAddresses = nonZeroMembers;
-        pa.messageIds = msgIds;
 
         pendingApprovals[nextPendingApprovalId] = pa;
         nextPendingApprovalId ++;
