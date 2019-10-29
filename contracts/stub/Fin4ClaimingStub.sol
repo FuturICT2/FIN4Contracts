@@ -4,6 +4,6 @@ contract Fin4ClaimingStub {
 
     function claimApprovedPingback(address tokenAddress, address claimer, uint claimId) public;
 
-    function proofApprovalPingback(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public;
+    function proofApprovalPingback(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public;
 
 }

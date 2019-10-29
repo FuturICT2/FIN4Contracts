@@ -13,13 +13,13 @@ contract Password is Fin4BaseProofType {
     }
 
     // TODO support string parameters to be able to use a string-password here
-    function submitProof_Password(address tokenAdrToReceiveProof, uint claimId, uint password) public returns(bool) {
+    function submitProof_Password(address tokenAddrToReceiveProof, uint claimId, uint password) public returns(bool) {
       //if (keccak256(abi.encodePacked((_password))) == keccak256(abi.encodePacked((password)))) { // via https://ethereum.stackexchange.com/a/30914
-      if (password == _getPassword(tokenAdrToReceiveProof)) {
-        _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
+      if (password == _getPassword(tokenAddrToReceiveProof)) {
+        _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStub(tokenAdrToReceiveProof).name(),
+          Fin4TokenStub(tokenAddrToReceiveProof).name(),
           ": The password you provided is not matching the one set by the action type creator."
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);

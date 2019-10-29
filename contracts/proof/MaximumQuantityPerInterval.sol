@@ -13,15 +13,15 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       // maxQuantity = 10;
     }
 
-    function submitProof_MaximumQuantityPerInterval(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
-      if (requirementMet(tokenAdrToReceiveProof, msg.sender, claimId)) {
-        _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
+    function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveProof, uint claimId) public returns(bool) {
+      if (requirementMet(tokenAddrToReceiveProof, msg.sender, claimId)) {
+        _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStub(tokenAdrToReceiveProof).name(),
+          Fin4TokenStub(tokenAddrToReceiveProof).name(),
           ": The quantity you are claiming would take you beyond the allowed amount for the given interval. Interval: ",
-          uint2str(_getInterval(tokenAdrToReceiveProof) / 1000), "s, max. quantity: ",
-          uint2str(_getMaxQuantity(tokenAdrToReceiveProof)), "."
+          uint2str(_getInterval(tokenAddrToReceiveProof) / 1000), "s, max. quantity: ",
+          uint2str(_getMaxQuantity(tokenAddrToReceiveProof)), "."
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
       }

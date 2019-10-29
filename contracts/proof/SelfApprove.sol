@@ -11,8 +11,8 @@ contract SelfApprove is Fin4BaseProofType {
       description = "Claimers approve their own claim.";
     }
 
-    function submitProof_SelfApprove(address tokenAdrToReceiveProof, uint claimId) public returns(bool) {
-      _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
+    function submitProof_SelfApprove(address tokenAddrToReceiveProof, uint claimId) public returns(bool) {
+      _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
       return true;
     }
 

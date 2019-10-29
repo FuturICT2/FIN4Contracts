@@ -14,12 +14,12 @@ contract SelfieTogether is SpecificAddress {
     description = "The claimer supplies a picture, based on which a self-chosen approver and the token creator decide to approve.";
   }
 
-  function submitProof_SelfieTogether(address tokenAdrToReceiveProof, uint claimId, address approver,
+  function submitProof_SelfieTogether(address tokenAddrToReceiveProof, uint claimId, address approver,
     string memory IPFShash) public {
 
     // to user-chosen approver
     PendingApproval memory pa;
-    pa.tokenAdrToReceiveProof = tokenAdrToReceiveProof;
+    pa.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
     pa.approver = approver;
@@ -27,15 +27,15 @@ contract SelfieTogether is SpecificAddress {
     pa.pendingApprovalId = pendingApprovals[approver].length;
 
     string memory message = string(abi.encodePacked(getMessageText(),
-      Fin4TokenBase(tokenAdrToReceiveProof).name()));
+      Fin4TokenBase(tokenAddrToReceiveProof).name()));
     pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
       msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
 
     // to token-creator
-    address tokenCreator = getCreatorOfToken(tokenAdrToReceiveProof);
+    address tokenCreator = getCreatorOfToken(tokenAddrToReceiveProof);
 
     PendingApproval memory paTC;
-    paTC.tokenAdrToReceiveProof = tokenAdrToReceiveProof;
+    paTC.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
     paTC.claimIdOnTokenToReceiveProof = claimId;
     paTC.requester = msg.sender;
     paTC.approver = tokenCreator;
@@ -45,7 +45,7 @@ contract SelfieTogether is SpecificAddress {
     paTC.pendingApprovalId = tokenCreator == approver ? idx + 1 : idx;
 
     string memory messageTC = string(abi.encodePacked(getMessageTextForTokenCreator(),
-      Fin4TokenBase(tokenAdrToReceiveProof).name()));
+      Fin4TokenBase(tokenAddrToReceiveProof).name()));
     paTC.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
       msg.sender, name, tokenCreator, messageTC, IPFShash, paTC.pendingApprovalId);
 
@@ -85,7 +85,7 @@ contract SelfieTogether is SpecificAddress {
     uint otherApproversPendingApprovalId = pa.linkedWithPendingApprovalId;
 
     if (pendingApprovals[otherApprover][otherApproversPendingApprovalId].isApproved) {
-        _sendApproval(address(this), pa.tokenAdrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
+        _sendApproval(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
         return true;
     }
 

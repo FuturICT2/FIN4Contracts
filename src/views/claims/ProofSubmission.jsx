@@ -50,7 +50,7 @@ function ProofSubmission(props) {
 						contractName={proofTypeName}
 						method={'submitProof_' + proofTypeName}
 						staticArgs={{
-							tokenAdrToReceiveProof: tokenAddrToReceiveProof,
+							tokenAddrToReceiveProof: tokenAddrToReceiveProof,
 							claimId: claimId + ''
 						}}
 						buttonLabel="Initiate proof"

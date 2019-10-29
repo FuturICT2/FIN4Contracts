@@ -19,7 +19,7 @@ contract SpecificAddress is Fin4BaseProofType {
   // Holds the info of a pending approval: who should approve what on which token
   // Get's displayed on the frontend as message
   struct PendingApproval {
-    address tokenAdrToReceiveProof;
+    address tokenAddrToReceiveProof;
     uint claimIdOnTokenToReceiveProof;
     address requester;
     address approver;
@@ -33,9 +33,9 @@ contract SpecificAddress is Fin4BaseProofType {
 
   mapping (address => PendingApproval[]) public pendingApprovals;
 
-  function submitProof_SpecificAddress(address tokenAdrToReceiveProof, uint claimId, address approver) public returns(bool) {
+  function submitProof_SpecificAddress(address tokenAddrToReceiveProof, uint claimId, address approver) public returns(bool) {
     PendingApproval memory pa;
-    pa.tokenAdrToReceiveProof = tokenAdrToReceiveProof;
+    pa.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
     pa.approver = approver;
@@ -43,7 +43,7 @@ contract SpecificAddress is Fin4BaseProofType {
     pa.pendingApprovalId = pendingApprovals[approver].length;
 
     string memory message = string(abi.encodePacked(getMessageText(),
-      Fin4TokenBase(tokenAdrToReceiveProof).name()));
+      Fin4TokenBase(tokenAddrToReceiveProof).name()));
     pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(msg.sender, name, approver, message, "", pa.pendingApprovalId);
 
     pendingApprovals[approver].push(pa);
@@ -58,7 +58,7 @@ contract SpecificAddress is Fin4BaseProofType {
     PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
     require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
     Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
-    _sendApproval(address(this), pa.tokenAdrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
+    _sendApproval(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
     return true;
   }
 
@@ -68,7 +68,7 @@ contract SpecificAddress is Fin4BaseProofType {
     Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
 
     string memory message = string(abi.encodePacked("User ", addressToString(pa.approver),
-      " has rejected your approval request for ", Fin4TokenBase(pa.tokenAdrToReceiveProof).name()));
+      " has rejected your approval request for ", Fin4TokenBase(pa.tokenAddrToReceiveProof).name()));
     Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
 
     // TODO boolean flag in PendingApproval? #ConceptualDecision

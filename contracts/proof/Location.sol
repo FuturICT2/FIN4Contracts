@@ -11,12 +11,12 @@ contract Location is Fin4BaseProofType {
       description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";
     }
 
-    function submitProof_Location(address tokenAdrToReceiveProof, uint claimId, uint distanceToLocation) public {
-      if (locationIsWithinMaxDistToSpecifiedLocation(tokenAdrToReceiveProof, distanceToLocation)) {
-        _sendApproval(address(this), tokenAdrToReceiveProof, claimId);
+    function submitProof_Location(address tokenAddrToReceiveProof, uint claimId, uint distanceToLocation) public {
+      if (locationIsWithinMaxDistToSpecifiedLocation(tokenAddrToReceiveProof, distanceToLocation)) {
+        _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-        Fin4TokenStub(tokenAdrToReceiveProof).name(),
+        Fin4TokenStub(tokenAddrToReceiveProof).name(),
         ": Your location is not within the allowed distance to the defined location."));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
       }

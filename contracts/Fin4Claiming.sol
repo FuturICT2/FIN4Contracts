@@ -7,7 +7,7 @@ contract Fin4Claiming {
     event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment,
         address[] requiredProofTypes);
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
-    event ProofApproved(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
+    event ProofApproved(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
     event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
 
     /*
@@ -29,8 +29,8 @@ contract Fin4Claiming {
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, date, comment, requiredProofTypes);
     }
 
-    function proofApprovalPingback(address tokenAdrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public {
-        emit ProofApproved(tokenAdrToReceiveProof, proofTypeAddress, claimId, claimer);
+    function proofApprovalPingback(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public {
+        emit ProofApproved(tokenAddrToReceiveProof, proofTypeAddress, claimId, claimer);
     }
 
     // called from Fin4TokenBase
