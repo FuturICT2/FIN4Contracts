@@ -1,17 +1,17 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/SpecificAddress.sol";
+import "contracts/proof/ApprovalByGroupMember.sol";
 
-contract SelfieTogether is SpecificAddress {
+contract SelfieTogether is ApprovalByGroupMember {
 
   constructor(address Fin4MessagingAddress)
-    SpecificAddress(Fin4MessagingAddress)
+    ApprovalByGroupMember(Fin4MessagingAddress)
     public {}
 
   // @Override
   function setNameAndDescription() public returns(bool) {
     name = "SelfieTogether";
-    description = "The claimer supplies a picture, based on which a self-chosen approver and the token creator decide to approve.";
+    description = "The claimer supplies a picture, based on which a self-chosen approver and a member of a predefined group of users decide to approve.";
   }
 
   function submitProof_SelfieTogether(address tokenAddrToReceiveProof, uint claimId, address approver,
@@ -22,43 +22,52 @@ contract SelfieTogether is SpecificAddress {
     pa.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
     pa.claimIdOnTokenToReceiveProof = claimId;
     pa.requester = msg.sender;
-    pa.approver = approver;
+    pa.groupMemberAddresses[0] = approver;
     pa.attachment = IPFShash;
-    pa.pendingApprovalId = pendingApprovals[approver].length;
+    pa.pendingApprovalId = nextPendingApprovalId;
+    pa.isIndividualApprover = true;
 
     string memory message = string(abi.encodePacked(getMessageText(),
       Fin4TokenBase(tokenAddrToReceiveProof).name()));
-    pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
+    pa.messageIds[0] = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
       msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
 
-    // to token-creator
-    address tokenCreator = getCreatorOfToken(tokenAddrToReceiveProof);
+    pendingApprovals[nextPendingApprovalId] = pa;
+    nextPendingApprovalId ++;
 
-    PendingApproval memory paTC;
-    paTC.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
-    paTC.claimIdOnTokenToReceiveProof = claimId;
-    paTC.requester = msg.sender;
-    paTC.approver = tokenCreator;
-    paTC.attachment = IPFShash;
-    uint idx = pendingApprovals[tokenCreator].length;
-    // otherwise it doesn't work if tokenCreator and approver are the same user - they would get the same pendingApprovalId
-    paTC.pendingApprovalId = tokenCreator == approver ? idx + 1 : idx;
+    // to approver-group set by token-creator
 
-    string memory messageTC = string(abi.encodePacked(getMessageTextForTokenCreator(),
-      Fin4TokenBase(tokenAddrToReceiveProof).name()));
-    paTC.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
-      msg.sender, name, tokenCreator, messageTC, IPFShash, paTC.pendingApprovalId);
+    PendingApproval memory paG;
+    paG.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
+    paG.claimIdOnTokenToReceiveProof = claimId;
+    paG.requester = msg.sender;
+    uint groupId = _getGroupId(tokenAddrToReceiveProof);
+    paG.approverGroupId = groupId;
+    paG.attachment = IPFShash;
+    paG.pendingApprovalId = nextPendingApprovalId;
+    paG.isIndividualApprover = false;
+
+    string memory messageG = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveProof).name(),
+            ". Once a member of the group approves, these messages get marked as read for all others."));
+
+    address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
+
+    paG.groupMemberAddresses = new address[](members.length);
+    paG.messageIds = new uint[](members.length);
+    for (uint i = 0; i < members.length; i ++) {
+      paG.groupMemberAddresses[i] = members[i];
+      paG.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
+        .addPendingApprovalMessage(msg.sender, name, members[i], messageG, "", paG.pendingApprovalId);
+    }
+
+    pendingApprovals[nextPendingApprovalId] = paG;
+    nextPendingApprovalId ++;
 
     // connect the two PendingApprovals
     pa.isApproved = false;
-    paTC.isApproved = false;
-    pa.linkedWith = tokenCreator;
-    pa.linkedWithPendingApprovalId = paTC.pendingApprovalId;
-    paTC.linkedWith = approver;
-    paTC.linkedWithPendingApprovalId = pa.pendingApprovalId;
-
-    pendingApprovals[approver].push(pa);
-    pendingApprovals[tokenCreator].push(paTC);
+    paG.isApproved = false;
+    pa.linkedWithPendingApprovalId = paG.pendingApprovalId;
+    paG.linkedWithPendingApprovalId = pa.pendingApprovalId;
   }
 
   // @Override
@@ -66,30 +75,30 @@ contract SelfieTogether is SpecificAddress {
     return "Please check this selfie and approve it if you are in it: ";
   }
 
-  function getMessageTextForTokenCreator() public pure returns(string memory) {
-    return "As token creator, please check this selfie and approve it: ";
+  function getMessageTextForGroupMember() public pure returns(string memory) {
+    return "As a member of the appointed approval group, please check this selfie and approve it: ";
   }
 
   function getAttachment(uint pendingApprovalId) public view returns(string memory) {
-    return pendingApprovals[msg.sender][pendingApprovalId].attachment;
+    return pendingApprovals[pendingApprovalId].attachment;
   }
 
   // @Override
-  function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
-    PendingApproval storage pa = pendingApprovals[msg.sender][pendingApprovalId];
-    require(pa.approver == msg.sender, "This address is not registered as approver for any pending approval");
-    Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
+  function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public {
+    PendingApproval storage pa = pendingApprovals[pendingApprovalId];
 
-    pa.isApproved = true;
-    address otherApprover = pa.linkedWith;
-    uint otherApproversPendingApprovalId = pa.linkedWithPendingApprovalId;
-
-    if (pendingApprovals[otherApprover][otherApproversPendingApprovalId].isApproved) {
-        _sendApproval(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
-        return true;
+    if (pa.isIndividualApprover) {
+      require(pa.groupMemberAddresses[0] == msg.sender, "You are not an approver on this instance");
+    } else {
+      require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
+      markMessagesAsRead(pendingApprovalId);
     }
 
-    return false;
+    pa.isApproved = true;
+
+    if (pendingApprovals[pa.linkedWithPendingApprovalId].isApproved) {
+      _sendApproval(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
+    }
   }
 
 }
