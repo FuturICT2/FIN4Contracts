@@ -66,7 +66,13 @@ contract Fin4Groups {
         require(groups[groupId].creator == msg.sender, "Only the group creator can remove members");
         require(groups[groupId].membersSet[memberToRemove], "Given address is not a member in this group, can't remove it");
         groups[groupId].membersSet[memberToRemove] = false;
-        delete groups[groupId].members[getIndexOfMember(groupId, memberToRemove)];
+        uint index = getIndexOfMember(groupId, memberToRemove);
+        uint length = groups[groupId].members.length;
+        // overwrite the deletion candidate with the last element
+        groups[groupId].members[index] = groups[groupId].members[length - 1];
+        // then delete the last element, via https://ethereum.stackexchange.com/a/1528/56047
+        delete groups[groupId].members[length - 1];
+        groups[groupId].members.length --; // via https://stackoverflow.com/a/51171477/2474159
     }
 
     function getIndexOfMember(uint groupId, address member) private view returns(uint) {

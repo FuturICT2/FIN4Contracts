@@ -107,25 +107,23 @@ function GroupEdit(props, context) {
 							{groupData.userIsCreator ? (
 								<>
 									<Table headers={['Member', 'Action']} colWidths={[85, 15]}>
-										{groupData.members
-											.filter(addr => addr != zeroAddress)
-											.map((memberAddress, index) => {
-												return (
-													<TableRow
-														key={'member_' + index}
-														data={{
-															member: <small>{memberAddress}</small>,
-															actions: (
-																<small
-																	onClick={() => removeMember(memberAddress)}
-																	style={{ color: 'blue', textDecoration: 'underline' }}>
-																	Remove
-																</small>
-															)
-														}}
-													/>
-												);
-											})}
+										{groupData.members.map((memberAddress, index) => {
+											return (
+												<TableRow
+													key={'member_' + index}
+													data={{
+														member: <small>{memberAddress}</small>,
+														actions: (
+															<small
+																onClick={() => removeMember(memberAddress)}
+																style={{ color: 'blue', textDecoration: 'underline' }}>
+																Remove
+															</small>
+														)
+													}}
+												/>
+											);
+										})}
 									</Table>
 									<br />
 									<br />
