@@ -9,13 +9,15 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 import Dropdown from '../../components/Dropdown';
 import { Link } from 'react-router-dom';
+import Table from '../../components/Table';
+import TableRow from '../../components/TableRow';
+import Currency from '../../components/Currency';
 
 function CollectionEdit(props, context) {
 	const { t } = useTranslation();
 
 	const [collection, setCollection] = useState(null);
 	const tokensToAddArr = useRef(null);
-	const tokenToRemove = useRef(null);
 
 	useEffect(() => {
 		let collIdentifier = props.match.params.collectionIdentifier;
@@ -28,21 +30,9 @@ function CollectionEdit(props, context) {
 		}
 	});
 
-	const getFormattedTokensInCollection = () => {
-		return collection.tokens.map(tokenAddr => {
-			let token = props.fin4Tokens[tokenAddr];
-			return {
-				value: token.address,
-				label: token.name,
-				symbol: token.symbol
-			};
-		});
-	};
-
-	const collectionContainsToken = token => {
+	const collectionContainsToken = tokenAddr => {
 		for (let i = 0; i < collection.tokens.length; i++) {
-			let tokenAddr = collection.tokens[i];
-			if (tokenAddr === token) {
+			if (tokenAddr === collection.tokens[i]) {
 				return true;
 			}
 		}
@@ -51,7 +41,7 @@ function CollectionEdit(props, context) {
 
 	const getFormattedTokensNotYetInCollection = () => {
 		return Object.keys(props.fin4Tokens)
-			.filter(token => !collectionContainsToken(token.address))
+			.filter(tokenAddr => !collectionContainsToken(tokenAddr))
 			.map(tokenAddr => {
 				let token = props.fin4Tokens[tokenAddr];
 				return {
@@ -78,13 +68,24 @@ function CollectionEdit(props, context) {
 			});
 	};
 
+	const removeToken = tokenToRemove => {
+		context.drizzle.contracts.Fin4Collections.methods
+			.removeToken(collection.collectionId, tokenToRemove)
+			.send({
+				from: props.store.getState().fin4Store.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
+	};
+
 	return (
 		<>
 			{collection && (
 				<Container>
 					<Box>
 						<center style={{ fontFamily: 'arial' }}>
-							<b style={{ fontSize: 'large' }}>{collection.name}</b>
+							Edit <b style={{ fontSize: 'large' }}>{collection.name}</b>
 							<br />
 							<br />
 							<Link to={'/collection/' + collection.identifier}>View collection</Link>
@@ -99,7 +100,30 @@ function CollectionEdit(props, context) {
 					</Box>
 					{collection.userIsAdmin && (
 						<Box title="Manage tokens">
+							<Table headers={['Token', 'Action']} colWidths={[85, 15]}>
+								{collection.tokens.map((tokenAddress, index) => {
+									let token = props.fin4Tokens[tokenAddress];
+									return (
+										<TableRow
+											key={'token_' + index}
+											data={{
+												token: <Currency name={token.name} symbol={token.symbol} />,
+												actions: (
+													<small
+														onClick={() => removeToken(tokenAddress)}
+														style={{ color: 'blue', textDecoration: 'underline' }}>
+														Remove
+													</small>
+												)
+											}}
+										/>
+									);
+								})}
+							</Table>
+							<br />
+							<br />
 							<center>
+								<br />
 								<Dropdown
 									key="add_tokens_select"
 									multipleChoice
@@ -111,14 +135,6 @@ function CollectionEdit(props, context) {
 								</Button>
 								<br />
 								<br />
-								<Dropdown
-									key="remove_token_select"
-									onChange={e => (tokenToRemove.current = e.value)}
-									options={getFormattedTokensInCollection()}
-								/>
-								<Button icon={DeleteIcon} onClick={() => {}}>
-									Remove token
-								</Button>
 							</center>
 						</Box>
 					)}
