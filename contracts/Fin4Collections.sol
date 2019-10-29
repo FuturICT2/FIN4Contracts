@@ -75,12 +75,21 @@ contract Fin4Collections {
         }
     }
 
-    function removeToken(uint collectionId, address token) public {
-        uint adminIndex = getIndexOfAdmin(collectionId, msg.sender);
-        require(adminIndex != INVALID_INDEX, "Only collection-admins can remove tokens");
-        uint tokenIndex = getIndexOfToken(collectionId, token);
+    function removeTokens(uint collectionId, address[] memory tokensToRemove) public {
+        for (uint i = 0; i < tokensToRemove.length; i ++) {
+            removeToken(collectionId, tokensToRemove[i]);
+        }
+    }
+
+    function removeToken(uint collectionId, address tokenToRemove) public {
+        // TODO admin check
+        uint tokenIndex = getIndexOfToken(collectionId, tokenToRemove);
         require(tokenIndex != INVALID_INDEX, "Token not contained in this collection, can't remove it");
-        delete collections[collectionId].tokens[tokenIndex];
+
+        uint length = collections[collectionId].tokens.length;
+        collections[collectionId].tokens[tokenIndex] = collections[collectionId].tokens[length - 1];
+        delete collections[collectionId].tokens[length - 1];
+        collections[collectionId].tokens.length --;
     }
 
     // HELPER METHODS
