@@ -97,4 +97,24 @@ contract SelfieTogether is ApprovalByGroupMember {
     }
   }
 
+  function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
+    PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+    string memory message;
+
+    if (pa.isIndividualApprover) {
+      require(pa.groupMemberAddresses[0] == msg.sender, "You are not an approver on this instance");
+      message = string(abi.encodePacked(
+        "The user you appointed for approving your selfie has rejected your request for ",
+        Fin4TokenBase(pa.tokenAddrToReceiveProof).name()));
+    } else {
+      require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
+      markMessagesAsRead(pendingApprovalId);
+      message = string(abi.encodePacked(
+        "A member of the appointed approver group has rejected your approval request for ",
+        Fin4TokenBase(pa.tokenAddrToReceiveProof).name()));
+    }
+
+    Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
+  }
+
 }
