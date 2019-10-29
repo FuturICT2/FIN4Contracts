@@ -83,7 +83,8 @@ contract Fin4Groups {
         return groups[groupId].membersSet[memberToCheck];
     }
 
-    function sendMessageToMembers() public view {
-        // TODO
+    // can contain zero addresses
+    function getGroupMembers(uint groupId) public view returns(address[] memory) {
+        return groups[groupId].members;
     }
 }

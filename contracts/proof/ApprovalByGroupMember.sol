@@ -23,8 +23,39 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         description = "The token creator specifies one or more user groups, of which one member has to approve.";
     }
 
-    function submitProof_ApprovalByGroupMember(address tokenAdrToReceiveProof, uint claimId) public {
-        // TODO
+    struct PendingApproval {
+        uint pendingApprovalId;
+        address tokenAddrToReceiveProof;
+        uint claimIdOnTokenToReceiveProof;
+        address requester;
+        uint approverGroupId;
+        uint[] messageIds;
+    }
+
+  mapping (uint => PendingApproval[]) public pendingApprovals;
+
+    function submitProof_ApprovalByGroupMember(address tokenAddrToReceiveProof, uint claimId) public {
+        PendingApproval memory pa;
+        pa.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
+        pa.claimIdOnTokenToReceiveProof = claimId;
+        pa.requester = msg.sender;
+        uint groupId = _getGroupId(tokenAddrToReceiveProof);
+        pa.approverGroupId = groupId;
+        pa.pendingApprovalId = pendingApprovals[groupId].length;
+
+        string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveProof).name(),
+            ". Once a member of the group approves, these messages get marked as read for all others."));
+
+        address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
+        for (uint i = 0; i < members.length; i ++) {
+            if (members[i] == address(0)) {
+                continue;
+            }
+            pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
+                .addPendingApprovalMessage(msg.sender, name, members[i], message, "", pa.pendingApprovalId);
+        }
+
+        pendingApprovals[groupId].push(pa);
     }
 
     function getMessageText() public pure returns(string memory) {
@@ -43,5 +74,15 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
 
     function _getGroupId(address token) private view returns(uint) {
         return fin4TokenToParametersSetOnThisProofType[token][0];
+    }
+
+    // copied method signature from SpecificAddress, then nothing has to be changed in Messages.jsx
+
+    function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public {
+        // TODO
+    }
+
+    function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
+        // TODO
     }
 }
