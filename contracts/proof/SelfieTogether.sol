@@ -49,7 +49,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     paG.pendingApprovalId = nextPendingApprovalId;
     paG.isIndividualApprover = false;
 
-    string memory messageG = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveProof).name(),
+    string memory messageG = string(abi.encodePacked(getMessageTextForGroupMember(), Fin4TokenBase(tokenAddrToReceiveProof).name(),
             ". Once a member of the group approves, these messages get marked as read for all others."));
 
     address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
@@ -59,7 +59,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     for (uint i = 0; i < members.length; i ++) {
       paG.groupMemberAddresses[i] = members[i];
       paG.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-        .addPendingApprovalMessage(msg.sender, name, members[i], messageG, "", paG.pendingApprovalId);
+        .addPendingApprovalMessage(msg.sender, name, members[i], messageG, IPFShash, paG.pendingApprovalId);
     }
 
     pendingApprovals[nextPendingApprovalId] = paG;
