@@ -28,10 +28,18 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         address tokenAddrToReceiveProof;
         uint claimIdOnTokenToReceiveProof;
         address requester;
+
+        bool isIndividualApprover; // false means group-usage
+
         uint approverGroupId;
         // the following two arrays belong tightly together
-        address[] groupMemberAddresses;
+        address[] groupMemberAddresses; // store a snapshot of those here or not? #ConceptualDecision
+                                        // if not, a mechanism to mark messages as read is needed
         uint[] messageIds;
+
+        string attachment;
+        bool isApproved; // in case of multiple PendingApprovals waiting for each other
+        uint linkedWithPendingApprovalId;
     }
 
     uint public nextPendingApprovalId = 0;
@@ -45,6 +53,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         uint groupId = _getGroupId(tokenAddrToReceiveProof);
         pa.approverGroupId = groupId;
         pa.pendingApprovalId = nextPendingApprovalId;
+        pa.isIndividualApprover = false;
 
         string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveProof).name(),
             ". Once a member of the group approves, these messages get marked as read for all others."));
