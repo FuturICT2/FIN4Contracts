@@ -32,7 +32,8 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         uint[] messageIds;
     }
 
-  mapping (uint => PendingApproval[]) public pendingApprovals;
+    uint public nextPendingApprovalId = 0;
+    mapping (uint => PendingApproval) public pendingApprovals; // just use an array? TODO
 
     function submitProof_ApprovalByGroupMember(address tokenAddrToReceiveProof, uint claimId) public {
         PendingApproval memory pa;
@@ -41,7 +42,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         pa.requester = msg.sender;
         uint groupId = _getGroupId(tokenAddrToReceiveProof);
         pa.approverGroupId = groupId;
-        pa.pendingApprovalId = pendingApprovals[groupId].length;
+        pa.pendingApprovalId = nextPendingApprovalId;
 
         string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveProof).name(),
             ". Once a member of the group approves, these messages get marked as read for all others."));
@@ -55,7 +56,8 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
                 .addPendingApprovalMessage(msg.sender, name, members[i], message, "", pa.pendingApprovalId);
         }
 
-        pendingApprovals[groupId].push(pa);
+        pendingApprovals[nextPendingApprovalId] = pa;
+        nextPendingApprovalId ++;
     }
 
     function getMessageText() public pure returns(string memory) {
