@@ -79,10 +79,6 @@ contract SelfieTogether is ApprovalByGroupMember {
     return "As a member of the appointed approval group, please check this selfie and approve it: ";
   }
 
-  function getAttachment(uint pendingApprovalId) public view returns(string memory) {
-    return pendingApprovals[pendingApprovalId].attachment;
-  }
-
   // @Override
   function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public {
     PendingApproval storage pa = pendingApprovals[pendingApprovalId];

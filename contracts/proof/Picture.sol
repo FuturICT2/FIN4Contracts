@@ -37,8 +37,4 @@ contract Picture is SpecificAddress {
     return "Please check this picture proof and approve the correct amount of this token: ";
   }
 
-  function getAttachment(uint pendingApprovalId) public view returns(string memory) {
-    return pendingApprovals[msg.sender][pendingApprovalId].attachment;
-  }
-
 }
