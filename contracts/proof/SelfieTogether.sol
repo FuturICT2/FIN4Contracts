@@ -89,9 +89,9 @@ contract SelfieTogether is ApprovalByGroupMember {
       require(pa.groupMemberAddresses[0] == msg.sender, "You are not an approver on this instance");
     } else {
       require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
-      markMessagesAsRead(pendingApprovalId);
     }
 
+    markMessagesAsRead(pendingApprovalId); // works for both individual and group
     pa.isApproved = true;
 
     if (pendingApprovals[pa.linkedWithPendingApprovalId].isApproved) {
