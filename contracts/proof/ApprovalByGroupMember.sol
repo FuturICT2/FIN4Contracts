@@ -23,18 +23,15 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         description = "The token creator specifies one or more user groups, of which one member has to approve.";
     }
 
-    struct MemberMessage {
-        address memberAddress;
-        uint messageId;
-    }
-
     struct PendingApproval {
         uint pendingApprovalId;
         address tokenAddrToReceiveProof;
         uint claimIdOnTokenToReceiveProof;
         address requester;
         uint approverGroupId;
-        MemberMessage[] memberMessages;
+        // the following two arrays belong tightly together
+        address[] groupMemberAddresses;
+        uint[] messageIds;
     }
 
     uint public nextPendingApprovalId = 0;
@@ -57,9 +54,9 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
             if (members[i] == address(0)) {
                 continue;
             }
-            uint messageId = Fin4Messaging(Fin4MessagingAddress)
+            pa.groupMemberAddresses[i] = members[i];
+            pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
                 .addPendingApprovalMessage(msg.sender, name, members[i], message, "", pa.pendingApprovalId);
-            pa.memberMessages[i] = MemberMessage(members[i], messageId);
         }
 
         pendingApprovals[nextPendingApprovalId] = pa;
@@ -107,11 +104,8 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
 
     function markMessagesAsRead(uint pendingApprovalId) private {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
-        for (uint i = 0; i < pa.memberMessages.length; i ++) {
-            Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(
-                pa.memberMessages[i].memberAddress,
-                pa.memberMessages[i].messageId
-            );
+        for (uint i = 0; i < pa.messageIds.length; i ++) {
+            Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(pa.groupMemberAddresses[i], pa.messageIds[i]);
         }
     }
 }
