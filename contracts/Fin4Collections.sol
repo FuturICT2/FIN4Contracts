@@ -55,11 +55,21 @@ contract Fin4Collections {
         string memory, string memory, string memory, string memory, string memory) {
         Collection memory col = collections[collectionId];
 
-        return(col.creator == msg.sender, userIsAdmin(collectionId, msg.sender), col.adminGroupId, col.tokens,
+        return(col.creator == msg.sender, _userIsAdmin(collectionId, msg.sender), col.adminGroupId, col.tokens,
             col.name, col.identifier, col.description, col.color, col.logoURL);
     }
 
-    function userIsAdmin(uint collectionId, address user) private {
+    modifier userIsCreator(uint collectionId) {
+        require(collections[collectionId].creator == msg.sender, "User is not collection creator");
+        _;
+    }
+
+    modifier userIsAdmin(uint collectionId) {
+        require(_userIsAdmin(collectionId, msg.sender), "User is not creator or in the appointed admin group");
+        _;
+    }
+
+    function _userIsAdmin(uint collectionId, address user) public view returns(bool) {
         if (collections[collectionId].creator == user) {
             return true;
         }
@@ -69,19 +79,16 @@ contract Fin4Collections {
         return false;
     }
 
-    function setAdminGroupId(uint collectionId, uint groupId) public {
-        require(collections[collectionId].creator == msg.sender, "Only the collection creator can modify the admin group");
+    function setAdminGroupId(uint collectionId, uint groupId) public userIsCreator(collectionId) {
         collections[collectionId].adminGroupId = groupId;
         collections[collectionId].adminGroupSet = true;
     }
 
-    function removeAdminGroup(uint collectionId) public {
-        require(collections[collectionId].creator == msg.sender, "Only the collection creator can modify the admin group");
+    function removeAdminGroup(uint collectionId) public userIsCreator(collectionId) {
         collections[collectionId].adminGroupSet = false;
     }
 
-    function addTokens(uint collectionId, address[] memory newTokens) public {
-        require(userIsAdmin(collectionId, msg.sender), "Only admins can modify the tokens in this collection");
+    function addTokens(uint collectionId, address[] memory newTokens) public userIsAdmin(collectionId) {
         Collection storage col = collections[collectionId];
         for (uint i = 0; i < newTokens.length; i ++) {
             if (!col.tokensSet[newTokens[i]]) {
@@ -91,15 +98,17 @@ contract Fin4Collections {
         }
     }
 
-    function removeToken(uint collectionId, address tokenToRemove) public {
-        require(userIsAdmin(collectionId, msg.sender), "Only admins can modify the tokens in this collection");
-        uint tokenIndex = getIndexOfToken(collectionId, tokenToRemove);
-        require(tokenIndex != INVALID_INDEX, "Token not contained in this collection, can't remove it");
+    function removeToken(uint collectionId, address tokenToRemove) public userIsAdmin(collectionId) {
+        Collection storage col = collections[collectionId];
 
-        uint length = collections[collectionId].tokens.length;
-        collections[collectionId].tokens[tokenIndex] = collections[collectionId].tokens[length - 1];
-        delete collections[collectionId].tokens[length - 1];
-        collections[collectionId].tokens.length --;
+        require(col.tokensSet[tokenToRemove], "Token not contained in this collection, can't remove it");
+
+        uint tokenIndex = getIndexOfToken(collectionId, tokenToRemove);
+        uint length = col.tokens.length;
+        col.tokens[tokenIndex] = col.tokens[length - 1];
+        delete col.tokens[length - 1];
+        col.tokens.length --;
+
         col.tokensSet[tokenToRemove] = false;
     }
 
