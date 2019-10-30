@@ -4,7 +4,6 @@
 // 		staticArgs: additional arguments, which are always submitted regardless of the input arguments
 //		hideArgs: arguments that are being set computationally, based on the user's input in other fields
 // 		buttonLabel: to customize the submit-button at the end of the form
-// 		specialFields: this is used by the ProofSubmission class to customize the fields for requesting location access and for uploading a picture to IPFS
 // 		singleSelectOptions, multiSelectOptions: to supply options for a single- or multiselect dropdown list instead of an input field
 // 		helperModalTriggers: used in TokenCreation to pass the click on
 // TODO Some of the added functionality is very specific and should be restructured to be more generic
@@ -136,14 +135,6 @@ class ContractForm extends Component {
 
 			if (input.type === 'bytes32') {
 				return window.web3.utils.toHex(this.state[input.name]);
-			}
-
-			if (this.props.specialFields && this.props.specialFields[input.name]) {
-				if (this.props.specialFields[input.name].belongsTo) {
-					var belongsTo = this.props.specialFields[input.name].belongsTo;
-					return this.props.specialFields[belongsTo].values[input.name];
-				}
-				return this.props.specialFields[input.name].values[input.name];
 			}
 
 			return this.state[input.name];
@@ -343,31 +334,6 @@ class ContractForm extends Component {
 									label={inputLabel}
 								/>
 							);
-						}
-
-						// DEPRECATED ?
-						if (this.props.specialFields && this.props.specialFields[name]) {
-							if (this.props.specialFields[name].type && this.props.specialFields[name].type === 'file') {
-								return (
-									<center key={name}>
-										<input
-											type="file"
-											name={name}
-											onChange={this.props.specialFields[name].onClick}
-											accept="image/png, image/jpeg"></input>
-									</center>
-								);
-							} else {
-								return (
-									<Button
-										key={name}
-										icon={this.props.specialFields[name].buttonIcon}
-										onClick={() => this.props.specialFields[name].onClick(this.props.specialFields[name])}
-										center>
-										{this.props.specialFields[name].buttonText}
-									</Button>
-								);
-							}
 						}
 
 						if (name === 'tokenAddress' && this.props.singleSelectOptions) {
