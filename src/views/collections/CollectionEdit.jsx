@@ -123,10 +123,12 @@ function CollectionEdit(props, context) {
 							<Link to={'/collection/' + collection.identifier}>View collection</Link>
 							<br />
 							<br />
-							{collection.userIsCreator || collection.userIsAdmin ? (
-								''
-							) : (
-								<span style={{ color: 'red' }}>You don't have editing rights on this collection.</span>
+							{!(collection.userIsCreator || collection.userIsAdmin) && (
+								<span style={{ color: 'red' }}>You don't have editing rights on this collection</span>
+							)}
+							{collection.userIsCreator && <span>You are the creator of this collection</span>}
+							{!collection.userIsCreator && collection.userIsAdmin && (
+								<span>You are an admin of this collection via your membership in group {collection.adminGroupId}</span>
 							)}
 						</center>
 					</Box>
@@ -172,7 +174,7 @@ function CollectionEdit(props, context) {
 					)}
 					{collection.userIsCreator && (
 						<Box title="Manage admins">
-							<center>
+							<center style={{ fontFamily: 'arial' }}>
 								<br />
 								<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Set admin group" width="350px">
 									<center>
