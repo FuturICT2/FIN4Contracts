@@ -137,7 +137,6 @@ class ContractForm extends Component {
 				return;
 			}
 
-			// TODO check for duplicate symbols in the frontend too?
 			if (symbol.length < 3 || symbol.length > 5) {
 				alert('Symbol must have between 3 and 5 characters');
 				return;
@@ -158,11 +157,6 @@ class ContractForm extends Component {
 				console.log('Results of submitting: ', result);
 				self.postSubmitCallback(true, result);
 			});
-		/*.catch(function(err) {
-				// TODO this syntax doesn't seem to work anymore, how else to detect error-returns?
-				console.log('Error: ', err.message);
-				self.postSubmitCallback(false, err);
-			});*/
 	};
 
 	postSubmitCallback(success, result) {
@@ -244,11 +238,9 @@ class ContractForm extends Component {
 		});
 	};
 
-	// DEPRECATED ?
 	handleParamChange = (proofTypeObj, event) => {
 		let name = event.target.name;
 		if (name === 'latitude / longitude') {
-			// 'latitude' || name === 'longitude') {
 			var multiplier = 10000000;
 			let lat = Number(event.target.value.split(',')[0].trim());
 			let lon = Number(event.target.value.split(',')[1].trim());
