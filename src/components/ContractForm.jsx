@@ -4,7 +4,7 @@
 // 		staticArgs: additional arguments, which are always submitted regardless of the input arguments
 //		hideArgs: arguments that are being set computationally, based on the user's input in other fields
 // 		buttonLabel: to customize the submit-button at the end of the form
-// 		singleSelectOptions, multiSelectOptions: to supply options for a single- or multiselect dropdown list instead of an input field
+// 		multiSelectOptions: to supply options for a multiselect dropdown list instead of an input field
 // 		helperModalTriggers: used in TokenCreation to pass the click on
 // TODO Some of the added functionality is very specific and should be restructured to be more generic
 
@@ -82,16 +82,6 @@ class ContractForm extends Component {
 		}
 		event.preventDefault();
 
-		//if (this.props.multiSelectOptions && this.state.requiredProofTypes.length < 1) {
-		//	alert('At least one proof type must be selected.');
-		//	return;
-		//}
-
-		if (this.props.singleSelectOptions && !this.state.tokenAddress) {
-			alert('An action type must be chosen.');
-			return;
-		}
-
 		var paramValuesIndicesArr = [];
 
 		const convertedInputs = this.inputs.map(input => {
@@ -127,10 +117,6 @@ class ContractForm extends Component {
 				}
 
 				return '';
-			}
-
-			if (input.name === 'tokenAddress' && this.props.singleSelectOptions) {
-				return this.state.tokenAddress;
 			}
 
 			if (input.type === 'bytes32') {
@@ -331,25 +317,6 @@ class ContractForm extends Component {
 									multipleChoice
 									onChange={this.handleInputChange}
 									options={this.props.multiSelectOptions}
-									label={inputLabel}
-								/>
-							);
-						}
-
-						if (name === 'tokenAddress' && this.props.singleSelectOptions) {
-							let formattedSelectOptions = Object.keys(this.props.singleSelectOptions).map(addr => {
-								let token = this.props.singleSelectOptions[addr];
-								return {
-									value: token.address,
-									label: token.name,
-									symbol: token.symbol
-								};
-							});
-							return (
-								<Dropdown
-									key={name}
-									onChange={this.handleSingleSelectInputChange}
-									options={formattedSelectOptions}
 									label={inputLabel}
 								/>
 							);
