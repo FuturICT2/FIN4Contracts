@@ -1,9 +1,16 @@
 pragma solidity ^0.5.0;
 
 import "solidity-util/lib/Strings.sol";
+import "contracts/Fin4Groups.sol";
 
 contract Fin4Collections {
     using Strings for string;
+
+    address public Fin4GroupsAddress;
+
+    function setFin4GroupsAddress(address Fin4GroupsAddr) public {
+        Fin4GroupsAddress = Fin4GroupsAddr;
+    }
 
     struct Collection {
         uint collectionId;

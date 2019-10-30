@@ -57,9 +57,9 @@ module.exports = async function(deployer) {
 	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4ProofingInstance.addProofType(address)));
 
-	// ApprovalByGroupMember & SelfieTogether
 	await proofTypeInstances[9].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await proofTypeInstances[8].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
 	// Write Fin4Main address to src/config/DeployedAddresses.js
 
