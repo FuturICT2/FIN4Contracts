@@ -18,6 +18,7 @@ contract Fin4Collections {
         uint adminGroupId;
         bool adminGroupSet;
         address[] tokens;
+        mapping (address => bool) tokensSet;
         string name;
         string identifier;
         string description;
@@ -83,8 +84,10 @@ contract Fin4Collections {
         require(userIsAdmin(collectionId, msg.sender), "Only admins can modify the tokens in this collection");
         Collection storage col = collections[collectionId];
         for (uint i = 0; i < newTokens.length; i ++) {
-            // TODO don't add if its already there
-            col.tokens.push(newTokens[i]);
+            if (!col.tokensSet[newTokens[i]]) {
+                col.tokens.push(newTokens[i]);
+                col.tokensSet[newTokens[i]] = true;
+            }
         }
     }
 
@@ -97,6 +100,7 @@ contract Fin4Collections {
         collections[collectionId].tokens[tokenIndex] = collections[collectionId].tokens[length - 1];
         delete collections[collectionId].tokens[length - 1];
         collections[collectionId].tokens.length --;
+        col.tokensSet[tokenToRemove] = false;
     }
 
     // HELPER METHODS
