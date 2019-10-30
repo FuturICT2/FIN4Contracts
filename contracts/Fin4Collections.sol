@@ -80,6 +80,7 @@ contract Fin4Collections {
     }
 
     function setAdminGroupId(uint collectionId, uint groupId) public userIsCreator(collectionId) {
+        require(Fin4Groups(Fin4GroupsAddress).groupExists(groupId), "Group does not exist");
         collections[collectionId].adminGroupId = groupId;
         collections[collectionId].adminGroupIsSet = true;
     }
