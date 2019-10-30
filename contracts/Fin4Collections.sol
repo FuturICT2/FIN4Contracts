@@ -15,7 +15,8 @@ contract Fin4Collections {
     struct Collection {
         uint collectionId;
         address creator;
-        address[] admins;
+        uint adminGroupId;
+        bool adminGroupSet;
         address[] tokens;
         string name;
         string identifier;
@@ -40,56 +41,55 @@ contract Fin4Collections {
         require(identifier.length() > 2, "Identifier is too short"); // TODO #ConceptualDecision
         Collection storage col = collections[nextCollectionId];
         col.creator = msg.sender;
-        col.admins.push(msg.sender);
         col.name = name;
         col.identifier = identifier;
         col.description = description;
-        nextCollectionId ++;
+        col.adminGroupSet = false;
         identifiers[identifier] = true;
-        return nextCollectionId;
+        nextCollectionId ++;
+        return nextCollectionId - 1;
     }
 
-    function getCollection(uint collectionId) public view returns(bool, bool, address[] memory,
+    function getCollection(uint collectionId) public view returns(bool, bool, uint, address[] memory,
         string memory, string memory, string memory, string memory, string memory) {
         Collection memory col = collections[collectionId];
-        return(col.creator == msg.sender, getIndexOfAdmin(collectionId, msg.sender) != INVALID_INDEX, col.tokens,
+
+        return(col.creator == msg.sender, userIsAdmin(collectionId, msg.sender), col.adminGroupId, col.tokens,
             col.name, col.identifier, col.description, col.color, col.logoURL);
     }
 
-    function getCollectionAdmins(uint collectionId) public view returns(address[] memory) {
-        collections[collectionId].admins;
+    function userIsAdmin(uint collectionId, address user) private {
+        if (collections[collectionId].creator == user) {
+            return true;
+        }
+        if (collections[collectionId].adminGroupSet) {
+            return Fin4Groups(Fin4GroupsAddress).isMember(collections[collectionId].adminGroupId, user);
+        }
+        return false;
     }
 
-    function addAdmin(uint collectionId, address newAdmin) public {
-        require(collections[collectionId].creator == msg.sender, "Only the collection creator can add admins");
-        collections[collectionId].admins.push(newAdmin);
+    function setAdminGroupId(uint collectionId, uint groupId) public {
+        require(collections[collectionId].creator == msg.sender, "Only the collection creator can modify the admin group");
+        collections[collectionId].adminGroupId = groupId;
+        collections[collectionId].adminGroupSet = true;
     }
 
-    function removeAdmin(uint collectionId, address adminToRemove) public {
-        require(collections[collectionId].creator == msg.sender, "Only the collection creator can remove admins");
-        uint index = getIndexOfAdmin(collectionId, adminToRemove);
-        require(index != INVALID_INDEX, "Given address is not registered as admin on this collection");
-        delete collections[collectionId].admins[index];
+    function removeAdminGroup(uint collectionId) public {
+        require(collections[collectionId].creator == msg.sender, "Only the collection creator can modify the admin group");
+        collections[collectionId].adminGroupSet = false;
     }
 
     function addTokens(uint collectionId, address[] memory newTokens) public {
+        require(userIsAdmin(collectionId, msg.sender), "Only admins can modify the tokens in this collection");
         Collection storage col = collections[collectionId];
-        uint adminIndex = getIndexOfAdmin(collectionId, msg.sender);
-        require(adminIndex != INVALID_INDEX, "Only collection-admins can add tokens");
         for (uint i = 0; i < newTokens.length; i ++) {
             // TODO don't add if its already there
             col.tokens.push(newTokens[i]);
         }
     }
 
-    function removeTokens(uint collectionId, address[] memory tokensToRemove) public {
-        for (uint i = 0; i < tokensToRemove.length; i ++) {
-            removeToken(collectionId, tokensToRemove[i]);
-        }
-    }
-
     function removeToken(uint collectionId, address tokenToRemove) public {
-        // TODO admin check
+        require(userIsAdmin(collectionId, msg.sender), "Only admins can modify the tokens in this collection");
         uint tokenIndex = getIndexOfToken(collectionId, tokenToRemove);
         require(tokenIndex != INVALID_INDEX, "Token not contained in this collection, can't remove it");
 
@@ -100,16 +100,6 @@ contract Fin4Collections {
     }
 
     // HELPER METHODS
-
-    function getIndexOfAdmin(uint collectionId, address admin) private view returns(uint) {
-        Collection memory col = collections[collectionId];
-        for (uint i = 0; i < col.admins.length; i ++) {
-            if (col.admins[i] == admin) {
-                return i;
-            }
-        }
-        return INVALID_INDEX;
-    }
 
     function getIndexOfToken(uint collectionId, address token) private view returns(uint) {
         Collection memory col = collections[collectionId];
