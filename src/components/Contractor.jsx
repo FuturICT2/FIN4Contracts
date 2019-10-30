@@ -288,9 +288,9 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 							4: tokens,
 							5: name,
 							6: identifier,
-							7: description,
-							8: color,
-							9: logoURL
+							7: description
+							// 8: color,
+							// 9: logoURL
 						}) => {
 							return {
 								collectionId: collectionId,
@@ -301,9 +301,7 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 								tokens: tokens,
 								name: name,
 								identifier: identifier,
-								description: description,
-								color: color,
-								logoURL: logoURL
+								description: description
 							};
 						}
 					);

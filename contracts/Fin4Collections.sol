@@ -22,8 +22,8 @@ contract Fin4Collections {
         string name;
         string identifier;
         string description;
-        string color;
-        string logoURL;
+        string color; // not used yet
+        string logoURL; // not used yet
     }
 
     uint public nextCollectionId = 0;
@@ -52,11 +52,11 @@ contract Fin4Collections {
     }
 
     function getCollection(uint collectionId) public view returns(bool, bool, bool, uint, address[] memory,
-        string memory, string memory, string memory, string memory, string memory) {
+        string memory, string memory, string memory) {
         Collection memory col = collections[collectionId];
 
         return(col.creator == msg.sender, _userIsAdmin(collectionId, msg.sender), col.adminGroupIsSet, col.adminGroupId,
-            col.tokens, col.name, col.identifier, col.description, col.color, col.logoURL);
+            col.tokens, col.name, col.identifier, col.description);
     }
 
     modifier userIsCreator(uint collectionId) {
