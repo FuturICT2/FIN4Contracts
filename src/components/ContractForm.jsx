@@ -1,6 +1,6 @@
 // The original class was from here: https://github.com/trufflesuite/drizzle-react-components/blob/develop/src/ContractForm.js
 // Much changed since then. The following PropTypes were added:
-// 		contractAddress, contractName: used to get the contract via truffle-contract
+// 		contractName: used to get the contract
 // 		staticArgs: additional arguments, which are always submitted regardless of the input arguments
 //		hideArgs: arguments that are being set computationally, based on the user's input in other fields
 // 		buttonLabel: to customize the submit-button at the end of the form
@@ -422,7 +422,6 @@ ContractForm.contextTypes = {
 
 ContractForm.propTypes = {
 	contractName: PropTypes.string,
-	contractAddress: PropTypes.string,
 	method: PropTypes.string.isRequired,
 	sendArgs: PropTypes.object,
 	labels: PropTypes.arrayOf(PropTypes.string),
