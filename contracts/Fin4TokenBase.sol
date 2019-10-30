@@ -8,15 +8,15 @@ contract Fin4TokenBase { // abstract class
 
   address public Fin4ClaimingAddress;
   address public Fin4ProofingAddress;
-  address public actionTypeCreator;
+  address public tokenCreator;
   string public description;
   string public unit;
   uint public tokenCreationTime;
 
-  constructor(string memory _description, string memory _unit, address _actionTypeCreator) public {
+  constructor(string memory _description, string memory _unit, address _tokenCreator) public {
     description = _description;
     unit = _unit;
-    actionTypeCreator = _actionTypeCreator;
+    tokenCreator = _tokenCreator;
     tokenCreationTime = now;
   }
 
@@ -60,7 +60,7 @@ contract Fin4TokenBase { // abstract class
     // make a deep copy because the token creator might change the required proof types, but throughout the lifecycle of a claim they should stay fix
     // TODO should they? --> #ConceptualDecision
     claim.requiredProofTypes = getRequiredProofTypes();
-    // initialize all the proofs required by the action type creator with false
+    // initialize all the proofs required by the token creator with false
     // TODO isn't the default initialization false?
     for (uint i = 0; i < claim.requiredProofTypes.length; i ++) {
       claim.proofStatuses[claim.requiredProofTypes[i]] = false;
@@ -151,7 +151,7 @@ contract Fin4TokenBase { // abstract class
 
   // ------------------------- PROOF TYPES -------------------------
 
-  address[] public requiredProofTypes; // a subset of all existing ones linked to Fin4Main, defined by the action type creator
+  address[] public requiredProofTypes; // a subset of all existing ones linked to Fin4Main, defined by the token creator
 
   // called from ProofType contracts
   function receiveProofApproval(address proofTypeAddress, uint claimId) public returns(bool) {
@@ -201,7 +201,7 @@ contract Fin4TokenBase { // abstract class
     require(Fin4Proofing(Fin4ProofingAddress).proofTypeIsRegistered(proofType),
       "This address is not registered as proof type in Fin4Proofing");
     requiredProofTypes.push(proofType);
-    Fin4BaseProofType(proofType).registerActionTypeCreator(actionTypeCreator);
+    Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
     return true;
   }
 

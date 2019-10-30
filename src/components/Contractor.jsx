@@ -191,14 +191,14 @@ const fetchAndAddAllProofTypes = (props, Fin4ProofingContract, drizzle) => {
 		.then(proofTypeAddresses => {
 			return proofTypeAddresses.map(proofTypeAddress => {
 				return getContractData(Fin4ProofingContract, defaultAccount, 'getProofTypeInfo', proofTypeAddress).then(
-					({ 0: name, 1: description, 2: parameterForActionTypeCreatorToSetEncoded }) => {
+					({ 0: name, 1: description, 2: parameterForTokenCreatorToSetEncoded }) => {
 						// add Contract objects to drizzle
 						addContract(props, drizzle, name, proofTypeAddress, []);
 						return {
 							value: proofTypeAddress,
 							label: name,
 							description: description,
-							paramsEncoded: parameterForActionTypeCreatorToSetEncoded,
+							paramsEncoded: parameterForTokenCreatorToSetEncoded,
 							paramValues: {} // TODO remove this weird placeholder to be used in ContractForm
 						};
 					}

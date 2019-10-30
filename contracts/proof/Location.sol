@@ -29,7 +29,7 @@ contract Location is Fin4BaseProofType {
     }
 
     // @Override
-    function getParameterForActionTypeCreatorToSetEncoded() public pure returns(string memory) {
+    function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
       return "string:latitude / longitude:gps,uint:maxDistance:m";
     }
 

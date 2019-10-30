@@ -43,7 +43,7 @@ contract Fin4Claiming {
 
     // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
 
-    // to keep track on which action types the user has claims (independent of their approval-statuses)
+    // to keep track on which tokens the user has claims (independent of their approval-statuses)
     mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
 
     function userClaimedOnThisActionAlready(address user, address action) private view returns (bool) {

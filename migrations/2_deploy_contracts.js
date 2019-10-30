@@ -11,7 +11,7 @@ const Fin4Groups = artifacts.require('Fin4Groups');
 const proofTypeContracts = [
 	artifacts.require('SelfApprove'),
 	artifacts.require('SpecificAddress'),
-	artifacts.require('ActionTypeCreator'),
+	artifacts.require('TokenCreator'),
 	artifacts.require('MinimumInterval'),
 	artifacts.require('MaximumQuantityPerInterval'),
 	artifacts.require('Password'),

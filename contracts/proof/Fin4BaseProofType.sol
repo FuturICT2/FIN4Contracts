@@ -12,7 +12,7 @@ contract Fin4BaseProofType is utils {
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
   mapping (address => uint[]) public fin4TokenToParametersSetOnThisProofType; // holds the token-specific parameters for each proof type
-                                                                              // (one proof type is used by multiple action types)
+                                                                              // (one proof type is used by multiple tokens)
 
   constructor(address Fin4MessagingAddr) public {
     Fin4MessagingAddress = Fin4MessagingAddr;
@@ -37,13 +37,13 @@ contract Fin4BaseProofType is utils {
   }
 
   function getInfo() public view returns(string memory, string memory, string memory) {
-    return (name, description, getParameterForActionTypeCreatorToSetEncoded());
+    return (name, description, getParameterForTokenCreatorToSetEncoded());
   }
 
   // This method gets overriden by the proof types and encode the parameter names (types are only uint for now TODO)
-  // to be filled by the action type creator. He gets prompted to set them via a popup in the front end when adding
+  // to be filled by the token creator. He gets prompted to set them via a popup in the front end when adding
   // a proof type, see the first <Modal> in ContractForm.render()
-  function getParameterForActionTypeCreatorToSetEncoded() public pure returns(string memory) {
+  function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
     return "";
   }
 
@@ -68,8 +68,8 @@ contract Fin4BaseProofType is utils {
     return true;
   }
 
-  function registerActionTypeCreator(address actionTypeCreator) public returns(bool) {
-    fin4TokenToItsCreator[msg.sender] = actionTypeCreator;
+  function registerTokenCreator(address tokenCreator) public returns(bool) {
+    fin4TokenToItsCreator[msg.sender] = tokenCreator;
     return true;
   }
 

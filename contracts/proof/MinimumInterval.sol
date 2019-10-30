@@ -32,14 +32,14 @@ contract MinimumInterval is Fin4BaseProofType {
     }
 
     // @Override
-    function getParameterForActionTypeCreatorToSetEncoded() public pure returns(string memory) {
+    function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
       return "uint:minimumInterval:days";
     }
 
     // @Override
     function getParameterizedDescription(address token) public view returns(string memory) {
       return string(abi.encodePacked(
-          "The action type creator defined the minimum time that has to pass between claims as ",
+          "The token creator defined the minimum time that has to pass between claims as ",
           uint2str(_getMinimumInterval(token) / (1000 * 60 * 60 * 24)), " days."
         ));
     }

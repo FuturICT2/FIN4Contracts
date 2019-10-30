@@ -32,7 +32,7 @@ contract Fin4TokenManagement {
         newToken.setAddresses(Fin4ClaimingAddress, Fin4ProofingAddress);
         symbolIsUsed[_symbol] = true;
 
-        for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the action type creator
+        for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the token creator
             newToken.addRequiredProofType(requiredProofTypes[i]);
             // ProofTypes must be minters because "they" (via msg.sender) are the ones calling mint() if the last required proof type is set to true
             newToken.addMinter(requiredProofTypes[i]);

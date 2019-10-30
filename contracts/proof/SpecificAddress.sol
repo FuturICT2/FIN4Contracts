@@ -51,7 +51,7 @@ contract SpecificAddress is Fin4BaseProofType {
   }
 
   function getMessageText() public pure returns(string memory) {
-    return "You were requested to approve the proof type SpecificAddress on the action type ";
+    return "You were requested to approve the proof type SpecificAddress on the token ";
   }
 
   function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public returns(bool) {

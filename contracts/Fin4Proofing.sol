@@ -4,7 +4,7 @@ import 'contracts/proof/Fin4BaseProofType.sol';
 
 contract Fin4Proofing {
 
-    // all the proof types that action type creators can use
+    // all the proof types that token creators can use
     address[] public proofTypes;
 
     function addProofType(address proofType) public returns(bool) {

@@ -20,7 +20,7 @@ contract Password is Fin4BaseProofType {
       } else {
         string memory message = string(abi.encodePacked(
           Fin4TokenStub(tokenAddrToReceiveProof).name(),
-          ": The password you provided is not matching the one set by the action type creator."
+          ": The password you provided is not matching the one set by the token creator."
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
       }
@@ -28,7 +28,7 @@ contract Password is Fin4BaseProofType {
     }
 
     // @Override
-    function getParameterForActionTypeCreatorToSetEncoded() public pure returns(string memory) {
+    function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
       return "uint:password:numeric PIN";
     }
 

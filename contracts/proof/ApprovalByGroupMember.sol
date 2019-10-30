@@ -73,11 +73,11 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
     }
 
     function getMessageText() public pure returns(string memory) {
-        return "You are a member of a user group that was appointed for approving this claim on the action type ";
+        return "You are a member of a user group that was appointed for approving this claim on the token ";
     }
 
     // @Override
-    function getParameterForActionTypeCreatorToSetEncoded() public pure returns(string memory) {
+    function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
       return "uint:Group Id:can be found in the overview of groups";
     }
 
