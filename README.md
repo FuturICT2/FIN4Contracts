@@ -35,7 +35,7 @@ npm explore npm -g -- npm install node-gyp@latest
 
 # truffle
 npm install -g truffle
-npm install -g ganache-cli
+npm install -g ganache-cli # or the GUI app from trufflesuite.com/ganache
 
 # project
 npm install # requires apparently more than 1GB of memory to run
@@ -82,7 +82,7 @@ sudo service nginx restart
 ### Compile and migrate the smart contracts
 
 1. `truffle compile`
-2. `ganache-cli --port=7545 --allowUnlimitedContractSize`
+2. `ganache-cli --port=7545 --allowUnlimitedContractSize` or start a workspace in the Ganache GUI app
 3. `truffle migrate` to place the smart contract on the local blockchain
 4. install the [MetaMask](https://metamask.io/) browser extension, paste the `MNEMONIC` from Ganache into the `seed` input and create a network with `http://127.0.0.1:7545` as `custom RPC`
 
