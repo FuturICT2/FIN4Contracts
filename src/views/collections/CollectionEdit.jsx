@@ -15,6 +15,8 @@ import TableRow from '../../components/TableRow';
 import Currency from '../../components/Currency';
 import Modal from '../../components/Modal';
 import TextField from '@material-ui/core/TextField';
+import { isValidPublicAddress } from '../../components/Contractor';
+import AddressQRreader from '../../components/AddressQRreader';
 
 function CollectionEdit(props, context) {
 	const { t } = useTranslation();
@@ -23,6 +25,9 @@ function CollectionEdit(props, context) {
 	const tokensToAddArr = useRef(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const groupIdViaModal = useRef(null);
+
+	const [ownershipExpanded, setOwnershipExpanded] = useState(false);
+	const newOwnerAddress = useRef(null);
 
 	const toggleModal = () => {
 		setIsModalOpen(!isModalOpen);
@@ -111,6 +116,25 @@ function CollectionEdit(props, context) {
 			});
 	};
 
+	const transferOwnership = () => {
+		if (!ownershipExpanded) {
+			setOwnershipExpanded(true);
+			return;
+		}
+		if (!isValidPublicAddress(newOwnerAddress.current)) {
+			alert('Invalid Ethereum public address');
+			return;
+		}
+		context.drizzle.contracts.Fin4Collections.methods
+			.transferOwnership(collection.collectionId, newOwnerAddress.current)
+			.send({
+				from: props.store.getState().fin4Store.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
+	};
+
 	return (
 		<>
 			{collection && (
@@ -173,48 +197,69 @@ function CollectionEdit(props, context) {
 						</Box>
 					)}
 					{collection.userIsCreator && (
-						<Box title="Manage admins">
-							<center style={{ fontFamily: 'arial' }}>
+						<>
+							<Box title="Manage admins">
+								<center style={{ fontFamily: 'arial' }}>
+									<br />
+									<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Set admin group" width="350px">
+										<center>
+											<TextField
+												key="groupId-field"
+												type="number"
+												label="Group Id (see overview of groups)"
+												onChange={e => (groupIdViaModal.current = e.target.value)}
+												style={inputFieldStyle}
+											/>
+											<br />
+											<Button onClick={setAdminGroup}>Submit</Button>
+											<br />
+										</center>
+									</Modal>
+									{collection.adminGroupIsSet ? (
+										<>
+											Admin group Id: <b>{collection.adminGroupId}</b>
+											<br />
+											<br />
+											<Button icon={EditIcon} onClick={toggleModal}>
+												Change admin group
+											</Button>
+											<br />
+											<br />
+											<Button icon={DeleteIcon} onClick={removeAdminGroup}>
+												Remove admin group
+											</Button>
+										</>
+									) : (
+										<>
+											<Button icon={AddIcon} onClick={toggleModal}>
+												Appoint admin group
+											</Button>
+										</>
+									)}
+									<br />
+									<br />
+								</center>
+							</Box>
+							<Box title="Edit ownership">
 								<br />
-								<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Set admin group" width="350px">
-									<center>
-										<TextField
-											key="groupId-field"
-											type="number"
-											label="Group Id (see overview of groups)"
-											onChange={e => (groupIdViaModal.current = e.target.value)}
-											style={inputFieldStyle}
-										/>
-										<br />
-										<Button onClick={setAdminGroup}>Submit</Button>
-										<br />
-									</center>
-								</Modal>
-								{collection.adminGroupIsSet ? (
-									<>
-										Admin group Id: <b>{collection.adminGroupId}</b>
-										<br />
-										<br />
-										<Button icon={EditIcon} onClick={toggleModal}>
-											Change admin group
-										</Button>
-										<br />
-										<br />
-										<Button icon={DeleteIcon} onClick={removeAdminGroup}>
-											Remove admin group
-										</Button>
-									</>
-								) : (
-									<>
-										<Button icon={AddIcon} onClick={toggleModal}>
-											Appoint admin group
-										</Button>
-									</>
-								)}
+								<center style={{ fontFamily: 'arial' }}>
+									{ownershipExpanded && (
+										<>
+											<AddressQRreader
+												onChange={val => (newOwnerAddress.current = val)}
+												label="Public address of new collection owner"
+											/>
+											<br />
+											<span style={{ color: 'red' }}>You won't be able to edit this collection anymore</span>
+											<br />
+											<br />
+										</>
+									)}
+									<Button onClick={() => transferOwnership()}>Transfer ownership</Button>
+								</center>
 								<br />
-								<br />
-							</center>
-						</Box>
+							</Box>
+						</>
 					)}
 				</Container>
 			)}
