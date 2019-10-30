@@ -89,11 +89,26 @@ function CollectionEdit(props, context) {
 	};
 
 	const setAdminGroup = () => {
-		// TODO
+		toggleModal();
+		context.drizzle.contracts.Fin4Collections.methods
+			.setAdminGroupId(collection.collectionId, groupIdViaModal.current)
+			.send({
+				from: props.store.getState().fin4Store.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
 	};
 
 	const removeAdminGroup = () => {
-		// TODO
+		context.drizzle.contracts.Fin4Collections.methods
+			.removeAdminGroup(collection.collectionId)
+			.send({
+				from: props.store.getState().fin4Store.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
 	};
 
 	return (
