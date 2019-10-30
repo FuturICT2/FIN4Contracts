@@ -61,10 +61,10 @@ module.exports = async function(deployer) {
 	await proofTypeInstances[8].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
-	// Write Fin4Main address to src/config/DeployedAddresses.js
+	// Write Fin4Main address to src/config/Fin4MainAddress.js
 
 	let data = "const Fin4MainAddress = '" + Fin4MainInstance.address + "';\n" + 'export { Fin4MainAddress };\n';
-	fs.writeFile(path.join(__dirname, '../src/config/DeployedAddresses.js'), data, err => {
+	fs.writeFile(path.join(__dirname, '../src/config/Fin4MainAddress.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
