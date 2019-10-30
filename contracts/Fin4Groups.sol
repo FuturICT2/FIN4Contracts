@@ -19,8 +19,12 @@ contract Fin4Groups {
         return groupId < nextGroupId; // in the future, consider group deletion? #ConceptualDecision
     }
 
-    function transferOwnership(uint groupId, address newOwner) public {
-        require(msg.sender == groups[groupId].creator, "Only the group creator can transfer ownership");
+    modifier userIsCreator(uint groupId) {
+        require(groups[groupId].creator == msg.sender, "User is not group creator");
+        _;
+    }
+
+    function transferOwnership(uint groupId, address newOwner) public userIsCreator(groupId) {
         groups[groupId].creator = newOwner;
     }
 
@@ -33,13 +37,13 @@ contract Fin4Groups {
     }
 
     function getGroupsInfo() public view returns(bool[] memory, bool[] memory) {
-        bool[] memory userIsCreator = new bool[](nextGroupId);
-        bool[] memory userIsMember = new bool[](nextGroupId);
+        bool[] memory userIsCreatorArr = new bool[](nextGroupId);
+        bool[] memory userIsMemberArr = new bool[](nextGroupId);
         for (uint i = 0; i < nextGroupId; i ++) {
-            userIsCreator[i] = groups[i].creator == msg.sender;
-            userIsMember[i] = groups[i].membersSet[msg.sender];
+            userIsCreatorArr[i] = groups[i].creator == msg.sender;
+            userIsMemberArr[i] = groups[i].membersSet[msg.sender];
         }
-        return (userIsCreator, userIsMember);
+        return (userIsCreatorArr, userIsMemberArr);
     }
 
     function createGroup(string memory name, bool addCreatorAsMember) public returns(uint) {
@@ -54,16 +58,14 @@ contract Fin4Groups {
         return nextGroupId - 1;
     }
 
-    function addMembers(uint groupId, address[] memory newMembers) public {
-        require(groups[groupId].creator == msg.sender, "Only the group creator can add members");
+    function addMembers(uint groupId, address[] memory newMembers) public  userIsCreator(groupId) {
         for (uint i = 0; i < newMembers.length; i ++) {
             groups[groupId].members.push(newMembers[i]);
             groups[groupId].membersSet[newMembers[i]] = true;
         }
     }
 
-    function removeMember(uint groupId, address memberToRemove) public {
-        require(groups[groupId].creator == msg.sender, "Only the group creator can remove members");
+    function removeMember(uint groupId, address memberToRemove) public userIsCreator(groupId) {
         require(groups[groupId].membersSet[memberToRemove], "Given address is not a member in this group, can't remove it");
         groups[groupId].membersSet[memberToRemove] = false;
         uint index = getIndexOfMember(groupId, memberToRemove);
