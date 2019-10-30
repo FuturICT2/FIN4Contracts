@@ -2,7 +2,7 @@
 src/build/
 .idea/
 src/config/deployment-config.json
-src/config/DeployedAddresses.js
+src/config/Fin4MainAddress.js
 scripts/TCR/DeployedAddresses.json
 scripts/*.csv
 docs/_build/
