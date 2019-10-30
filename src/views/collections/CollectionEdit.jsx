@@ -6,18 +6,27 @@ import Box from '../../components/Box';
 import PropTypes from 'prop-types';
 import Button from '../../components/Button';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 import Dropdown from '../../components/Dropdown';
 import { Link } from 'react-router-dom';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import Currency from '../../components/Currency';
+import Modal from '../../components/Modal';
+import TextField from '@material-ui/core/TextField';
 
 function CollectionEdit(props, context) {
 	const { t } = useTranslation();
 
 	const [collection, setCollection] = useState(null);
 	const tokensToAddArr = useRef(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const groupIdViaModal = useRef(null);
+
+	const toggleModal = () => {
+		setIsModalOpen(!isModalOpen);
+	};
 
 	useEffect(() => {
 		let collIdentifier = props.match.params.collectionIdentifier;
@@ -77,6 +86,14 @@ function CollectionEdit(props, context) {
 			.then(function(result) {
 				console.log('Results of submitting: ', result);
 			});
+	};
+
+	const setAdminGroup = () => {
+		// TODO
+	};
+
+	const removeAdminGroup = () => {
+		// TODO
 	};
 
 	return (
@@ -141,14 +158,44 @@ function CollectionEdit(props, context) {
 					{collection.userIsCreator && (
 						<Box title="Manage admins">
 							<center>
-								<Button icon={AddIcon} onClick={() => {}}>
-									Add admin
-								</Button>
+								<br />
+								<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Set admin group" width="350px">
+									<center>
+										<TextField
+											key="groupId-field"
+											type="number"
+											label="Group Id (see overview of groups)"
+											onChange={e => (groupIdViaModal.current = e.target.value)}
+											style={inputFieldStyle}
+										/>
+										<br />
+										<Button onClick={setAdminGroup}>Submit</Button>
+										<br />
+									</center>
+								</Modal>
+								{collection.adminGroupIsSet ? (
+									<>
+										Admin group Id: <b>{collection.adminGroupId}</b>
+										<br />
+										<br />
+										<Button icon={EditIcon} onClick={toggleModal}>
+											Change admin group
+										</Button>
+										<br />
+										<br />
+										<Button icon={DeleteIcon} onClick={removeAdminGroup}>
+											Remove admin group
+										</Button>
+									</>
+								) : (
+									<>
+										<Button icon={AddIcon} onClick={toggleModal}>
+											Appoint admin group
+										</Button>
+									</>
+								)}
 								<br />
 								<br />
-								<Button icon={DeleteIcon} onClick={() => {}}>
-									Remove admin
-								</Button>
 							</center>
 						</Box>
 					)}
@@ -157,6 +204,11 @@ function CollectionEdit(props, context) {
 		</>
 	);
 }
+
+const inputFieldStyle = {
+	width: '100%',
+	marginBottom: '15px'
+};
 
 CollectionEdit.contextTypes = {
 	drizzle: PropTypes.object
