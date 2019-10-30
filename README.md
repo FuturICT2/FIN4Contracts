@@ -1,7 +1,5 @@
 # FIN4Xplorer
 
-## Context
-
 **FIN4Xplorer** is a decentralised design for a bottom-up and multidimensional finance system with the aim of making communities healthier, more social, and sustainable. It is part of the FLAG-ERA-funded project [FuturICT 2.0](https://futurict2.eu/).
 
 <table border="0"><tr><td>
@@ -12,13 +10,11 @@
 
 ℹ️ [Explanatory video](http://www.youtube.com/watch?v=oNlKdHjvExo)
 
-## Description
-
 **FIN4Xplorer** allows any person, organisation, and public institution to create tokens, which stand for a positive action. Users can claim and prove these actions, for which they receive said tokens. By designing the system to be open to markets tailored to the respective actions, incentives are generated. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach.
 
-## Quick start
+# Setup
 
-### Install dependencies
+## Dependencies
 
 ```sh
 # the basics
@@ -41,8 +37,22 @@ npm install -g ganache-cli # or the GUI app from trufflesuite.com/ganache
 npm install # requires apparently more than 1GB of memory to run
 ```
 
-### For deployment
-Add and fill this file: `src/config/deployment-config.json`
+Install the [MetaMask](https://metamask.io/) browser extension.
+
+## Deploying the smart contracts
+
+To deploy the smart contracts to a local Ganache instance, run:
+```sh
+truffle migrate
+```
+
+To deploy to the Rinkeby testnet, use:
+
+```sh
+truffle migrate --network rinkeby
+```
+
+This requires the file `src/config/deployment-config.json` to be added and filled:
 ```json
 {
     "MNEMONIC": "",
@@ -51,22 +61,32 @@ Add and fill this file: `src/config/deployment-config.json`
     "FAUCET_URL": ""
 }
 ```
+The account encoded by the mnemonic is paying the deployment costs. Therefore it has to have sufficient funds on the respective network. The Infura API key can be obtained by creating a project on infura.io: it is the "Project ID" under "View Project".
 
-The mnemonic gets used for deploying (e.g. `truffle migrate --network rinkeby`), therefore the account has to have sufficient funds on the respective network. The infura API key can be obtained by creating a project on infura.io: it is the "Project ID" under "View Project".
+The *faucet-server* located under `scripts/faucet-server` uses all four fields. More in its respective Readme.
 
-### Compile and migrate the smart contracts
+## Serving the GUI
 
-1. `truffle compile`
-2. `ganache-cli --port=7545 --allowUnlimitedContractSize` or start a workspace in the Ganache GUI app
-3. `truffle migrate` to place the smart contract on the local blockchain
-4. install the [MetaMask](https://metamask.io/) browser extension, paste the `MNEMONIC` from Ganache into the `seed` input and create a network with `http://127.0.0.1:7545` as `custom RPC`
+Serving the GUI can happen right after deploying the smart contracts on the same computer - but does not have to.
 
-### Use the app
+If they are not the same computers it is necessary:
+
+- to copy `src/config/Fin4MainAddress.js` onto the computer serving the GUI - this file was automatically created during `truffle migrate`
+
+- to run `truffle compile` on a computer serving the GUI that hasn't run `truffle migrate` beforehand - this creates JSON-files for each contract that are necessary for calling the contracts on the blockchain
+
+Start the React app on port 3000:
 ```sh
 npm start
 ```
 
-## Docs
+## Using the Dapp
+
+If running locally, choose "import using account seed phrase" in MetaMask and use the `MNEMONIC` from Ganache. Create a network with `http://127.0.0.1:7545` as `custom RPC`. If running on Rinkeby, select that as your network in MetaMask and create or restore your respective account.
+
+Once correctly connected the warnings should disappear and you are good to go.
+
+# Docs
 
 Our documentation is located at [fin4xplorer.readthedocs.io](https://fin4xplorer.readthedocs.io/en/latest/) in English and German.
 
