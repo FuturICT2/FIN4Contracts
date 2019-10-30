@@ -58,6 +58,10 @@ contract Fin4TokenManagement {
                 Fin4BaseProofType(requiredProofTypes[i]).setParameters(address(newToken), params);
             }
         }
+
+        // required to mint token in case of no proof types, should it be restricted to if requiredProofTypes.length == 0 ?
+        newToken.addMinter(Fin4ClaimingAddress);
+
         allFin4Tokens.push(address(newToken));
         emit Fin4TokenCreated(address(newToken), name, _symbol, description, unit, msg.sender);
         return address(newToken);
