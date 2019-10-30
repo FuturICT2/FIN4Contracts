@@ -51,12 +51,12 @@ contract Fin4Collections {
         return nextCollectionId - 1;
     }
 
-    function getCollection(uint collectionId) public view returns(bool, bool, uint, address[] memory,
+    function getCollection(uint collectionId) public view returns(bool, bool, bool, uint, address[] memory,
         string memory, string memory, string memory, string memory, string memory) {
         Collection memory col = collections[collectionId];
 
-        return(col.creator == msg.sender, _userIsAdmin(collectionId, msg.sender), col.adminGroupId, col.tokens,
-            col.name, col.identifier, col.description, col.color, col.logoURL);
+        return(col.creator == msg.sender, _userIsAdmin(collectionId, msg.sender), col.adminGroupIsSet, col.adminGroupId,
+            col.tokens, col.name, col.identifier, col.description, col.color, col.logoURL);
     }
 
     modifier userIsCreator(uint collectionId) {

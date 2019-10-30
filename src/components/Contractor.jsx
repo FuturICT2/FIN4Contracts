@@ -283,17 +283,21 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 						({
 							0: userIsCreator,
 							1: userIsAdmin,
-							2: tokens,
-							3: name,
-							4: identifier,
-							5: description,
-							6: color,
-							7: logoURL
+							2: adminGroupIsSet,
+							3: adminGroupId,
+							4: tokens,
+							5: name,
+							6: identifier,
+							7: description,
+							8: color,
+							9: logoURL
 						}) => {
 							return {
 								collectionId: collectionId,
 								userIsCreator: userIsCreator,
 								userIsAdmin: userIsAdmin,
+								adminGroupIsSet: adminGroupIsSet,
+								adminGroupId: adminGroupId,
 								tokens: tokens,
 								name: name,
 								identifier: identifier,
