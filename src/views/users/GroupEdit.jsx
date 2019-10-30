@@ -105,57 +105,7 @@ function GroupEdit(props, context) {
 							<br />
 							<br />
 							{groupData.userIsCreator ? (
-								<>
-									<Table headers={['Member', 'Action']} colWidths={[85, 15]}>
-										{groupData.members.map((memberAddress, index) => {
-											return (
-												<TableRow
-													key={'member_' + index}
-													data={{
-														member: <small>{memberAddress}</small>,
-														actions: (
-															<small
-																onClick={() => removeMember(memberAddress)}
-																style={{ color: 'blue', textDecoration: 'underline' }}>
-																Remove
-															</small>
-														)
-													}}
-												/>
-											);
-										})}
-									</Table>
-									<br />
-									<br />
-									<RadioGroup
-										row={true}
-										onChange={e => {
-											setAddMemberMode(e.target.value);
-											newMembersString.current = '';
-										}}
-										value={addMemberMode}>
-										<FormControlLabel value="addOne" control={<Radio />} label="Add a member" />
-										<FormControlLabel value="addMultiple" control={<Radio />} label="Add multiple members" />
-									</RadioGroup>
-									<br />
-									{addMemberMode === 'addOne' ? (
-										<AddressQRreader onChange={val => (newMembersString.current = val)} label="Public address" />
-									) : (
-										<TextField
-											label="Public addresses, comma separated"
-											multiline
-											rows="4"
-											fullWidth
-											variant="outlined"
-											onChange={e => (newMembersString.current = e.target.value)}
-										/>
-									)}
-									<br />
-									<br />
-									<Button onClick={() => addMembers()}>Add</Button>
-									<br />
-									<br />
-								</>
+								<span>You are the creator of this group</span>
 							) : (
 								<span style={{ color: 'red' }}>You have no editing rights for this group</span>
 							)}
@@ -163,6 +113,59 @@ function GroupEdit(props, context) {
 					)}
 				</center>
 			</Box>
+			{groupData.creator !== null && groupData.creator !== zeroAddress && groupData.userIsCreator && (
+				<Box title="Edit members">
+					<Table headers={['Member', 'Action']} colWidths={[85, 15]}>
+						{groupData.members.map((memberAddress, index) => {
+							return (
+								<TableRow
+									key={'member_' + index}
+									data={{
+										member: <small>{memberAddress}</small>,
+										actions: (
+											<small
+												onClick={() => removeMember(memberAddress)}
+												style={{ color: 'blue', textDecoration: 'underline' }}>
+												Remove
+											</small>
+										)
+									}}
+								/>
+							);
+						})}
+					</Table>
+					<br />
+					<br />
+					<RadioGroup
+						row={true}
+						onChange={e => {
+							setAddMemberMode(e.target.value);
+							newMembersString.current = '';
+						}}
+						value={addMemberMode}>
+						<FormControlLabel value="addOne" control={<Radio />} label="Add a member" />
+						<FormControlLabel value="addMultiple" control={<Radio />} label="Add multiple members" />
+					</RadioGroup>
+					<br />
+					{addMemberMode === 'addOne' ? (
+						<AddressQRreader onChange={val => (newMembersString.current = val)} label="Public address" />
+					) : (
+						<TextField
+							label="Public addresses, comma separated"
+							multiline
+							rows="4"
+							fullWidth
+							variant="outlined"
+							onChange={e => (newMembersString.current = e.target.value)}
+						/>
+					)}
+					<br />
+					<center>
+						<Button onClick={() => addMembers()}>Add</Button>
+					</center>
+					<br />
+				</Box>
+			)}
 		</Container>
 	);
 }
