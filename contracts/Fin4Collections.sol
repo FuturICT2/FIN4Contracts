@@ -16,7 +16,7 @@ contract Fin4Collections {
         uint collectionId;
         address creator;
         uint adminGroupId;
-        bool adminGroupSet;
+        bool adminGroupIsSet;
         address[] tokens;
         mapping (address => bool) tokensSet;
         string name;
@@ -45,7 +45,7 @@ contract Fin4Collections {
         col.name = name;
         col.identifier = identifier;
         col.description = description;
-        col.adminGroupSet = false;
+        col.adminGroupIsSet = false;
         identifiers[identifier] = true;
         nextCollectionId ++;
         return nextCollectionId - 1;
@@ -73,7 +73,7 @@ contract Fin4Collections {
         if (collections[collectionId].creator == user) {
             return true;
         }
-        if (collections[collectionId].adminGroupSet) {
+        if (collections[collectionId].adminGroupIsSet) {
             return Fin4Groups(Fin4GroupsAddress).isMember(collections[collectionId].adminGroupId, user);
         }
         return false;
@@ -81,11 +81,11 @@ contract Fin4Collections {
 
     function setAdminGroupId(uint collectionId, uint groupId) public userIsCreator(collectionId) {
         collections[collectionId].adminGroupId = groupId;
-        collections[collectionId].adminGroupSet = true;
+        collections[collectionId].adminGroupIsSet = true;
     }
 
     function removeAdminGroup(uint collectionId) public userIsCreator(collectionId) {
-        collections[collectionId].adminGroupSet = false;
+        collections[collectionId].adminGroupIsSet = false;
     }
 
     function addTokens(uint collectionId, address[] memory newTokens) public userIsAdmin(collectionId) {
