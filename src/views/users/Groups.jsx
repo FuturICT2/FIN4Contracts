@@ -97,7 +97,6 @@ function Groups(props, context) {
 				<FormControlLabel
 					control={
 						<Checkbox
-							label="Add yourself as member"
 							key="addCreator-field"
 							onChange={() => {
 								values.current.addCreator = !values.current.addCreator;
