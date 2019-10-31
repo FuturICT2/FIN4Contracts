@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
+import OutlinedDiv from './OutlinedDiv';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 function SortableTokenList(props, context) {
 	const { t } = useTranslation();
@@ -19,9 +21,15 @@ function SortableTokenList(props, context) {
 	const [filterSettingsOpen, setFilterSettingsOpen] = useState(false);
 	const [sortSettingsOpen, setSortSettingsOpen] = useState(false);
 	const toggleFilterSettings = () => {
-		setFilterSettingsOpen(!setFilterSettingsOpen);
+		if (!filterSettingsOpen && sortSettingsOpen) {
+			toggleSortSettings();
+		}
+		setFilterSettingsOpen(!filterSettingsOpen);
 	};
 	const toggleSortSettings = () => {
+		if (!sortSettingsOpen && filterSettingsOpen) {
+			toggleFilterSettings();
+		}
 		setSortSettingsOpen(!sortSettingsOpen);
 	};
 
@@ -36,19 +44,35 @@ function SortableTokenList(props, context) {
 			<TableIcons>
 				<FontAwesomeIcon
 					icon={faFilter}
-					style={filterIconHovered ? styles.iconsHovered : styles.iconsDefault}
+					style={filterIconHovered ? styles.iconHovered : filterSettingsOpen ? styles.iconActive : styles.iconDefault}
 					onClick={toggleFilterSettings}
 					onMouseEnter={() => setFilterIconHovered(true)}
 					onMouseLeave={() => setFilterIconHovered(false)}
 				/>
 				<FontAwesomeIcon
 					icon={faSortAmountDownAlt}
-					style={sortIconHovered ? styles.iconsHovered : styles.iconsDefault}
+					style={sortIconHovered ? styles.iconHovered : sortSettingsOpen ? styles.iconActive : styles.iconDefault}
 					onClick={toggleSortSettings}
 					onMouseEnter={() => setSortIconHovered(true)}
 					onMouseLeave={() => setSortIconHovered(false)}
 				/>
 			</TableIcons>
+			{filterSettingsOpen && (
+				<OutlinedDiv label="Filter options">
+					<FormControlLabel
+						control={<Checkbox onChange={() => {}} />}
+						label={<span style={{ color: 'gray' }}>Option</span>}
+					/>
+				</OutlinedDiv>
+			)}
+			{sortSettingsOpen && (
+				<OutlinedDiv label="Sort options">
+					<FormControlLabel
+						control={<Checkbox onChange={() => {}} />}
+						label={<span style={{ color: 'gray' }}>Option</span>}
+					/>
+				</OutlinedDiv>
+			)}
 			<Table headers={[t('token-name'), 'Supply', 'Actions']} colWidths={[65, 20, 15]}>
 				{tokens.map((token, index) => {
 					return (
@@ -90,14 +114,20 @@ const TableIcons = styled.div`
 
 const styles = {
 	// TODO make a shared default and use multiple classes in the FontAwesomeIcon?
-	iconsDefault: {
+	iconDefault: {
 		color: 'gray',
 		width: '14px',
 		height: '14px',
 		paddingLeft: '10px' // padding: top right bottom left
 	},
-	iconsHovered: {
+	iconHovered: {
 		color: 'silver',
+		width: '14px',
+		height: '14px',
+		paddingLeft: '10px'
+	},
+	iconActive: {
+		color: 'blue',
 		width: '14px',
 		height: '14px',
 		paddingLeft: '10px'
