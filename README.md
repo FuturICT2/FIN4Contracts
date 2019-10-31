@@ -52,7 +52,7 @@ To deploy to the Rinkeby testnet, use:
 truffle migrate --network rinkeby
 ```
 
-This requires the file `src/config/deployment-config.json` to be added and filled:
+This requires the file `src/config/deployment-config.json` to be added and filled. For deploying, only the first two fields are required. The *faucet-server* located under `scripts/faucet-server` uses the third field as well. If the fourth field is present, a *Request Ether* link is shown in the *About you* box on the landing page.
 ```json
 {
     "MNEMONIC": "",
@@ -62,8 +62,6 @@ This requires the file `src/config/deployment-config.json` to be added and fille
 }
 ```
 The account encoded by the mnemonic is paying the deployment costs. Therefore it has to have sufficient funds on the respective network. The Infura API key can be obtained by creating a project on infura.io: it is the "Project ID" under "View Project".
-
-The *faucet-server* located under `scripts/faucet-server` uses all four fields. More in its respective Readme.
 
 ## Serving the GUI
 
