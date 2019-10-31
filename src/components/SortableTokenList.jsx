@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import OutlinedDiv from './OutlinedDiv';
-import { Checkbox, FormControlLabel } from '@material-ui/core';
+import { Checkbox, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 
 function SortableTokenList(props, context) {
 	const { t } = useTranslation();
@@ -20,6 +20,8 @@ function SortableTokenList(props, context) {
 	const [sortIconHovered, setSortIconHovered] = useState(false);
 	const [filterSettingsOpen, setFilterSettingsOpen] = useState(false);
 	const [sortSettingsOpen, setSortSettingsOpen] = useState(false);
+	const [sortingMode, setSortingMode] = useState('by-name');
+	const [sortingModeReversed, setSortingModeReversed] = useState(false);
 	const toggleFilterSettings = () => {
 		if (!filterSettingsOpen && sortSettingsOpen) {
 			toggleSortSettings();
@@ -66,11 +68,20 @@ function SortableTokenList(props, context) {
 				</OutlinedDiv>
 			)}
 			{sortSettingsOpen && (
-				<OutlinedDiv label="Sort options">
-					<FormControlLabel
-						control={<Checkbox onChange={() => {}} />}
-						label={<span style={{ color: 'gray' }}>Option</span>}
-					/>
+				<OutlinedDiv label="Sort by...">
+					<RadioGroup row={true} onChange={e => setSortingMode(e.target.value)} value={sortingMode}>
+						<FormControlLabel value="by-name" control={<Radio />} label="Name" />
+						<FormControlLabel value="by-symbol" control={<Radio />} label="Symbol" />
+						<FormControlLabel value="by-date" control={<Radio />} label="Creation date" />
+						<FormControlLabel value="by-supply" control={<Radio />} label="Total supply" />
+						<FormControlLabel value="by-claims" control={<Radio />} label="Claims" />
+					</RadioGroup>
+					<div style={{ textAlign: 'right' }}>
+						<FormControlLabel
+							control={<Checkbox onChange={() => setSortingModeReversed(!sortingModeReversed)} />}
+							label="Reverse"
+						/>
+					</div>
 				</OutlinedDiv>
 			)}
 			<Table headers={[t('token-name'), 'Supply', 'Actions']} colWidths={[65, 20, 15]}>
