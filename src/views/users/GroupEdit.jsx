@@ -118,7 +118,7 @@ function GroupEdit(props, context) {
 					{groupData.creator === null ? (
 						<span>Loading...</span>
 					) : groupData.creator === zeroAddress ? (
-						<span style={{ color: 'red' }}>Invalid group Id: {groupId}</span>
+						<span style={{ color: 'red' }}>Invalid group ID: {groupId}</span>
 					) : (
 						<>
 							<span style={{ fontSize: 'x-large' }}>

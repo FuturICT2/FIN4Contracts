@@ -206,7 +206,7 @@ function CollectionEdit(props, context) {
 											<TextField
 												key="groupId-field"
 												type="number"
-												label="Group Id (see overview of groups)"
+												label="Group ID (see overview of groups)"
 												onChange={e => (groupIdViaModal.current = e.target.value)}
 												style={inputFieldStyle}
 											/>
@@ -217,7 +217,7 @@ function CollectionEdit(props, context) {
 									</Modal>
 									{collection.adminGroupIsSet ? (
 										<>
-											Admin group Id: <b>{collection.adminGroupId}</b>
+											Admin group ID: <b>{collection.adminGroupId}</b>
 											<br />
 											<br />
 											<Button icon={EditIcon} onClick={toggleModal}>

@@ -78,7 +78,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
 
     // @Override
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
-      return "uint:Group Id:can be found in the overview of groups";
+      return "uint:Group ID:can be found in the overview of groups";
     }
 
     // @Override
