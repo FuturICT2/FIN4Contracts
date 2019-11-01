@@ -89,7 +89,7 @@ function SortableTokenList(props, context) {
 				/>
 			</TableIcons>
 			{filterSettingsOpen && (
-				<OutlinedDiv label="Filter options">
+				<OutlinedDiv label="Filter options [mockup]">
 					{buildPlusMinusCheckbox('user-is-creator', 'You are creator')}
 					{buildPlusMinusCheckbox('user-is-admin', 'You are admin')}
 					{buildPlusMinusCheckbox('claimed-by-user', 'You claimed it')}
@@ -107,7 +107,7 @@ function SortableTokenList(props, context) {
 				</OutlinedDiv>
 			)}
 			{sortSettingsOpen && (
-				<OutlinedDiv label="Sort by...">
+				<OutlinedDiv label="Sort by... [mockup]">
 					<RadioGroup row={true} onChange={e => setSortingMode(e.target.value)} value={sortingMode}>
 						<FormControlLabel value="by-name" control={<Radio />} label="Name" />
 						<FormControlLabel value="by-symbol" control={<Radio />} label="Symbol" />
