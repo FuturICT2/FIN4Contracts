@@ -139,7 +139,7 @@ function CollectionEdit(props, context) {
 		<>
 			{collection && (
 				<Container>
-					<Box>
+					<Box title="Edit Collection">
 						<center style={{ fontFamily: 'arial' }}>
 							Edit <b style={{ fontSize: 'large' }}>{collection.name}</b>
 							<br />

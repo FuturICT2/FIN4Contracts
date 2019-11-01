@@ -24,7 +24,7 @@ function CollectionView(props, drizzle) {
 
 	return (
 		<Container>
-			<Box>
+			<Box title="Collection details">
 				{collection && (
 					<span style={{ fontFamily: 'arial' }}>
 						<center>
