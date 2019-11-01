@@ -25,7 +25,7 @@ function User(props, context) {
 					<br />
 					<br />
 					<Link to={'/users/groups'}>
-						<Button>See user groups</Button>
+						<Button>Manage user groups</Button>
 					</Link>
 				</center>
 			</Box>

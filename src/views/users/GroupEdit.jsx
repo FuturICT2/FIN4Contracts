@@ -191,7 +191,7 @@ function GroupEdit(props, context) {
 						</center>
 						<br />
 					</Box>
-					<Box title="Edit ownership">
+					<Box title="Transfer ownership">
 						<br />
 						<center style={{ fontFamily: 'arial' }}>
 							{ownershipExpanded && (

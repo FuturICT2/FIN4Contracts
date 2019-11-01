@@ -11,7 +11,7 @@ function ListCollections(props) {
 	const { t } = useTranslation();
 
 	return (
-		<Box title="Existing collections">
+		<Box title="Token collections">
 			<Table headers={['Name', 'Actions']} colWidths={[85, 15]}>
 				{Object.keys(props.collections).map((identifier, index) => {
 					let collection = props.collections[identifier];

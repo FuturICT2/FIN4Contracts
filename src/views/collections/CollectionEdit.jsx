@@ -232,7 +232,7 @@ function CollectionEdit(props, context) {
 									) : (
 										<>
 											<Button icon={AddIcon} onClick={toggleModal}>
-												Appoint admin group
+												Select user group
 											</Button>
 										</>
 									)}
@@ -240,7 +240,7 @@ function CollectionEdit(props, context) {
 									<br />
 								</center>
 							</Box>
-							<Box title="Edit ownership">
+							<Box title="Transfer ownership">
 								<br />
 								<center style={{ fontFamily: 'arial' }}>
 									{ownershipExpanded && (

@@ -10,7 +10,7 @@ function CreateCollection(props, context) {
 	const [showHint, setShowHint] = useState(false);
 
 	return (
-		<Box title="Create a new collection">
+		<Box title="Create token collection">
 			<ContractForm
 				contractName="Fin4Collections"
 				method="createCollection"

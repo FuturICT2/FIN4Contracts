@@ -324,7 +324,7 @@ class Listing extends Component {
 	render() {
 		return (
 			<center>
-				<Box title="Listings" width="800px">
+				<Box title="Curated Positive Action Tokens" width="800px">
 					<Table headers={['Name', 'Status', 'Due Date', 'Actions', 'Whitelisted']}>
 						{Object.keys(this.state.listings).map((key, index) => {
 							// key is address of the Fin4Token
@@ -364,7 +364,7 @@ class Listing extends Component {
 						})}
 					</Table>
 				</Box>
-				<Box title="Unlisted Fin4 Tokens">
+				<Box title="All Positive Action Tokens">
 					<Table headers={['Name', 'Apply']}>
 						{Object.keys(this.props.fin4Tokens).map((key, index) => {
 							let token = this.props.fin4Tokens[key];
