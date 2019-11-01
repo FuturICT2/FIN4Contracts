@@ -1,6 +1,15 @@
 pragma solidity ^0.5.0;
 
-contract Fin4Groups {
+import 'contracts/Fin4Messaging.sol';
+import "contracts/util/utils.sol";
+
+contract Fin4Groups is utils {
+
+    address public Fin4MessagingAddress;
+
+    constructor(address Fin4MessagingAddr) public {
+        Fin4MessagingAddress = Fin4MessagingAddr;
+    }
 
     struct Group {
         uint groupId;
@@ -65,7 +74,9 @@ contract Fin4Groups {
         }
     }
 
-    function removeMember(uint groupId, address memberToRemove) public userIsCreator(groupId) {
+    function removeMember(uint groupId, address memberToRemove, bool notifyOwner) public {
+        require(groups[groupId].creator == msg.sender || msg.sender == memberToRemove,
+            "User is not group creator or removes himself");
         require(groups[groupId].membersSet[memberToRemove], "Given address is not a member in this group, can't remove it");
         groups[groupId].membersSet[memberToRemove] = false;
         uint index = getIndexOfMember(groupId, memberToRemove);
@@ -75,6 +86,11 @@ contract Fin4Groups {
         // then delete the last element, via https://ethereum.stackexchange.com/a/1528/56047
         delete groups[groupId].members[length - 1];
         groups[groupId].members.length --; // via https://stackoverflow.com/a/51171477/2474159
+        if (notifyOwner) {
+            string memory message = string(abi.encodePacked("User ", addressToString(memberToRemove),
+            " has left your group ", groups[groupId].name, " (ID: ", uint2str(groupId), ")."));
+            Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), groups[groupId].creator, message);
+        }
     }
 
     function getIndexOfMember(uint groupId, address member) private view returns(uint) {

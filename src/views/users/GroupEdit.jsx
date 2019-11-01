@@ -63,7 +63,7 @@ function GroupEdit(props, context) {
 
 	const removeMember = address => {
 		context.drizzle.contracts.Fin4Groups.methods
-			.removeMember(groupId, address)
+			.removeMember(groupId, address, false)
 			.send({
 				from: props.store.getState().fin4Store.defaultAccount
 			})

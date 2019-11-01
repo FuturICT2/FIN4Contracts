@@ -10,6 +10,7 @@ import { getContractData } from '../../components/Contractor';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { Link } from 'react-router-dom';
+import Modal from '../../components/Modal';
 
 function Groups(props, context) {
 	const { t } = useTranslation();
@@ -20,6 +21,15 @@ function Groups(props, context) {
 		name: null,
 		addCreator: false
 	});
+	// leave group checkbox about notifying group owner
+	const [isLeaveGroupModalOpen, setIsLeaveGroupModalOpen] = useState(false);
+	const leaveGroupValues = useRef({
+		groupId: null,
+		notifyOwner: false
+	});
+	const toggleLeaveGroupModal = () => {
+		setIsLeaveGroupModalOpen(!isLeaveGroupModalOpen);
+	};
 
 	useEffect(() => {
 		if (!groupsContractReady.current && props.contracts.Fin4Groups && props.contracts.Fin4Groups.initialized) {
@@ -84,6 +94,20 @@ function Groups(props, context) {
 			});
 	};
 
+	const removeUsersMembership = () => {
+		let groupId = leaveGroupValues.current.groupId;
+		let notifyOwner = leaveGroupValues.current.notifyOwner;
+		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+		context.drizzle.contracts.Fin4Groups.methods
+			.removeMember(groupId, defaultAccount, notifyOwner)
+			.send({
+				from: defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
+	};
+
 	return (
 		<Container>
 			<Box title="Create a group">
@@ -138,22 +162,45 @@ function Groups(props, context) {
 			)}
 			{groups.filter(group => group.userIsMember).length > 0 && (
 				<Box title="My groups">
-					<Table headers={['Group name', 'ID', 'Action']} colWidths={[75, 5, 20]}>
+					<Table headers={['Group name', 'ID', 'Action']} colWidths={[64, 5, 31]}>
 						{groups
 							.filter(g => g.userIsMember)
 							.map((group, index) => {
 								return (
 									<TableRow
 										key={'groupMember_' + index}
+										// TODO leave group option, checkbox if inform group owner about you leaving or not
 										data={{
 											name: group.name,
 											id: group.groupId,
-											actions: group.userIsCreator ? (
-												<small>You are creator</small>
-											) : (
-												<small style={{ color: 'blue', textDecoration: 'underline' }}>
-													<Link to={'/user/message/' + group.creator}>Message creator</Link>
-												</small>
+											actions: (
+												<>
+													{group.userIsCreator ? (
+														<small>You are owner</small>
+													) : (
+														<small style={{ color: 'blue', textDecoration: 'underline' }}>
+															<Link to={'/user/message/' + group.creator}>Message owner</Link>
+														</small>
+													)}
+													<br />
+													<small
+														title={
+															group.userIsCreator
+																? 'Removing yourself as member does not change your ownership of this group'
+																: ''
+														}
+														style={{ color: 'blue', textDecoration: 'underline' }}
+														onClick={() => {
+															leaveGroupValues.current.groupId = group.groupId;
+															if (group.userIsCreator) {
+																removeUsersMembership(group.groupId);
+															} else {
+																toggleLeaveGroupModal();
+															}
+														}}>
+														Leave group
+													</small>
+												</>
 											)
 										}}
 									/>
@@ -162,6 +209,26 @@ function Groups(props, context) {
 					</Table>
 				</Box>
 			)}
+			<Modal isOpen={isLeaveGroupModalOpen} handleClose={toggleLeaveGroupModal} title="Leave group" width="350px">
+				<FormControlLabel
+					control={
+						<Checkbox
+							onChange={() => {
+								leaveGroupValues.current.notifyOwner = !leaveGroupValues.current.notifyOwner;
+							}}
+						/>
+					}
+					label="Notify the group owner"
+				/>
+				<Button
+					onClick={() => {
+						toggleLeaveGroupModal();
+						removeUsersMembership();
+					}}
+					center="true">
+					Submit
+				</Button>
+			</Modal>
 		</Container>
 	);
 }

@@ -39,7 +39,7 @@ module.exports = async function(deployer) {
 	const Fin4CollectionsInstance = await Fin4Collections.deployed();
 	await deployer.deploy(Fin4Messaging);
 	const Fin4MessagingInstance = await Fin4Messaging.deployed();
-	await deployer.deploy(Fin4Groups);
+	await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
 	const Fin4GroupsInstance = await Fin4Groups.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
