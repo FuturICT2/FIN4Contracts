@@ -101,6 +101,8 @@ function SortableTokenList(props, context) {
 						has these proof types: multiselect dropdown
 						total supply <> x 
 						# of claims <> x
+
+						Reset option
 					*/}
 				</OutlinedDiv>
 			)}
