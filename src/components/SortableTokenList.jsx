@@ -97,10 +97,13 @@ function SortableTokenList(props, context) {
 					<TextField type="text" label="Name contains" onChange={e => {}} />
 					<br />
 					{/* TODO
+						*-wildcard info popup next to Name contains
+
 						+- in front of name contains
 						has these proof types: multiselect dropdown
 						total supply <> x 
 						# of claims <> x
+						is curated token (TCR)
 
 						Reset option
 					*/}
