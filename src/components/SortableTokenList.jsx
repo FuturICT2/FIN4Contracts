@@ -9,7 +9,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import OutlinedDiv from './OutlinedDiv';
-import { Checkbox, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
+import { Checkbox, FormControlLabel, Radio, RadioGroup, TextField } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 function SortableTokenList(props, context) {
 	const { t } = useTranslation();
@@ -35,11 +37,38 @@ function SortableTokenList(props, context) {
 		setSortSettingsOpen(!sortSettingsOpen);
 	};
 
+	const [filterModes, setFilterModes] = useState({
+		'user-is-creator': true,
+		'user-is-admin': true,
+		'claimed-by-user': true
+	});
+
 	useEffect(() => {
 		if (tokens.length != props.tokens.length) {
 			setTokens(props.tokens);
 		}
 	});
+
+	const buildPlusMinusCheckbox = (attribute, label) => {
+		return (
+			<FormControlLabel
+				control={
+					<Checkbox
+						icon={<RemoveIcon />}
+						checkedIcon={<AddIcon />}
+						checked={filterModes[attribute]}
+						onChange={() => {
+							setFilterModes({
+								...filterModes,
+								[attribute]: !filterModes[attribute]
+							});
+						}}
+					/>
+				}
+				label={label}
+			/>
+		);
+	};
 
 	return (
 		<>
@@ -61,10 +90,18 @@ function SortableTokenList(props, context) {
 			</TableIcons>
 			{filterSettingsOpen && (
 				<OutlinedDiv label="Filter options">
-					<FormControlLabel
-						control={<Checkbox onChange={() => {}} />}
-						label={<span style={{ color: 'gray' }}>Option</span>}
-					/>
+					{buildPlusMinusCheckbox('user-is-creator', 'You are creator')}
+					{buildPlusMinusCheckbox('user-is-admin', 'You are admin')}
+					{buildPlusMinusCheckbox('claimed-by-user', 'You claimed it')}
+					<br />
+					<TextField type="text" label="Name contains" onChange={e => {}} />
+					<br />
+					{/* TODO
+						+- in front of name contains
+						has these proof types: multiselect dropdown
+						total supply <> x 
+						# of claims <> x
+					*/}
 				</OutlinedDiv>
 			)}
 			{sortSettingsOpen && (
