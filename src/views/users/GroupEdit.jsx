@@ -20,7 +20,8 @@ function GroupEdit(props, context) {
 		creator: null,
 		members: [],
 		name: null,
-		userIsCreator: null
+		userIsCreator: null,
+		userIsMember: null
 	});
 	const [addMemberMode, setAddMemberMode] = useState('addOne');
 	const newMembersString = useRef('');
@@ -53,7 +54,8 @@ function GroupEdit(props, context) {
 					creator: creator,
 					members: members,
 					name: name,
-					userIsCreator: creator === defaultAccount
+					userIsCreator: creator === defaultAccount,
+					userIsMember: members.filter(m => m === defaultAccount).length > 0
 				});
 			}
 		);
@@ -158,7 +160,14 @@ function GroupEdit(props, context) {
 							})}
 						</Table>
 						<br />
-						<br />
+						{groupData.userIsMember && (
+							<>
+								<center style={{ fontFamily: 'arial', color: 'gray' }}>
+									<small>Removing yourself as member does not change your ownership of this group</small>
+								</center>
+								<br />
+							</>
+						)}
 						<RadioGroup
 							row={true}
 							onChange={e => {
