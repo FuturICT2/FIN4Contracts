@@ -142,6 +142,7 @@ function GroupEdit(props, context) {
 					<Box title="Edit members">
 						<Table headers={['Member', 'Action']} colWidths={[85, 15]}>
 							{groupData.members.map((memberAddress, index) => {
+								let user = props.store.getState().fin4Store.defaultAccount;
 								return (
 									<TableRow
 										key={'member_' + index}
@@ -151,7 +152,7 @@ function GroupEdit(props, context) {
 												<small
 													onClick={() => removeMember(memberAddress)}
 													style={{ color: 'blue', textDecoration: 'underline' }}>
-													Remove
+													Remove {memberAddress === user ? 'yourself' : ''}
 												</small>
 											)
 										}}
@@ -185,14 +186,17 @@ function GroupEdit(props, context) {
 								label="Public address of new member"
 							/>
 						) : (
-							<TextField
-								label="Public addresses, comma separated"
-								multiline
-								rows="4"
-								fullWidth
-								variant="outlined"
-								onChange={e => (newMembersString.current = e.target.value)}
-							/>
+							<>
+								<TextField
+									label="Public addresses, comma separated"
+									multiline
+									rows="4"
+									fullWidth
+									variant="outlined"
+									onChange={e => (newMembersString.current = e.target.value)}
+								/>
+								<br />
+							</>
 						)}
 						<br />
 						<center>
