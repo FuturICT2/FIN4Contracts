@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Table from './Table';
 import TableRow from './TableRow';
 import { drizzleConnect } from 'drizzle-react';
@@ -12,6 +12,7 @@ import OutlinedDiv from './OutlinedDiv';
 import { Checkbox, FormControlLabel, Radio, RadioGroup, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import ComparisonSigns from './ComparisonSigns';
 
 function SortableTokenList(props, context) {
 	const { t } = useTranslation();
@@ -40,7 +41,16 @@ function SortableTokenList(props, context) {
 	const [filterModes, setFilterModes] = useState({
 		'user-is-creator': true,
 		'user-is-admin': true,
-		'claimed-by-user': true
+		'claimed-by-user': true,
+		'is-curated': true,
+		'name-search': true,
+		'total-supply-comparison': true,
+		'number-of-claims-comparison': true
+	});
+
+	const comparisonModes = useRef({
+		'total-supply-comparison': 'equal',
+		'number-of-claims-comparison': 'equal'
 	});
 
 	useEffect(() => {
@@ -70,6 +80,28 @@ function SortableTokenList(props, context) {
 		);
 	};
 
+	const buildNameSearchComponent = (attribute, label) => {
+		return (
+			<>
+				{buildPlusMinusCheckbox(attribute, label)}
+				<TextField title="* is wildcard" type="text" onChange={() => {}} style={{ width: '140px' }} />
+				<br />
+			</>
+		);
+	};
+
+	const buildComparisonComponent = (attribute, label) => {
+		return (
+			<>
+				{buildPlusMinusCheckbox(attribute, label)}
+				<ComparisonSigns setComparisonMode={mode => (comparisonModes.current[attribute] = mode)} />
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<TextField type="number" onChange={() => {}} style={{ width: '60px' }} />
+				<br />
+			</>
+		);
+	};
+
 	return (
 		<>
 			<TableIcons>
@@ -93,18 +125,17 @@ function SortableTokenList(props, context) {
 					{buildPlusMinusCheckbox('user-is-creator', 'You are creator')}
 					{buildPlusMinusCheckbox('user-is-admin', 'You are admin')}
 					{buildPlusMinusCheckbox('claimed-by-user', 'You claimed it')}
+					{buildPlusMinusCheckbox('is-curated', 'Is curated token')}
 					<br />
-					<TextField type="text" label="Name contains" onChange={e => {}} />
-					<br />
-					{/* TODO
-						*-wildcard info popup next to Name contains
-
-						+- in front of name contains
+					{buildNameSearchComponent('name-search', 'Name contains')}
+					{buildComparisonComponent('total-supply-comparison', 'Total supply')}
+					{buildComparisonComponent('number-of-claims-comparison', 'Number of claims')}
+					{/* 
+						TODO
+						ComparisonSigns modes:
+						equals, not-equal, greater-than, less-than, greater-than-equal, less-than-equal
+						* wildcard explanation
 						has these proof types: multiselect dropdown
-						total supply <> x 
-						# of claims <> x
-						is curated token (TCR)
-
 						Reset option
 					*/}
 				</OutlinedDiv>
