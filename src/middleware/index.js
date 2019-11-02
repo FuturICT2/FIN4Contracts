@@ -40,8 +40,9 @@ const contractEventNotifier = store => next => action => {
 				description: token.description,
 				unit: token.unit,
 				userIsCreator: token.creator === defaultAccount,
-				userIsAdmin: false,
-				totalSupply: 0
+				userIsAdmin: false, // TODO
+				totalSupply: 0,
+				creationTime: token.creationTime
 			}
 		});
 	}

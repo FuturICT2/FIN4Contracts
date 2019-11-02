@@ -144,7 +144,16 @@ const fetchAllTokens = (props, Fin4TokenManagementContract, callback) => {
 		.then(tokens => {
 			return tokens.map(tokenAddr => {
 				return getContractData(Fin4TokenManagementContract, defaultAccount, 'getTokenInfo', tokenAddr).then(
-					({ 0: userIsCreator, 1: userIsAdmin, 2: name, 3: symbol, 4: description, 5: unit, 6: totalSupply }) => {
+					({
+						0: userIsCreator,
+						1: userIsAdmin,
+						2: name,
+						3: symbol,
+						4: description,
+						5: unit,
+						6: totalSupply,
+						7: creationTime
+					}) => {
 						return {
 							userIsCreator: userIsCreator,
 							userIsAdmin: userIsAdmin,
@@ -153,7 +162,8 @@ const fetchAllTokens = (props, Fin4TokenManagementContract, callback) => {
 							symbol: symbol,
 							description: description,
 							unit: unit,
-							totalSupply: new BN(totalSupply).toNumber()
+							totalSupply: new BN(totalSupply).toNumber(),
+							creationTime: creationTime
 						};
 					}
 				);

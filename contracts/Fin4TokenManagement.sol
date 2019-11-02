@@ -7,7 +7,7 @@ contract Fin4TokenManagement {
     using Strings for string;
 
     // TODO do we need the indexed keyword for event params?
-    event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator);
+    event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator, uint creationTime);
 
     address public Fin4ClaimingAddress;
     address public Fin4ProofingAddress;
@@ -63,7 +63,7 @@ contract Fin4TokenManagement {
         newToken.addMinter(Fin4ClaimingAddress);
 
         allFin4Tokens.push(address(newToken));
-        emit Fin4TokenCreated(address(newToken), name, _symbol, description, unit, msg.sender);
+        emit Fin4TokenCreated(address(newToken), name, _symbol, description, unit, msg.sender, newToken.tokenCreationTime());
         return address(newToken);
     }
 
@@ -74,7 +74,7 @@ contract Fin4TokenManagement {
     // relay-functions to not have to call Fin4Token contracts directly from the frontend
 
     function getTokenInfo(address tokenAddr) public view returns(bool, bool, string memory, string memory,
-        string memory, string memory, uint256) {
+        string memory, string memory, uint256, uint) {
         return Fin4Token(tokenAddr).getTokenInfo(msg.sender);
     }
 
