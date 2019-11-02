@@ -48,7 +48,10 @@ function CollectionView(props, drizzle) {
 			</Box>
 			{collection && (
 				<Box title="Tokens in collection">
-					<SortableTokenList tokens={collection.tokens.map(tokenAddr => props.fin4Tokens[tokenAddr])} />
+					<SortableTokenList
+						tokens={collection.tokens.map(tokenAddr => props.fin4Tokens[tokenAddr])}
+						showFilterAndSortOptions={false}
+					/>
 				</Box>
 			)}
 		</Container>

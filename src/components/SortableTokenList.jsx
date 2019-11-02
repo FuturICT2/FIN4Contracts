@@ -104,58 +104,64 @@ function SortableTokenList(props, context) {
 
 	return (
 		<>
-			<TableIcons>
-				<FontAwesomeIcon
-					icon={faFilter}
-					style={filterIconHovered ? styles.iconHovered : filterSettingsOpen ? styles.iconActive : styles.iconDefault}
-					onClick={toggleFilterSettings}
-					onMouseEnter={() => setFilterIconHovered(true)}
-					onMouseLeave={() => setFilterIconHovered(false)}
-				/>
-				<FontAwesomeIcon
-					icon={faSortAmountDownAlt}
-					style={sortIconHovered ? styles.iconHovered : sortSettingsOpen ? styles.iconActive : styles.iconDefault}
-					onClick={toggleSortSettings}
-					onMouseEnter={() => setSortIconHovered(true)}
-					onMouseLeave={() => setSortIconHovered(false)}
-				/>
-			</TableIcons>
-			{filterSettingsOpen && (
-				<OutlinedDiv label="Filter options [mockup]">
-					{buildPlusMinusCheckbox('user-is-creator', 'You are creator')}
-					{buildPlusMinusCheckbox('user-is-admin', 'You are admin')}
-					{buildPlusMinusCheckbox('claimed-by-user', 'You claimed it')}
-					{buildPlusMinusCheckbox('is-curated', 'Is curated token')}
-					<br />
-					{buildNameSearchComponent('name-search', 'Name contains')}
-					{buildComparisonComponent('total-supply-comparison', 'Total supply')}
-					{buildComparisonComponent('number-of-claims-comparison', 'Number of claims')}
-					{/* 
-						TODO
-						ComparisonSigns modes:
-						equals, not-equal, greater-than, less-than, greater-than-equal, less-than-equal
-						* wildcard explanation
-						has these proof types: multiselect dropdown
-						Reset option
-					*/}
-				</OutlinedDiv>
-			)}
-			{sortSettingsOpen && (
-				<OutlinedDiv label="Sort by... [mockup]">
-					<RadioGroup row={true} onChange={e => setSortingMode(e.target.value)} value={sortingMode}>
-						<FormControlLabel value="by-name" control={<Radio />} label="Name" />
-						<FormControlLabel value="by-symbol" control={<Radio />} label="Symbol" />
-						<FormControlLabel value="by-date" control={<Radio />} label="Creation date" />
-						<FormControlLabel value="by-supply" control={<Radio />} label="Total supply" />
-						<FormControlLabel value="by-claims" control={<Radio />} label="Claims" />
-					</RadioGroup>
-					<div style={{ textAlign: 'right' }}>
-						<FormControlLabel
-							control={<Checkbox onChange={() => setSortingModeReversed(!sortingModeReversed)} />}
-							label="Reverse"
+			{props.showFilterAndSortOptions && (
+				<>
+					<TableIcons>
+						<FontAwesomeIcon
+							icon={faFilter}
+							style={
+								filterIconHovered ? styles.iconHovered : filterSettingsOpen ? styles.iconActive : styles.iconDefault
+							}
+							onClick={toggleFilterSettings}
+							onMouseEnter={() => setFilterIconHovered(true)}
+							onMouseLeave={() => setFilterIconHovered(false)}
 						/>
-					</div>
-				</OutlinedDiv>
+						<FontAwesomeIcon
+							icon={faSortAmountDownAlt}
+							style={sortIconHovered ? styles.iconHovered : sortSettingsOpen ? styles.iconActive : styles.iconDefault}
+							onClick={toggleSortSettings}
+							onMouseEnter={() => setSortIconHovered(true)}
+							onMouseLeave={() => setSortIconHovered(false)}
+						/>
+					</TableIcons>
+					{filterSettingsOpen && (
+						<OutlinedDiv label="Filter options [mockup]">
+							{buildPlusMinusCheckbox('user-is-creator', 'You are creator')}
+							{buildPlusMinusCheckbox('user-is-admin', 'You are admin')}
+							{buildPlusMinusCheckbox('claimed-by-user', 'You claimed it')}
+							{buildPlusMinusCheckbox('is-curated', 'Is curated token')}
+							<br />
+							{buildNameSearchComponent('name-search', 'Name contains')}
+							{buildComparisonComponent('total-supply-comparison', 'Total supply')}
+							{buildComparisonComponent('number-of-claims-comparison', 'Number of claims')}
+							{/* 
+								TODO
+								ComparisonSigns modes:
+								equals, not-equal, greater-than, less-than, greater-than-equal, less-than-equal
+								* wildcard explanation
+								has these proof types: multiselect dropdown
+								Reset option
+							*/}
+						</OutlinedDiv>
+					)}
+					{sortSettingsOpen && (
+						<OutlinedDiv label="Sort by... [mockup]">
+							<RadioGroup row={true} onChange={e => setSortingMode(e.target.value)} value={sortingMode}>
+								<FormControlLabel value="by-name" control={<Radio />} label="Name" />
+								<FormControlLabel value="by-symbol" control={<Radio />} label="Symbol" />
+								<FormControlLabel value="by-date" control={<Radio />} label="Creation date" />
+								<FormControlLabel value="by-supply" control={<Radio />} label="Total supply" />
+								<FormControlLabel value="by-claims" control={<Radio />} label="Claims" />
+							</RadioGroup>
+							<div style={{ textAlign: 'right' }}>
+								<FormControlLabel
+									control={<Checkbox onChange={() => setSortingModeReversed(!sortingModeReversed)} />}
+									label="Reverse"
+								/>
+							</div>
+						</OutlinedDiv>
+					)}
+				</>
 			)}
 			<Table headers={[t('token-name'), 'Supply', 'Actions']} colWidths={[65, 20, 15]}>
 				{tokens.map((token, index) => {
