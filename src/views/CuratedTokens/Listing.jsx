@@ -17,10 +17,11 @@ import { drizzleConnect } from 'drizzle-react';
 import { TextField } from '@material-ui/core';
 import VoteModal from './VoteModal';
 import RevealModal from './RevealModal';
+import PropTypes from 'prop-types';
 const BN = require('bignumber.js');
 
 class Listing extends Component {
-	constructor(props) {
+	constructor(props, context) {
 		super(props);
 
 		this.state = {
@@ -473,6 +474,10 @@ const inputFieldStyle = {
 	// copied from ContractForm
 	width: '100%',
 	marginBottom: '15px'
+};
+
+Listing.contextTypes = {
+	drizzle: PropTypes.object
 };
 
 const mapStateToProps = state => {
