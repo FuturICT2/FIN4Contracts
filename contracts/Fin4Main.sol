@@ -48,7 +48,6 @@ contract Fin4Main {
       Fin4ProofingAddress, Fin4GroupsAddress);
   }
 
-  /*
   address public REPToken;
   address public GOVToken;
   address public Registry;
@@ -64,6 +63,5 @@ contract Fin4Main {
   function getTCRaddresses() public view returns(address, address, address, address) {
     return (REPToken, GOVToken, Registry, PLCRVoting);
   }
-  */
 
 }
