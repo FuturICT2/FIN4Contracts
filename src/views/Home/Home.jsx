@@ -8,6 +8,9 @@ import TableRow from '../../components/TableRow';
 import styled from 'styled-components';
 import Currency from '../../components/Currency';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import Button from '../../components/Button';
+
 let config = null;
 try {
 	config = require('../../config/deployment-config.json');
@@ -104,6 +107,23 @@ function Home(props) {
 						</a>
 					</>
 				)}
+			</Box>
+			<Box title="User actions">
+				<center>
+					<Link to={'/user/message'}>
+						<Button>Message user</Button>
+					</Link>
+					<br />
+					<br />
+					<Link to={'/user/transfer'}>
+						<Button>Transfer tokens to user</Button>
+					</Link>
+					<br />
+					<br />
+					<Link to={'/users/groups'}>
+						<Button>Manage user groups</Button>
+					</Link>
+				</center>
 			</Box>
 		</Container>
 	);

@@ -1,7 +1,6 @@
 import ListIcon from '@material-ui/icons/List';
 import CheckIcon from '@material-ui/icons/CheckCircle';
 import HomeIcon from '@material-ui/icons/Home';
-import UsersIcon from '@material-ui/icons/Group';
 import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import Home from '../views/Home/Home';
 import Claim from '../views/claims/Claim';
@@ -14,7 +13,6 @@ import CollectionView from '../views/collections/CollectionView';
 import CollectionEdit from '../views/collections/CollectionEdit';
 import UserMessage from '../views/users/UserMessage';
 import UserTransfer from '../views/users/UserTransfer';
-import User from '../views/users/User';
 import Settings from '../views/Settings';
 import About from '../views/About';
 import Groups from '../views/users/Groups';
@@ -90,13 +88,6 @@ const menu = [
 		showInNavBar: false
 	},
 	// ------------------ USERS ------------------
-	{
-		component: User,
-		path: '/users',
-		label: 'Users',
-		icon: UsersIcon,
-		showInNavBar: true // SHOW IN NAVBAR
-	},
 	{
 		component: UserMessage,
 		path: '/user/message',
