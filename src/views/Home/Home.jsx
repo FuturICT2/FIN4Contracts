@@ -108,7 +108,8 @@ function Home(props) {
 					</>
 				)}
 			</Box>
-			<Box title="User actions">
+			<Box title="More">
+				{/* TODO better title */}
 				<center>
 					<Link to={'/user/message'}>
 						<Button>Message user</Button>
@@ -123,6 +124,12 @@ function Home(props) {
 					<Link to={'/users/groups'}>
 						<Button>Manage user groups</Button>
 					</Link>
+					<br />
+					<br />
+					<Link to={'/collections'}>
+						<Button>Token collections</Button>
+					</Link>
+					<br />
 				</center>
 			</Box>
 		</Container>

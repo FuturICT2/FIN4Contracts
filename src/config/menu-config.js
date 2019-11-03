@@ -1,7 +1,6 @@
 import ListIcon from '@material-ui/icons/List';
 import CheckIcon from '@material-ui/icons/CheckCircle';
 import HomeIcon from '@material-ui/icons/Home';
-import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import Home from '../views/Home/Home';
 import Claim from '../views/claims/Claim';
 import TokenView from '../views/tokens/TokenView';
@@ -73,9 +72,7 @@ const menu = [
 	{
 		component: Collections,
 		path: '/collections/',
-		label: 'Collections',
-		icon: CollectionsIcon,
-		showInNavBar: true // SHOW IN NAVBAR
+		showInNavBar: false
 	},
 	{
 		component: CollectionView,
