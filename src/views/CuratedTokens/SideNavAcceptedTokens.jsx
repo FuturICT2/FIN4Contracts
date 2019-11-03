@@ -6,6 +6,7 @@ import { ReactComponent as GovernanceButton } from './assets/governance.svg';
 
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
+// TODO replace this with a second NavigationBar at the bottom
 class SideNavAcceptedTokens extends Component {
 	componentDidMount() {}
 	render() {
