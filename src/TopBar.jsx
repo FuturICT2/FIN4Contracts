@@ -53,7 +53,7 @@ function TopBar(props) {
 				</Link>
 			</center>
 			<div className={classes.alignRight}>
-				<Link to={'/'}>
+				<Link to={'/messages'}>
 					{props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 ? (
 						<NewNotificationsIcon className={classes.newNotification} />
 					) : (

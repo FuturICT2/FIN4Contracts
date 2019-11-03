@@ -11,6 +11,7 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { fetchMessage } from '../components/Contractor';
 import history from '../components/history';
+import Container from '../components/Container';
 
 function Messages(props, context) {
 	const { t } = useTranslation();
@@ -78,82 +79,88 @@ function Messages(props, context) {
 	};
 
 	return (
-		props.messages.filter(msg => !msg.hasBeenActedUpon && msg.messageType).length > 0 && (
+		<Container>
 			<Box title="Messages">
-				{props.messages
-					.filter(msg => !msg.hasBeenActedUpon && msg.messageType)
-					.map((msg, index) => {
-						return (
-							<Message key={`${msg.proofTypeName}_${msg.pendingApprovalId}_${index}`}>
-								<span style={{ color: 'gray' }}>
-									<Typography color="inherit" variant="body2">
-										<b>{getIntroText(msg.messageType).toUpperCase()}</b>
-									</Typography>
-								</span>
-								<Typography color="textSecondary" variant="body2">
-									{msg.message}
-								</Typography>
-								{/* Fin4Messaging.sol: enum MessageType { INFO, APPROVAL, USER2USER } */}
-								{msg.messageType === '1' && (
-									<>
-										<Divider style={{ margin: '10px 0' }} variant="middle" />
+				{props.messages.filter(msg => !msg.hasBeenActedUpon && msg.messageType).length == 0 ? (
+					<center style={{ fontFamily: 'arial' }}>No messages</center>
+				) : (
+					<>
+						{props.messages
+							.filter(msg => !msg.hasBeenActedUpon && msg.messageType)
+							.map((msg, index) => {
+								return (
+									<Message key={`${msg.proofTypeName}_${msg.pendingApprovalId}_${index}`}>
+										<span style={{ color: 'gray' }}>
+											<Typography color="inherit" variant="body2">
+												<b>{getIntroText(msg.messageType).toUpperCase()}</b>
+											</Typography>
+										</span>
 										<Typography color="textSecondary" variant="body2">
-											Requested by {msg.sender}
+											{msg.message}
 										</Typography>
-										<br />
-										{msg.attachment && msg.attachment.length > 0 && (
+										{/* Fin4Messaging.sol: enum MessageType { INFO, APPROVAL, USER2USER } */}
+										{msg.messageType === '1' && (
 											<>
-												<Button
-													center="true"
-													icon={Photo}
-													onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
-													Click to see the image
-												</Button>
+												<Divider style={{ margin: '10px 0' }} variant="middle" />
+												<Typography color="textSecondary" variant="body2">
+													Requested by {msg.sender}
+												</Typography>
+												<br />
+												{msg.attachment && msg.attachment.length > 0 && (
+													<>
+														<Button
+															center="true"
+															icon={Photo}
+															onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
+															Click to see the image
+														</Button>
+														<br />
+													</>
+												)}
+												<center>
+													<span style={{ color: 'green' }}>
+														<Button
+															color="inherit"
+															icon={ThumbUpIcon}
+															onClick={() => approveRequest(msg.proofTypeName, msg.pendingApprovalId)}>
+															Approve
+														</Button>
+													</span>
+													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<span style={{ color: 'red' }}>
+														<Button
+															color="inherit"
+															icon={ThumbDownIcon}
+															onClick={() => rejectRequest(msg.proofTypeName, msg.pendingApprovalId)}>
+															Reject
+														</Button>
+													</span>
+												</center>
 												<br />
 											</>
 										)}
+										<Divider style={{ margin: '10px 0' }} variant="middle" />
 										<center>
-											<span style={{ color: 'green' }}>
-												<Button
-													color="inherit"
-													icon={ThumbUpIcon}
-													onClick={() => approveRequest(msg.proofTypeName, msg.pendingApprovalId)}>
-													Approve
-												</Button>
-											</span>
-											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											<span style={{ color: 'red' }}>
-												<Button
-													color="inherit"
-													icon={ThumbDownIcon}
-													onClick={() => rejectRequest(msg.proofTypeName, msg.pendingApprovalId)}>
-													Reject
-												</Button>
-											</span>
+											<MsgResponseLink onClick={() => markAsRead(msg.messageId)}>MARK AS READ</MsgResponseLink>
+											{msg.messageType !== '0' && (
+												<>
+													&nbsp;&nbsp;&nbsp;
+													<MsgResponseLink
+														onClick={() => {
+															history.push('/user/message/' + msg.sender);
+														}}>
+														REPLY
+													</MsgResponseLink>
+												</>
+											)}
 										</center>
-										<br />
-									</>
-								)}
-								<Divider style={{ margin: '10px 0' }} variant="middle" />
-								<center>
-									<MsgResponseLink onClick={() => markAsRead(msg.messageId)}>MARK AS READ</MsgResponseLink>
-									{msg.messageType !== '0' && (
-										<>
-											&nbsp;&nbsp;&nbsp;
-											<MsgResponseLink
-												onClick={() => {
-													history.push('/user/message/' + msg.sender);
-												}}>
-												REPLY
-											</MsgResponseLink>
-										</>
-									)}
-								</center>
-							</Message>
-						);
-					})}
+									</Message>
+								);
+							})}
+					</>
+				)}
 			</Box>
-		)
+		</Container>
 	);
 }
 

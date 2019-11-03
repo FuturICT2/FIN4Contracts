@@ -18,6 +18,7 @@ import Groups from '../views/users/Groups';
 import GroupEdit from '../views/users/GroupEdit';
 import CuratedTokens from '../views/CuratedTokens/CuratedTokens';
 import CheckIcon2 from '@material-ui/icons/CheckCircleOutline';
+import Messages from '../views/Messages';
 
 const menu = [
 	{
@@ -85,6 +86,11 @@ const menu = [
 		showInNavBar: false
 	},
 	// ------------------ USERS ------------------
+	{
+		component: Messages,
+		path: '/messages',
+		showInNavBar: false
+	},
 	{
 		component: UserMessage,
 		path: '/user/message',

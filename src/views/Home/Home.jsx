@@ -1,7 +1,6 @@
 import React from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import Container from '../../components/Container';
-import Messages from '../Messages';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
@@ -13,6 +12,7 @@ import UsersIcon from '@material-ui/icons/Group';
 import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import MessageIcon from '@material-ui/icons/Message';
 import SendIcon from '@material-ui/icons/Send'; // or Forward
+import EmailIcon from '@material-ui/icons/Email';
 
 let config = null;
 try {
@@ -39,7 +39,6 @@ function Home(props) {
 	const { t } = useTranslation();
 	return (
 		<Container>
-			<Messages />
 			<Box title={t('your-token-balances')}>
 				{Object.keys(props.usersBalances).length === 0 ? (
 					<NoTokens>{t('no-tokens-yet')}</NoTokens>
@@ -125,10 +124,11 @@ function Home(props) {
 			</Box>
 			<Box title="More" width="250px">
 				{/* TODO better title */}
-				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
-				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections')}
+				{buildIconLabelLink('/messages', <EmailIcon />, 'Your messages')}
 				{buildIconLabelLink('/user/message', <MessageIcon />, 'Message user')}
 				{buildIconLabelLink('/user/transfer', <SendIcon />, 'Transfer token')}
+				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
+				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections')}
 			</Box>
 		</Container>
 	);
