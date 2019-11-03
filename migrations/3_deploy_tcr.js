@@ -10,7 +10,7 @@ const Fin4Reputation = artifacts.require('Fin4Reputation');
 const Fin4Main = artifacts.require('Fin4Main');
 
 const fs = require('fs');
-var path = require('path');
+//var path = require('path');
 const config = JSON.parse(fs.readFileSync('./config.json'));
 const paramConfig = config.paramConfig;
 const tokenHolders = config.token.tokenHolders;
@@ -99,7 +99,7 @@ module.exports = async function(deployer) {
 		RegistryInstance.address,
 		PLCRVotingAddress
 	);
-
+	/*
 	// TODO write only Fin4Main to file and fetch the other 4 from the drizzle store
 
 	// write Fin4Main and registry address to src/config/DeployedAddresses.js
@@ -142,7 +142,7 @@ module.exports = async function(deployer) {
 	fs.writeFile(path.join(__dirname, '../scripts/DeployedAddresses.json'), jsonData, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
-
+*/
 	// Token-TCR-Dev-1, Token-TCR-Dev-2, Token-TCR-Dev-3, Token-TCR-Dev-4, Token-TCR-Dev-5
 	//const allFin4Tokens = await Fin4MainInstance.getAllFin4Tokens();
 	//await RegistryInstance.applyToken(allFin4Tokens[0], 150, 'data');
