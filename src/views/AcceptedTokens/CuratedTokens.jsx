@@ -4,7 +4,7 @@ import Management from './Management';
 import Listing from './Listing';
 import Governance from './Governance';
 
-class AcceptedTokens extends Component {
+class CuratedTokens extends Component {
 	constructor(props) {
 		super(props);
 
@@ -63,4 +63,4 @@ class AcceptedTokens extends Component {
 	}
 }
 
-export default AcceptedTokens;
+export default CuratedTokens;

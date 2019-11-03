@@ -18,7 +18,7 @@
 		"reviewTax": 10,
 		"pminReputation": 20
 	},
-	"name": "FIN4 list of accepted tokens",
+	"name": "FIN4 list of curated tokens",
 	"token": {
 		"name": "Governance Token",
 		"symbol": "GOV",

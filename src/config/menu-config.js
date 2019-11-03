@@ -19,7 +19,7 @@ import Settings from '../views/Settings';
 import About from '../views/About';
 import Groups from '../views/users/Groups';
 import GroupEdit from '../views/users/GroupEdit';
-import AcceptedTokens from '../views/AcceptedTokens/AcceptedTokens';
+import CuratedTokens from '../views/AcceptedTokens/CuratedTokens';
 import CheckIcon2 from '@material-ui/icons/CheckCircleOutline';
 
 const menu = [
@@ -139,9 +139,9 @@ const menu = [
 	},
 	// ------------------ GOVERNANCE ------------------
 	{
-		component: AcceptedTokens,
-		path: '/AcceptedTokens',
-		label: 'Accepted Tokens',
+		component: CuratedTokens,
+		path: '/CuratedTokens',
+		label: 'Curated Tokens',
 		icon: CheckIcon2,
 		showInNavBar: true // SHOW IN NAVBAR
 	},
