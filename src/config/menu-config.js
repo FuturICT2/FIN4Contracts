@@ -19,7 +19,7 @@ import Settings from '../views/Settings';
 import About from '../views/About';
 import Groups from '../views/users/Groups';
 import GroupEdit from '../views/users/GroupEdit';
-import CuratedTokens from '../views/AcceptedTokens/CuratedTokens';
+import CuratedTokens from '../views/CuratedTokens/CuratedTokens';
 import CheckIcon2 from '@material-ui/icons/CheckCircleOutline';
 
 const menu = [
