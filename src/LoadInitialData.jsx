@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import {
 	addSatelliteContracts,
+	addTCRcontracts,
 	fetchMessages,
 	fetchAllTokens,
 	fetchUsersNonzeroTokenBalances,
@@ -30,7 +31,8 @@ function LoadInitialData(props, context) {
 		if (!isInit.current.Fin4Main && props.contracts.Fin4Main.initialized) {
 			isInit.current.Fin4Main = true;
 			// can happen in parallel once Fin4Main is ready:
-			addSatelliteContracts(props, context.drizzle.contracts.Fin4Main, context.drizzle); // = Fin4Messaging, Fin4Claiming and Fin4Collections
+			addSatelliteContracts(props, context.drizzle.contracts.Fin4Main, context.drizzle);
+			addTCRcontracts(props, context.drizzle.contracts.Fin4Main, context.drizzle);
 		}
 
 		if (
