@@ -92,12 +92,14 @@ module.exports = async function(deployer) {
 	const Fin4MainInstance = await Fin4Main.deployed();
 
 	const PLCRVotingAddress = await RegistryInstance.voting();
+	const ParameterizerAddress = await RegistryInstance.parameterizer();
 
 	await Fin4MainInstance.setTCRaddresses(
 		Fin4ReputationInstance.address,
 		GOVTokenInstance.address,
 		RegistryInstance.address,
-		PLCRVotingAddress
+		PLCRVotingAddress,
+		ParameterizerAddress
 	);
 	/*
 	// TODO write only Fin4Main to file and fetch the other 4 from the drizzle store

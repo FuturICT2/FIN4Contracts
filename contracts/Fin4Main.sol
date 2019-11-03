@@ -52,16 +52,18 @@ contract Fin4Main {
   address public GOVToken;
   address public Registry;
   address public PLCRVoting;
+  address public Parameterizer;
 
-  function setTCRaddresses(address _REPToken, address _GOVToken, address _Registry, address _PLCRVoting) public {
+  function setTCRaddresses(address _REPToken, address _GOVToken, address _Registry, address _PLCRVoting, address _Parameterizer) public {
     REPToken = _REPToken;
     GOVToken = _GOVToken;
     Registry = _Registry;
     PLCRVoting = _PLCRVoting;
+    Parameterizer = _Parameterizer;
   }
 
-  function getTCRaddresses() public view returns(address, address, address, address) {
-    return (REPToken, GOVToken, Registry, PLCRVoting);
+  function getTCRaddresses() public view returns(address, address, address, address, address) {
+    return (REPToken, GOVToken, Registry, PLCRVoting, Parameterizer);
   }
 
 }
