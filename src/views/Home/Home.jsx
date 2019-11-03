@@ -9,7 +9,10 @@ import styled from 'styled-components';
 import Currency from '../../components/Currency';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import Button from '../../components/Button';
+import UsersIcon from '@material-ui/icons/Group';
+import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
+import MessageIcon from '@material-ui/icons/Message';
+import SendIcon from '@material-ui/icons/Send'; // or Forward
 
 let config = null;
 try {
@@ -19,6 +22,18 @@ try {
 }
 
 const axios = require('axios');
+
+const buildIconLabelLink = (link, icon, label) => {
+	return (
+		<Link to={link} style={{ textDecoration: 'none' }}>
+			<div style={{ display: 'flex', alignItems: 'center', paddingLeft: '15px', fontFamily: 'arial' }}>
+				{icon}
+				&nbsp;&nbsp;{label}
+			</div>
+			<br />
+		</Link>
+	);
+};
 
 function Home(props) {
 	const { t } = useTranslation();
@@ -108,29 +123,12 @@ function Home(props) {
 					</>
 				)}
 			</Box>
-			<Box title="More">
+			<Box title="More" width="250px">
 				{/* TODO better title */}
-				<center>
-					<Link to={'/user/message'}>
-						<Button>Message user</Button>
-					</Link>
-					<br />
-					<br />
-					<Link to={'/user/transfer'}>
-						<Button>Transfer tokens to user</Button>
-					</Link>
-					<br />
-					<br />
-					<Link to={'/users/groups'}>
-						<Button>Manage user groups</Button>
-					</Link>
-					<br />
-					<br />
-					<Link to={'/collections'}>
-						<Button>Token collections</Button>
-					</Link>
-					<br />
-				</center>
+				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
+				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections')}
+				{buildIconLabelLink('/user/message', <MessageIcon />, 'Message user')}
+				{buildIconLabelLink('/user/transfer', <SendIcon />, 'Transfer token')}
 			</Box>
 		</Container>
 	);
