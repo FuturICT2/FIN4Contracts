@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
@@ -18,34 +18,43 @@ import { TextField } from '@material-ui/core';
 import VoteModal from './VoteModal';
 import RevealModal from './RevealModal';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+
 const BN = require('bignumber.js');
 
-class Listing extends Component {
-	constructor(props, context) {
-		super(props);
+function Listing(props, drizzle) {
+	const { t } = useTranslation();
 
-		this.state = {
-			isApplyModalOpen: false,
-			isVoteModalOpen: false,
-			isRevealModalOpen: false,
-			isChallengeModalOpen: false,
+	const [isApplyModalOpen, setApplyModalOpen] = useState(false);
+	const [isVoteModalOpen, setVoteModalOpen] = useState(false);
+	const [isRevealModalOpen, setRevealModalOpen] = useState(false);
+	const [isChallengeModalOpen, setChallengeModalOpen] = useState(false);
 
-			listings: {},
-			allFin4Tokens: [],
-			unlistedFin4Tokens: []
-		};
+	const [listings, setListings] = useState({});
+	const [allFin4Tokens, setAllFin4Tokens] = useState([]);
+	const [unlistedFin4Tokens, setUnlistedFin4Tokens] = useState([]);
 
-		this.selectedListing = null;
-		this.resetApplyModalValues();
-		this.resetChallengeModalValues();
+	const applyModalValues = useRef({
+		token: null,
+		deposit: null,
+		data: null
+	});
 
-		this.parameterizerValues = {
-			// TODO load this into redux store
-			minDeposit: null,
-			reviewTax: null
-		};
+	const parameterizerValues = useRef({
+		// TODO load this into redux store
+		minDeposit: null,
+		reviewTax: null
+	});
 
-		/*
+	const challengeModalValues = useRef({
+		data: null
+	});
+
+	const selectedListing = useRef(null);
+
+	useEffect(() => {});
+
+	/*
 		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
 			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
 				this.parameterizerValues.minDeposit = new BN(minDepositBN).toNumber();
@@ -167,42 +176,41 @@ class Listing extends Component {
 			}
 		);
 */
-	}
 
 	// ---------- ApplyModal ----------
 
-	resetApplyModalValues() {
-		this.applyModalValues = {
+	const resetApplyModalValues = () => {
+		applyModalValues.current = {
 			token: null, // address
 			deposit: null, // number
 			data: null // string
 		};
-	}
-
-	toggleApplyModal = () => {
-		if (this.state.isApplyModalOpen) {
-			this.resetApplyModalValues();
-		}
-		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
 	};
 
-	submitApplyModal = () => {
-		if (this.applyModalValues.deposit === null || this.applyModalValues.data === null) {
+	const toggleApplyModal = () => {
+		if (isApplyModalOpen) {
+			resetApplyModalValues();
+		}
+		setApplyModalOpen(!isApplyModalOpen);
+	};
+
+	const submitApplyModal = () => {
+		if (applyModalValues.current.deposit === null || applyModalValues.current.data === null) {
 			alert('Both values must be set.');
 			return;
 		}
 
-		let token = this.applyModalValues.token;
-		let deposit = Number(this.applyModalValues.deposit);
-		let data = this.applyModalValues.data;
+		let token = applyModalValues.current.token;
+		let deposit = Number(applyModalValues.current.deposit);
+		let data = applyModalValues.current.data;
 
-		let minDepositPlusReviewTax = this.parameterizerValues.minDeposit + this.parameterizerValues.reviewTax;
+		let minDepositPlusReviewTax = parameterizerValues.current.minDeposit + parameterizerValues.current.reviewTax;
 		if (deposit < minDepositPlusReviewTax) {
 			alert('Deposit must be bigger than minDeposit + reviewTax (=' + minDepositPlusReviewTax + ')');
 			return;
 		}
 
-		this.toggleApplyModal();
+		toggleApplyModal();
 
 		// Step 1: approve
 		/*
@@ -240,37 +248,37 @@ class Listing extends Component {
 
 	// ---------- VoteModal ----------
 
-	toggleVoteModal = () => {
-		this.setState({ isVoteModalOpen: !this.state.isVoteModalOpen });
+	const toggleVoteModal = () => {
+		setVoteModalOpen(!isVoteModalOpen);
 	};
 
 	// ---------- RevealModal ----------
 
-	toggleRevealModal = () => {
-		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
+	const toggleRevealModal = () => {
+		setRevealModalOpen(!isRevealModalOpen);
 	};
 
 	// ---------- ChallengeModal ----------
 
-	resetChallengeModalValues() {
-		this.challengeModalValues = {
+	const resetChallengeModalValues = () => {
+		challengeModalValues.current = {
 			data: null // string
 		};
-	}
-
-	toggleChallengeModal = () => {
-		if (this.state.isChallengeModalOpen) {
-			this.resetChallengeModalValues();
-		}
-		this.setState({ isChallengeModalOpen: !this.state.isChallengeModalOpen });
 	};
 
-	submitChallengeModal = () => {
-		let listingHash = this.selectedListing.listingKey;
-		let data = this.challengeModalValues.data;
-		let minDeposit = this.parameterizerValues.minDeposit;
+	const toggleChallengeModal = () => {
+		if (isChallengeModalOpen) {
+			resetChallengeModalValues();
+		}
+		setChallengeModalOpen(!isChallengeModalOpen);
+	};
 
-		this.toggleChallengeModal();
+	const submitChallengeModal = () => {
+		let listingHash = selectedListing.current.listingKey;
+		let data = challengeModalValues.current.data;
+		let minDeposit = parameterizerValues.current.minDeposit;
+
+		toggleChallengeModal();
 		/*
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
@@ -303,7 +311,7 @@ class Listing extends Component {
 
 	// ----------
 
-	updateStatus() {
+	const updateStatus = () => {
 		/*
 		let listingKey = this.selectedListing.listingKey;
 		getContract(RegistryAddress, 'Registry')
@@ -320,145 +328,135 @@ class Listing extends Component {
 				alert(err.message);
 			});
 */
-	}
+	};
 
-	render() {
-		return (
-			<center>
-				<Box title="Curated Positive Action Tokens" width="800px">
-					<Table headers={['Name', 'Status', 'Due Date', 'Actions', 'Whitelisted']}>
-						{Object.keys(this.state.listings).map((key, index) => {
-							// key is address of the Fin4Token
-							return (
-								<TableRow
-									key={index}
-									data={{
-										name: this.state.listings[key].name,
-										status: this.state.listings[key].status,
-										dueDate: this.state.listings[key].dueDate,
-										actions: this.state.listings[key].actionStatus !== Action_Status.REJECTED && (
-											<Button
-												onClick={() => {
-													this.selectedListing = this.state.listings[key];
-													switch (this.state.listings[key].actionStatus) {
-														case Action_Status.VOTE:
-															this.toggleVoteModal();
-															break;
-														case Action_Status.REVEAL:
-															this.toggleRevealModal();
-															break;
-														case Action_Status.UPDATE:
-															this.updateStatus();
-															break;
-														case Action_Status.CHALLENGE:
-															this.toggleChallengeModal();
-															break;
-													}
-												}}>
-												{this.state.listings[key].actionStatus}
-											</Button>
-										),
-										whitelisted: this.state.listings[key].whitelisted.toString()
-									}}
-								/>
-							);
-						})}
-					</Table>
-				</Box>
-				<Box title="All Positive Action Tokens">
-					<Table headers={['Name', 'Apply']}>
-						{Object.keys(this.props.fin4Tokens).map((key, index) => {
-							let token = this.props.fin4Tokens[key];
-							return (
-								<TableRow
-									key={index}
-									data={{
-										name: token.name,
-										apply: (
-											<Button
-												onClick={() => {
-													this.applyModalValues.token = token.address;
-													this.toggleApplyModal();
-												}}>
-												Apply
-											</Button>
-										)
-									}}
-								/>
-							);
-						})}
-					</Table>
-				</Box>
-				<Modal
-					isOpen={this.state.isApplyModalOpen}
-					handleClose={this.toggleApplyModal}
-					title="Set deposit and data"
-					width="400px">
-					<TextField
-						key="apply-deposit"
-						type="number"
-						label="Deposit"
-						onChange={e => (this.applyModalValues.deposit = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<TextField
-						key="apply-data"
-						type="text"
-						label="Data"
-						onChange={e => (this.applyModalValues.data = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<Button onClick={this.submitApplyModal} center="true">
-						Submit
-					</Button>
-					<center>
-						<small style={{ color: 'gray' }}>
-							Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
-							token balance and then to submit the application for this token.
-						</small>
-					</center>
-				</Modal>
-				<VoteModal
-					isOpen={this.state.isVoteModalOpen}
-					handleClose={this.toggleVoteModal}
-					pollID={this.selectedListing && this.selectedListing.challengeID}
-					voteOptionsInfo={
-						this.selectedListing && this.selectedListing.whitelisted
-							? 'Challenge: 1 = keep token on the list, 0 = remove it'
-							: 'Review: 1 = put token on list, 0 = reject application'
-					}
+	return (
+		<center>
+			<Box title="Curated Positive Action Tokens" width="800px">
+				<Table headers={['Name', 'Status', 'Due Date', 'Actions', 'Whitelisted']}>
+					{Object.keys(listings).map((key, index) => {
+						// key is address of the Fin4Token
+						return (
+							<TableRow
+								key={index}
+								data={{
+									name: listings[key].name,
+									status: listings[key].status,
+									dueDate: listings[key].dueDate,
+									actions: listings[key].actionStatus !== Action_Status.REJECTED && (
+										<Button
+											onClick={() => {
+												selectedListing.current = listings[key];
+												switch (listings[key].actionStatus) {
+													case Action_Status.VOTE:
+														toggleVoteModal();
+														break;
+													case Action_Status.REVEAL:
+														toggleRevealModal();
+														break;
+													case Action_Status.UPDATE:
+														updateStatus();
+														break;
+													case Action_Status.CHALLENGE:
+														toggleChallengeModal();
+														break;
+												}
+											}}>
+											{listings[key].actionStatus}
+										</Button>
+									),
+									whitelisted: listings[key].whitelisted.toString()
+								}}
+							/>
+						);
+					})}
+				</Table>
+			</Box>
+			<Box title="All Positive Action Tokens">
+				<Table headers={['Name', 'Apply']}>
+					{Object.keys(props.fin4Tokens).map((key, index) => {
+						let token = props.fin4Tokens[key];
+						return (
+							<TableRow
+								key={index}
+								data={{
+									name: token.name,
+									apply: (
+										<Button
+											onClick={() => {
+												applyModalValues.current.token = token.address;
+												toggleApplyModal();
+											}}>
+											Apply
+										</Button>
+									)
+								}}
+							/>
+						);
+					})}
+				</Table>
+			</Box>
+			<Modal isOpen={isApplyModalOpen} handleClose={toggleApplyModal} title="Set deposit and data" width="400px">
+				<TextField
+					key="apply-deposit"
+					type="number"
+					label="Deposit"
+					onChange={e => (applyModalValues.current.deposit = e.target.value)}
+					style={inputFieldStyle}
 				/>
-				<RevealModal
-					isOpen={this.state.isRevealModalOpen}
-					handleClose={this.toggleRevealModal}
-					pollID={this.selectedListing && this.selectedListing.challengeID}
+				<TextField
+					key="apply-data"
+					type="text"
+					label="Data"
+					onChange={e => (applyModalValues.current.data = e.target.value)}
+					style={inputFieldStyle}
 				/>
-				<Modal
-					isOpen={this.state.isChallengeModalOpen}
-					handleClose={this.toggleChallengeModal}
-					title="Add optional data"
-					width="400px">
-					<TextField
-						key="set-data"
-						type="text"
-						label="Data"
-						onChange={e => (this.challengeModalValues.data = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<Button onClick={this.submitChallengeModal} center="true">
-						Submit
-					</Button>
-					<center>
-						<small style={{ color: 'gray' }}>
-							Upon submitting, two transactions have to be signed: to allow minDeposit (
-							{this.parameterizerValues.minDeposit === null ? '?' : this.parameterizerValues.minDeposit}) to be
-							withdrawn from your GOV token balance and then to submit your challenge.
-						</small>
-					</center>
-				</Modal>
-			</center>
-		);
-	}
+				<Button onClick={submitApplyModal} center="true">
+					Submit
+				</Button>
+				<center>
+					<small style={{ color: 'gray' }}>
+						Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
+						token balance and then to submit the application for this token.
+					</small>
+				</center>
+			</Modal>
+			<VoteModal
+				isOpen={isVoteModalOpen}
+				handleClose={toggleVoteModal}
+				pollID={selectedListing.current && selectedListing.current.challengeID}
+				voteOptionsInfo={
+					selectedListing.current && selectedListing.current.whitelisted
+						? 'Challenge: 1 = keep token on the list, 0 = remove it'
+						: 'Review: 1 = put token on list, 0 = reject application'
+				}
+			/>
+			<RevealModal
+				isOpen={isRevealModalOpen}
+				handleClose={toggleRevealModal}
+				pollID={selectedListing.current && selectedListing.current.challengeID}
+			/>
+			<Modal isOpen={isChallengeModalOpen} handleClose={toggleChallengeModal} title="Add optional data" width="400px">
+				<TextField
+					key="set-data"
+					type="text"
+					label="Data"
+					onChange={e => (challengeModalValues.current.data = e.target.value)}
+					style={inputFieldStyle}
+				/>
+				<Button onClick={submitChallengeModal} center="true">
+					Submit
+				</Button>
+				<center>
+					<small style={{ color: 'gray' }}>
+						Upon submitting, two transactions have to be signed: to allow minDeposit (
+						{parameterizerValues.current.minDeposit === null ? '?' : parameterizerValues.current.minDeposit}) to be
+						withdrawn from your GOV token balance and then to submit your challenge.
+					</small>
+				</center>
+			</Modal>
+		</center>
+	);
 }
 
 const Action_Status = {
