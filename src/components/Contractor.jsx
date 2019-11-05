@@ -119,7 +119,7 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 const addTCRcontracts = (props, Fin4MainContract, drizzle) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4MainContract, defaultAccount, 'getTCRaddresses').then(
-		({ 0: REPTokenAddress, 1: GOVTokenAddress, 2: RegistryAddress, 3: PLCRVotingAddress, 3: ParameterizerAddress }) => {
+		({ 0: REPTokenAddress, 1: GOVTokenAddress, 2: RegistryAddress, 3: PLCRVotingAddress, 4: ParameterizerAddress }) => {
 			addContract(props, drizzle, 'Fin4Reputation', REPTokenAddress, []);
 			addContract(props, drizzle, 'GOV', GOVTokenAddress, []);
 			addContract(props, drizzle, 'Registry', RegistryAddress, []);
