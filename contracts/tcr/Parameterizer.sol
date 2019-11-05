@@ -379,12 +379,13 @@ contract Parameterizer {
         paramValues[7] = params[keccak256(abi.encodePacked("pRevealStageLen"))];
         paramValues[8] = params[keccak256(abi.encodePacked("dispensationPct"))];
         paramValues[9] = params[keccak256(abi.encodePacked("pDispensationPct"))];
-        paramValues[10] = params[keccak256(abi.encodePacked("voteQuorum"))];
-        paramValues[11] = params[keccak256(abi.encodePacked("pVoteQuorum"))];
-        paramValues[12] = params[keccak256(abi.encodePacked("exitTimeDelay"))];
-        paramValues[13] = params[keccak256(abi.encodePacked("exitPeriodLen"))];
-        paramValues[14] = params[keccak256(abi.encodePacked("reviewTax"))];
-        paramValues[15] = params[keccak256(abi.encodePacked("pminReputation"))];
+        paramValues[10] = params[keccak256(abi.encodePacked("reviewVoteQuorum"))];
+        paramValues[11] = params[keccak256(abi.encodePacked("challengeVoteQuorum"))];
+        paramValues[12] = params[keccak256(abi.encodePacked("pVoteQuorum"))];
+        paramValues[13] = params[keccak256(abi.encodePacked("exitTimeDelay"))];
+        paramValues[14] = params[keccak256(abi.encodePacked("exitPeriodLen"))];
+        paramValues[15] = params[keccak256(abi.encodePacked("reviewTax"))];
+        paramValues[16] = params[keccak256(abi.encodePacked("pminReputation"))];
         return paramValues;
     }
 
