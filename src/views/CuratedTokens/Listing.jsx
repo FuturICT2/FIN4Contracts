@@ -2,12 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-//import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import {
-	getCurrentAccount,
 	getContractData,
-	getAllActionTypes,
-	getContract,
 	getPollStatus,
 	PollStatus,
 	fetchTCRparameters,
