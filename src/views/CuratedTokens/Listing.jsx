@@ -374,17 +374,18 @@ function Listing(props, context) {
 									key={index}
 									data={{
 										name: token.name,
-										apply: token.isOPAT ? (
-											'Is on the curated list'
-										) : (
-											<Button
-												onClick={() => {
-													applyModalValues.current.token = token.address;
-													toggleApplyModal();
-												}}>
-												Apply
-											</Button>
-										)
+										apply:
+											token.isOPAT === true ? (
+												'Is on the curated list'
+											) : (
+												<Button
+													onClick={() => {
+														applyModalValues.current.token = token.address;
+														toggleApplyModal();
+													}}>
+													Apply
+												</Button>
+											)
 									}}
 								/>
 							);
