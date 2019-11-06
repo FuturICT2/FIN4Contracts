@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
 //import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
+import React, { useState, useRef, useEffect } from 'react';
 import {
 	getCurrentAccount,
 	getContractData,
 	getContract,
 	getPollStatus,
-	PollStatus
+	PollStatus,
+	fetchParameterizerParams
 } from '../../components/Contractor';
 import { drizzleConnect } from 'drizzle-react';
 import Box from '../../components/Box';
@@ -16,27 +17,32 @@ import Modal from '../../components/Modal';
 import { TextField } from '@material-ui/core';
 import VoteModal from './VoteModal';
 import RevealModal from './RevealModal';
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 const BN = require('bignumber.js');
 
-class Governance extends Component {
-	constructor(props) {
-		super(props);
+function Governance(props, context) {
+	const { t } = useTranslation();
 
-		this.state = {
-			isProposeReparamOpen: false,
-			isChallengeReparamOpen: false,
-			isVoteModalOpen: false,
-			isRevealModalOpen: false,
-			paramValues: null
-		};
+	const [isProposeReparamOpen, setProposeReparamOpen] = useState(false);
+	const [isChallengeReparamOpen, setChallengeReparamOpen] = useState(false);
+	const [isVoteModalOpen, setVoteModalOpen] = useState(false);
+	const [isRevealModalOpen, setRevealModalOpen] = useState(false);
+	const [paramValues, setParamValues] = useState(null);
 
-		this.selectedParam = null;
-		this.parameterizerAddress = null;
-		this.resetProposeReparamModalValues();
-		/*
-		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
-			this.parameterizerAddress = parameterizerAddress;
+	const selectedParam = useRef(null);
+	const parameterizerAddress = useRef(null);
+	const proposeReparamModalValues = useRef({
+		value: null
+	});
 
+	useEffect(() => {
+		fetchParameterizerParams(props.contracts, props, context.drizzle);
+
+		// TODO
+	});
+
+	/*
 			// get all parameters
 
 			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
@@ -136,30 +142,29 @@ class Governance extends Component {
 			});
 		});
 */
-	}
 
 	// ---------- ProposeReparam ----------
 
-	resetProposeReparamModalValues() {
-		this.proposeReparamModalValues = {
+	const resetProposeReparamModalValues = () => {
+		proposeReparamModalValues.current = {
 			value: null
 		};
-	}
-
-	toggleProposeReparamModal = () => {
-		if (this.state.isProposeReparamOpen) {
-			this.resetProposeReparamModalValues();
-		}
-		this.setState({ isProposeReparamOpen: !this.state.isProposeReparamOpen });
 	};
 
-	submitProposeReparamModal = () => {
-		let name = this.selectedParam.name;
-		let value = Number(this.proposeReparamModalValues.value);
-		let pMinDeposit = this.state.paramValues['pMinDeposit'].value;
-		let parameterizerAddr = this.parameterizerAddress;
+	const toggleProposeReparamModal = () => {
+		if (isProposeReparamOpen) {
+			resetProposeReparamModalValues();
+		}
+		setProposeReparamOpen(!isProposeReparamOpen);
+	};
 
-		this.toggleProposeReparamModal();
+	const submitProposeReparamModal = () => {
+		let name = selectedParam.current.name;
+		let value = Number(proposeReparamModalValues.current.value);
+		let pMinDeposit = paramValues['pMinDeposit'].value;
+		let parameterizerAddr = parameterizerAddress.current;
+
+		toggleProposeReparamModal();
 		/*
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
@@ -191,28 +196,28 @@ class Governance extends Component {
 	};
 	// ---------- VoteModal ----------
 
-	toggleVoteModal = () => {
-		this.setState({ isVoteModalOpen: !this.state.isVoteModalOpen });
+	const toggleVoteModal = () => {
+		setVoteModalOpen(!isVoteModalOpen);
 	};
 
 	// ---------- RevealModal ----------
 
-	toggleRevealModal = () => {
-		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
+	const toggleRevealModal = () => {
+		setRevealModalOpen(!isRevealModalOpen);
 	};
 
 	// ---------- ChallengeReparam ----------
 
-	toggleChallengeReparamModal = () => {
-		this.setState({ isChallengeReparamOpen: !this.state.isChallengeReparamOpen });
+	const toggleChallengeReparamModal = () => {
+		setChallengeReparamOpen(!isChallengeReparamOpen);
 	};
 
-	submitChallengeReparamModal = () => {
-		let propID = this.selectedParam.propID;
-		let propDeposit = this.selectedParam.propDeposit;
-		let parameterizerAddr = this.parameterizerAddress;
+	const submitChallengeReparamModal = () => {
+		let propID = selectedParam.current.propID;
+		let propDeposit = selectedParam.current.propDeposit;
+		let parameterizerAddr = parameterizerAddress.current;
 
-		this.toggleChallengeReparamModal();
+		toggleChallengeReparamModal();
 		/*
 		getContract(GOVTokenAddress, 'GOV')
 			.then(function(instance) {
@@ -246,7 +251,7 @@ class Governance extends Component {
 	// ----------
 
 	// same as Registry.updateStatus()
-	processProposal() {
+	const processProposal = () => {
 		/*
 		let propID = this.selectedParam.propID;
 		getContract(this.parameterizerAddress, 'Parameterizer')
@@ -263,110 +268,108 @@ class Governance extends Component {
 				alert(err.message);
 			});
 */
-	}
+	};
 
-	render() {
-		return (
-			<center>
-				<Box title="TCR Parameters" width="900px">
-					<Table headers={['Parameter', 'Description', 'Value', 'Actions', 'Status', 'Due Date']}>
-						{this.state.paramValues !== null &&
-							params.map((entry, index) => {
-								return (
-									<TableRow
-										key={index}
-										data={{
-											parameter: entry.name,
-											description: entry.description,
-											value: this.state.paramValues[entry.name].value,
-											actions: (
-												<Button
-													onClick={() => {
-														this.selectedParam = this.state.paramValues[entry.name];
-														switch (this.state.paramValues[entry.name].statusEnum) {
-															case Param_Action_Status.DEFAULT:
-																this.toggleProposeReparamModal();
-																break;
-															case Param_Action_Status.PROPOSEDREPARAM:
-																this.toggleChallengeReparamModal();
-																break;
-															case Param_Action_Status.VOTE:
-																this.toggleVoteModal();
-																break;
-															case Param_Action_Status.REVEAL:
-																this.toggleRevealModal();
-																break;
-															case Param_Action_Status.UPDATE:
-																this.processProposal();
-																break;
-														}
-													}}>
-													{this.state.paramValues[entry.name].statusEnum}
-												</Button>
-											),
-											status: this.state.paramValues[entry.name].status,
-											dueDate: this.state.paramValues[entry.name].dueDate
-										}}
-									/>
-								);
-							})}
-					</Table>
-				</Box>
-				<Modal
-					isOpen={this.state.isProposeReparamOpen}
-					handleClose={this.toggleProposeReparamModal}
-					title="Propose new value"
-					width="400px">
-					<TextField
-						key="propose-value"
-						type="number"
-						label="Value"
-						onChange={e => (this.proposeReparamModalValues.value = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<Button onClick={this.submitProposeReparamModal} center="true">
-						Submit
-					</Button>
-					<center>
-						<small style={{ color: 'gray' }}>
-							Upon submitting, two transactions have to be signed: to allow the deposit (
-							{this.state.paramValues === null ? '?' : this.state.paramValues['pMinDeposit'].value}) to be withdrawn
-							from your GOV token balance and then to submit the proposed reparameterization.
-						</small>
-					</center>
-				</Modal>
-				<Modal
-					isOpen={this.state.isChallengeReparamOpen}
-					handleClose={this.toggleChallengeReparamModal}
-					title="Challenge proposed value"
-					width="400px">
-					<Button onClick={this.submitChallengeReparamModal} center="true">
-						Submit
-					</Button>
-					<center>
-						<small style={{ color: 'gray' }}>
-							Upon submitting, two transactions have to be signed: to allow the proposal-deposit (
-							{this.selectedParam ? this.selectedParam.propDeposit : '?'}) to be withdrawn from your GOV token balance
-							and then to challenge the proposed reparameterization.
-						</small>
-					</center>
-				</Modal>
-				<VoteModal
-					isOpen={this.state.isVoteModalOpen}
-					handleClose={this.toggleVoteModal}
-					pollID={this.selectedParam && this.selectedParam.challengeID}
-					voteOptionsInfo={
-						'Challenge: 1 = vote for the proposed new value, 0 = reject the proposed value and keep the existing one'
-					}
+	return (
+		<center>
+			<Box title="TCR Parameters" width="900px">
+				<Table headers={['Parameter', 'Description', 'Value', 'Actions', 'Status', 'Due Date']}>
+					{paramValues !== null &&
+						params.map((entry, index) => {
+							return (
+								<TableRow
+									key={index}
+									data={{
+										parameter: entry.name,
+										description: entry.description,
+										value: paramValues[entry.name].value,
+										actions: (
+											<Button
+												onClick={() => {
+													selectedParam.current = paramValues[entry.name];
+													switch (paramValues[entry.name].statusEnum) {
+														case Param_Action_Status.DEFAULT:
+															toggleProposeReparamModal();
+															break;
+														case Param_Action_Status.PROPOSEDREPARAM:
+															toggleChallengeReparamModal();
+															break;
+														case Param_Action_Status.VOTE:
+															toggleVoteModal();
+															break;
+														case Param_Action_Status.REVEAL:
+															toggleRevealModal();
+															break;
+														case Param_Action_Status.UPDATE:
+															processProposal();
+															break;
+													}
+												}}>
+												{paramValues[entry.name].statusEnum}
+											</Button>
+										),
+										status: paramValues[entry.name].status,
+										dueDate: paramValues[entry.name].dueDate
+									}}
+								/>
+							);
+						})}
+				</Table>
+			</Box>
+			<Modal
+				isOpen={isProposeReparamOpen}
+				handleClose={toggleProposeReparamModal}
+				title="Propose new value"
+				width="400px">
+				<TextField
+					key="propose-value"
+					type="number"
+					label="Value"
+					onChange={e => (proposeReparamModalValues.current.value = e.target.value)}
+					style={inputFieldStyle}
 				/>
-				<RevealModal
-					isOpen={this.state.isRevealModalOpen}
-					handleClose={this.toggleRevealModal}
-					pollID={this.selectedParam && this.selectedParam.challengeID}
-				/>
-			</center>
-		);
-	}
+				<Button onClick={submitProposeReparamModal} center="true">
+					Submit
+				</Button>
+				<center>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
+						Upon submitting, two transactions have to be signed: to allow the deposit (
+						{paramValues === null ? '?' : paramValues['pMinDeposit'].value}) to be withdrawn from your GOV token balance
+						and then to submit the proposed reparameterization.
+					</small>
+				</center>
+			</Modal>
+			<Modal
+				isOpen={isChallengeReparamOpen}
+				handleClose={toggleChallengeReparamModal}
+				title="Challenge proposed value"
+				width="400px">
+				<Button onClick={submitChallengeReparamModal} center="true">
+					Submit
+				</Button>
+				<center>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
+						Upon submitting, two transactions have to be signed: to allow the proposal-deposit (
+						{selectedParam.current ? selectedParam.current.propDeposit : '?'}) to be withdrawn from your GOV token
+						balance and then to challenge the proposed reparameterization.
+					</small>
+				</center>
+			</Modal>
+			<VoteModal
+				isOpen={isVoteModalOpen}
+				handleClose={toggleVoteModal}
+				pollID={selectedParam.current && selectedParam.current.challengeID}
+				voteOptionsInfo={
+					'Challenge: 1 = vote for the proposed new value, 0 = reject the proposed value and keep the existing one'
+				}
+			/>
+			<RevealModal
+				isOpen={isRevealModalOpen}
+				handleClose={toggleRevealModal}
+				pollID={selectedParam.current && selectedParam.current.challengeID}
+			/>
+		</center>
+	);
 }
 
 const Param_Action_Status = {
@@ -454,4 +457,15 @@ const inputFieldStyle = {
 	marginBottom: '15px'
 };
 
-export default drizzleConnect(Governance);
+Governance.contextTypes = {
+	drizzle: PropTypes.object
+};
+
+const mapStateToProps = state => {
+	return {
+		contracts: state.contracts,
+		parameterizerParams: state.fin4Store.parameterizerParams
+	};
+};
+
+export default drizzleConnect(Governance, mapStateToProps);
