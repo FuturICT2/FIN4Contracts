@@ -110,7 +110,7 @@ const parameterizerParamNames = [
 
 let parameterizerParamsFetched = false;
 
-const fetchTCRparameters = (contracts, props, drizzle) => {
+const fetchParameterizerParams = (contracts, props, drizzle) => {
 	let parameterizerContractReady = contracts.Parameterizer && contracts.Parameterizer.initialized;
 
 	// ensures the following code will only be executed once as this method will be
@@ -479,7 +479,7 @@ export {
 	fetchCollectionsInfo,
 	zeroAddress,
 	parameterizerParamNames,
-	fetchTCRparameters,
+	fetchParameterizerParams,
 	PollStatus,
 	getPollStatus,
 	fetchUsersReputationAndGOVbalance

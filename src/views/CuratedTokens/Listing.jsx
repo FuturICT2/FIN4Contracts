@@ -6,7 +6,7 @@ import {
 	getContractData,
 	getPollStatus,
 	PollStatus,
-	fetchTCRparameters,
+	fetchParameterizerParams,
 	fetchUsersReputationAndGOVbalance
 } from '../../components/Contractor';
 import Button from '../../components/Button';
@@ -46,7 +46,7 @@ function Listing(props, context) {
 
 	useEffect(() => {
 		// this method guards itself against to ensure it's only executed once
-		fetchTCRparameters(props.contracts, props, context.drizzle);
+		fetchParameterizerParams(props.contracts, props, context.drizzle);
 		fetchUsersReputationAndGOVbalance(props.contracts, props, context.drizzle);
 
 		if (
