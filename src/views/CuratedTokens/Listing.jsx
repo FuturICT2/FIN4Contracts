@@ -63,9 +63,7 @@ function Listing(props, context) {
 	});
 
 	const fetchListings = () => {
-		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-
-		getContractData(context.drizzle.contracts.Registry, defaultAccount, 'getListings').then(
+		getContractData(context.drizzle.contracts.Registry, props.defaultAccount, 'getListings').then(
 			({
 				0: listingsKeys,
 				1: applicationExpiries,
@@ -101,7 +99,7 @@ function Listing(props, context) {
 					};
 				}
 
-				getContractData(context.drizzle.contracts.Registry, defaultAccount, 'getChallenges').then(
+				getContractData(context.drizzle.contracts.Registry, props.defaultAccount, 'getChallenges').then(
 					({ 0: challengeIDs, 1: rewardPools, 2: challengers, 3: isReviews, 4: isResolveds, 5: totalTokenss }) => {
 						let challengesObj = {};
 						for (var i = 0; i < challengeIDs.length; i++) {
@@ -134,7 +132,7 @@ function Listing(props, context) {
 
 							let review_challenge = challengesObj[challengeID].isReview ? 'Review' : 'Challenge';
 
-							return getPollStatus(challengeID, context.drizzle.contracts.PLCRVoting, defaultAccount).then(
+							return getPollStatus(challengeID, context.drizzle.contracts.PLCRVoting, props.defaultAccount).then(
 								pollStatus => {
 									listing.dueDate = pollStatus.dueDate;
 
@@ -480,6 +478,7 @@ Listing.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
+		defaultAccount: state.fin4Store.defaultAccount,
 		contracts: state.contracts,
 		fin4Tokens: state.fin4Store.fin4Tokens,
 		fin4TokensInitiallyFetched: state.fin4Store.fin4TokensInitiallyFetched,
