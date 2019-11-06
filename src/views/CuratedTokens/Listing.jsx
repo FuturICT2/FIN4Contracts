@@ -41,12 +41,6 @@ function Listing(props, context) {
 		data: null
 	});
 
-	const parameterizerValues = useRef({
-		// TODO load this into redux store
-		minDeposit: null,
-		reviewTax: null
-	});
-
 	const challengeModalValues = useRef({
 		data: null
 	});
@@ -59,17 +53,6 @@ function Listing(props, context) {
 	});
 
 	/*
-		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
-			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
-				this.parameterizerValues.minDeposit = new BN(minDepositBN).toNumber();
-				console.log(new BN(minDepositBN).toNumber());
-			});
-			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['reviewTax']).then(reviewTaxBN => {
-				this.parameterizerValues.reviewTax = new BN(reviewTaxBN).toNumber();
-				console.log('reviewtax:' + new BN(reviewTaxBN).toNumber());
-			});
-		});
-
 		getContractData_deprecated(RegistryAddress, 'Registry', 'getListings').then(
 			({
 				0: listingsKeys,
@@ -208,7 +191,7 @@ function Listing(props, context) {
 		let deposit = Number(applyModalValues.current.deposit);
 		let data = applyModalValues.current.data;
 
-		let minDepositPlusReviewTax = parameterizerValues.current.minDeposit + parameterizerValues.current.reviewTax;
+		let minDepositPlusReviewTax = props.parameterizerParams['minDeposit'] + props.parameterizerParams['reviewTax'];
 		if (deposit < minDepositPlusReviewTax) {
 			alert('Deposit must be bigger than minDeposit + reviewTax (=' + minDepositPlusReviewTax + ')');
 			return;
@@ -280,7 +263,7 @@ function Listing(props, context) {
 	const submitChallengeModal = () => {
 		let listingHash = selectedListing.current.listingKey;
 		let data = challengeModalValues.current.data;
-		let minDeposit = parameterizerValues.current.minDeposit;
+		let minDeposit = props.parameterizerParams['minDeposit'];
 
 		toggleChallengeModal();
 		/*
@@ -454,8 +437,8 @@ function Listing(props, context) {
 				<center>
 					<small style={{ color: 'gray' }}>
 						Upon submitting, two transactions have to be signed: to allow minDeposit (
-						{parameterizerValues.current.minDeposit === null ? '?' : parameterizerValues.current.minDeposit}) to be
-						withdrawn from your GOV token balance and then to submit your challenge.
+						{props.parameterizerParams['minDeposit'] ? props.parameterizerParams['minDeposit'] : '?'}) to be withdrawn
+						from your GOV token balance and then to submit your challenge.
 					</small>
 				</center>
 			</Modal>
@@ -485,7 +468,8 @@ Listing.contextTypes = {
 const mapStateToProps = state => {
 	return {
 		contracts: state.contracts,
-		fin4Tokens: state.fin4Store.fin4Tokens
+		fin4Tokens: state.fin4Store.fin4Tokens,
+		parameterizerParams: state.fin4Store.parameterizerParams
 	};
 };
 
