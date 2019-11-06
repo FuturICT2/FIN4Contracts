@@ -1,13 +1,5 @@
-//import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import React, { useState, useRef, useEffect } from 'react';
-import {
-	getCurrentAccount,
-	getContractData,
-	getContract,
-	getPollStatus,
-	PollStatus,
-	fetchParameterizerParams
-} from '../../components/Contractor';
+import { getContractData, getPollStatus, PollStatus, fetchParameterizerParams } from '../../components/Contractor';
 import { drizzleConnect } from 'drizzle-react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';

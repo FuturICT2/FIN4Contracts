@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { getContractData } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
