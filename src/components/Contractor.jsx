@@ -130,6 +130,39 @@ const fetchTCRparameters = (contracts, props, drizzle) => {
 	});
 };
 
+const fetchUsersReputationAndGOVbalance = (contracts, props, drizzle) => {
+	let reputationContractReady = contracts.Fin4Reputation && contracts.Fin4Reputation.initialized;
+	let govContractReady = contracts.GOV && contracts.GOV.initialized;
+
+	let store = props.store.getState().fin4Store;
+
+	if (reputationContractReady) {
+		let reputationContract = drizzle.contracts.Fin4Reputation;
+		if (!store.usersBalances[reputationContract.address]) {
+			getContractData(reputationContract, store.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
+				props.dispatch({
+					type: 'UPDATE_BALANCE',
+					tokenAddress: reputationContract.address,
+					balance: new BN(balanceBN).toNumber()
+				});
+			});
+		}
+	}
+
+	if (govContractReady) {
+		let govContract = drizzle.contracts.GOV;
+		if (!store.usersBalances[govContract.address]) {
+			getContractData(govContract, store.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
+				props.dispatch({
+					type: 'UPDATE_BALANCE',
+					tokenAddress: govContract.address,
+					balance: new BN(balanceBN).toNumber()
+				});
+			});
+		}
+	}
+};
+
 // --------------------- LOAD INITIAL DATA ---------------------
 
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
@@ -442,7 +475,8 @@ export {
 	parameterizerParamNames,
 	fetchTCRparameters,
 	PollStatus,
-	getPollStatus
+	getPollStatus,
+	fetchUsersReputationAndGOVbalance
 };
 
 /*

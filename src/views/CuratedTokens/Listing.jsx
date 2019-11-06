@@ -10,7 +10,8 @@ import {
 	getContract,
 	getPollStatus,
 	PollStatus,
-	fetchTCRparameters
+	fetchTCRparameters,
+	fetchUsersReputationAndGOVbalance
 } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
@@ -50,6 +51,7 @@ function Listing(props, context) {
 	useEffect(() => {
 		// this method guards itself against to ensure it's only executed once
 		fetchTCRparameters(props.contracts, props, context.drizzle);
+		fetchUsersReputationAndGOVbalance(props.contracts, props, context.drizzle);
 
 		if (
 			!listingsFetched.current &&
@@ -482,7 +484,8 @@ const mapStateToProps = state => {
 		contracts: state.contracts,
 		fin4Tokens: state.fin4Store.fin4Tokens,
 		fin4TokensInitiallyFetched: state.fin4Store.fin4TokensInitiallyFetched,
-		parameterizerParams: state.fin4Store.parameterizerParams
+		parameterizerParams: state.fin4Store.parameterizerParams,
+		usersBalances: state.fin4Store.usersBalances
 	};
 };
 
