@@ -135,38 +135,38 @@ const fetchParameterizerParams = (contracts, props, drizzle) => {
 	);
 };
 
-let reputationBalanceFetched = false;
 let govBalanceFetched = false;
 
-const fetchUsersReputationAndGOVbalance = (contracts, props, drizzle) => {
-	let reputationContractReady = contracts.Fin4Reputation && contracts.Fin4Reputation.initialized;
-	let govContractReady = contracts.GOV && contracts.GOV.initialized;
-
-	let store = props.store.getState().fin4Store;
-
-	if (reputationContractReady && !reputationBalanceFetched) {
-		reputationBalanceFetched = true;
-		let reputationContract = drizzle.contracts.Fin4Reputation;
-		getContractData(reputationContract, store.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
-			props.dispatch({
-				type: 'UPDATE_BALANCE',
-				tokenAddress: reputationContract.address,
-				balance: new BN(balanceBN).toNumber()
-			});
-		});
+const fetchUsersGOVbalance = (contracts, props, drizzle) => {
+	if (govBalanceFetched || !contracts.GOV || !contracts.GOV.initialized) {
+		return;
 	}
-
-	if (govContractReady && !govBalanceFetched) {
-		govBalanceFetched = true;
-		let govContract = drizzle.contracts.GOV;
-		getContractData(govContract, store.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
-			props.dispatch({
-				type: 'UPDATE_BALANCE',
-				tokenAddress: govContract.address,
-				balance: new BN(balanceBN).toNumber()
-			});
+	govBalanceFetched = true;
+	let govContract = drizzle.contracts.GOV;
+	getContractData(govContract, props.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
+		props.dispatch({
+			type: 'UPDATE_BALANCE',
+			tokenAddress: govContract.address,
+			balance: new BN(balanceBN).toNumber()
 		});
+	});
+};
+
+let repBalanceFetched = false;
+
+const fetchUsersREPbalance = (contracts, props, drizzle) => {
+	if (repBalanceFetched || !contracts.Fin4Reputation || !contracts.Fin4Reputation.initialized) {
+		return;
 	}
+	repBalanceFetched = true;
+	let repContract = drizzle.contracts.Fin4Reputation;
+	getContractData(repContract, props.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
+		props.dispatch({
+			type: 'UPDATE_BALANCE',
+			tokenAddress: repContract.address,
+			balance: new BN(balanceBN).toNumber()
+		});
+	});
 };
 
 // --------------------- LOAD INITIAL DATA ---------------------
@@ -482,7 +482,8 @@ export {
 	fetchParameterizerParams,
 	PollStatus,
 	getPollStatus,
-	fetchUsersReputationAndGOVbalance
+	fetchUsersGOVbalance,
+	fetchUsersREPbalance
 };
 
 /*

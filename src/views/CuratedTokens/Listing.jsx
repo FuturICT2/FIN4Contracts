@@ -7,7 +7,7 @@ import {
 	getPollStatus,
 	PollStatus,
 	fetchParameterizerParams,
-	fetchUsersReputationAndGOVbalance
+	fetchUsersGOVbalance
 } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
@@ -17,7 +17,6 @@ import VoteModal from './VoteModal';
 import RevealModal from './RevealModal';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-
 const BN = require('bignumber.js');
 
 function Listing(props, context) {
@@ -47,7 +46,7 @@ function Listing(props, context) {
 	useEffect(() => {
 		// this method guards itself against to ensure it's only executed once
 		fetchParameterizerParams(props.contracts, props, context.drizzle);
-		fetchUsersReputationAndGOVbalance(props.contracts, props, context.drizzle);
+		fetchUsersGOVbalance(props.contracts, props, context.drizzle);
 
 		if (
 			!listingsFetched.current &&
