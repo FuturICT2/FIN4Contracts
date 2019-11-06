@@ -367,28 +367,34 @@ function Listing(props, context) {
 				</Table>
 			</Box>
 			<Box title="All Positive Action Tokens">
-				<Table headers={['Name', 'Apply']}>
-					{Object.keys(props.fin4Tokens).map((key, index) => {
-						let token = props.fin4Tokens[key];
-						return (
-							<TableRow
-								key={index}
-								data={{
-									name: token.name,
-									apply: (
-										<Button
-											onClick={() => {
-												applyModalValues.current.token = token.address;
-												toggleApplyModal();
-											}}>
-											Apply
-										</Button>
-									)
-								}}
-							/>
-						);
-					})}
-				</Table>
+				{!props.fin4TokensInitiallyFetched ? (
+					<span style={{ fontFamily: 'arial', color: 'gray' }}>Loading...</span>
+				) : (
+					<Table headers={['Name', 'Apply']}>
+						{Object.keys(props.fin4Tokens).map((key, index) => {
+							let token = props.fin4Tokens[key];
+							return (
+								<TableRow
+									key={index}
+									data={{
+										name: token.name,
+										apply: token.isOPAT ? (
+											'Is on the curated list'
+										) : (
+											<Button
+												onClick={() => {
+													applyModalValues.current.token = token.address;
+													toggleApplyModal();
+												}}>
+												Apply
+											</Button>
+										)
+									}}
+								/>
+							);
+						})}
+					</Table>
+				)}
 			</Box>
 			<Modal isOpen={isApplyModalOpen} handleClose={toggleApplyModal} title="Set deposit and data" width="400px">
 				<TextField
