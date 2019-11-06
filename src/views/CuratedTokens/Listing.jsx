@@ -32,8 +32,6 @@ function Listing(props, context) {
 	const [isChallengeModalOpen, setChallengeModalOpen] = useState(false);
 
 	const [listings, setListings] = useState({});
-	const [allFin4Tokens, setAllFin4Tokens] = useState([]);
-	const [unlistedFin4Tokens, setUnlistedFin4Tokens] = useState([]);
 
 	const applyModalValues = useRef({
 		token: null,
@@ -60,13 +58,14 @@ function Listing(props, context) {
 			props.contracts.Registry.initialized
 		) {
 			listingsFetched.current = true;
-
-			// TODO
+			fetchListings();
 		}
 	});
 
-	/*
-		getContractData_deprecated(RegistryAddress, 'Registry', 'getListings').then(
+	const fetchListings = () => {
+		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+
+		getContractData(context.drizzle.contracts.Registry, defaultAccount, 'getListings').then(
 			({
 				0: listingsKeys,
 				1: applicationExpiries,
@@ -102,7 +101,7 @@ function Listing(props, context) {
 					};
 				}
 
-				getContractData_deprecated(RegistryAddress, 'Registry', 'getChallenges').then(
+				getContractData(context.drizzle.contracts.Registry, defaultAccount, 'getChallenges').then(
 					({ 0: challengeIDs, 1: rewardPools, 2: challengers, 3: isReviews, 4: isResolveds, 5: totalTokenss }) => {
 						let challengesObj = {};
 						for (var i = 0; i < challengeIDs.length; i++) {
@@ -135,47 +134,34 @@ function Listing(props, context) {
 
 							let review_challenge = challengesObj[challengeID].isReview ? 'Review' : 'Challenge';
 
-							return getPollStatus(challengeID).then(pollStatus => {
-								listing.dueDate = pollStatus.dueDate;
+							return getPollStatus(challengeID, context.drizzle.contracts.PLCRVoting, defaultAccount).then(
+								pollStatus => {
+									listing.dueDate = pollStatus.dueDate;
 
-								switch (pollStatus.inPeriod) {
-									case PollStatus.IN_COMMIT_PERIOD:
-										listing.actionStatus = Action_Status.VOTE;
-										listing.status = review_challenge + ': commit period';
-										return;
-									case PollStatus.IN_REVEAL_PERIOD:
-										listing.actionStatus = Action_Status.REVEAL;
-										listing.status = review_challenge + ': reveal period';
-										return;
-									case PollStatus.PAST_REVEAL_PERIOD:
-										listing.actionStatus = Action_Status.UPDATE;
-										listing.status = review_challenge;
-										break;
+									switch (pollStatus.inPeriod) {
+										case PollStatus.IN_COMMIT_PERIOD:
+											listing.actionStatus = Action_Status.VOTE;
+											listing.status = review_challenge + ': commit period';
+											return;
+										case PollStatus.IN_REVEAL_PERIOD:
+											listing.actionStatus = Action_Status.REVEAL;
+											listing.status = review_challenge + ': reveal period';
+											return;
+										case PollStatus.PAST_REVEAL_PERIOD:
+											listing.actionStatus = Action_Status.UPDATE;
+											listing.status = review_challenge;
+											break;
+									}
 								}
-							});
+							);
 						});
 					}
 				);
 
-				// Unlisted Fin4 Tokens
-				getAllActionTypes().then(data => {
-					this.setState({ allFin4Tokens: data });
-					let unlistedFin4TokensArr = [];
-					for (var i = 0; i < data.length; i++) {
-						// addresses are case in-sensitive. the address-to-byte32 method in Registry.applyToken() leaves only lower-case
-						let tokenAddr = data[i].value.toLowerCase();
-						if (!listingsObj[tokenAddr]) {
-							unlistedFin4TokensArr.push(data[i]);
-						} else {
-							listingsObj[tokenAddr].name = data[i].label;
-						}
-					}
-					this.setState({ listings: listingsObj });
-					this.setState({ unlistedFin4Tokens: unlistedFin4TokensArr });
-				});
+				// TODO
 			}
 		);
-*/
+	};
 
 	// ---------- ApplyModal ----------
 

@@ -386,48 +386,18 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 		});
 };
 
-// -------------------------------------------------------------
+// --------------------- TCR ---------------------
 
-export {
-	getContractData,
-	addContract,
-	addSatelliteContracts,
-	addTCRcontracts,
-	fetchMessage,
-	fetchMessages,
-	fetchAllTokens,
-	fetchUsersNonzeroTokenBalances,
-	fetchCurrentUsersClaims,
-	fetchAndAddAllProofTypes,
-	findTokenBySymbol,
-	isValidPublicAddress,
-	getFin4TokensFormattedForSelectOptions,
-	fetchCollectionsInfo,
-	zeroAddress,
-	parameterizerParamNames,
-	fetchTCRparameters
+const PollStatus = {
+	IN_COMMIT_PERIOD: 'Commit Vote',
+	IN_REVEAL_PERIOD: 'Reveal',
+	PAST_REVEAL_PERIOD: '-'
 };
 
-/*
-// DEPRECATED
-const getAllActionTypes = () => {
-	return getContractData_deprecated(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
-		.then(tokens => {
-			return tokens.map(address => {
-				return getContractData_deprecated(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
-					return {
-						value: address,
-						label: `[${symbol}] ${name}`
-					};
-				});
-			});
-		})
-		.then(data => Promise.all(data));
-};
-
-const getPollStatus = pollID => {
+const getPollStatus = (pollID, PLCRVotingContract, defaultAccount) => {
 	// pollID is also called challengeID in Registry.sol
-	return getContractData_deprecated('PLCRVotingAddress-DUMMY', 'PLCRVoting', 'pollMap', [pollID]).then(
+
+	return getContractData(PLCRVotingContract, defaultAccount, 'pollMap', pollID).then(
 		({ 0: commitEndDateBN, 1: revealEndDateBN, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
 			let commitEndDate = new BN(commitEndDateBN).toNumber() * 1000;
 			let revealEndDate = new BN(revealEndDateBN).toNumber() * 1000;
@@ -455,36 +425,44 @@ const getPollStatus = pollID => {
 	);
 };
 
-const getTCRAddresses = props => {
-	getContractData_deprecated(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
-		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'REPToken',
-				address: REPToken
-			});
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'GOVToken',
-				address: GOVToken
-			});
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'Registry',
-				address: Registry
-			});
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'PLCRVoting',
-				address: PLCRVoting
-			});
-		}
-	);
+// -------------------------------------------------------------
+
+export {
+	getContractData,
+	addContract,
+	addSatelliteContracts,
+	addTCRcontracts,
+	fetchMessage,
+	fetchMessages,
+	fetchAllTokens,
+	fetchUsersNonzeroTokenBalances,
+	fetchCurrentUsersClaims,
+	fetchAndAddAllProofTypes,
+	findTokenBySymbol,
+	isValidPublicAddress,
+	getFin4TokensFormattedForSelectOptions,
+	fetchCollectionsInfo,
+	zeroAddress,
+	parameterizerParamNames,
+	fetchTCRparameters,
+	PollStatus,
+	getPollStatus
 };
 
-const PollStatus = {
-	IN_COMMIT_PERIOD: 'Commit Vote',
-	IN_REVEAL_PERIOD: 'Reveal',
-	PAST_REVEAL_PERIOD: '-'
+/*
+// DEPRECATED
+const getAllActionTypes = () => {
+	return getContractData_deprecated(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
+		.then(tokens => {
+			return tokens.map(address => {
+				return getContractData_deprecated(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
+					return {
+						value: address,
+						label: `[${symbol}] ${name}`
+					};
+				});
+			});
+		})
+		.then(data => Promise.all(data));
 };
 */
