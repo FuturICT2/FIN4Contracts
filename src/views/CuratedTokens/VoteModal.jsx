@@ -49,31 +49,28 @@ function VoteModal(props, context) {
 		resetVoteModalValues();
 		props.handleClose();
 
+		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 		let PLCRVotingContract = context.drizzle.contracts.PLCRVoting;
 
 		context.drizzle.contracts.GOV.methods
 			.approve(PLCRVotingContract.address, numbTokens)
-			.send({ from: props.defaultAccount })
+			.send({ from: defaultAccount })
 			.then(result => {
 				console.log('Results of submitting GOV.approve: ', result);
 
-				getContractData(
-					PLCRVotingContract,
-					props.defaultAccount,
-					'getInsertPointForNumTokens',
-					numbTokens,
-					pollID
-				).then(prevPollIdBN => {
-					let prevPollID = new BN(prevPollIdBN).toNumber();
-					let secretHash = soliditySha3(vote, salt);
+				getContractData(PLCRVotingContract, defaultAccount, 'getInsertPointForNumTokens', numbTokens, pollID).then(
+					prevPollIdBN => {
+						let prevPollID = new BN(prevPollIdBN).toNumber();
+						let secretHash = soliditySha3(vote, salt);
 
-					PLCRVotingContract.methods
-						.commitVote(pollID, secretHash, numbTokens, prevPollID)
-						.send({ from: props.defaultAccount })
-						.then(result => {
-							console.log('Results of submitting PLCRVoting.commitVote: ', result);
-						});
-				});
+						PLCRVotingContract.methods
+							.commitVote(pollID, secretHash, numbTokens, prevPollID)
+							.send({ from: defaultAccount })
+							.then(result => {
+								console.log('Results of submitting PLCRVoting.commitVote: ', result);
+							});
+					}
+				);
 			});
 	};
 
