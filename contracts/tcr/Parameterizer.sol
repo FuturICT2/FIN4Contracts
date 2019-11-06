@@ -368,7 +368,7 @@ contract Parameterizer {
     @notice gets all parameter values from the params mapping
     */
     function getAll() public view returns (uint[] memory) {
-        uint[] memory paramValues = new uint[](16);
+        uint[] memory paramValues = new uint[](17);
         paramValues[0] = params[keccak256(abi.encodePacked("minDeposit"))];
         paramValues[1] = params[keccak256(abi.encodePacked("pMinDeposit"))];
         paramValues[2] = params[keccak256(abi.encodePacked("applyStageLen"))];
