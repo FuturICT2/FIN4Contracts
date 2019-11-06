@@ -157,7 +157,12 @@ function Listing(props, context) {
 				for (var tokenAddress in props.fin4Tokens) {
 					if (props.fin4Tokens.hasOwnProperty(tokenAddress)) {
 						// addresses are case in-sensitive. the address-to-byte32 method in Registry.applyToken() leaves only lower-case
-						props.fin4Tokens[tokenAddress].isOPAT = listingsObj[tokenAddress.toLowerCase()] ? true : false;
+						let tokenAddr = tokenAddress.toLowerCase();
+						let isOPAT = listingsObj[tokenAddr] ? true : false;
+						props.fin4Tokens[tokenAddress].isOPAT = isOPAT;
+						if (isOPAT) {
+							listingsObj[tokenAddr].name = props.fin4Tokens[tokenAddress].name;
+						}
 					}
 				}
 
