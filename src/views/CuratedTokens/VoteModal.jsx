@@ -58,19 +58,24 @@ function VoteModal(props, context) {
 			.then(result => {
 				console.log('Results of submitting GOV.approve: ', result);
 
-				getContractData(PLCRVotingContract, defaultAccount, 'getInsertPointForNumTokens', numbTokens, pollID).then(
-					prevPollIdBN => {
-						let prevPollID = new BN(prevPollIdBN).toNumber();
-						let secretHash = soliditySha3(vote, salt);
+				getContractData(
+					PLCRVotingContract,
+					defaultAccount,
+					'getInsertPointForNumTokens',
+					defaultAccount,
+					numbTokens,
+					pollID
+				).then(prevPollIdBN => {
+					let prevPollID = new BN(prevPollIdBN).toNumber();
+					let secretHash = soliditySha3(vote, salt);
 
-						PLCRVotingContract.methods
-							.commitVote(pollID, secretHash, numbTokens, prevPollID)
-							.send({ from: defaultAccount })
-							.then(result => {
-								console.log('Results of submitting PLCRVoting.commitVote: ', result);
-							});
-					}
-				);
+					PLCRVotingContract.methods
+						.commitVote(pollID, secretHash, numbTokens, prevPollID)
+						.send({ from: defaultAccount })
+						.then(result => {
+							console.log('Results of submitting PLCRVoting.commitVote: ', result);
+						});
+				});
 			});
 	};
 
