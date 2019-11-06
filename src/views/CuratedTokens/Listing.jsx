@@ -96,6 +96,19 @@ function Listing(props, context) {
 					};
 				}
 
+				// set isOPAT flag on tokens
+				for (var tokenAddress in props.fin4Tokens) {
+					if (props.fin4Tokens.hasOwnProperty(tokenAddress)) {
+						// addresses are case in-sensitive. the address-to-byte32 method in Registry.applyToken() leaves only lower-case
+						let tokenAddr = tokenAddress.toLowerCase();
+						let isOPAT = listingsObj[tokenAddr] ? true : false;
+						props.fin4Tokens[tokenAddress].isOPAT = isOPAT;
+						if (isOPAT) {
+							listingsObj[tokenAddr].name = props.fin4Tokens[tokenAddress].name;
+						}
+					}
+				}
+
 				getContractData(context.drizzle.contracts.Registry, props.defaultAccount, 'getChallenges').then(
 					({ 0: challengeIDs, 1: rewardPools, 2: challengers, 3: isReviews, 4: isResolveds, 5: totalTokenss }) => {
 						let challengesObj = {};
@@ -152,20 +165,6 @@ function Listing(props, context) {
 						});
 					}
 				);
-
-				// set isOPAT flag on tokens
-				for (var tokenAddress in props.fin4Tokens) {
-					if (props.fin4Tokens.hasOwnProperty(tokenAddress)) {
-						// addresses are case in-sensitive. the address-to-byte32 method in Registry.applyToken() leaves only lower-case
-						let tokenAddr = tokenAddress.toLowerCase();
-						let isOPAT = listingsObj[tokenAddr] ? true : false;
-						props.fin4Tokens[tokenAddress].isOPAT = isOPAT;
-						if (isOPAT) {
-							listingsObj[tokenAddr].name = props.fin4Tokens[tokenAddress].name;
-						}
-					}
-				}
-
 				setListings(listingsObj);
 			}
 		);
