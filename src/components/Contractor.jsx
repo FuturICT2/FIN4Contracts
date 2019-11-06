@@ -108,13 +108,8 @@ const parameterizerParamNames = [
 	'pminReputation'
 ];
 
-let parameterizerContractReady = false;
-
 const fetchTCRparameters = (contracts, props, drizzle) => {
-	if (!parameterizerContractReady && contracts.Parameterizer && contracts.Parameterizer.initialized) {
-		parameterizerContractReady = true;
-	}
-
+	let parameterizerContractReady = contracts.Parameterizer && contracts.Parameterizer.initialized;
 	let store = props.store.getState().fin4Store;
 
 	// ensures the following code will only be executed once as this method will be
