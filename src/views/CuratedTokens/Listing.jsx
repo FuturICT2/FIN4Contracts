@@ -9,7 +9,8 @@ import {
 	getAllActionTypes,
 	getContract,
 	getPollStatus,
-	PollStatus
+	PollStatus,
+	fetchTCRparameters
 } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
@@ -22,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 
 const BN = require('bignumber.js');
 
-function Listing(props, drizzle) {
+function Listing(props, context) {
 	const { t } = useTranslation();
 
 	const [isApplyModalOpen, setApplyModalOpen] = useState(false);
@@ -52,7 +53,10 @@ function Listing(props, drizzle) {
 
 	const selectedListing = useRef(null);
 
-	useEffect(() => {});
+	useEffect(() => {
+		// this method guards itself against to ensure it's only executed once
+		fetchTCRparameters(props.contracts, props, context.drizzle);
+	});
 
 	/*
 		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
@@ -480,6 +484,7 @@ Listing.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
+		contracts: state.contracts,
 		fin4Tokens: state.fin4Store.fin4Tokens
 	};
 };

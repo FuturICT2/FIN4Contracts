@@ -255,7 +255,8 @@ const initialState = {
 	defaultAccount: null,
 	usersEthBalance: null,
 	messages: [],
-	collections: {}
+	collections: {},
+	parameterizerParams: {}
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -422,6 +423,10 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
+		case 'SET_PARAMETERIZER_PARAMS':
+			return Object.assign({}, state, {
+				parameterizerParams: action.paramsObj
+			});
 		default:
 			return state;
 	}

@@ -88,6 +88,53 @@ const fetchMessage = (Fin4MessagingContract, defaultAccount, messageId) => {
 	);
 };
 
+const parameterizerParamNames = [
+	'minDeposit',
+	'pMinDeposit',
+	'applyStageLen',
+	'pApplyStageLen',
+	'commitStageLen',
+	'pCommitStageLen',
+	'revealStageLen',
+	'pRevealStageLen',
+	'dispensationPct',
+	'pDispensationPct',
+	'reviewVoteQuorum',
+	'challengeVoteQuorum',
+	'pVoteQuorum',
+	'exitTimeDelay',
+	'exitPeriodLen',
+	'reviewTax',
+	'pminReputation'
+];
+
+let parameterizerContractReady = false;
+
+const fetchTCRparameters = (contracts, props, drizzle) => {
+	if (!parameterizerContractReady && contracts.Parameterizer && contracts.Parameterizer.initialized) {
+		parameterizerContractReady = true;
+	}
+
+	let store = props.store.getState().fin4Store;
+
+	// ensures the following code will only be executed once as this method will be
+	// called multiple times from useEffect() methods from the CuratedTokens sites
+	if (!parameterizerContractReady || Object.keys(store.parameterizerParams).length > 0) {
+		return;
+	}
+
+	getContractData(drizzle.contracts.Parameterizer, store.defaultAccount, 'getAll').then(paramValues => {
+		let params = {};
+		for (let i = 0; i < paramValues.length; i++) {
+			params[parameterizerParamNames[i]] = Number(paramValues[i]);
+		}
+		props.dispatch({
+			type: 'SET_PARAMETERIZER_PARAMS',
+			paramsObj: params
+		});
+	});
+};
+
 // --------------------- LOAD INITIAL DATA ---------------------
 
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
@@ -356,7 +403,9 @@ export {
 	isValidPublicAddress,
 	getFin4TokensFormattedForSelectOptions,
 	fetchCollectionsInfo,
-	zeroAddress
+	zeroAddress,
+	parameterizerParamNames,
+	fetchTCRparameters
 };
 
 /*
