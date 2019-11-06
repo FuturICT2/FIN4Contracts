@@ -163,9 +163,11 @@ function Listing(props, context) {
 								}
 							);
 						});
+						Promise.all(allPollPromises).then(() => {
+							setListings(listingsObj);
+						});
 					}
 				);
-				setListings(listingsObj);
 			}
 		);
 	};
