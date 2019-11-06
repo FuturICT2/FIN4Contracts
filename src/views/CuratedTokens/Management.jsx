@@ -74,7 +74,12 @@ function Management(props, context) {
 						key="rep-token"
 						data={{
 							token: 'Reputation Token',
-							balance: 'TODO',
+							balance:
+								props.contracts.Fin4Reputation &&
+								props.contracts.Fin4Reputation.initialized &&
+								props.usersBalances[context.drizzle.contracts.Fin4Reputation.address] !== undefined
+									? props.usersBalances[context.drizzle.contracts.Fin4Reputation.address]
+									: '?',
 							actions: <Button onClick={claimGOV}>Claim GOV</Button>
 						}}
 					/>
@@ -82,7 +87,12 @@ function Management(props, context) {
 						key="gov-token"
 						data={{
 							token: 'Governance Token',
-							balance: 'TODO',
+							balance:
+								props.contracts.GOV &&
+								props.contracts.GOV.initialized &&
+								props.usersBalances[context.drizzle.contracts.GOV.address] !== undefined
+									? props.usersBalances[context.drizzle.contracts.GOV.address]
+									: '?',
 							actions: ''
 						}}
 					/>
