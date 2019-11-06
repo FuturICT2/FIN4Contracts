@@ -108,26 +108,31 @@ const parameterizerParamNames = [
 	'pminReputation'
 ];
 
+let parameterizerParamsFetched = false;
+
 const fetchTCRparameters = (contracts, props, drizzle) => {
 	let parameterizerContractReady = contracts.Parameterizer && contracts.Parameterizer.initialized;
-	let store = props.store.getState().fin4Store;
 
 	// ensures the following code will only be executed once as this method will be
 	// called multiple times from useEffect() methods from the CuratedTokens sites
-	if (!parameterizerContractReady || Object.keys(store.parameterizerParams).length > 0) {
+	if (parameterizerParamsFetched || !parameterizerContractReady) {
 		return;
 	}
 
-	getContractData(drizzle.contracts.Parameterizer, store.defaultAccount, 'getAll').then(paramValues => {
-		let params = {};
-		for (let i = 0; i < paramValues.length; i++) {
-			params[parameterizerParamNames[i]] = Number(paramValues[i]);
+	parameterizerParamsFetched = true;
+
+	getContractData(drizzle.contracts.Parameterizer, props.store.getState().fin4Store.defaultAccount, 'getAll').then(
+		paramValues => {
+			let params = {};
+			for (let i = 0; i < paramValues.length; i++) {
+				params[parameterizerParamNames[i]] = Number(paramValues[i]);
+			}
+			props.dispatch({
+				type: 'SET_PARAMETERIZER_PARAMS',
+				paramsObj: params
+			});
 		}
-		props.dispatch({
-			type: 'SET_PARAMETERIZER_PARAMS',
-			paramsObj: params
-		});
-	});
+	);
 };
 
 let reputationBalanceFetched = false;
