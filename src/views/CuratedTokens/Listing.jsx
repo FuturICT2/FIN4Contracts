@@ -357,7 +357,7 @@ function Listing(props, context) {
 										name: token.name,
 										apply:
 											token.isOPAT === true ? (
-												'Is on the curated list'
+												'' // TODO what to write here, is on the list or in application/challenge? or nothing is ok
 											) : (
 												<Button
 													onClick={() => {
