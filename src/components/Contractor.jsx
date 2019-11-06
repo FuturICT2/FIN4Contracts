@@ -130,36 +130,37 @@ const fetchTCRparameters = (contracts, props, drizzle) => {
 	});
 };
 
+let reputationBalanceFetched = false;
+let govBalanceFetched = false;
+
 const fetchUsersReputationAndGOVbalance = (contracts, props, drizzle) => {
 	let reputationContractReady = contracts.Fin4Reputation && contracts.Fin4Reputation.initialized;
 	let govContractReady = contracts.GOV && contracts.GOV.initialized;
 
 	let store = props.store.getState().fin4Store;
 
-	if (reputationContractReady) {
+	if (reputationContractReady && !reputationBalanceFetched) {
+		reputationBalanceFetched = true;
 		let reputationContract = drizzle.contracts.Fin4Reputation;
-		if (!store.usersBalances[reputationContract.address]) {
-			getContractData(reputationContract, store.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
-				props.dispatch({
-					type: 'UPDATE_BALANCE',
-					tokenAddress: reputationContract.address,
-					balance: new BN(balanceBN).toNumber()
-				});
+		getContractData(reputationContract, store.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
+			props.dispatch({
+				type: 'UPDATE_BALANCE',
+				tokenAddress: reputationContract.address,
+				balance: new BN(balanceBN).toNumber()
 			});
-		}
+		});
 	}
 
-	if (govContractReady) {
+	if (govContractReady && !govBalanceFetched) {
+		govBalanceFetched = true;
 		let govContract = drizzle.contracts.GOV;
-		if (!store.usersBalances[govContract.address]) {
-			getContractData(govContract, store.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
-				props.dispatch({
-					type: 'UPDATE_BALANCE',
-					tokenAddress: govContract.address,
-					balance: new BN(balanceBN).toNumber()
-				});
+		getContractData(govContract, store.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
+			props.dispatch({
+				type: 'UPDATE_BALANCE',
+				tokenAddress: govContract.address,
+				balance: new BN(balanceBN).toNumber()
 			});
-		}
+		});
 	}
 };
 
