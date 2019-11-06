@@ -8,7 +8,7 @@ import Modal from '../../components/Modal';
 import ContractForm from '../../components/ContractForm';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { fetchUsersGOVbalance, fetchUsersREPbalance } from '../../components/Contractor';
+import { fetchUsersGOVbalance, fetchUsersREPbalance, getContractData } from '../../components/Contractor';
 const BN = require('bignumber.js');
 
 function Management(props, context) {
@@ -19,32 +19,23 @@ function Management(props, context) {
 
 	const [govTokenDelegateeBalance, setGovTokenDelegateeBalance] = useState(null);
 
+	let delegatedToMeFetched = useRef(false);
+
 	useEffect(() => {
 		fetchUsersGOVbalance(props.contracts, props, context.drizzle); // in case user navigates directly here without visiting Listing first
 		fetchUsersREPbalance(props.contracts, props, context.drizzle);
+
+		if (!delegatedToMeFetched.current && props.contracts.GOV && props.contracts.GOV.initialized) {
+			delegatedToMeFetched.current = true;
+			fetchDelegatedToMe();
+		}
 	});
 
-	/*this.state = {
-			repTokenBalance: '?',
-			govTokenBalance: '?',
-			govTokenDelegateeBalance: '?'
-		};*/
-
-	/*
-		getContractData_deprecated(RepTokenAddress, 'Fin4Reputation', 'balanceOf', [getCurrentAccount()]).then(
-			repTokenBalanceBN => {
-				this.setState({ repTokenBalance: new BN(repTokenBalanceBN).toNumber() });
-			}
-		);
-
-		getContractData_deprecated(GOVTokenAddress, 'GOV', 'balanceOf', [getCurrentAccount()]).then(govTokenBalanceBN => {
-			this.setState({ govTokenBalance: new BN(govTokenBalanceBN).toNumber() });
+	const fetchDelegatedToMe = () => {
+		getContractData(context.drizzle.contracts.GOV, props.defaultAccount, 'getAmountsDelegatedToMe').then(balanceBN => {
+			setGovTokenDelegateeBalance(new BN(balanceBN).toNumber());
 		});
-
-		getContractData_deprecated(GOVTokenAddress, 'GOV', 'getAmountsDelegatedToMe').then(govTokenDelegateeBalanceBN => {
-			this.setState({ govTokenDelegateeBalance: new BN(govTokenDelegateeBalanceBN).toNumber() });
-		});
-*/
+	};
 
 	const claimGOV = () => {
 		/*
