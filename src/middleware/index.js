@@ -42,7 +42,8 @@ const contractEventNotifier = store => next => action => {
 				userIsCreator: token.creator === defaultAccount,
 				userIsAdmin: false, // TODO
 				totalSupply: 0,
-				creationTime: token.creationTime
+				creationTime: token.creationTime,
+				isOPAT: null
 			}
 		});
 	}

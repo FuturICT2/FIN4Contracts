@@ -223,7 +223,8 @@ const fetchAllTokens = (props, Fin4TokenManagementContract, callback) => {
 							description: description,
 							unit: unit,
 							totalSupply: new BN(totalSupply).toNumber(),
-							creationTime: creationTime
+							creationTime: creationTime,
+							isOPAT: null
 						};
 					}
 				);
