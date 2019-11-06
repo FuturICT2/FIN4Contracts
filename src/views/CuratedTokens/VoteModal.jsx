@@ -91,7 +91,7 @@ function VoteModal(props, context) {
 					onChange={e => (voteModalValues.current.vote = e.target.value)}
 					style={inputFieldStyle}
 				/>
-				<small style={{ color: 'gray' }}>{props.voteOptionsInfo}</small>
+				<small style={{ fontFamily: 'arial', color: 'gray' }}>{props.voteOptionsInfo}</small>
 				<TextField
 					key="set-salt"
 					type="number"
@@ -110,7 +110,7 @@ function VoteModal(props, context) {
 					Submit
 				</Button>
 				<center>
-					<small style={{ color: 'gray' }}>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
 						Upon submitting, two transactions have to be signed: to allow the number of tokens to be withdrawn from your
 						GOV token balance and then to submit your vote.
 					</small>

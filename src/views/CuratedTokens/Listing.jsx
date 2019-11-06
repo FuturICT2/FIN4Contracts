@@ -393,7 +393,7 @@ function Listing(props, context) {
 					Submit
 				</Button>
 				<center>
-					<small style={{ color: 'gray' }}>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
 						Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
 						token balance and then to submit the application for this token.
 					</small>
@@ -426,7 +426,7 @@ function Listing(props, context) {
 					Submit
 				</Button>
 				<center>
-					<small style={{ color: 'gray' }}>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
 						Upon submitting, two transactions have to be signed: to allow minDeposit (
 						{props.parameterizerParams['minDeposit'] ? props.parameterizerParams['minDeposit'] : '?'}) to be withdrawn
 						from your GOV token balance and then to submit your challenge.
