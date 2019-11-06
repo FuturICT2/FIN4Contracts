@@ -185,6 +185,9 @@ function Listing(props, context) {
 	};
 
 	const submitApplyModal = () => {
+		let govContract = context.drizzle.contracts.GOV;
+		let registryContract = context.drizzle.contracts.Registry;
+
 		if (applyModalValues.current.deposit === null || applyModalValues.current.data === null) {
 			alert('Both values must be set.');
 			return;
@@ -200,40 +203,36 @@ function Listing(props, context) {
 			return;
 		}
 
+		if (!props.usersBalances[govContract.address]) {
+			alert('GOV balance not available');
+		}
+
+		if (!props.usersBalances[govContract.address] || props.usersBalances[govContract.address] < deposit) {
+			alert(
+				'Your GOV balance is ' + props.usersBalances[govContract.address] + ', less than your deposit of ' + deposit
+			);
+			return;
+		}
+
 		toggleApplyModal();
 
-		// Step 1: approve
-		/*
-		getContract(GOVTokenAddress, 'GOV')
-			.then(function(instance) {
-				return instance.approve(RegistryAddress, deposit, {
-					from: getCurrentAccount()
-				});
-			})
+		// Step 1: approve deposit to be taken from users GOV balance
+
+		govContract.methods
+			.approve(registryContract.address, deposit)
+			.send({ from: props.defaultAccount })
 			.then(function(result) {
-				console.log('GOV.approve Result: ', result);
+				console.log('Results of submitting GOV.approve: ', result);
 
 				// Step 2: applyToken
 
-				getContract(RegistryAddress, 'Registry')
-					.then(function(instance) {
-						return instance.applyToken(token, deposit, data, {
-							from: getCurrentAccount()
-						});
-					})
+				registryContract.methods
+					.applyToken(token, deposit, data)
+					.send({ from: props.defaultAccount })
 					.then(function(result) {
-						console.log('Registry.applyToken Result: ', result);
-					})
-					.catch(function(err) {
-						console.log('Registry.applyToken Error: ', err.message);
-						alert(err.message);
+						console.log('Results of submitting Registry.applyToken: ', result);
 					});
-			})
-			.catch(function(err) {
-				console.log('GOV.approve Error: ', err.message);
-				alert(err.message);
 			});
-*/
 	};
 
 	// ---------- VoteModal ----------
