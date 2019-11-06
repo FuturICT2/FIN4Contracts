@@ -273,55 +273,32 @@ function Listing(props, context) {
 		let minDeposit = props.parameterizerParams['minDeposit'];
 
 		toggleChallengeModal();
-		/*
-		getContract(GOVTokenAddress, 'GOV')
-			.then(function(instance) {
-				return instance.approve(RegistryAddress, minDeposit, {
-					from: getCurrentAccount()
-				});
-			})
-			.then(function(result) {
-				console.log('GOV.approve Result: ', result);
-				getContract(RegistryAddress, 'Registry')
-					.then(function(instance) {
-						return instance.challenge(listingHash, data, {
-							from: getCurrentAccount()
-						});
-					})
-					.then(function(result) {
-						console.log('Registry.challenge Result: ', result);
-					})
-					.catch(function(err) {
-						console.log('Registry.challenge Error: ', err.message);
-						alert(err.message);
+
+		context.drizzle.contracts.GOV.methods
+			.approve(context.drizzle.contracts.Registry.address, minDeposit)
+			.send({ from: props.defaultAccount })
+			.then(result => {
+				console.log('Results of submitting GOV.approve: ', result);
+
+				context.drizzle.contracts.Registry.methods
+					.challenge(listingHash, data)
+					.send({ from: props.defaultAccount })
+					.then(result => {
+						console.log('Results of submitting Registry.challenge: ', result);
 					});
-			})
-			.catch(function(err) {
-				console.log('GOV.approve Error: ', err.message);
-				alert(err.message);
 			});
-*/
 	};
 
 	// ----------
 
 	const updateStatus = () => {
-		/*
-		let listingKey = this.selectedListing.listingKey;
-		getContract(RegistryAddress, 'Registry')
-			.then(function(instance) {
-				return instance.updateStatus(listingKey, {
-					from: getCurrentAccount()
-				});
-			})
-			.then(function(result) {
-				console.log('RegistryAddress.updateStatus Result: ', result);
-			})
-			.catch(function(err) {
-				console.log('RegistryAddress.updateStatus Error: ', err.message);
-				alert(err.message);
+		let listingKey = selectedListing.current.listingKey;
+		context.drizzle.contracts.Registry.methods
+			.updateStatus(listingKey)
+			.send({ from: props.defaultAccount })
+			.then(result => {
+				console.log('Results of submitting Listing.updateStatus: ', result);
 			});
-*/
 	};
 
 	return (
