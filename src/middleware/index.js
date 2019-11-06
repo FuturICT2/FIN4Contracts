@@ -249,6 +249,7 @@ const appMiddlewares = [contractEventNotifier];
 const initialState = {
 	drizzleInitialized: false,
 	fin4Tokens: {},
+	fin4TokensInitiallyFetched: false, // is there a more elegant solution to know this? E.g. needed in Listing.jsx
 	usersClaims: {},
 	usersBalances: {},
 	proofTypes: {},
@@ -292,7 +293,9 @@ function fin4StoreReducer(state = initialState, action) {
 					}
 				};
 			}
-			return state;
+			return update(state, {
+				fin4TokensInitiallyFetched: { $set: true }
+			});
 		case 'ADD_CLAIM':
 			return {
 				...state,

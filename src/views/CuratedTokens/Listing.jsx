@@ -47,9 +47,22 @@ function Listing(props, context) {
 
 	const selectedListing = useRef(null);
 
+	let listingsFetched = useRef(false);
+
 	useEffect(() => {
 		// this method guards itself against to ensure it's only executed once
 		fetchTCRparameters(props.contracts, props, context.drizzle);
+
+		if (
+			!listingsFetched.current &&
+			props.fin4TokensInitiallyFetched &&
+			props.contracts.Registry &&
+			props.contracts.Registry.initialized
+		) {
+			listingsFetched.current = true;
+
+			// TODO
+		}
 	});
 
 	/*
@@ -469,6 +482,7 @@ const mapStateToProps = state => {
 	return {
 		contracts: state.contracts,
 		fin4Tokens: state.fin4Store.fin4Tokens,
+		fin4TokensInitiallyFetched: state.fin4Store.fin4TokensInitiallyFetched,
 		parameterizerParams: state.fin4Store.parameterizerParams
 	};
 };
