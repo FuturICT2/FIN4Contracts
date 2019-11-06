@@ -38,21 +38,12 @@ function Management(props, context) {
 	};
 
 	const claimGOV = () => {
-		/*
-		getContract(RepTokenAddress, 'Fin4Reputation')
-			.then(function(instance) {
-				return instance.getGOVFromReputation(getCurrentAccount(), {
-					from: getCurrentAccount()
-				});
-			})
-			.then(function(result) {
-				console.log('Fin4Reputation.getGOVFromReputation Result: ', result);
-			})
-			.catch(function(err) {
-				console.log('Fin4Reputation.getGOVFromReputation Error: ', err.message);
-				alert(err.message);
+		context.drizzle.contracts.Fin4Reputation.methods
+			.getGOVFromReputation()
+			.send({ from: props.defaultAccount })
+			.then(result => {
+				console.log('Results of submitting GOV.approve: ', result);
 			});
-*/
 	};
 
 	const toggleDelegateModal = () => {
