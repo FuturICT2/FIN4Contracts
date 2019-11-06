@@ -203,7 +203,7 @@ function Listing(props, context) {
 			return;
 		}
 
-		if (!props.usersBalances[govContract.address]) {
+		if (!props.usersBalances[govContract.address] === undefined) {
 			alert('GOV balance not available');
 		}
 
