@@ -1,37 +1,32 @@
-import React, { Component } from 'react';
-//import { PLCRVotingAddress } from '../../config/DeployedAddresses.js';
+import React from 'react';
 import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';
 import ContractForm from '../../components/ContractForm';
+import { useTranslation } from 'react-i18next';
 
-class RevealModal extends Component {
-	constructor(props) {
-		super(props);
-	}
+function RevealModal(props) {
+	const { t } = useTranslation();
 
-	render() {
-		return (
-			<center>
-				<Modal isOpen={this.props.isOpen} handleClose={this.props.handleClose} title="Set vote and salt" width="400px">
-					<ContractForm
-						//contractAddress={PLCRVotingAddress}
-						contractName="PLCRVoting"
-						method="revealVote"
-						labels={['_pollID', 'Vote', 'Salt']}
-						staticArgs={{
-							_pollID: this.props.pollID
-						}}
-						postSubmitCallback={(success, result) => {
-							if (!success) {
-								alert(result.message);
-							}
-							this.props.handleClose();
-						}}
-					/>
-				</Modal>
-			</center>
-		);
-	}
+	return (
+		<center>
+			<Modal isOpen={props.isOpen} handleClose={props.handleClose} title="Set vote and salt" width="400px">
+				<ContractForm
+					contractName="PLCRVoting"
+					method="revealVote"
+					labels={['_pollID', 'Vote', 'Salt']}
+					staticArgs={{
+						_pollID: props.pollID
+					}}
+					postSubmitCallback={(success, result) => {
+						if (!success) {
+							alert(result.message);
+						}
+						props.handleClose();
+					}}
+				/>
+			</Modal>
+		</center>
+	);
 }
 
 export default drizzleConnect(RevealModal);
