@@ -20,7 +20,8 @@ function Governance(props, context) {
 	const [isChallengeReparamOpen, setChallengeReparamOpen] = useState(false);
 	const [isVoteModalOpen, setVoteModalOpen] = useState(false);
 	const [isRevealModalOpen, setRevealModalOpen] = useState(false);
-	const [paramValues, setParamValues] = useState(null);
+
+	const [params, setParams] = useState({});
 
 	const selectedParam = useRef(null);
 	const parameterizerAddress = useRef(null);
@@ -28,40 +29,42 @@ function Governance(props, context) {
 		value: null
 	});
 
+	const paramStatusesFetched = useRef(false);
+
 	useEffect(() => {
 		fetchParameterizerParams(props.contracts, props, context.drizzle);
 
-		// TODO
+		if (!paramStatusesFetched.current && Object.keys(props.parameterizerParams).length > 0) {
+			paramStatusesFetched.current = true;
+			fetchParamStatuses();
+		}
 	});
 
-	/*
-			// get all parameters
+	const fetchParamStatuses = () => {
+		let paramsObj = {};
+		for (var paramName in props.parameterizerParams) {
+			if (props.parameterizerParams.hasOwnProperty(paramName)) {
+				paramsObj[paramName] = {
+					name: paramName,
+					statusEnum: ParamActionStatus.DEFAULT,
+					status: '-',
+					dueDate: '-',
+					propId: null,
+					propDeposit: null,
+					dueDate: null,
+					challengeID: null
+				};
+			}
+		}
+		setParams(paramsObj);
 
-			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'getAll').then(paramValuesBN => {
-				let paramValues = {};
-				for (var i = 0; i < params.length; i++) {
-					let entry = {
-						name: params[i].name,
-						value: new BN(paramValuesBN[i]).toNumber(),
-						statusEnum: ParamActionStatus.DEFAULT,
-						status: '-',
-						dueDate: '-'
-					};
-					paramValues[params[i].name] = entry;
-				}
-				this.setState({ paramValues: paramValues });
-
-				// get proposals
-
-				getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'getProposalKeys').then(proposalKeys => {
+		// get proposals
+		/*
+			getContractData(context.drizzle.contracts.Parameterizer, props.defaultAccount, 'getProposalKeys').then(proposalKeys => {
 					let allPromises = proposalKeys.map(key => {
 						return getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(
 							({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
-								if (!this.state.paramValues[name]) {
-									// is this correct? TODO
-									return;
-								}
-								let param = this.state.paramValues[name];
+								let param = params[name];
 								param.propID = key;
 								param.propDeposit = new BN(depositBN).toNumber();
 
@@ -131,9 +134,8 @@ function Governance(props, context) {
 						this.setState({ paramValues: this.state.paramValues });
 					});
 				});
-			});
-		});
-*/
+				*/
+	};
 
 	// ---------- ProposeReparam ----------
 
@@ -153,7 +155,7 @@ function Governance(props, context) {
 	const submitProposeReparamModal = () => {
 		let name = selectedParam.current.name;
 		let value = Number(proposeReparamModalValues.current.value);
-		let pMinDeposit = paramValues['pMinDeposit'].value;
+		let pMinDeposit = props.parameterizerParams['pMinDeposit'].value;
 		let parameterizerAddr = parameterizerAddress.current;
 
 		toggleProposeReparamModal();
@@ -266,46 +268,47 @@ function Governance(props, context) {
 		<center>
 			<Box title="TCR Parameters" width="900px">
 				<Table headers={['Parameter', 'Description', 'Value', 'Actions', 'Status', 'Due Date']}>
-					{paramValues !== null &&
-						params.map((entry, index) => {
-							return (
-								<TableRow
-									key={index}
-									data={{
-										parameter: entry.name,
-										description: entry.description,
-										value: paramValues[entry.name].value,
-										actions: (
-											<Button
-												onClick={() => {
-													selectedParam.current = paramValues[entry.name];
-													switch (paramValues[entry.name].statusEnum) {
-														case Param_Action_Status.DEFAULT:
-															toggleProposeReparamModal();
-															break;
-														case ParamActionStatus.PROPOSEDREPARAM:
-															toggleChallengeReparamModal();
-															break;
-														case ParamActionStatus.VOTE:
-															toggleVoteModal();
-															break;
-														case ParamActionStatus.REVEAL:
-															toggleRevealModal();
-															break;
-														case ParamActionStatus.UPDATE:
-															processProposal();
-															break;
-													}
-												}}>
-												{paramValues[entry.name].statusEnum}
-											</Button>
-										),
-										status: paramValues[entry.name].status,
-										dueDate: paramValues[entry.name].dueDate
-									}}
-								/>
-							);
-						})}
+					{Object.keys(params).map((paramName, index) => {
+						let entry = params[paramName];
+						let paramInStore = props.parameterizerParams[paramName];
+						return (
+							<TableRow
+								key={index}
+								data={{
+									parameter: paramName,
+									description: paramInStore.description,
+									value: paramInStore.value,
+									actions: (
+										<Button
+											onClick={() => {
+												selectedParam.current = paramName;
+												switch (entry.statusEnum) {
+													case ParamActionStatus.DEFAULT:
+														toggleProposeReparamModal();
+														break;
+													case ParamActionStatus.PROPOSEDREPARAM:
+														toggleChallengeReparamModal();
+														break;
+													case ParamActionStatus.VOTE:
+														toggleVoteModal();
+														break;
+													case ParamActionStatus.REVEAL:
+														toggleRevealModal();
+														break;
+													case ParamActionStatus.UPDATE:
+														processProposal();
+														break;
+												}
+											}}>
+											{entry.statusEnum}
+										</Button>
+									),
+									status: entry.status,
+									dueDate: entry.dueDate
+								}}
+							/>
+						);
+					})}
 				</Table>
 			</Box>
 			<Modal
@@ -326,8 +329,8 @@ function Governance(props, context) {
 				<center>
 					<small style={{ fontFamily: 'arial', color: 'gray' }}>
 						Upon submitting, two transactions have to be signed: to allow the deposit (
-						{paramValues === null ? '?' : paramValues['pMinDeposit'].value}) to be withdrawn from your GOV token balance
-						and then to submit the proposed reparameterization.
+						{props.parameterizerParams['pMinDeposit'] ? props.parameterizerParams['pMinDeposit'].value : '?'}) to be
+						withdrawn from your GOV token balance and then to submit the proposed reparameterization.
 					</small>
 				</center>
 			</Modal>
