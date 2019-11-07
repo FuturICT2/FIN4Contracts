@@ -245,6 +245,17 @@ const messageHasBeenActedUpon = (store, messageId) => {
 	return false;
 };
 
+const findMatchingMixedCaseTokenAddress = (fin4Tokens, lowerCaseTokenAddr) => {
+	let addresses = Object.keys(fin4Tokens);
+	for (let i = 0; i < addresses.length; i++) {
+		let addr = addresses[i];
+		if (addr.toLowerCase() === lowerCaseTokenAddr) {
+			return addr;
+		}
+	}
+	return null;
+};
+
 const appMiddlewares = [contractEventNotifier];
 
 const initialState = {
@@ -439,6 +450,22 @@ function fin4StoreReducer(state = initialState, action) {
 		case 'SET_PARAMETERIZER_PARAMS':
 			return Object.assign({}, state, {
 				parameterizerParams: action.paramsObj
+			});
+		case 'MARK_FIN4TOKEN_AS_OPAT':
+			let matchingMixedCaseTokenAddr = findMatchingMixedCaseTokenAddress(
+				state.fin4Tokens,
+				action.lowerCaseTokenAddress
+			);
+			if (!matchingMixedCaseTokenAddr) {
+				// should only happen if tokens were added to TCR that are not Fin4Tokens
+				return state;
+			}
+			return update(state, {
+				fin4Tokens: {
+					[matchingMixedCaseTokenAddr]: {
+						isOPAT: { $set: true }
+					}
+				}
 			});
 		default:
 			return state;

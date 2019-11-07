@@ -412,7 +412,12 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 const fetchOPATs = (props, RegistryContract) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(RegistryContract, defaultAccount, 'getWhitelistedListingKeys').then(whitelistedListingKeys => {
-		// TODO
+		whitelistedListingKeys.map(listingKey => {
+			props.dispatch({
+				type: 'MARK_FIN4TOKEN_AS_OPAT',
+				lowerCaseTokenAddress: '0x' + listingKey.substr(26, listingKey.length - 1)
+			});
+		});
 	});
 };
 
