@@ -8,6 +8,8 @@ const GOV = artifacts.require('tokens/GOV');
 const Fin4Reputation = artifacts.require('Fin4Reputation');
 
 const Fin4Main = artifacts.require('Fin4Main');
+const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
+const Fin4Claiming = artifacts.require('Fin4Claiming');
 
 const fs = require('fs');
 //var path = require('path');
@@ -52,6 +54,11 @@ module.exports = async function(deployer) {
 
 	const GOVTokenInstance = await GOV.deployed();
 	await Fin4ReputationInstance.init(GOVTokenInstance.address);
+
+	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
+	await Fin4TokenManagementInstance.setFin4ReputationAddress(Fin4ReputationInstance.address);
+	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
+	await Fin4ClaimingInstance.setFin4ReputationAddress(Fin4ReputationInstance.address);
 
 	// dev: give all tokenHolders 10000 reputation tokens
 	await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 200000)));

@@ -22,10 +22,16 @@ contract Fin4Claiming {
 
     address public creator;
     address public Fin4SystemParametersAddress;
+    address public Fin4ReputationAddress;
 
     constructor(address Fin4SystemParametersAddr) public {
         creator = msg.sender;
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
+    }
+
+    function setFin4ReputationAddress(address Fin4ReputationAddr) public {
+        require(msg.sender == creator, "Only the creator of this smart contract can call this function");
+        Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
     function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public {

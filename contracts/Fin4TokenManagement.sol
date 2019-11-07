@@ -14,12 +14,19 @@ contract Fin4TokenManagement {
     address public Fin4ClaimingAddress;
     address public Fin4ProofingAddress;
     address public Fin4SystemParametersAddress;
+    address public Fin4ReputationAddress;
 
     constructor(address Fin4ClaimingAddr, address Fin4ProofingAddr, address Fin4SystemParametersAddr) public {
         creator = msg.sender;
         Fin4ClaimingAddress = Fin4ClaimingAddr;
         Fin4ProofingAddress = Fin4ProofingAddr;
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
+    }
+
+    function setFin4ReputationAddress(address Fin4ReputationAddr) public {
+        require(msg.sender == creator, "Only the creator of this smart contract can call this function");
+        // TODO furthermore it should be only callable once? #ConceptualDecision #NoBackdoors
+        Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
     address[] public allFin4Tokens;
