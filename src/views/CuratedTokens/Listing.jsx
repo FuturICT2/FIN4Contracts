@@ -202,7 +202,8 @@ function Listing(props, context) {
 		let deposit = Number(applyModalValues.current.deposit);
 		let data = applyModalValues.current.data;
 
-		let minDepositPlusReviewTax = props.parameterizerParams['minDeposit'] + props.parameterizerParams['reviewTax'];
+		let minDepositPlusReviewTax =
+			props.parameterizerParams['minDeposit'].value + props.parameterizerParams['reviewTax'].value;
 		if (deposit < minDepositPlusReviewTax) {
 			alert('Deposit must be bigger than minDeposit + reviewTax (=' + minDepositPlusReviewTax + ')');
 			return;
@@ -270,7 +271,7 @@ function Listing(props, context) {
 	const submitChallengeModal = () => {
 		let listingHash = selectedListing.current.listingKey;
 		let data = challengeModalValues.current.data;
-		let minDeposit = props.parameterizerParams['minDeposit'];
+		let minDeposit = props.parameterizerParams['minDeposit'].value;
 
 		toggleChallengeModal();
 
@@ -435,8 +436,8 @@ function Listing(props, context) {
 				<center>
 					<small style={{ fontFamily: 'arial', color: 'gray' }}>
 						Upon submitting, two transactions have to be signed: to allow minDeposit (
-						{props.parameterizerParams['minDeposit'] ? props.parameterizerParams['minDeposit'] : '?'}) to be withdrawn
-						from your GOV token balance and then to submit your challenge.
+						{props.parameterizerParams['minDeposit'] ? props.parameterizerParams['minDeposit'].value : '?'}) to be
+						withdrawn from your GOV token balance and then to submit your challenge.
 					</small>
 				</center>
 			</Modal>
