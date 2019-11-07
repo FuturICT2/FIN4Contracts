@@ -29,18 +29,24 @@ function Governance(props, context) {
 		value: null
 	});
 
+	const paramsAugmented = useRef(false);
 	const paramStatusesFetched = useRef(false);
 
 	useEffect(() => {
 		fetchParameterizerParams(props.contracts, props, context.drizzle);
 
-		if (!paramStatusesFetched.current && Object.keys(props.parameterizerParams).length > 0) {
+		if (!paramsAugmented.current && Object.keys(props.parameterizerParams).length > 0) {
+			paramsAugmented.current = true;
+			augmentParams();
+		}
+
+		if (!paramStatusesFetched.current && Object.keys(params).length > 0) {
 			paramStatusesFetched.current = true;
 			fetchParamStatuses();
 		}
 	});
 
-	const fetchParamStatuses = () => {
+	const augmentParams = () => {
 		let paramsObj = {};
 		for (var paramName in props.parameterizerParams) {
 			if (props.parameterizerParams.hasOwnProperty(paramName)) {
@@ -57,84 +63,86 @@ function Governance(props, context) {
 			}
 		}
 		setParams(paramsObj);
+	};
 
+	const fetchParamStatuses = () => {
 		// get proposals
-		/*
-			getContractData(context.drizzle.contracts.Parameterizer, props.defaultAccount, 'getProposalKeys').then(proposalKeys => {
-					let allPromises = proposalKeys.map(key => {
-						return getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'proposals', [key]).then(
-							({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
-								let param = params[name];
-								param.propID = key;
-								param.propDeposit = new BN(depositBN).toNumber();
 
-								let appExpiry = new BN(appExpiryBN).toNumber() * 1000;
-								param.dueDate = new Date(appExpiry).toLocaleString('de-CH-1996');
+		let parameterizerContract = context.drizzle.contracts.Parameterizer;
 
-								let nowTimestamp = Date.now();
-								let inAppTime = appExpiry - nowTimestamp > 0;
-								let value = new BN(valueBN).toNumber();
+		getContractData(parameterizerContract, props.defaultAccount, 'getProposalKeys').then(proposalKeys => {
+			let allPromises = proposalKeys.map(key => {
+				return getContractData(parameterizerContract, props.defaultAccount, 'proposals', key).then(
+					({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
+						let param = params[name];
+						param.propID = key;
+						param.propDeposit = new BN(depositBN).toNumber();
 
-								let challengeID = new BN(challengeIDBN).toNumber();
-								param.challengeID = challengeID;
+						let appExpiry = new BN(appExpiryBN).toNumber() * 1000;
+						param.dueDate = new Date(appExpiry).toLocaleString('de-CH-1996');
 
-								if (challengeID === 0) {
-									if (inAppTime) {
-										param.statusEnum = ParamActionStatus.PROPOSEDREPARAM;
-										param.status = 'Proposed value: ' + value;
+						let nowTimestamp = Date.now();
+						let inAppTime = appExpiry - nowTimestamp > 0;
+						let value = new BN(valueBN).toNumber();
+
+						let challengeID = new BN(challengeIDBN).toNumber();
+						param.challengeID = challengeID;
+
+						if (challengeID === 0) {
+							if (inAppTime) {
+								param.statusEnum = ParamActionStatus.PROPOSEDREPARAM;
+								param.status = 'Proposed value: ' + value;
+								return;
+							}
+							param.statusEnum = ParamActionStatus.DEFAULT;
+							param.status = '-';
+							param.dueDate = '-';
+							return;
+						}
+
+						return getPollStatus(challengeID, context.drizzle.contracts.PLCRVoting, props.defaultAccount).then(
+							pollStatus => {
+								param.dueDate = pollStatus.dueDate;
+								switch (pollStatus.inPeriod) {
+									case PollStatus.IN_COMMIT_PERIOD:
+										param.statusEnum = ParamActionStatus.VOTE;
+										param.status = ParamActionStatus.VOTE;
 										return;
-									}
-									param.statusEnum = ParamActionStatus.DEFAULT;
-									param.status = '-';
-									param.dueDate = '-';
-									return;
-								}
-
-								return getPollStatus(challengeID).then(pollStatus => {
-									param.dueDate = pollStatus.dueDate;
-									switch (pollStatus.inPeriod) {
-										case PollStatus.IN_COMMIT_PERIOD:
-											param.statusEnum = ParamActionStatus.VOTE;
-											param.status = ParamActionStatus.VOTE;
-											return;
-										case PollStatus.IN_REVEAL_PERIOD:
-											param.statusEnum = ParamActionStatus.REVEAL;
-											param.status = ParamActionStatus.REVEAL;
-											return;
-										case PollStatus.PAST_REVEAL_PERIOD:
-											return getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'challenges', [
-												challengeID
-											]).then(
-												({
-													0: rewardPoolBN,
-													1: challenger,
-													2: resolved,
-													3: stakeBN,
-													4: winningTokensBN,
-													5: tokenClaimsMapping
-												}) => {
-													if (resolved) {
-														param.statusEnum = ParamActionStatus.DEFAULT;
-														param.status = '-';
-														param.dueDate = '-';
-														return;
-													}
-													param.statusEnum = ParamActionStatus.UPDATE;
-													param.status = 'Update pending';
+									case PollStatus.IN_REVEAL_PERIOD:
+										param.statusEnum = ParamActionStatus.REVEAL;
+										param.status = ParamActionStatus.REVEAL;
+										return;
+									case PollStatus.PAST_REVEAL_PERIOD:
+										return getContractData(parameterizerContract, props.defaultAccount, 'challenges', challengeID).then(
+											({
+												0: rewardPoolBN,
+												1: challenger,
+												2: resolved,
+												3: stakeBN,
+												4: winningTokensBN,
+												5: tokenClaimsMapping
+											}) => {
+												if (resolved) {
+													param.statusEnum = ParamActionStatus.DEFAULT;
+													param.status = '-';
 													param.dueDate = '-';
+													return;
 												}
-											);
-									}
-								});
+												param.statusEnum = ParamActionStatus.UPDATE;
+												param.status = 'Update pending';
+												param.dueDate = '-';
+											}
+										);
+								}
 							}
 						);
-					});
-					Promise.all(allPromises).then(results => {
-						// a more elegant way to trigger a state-update?
-						this.setState({ paramValues: this.state.paramValues });
-					});
-				});
-				*/
+					}
+				);
+			});
+			Promise.all(allPromises).then(() => {
+				setParams(params);
+			});
+		});
 	};
 
 	// ---------- ProposeReparam ----------
@@ -388,6 +396,7 @@ Governance.contextTypes = {
 const mapStateToProps = state => {
 	return {
 		contracts: state.contracts,
+		defaultAccount: state.fin4Store.defaultAccount,
 		parameterizerParams: state.fin4Store.parameterizerParams
 	};
 };
