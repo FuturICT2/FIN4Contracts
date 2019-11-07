@@ -6,7 +6,7 @@ import Currency from './Currency';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faSortAmountDownAlt, faStar } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import OutlinedDiv from './OutlinedDiv';
 import { Checkbox, FormControlLabel, Radio, RadioGroup, TextField } from '@material-ui/core';
@@ -172,9 +172,18 @@ function SortableTokenList(props, context) {
 							key={'token_' + index}
 							data={{
 								name: (
-									<span title={'Description: ' + token.description + '\nUnit: ' + token.unit}>
-										<Currency symbol={token.symbol} name={token.name} />
-									</span>
+									<>
+										<span title={'Description: ' + token.description + '\nUnit: ' + token.unit}>
+											<Currency symbol={token.symbol} name={token.name} />
+										</span>
+										{token.isOPAT && (
+											<FontAwesomeIcon
+												title="This token is on the list of curated tokens"
+												icon={faStar}
+												style={styles.iconOPAT}
+											/>
+										)}
+									</>
 								),
 								totalSupply: token.totalSupply,
 								actions: (
@@ -223,6 +232,12 @@ const styles = {
 		width: '14px',
 		height: '14px',
 		paddingLeft: '10px'
+	},
+	iconOPAT: {
+		color: 'lightgreen',
+		width: '16px',
+		height: '16px',
+		paddingLeft: '5px'
 	}
 };
 
