@@ -245,6 +245,13 @@ function Governance(props, context) {
 	return (
 		<center>
 			<Box title="TCR Parameters" width="900px">
+				<center>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
+						Reload to see changes, statuses won't change automatically.
+						<br />
+						TODO explain costs involved for making changes and potential rewards/losses.
+					</small>
+				</center>
 				<Table headers={['Parameter', 'Description', 'Value', 'Actions', 'Status', 'Due Date']}>
 					{Object.keys(params).map((paramName, index) => {
 						let entry = params[paramName];

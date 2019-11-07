@@ -304,6 +304,13 @@ function Listing(props, context) {
 	return (
 		<center>
 			<Box title="Curated Positive Action Tokens" width="800px">
+				<center>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
+						Reload to see changes, statuses won't change automatically.
+						<br />
+						TODO explain costs involved for making changes and potential rewards/losses.
+					</small>
+				</center>
 				<Table headers={['Name', 'Status', 'Due Date', 'Actions', 'Whitelisted']}>
 					{Object.keys(listings).map((key, index) => {
 						// key is address of the Fin4Token
