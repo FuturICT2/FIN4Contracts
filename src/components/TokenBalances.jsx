@@ -9,9 +9,16 @@ import TableRow from './TableRow';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import Modal from './Modal';
 
 function TokenBalances(props, context) {
 	const { t } = useTranslation();
+
+	const [isModalOpen, setModalOpen] = useState(false);
+
+	const toggleModal = () => {
+		setModalOpen(!isModalOpen);
+	};
 
 	const noBalanceYet = balances => {
 		for (var addr in balances) {
@@ -38,7 +45,7 @@ function TokenBalances(props, context) {
 							<span>
 								<Currency symbol={symbol} name={name} />
 							</span>
-							<FontAwesomeIcon icon={faInfoCircle} style={styles.infoIcon} />
+							<FontAwesomeIcon icon={faInfoCircle} style={styles.infoIcon} onClick={toggleModal} />
 						</>
 					),
 					balance: balance
@@ -77,6 +84,30 @@ function TokenBalances(props, context) {
 					})}
 				</Table>
 			)}
+			<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Governance tokens" width="350px">
+				<div style={{ fontFamily: 'arial' }}>
+					You can earn <b>Reputation Tokens (REP)</b> by being active here on the plattform:
+					<br />
+					<small>
+						- Creating a token yields {props.systemParameters['REPforTokenCreation']} REP
+						<br />- Succesfully claiming a token yields {props.systemParameters['REPforTokenClaim']} REP
+						<br />- <i>More rewards for constructiv activity will follow...</i>
+					</small>
+					<br />
+					<br />
+					Once you earned{' '}
+					{props.parameterizerParams['pminReputation'] ? props.parameterizerParams['pminReputation'].value : '?'}, you
+					can claim <b>Governance Tokens (GOV)</b> and participate in governance.
+					<br />
+					<small>
+						To propose a token to be added to the list of curated tokens you need at least{' '}
+						{props.parameterizerParams['minDeposit'] && props.parameterizerParams['reviewTax']
+							? props.parameterizerParams['minDeposit'].value + props.parameterizerParams['reviewTax'].value
+							: '?'}{' '}
+						GOV tokens.
+					</small>
+				</div>
+			</Modal>
 		</Box>
 	);
 }
@@ -105,7 +136,9 @@ const mapStateToProps = state => {
 		usersFin4TokenBalances: state.fin4Store.usersFin4TokenBalances,
 		usersFin4GovernanceTokenBalances: state.fin4Store.usersFin4GovernanceTokenBalances,
 		fin4Tokens: state.fin4Store.fin4Tokens,
-		contracts: state.contracts
+		contracts: state.contracts,
+		systemParameters: state.fin4Store.systemParameters,
+		parameterizerParams: state.fin4Store.parameterizerParams
 	};
 };
 
