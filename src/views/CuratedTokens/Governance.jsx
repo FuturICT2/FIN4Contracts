@@ -217,58 +217,37 @@ function Governance(props, context) {
 	const submitChallengeReparamModal = () => {
 		let propID = selectedParam.current.propID;
 		let propDeposit = selectedParam.current.propDeposit;
+		let parameterizerContract = context.drizzle.contracts.Parameterizer;
 
 		toggleChallengeReparamModal();
-		/*
-		getContract(GOVTokenAddress, 'GOV')
-			.then(function(instance) {
-				return instance.approve(parameterizerAddr, propDeposit, {
-					from: getCurrentAccount()
-				});
-			})
-			.then(function(result) {
-				console.log('GOV.approve Result: ', result);
-				getContract(parameterizerAddr, 'Parameterizer')
-					.then(function(instance) {
-						return instance.challengeReparameterization(propID, {
-							from: getCurrentAccount()
-						});
-					})
-					.then(function(result) {
-						console.log('Parameterizer.challengeReparameterization Result: ', result);
-					})
-					.catch(function(err) {
-						console.log('Parameterizer.challengeReparameterization Error: ', err.message);
-						alert(err.message);
+
+		context.drizzle.contracts.GOV.methods
+			.approve(parameterizerContract.address, propDeposit)
+			.send({ from: props.defaultAccount })
+			.then(result => {
+				console.log('Results of submitting GOV.approve: ', result);
+
+				parameterizerContract.methods
+					.challengeReparameterization(propID)
+					.send({ from: props.defaultAccount })
+					.then(result => {
+						console.log('Results of submitting Parameterizer.challengeReparameterization: ', result);
 					});
-			})
-			.catch(function(err) {
-				console.log('GOV.approve Error: ', err.message);
-				alert(err.message);
 			});
-*/
 	};
 
 	// ----------
 
 	// same as Registry.updateStatus()
 	const processProposal = () => {
-		/*
-		let propID = this.selectedParam.propID;
-		getContract(this.parameterizerAddress, 'Parameterizer')
-			.then(function(instance) {
-				return instance.processProposal(propID, {
-					from: getCurrentAccount()
-				});
-			})
-			.then(function(result) {
-				console.log('Parameterizer.processProposal Result: ', result);
-			})
-			.catch(function(err) {
-				console.log('Parameterizer.processProposal Error: ', err.message);
-				alert(err.message);
+		let propID = selectedParam.current.propID;
+
+		context.drizzle.contracts.Parameterizer.methods
+			.processProposal(propID)
+			.send({ from: props.defaultAccount })
+			.then(result => {
+				console.log('Results of submitting Parameterizer.processProposal: ', result);
 			});
-*/
 	};
 
 	return (
