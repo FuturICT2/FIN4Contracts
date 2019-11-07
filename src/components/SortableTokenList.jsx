@@ -45,7 +45,8 @@ function SortableTokenList(props, context) {
 		'is-curated': true,
 		'name-search': true,
 		'total-supply-comparison': true,
-		'number-of-claims-comparison': true
+		'number-of-claims-comparison': true,
+		'is-OPAT': true
 	});
 
 	const comparisonModes = useRef({
@@ -130,6 +131,7 @@ function SortableTokenList(props, context) {
 							{buildPlusMinusCheckbox('user-is-admin', 'You are admin')}
 							{buildPlusMinusCheckbox('claimed-by-user', 'You claimed it')}
 							{buildPlusMinusCheckbox('is-curated', 'Is curated token')}
+							{buildPlusMinusCheckbox('is-OPAT', 'Is OPAT')}
 							<br />
 							{buildNameSearchComponent('name-search', 'Name contains')}
 							{buildComparisonComponent('total-supply-comparison', 'Total supply')}
