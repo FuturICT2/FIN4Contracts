@@ -45,7 +45,7 @@ function Home(props) {
 				) : (
 					<Table headers={[t('token-name'), t('token-balance')]} colWidths={[85, 15]}>
 						{Object.keys(props.usersBalances).map((tokenAddr, index) => {
-							let token = props.store.getState().fin4Store.fin4Tokens[tokenAddr];
+							let token = props.fin4Tokens[tokenAddr];
 							return (
 								<TableRow
 									key={'balance_' + index}
@@ -149,6 +149,7 @@ const NoTokens = styled.div`
 const mapStateToProps = state => {
 	return {
 		usersBalances: state.fin4Store.usersBalances,
+		fin4Tokens: state.fin4Store.fin4Tokens,
 		defaultAccount: state.fin4Store.defaultAccount,
 		usersEthBalance: state.fin4Store.usersEthBalance
 	};
