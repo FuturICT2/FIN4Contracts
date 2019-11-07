@@ -1,5 +1,5 @@
 import React from 'react';
-import colors from './config/colors-config';
+import colors from '../config/colors-config';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import { useTranslation } from 'react-i18next';

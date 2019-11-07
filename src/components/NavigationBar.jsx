@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import menuItems from './config/menu-config';
+import menuItems from '../config/menu-config';
 import { createMuiTheme, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
-import colors from './config/colors-config';
+import colors from '../config/colors-config';
 import styled from 'styled-components';
 
 class NavigationBar extends Component {
