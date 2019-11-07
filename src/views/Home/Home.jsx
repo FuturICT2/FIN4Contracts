@@ -2,10 +2,7 @@ import React from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import Container from '../../components/Container';
 import Box from '../../components/Box';
-import Table from '../../components/Table';
-import TableRow from '../../components/TableRow';
 import styled from 'styled-components';
-import Currency from '../../components/Currency';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import UsersIcon from '@material-ui/icons/Group';
@@ -13,6 +10,7 @@ import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import MessageIcon from '@material-ui/icons/Message';
 import SendIcon from '@material-ui/icons/Send'; // or Forward
 import EmailIcon from '@material-ui/icons/Email';
+import TokenBalances from '../../components/TokenBalances';
 
 let config = null;
 try {
@@ -39,30 +37,7 @@ function Home(props) {
 	const { t } = useTranslation();
 	return (
 		<Container>
-			<Box title={t('your-token-balances')}>
-				{Object.keys(props.usersFin4TokenBalances).length === 0 ? (
-					<NoTokens>{t('no-tokens-yet')}</NoTokens>
-				) : (
-					<Table headers={[t('token-name'), t('token-balance')]} colWidths={[85, 15]}>
-						{Object.keys(props.usersFin4TokenBalances).map((tokenAddr, index) => {
-							let token = props.fin4Tokens[tokenAddr];
-							return (
-								<TableRow
-									key={'balance_' + index}
-									data={{
-										name: (
-											<span title={'Description: ' + token.description + '\nUnit:' + token.unit}>
-												<Currency symbol={token.symbol} name={token.name} linkTo={'/token/view/' + token.symbol} />
-											</span>
-										),
-										balance: props.usersFin4TokenBalances[tokenAddr]
-									}}
-								/>
-							);
-						})}
-					</Table>
-				)}
-			</Box>
+			<TokenBalances />
 			<Box title={t('about-you')}>
 				<p style={{ fontFamily: 'arial' }}>
 					{t('your-public-address')}
@@ -138,12 +113,6 @@ const RequestEth = styled.div`
 	font-family: arial;
 	font-size: small;
 	color: gray;
-`;
-
-const NoTokens = styled.div`
-	font-family: arial;
-	text-align: center;
-	color: silver;
 `;
 
 const mapStateToProps = state => {
