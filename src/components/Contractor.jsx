@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { ParameterizerParams } from '../views/CuratedTokens/params';
 const BN = require('bignumber.js');
 const web3 = new Web3(window.ethereum);
 
@@ -88,26 +89,6 @@ const fetchMessage = (Fin4MessagingContract, defaultAccount, messageId) => {
 	);
 };
 
-const parameterizerParamNames = [
-	'minDeposit',
-	'pMinDeposit',
-	'applyStageLen',
-	'pApplyStageLen',
-	'commitStageLen',
-	'pCommitStageLen',
-	'revealStageLen',
-	'pRevealStageLen',
-	'dispensationPct',
-	'pDispensationPct',
-	'reviewVoteQuorum',
-	'challengeVoteQuorum',
-	'pVoteQuorum',
-	'exitTimeDelay',
-	'exitPeriodLen',
-	'reviewTax',
-	'pminReputation'
-];
-
 let parameterizerParamsFetched = false;
 
 const fetchParameterizerParams = (contracts, props, drizzle) => {
@@ -125,7 +106,12 @@ const fetchParameterizerParams = (contracts, props, drizzle) => {
 		paramValues => {
 			let params = {};
 			for (let i = 0; i < paramValues.length; i++) {
-				params[parameterizerParamNames[i]] = Number(paramValues[i]);
+				let param = ParameterizerParams[i];
+				params[param.name] = {
+					name: param.name,
+					description: param.description,
+					value: Number(paramValues[i])
+				};
 			}
 			props.dispatch({
 				type: 'SET_PARAMETERIZER_PARAMS',
@@ -478,7 +464,6 @@ export {
 	getFin4TokensFormattedForSelectOptions,
 	fetchCollectionsInfo,
 	zeroAddress,
-	parameterizerParamNames,
 	fetchParameterizerParams,
 	PollStatus,
 	getPollStatus,
