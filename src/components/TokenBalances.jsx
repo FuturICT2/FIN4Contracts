@@ -91,13 +91,14 @@ function TokenBalances(props, context) {
 					<small>
 						- Creating a token yields {props.systemParameters['REPforTokenCreation']} REP
 						<br />- Succesfully claiming a token yields {props.systemParameters['REPforTokenClaim']} REP
-						<br />- <i>More rewards for constructiv activity will follow...</i>
+						<br />- <i>More rewards for constructive activity will follow...</i>
 					</small>
 					<br />
 					<br />
-					Once you earned{' '}
-					{props.parameterizerParams['pminReputation'] ? props.parameterizerParams['pminReputation'].value : '?'}, you
-					can claim <b>Governance Tokens (GOV)</b> and participate in governance.
+					As soon as you have{' '}
+					{props.parameterizerParams['pminReputation'] ? props.parameterizerParams['pminReputation'].value : '?'} or
+					more REP, you can claim the same amount of <b>Governance Tokens (GOV)</b> and participate in governance. If
+					your GOV falls below your REP amount, you can claim GOV again - always up to the level of REP.
 					<br />
 					<small>
 						To propose a token to be added to the list of curated tokens you need at least{' '}
