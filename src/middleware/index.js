@@ -270,7 +270,8 @@ const initialState = {
 	usersEthBalance: null,
 	messages: [],
 	collections: {},
-	parameterizerParams: {}
+	parameterizerParams: {},
+	systemParameters: {}
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -467,6 +468,14 @@ function fin4StoreReducer(state = initialState, action) {
 					}
 				}
 			});
+		case 'SET_SYSTEM_PARAMETER':
+			return {
+				...state,
+				systemParameters: {
+					...state.systemParameters,
+					[action.parameter.name]: action.parameter.value
+				}
+			};
 		default:
 			return state;
 	}

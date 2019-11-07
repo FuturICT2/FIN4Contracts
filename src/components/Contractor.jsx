@@ -180,6 +180,7 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 			addContract(props, drizzle, 'Fin4Collections', Fin4CollectionsAddress, []);
 			addContract(props, drizzle, 'Fin4Proofing', Fin4ProofingAddress, []);
 			addContract(props, drizzle, 'Fin4Groups', Fin4GroupsAddress, []);
+			addContract(props, drizzle, 'Fin4SystemParameters', Fin4SystemParametersAddress, []);
 		}
 	);
 };
@@ -193,6 +194,28 @@ const addTCRcontracts = (props, Fin4MainContract, drizzle) => {
 			addContract(props, drizzle, 'Registry', RegistryAddress, []);
 			addContract(props, drizzle, 'PLCRVoting', PLCRVotingAddress, []);
 			addContract(props, drizzle, 'Parameterizer', ParameterizerAddress, []);
+		}
+	);
+};
+
+const fetchSystemParameters = (props, Fin4SystemParametersContract) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	getContractData(Fin4SystemParametersContract, defaultAccount, 'getSystemParameters').then(
+		({ 0: REPforTokenCreationBN, 1: REPforTokenClaimBN }) => {
+			props.dispatch({
+				type: 'SET_SYSTEM_PARAMETER',
+				parameter: {
+					name: 'REPforTokenCreation',
+					value: new BN(REPforTokenCreationBN).toNumber()
+				}
+			});
+			props.dispatch({
+				type: 'SET_SYSTEM_PARAMETER',
+				parameter: {
+					name: 'REPforTokenClaim',
+					value: new BN(REPforTokenClaimBN).toNumber()
+				}
+			});
 		}
 	);
 };
@@ -482,7 +505,8 @@ export {
 	getPollStatus,
 	fetchUsersGOVbalance,
 	fetchUsersREPbalance,
-	fetchOPATs
+	fetchOPATs,
+	fetchSystemParameters
 };
 
 /*

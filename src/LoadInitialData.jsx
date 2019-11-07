@@ -9,7 +9,8 @@ import {
 	fetchCurrentUsersClaims,
 	fetchAndAddAllProofTypes,
 	fetchCollectionsInfo,
-	fetchOPATs
+	fetchOPATs,
+	fetchSystemParameters
 } from './components/Contractor';
 import PropTypes from 'prop-types';
 
@@ -22,7 +23,8 @@ function LoadInitialData(props, context) {
 		Fin4Claiming: false,
 		Fin4Collections: false,
 		Fin4Proofing: false,
-		Registry: false
+		Registry: false,
+		Fin4SystemParameters: false
 	});
 
 	useEffect(() => {
@@ -39,6 +41,15 @@ function LoadInitialData(props, context) {
 
 		if (!isInit.current.Registry && props.contracts.Registry && props.contracts.Registry.initialized) {
 			isInit.current.Registry = true;
+		}
+
+		if (
+			!isInit.current.Fin4SystemParameters &&
+			props.contracts.Fin4SystemParameters &&
+			props.contracts.Fin4SystemParameters.initialized
+		) {
+			isInit.current.Fin4SystemParameters = true;
+			fetchSystemParameters(props, context.drizzle.contracts.Fin4SystemParameters);
 		}
 
 		if (
