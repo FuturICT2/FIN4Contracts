@@ -43,7 +43,7 @@ function Governance(props, context) {
 					let entry = {
 						name: params[i].name,
 						value: new BN(paramValuesBN[i]).toNumber(),
-						statusEnum: Param_Action_Status.DEFAULT,
+						statusEnum: ParamActionStatus.DEFAULT,
 						status: '-',
 						dueDate: '-'
 					};
@@ -77,11 +77,11 @@ function Governance(props, context) {
 
 								if (challengeID === 0) {
 									if (inAppTime) {
-										param.statusEnum = Param_Action_Status.PROPOSEDREPARAM;
+										param.statusEnum = ParamActionStatus.PROPOSEDREPARAM;
 										param.status = 'Proposed value: ' + value;
 										return;
 									}
-									param.statusEnum = Param_Action_Status.DEFAULT;
+									param.statusEnum = ParamActionStatus.DEFAULT;
 									param.status = '-';
 									param.dueDate = '-';
 									return;
@@ -91,12 +91,12 @@ function Governance(props, context) {
 									param.dueDate = pollStatus.dueDate;
 									switch (pollStatus.inPeriod) {
 										case PollStatus.IN_COMMIT_PERIOD:
-											param.statusEnum = Param_Action_Status.VOTE;
-											param.status = Param_Action_Status.VOTE;
+											param.statusEnum = ParamActionStatus.VOTE;
+											param.status = ParamActionStatus.VOTE;
 											return;
 										case PollStatus.IN_REVEAL_PERIOD:
-											param.statusEnum = Param_Action_Status.REVEAL;
-											param.status = Param_Action_Status.REVEAL;
+											param.statusEnum = ParamActionStatus.REVEAL;
+											param.status = ParamActionStatus.REVEAL;
 											return;
 										case PollStatus.PAST_REVEAL_PERIOD:
 											return getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'challenges', [
@@ -111,12 +111,12 @@ function Governance(props, context) {
 													5: tokenClaimsMapping
 												}) => {
 													if (resolved) {
-														param.statusEnum = Param_Action_Status.DEFAULT;
+														param.statusEnum = ParamActionStatus.DEFAULT;
 														param.status = '-';
 														param.dueDate = '-';
 														return;
 													}
-													param.statusEnum = Param_Action_Status.UPDATE;
+													param.statusEnum = ParamActionStatus.UPDATE;
 													param.status = 'Update pending';
 													param.dueDate = '-';
 												}
@@ -283,16 +283,16 @@ function Governance(props, context) {
 														case Param_Action_Status.DEFAULT:
 															toggleProposeReparamModal();
 															break;
-														case Param_Action_Status.PROPOSEDREPARAM:
+														case ParamActionStatus.PROPOSEDREPARAM:
 															toggleChallengeReparamModal();
 															break;
-														case Param_Action_Status.VOTE:
+														case ParamActionStatus.VOTE:
 															toggleVoteModal();
 															break;
-														case Param_Action_Status.REVEAL:
+														case ParamActionStatus.REVEAL:
 															toggleRevealModal();
 															break;
-														case Param_Action_Status.UPDATE:
+														case ParamActionStatus.UPDATE:
 															processProposal();
 															break;
 													}
@@ -364,7 +364,7 @@ function Governance(props, context) {
 	);
 }
 
-const Param_Action_Status = {
+const ParamActionStatus = {
 	DEFAULT: 'Propose',
 	PROPOSEDREPARAM: 'Challenge',
 	VOTE: 'Vote',
