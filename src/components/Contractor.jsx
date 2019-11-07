@@ -89,20 +89,8 @@ const fetchMessage = (Fin4MessagingContract, defaultAccount, messageId) => {
 	);
 };
 
-let parameterizerParamsFetched = false;
-
-const fetchParameterizerParams = (contracts, props, drizzle) => {
-	let parameterizerContractReady = contracts.Parameterizer && contracts.Parameterizer.initialized;
-
-	// ensures the following code will only be executed once as this method will be
-	// called multiple times from useEffect() methods from the CuratedTokens sites
-	if (parameterizerParamsFetched || !parameterizerContractReady) {
-		return;
-	}
-
-	parameterizerParamsFetched = true;
-
-	getContractData(drizzle.contracts.Parameterizer, props.store.getState().fin4Store.defaultAccount, 'getAll').then(
+const fetchParameterizerParams = (props, parameterizerContract) => {
+	getContractData(parameterizerContract, props.store.getState().fin4Store.defaultAccount, 'getAll').then(
 		paramValues => {
 			let params = {};
 			for (let i = 0; i < paramValues.length; i++) {

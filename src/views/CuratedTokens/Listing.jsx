@@ -2,13 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-import {
-	getContractData,
-	getPollStatus,
-	PollStatus,
-	fetchParameterizerParams,
-	fetchUsersGOVbalance
-} from '../../components/Contractor';
+import { getContractData, getPollStatus, PollStatus, fetchUsersGOVbalance } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';
@@ -44,9 +38,6 @@ function Listing(props, context) {
 	let listingsFetched = useRef(false);
 
 	useEffect(() => {
-		// this method guards itself against to ensure it's only executed once
-		fetchParameterizerParams(props.contracts, props, context.drizzle);
-
 		if (
 			!listingsFetched.current &&
 			props.fin4TokensInitiallyFetched &&

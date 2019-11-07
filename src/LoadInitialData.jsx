@@ -12,7 +12,8 @@ import {
 	fetchOPATs,
 	fetchSystemParameters,
 	fetchUsersGOVbalance,
-	fetchUsersREPbalance
+	fetchUsersREPbalance,
+	fetchParameterizerParams
 } from './components/Contractor';
 import PropTypes from 'prop-types';
 
@@ -26,6 +27,7 @@ function LoadInitialData(props, context) {
 		Fin4Collections: false,
 		Fin4Proofing: false,
 		Registry: false,
+		Parameterizer: false,
 		Fin4SystemParameters: false,
 		REP: false,
 		GOV: false
@@ -45,6 +47,11 @@ function LoadInitialData(props, context) {
 
 		if (!isInit.current.Registry && props.contracts.Registry && props.contracts.Registry.initialized) {
 			isInit.current.Registry = true;
+		}
+
+		if (!isInit.current.Parameterizer && props.contracts.Parameterizer && props.contracts.Parameterizer.initialized) {
+			isInit.current.Parameterizer = true;
+			fetchParameterizerParams(props, context.drizzle.contracts.Parameterizer);
 		}
 
 		if (!isInit.current.GOV && props.contracts.GOV && props.contracts.GOV.initialized) {

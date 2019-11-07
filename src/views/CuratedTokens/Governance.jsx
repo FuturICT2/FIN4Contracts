@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getContractData, getPollStatus, PollStatus, fetchParameterizerParams } from '../../components/Contractor';
+import { getContractData, getPollStatus, PollStatus } from '../../components/Contractor';
 import { drizzleConnect } from 'drizzle-react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
@@ -31,8 +31,6 @@ function Governance(props, context) {
 	const paramStatusesFetched = useRef(false);
 
 	useEffect(() => {
-		fetchParameterizerParams(props.contracts, props, context.drizzle);
-
 		if (!paramsAugmented.current && Object.keys(props.parameterizerParams).length > 0) {
 			paramsAugmented.current = true;
 			augmentParams();
