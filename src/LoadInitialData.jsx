@@ -8,7 +8,8 @@ import {
 	fetchUsersNonzeroTokenBalances,
 	fetchCurrentUsersClaims,
 	fetchAndAddAllProofTypes,
-	fetchCollectionsInfo
+	fetchCollectionsInfo,
+	fetchOPATs
 } from './components/Contractor';
 import PropTypes from 'prop-types';
 
@@ -20,7 +21,8 @@ function LoadInitialData(props, context) {
 		Fin4Messaging: false,
 		Fin4Claiming: false,
 		Fin4Collections: false,
-		Fin4Proofing: false
+		Fin4Proofing: false,
+		Registry: false
 	});
 
 	useEffect(() => {
@@ -35,14 +37,20 @@ function LoadInitialData(props, context) {
 			addTCRcontracts(props, context.drizzle.contracts.Fin4Main, context.drizzle);
 		}
 
+		if (!isInit.current.Registry && props.contracts.Registry && props.contracts.Registry.initialized) {
+			isInit.current.Registry = true;
+		}
+
 		if (
 			!isInit.current.Fin4TokenManagement &&
 			props.contracts.Fin4TokenManagement &&
-			props.contracts.Fin4TokenManagement.initialized
+			props.contracts.Fin4TokenManagement.initialized &&
+			isInit.current.Registry
 		) {
 			isInit.current.Fin4TokenManagement = true;
 			let Fin4TokenManagementContract = context.drizzle.contracts.Fin4TokenManagement;
 			fetchAllTokens(props, Fin4TokenManagementContract, () => {
+				fetchOPATs(props, context.drizzle.contracts.Registry);
 				fetchUsersNonzeroTokenBalances(props, Fin4TokenManagementContract);
 			});
 		}

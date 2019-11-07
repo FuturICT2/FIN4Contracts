@@ -409,6 +409,13 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 
 // --------------------- TCR ---------------------
 
+const fetchOPATs = (props, RegistryContract) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	getContractData(RegistryContract, defaultAccount, 'getWhitelistedListingKeys').then(whitelistedListingKeys => {
+		// TODO
+	});
+};
+
 const PollStatus = {
 	IN_COMMIT_PERIOD: 'Commit Vote',
 	IN_REVEAL_PERIOD: 'Reveal',
@@ -468,7 +475,8 @@ export {
 	PollStatus,
 	getPollStatus,
 	fetchUsersGOVbalance,
-	fetchUsersREPbalance
+	fetchUsersREPbalance,
+	fetchOPATs
 };
 
 /*

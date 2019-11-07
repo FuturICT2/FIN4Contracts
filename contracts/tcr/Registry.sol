@@ -456,6 +456,27 @@ contract Registry {
     }
 
     /**
+    @dev Gets only the listingKeys from whitelisted listings, for easy display in frontend token lists which are curated
+    */
+    function getWhitelistedListingKeys() public view returns (bytes32[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < listingsIndexes.length; i++) {
+            if (listings[listingsIndexes[i]].whitelisted) {
+                count ++;
+            }
+        }
+        bytes32[] memory whitelistedListingKeys = new bytes32[](count);
+        count = 0;
+        for (uint i = 0; i < listingsIndexes.length; i++) {
+            if (listings[listingsIndexes[i]].whitelisted) {
+                whitelistedListingKeys[count] = listingsIndexes[i];
+                count ++;
+            }
+        }
+        return whitelistedListingKeys;
+    }
+
+    /**
     @dev Getter for easy handling of Challenges in the Front-End
     */
     function getChallenges () public view returns (uint[] memory, uint[] memory,
