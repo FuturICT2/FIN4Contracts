@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
 import 'contracts/Fin4Token.sol';
+import 'contracts/Fin4SystemParameters.sol';
 import "solidity-util/lib/Strings.sol";
 
 contract Fin4TokenManagement {
@@ -9,12 +10,16 @@ contract Fin4TokenManagement {
     // TODO do we need the indexed keyword for event params?
     event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator, uint creationTime);
 
+    address public creator;
     address public Fin4ClaimingAddress;
     address public Fin4ProofingAddress;
+    address public Fin4SystemParametersAddress;
 
-    constructor(address Fin4ClaimingAddr, address Fin4ProofingAddr) public {
+    constructor(address Fin4ClaimingAddr, address Fin4ProofingAddr, address Fin4SystemParametersAddr) public {
+        creator = msg.sender;
         Fin4ClaimingAddress = Fin4ClaimingAddr;
         Fin4ProofingAddress = Fin4ProofingAddr;
+        Fin4SystemParametersAddress = Fin4SystemParametersAddr;
     }
 
     address[] public allFin4Tokens;

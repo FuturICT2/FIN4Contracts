@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
 import 'contracts/Fin4Token.sol';
+import 'contracts/Fin4SystemParameters.sol';
 
 contract Fin4Claiming {
 
@@ -18,6 +19,14 @@ contract Fin4Claiming {
 
     mapping (string => ClaimRef) public claimRefs;
     */
+
+    address public creator;
+    address public Fin4SystemParametersAddress;
+
+    constructor(address Fin4SystemParametersAddr) public {
+        creator = msg.sender;
+        Fin4SystemParametersAddress = Fin4SystemParametersAddr;
+    }
 
     function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public {
         if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {

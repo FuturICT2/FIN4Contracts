@@ -30,11 +30,19 @@ module.exports = async function(deployer) {
 
 	// SATELLITE CONTRACTS
 
+	await deployer.deploy(Fin4SystemParameters);
+	const Fin4SystemParametersInstance = await Fin4SystemParameters.deployed();
+
 	await deployer.deploy(Fin4Proofing);
 	const Fin4ProofingInstance = await Fin4Proofing.deployed();
-	await deployer.deploy(Fin4Claiming);
+	await deployer.deploy(Fin4Claiming, Fin4SystemParametersInstance.address);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
-	await deployer.deploy(Fin4TokenManagement, Fin4ClaimingInstance.address, Fin4ProofingInstance.address);
+	await deployer.deploy(
+		Fin4TokenManagement,
+		Fin4ClaimingInstance.address,
+		Fin4ProofingInstance.address,
+		Fin4SystemParametersInstance.address
+	);
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
 	await deployer.deploy(Fin4Collections);
 	const Fin4CollectionsInstance = await Fin4Collections.deployed();
@@ -42,9 +50,6 @@ module.exports = async function(deployer) {
 	const Fin4MessagingInstance = await Fin4Messaging.deployed();
 	await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
 	const Fin4GroupsInstance = await Fin4Groups.deployed();
-
-	await deployer.deploy(Fin4SystemParameters);
-	const Fin4SystemParametersInstance = await Fin4SystemParameters.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
 		Fin4TokenManagementInstance.address,
