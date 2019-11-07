@@ -24,16 +24,8 @@ function Governance(props, context) {
 
 	const [params, setParams] = useState({});
 
-	const selectedParam = useRef({
-		name: null,
-		propID: null,
-		propDeposit: null,
-		challengeID: null
-	});
-
-	const proposeReparamModalValues = useRef({
-		value: null
-	});
+	const selectedParamName = useRef(null);
+	const proposeReparamModalValue = useRef(null);
 
 	const paramsAugmented = useRef(false);
 	const paramStatusesFetched = useRef(false);
@@ -161,22 +153,20 @@ function Governance(props, context) {
 
 	// ---------- ProposeReparam ----------
 
-	const resetProposeReparamModalValues = () => {
-		proposeReparamModalValues.current = {
-			value: null
-		};
+	const resetproposeReparamModalValue = () => {
+		proposeReparamModalValue.current = null;
 	};
 
 	const toggleProposeReparamModal = () => {
 		if (isProposeReparamOpen) {
-			resetProposeReparamModalValues();
+			resetproposeReparamModalValue();
 		}
 		setProposeReparamOpen(!isProposeReparamOpen);
 	};
 
 	const submitProposeReparamModal = () => {
-		let name = selectedParam.current.name;
-		let value = Number(proposeReparamModalValues.current.value);
+		let name = selectedParamName.current;
+		let value = Number(proposeReparamModalValue.current);
 		let pMinDeposit = props.parameterizerParams['pMinDeposit'].value;
 		let parameterizerContract = context.drizzle.contracts.Parameterizer;
 
@@ -215,8 +205,8 @@ function Governance(props, context) {
 	};
 
 	const submitChallengeReparamModal = () => {
-		let propID = selectedParam.current.propID;
-		let propDeposit = selectedParam.current.propDeposit;
+		let propID = params[selectedParamName.current].propID;
+		let propDeposit = params[selectedParamName.current].propDeposit;
 		let parameterizerContract = context.drizzle.contracts.Parameterizer;
 
 		toggleChallengeReparamModal();
@@ -240,7 +230,7 @@ function Governance(props, context) {
 
 	// same as Registry.updateStatus()
 	const processProposal = () => {
-		let propID = selectedParam.current.propID;
+		let propID = params[selectedParamName.current].propID;
 
 		context.drizzle.contracts.Parameterizer.methods
 			.processProposal(propID)
@@ -267,7 +257,7 @@ function Governance(props, context) {
 									actions: (
 										<Button
 											onClick={() => {
-												selectedParam.current.name = paramName;
+												selectedParamName.current = paramName;
 												switch (entry.statusEnum) {
 													case ParamActionStatus.DEFAULT:
 														toggleProposeReparamModal();
@@ -306,7 +296,7 @@ function Governance(props, context) {
 					key="propose-value"
 					type="number"
 					label="Value"
-					onChange={e => (proposeReparamModalValues.current.value = e.target.value)}
+					onChange={e => (proposeReparamModalValue.current = e.target.value)}
 					style={inputFieldStyle}
 				/>
 				<Button onClick={submitProposeReparamModal} center="true">
