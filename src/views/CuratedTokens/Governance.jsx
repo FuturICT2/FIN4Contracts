@@ -97,7 +97,6 @@ function Governance(props, context) {
 							param.statusEnum = ParamActionStatus.DEFAULT;
 							param.status = '-';
 							param.dueDate = '-';
-							return;
 						}
 
 						return getPollStatus(challengeID, context.drizzle.contracts.PLCRVoting, props.defaultAccount).then(
