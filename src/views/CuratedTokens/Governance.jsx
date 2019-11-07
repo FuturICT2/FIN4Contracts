@@ -330,15 +330,15 @@ function Governance(props, context) {
 				<center>
 					<small style={{ fontFamily: 'arial', color: 'gray' }}>
 						Upon submitting, two transactions have to be signed: to allow the proposal-deposit (
-						{selectedParam.current ? selectedParam.current.propDeposit : '?'}) to be withdrawn from your GOV token
-						balance and then to challenge the proposed reparameterization.
+						{params[selectedParamName.current] ? params[selectedParamName.current].propDeposit : '?'}) to be withdrawn
+						from your GOV token balance and then to challenge the proposed reparameterization.
 					</small>
 				</center>
 			</Modal>
 			<VoteModal
 				isOpen={isVoteModalOpen}
 				handleClose={toggleVoteModal}
-				pollID={selectedParam.current && selectedParam.current.challengeID}
+				pollID={params[selectedParamName.current] ? params[selectedParamName.current].challengeID : null}
 				voteOptionsInfo={
 					'Challenge: 1 = vote for the proposed new value, 0 = reject the proposed value and keep the existing one'
 				}
@@ -346,7 +346,7 @@ function Governance(props, context) {
 			<RevealModal
 				isOpen={isRevealModalOpen}
 				handleClose={toggleRevealModal}
-				pollID={selectedParam.current && selectedParam.current.challengeID}
+				pollID={params[selectedParamName.current] ? params[selectedParamName.current].challengeID : null}
 			/>
 		</center>
 	);
