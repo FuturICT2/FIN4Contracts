@@ -27,16 +27,6 @@
 		"isBurnable": true,
 		"isTransferable": true,
 		"isMintable": true,
-		"tokenHolders": [
-			"0xcb8310d61294b52500ad2359eb43fca4ed6bcebb",
-			"0x89d566c1dbcc16e72bcf99faa2a3e8bd0b00c61c",
-			"0x594303dd064af4bdb6c57fd2e9a81d5c29f603ea",
-			"0x97ee30c8b6609cc69e7c5c37065c9bf2f2b1c93d",
-			"0xbba10c0ce2710c5bc9680ca670af4ab0a16726bf",
-			"0x01b6cc93c00a61843a31df3ec99a3a30f701c3f9",
-			"0xefd89b90587baaaf3df03558f7271a8fe8139eb2",
-			"0x28f8c52e49332a57038f8e630ebcfca019e85ff5",
-			"0xc55fe9ebfd0a0d8636b9e981c94ce48d576b22b3"
-		]
+		"tokenHolders": []
 	}
 }
