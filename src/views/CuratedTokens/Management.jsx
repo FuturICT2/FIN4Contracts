@@ -65,8 +65,8 @@ function Management(props, context) {
 							balance:
 								props.contracts.Fin4Reputation &&
 								props.contracts.Fin4Reputation.initialized &&
-								props.usersBalances[context.drizzle.contracts.Fin4Reputation.address] !== undefined
-									? props.usersBalances[context.drizzle.contracts.Fin4Reputation.address]
+								props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.Fin4Reputation.address] !== undefined
+									? props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.Fin4Reputation.address]
 									: '?',
 							actions: <Button onClick={claimGOV}>Claim GOV</Button>
 						}}
@@ -78,8 +78,8 @@ function Management(props, context) {
 							balance:
 								props.contracts.GOV &&
 								props.contracts.GOV.initialized &&
-								props.usersBalances[context.drizzle.contracts.GOV.address] !== undefined
-									? props.usersBalances[context.drizzle.contracts.GOV.address]
+								props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.GOV.address] !== undefined
+									? props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.GOV.address]
 									: '?',
 							actions: ''
 						}}
@@ -145,7 +145,7 @@ const mapStateToProps = state => {
 	return {
 		defaultAccount: state.fin4Store.defaultAccount,
 		contracts: state.contracts,
-		usersBalances: state.fin4Store.usersBalances
+		usersFin4GovernanceTokenBalances: state.fin4Store.usersFin4GovernanceTokenBalances
 	};
 };
 

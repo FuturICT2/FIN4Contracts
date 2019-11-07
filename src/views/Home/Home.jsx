@@ -40,11 +40,11 @@ function Home(props) {
 	return (
 		<Container>
 			<Box title={t('your-token-balances')}>
-				{Object.keys(props.usersBalances).length === 0 ? (
+				{Object.keys(props.usersFin4TokenBalances).length === 0 ? (
 					<NoTokens>{t('no-tokens-yet')}</NoTokens>
 				) : (
 					<Table headers={[t('token-name'), t('token-balance')]} colWidths={[85, 15]}>
-						{Object.keys(props.usersBalances).map((tokenAddr, index) => {
+						{Object.keys(props.usersFin4TokenBalances).map((tokenAddr, index) => {
 							let token = props.fin4Tokens[tokenAddr];
 							return (
 								<TableRow
@@ -55,7 +55,7 @@ function Home(props) {
 												<Currency symbol={token.symbol} name={token.name} linkTo={'/token/view/' + token.symbol} />
 											</span>
 										),
-										balance: props.usersBalances[tokenAddr]
+										balance: props.usersFin4TokenBalances[tokenAddr]
 									}}
 								/>
 							);
@@ -148,7 +148,7 @@ const NoTokens = styled.div`
 
 const mapStateToProps = state => {
 	return {
-		usersBalances: state.fin4Store.usersBalances,
+		usersFin4TokenBalances: state.fin4Store.usersFin4TokenBalances,
 		fin4Tokens: state.fin4Store.fin4Tokens,
 		defaultAccount: state.fin4Store.defaultAccount,
 		usersEthBalance: state.fin4Store.usersEthBalance

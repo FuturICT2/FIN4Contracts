@@ -209,13 +209,19 @@ function Listing(props, context) {
 			return;
 		}
 
-		if (!props.usersBalances[govContract.address] === undefined) {
+		if (!props.usersFin4GovernanceTokenBalances[govContract.address] === undefined) {
 			alert('GOV balance not available');
 		}
 
-		if (!props.usersBalances[govContract.address] || props.usersBalances[govContract.address] < deposit) {
+		if (
+			!props.usersFin4GovernanceTokenBalances[govContract.address] ||
+			props.usersFin4GovernanceTokenBalances[govContract.address] < deposit
+		) {
 			alert(
-				'Your GOV balance is ' + props.usersBalances[govContract.address] + ', less than your deposit of ' + deposit
+				'Your GOV balance is ' +
+					props.usersFin4GovernanceTokenBalances[govContract.address] +
+					', less than your deposit of ' +
+					deposit
 			);
 			return;
 		}
@@ -471,7 +477,7 @@ const mapStateToProps = state => {
 		fin4Tokens: state.fin4Store.fin4Tokens,
 		fin4TokensInitiallyFetched: state.fin4Store.fin4TokensInitiallyFetched,
 		parameterizerParams: state.fin4Store.parameterizerParams,
-		usersBalances: state.fin4Store.usersBalances
+		usersFin4GovernanceTokenBalances: state.fin4Store.usersFin4GovernanceTokenBalances
 	};
 };
 

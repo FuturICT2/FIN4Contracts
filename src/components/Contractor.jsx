@@ -131,7 +131,7 @@ const fetchUsersGOVbalance = (contracts, props, drizzle) => {
 	let govContract = drizzle.contracts.GOV;
 	getContractData(govContract, props.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
 		props.dispatch({
-			type: 'UPDATE_BALANCE',
+			type: 'UPDATE_GOVERNANCE_BALANCE',
 			tokenAddress: govContract.address,
 			balance: new BN(balanceBN).toNumber()
 		});
@@ -148,7 +148,7 @@ const fetchUsersREPbalance = (contracts, props, drizzle) => {
 	let repContract = drizzle.contracts.Fin4Reputation;
 	getContractData(repContract, props.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
 		props.dispatch({
-			type: 'UPDATE_BALANCE',
+			type: 'UPDATE_GOVERNANCE_BALANCE',
 			tokenAddress: repContract.address,
 			balance: new BN(balanceBN).toNumber()
 		});

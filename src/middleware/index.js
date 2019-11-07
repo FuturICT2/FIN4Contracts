@@ -252,7 +252,8 @@ const initialState = {
 	fin4Tokens: {},
 	fin4TokensInitiallyFetched: false, // is there a more elegant solution to know this? E.g. needed in Listing.jsx
 	usersClaims: {},
-	usersBalances: {},
+	usersFin4TokenBalances: {},
+	usersFin4GovernanceTokenBalances: {}, // REP and GOV
 	proofTypes: {},
 	defaultAccount: null,
 	usersEthBalance: null,
@@ -331,8 +332,16 @@ function fin4StoreReducer(state = initialState, action) {
 		case 'UPDATE_BALANCE':
 			return {
 				...state,
-				usersBalances: {
-					...state.usersBalances,
+				usersFin4TokenBalances: {
+					...state.usersFin4TokenBalances,
+					[action.tokenAddress]: action.balance
+				}
+			};
+		case 'UPDATE_GOVERNANCE_BALANCE': // REP and GOV
+			return {
+				...state,
+				usersFin4GovernanceTokenBalances: {
+					...state.usersFin4GovernanceTokenBalances,
 					[action.tokenAddress]: action.balance
 				}
 			};
@@ -340,8 +349,8 @@ function fin4StoreReducer(state = initialState, action) {
 			for (i = 0; i < action.tokenAddresses.length; i++) {
 				state = {
 					...state,
-					usersBalances: {
-						...state.usersBalances,
+					usersFin4TokenBalances: {
+						...state.usersFin4TokenBalances,
 						[action.tokenAddresses[i]]: action.balances[i]
 					}
 				};
