@@ -2,6 +2,7 @@ pragma solidity ^0.5.0;
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';
+import 'contracts/stub/MintingStub.sol';
 
 contract Fin4Claiming {
 
@@ -54,6 +55,9 @@ contract Fin4Claiming {
         // can changes to totalSupply happen at other places too though? Definitely if we use the
         // AllPurpose contract with burning for instance... #ConceptualDecision
         emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
+
+        // REP reward for creating a new token
+        MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
     }
 
     // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------

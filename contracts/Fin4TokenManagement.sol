@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
 import 'contracts/Fin4Token.sol';
+import 'contracts/stub/MintingStub.sol';
 import 'contracts/Fin4SystemParameters.sol';
 import "solidity-util/lib/Strings.sol";
 
@@ -73,6 +74,9 @@ contract Fin4TokenManagement {
 
         // required to mint token in case of no proof types, should it be restricted to if requiredProofTypes.length == 0 ?
         newToken.addMinter(Fin4ClaimingAddress);
+
+        // REP reward for creating a new token
+        MintingStub(Fin4ReputationAddress).mint(msg.sender, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
 
         allFin4Tokens.push(address(newToken));
         emit Fin4TokenCreated(address(newToken), name, _symbol, description, unit, msg.sender, newToken.tokenCreationTime());
