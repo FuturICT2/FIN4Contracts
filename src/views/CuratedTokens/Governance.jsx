@@ -73,6 +73,9 @@ function Governance(props, context) {
 			let allPromises = proposalKeys.map(key => {
 				return getContractData(parameterizerContract, props.defaultAccount, 'proposals', key).then(
 					({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
+						if (!params[name]) {
+							return; // name can be undefined, I forgot why and if that's ok...
+						}
 						let param = params[name];
 						paramsWithProposal.push(param);
 						param.propID = key;
