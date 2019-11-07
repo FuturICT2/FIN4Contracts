@@ -11,6 +11,7 @@ import VoteModal from './VoteModal';
 import RevealModal from './RevealModal';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import update from 'react-addons-update';
 const BN = require('bignumber.js');
 
 function Governance(props, context) {
@@ -76,10 +77,12 @@ function Governance(props, context) {
 		let parameterizerContract = context.drizzle.contracts.Parameterizer;
 
 		getContractData(parameterizerContract, props.defaultAccount, 'getProposalKeys').then(proposalKeys => {
+			let paramsWithProposal = [];
 			let allPromises = proposalKeys.map(key => {
 				return getContractData(parameterizerContract, props.defaultAccount, 'proposals', key).then(
 					({ 0: appExpiryBN, 1: challengeIDBN, 2: depositBN, 3: name, 4: owner, 5: processByBN, 6: valueBN }) => {
 						let param = params[name];
+						paramsWithProposal.push(param);
 						param.propID = key;
 						param.propDeposit = new BN(depositBN).toNumber();
 
@@ -145,7 +148,13 @@ function Governance(props, context) {
 				);
 			});
 			Promise.all(allPromises).then(() => {
-				setParams(params);
+				for (let i = 0; i < paramsWithProposal.length; i++) {
+					setParams(
+						update(params, {
+							[paramsWithProposal[i].name]: { $set: paramsWithProposal[i] }
+						})
+					);
+				}
 			});
 		});
 	};
