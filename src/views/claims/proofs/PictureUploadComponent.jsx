@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import AddressQRreader from '../../../components/AddressQRreader';
 import Button from '../../../components/Button';
-import ipfs from '../../../ipfs';
+import ipfs from '../../../config/ipfs';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
 import { isValidPublicAddress } from '../../../components/Contractor';
