@@ -23,8 +23,13 @@ function Governance(props, context) {
 
 	const [params, setParams] = useState({});
 
-	const selectedParam = useRef(null);
-	const parameterizerAddress = useRef(null);
+	const selectedParam = useRef({
+		name: null,
+		propID: null,
+		propDeposit: null,
+		challengeID: null
+	});
+
 	const proposeReparamModalValues = useRef({
 		value: null
 	});
@@ -164,37 +169,23 @@ function Governance(props, context) {
 		let name = selectedParam.current.name;
 		let value = Number(proposeReparamModalValues.current.value);
 		let pMinDeposit = props.parameterizerParams['pMinDeposit'].value;
-		let parameterizerAddr = parameterizerAddress.current;
+		let parameterizerContract = context.drizzle.contracts.Parameterizer;
 
 		toggleProposeReparamModal();
-		/*
-		getContract(GOVTokenAddress, 'GOV')
-			.then(function(instance) {
-				return instance.approve(parameterizerAddr, pMinDeposit, {
-					from: getCurrentAccount()
-				});
-			})
-			.then(function(result) {
-				console.log('GOV.approve Result: ', result);
-				getContract(parameterizerAddr, 'Parameterizer')
-					.then(function(instance) {
-						return instance.proposeReparameterization(name, value, {
-							from: getCurrentAccount()
-						});
-					})
-					.then(function(result) {
-						console.log('Parameterizer.proposeReparameterization Result: ', result);
-					})
-					.catch(function(err) {
-						console.log('Parameterizer.proposeReparameterization Error: ', err.message);
-						alert(err.message);
+
+		context.drizzle.contracts.GOV.methods
+			.approve(parameterizerContract.address, pMinDeposit)
+			.send({ from: props.defaultAccount })
+			.then(result => {
+				console.log('Results of submitting GOV.approve: ', result);
+
+				parameterizerContract.methods
+					.proposeReparameterization(name, value)
+					.send({ from: props.defaultAccount })
+					.then(result => {
+						console.log('Results of submitting Parameterizer.proposeReparameterization: ', result);
 					});
-			})
-			.catch(function(err) {
-				console.log('GOV.approve Error: ', err.message);
-				alert(err.message);
 			});
-*/
 	};
 	// ---------- VoteModal ----------
 
@@ -217,7 +208,6 @@ function Governance(props, context) {
 	const submitChallengeReparamModal = () => {
 		let propID = selectedParam.current.propID;
 		let propDeposit = selectedParam.current.propDeposit;
-		let parameterizerAddr = parameterizerAddress.current;
 
 		toggleChallengeReparamModal();
 		/*
@@ -289,7 +279,7 @@ function Governance(props, context) {
 									actions: (
 										<Button
 											onClick={() => {
-												selectedParam.current = paramName;
+												selectedParam.current.name = paramName;
 												switch (entry.statusEnum) {
 													case ParamActionStatus.DEFAULT:
 														toggleProposeReparamModal();
