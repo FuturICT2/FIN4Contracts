@@ -10,7 +10,9 @@ import {
 	fetchAndAddAllProofTypes,
 	fetchCollectionsInfo,
 	fetchOPATs,
-	fetchSystemParameters
+	fetchSystemParameters,
+	fetchUsersGOVbalance,
+	fetchUsersREPbalance
 } from './components/Contractor';
 import PropTypes from 'prop-types';
 
@@ -24,7 +26,9 @@ function LoadInitialData(props, context) {
 		Fin4Collections: false,
 		Fin4Proofing: false,
 		Registry: false,
-		Fin4SystemParameters: false
+		Fin4SystemParameters: false,
+		REP: false,
+		GOV: false
 	});
 
 	useEffect(() => {
@@ -41,6 +45,16 @@ function LoadInitialData(props, context) {
 
 		if (!isInit.current.Registry && props.contracts.Registry && props.contracts.Registry.initialized) {
 			isInit.current.Registry = true;
+		}
+
+		if (!isInit.current.GOV && props.contracts.GOV && props.contracts.GOV.initialized) {
+			isInit.current.GOV = true;
+			fetchUsersGOVbalance(props, context.drizzle.contracts.GOV);
+		}
+
+		if (!isInit.current.REP && props.contracts.Fin4Reputation && props.contracts.Fin4Reputation.initialized) {
+			isInit.current.REP = true;
+			fetchUsersREPbalance(props, context.drizzle.contracts.Fin4Reputation);
 		}
 
 		if (

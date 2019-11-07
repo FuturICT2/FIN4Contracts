@@ -46,7 +46,6 @@ function Listing(props, context) {
 	useEffect(() => {
 		// this method guards itself against to ensure it's only executed once
 		fetchParameterizerParams(props.contracts, props, context.drizzle);
-		fetchUsersGOVbalance(props.contracts, props, context.drizzle);
 
 		if (
 			!listingsFetched.current &&

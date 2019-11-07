@@ -22,9 +22,6 @@ function Management(props, context) {
 	let delegatedToMeFetched = useRef(false);
 
 	useEffect(() => {
-		fetchUsersGOVbalance(props.contracts, props, context.drizzle); // in case user navigates directly here without visiting Listing first
-		fetchUsersREPbalance(props.contracts, props, context.drizzle);
-
 		if (!delegatedToMeFetched.current && props.contracts.GOV && props.contracts.GOV.initialized) {
 			delegatedToMeFetched.current = true;
 			fetchDelegatedToMe();
