@@ -42,7 +42,8 @@ const contractEventNotifier = store => next => action => {
 				userIsCreator: token.creator === defaultAccount,
 				userIsAdmin: false, // TODO
 				totalSupply: 0,
-				creationTime: token.creationTime
+				creationTime: token.creationTime,
+				isOPAT: null
 			}
 		});
 	}
@@ -244,18 +245,32 @@ const messageHasBeenActedUpon = (store, messageId) => {
 	return false;
 };
 
+const findMatchingMixedCaseTokenAddress = (fin4Tokens, lowerCaseTokenAddr) => {
+	let addresses = Object.keys(fin4Tokens);
+	for (let i = 0; i < addresses.length; i++) {
+		let addr = addresses[i];
+		if (addr.toLowerCase() === lowerCaseTokenAddr) {
+			return addr;
+		}
+	}
+	return null;
+};
+
 const appMiddlewares = [contractEventNotifier];
 
 const initialState = {
 	drizzleInitialized: false,
 	fin4Tokens: {},
+	fin4TokensInitiallyFetched: false, // is there a more elegant solution to know this? E.g. needed in Listing.jsx
 	usersClaims: {},
-	usersBalances: {},
+	usersFin4TokenBalances: {},
+	usersFin4GovernanceTokenBalances: {}, // REP and GOV
 	proofTypes: {},
 	defaultAccount: null,
 	usersEthBalance: null,
 	messages: [],
-	collections: {}
+	collections: {},
+	parameterizerParams: {}
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -291,7 +306,9 @@ function fin4StoreReducer(state = initialState, action) {
 					}
 				};
 			}
-			return state;
+			return update(state, {
+				fin4TokensInitiallyFetched: { $set: true }
+			});
 		case 'ADD_CLAIM':
 			return {
 				...state,
@@ -326,8 +343,16 @@ function fin4StoreReducer(state = initialState, action) {
 		case 'UPDATE_BALANCE':
 			return {
 				...state,
-				usersBalances: {
-					...state.usersBalances,
+				usersFin4TokenBalances: {
+					...state.usersFin4TokenBalances,
+					[action.tokenAddress]: action.balance
+				}
+			};
+		case 'UPDATE_GOVERNANCE_BALANCE': // REP and GOV
+			return {
+				...state,
+				usersFin4GovernanceTokenBalances: {
+					...state.usersFin4GovernanceTokenBalances,
 					[action.tokenAddress]: action.balance
 				}
 			};
@@ -335,8 +360,8 @@ function fin4StoreReducer(state = initialState, action) {
 			for (i = 0; i < action.tokenAddresses.length; i++) {
 				state = {
 					...state,
-					usersBalances: {
-						...state.usersBalances,
+					usersFin4TokenBalances: {
+						...state.usersFin4TokenBalances,
 						[action.tokenAddresses[i]]: action.balances[i]
 					}
 				};
@@ -422,6 +447,26 @@ function fin4StoreReducer(state = initialState, action) {
 				};
 			}
 			return state;
+		case 'SET_PARAMETERIZER_PARAMS':
+			return Object.assign({}, state, {
+				parameterizerParams: action.paramsObj
+			});
+		case 'MARK_FIN4TOKEN_AS_OPAT':
+			let matchingMixedCaseTokenAddr = findMatchingMixedCaseTokenAddress(
+				state.fin4Tokens,
+				action.lowerCaseTokenAddress
+			);
+			if (!matchingMixedCaseTokenAddr) {
+				// should only happen if tokens were added to TCR that are not Fin4Tokens
+				return state;
+			}
+			return update(state, {
+				fin4Tokens: {
+					[matchingMixedCaseTokenAddr]: {
+						isOPAT: { $set: true }
+					}
+				}
+			});
 		default:
 			return state;
 	}

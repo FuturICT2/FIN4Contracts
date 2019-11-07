@@ -1,131 +1,125 @@
-import React, { Component } from 'react';
-//import { PLCRVotingAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
-import { getCurrentAccount, getContractData, getContract } from '../../components/Contractor';
+import React, { useRef } from 'react';
+import { getContractData } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';
 import { TextField } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 const { soliditySha3 } = require('web3-utils');
 const BN = require('bignumber.js');
 
-class VoteModal extends Component {
-	constructor(props) {
-		super(props);
-		this.resetVoteModalValues();
-	}
+function VoteModal(props, context) {
+	const { t } = useTranslation();
 
-	resetVoteModalValues() {
-		this.voteModalValues = {
+	const voteModalValues = useRef({
+		vote: null,
+		salt: null,
+		numbTokens: null
+	});
+
+	const resetVoteModalValues = () => {
+		voteModalValues.current = {
 			vote: null,
 			salt: null,
 			numbTokens: null
 		};
-	}
+	};
 
-	submitVoteModal = () => {
+	const submitVoteModal = () => {
 		if (
-			this.voteModalValues.vote === null ||
-			this.voteModalValues.salt === null ||
-			this.voteModalValues.numbTokens === null
+			voteModalValues.current.vote === null ||
+			voteModalValues.current.salt === null ||
+			voteModalValues.current.numbTokens === null
 		) {
 			alert('All values must be set.');
 			return;
 		}
 
-		let vote = this.voteModalValues.vote;
-		let salt = this.voteModalValues.salt;
-		let numbTokens = Number(this.voteModalValues.numbTokens);
-		let pollID = this.props.pollID;
+		let vote = voteModalValues.current.vote;
+		let salt = voteModalValues.current.salt;
+		let numbTokens = Number(voteModalValues.current.numbTokens);
+		let pollID = props.pollID;
 
 		if (numbTokens < 0) {
 			alert('Number of tokens must be more than 0.');
 			return;
 		}
 
-		this.resetVoteModalValues();
-		this.props.handleClose();
-		/*
-		getContract(GOVTokenAddress, 'GOV')
-			.then(function(instance) {
-				return instance.approve(PLCRVotingAddress, numbTokens, {
-					from: getCurrentAccount()
-				});
-			})
-			.then(function(result) {
-				console.log('GOV.approve Result: ', result);
+		resetVoteModalValues();
+		props.handleClose();
 
-				getContractData_deprecated(PLCRVotingAddress, 'PLCRVoting', 'getInsertPointForNumTokens', [
-					getCurrentAccount(),
+		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+		let PLCRVotingContract = context.drizzle.contracts.PLCRVoting;
+
+		context.drizzle.contracts.GOV.methods
+			.approve(PLCRVotingContract.address, numbTokens)
+			.send({ from: defaultAccount })
+			.then(result => {
+				console.log('Results of submitting GOV.approve: ', result);
+
+				getContractData(
+					PLCRVotingContract,
+					defaultAccount,
+					'getInsertPointForNumTokens',
+					defaultAccount,
 					numbTokens,
 					pollID
-				]).then(prevPollIdBN => {
+				).then(prevPollIdBN => {
 					let prevPollID = new BN(prevPollIdBN).toNumber();
 					let secretHash = soliditySha3(vote, salt);
-					getContract(PLCRVotingAddress, 'PLCRVoting')
-						.then(function(instance) {
-							return instance.commitVote(pollID, secretHash, numbTokens, prevPollID, {
-								from: getCurrentAccount()
-							});
-						})
-						.then(function(result) {
-							console.log('PLCRVoting.commitVote Result: ', result);
-						})
-						.catch(function(err) {
-							console.log('PLCRVoting.commitVote Error: ', err.message);
-							alert(err.message);
+
+					PLCRVotingContract.methods
+						.commitVote(pollID, secretHash, numbTokens, prevPollID)
+						.send({ from: defaultAccount })
+						.then(result => {
+							console.log('Results of submitting PLCRVoting.commitVote: ', result);
 						});
 				});
-			})
-			.catch(function(err) {
-				console.log('GOV.approve Error: ', err.message);
-				alert(err.message);
 			});
-*/
 	};
 
-	render() {
-		return (
-			<center>
-				<Modal
-					isOpen={this.props.isOpen}
-					handleClose={this.props.handleClose}
-					title="Set vote, salt and number of tokens"
-					width="400px">
-					<TextField
-						key="set-vote"
-						type="number"
-						label="Vote (1 or 0)"
-						onChange={e => (this.voteModalValues.vote = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<small style={{ color: 'gray' }}>{this.props.voteOptionsInfo}</small>
-					<TextField
-						key="set-salt"
-						type="number"
-						label="Salt"
-						onChange={e => (this.voteModalValues.salt = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<TextField
-						key="set-numb-tokens"
-						type="number"
-						label="Number of tokens"
-						onChange={e => (this.voteModalValues.numbTokens = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<Button onClick={this.submitVoteModal} center="true">
-						Submit
-					</Button>
-					<center>
-						<small style={{ color: 'gray' }}>
-							Upon submitting, two transactions have to be signed: to allow the number of tokens to be withdrawn from
-							your GOV token balance and then to submit your vote.
-						</small>
-					</center>
-				</Modal>
-			</center>
-		);
-	}
+	return (
+		<center>
+			<Modal
+				isOpen={props.isOpen}
+				handleClose={props.handleClose}
+				title="Set vote, salt and number of tokens"
+				width="400px">
+				<TextField
+					key="set-vote"
+					type="number"
+					label="Vote (1 or 0)"
+					onChange={e => (voteModalValues.current.vote = e.target.value)}
+					style={inputFieldStyle}
+				/>
+				<small style={{ fontFamily: 'arial', color: 'gray' }}>{props.voteOptionsInfo}</small>
+				<TextField
+					key="set-salt"
+					type="number"
+					label="Salt"
+					onChange={e => (voteModalValues.current.salt = e.target.value)}
+					style={inputFieldStyle}
+				/>
+				<TextField
+					key="set-numb-tokens"
+					type="number"
+					label="Number of tokens"
+					onChange={e => (voteModalValues.current.numbTokens = e.target.value)}
+					style={inputFieldStyle}
+				/>
+				<Button onClick={submitVoteModal} center="true">
+					Submit
+				</Button>
+				<center>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
+						Upon submitting, two transactions have to be signed: to allow the number of tokens to be withdrawn from your
+						GOV token balance and then to submit your vote.
+					</small>
+				</center>
+			</Modal>
+		</center>
+	);
 }
 
 const inputFieldStyle = {
@@ -133,4 +127,12 @@ const inputFieldStyle = {
 	marginBottom: '15px'
 };
 
-export default drizzleConnect(VoteModal);
+VoteModal.contextTypes = {
+	drizzle: PropTypes.object
+};
+
+const mapStateToProps = state => {
+	return {};
+};
+
+export default drizzleConnect(VoteModal, mapStateToProps);

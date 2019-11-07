@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { ParameterizerParams } from '../views/CuratedTokens/params';
 const BN = require('bignumber.js');
 const web3 = new Web3(window.ethereum);
 
@@ -88,6 +89,72 @@ const fetchMessage = (Fin4MessagingContract, defaultAccount, messageId) => {
 	);
 };
 
+let parameterizerParamsFetched = false;
+
+const fetchParameterizerParams = (contracts, props, drizzle) => {
+	let parameterizerContractReady = contracts.Parameterizer && contracts.Parameterizer.initialized;
+
+	// ensures the following code will only be executed once as this method will be
+	// called multiple times from useEffect() methods from the CuratedTokens sites
+	if (parameterizerParamsFetched || !parameterizerContractReady) {
+		return;
+	}
+
+	parameterizerParamsFetched = true;
+
+	getContractData(drizzle.contracts.Parameterizer, props.store.getState().fin4Store.defaultAccount, 'getAll').then(
+		paramValues => {
+			let params = {};
+			for (let i = 0; i < paramValues.length; i++) {
+				let param = ParameterizerParams[i];
+				params[param.name] = {
+					name: param.name,
+					description: param.description,
+					value: Number(paramValues[i])
+				};
+			}
+			props.dispatch({
+				type: 'SET_PARAMETERIZER_PARAMS',
+				paramsObj: params
+			});
+		}
+	);
+};
+
+let govBalanceFetched = false;
+
+const fetchUsersGOVbalance = (contracts, props, drizzle) => {
+	if (govBalanceFetched || !contracts.GOV || !contracts.GOV.initialized) {
+		return;
+	}
+	govBalanceFetched = true;
+	let govContract = drizzle.contracts.GOV;
+	getContractData(govContract, props.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
+		props.dispatch({
+			type: 'UPDATE_GOVERNANCE_BALANCE',
+			tokenAddress: govContract.address,
+			balance: new BN(balanceBN).toNumber()
+		});
+	});
+};
+
+let repBalanceFetched = false;
+
+const fetchUsersREPbalance = (contracts, props, drizzle) => {
+	if (repBalanceFetched || !contracts.Fin4Reputation || !contracts.Fin4Reputation.initialized) {
+		return;
+	}
+	repBalanceFetched = true;
+	let repContract = drizzle.contracts.Fin4Reputation;
+	getContractData(repContract, props.defaultAccount, 'balanceOf', props.defaultAccount).then(balanceBN => {
+		props.dispatch({
+			type: 'UPDATE_GOVERNANCE_BALANCE',
+			tokenAddress: repContract.address,
+			balance: new BN(balanceBN).toNumber()
+		});
+	});
+};
+
 // --------------------- LOAD INITIAL DATA ---------------------
 
 const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
@@ -112,6 +179,19 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 			addContract(props, drizzle, 'Fin4Collections', Fin4CollectionsAddress, []);
 			addContract(props, drizzle, 'Fin4Proofing', Fin4ProofingAddress, []);
 			addContract(props, drizzle, 'Fin4Groups', Fin4GroupsAddress, []);
+		}
+	);
+};
+
+const addTCRcontracts = (props, Fin4MainContract, drizzle) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	getContractData(Fin4MainContract, defaultAccount, 'getTCRaddresses').then(
+		({ 0: REPTokenAddress, 1: GOVTokenAddress, 2: RegistryAddress, 3: PLCRVotingAddress, 4: ParameterizerAddress }) => {
+			addContract(props, drizzle, 'Fin4Reputation', REPTokenAddress, []);
+			addContract(props, drizzle, 'GOV', GOVTokenAddress, []);
+			addContract(props, drizzle, 'Registry', RegistryAddress, []);
+			addContract(props, drizzle, 'PLCRVoting', PLCRVotingAddress, []);
+			addContract(props, drizzle, 'Parameterizer', ParameterizerAddress, []);
 		}
 	);
 };
@@ -163,7 +243,8 @@ const fetchAllTokens = (props, Fin4TokenManagementContract, callback) => {
 							description: description,
 							unit: unit,
 							totalSupply: new BN(totalSupply).toNumber(),
-							creationTime: creationTime
+							creationTime: creationTime,
+							isOPAT: null
 						};
 					}
 				);
@@ -326,45 +407,30 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 		});
 };
 
-// -------------------------------------------------------------
+// --------------------- TCR ---------------------
 
-export {
-	getContractData,
-	addContract,
-	addSatelliteContracts,
-	fetchMessage,
-	fetchMessages,
-	fetchAllTokens,
-	fetchUsersNonzeroTokenBalances,
-	fetchCurrentUsersClaims,
-	fetchAndAddAllProofTypes,
-	findTokenBySymbol,
-	isValidPublicAddress,
-	getFin4TokensFormattedForSelectOptions,
-	fetchCollectionsInfo,
-	zeroAddress
-};
-
-/*
-// DEPRECATED
-const getAllActionTypes = () => {
-	return getContractData_deprecated(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
-		.then(tokens => {
-			return tokens.map(address => {
-				return getContractData_deprecated(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
-					return {
-						value: address,
-						label: `[${symbol}] ${name}`
-					};
-				});
+const fetchOPATs = (props, RegistryContract) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	getContractData(RegistryContract, defaultAccount, 'getWhitelistedListingKeys').then(whitelistedListingKeys => {
+		whitelistedListingKeys.map(listingKey => {
+			props.dispatch({
+				type: 'MARK_FIN4TOKEN_AS_OPAT',
+				lowerCaseTokenAddress: '0x' + listingKey.substr(26, listingKey.length - 1)
 			});
-		})
-		.then(data => Promise.all(data));
+		});
+	});
 };
 
-const getPollStatus = pollID => {
+const PollStatus = {
+	IN_COMMIT_PERIOD: 'Commit Vote',
+	IN_REVEAL_PERIOD: 'Reveal',
+	PAST_REVEAL_PERIOD: '-'
+};
+
+const getPollStatus = (pollID, PLCRVotingContract, defaultAccount) => {
 	// pollID is also called challengeID in Registry.sol
-	return getContractData_deprecated('PLCRVotingAddress-DUMMY', 'PLCRVoting', 'pollMap', [pollID]).then(
+
+	return getContractData(PLCRVotingContract, defaultAccount, 'pollMap', pollID).then(
 		({ 0: commitEndDateBN, 1: revealEndDateBN, 2: voteQuorum, 3: votesFor, 4: votesAgainst }) => {
 			let commitEndDate = new BN(commitEndDateBN).toNumber() * 1000;
 			let revealEndDate = new BN(revealEndDateBN).toNumber() * 1000;
@@ -392,36 +458,46 @@ const getPollStatus = pollID => {
 	);
 };
 
-const getTCRAddresses = props => {
-	getContractData_deprecated(Fin4MainAddress, 'Fin4Main', 'getTCRaddresses').then(
-		({ 0: REPToken, 1: GOVToken, 2: Registry, 3: PLCRVoting }) => {
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'REPToken',
-				address: REPToken
-			});
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'GOVToken',
-				address: GOVToken
-			});
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'Registry',
-				address: Registry
-			});
-			props.dispatch({
-				type: ADD_ADDRESS,
-				name: 'PLCRVoting',
-				address: PLCRVoting
-			});
-		}
-	);
+// -------------------------------------------------------------
+
+export {
+	getContractData,
+	addContract,
+	addSatelliteContracts,
+	addTCRcontracts,
+	fetchMessage,
+	fetchMessages,
+	fetchAllTokens,
+	fetchUsersNonzeroTokenBalances,
+	fetchCurrentUsersClaims,
+	fetchAndAddAllProofTypes,
+	findTokenBySymbol,
+	isValidPublicAddress,
+	getFin4TokensFormattedForSelectOptions,
+	fetchCollectionsInfo,
+	zeroAddress,
+	fetchParameterizerParams,
+	PollStatus,
+	getPollStatus,
+	fetchUsersGOVbalance,
+	fetchUsersREPbalance,
+	fetchOPATs
 };
 
-const PollStatus = {
-	IN_COMMIT_PERIOD: 'Commit Vote',
-	IN_REVEAL_PERIOD: 'Reveal',
-	PAST_REVEAL_PERIOD: '-'
+/*
+// DEPRECATED
+const getAllActionTypes = () => {
+	return getContractData_deprecated(Fin4MainAddress, 'Fin4Main', 'getAllFin4Tokens')
+		.then(tokens => {
+			return tokens.map(address => {
+				return getContractData_deprecated(address, 'Fin4Token', 'getInfo').then(({ 0: name, 1: symbol, 2: description }) => {
+					return {
+						value: address,
+						label: `[${symbol}] ${name}`
+					};
+				});
+			});
+		})
+		.then(data => Promise.all(data));
 };
 */

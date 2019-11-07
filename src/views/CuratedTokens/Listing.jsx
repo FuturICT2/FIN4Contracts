@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-//import { RegistryAddress, GOVTokenAddress } from '../../config/DeployedAddresses.js';
 import {
-	getCurrentAccount,
 	getContractData,
-	getAllActionTypes,
-	getContract,
 	getPollStatus,
-	PollStatus
+	PollStatus,
+	fetchParameterizerParams,
+	fetchUsersGOVbalance
 } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
@@ -17,46 +15,52 @@ import { drizzleConnect } from 'drizzle-react';
 import { TextField } from '@material-ui/core';
 import VoteModal from './VoteModal';
 import RevealModal from './RevealModal';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 const BN = require('bignumber.js');
 
-class Listing extends Component {
-	constructor(props) {
-		super(props);
+function Listing(props, context) {
+	const { t } = useTranslation();
 
-		this.state = {
-			isApplyModalOpen: false,
-			isVoteModalOpen: false,
-			isRevealModalOpen: false,
-			isChallengeModalOpen: false,
+	const [isApplyModalOpen, setApplyModalOpen] = useState(false);
+	const [isVoteModalOpen, setVoteModalOpen] = useState(false);
+	const [isRevealModalOpen, setRevealModalOpen] = useState(false);
+	const [isChallengeModalOpen, setChallengeModalOpen] = useState(false);
 
-			listings: {},
-			allFin4Tokens: [],
-			unlistedFin4Tokens: []
-		};
+	const [listings, setListings] = useState({});
 
-		this.selectedListing = null;
-		this.resetApplyModalValues();
-		this.resetChallengeModalValues();
+	const applyModalValues = useRef({
+		token: null,
+		deposit: null,
+		data: null
+	});
 
-		this.parameterizerValues = {
-			// TODO load this into redux store
-			minDeposit: null,
-			reviewTax: null
-		};
+	const challengeModalValues = useRef({
+		data: null
+	});
 
-		/*
-		getContractData_deprecated(RegistryAddress, 'Registry', 'parameterizer').then(parameterizerAddress => {
-			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['minDeposit']).then(minDepositBN => {
-				this.parameterizerValues.minDeposit = new BN(minDepositBN).toNumber();
-				console.log(new BN(minDepositBN).toNumber());
-			});
-			getContractData_deprecated(parameterizerAddress, 'Parameterizer', 'get', ['reviewTax']).then(reviewTaxBN => {
-				this.parameterizerValues.reviewTax = new BN(reviewTaxBN).toNumber();
-				console.log('reviewtax:' + new BN(reviewTaxBN).toNumber());
-			});
-		});
+	const selectedListing = useRef(null);
 
-		getContractData_deprecated(RegistryAddress, 'Registry', 'getListings').then(
+	let listingsFetched = useRef(false);
+
+	useEffect(() => {
+		// this method guards itself against to ensure it's only executed once
+		fetchParameterizerParams(props.contracts, props, context.drizzle);
+		fetchUsersGOVbalance(props.contracts, props, context.drizzle);
+
+		if (
+			!listingsFetched.current &&
+			props.fin4TokensInitiallyFetched &&
+			props.contracts.Registry &&
+			props.contracts.Registry.initialized
+		) {
+			listingsFetched.current = true;
+			fetchListings();
+		}
+	});
+
+	const fetchListings = () => {
+		getContractData(context.drizzle.contracts.Registry, props.defaultAccount, 'getListings').then(
 			({
 				0: listingsKeys,
 				1: applicationExpiries,
@@ -92,7 +96,20 @@ class Listing extends Component {
 					};
 				}
 
-				getContractData_deprecated(RegistryAddress, 'Registry', 'getChallenges').then(
+				// set isOPAT flag on tokens
+				for (var tokenAddress in props.fin4Tokens) {
+					if (props.fin4Tokens.hasOwnProperty(tokenAddress)) {
+						// addresses are case in-sensitive. the address-to-byte32 method in Registry.applyToken() leaves only lower-case
+						let tokenAddr = tokenAddress.toLowerCase();
+						let isOPAT = listingsObj[tokenAddr] ? true : false;
+						props.fin4Tokens[tokenAddress].isOPAT = isOPAT;
+						if (isOPAT) {
+							listingsObj[tokenAddr].name = props.fin4Tokens[tokenAddress].name;
+						}
+					}
+				}
+
+				getContractData(context.drizzle.contracts.Registry, props.defaultAccount, 'getChallenges').then(
 					({ 0: challengeIDs, 1: rewardPools, 2: challengers, 3: isReviews, 4: isResolveds, 5: totalTokenss }) => {
 						let challengesObj = {};
 						for (var i = 0; i < challengeIDs.length; i++) {
@@ -125,339 +142,313 @@ class Listing extends Component {
 
 							let review_challenge = challengesObj[challengeID].isReview ? 'Review' : 'Challenge';
 
-							return getPollStatus(challengeID).then(pollStatus => {
-								listing.dueDate = pollStatus.dueDate;
+							return getPollStatus(challengeID, context.drizzle.contracts.PLCRVoting, props.defaultAccount).then(
+								pollStatus => {
+									listing.dueDate = pollStatus.dueDate;
 
-								switch (pollStatus.inPeriod) {
-									case PollStatus.IN_COMMIT_PERIOD:
-										listing.actionStatus = Action_Status.VOTE;
-										listing.status = review_challenge + ': commit period';
-										return;
-									case PollStatus.IN_REVEAL_PERIOD:
-										listing.actionStatus = Action_Status.REVEAL;
-										listing.status = review_challenge + ': reveal period';
-										return;
-									case PollStatus.PAST_REVEAL_PERIOD:
-										listing.actionStatus = Action_Status.UPDATE;
-										listing.status = review_challenge;
-										break;
+									switch (pollStatus.inPeriod) {
+										case PollStatus.IN_COMMIT_PERIOD:
+											listing.actionStatus = Action_Status.VOTE;
+											listing.status = review_challenge + ': commit period';
+											return;
+										case PollStatus.IN_REVEAL_PERIOD:
+											listing.actionStatus = Action_Status.REVEAL;
+											listing.status = review_challenge + ': reveal period';
+											return;
+										case PollStatus.PAST_REVEAL_PERIOD:
+											listing.actionStatus = Action_Status.UPDATE;
+											listing.status = review_challenge;
+											break;
+									}
 								}
-							});
+							);
+						});
+						Promise.all(allPollPromises).then(() => {
+							setListings(listingsObj);
 						});
 					}
 				);
-
-				// Unlisted Fin4 Tokens
-				getAllActionTypes().then(data => {
-					this.setState({ allFin4Tokens: data });
-					let unlistedFin4TokensArr = [];
-					for (var i = 0; i < data.length; i++) {
-						// addresses are case in-sensitive. the address-to-byte32 method in Registry.applyToken() leaves only lower-case
-						let tokenAddr = data[i].value.toLowerCase();
-						if (!listingsObj[tokenAddr]) {
-							unlistedFin4TokensArr.push(data[i]);
-						} else {
-							listingsObj[tokenAddr].name = data[i].label;
-						}
-					}
-					this.setState({ listings: listingsObj });
-					this.setState({ unlistedFin4Tokens: unlistedFin4TokensArr });
-				});
 			}
 		);
-*/
-	}
+	};
 
 	// ---------- ApplyModal ----------
 
-	resetApplyModalValues() {
-		this.applyModalValues = {
+	const resetApplyModalValues = () => {
+		applyModalValues.current = {
 			token: null, // address
 			deposit: null, // number
 			data: null // string
 		};
-	}
-
-	toggleApplyModal = () => {
-		if (this.state.isApplyModalOpen) {
-			this.resetApplyModalValues();
-		}
-		this.setState({ isApplyModalOpen: !this.state.isApplyModalOpen });
 	};
 
-	submitApplyModal = () => {
-		if (this.applyModalValues.deposit === null || this.applyModalValues.data === null) {
+	const toggleApplyModal = () => {
+		if (isApplyModalOpen) {
+			resetApplyModalValues();
+		}
+		setApplyModalOpen(!isApplyModalOpen);
+	};
+
+	const submitApplyModal = () => {
+		let govContract = context.drizzle.contracts.GOV;
+		let registryContract = context.drizzle.contracts.Registry;
+
+		if (applyModalValues.current.deposit === null || applyModalValues.current.data === null) {
 			alert('Both values must be set.');
 			return;
 		}
 
-		let token = this.applyModalValues.token;
-		let deposit = Number(this.applyModalValues.deposit);
-		let data = this.applyModalValues.data;
+		let token = applyModalValues.current.token;
+		let deposit = Number(applyModalValues.current.deposit);
+		let data = applyModalValues.current.data;
 
-		let minDepositPlusReviewTax = this.parameterizerValues.minDeposit + this.parameterizerValues.reviewTax;
+		let minDepositPlusReviewTax =
+			props.parameterizerParams['minDeposit'].value + props.parameterizerParams['reviewTax'].value;
 		if (deposit < minDepositPlusReviewTax) {
 			alert('Deposit must be bigger than minDeposit + reviewTax (=' + minDepositPlusReviewTax + ')');
 			return;
 		}
 
-		this.toggleApplyModal();
+		if (!props.usersFin4GovernanceTokenBalances[govContract.address] === undefined) {
+			alert('GOV balance not available');
+		}
 
-		// Step 1: approve
-		/*
-		getContract(GOVTokenAddress, 'GOV')
-			.then(function(instance) {
-				return instance.approve(RegistryAddress, deposit, {
-					from: getCurrentAccount()
-				});
-			})
+		if (
+			!props.usersFin4GovernanceTokenBalances[govContract.address] ||
+			props.usersFin4GovernanceTokenBalances[govContract.address] < deposit
+		) {
+			alert(
+				'Your GOV balance is ' +
+					props.usersFin4GovernanceTokenBalances[govContract.address] +
+					', less than your deposit of ' +
+					deposit
+			);
+			return;
+		}
+
+		toggleApplyModal();
+
+		// Step 1: approve deposit to be taken from users GOV balance
+
+		govContract.methods
+			.approve(registryContract.address, deposit)
+			.send({ from: props.defaultAccount })
 			.then(function(result) {
-				console.log('GOV.approve Result: ', result);
+				console.log('Results of submitting GOV.approve: ', result);
 
 				// Step 2: applyToken
 
-				getContract(RegistryAddress, 'Registry')
-					.then(function(instance) {
-						return instance.applyToken(token, deposit, data, {
-							from: getCurrentAccount()
-						});
-					})
+				registryContract.methods
+					.applyToken(token, deposit, data)
+					.send({ from: props.defaultAccount })
 					.then(function(result) {
-						console.log('Registry.applyToken Result: ', result);
-					})
-					.catch(function(err) {
-						console.log('Registry.applyToken Error: ', err.message);
-						alert(err.message);
+						console.log('Results of submitting Registry.applyToken: ', result);
 					});
-			})
-			.catch(function(err) {
-				console.log('GOV.approve Error: ', err.message);
-				alert(err.message);
 			});
-*/
 	};
 
 	// ---------- VoteModal ----------
 
-	toggleVoteModal = () => {
-		this.setState({ isVoteModalOpen: !this.state.isVoteModalOpen });
+	const toggleVoteModal = () => {
+		setVoteModalOpen(!isVoteModalOpen);
 	};
 
 	// ---------- RevealModal ----------
 
-	toggleRevealModal = () => {
-		this.setState({ isRevealModalOpen: !this.state.isRevealModalOpen });
+	const toggleRevealModal = () => {
+		setRevealModalOpen(!isRevealModalOpen);
 	};
 
 	// ---------- ChallengeModal ----------
 
-	resetChallengeModalValues() {
-		this.challengeModalValues = {
+	const resetChallengeModalValues = () => {
+		challengeModalValues.current = {
 			data: null // string
 		};
-	}
-
-	toggleChallengeModal = () => {
-		if (this.state.isChallengeModalOpen) {
-			this.resetChallengeModalValues();
-		}
-		this.setState({ isChallengeModalOpen: !this.state.isChallengeModalOpen });
 	};
 
-	submitChallengeModal = () => {
-		let listingHash = this.selectedListing.listingKey;
-		let data = this.challengeModalValues.data;
-		let minDeposit = this.parameterizerValues.minDeposit;
+	const toggleChallengeModal = () => {
+		if (isChallengeModalOpen) {
+			resetChallengeModalValues();
+		}
+		setChallengeModalOpen(!isChallengeModalOpen);
+	};
 
-		this.toggleChallengeModal();
-		/*
-		getContract(GOVTokenAddress, 'GOV')
-			.then(function(instance) {
-				return instance.approve(RegistryAddress, minDeposit, {
-					from: getCurrentAccount()
-				});
-			})
-			.then(function(result) {
-				console.log('GOV.approve Result: ', result);
-				getContract(RegistryAddress, 'Registry')
-					.then(function(instance) {
-						return instance.challenge(listingHash, data, {
-							from: getCurrentAccount()
-						});
-					})
-					.then(function(result) {
-						console.log('Registry.challenge Result: ', result);
-					})
-					.catch(function(err) {
-						console.log('Registry.challenge Error: ', err.message);
-						alert(err.message);
+	const submitChallengeModal = () => {
+		let listingHash = selectedListing.current.listingKey;
+		let data = challengeModalValues.current.data;
+		let minDeposit = props.parameterizerParams['minDeposit'].value;
+
+		toggleChallengeModal();
+
+		context.drizzle.contracts.GOV.methods
+			.approve(context.drizzle.contracts.Registry.address, minDeposit)
+			.send({ from: props.defaultAccount })
+			.then(result => {
+				console.log('Results of submitting GOV.approve: ', result);
+
+				context.drizzle.contracts.Registry.methods
+					.challenge(listingHash, data)
+					.send({ from: props.defaultAccount })
+					.then(result => {
+						console.log('Results of submitting Registry.challenge: ', result);
 					});
-			})
-			.catch(function(err) {
-				console.log('GOV.approve Error: ', err.message);
-				alert(err.message);
 			});
-*/
 	};
 
 	// ----------
 
-	updateStatus() {
-		/*
-		let listingKey = this.selectedListing.listingKey;
-		getContract(RegistryAddress, 'Registry')
-			.then(function(instance) {
-				return instance.updateStatus(listingKey, {
-					from: getCurrentAccount()
-				});
-			})
-			.then(function(result) {
-				console.log('RegistryAddress.updateStatus Result: ', result);
-			})
-			.catch(function(err) {
-				console.log('RegistryAddress.updateStatus Error: ', err.message);
-				alert(err.message);
+	const updateStatus = () => {
+		let listingKey = selectedListing.current.listingKey;
+		context.drizzle.contracts.Registry.methods
+			.updateStatus(listingKey)
+			.send({ from: props.defaultAccount })
+			.then(result => {
+				console.log('Results of submitting Listing.updateStatus: ', result);
 			});
-*/
-	}
+	};
 
-	render() {
-		return (
-			<center>
-				<Box title="Curated Positive Action Tokens" width="800px">
-					<Table headers={['Name', 'Status', 'Due Date', 'Actions', 'Whitelisted']}>
-						{Object.keys(this.state.listings).map((key, index) => {
-							// key is address of the Fin4Token
-							return (
-								<TableRow
-									key={index}
-									data={{
-										name: this.state.listings[key].name,
-										status: this.state.listings[key].status,
-										dueDate: this.state.listings[key].dueDate,
-										actions: this.state.listings[key].actionStatus !== Action_Status.REJECTED && (
-											<Button
-												onClick={() => {
-													this.selectedListing = this.state.listings[key];
-													switch (this.state.listings[key].actionStatus) {
-														case Action_Status.VOTE:
-															this.toggleVoteModal();
-															break;
-														case Action_Status.REVEAL:
-															this.toggleRevealModal();
-															break;
-														case Action_Status.UPDATE:
-															this.updateStatus();
-															break;
-														case Action_Status.CHALLENGE:
-															this.toggleChallengeModal();
-															break;
-													}
-												}}>
-												{this.state.listings[key].actionStatus}
-											</Button>
-										),
-										whitelisted: this.state.listings[key].whitelisted.toString()
-									}}
-								/>
-							);
-						})}
-					</Table>
-				</Box>
-				<Box title="All Positive Action Tokens">
+	return (
+		<center>
+			<Box title="Curated Positive Action Tokens" width="800px">
+				<center>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
+						Reload to see changes, statuses won't change automatically.
+						<br />
+						TODO explain costs involved for making changes and potential rewards/losses.
+					</small>
+				</center>
+				<Table headers={['Name', 'Status', 'Due Date', 'Actions', 'Whitelisted']}>
+					{Object.keys(listings).map((key, index) => {
+						// key is address of the Fin4Token
+						return (
+							<TableRow
+								key={index}
+								data={{
+									name: listings[key].name,
+									status: listings[key].status,
+									dueDate: listings[key].dueDate,
+									actions: listings[key].actionStatus !== Action_Status.REJECTED && (
+										<Button
+											onClick={() => {
+												selectedListing.current = listings[key];
+												switch (listings[key].actionStatus) {
+													case Action_Status.VOTE:
+														toggleVoteModal();
+														break;
+													case Action_Status.REVEAL:
+														toggleRevealModal();
+														break;
+													case Action_Status.UPDATE:
+														updateStatus();
+														break;
+													case Action_Status.CHALLENGE:
+														toggleChallengeModal();
+														break;
+												}
+											}}>
+											{listings[key].actionStatus}
+										</Button>
+									),
+									whitelisted: listings[key].whitelisted.toString()
+								}}
+							/>
+						);
+					})}
+				</Table>
+			</Box>
+			<Box title="All Positive Action Tokens">
+				{!props.fin4TokensInitiallyFetched ? (
+					<span style={{ fontFamily: 'arial', color: 'gray' }}>Loading...</span>
+				) : (
 					<Table headers={['Name', 'Apply']}>
-						{Object.keys(this.props.fin4Tokens).map((key, index) => {
-							let token = this.props.fin4Tokens[key];
+						{Object.keys(props.fin4Tokens).map((key, index) => {
+							let token = props.fin4Tokens[key];
 							return (
 								<TableRow
 									key={index}
 									data={{
 										name: token.name,
-										apply: (
-											<Button
-												onClick={() => {
-													this.applyModalValues.token = token.address;
-													this.toggleApplyModal();
-												}}>
-												Apply
-											</Button>
-										)
+										apply:
+											token.isOPAT === true ? (
+												'' // TODO what to write here, is on the list or in application/challenge? or nothing is ok
+											) : (
+												<Button
+													onClick={() => {
+														applyModalValues.current.token = token.address;
+														toggleApplyModal();
+													}}>
+													Apply
+												</Button>
+											)
 									}}
 								/>
 							);
 						})}
 					</Table>
-				</Box>
-				<Modal
-					isOpen={this.state.isApplyModalOpen}
-					handleClose={this.toggleApplyModal}
-					title="Set deposit and data"
-					width="400px">
-					<TextField
-						key="apply-deposit"
-						type="number"
-						label="Deposit"
-						onChange={e => (this.applyModalValues.deposit = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<TextField
-						key="apply-data"
-						type="text"
-						label="Data"
-						onChange={e => (this.applyModalValues.data = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<Button onClick={this.submitApplyModal} center="true">
-						Submit
-					</Button>
-					<center>
-						<small style={{ color: 'gray' }}>
-							Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
-							token balance and then to submit the application for this token.
-						</small>
-					</center>
-				</Modal>
-				<VoteModal
-					isOpen={this.state.isVoteModalOpen}
-					handleClose={this.toggleVoteModal}
-					pollID={this.selectedListing && this.selectedListing.challengeID}
-					voteOptionsInfo={
-						this.selectedListing && this.selectedListing.whitelisted
-							? 'Challenge: 1 = keep token on the list, 0 = remove it'
-							: 'Review: 1 = put token on list, 0 = reject application'
-					}
+				)}
+			</Box>
+			<Modal isOpen={isApplyModalOpen} handleClose={toggleApplyModal} title="Set deposit and data" width="400px">
+				<TextField
+					key="apply-deposit"
+					type="number"
+					label="Deposit"
+					onChange={e => (applyModalValues.current.deposit = e.target.value)}
+					style={inputFieldStyle}
 				/>
-				<RevealModal
-					isOpen={this.state.isRevealModalOpen}
-					handleClose={this.toggleRevealModal}
-					pollID={this.selectedListing && this.selectedListing.challengeID}
+				<TextField
+					key="apply-data"
+					type="text"
+					label="Data"
+					onChange={e => (applyModalValues.current.data = e.target.value)}
+					style={inputFieldStyle}
 				/>
-				<Modal
-					isOpen={this.state.isChallengeModalOpen}
-					handleClose={this.toggleChallengeModal}
-					title="Add optional data"
-					width="400px">
-					<TextField
-						key="set-data"
-						type="text"
-						label="Data"
-						onChange={e => (this.challengeModalValues.data = e.target.value)}
-						style={inputFieldStyle}
-					/>
-					<Button onClick={this.submitChallengeModal} center="true">
-						Submit
-					</Button>
-					<center>
-						<small style={{ color: 'gray' }}>
-							Upon submitting, two transactions have to be signed: to allow minDeposit (
-							{this.parameterizerValues.minDeposit === null ? '?' : this.parameterizerValues.minDeposit}) to be
-							withdrawn from your GOV token balance and then to submit your challenge.
-						</small>
-					</center>
-				</Modal>
-			</center>
-		);
-	}
+				<Button onClick={submitApplyModal} center="true">
+					Submit
+				</Button>
+				<center>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
+						Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
+						token balance and then to submit the application for this token.
+					</small>
+				</center>
+			</Modal>
+			<VoteModal
+				isOpen={isVoteModalOpen}
+				handleClose={toggleVoteModal}
+				pollID={selectedListing.current && selectedListing.current.challengeID}
+				voteOptionsInfo={
+					selectedListing.current && selectedListing.current.whitelisted
+						? 'Challenge: 1 = keep token on the list, 0 = remove it'
+						: 'Review: 1 = put token on list, 0 = reject application'
+				}
+			/>
+			<RevealModal
+				isOpen={isRevealModalOpen}
+				handleClose={toggleRevealModal}
+				pollID={selectedListing.current && selectedListing.current.challengeID}
+			/>
+			<Modal isOpen={isChallengeModalOpen} handleClose={toggleChallengeModal} title="Add optional data" width="400px">
+				<TextField
+					key="set-data"
+					type="text"
+					label="Data"
+					onChange={e => (challengeModalValues.current.data = e.target.value)}
+					style={inputFieldStyle}
+				/>
+				<Button onClick={submitChallengeModal} center="true">
+					Submit
+				</Button>
+				<center>
+					<small style={{ fontFamily: 'arial', color: 'gray' }}>
+						Upon submitting, two transactions have to be signed: to allow minDeposit (
+						{props.parameterizerParams['minDeposit'] ? props.parameterizerParams['minDeposit'].value : '?'}) to be
+						withdrawn from your GOV token balance and then to submit your challenge.
+					</small>
+				</center>
+			</Modal>
+		</center>
+	);
 }
 
 const Action_Status = {
@@ -475,9 +466,18 @@ const inputFieldStyle = {
 	marginBottom: '15px'
 };
 
+Listing.contextTypes = {
+	drizzle: PropTypes.object
+};
+
 const mapStateToProps = state => {
 	return {
-		fin4Tokens: state.fin4Store.fin4Tokens
+		defaultAccount: state.fin4Store.defaultAccount,
+		contracts: state.contracts,
+		fin4Tokens: state.fin4Store.fin4Tokens,
+		fin4TokensInitiallyFetched: state.fin4Store.fin4TokensInitiallyFetched,
+		parameterizerParams: state.fin4Store.parameterizerParams,
+		usersFin4GovernanceTokenBalances: state.fin4Store.usersFin4GovernanceTokenBalances
 	};
 };
 
