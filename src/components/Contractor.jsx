@@ -166,7 +166,8 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 			2: Fin4CollectionsAddress,
 			3: Fin4MessagingAddress,
 			4: Fin4ProofingAddress,
-			5: Fin4GroupsAddress
+			5: Fin4GroupsAddress,
+			6: Fin4SystemParametersAddress
 		}) => {
 			addContract(props, drizzle, 'Fin4TokenManagement', Fin4TokenManagementAddress, ['Fin4TokenCreated']);
 			addContract(props, drizzle, 'Fin4Messaging', Fin4MessagingAddress, ['NewMessage', 'MessageMarkedAsRead']);
