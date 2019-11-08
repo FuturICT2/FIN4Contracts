@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Box from '../../components/Box';
 import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
-import { getContractData, getPollStatus, PollStatus, fetchUsersGOVbalance } from '../../components/Contractor';
+import { getContractData, getPollStatus, PollStatus } from '../../components/Contractor';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { drizzleConnect } from 'drizzle-react';

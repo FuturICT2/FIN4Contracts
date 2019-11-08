@@ -8,7 +8,7 @@ import Modal from '../../components/Modal';
 import ContractForm from '../../components/ContractForm';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { fetchUsersGOVbalance, fetchUsersREPbalance, getContractData } from '../../components/Contractor';
+import { getContractData } from '../../components/Contractor';
 const BN = require('bignumber.js');
 
 function Management(props, context) {
