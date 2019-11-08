@@ -16,7 +16,9 @@ import Settings from '../views/Settings';
 import About from '../views/About';
 import Groups from '../views/users/Groups';
 import GroupEdit from '../views/users/GroupEdit';
-import CuratedTokens from '../views/CuratedTokens/CuratedTokens';
+import Listing from '../views/CuratedTokens/Listing';
+import Management from '../views/CuratedTokens/Management';
+import Governance from '../views/CuratedTokens/Governance';
 import Messages from '../views/Messages';
 
 const menu = [
@@ -132,8 +134,18 @@ const menu = [
 	},
 	// ------------------ GOVERNANCE ------------------
 	{
-		component: CuratedTokens,
-		path: '/CuratedTokens',
+		component: Listing,
+		path: '/governance/listing',
+		showInNavBar: false
+	},
+	{
+		component: Management,
+		path: '/governance/management',
+		showInNavBar: false
+	},
+	{
+		component: Governance,
+		path: '/governance/parameters',
 		showInNavBar: false
 	},
 	// ------------------ SETTINGS ------------------

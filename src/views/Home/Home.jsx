@@ -151,7 +151,7 @@ function Home(props) {
 				{buildIconLabelLink('/user/transfer', <SendIcon />, 'Transfer token')}
 				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
 				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections')}
-				{buildIconLabelLink('/CuratedTokens', <StarIcon />, 'Curated tokens')}
+				{buildIconLabelLink('/governance/listing', <StarIcon />, 'Curated tokens')}
 			</Box>
 		</Container>
 	);
