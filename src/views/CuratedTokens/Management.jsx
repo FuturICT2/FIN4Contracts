@@ -9,6 +9,7 @@ import ContractForm from '../../components/ContractForm';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
+import Container from '../../components/Container';
 const BN = require('bignumber.js');
 
 function Management(props, context) {
@@ -52,8 +53,8 @@ function Management(props, context) {
 	};
 
 	return (
-		<center>
-			<Box title="Token Balances" width="600px">
+		<Container>
+			<Box title="Governance Token Balances" width="600px">
 				<Table headers={['Token', 'Balance', 'Actions']}>
 					<TableRow
 						key="rep-token"
@@ -130,7 +131,7 @@ function Management(props, context) {
 					/>
 				</Modal>
 			</Box>
-		</center>
+		</Container>
 	);
 }
 

@@ -12,6 +12,7 @@ import RevealModal from './RevealModal';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import update from 'react-addons-update';
+import Container from '../../components/Container';
 const BN = require('bignumber.js');
 
 function Governance(props, context) {
@@ -241,7 +242,7 @@ function Governance(props, context) {
 	};
 
 	return (
-		<center>
+		<Container>
 			<Box title="TCR Parameters" width="900px">
 				<center>
 					<small style={{ fontFamily: 'arial', color: 'gray' }}>
@@ -346,7 +347,7 @@ function Governance(props, context) {
 				handleClose={toggleRevealModal}
 				pollID={params[selectedParamName.current] ? params[selectedParamName.current].challengeID : null}
 			/>
-		</center>
+		</Container>
 	);
 }
 

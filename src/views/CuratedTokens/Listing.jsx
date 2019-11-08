@@ -11,6 +11,7 @@ import VoteModal from './VoteModal';
 import RevealModal from './RevealModal';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import Container from '../../components/Container';
 const BN = require('bignumber.js');
 
 function Listing(props, context) {
@@ -299,7 +300,7 @@ function Listing(props, context) {
 	};
 
 	return (
-		<center>
+		<Container>
 			<Box title="Curated Positive Action Tokens" width="800px">
 				<center>
 					<small style={{ fontFamily: 'arial', color: 'gray' }}>
@@ -437,7 +438,7 @@ function Listing(props, context) {
 					</small>
 				</center>
 			</Modal>
-		</center>
+		</Container>
 	);
 }
 
