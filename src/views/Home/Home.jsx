@@ -10,6 +10,7 @@ import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import MessageIcon from '@material-ui/icons/Message';
 import SendIcon from '@material-ui/icons/Send'; // or Forward
 import EmailIcon from '@material-ui/icons/Email';
+import StarIcon from '@material-ui/icons/Star';
 import TokenBalances from '../../components/TokenBalances';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQrcode } from '@fortawesome/free-solid-svg-icons';
@@ -150,6 +151,7 @@ function Home(props) {
 				{buildIconLabelLink('/user/transfer', <SendIcon />, 'Transfer token')}
 				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
 				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections')}
+				{buildIconLabelLink('/CuratedTokens', <StarIcon />, 'Curated tokens')}
 			</Box>
 		</Container>
 	);

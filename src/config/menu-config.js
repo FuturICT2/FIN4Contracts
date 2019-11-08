@@ -17,7 +17,6 @@ import About from '../views/About';
 import Groups from '../views/users/Groups';
 import GroupEdit from '../views/users/GroupEdit';
 import CuratedTokens from '../views/CuratedTokens/CuratedTokens';
-import CheckIcon2 from '@material-ui/icons/CheckCircleOutline';
 import Messages from '../views/Messages';
 
 const menu = [
@@ -135,9 +134,7 @@ const menu = [
 	{
 		component: CuratedTokens,
 		path: '/CuratedTokens',
-		label: 'Curated Tokens',
-		icon: CheckIcon2,
-		showInNavBar: true // SHOW IN NAVBAR
+		showInNavBar: false
 	},
 	// ------------------ SETTINGS ------------------
 	{
