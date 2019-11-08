@@ -73,10 +73,25 @@ If they are not the same computers it is necessary:
 
 - to run `truffle compile` on a computer serving the GUI that hasn't run `truffle migrate` beforehand - this creates JSON-files for each contract that are necessary for calling the contracts on the blockchain
 
-Start the React app on port 3000:
+### Development mode
+
+This starts the React app on port 3000:
+
 ```sh
 npm start
 ```
+
+### Production mode
+
+This starts the React app on port 5000:
+
+```sh
+npm run build
+npm install -g serve
+serve -s build
+```
+
+Serving the DApp in production mode instead of development mode also solves an issue with sub-sites (e.g. `/tokens`) on mobile DApp browsers (observed in MetaMask on Android) where it would only show `cannot GET /URL` on reloading.
 
 ## Using the Dapp
 
