@@ -94,6 +94,27 @@ function Home(props) {
 							}}>
 							<RequestEth>{t('request-ether')}</RequestEth>
 						</a>
+						{/*<a
+							href="#"
+							onClick={() => {
+								if (navigator.geolocation) {
+									alert("navigator.geolocation: TRUE");
+								} else {
+									alert("navigator.geolocation: FALSE");
+								}
+								navigator.geolocation.getCurrentPosition(pos => {
+										let latitude = pos.coords.latitude;
+										let longitude = pos.coords.longitude;
+										alert('Captured location ' + latitude + ' / ' + longitude);
+									}, 
+									err => {
+										alert('error: ' + err.message + ', code: ' + err.code);
+									},
+									{ timeout: 5000 }
+								);
+							}}>
+							<RequestEth>Location test</RequestEth>
+						</a>*/}
 					</>
 				)}
 			</Box>
