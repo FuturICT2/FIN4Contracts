@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import update from 'react-addons-update';
 import Container from '../../components/Container';
+import GovNavComponent from './GovNavComponent';
 const BN = require('bignumber.js');
 
 function Governance(props, context) {
@@ -242,112 +243,115 @@ function Governance(props, context) {
 	};
 
 	return (
-		<Container>
-			<Box title="TCR Parameters" width="900px">
-				<center>
-					<small style={{ fontFamily: 'arial', color: 'gray' }}>
-						Reload to see changes, statuses won't change automatically.
-						<br />
-						TODO explain costs involved for making changes and potential rewards/losses.
-					</small>
-				</center>
-				<Table headers={['Parameter', 'Description', 'Value', 'Actions', 'Status', 'Due Date']}>
-					{Object.keys(params).map((paramName, index) => {
-						let entry = params[paramName];
-						let paramInStore = props.parameterizerParams[paramName];
-						return (
-							<TableRow
-								key={index}
-								data={{
-									parameter: paramName,
-									description: paramInStore.description,
-									value: paramInStore.value,
-									actions: (
-										<Button
-											onClick={() => {
-												selectedParamName.current = paramName;
-												switch (entry.statusEnum) {
-													case ParamActionStatus.DEFAULT:
-														toggleProposeReparamModal();
-														break;
-													case ParamActionStatus.PROPOSEDREPARAM:
-														toggleChallengeReparamModal();
-														break;
-													case ParamActionStatus.VOTE:
-														toggleVoteModal();
-														break;
-													case ParamActionStatus.REVEAL:
-														toggleRevealModal();
-														break;
-													case ParamActionStatus.UPDATE:
-														processProposal();
-														break;
-												}
-											}}>
-											{entry.statusEnum}
-										</Button>
-									),
-									status: entry.status,
-									dueDate: entry.dueDate
-								}}
-							/>
-						);
-					})}
-				</Table>
-			</Box>
-			<Modal
-				isOpen={isProposeReparamOpen}
-				handleClose={toggleProposeReparamModal}
-				title="Propose new value"
-				width="400px">
-				<TextField
-					key="propose-value"
-					type="number"
-					label="Value"
-					onChange={e => (proposeReparamModalValue.current = e.target.value)}
-					style={inputFieldStyle}
+		<>
+			<GovNavComponent />
+			<Container>
+				<Box title="TCR Parameters" width="900px">
+					<center>
+						<small style={{ fontFamily: 'arial', color: 'gray' }}>
+							Reload to see changes, statuses won't change automatically.
+							<br />
+							TODO explain costs involved for making changes and potential rewards/losses.
+						</small>
+					</center>
+					<Table headers={['Parameter', 'Description', 'Value', 'Actions', 'Status', 'Due Date']}>
+						{Object.keys(params).map((paramName, index) => {
+							let entry = params[paramName];
+							let paramInStore = props.parameterizerParams[paramName];
+							return (
+								<TableRow
+									key={index}
+									data={{
+										parameter: paramName,
+										description: paramInStore.description,
+										value: paramInStore.value,
+										actions: (
+											<Button
+												onClick={() => {
+													selectedParamName.current = paramName;
+													switch (entry.statusEnum) {
+														case ParamActionStatus.DEFAULT:
+															toggleProposeReparamModal();
+															break;
+														case ParamActionStatus.PROPOSEDREPARAM:
+															toggleChallengeReparamModal();
+															break;
+														case ParamActionStatus.VOTE:
+															toggleVoteModal();
+															break;
+														case ParamActionStatus.REVEAL:
+															toggleRevealModal();
+															break;
+														case ParamActionStatus.UPDATE:
+															processProposal();
+															break;
+													}
+												}}>
+												{entry.statusEnum}
+											</Button>
+										),
+										status: entry.status,
+										dueDate: entry.dueDate
+									}}
+								/>
+							);
+						})}
+					</Table>
+				</Box>
+				<Modal
+					isOpen={isProposeReparamOpen}
+					handleClose={toggleProposeReparamModal}
+					title="Propose new value"
+					width="400px">
+					<TextField
+						key="propose-value"
+						type="number"
+						label="Value"
+						onChange={e => (proposeReparamModalValue.current = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<Button onClick={submitProposeReparamModal} center="true">
+						Submit
+					</Button>
+					<center>
+						<small style={{ fontFamily: 'arial', color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow the deposit (
+							{props.parameterizerParams['pMinDeposit'] ? props.parameterizerParams['pMinDeposit'].value : '?'}) to be
+							withdrawn from your GOV token balance and then to submit the proposed reparameterization.
+						</small>
+					</center>
+				</Modal>
+				<Modal
+					isOpen={isChallengeReparamOpen}
+					handleClose={toggleChallengeReparamModal}
+					title="Challenge proposed value"
+					width="400px">
+					<Button onClick={submitChallengeReparamModal} center="true">
+						Submit
+					</Button>
+					<center>
+						<small style={{ fontFamily: 'arial', color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow the proposal-deposit (
+							{params[selectedParamName.current] ? params[selectedParamName.current].propDeposit : '?'}) to be withdrawn
+							from your GOV token balance and then to challenge the proposed reparameterization.
+						</small>
+					</center>
+				</Modal>
+				<VoteModal
+					isOpen={isVoteModalOpen}
+					handleClose={toggleVoteModal}
+					pollID={params[selectedParamName.current] ? params[selectedParamName.current].challengeID : null}
+					voteOptionsInfo={
+						'Challenge: 1 = vote for the proposed new value, 0 = reject the proposed value and keep the existing one'
+					}
 				/>
-				<Button onClick={submitProposeReparamModal} center="true">
-					Submit
-				</Button>
-				<center>
-					<small style={{ fontFamily: 'arial', color: 'gray' }}>
-						Upon submitting, two transactions have to be signed: to allow the deposit (
-						{props.parameterizerParams['pMinDeposit'] ? props.parameterizerParams['pMinDeposit'].value : '?'}) to be
-						withdrawn from your GOV token balance and then to submit the proposed reparameterization.
-					</small>
-				</center>
-			</Modal>
-			<Modal
-				isOpen={isChallengeReparamOpen}
-				handleClose={toggleChallengeReparamModal}
-				title="Challenge proposed value"
-				width="400px">
-				<Button onClick={submitChallengeReparamModal} center="true">
-					Submit
-				</Button>
-				<center>
-					<small style={{ fontFamily: 'arial', color: 'gray' }}>
-						Upon submitting, two transactions have to be signed: to allow the proposal-deposit (
-						{params[selectedParamName.current] ? params[selectedParamName.current].propDeposit : '?'}) to be withdrawn
-						from your GOV token balance and then to challenge the proposed reparameterization.
-					</small>
-				</center>
-			</Modal>
-			<VoteModal
-				isOpen={isVoteModalOpen}
-				handleClose={toggleVoteModal}
-				pollID={params[selectedParamName.current] ? params[selectedParamName.current].challengeID : null}
-				voteOptionsInfo={
-					'Challenge: 1 = vote for the proposed new value, 0 = reject the proposed value and keep the existing one'
-				}
-			/>
-			<RevealModal
-				isOpen={isRevealModalOpen}
-				handleClose={toggleRevealModal}
-				pollID={params[selectedParamName.current] ? params[selectedParamName.current].challengeID : null}
-			/>
-		</Container>
+				<RevealModal
+					isOpen={isRevealModalOpen}
+					handleClose={toggleRevealModal}
+					pollID={params[selectedParamName.current] ? params[selectedParamName.current].challengeID : null}
+				/>
+			</Container>
+		</>
 	);
 }
 

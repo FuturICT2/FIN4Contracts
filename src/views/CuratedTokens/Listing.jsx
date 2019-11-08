@@ -12,6 +12,7 @@ import RevealModal from './RevealModal';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
+import GovNavComponent from './GovNavComponent';
 const BN = require('bignumber.js');
 
 function Listing(props, context) {
@@ -300,145 +301,148 @@ function Listing(props, context) {
 	};
 
 	return (
-		<Container>
-			<Box title="Curated Positive Action Tokens" width="800px">
-				<center>
-					<small style={{ fontFamily: 'arial', color: 'gray' }}>
-						Reload to see changes, statuses won't change automatically.
-						<br />
-						TODO explain costs involved for making changes and potential rewards/losses.
-					</small>
-				</center>
-				<Table headers={['Name', 'Status', 'Due Date', 'Actions', 'Whitelisted']}>
-					{Object.keys(listings).map((key, index) => {
-						// key is address of the Fin4Token
-						return (
-							<TableRow
-								key={index}
-								data={{
-									name: listings[key].name,
-									status: listings[key].status,
-									dueDate: listings[key].dueDate,
-									actions: listings[key].actionStatus !== Action_Status.REJECTED && (
-										<Button
-											onClick={() => {
-												selectedListing.current = listings[key];
-												switch (listings[key].actionStatus) {
-													case Action_Status.VOTE:
-														toggleVoteModal();
-														break;
-													case Action_Status.REVEAL:
-														toggleRevealModal();
-														break;
-													case Action_Status.UPDATE:
-														updateStatus();
-														break;
-													case Action_Status.CHALLENGE:
-														toggleChallengeModal();
-														break;
-												}
-											}}>
-											{listings[key].actionStatus}
-										</Button>
-									),
-									whitelisted: listings[key].whitelisted.toString()
-								}}
-							/>
-						);
-					})}
-				</Table>
-			</Box>
-			<Box title="All Positive Action Tokens">
-				{!props.fin4TokensInitiallyFetched ? (
-					<span style={{ fontFamily: 'arial', color: 'gray' }}>Loading...</span>
-				) : (
-					<Table headers={['Name', 'Apply']}>
-						{Object.keys(props.fin4Tokens).map((key, index) => {
-							let token = props.fin4Tokens[key];
+		<>
+			<GovNavComponent />
+			<Container>
+				<Box title="Curated Positive Action Tokens" width="800px">
+					<center>
+						<small style={{ fontFamily: 'arial', color: 'gray' }}>
+							Reload to see changes, statuses won't change automatically.
+							<br />
+							TODO explain costs involved for making changes and potential rewards/losses.
+						</small>
+					</center>
+					<Table headers={['Name', 'Status', 'Due Date', 'Actions', 'Whitelisted']}>
+						{Object.keys(listings).map((key, index) => {
+							// key is address of the Fin4Token
 							return (
 								<TableRow
 									key={index}
 									data={{
-										name: token.name,
-										apply:
-											token.isOPAT === true ? (
-												'' // TODO what to write here, is on the list or in application/challenge? or nothing is ok
-											) : (
-												<Button
-													onClick={() => {
-														applyModalValues.current.token = token.address;
-														toggleApplyModal();
-													}}>
-													Apply
-												</Button>
-											)
+										name: listings[key].name,
+										status: listings[key].status,
+										dueDate: listings[key].dueDate,
+										actions: listings[key].actionStatus !== Action_Status.REJECTED && (
+											<Button
+												onClick={() => {
+													selectedListing.current = listings[key];
+													switch (listings[key].actionStatus) {
+														case Action_Status.VOTE:
+															toggleVoteModal();
+															break;
+														case Action_Status.REVEAL:
+															toggleRevealModal();
+															break;
+														case Action_Status.UPDATE:
+															updateStatus();
+															break;
+														case Action_Status.CHALLENGE:
+															toggleChallengeModal();
+															break;
+													}
+												}}>
+												{listings[key].actionStatus}
+											</Button>
+										),
+										whitelisted: listings[key].whitelisted.toString()
 									}}
 								/>
 							);
 						})}
 					</Table>
-				)}
-			</Box>
-			<Modal isOpen={isApplyModalOpen} handleClose={toggleApplyModal} title="Set deposit and data" width="400px">
-				<TextField
-					key="apply-deposit"
-					type="number"
-					label="Deposit"
-					onChange={e => (applyModalValues.current.deposit = e.target.value)}
-					style={inputFieldStyle}
+				</Box>
+				<Box title="All Positive Action Tokens">
+					{!props.fin4TokensInitiallyFetched ? (
+						<span style={{ fontFamily: 'arial', color: 'gray' }}>Loading...</span>
+					) : (
+						<Table headers={['Name', 'Apply']}>
+							{Object.keys(props.fin4Tokens).map((key, index) => {
+								let token = props.fin4Tokens[key];
+								return (
+									<TableRow
+										key={index}
+										data={{
+											name: token.name,
+											apply:
+												token.isOPAT === true ? (
+													'' // TODO what to write here, is on the list or in application/challenge? or nothing is ok
+												) : (
+													<Button
+														onClick={() => {
+															applyModalValues.current.token = token.address;
+															toggleApplyModal();
+														}}>
+														Apply
+													</Button>
+												)
+										}}
+									/>
+								);
+							})}
+						</Table>
+					)}
+				</Box>
+				<Modal isOpen={isApplyModalOpen} handleClose={toggleApplyModal} title="Set deposit and data" width="400px">
+					<TextField
+						key="apply-deposit"
+						type="number"
+						label="Deposit"
+						onChange={e => (applyModalValues.current.deposit = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<TextField
+						key="apply-data"
+						type="text"
+						label="Data"
+						onChange={e => (applyModalValues.current.data = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<Button onClick={submitApplyModal} center="true">
+						Submit
+					</Button>
+					<center>
+						<small style={{ fontFamily: 'arial', color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
+							token balance and then to submit the application for this token.
+						</small>
+					</center>
+				</Modal>
+				<VoteModal
+					isOpen={isVoteModalOpen}
+					handleClose={toggleVoteModal}
+					pollID={selectedListing.current && selectedListing.current.challengeID}
+					voteOptionsInfo={
+						selectedListing.current && selectedListing.current.whitelisted
+							? 'Challenge: 1 = keep token on the list, 0 = remove it'
+							: 'Review: 1 = put token on list, 0 = reject application'
+					}
 				/>
-				<TextField
-					key="apply-data"
-					type="text"
-					label="Data"
-					onChange={e => (applyModalValues.current.data = e.target.value)}
-					style={inputFieldStyle}
+				<RevealModal
+					isOpen={isRevealModalOpen}
+					handleClose={toggleRevealModal}
+					pollID={selectedListing.current && selectedListing.current.challengeID}
 				/>
-				<Button onClick={submitApplyModal} center="true">
-					Submit
-				</Button>
-				<center>
-					<small style={{ fontFamily: 'arial', color: 'gray' }}>
-						Upon submitting, two transactions have to be signed: to allow the deposit to be withdrawn from your GOV
-						token balance and then to submit the application for this token.
-					</small>
-				</center>
-			</Modal>
-			<VoteModal
-				isOpen={isVoteModalOpen}
-				handleClose={toggleVoteModal}
-				pollID={selectedListing.current && selectedListing.current.challengeID}
-				voteOptionsInfo={
-					selectedListing.current && selectedListing.current.whitelisted
-						? 'Challenge: 1 = keep token on the list, 0 = remove it'
-						: 'Review: 1 = put token on list, 0 = reject application'
-				}
-			/>
-			<RevealModal
-				isOpen={isRevealModalOpen}
-				handleClose={toggleRevealModal}
-				pollID={selectedListing.current && selectedListing.current.challengeID}
-			/>
-			<Modal isOpen={isChallengeModalOpen} handleClose={toggleChallengeModal} title="Add optional data" width="400px">
-				<TextField
-					key="set-data"
-					type="text"
-					label="Data"
-					onChange={e => (challengeModalValues.current.data = e.target.value)}
-					style={inputFieldStyle}
-				/>
-				<Button onClick={submitChallengeModal} center="true">
-					Submit
-				</Button>
-				<center>
-					<small style={{ fontFamily: 'arial', color: 'gray' }}>
-						Upon submitting, two transactions have to be signed: to allow minDeposit (
-						{props.parameterizerParams['minDeposit'] ? props.parameterizerParams['minDeposit'].value : '?'}) to be
-						withdrawn from your GOV token balance and then to submit your challenge.
-					</small>
-				</center>
-			</Modal>
-		</Container>
+				<Modal isOpen={isChallengeModalOpen} handleClose={toggleChallengeModal} title="Add optional data" width="400px">
+					<TextField
+						key="set-data"
+						type="text"
+						label="Data"
+						onChange={e => (challengeModalValues.current.data = e.target.value)}
+						style={inputFieldStyle}
+					/>
+					<Button onClick={submitChallengeModal} center="true">
+						Submit
+					</Button>
+					<center>
+						<small style={{ fontFamily: 'arial', color: 'gray' }}>
+							Upon submitting, two transactions have to be signed: to allow minDeposit (
+							{props.parameterizerParams['minDeposit'] ? props.parameterizerParams['minDeposit'].value : '?'}) to be
+							withdrawn from your GOV token balance and then to submit your challenge.
+						</small>
+					</center>
+				</Modal>
+			</Container>
+		</>
 	);
 }
 

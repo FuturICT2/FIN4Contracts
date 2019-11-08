@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
 import Container from '../../components/Container';
+import GovNavComponent from './GovNavComponent';
 const BN = require('bignumber.js');
 
 function Management(props, context) {
@@ -53,85 +54,92 @@ function Management(props, context) {
 	};
 
 	return (
-		<Container>
-			<Box title="Governance Token Balances" width="600px">
-				<Table headers={['Token', 'Balance', 'Actions']}>
-					<TableRow
-						key="rep-token"
-						data={{
-							token: 'Reputation Token',
-							balance:
-								props.contracts.Fin4Reputation &&
-								props.contracts.Fin4Reputation.initialized &&
-								props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.Fin4Reputation.address] !== undefined
-									? props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.Fin4Reputation.address]
-									: '?',
-							actions: <Button onClick={claimGOV}>Claim GOV</Button>
-						}}
-					/>
-					<TableRow
-						key="gov-token"
-						data={{
-							token: 'Governance Token',
-							balance:
-								props.contracts.GOV &&
-								props.contracts.GOV.initialized &&
-								props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.GOV.address] !== undefined
-									? props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.GOV.address]
-									: '?',
-							actions: ''
-						}}
-					/>
-				</Table>
-			</Box>
-			<Box title="Delegation" width="600px">
-				<Table headers={['Type', 'Amount']}>
-					<TableRow
-						key="delegatee"
-						data={{
-							type: 'GOV tokens delegated to me',
-							amount: govTokenDelegateeBalance === null ? '?' : govTokenDelegateeBalance
-						}}
-					/>
-				</Table>
-				<Button onClick={toggleDelegateModal} center="true">
-					Delegate
-				</Button>
-				<Button onClick={toggleRefundDelegationModal} center="true">
-					Refund delegation
-				</Button>
-				<Modal isOpen={isDelegateModalOpen} handleClose={toggleDelegateModal} title="Delegate GOV tokens" width="400px">
-					<ContractForm
-						contractName="GOV"
-						method="delegate"
-						labels={['Delegator address', 'Amount']}
-						postSubmitCallback={(success, result) => {
-							if (!success) {
-								alert(result.message);
-							}
-							toggleDelegateModal();
-						}}
-					/>
-				</Modal>
-				<Modal
-					isOpen={isRefundDelegationModalOpen}
-					handleClose={toggleRefundDelegationModal}
-					title="Refund delegated GOV tokens"
-					width="400px">
-					<ContractForm
-						contractName="GOV"
-						method="refundDelegation"
-						labels={['Delegator address', 'Amount']}
-						postSubmitCallback={(success, result) => {
-							if (!success) {
-								alert(result.message);
-							}
-							toggleRefundDelegationModal();
-						}}
-					/>
-				</Modal>
-			</Box>
-		</Container>
+		<>
+			<GovNavComponent />
+			<Container>
+				<Box title="Governance Token Balances" width="600px">
+					<Table headers={['Token', 'Balance', 'Actions']}>
+						<TableRow
+							key="rep-token"
+							data={{
+								token: 'Reputation Token',
+								balance:
+									props.contracts.Fin4Reputation &&
+									props.contracts.Fin4Reputation.initialized &&
+									props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.Fin4Reputation.address] !== undefined
+										? props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.Fin4Reputation.address]
+										: '?',
+								actions: <Button onClick={claimGOV}>Claim GOV</Button>
+							}}
+						/>
+						<TableRow
+							key="gov-token"
+							data={{
+								token: 'Governance Token',
+								balance:
+									props.contracts.GOV &&
+									props.contracts.GOV.initialized &&
+									props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.GOV.address] !== undefined
+										? props.usersFin4GovernanceTokenBalances[context.drizzle.contracts.GOV.address]
+										: '?',
+								actions: ''
+							}}
+						/>
+					</Table>
+				</Box>
+				<Box title="Delegation" width="600px">
+					<Table headers={['Type', 'Amount']}>
+						<TableRow
+							key="delegatee"
+							data={{
+								type: 'GOV tokens delegated to me',
+								amount: govTokenDelegateeBalance === null ? '?' : govTokenDelegateeBalance
+							}}
+						/>
+					</Table>
+					<Button onClick={toggleDelegateModal} center="true">
+						Delegate
+					</Button>
+					<Button onClick={toggleRefundDelegationModal} center="true">
+						Refund delegation
+					</Button>
+					<Modal
+						isOpen={isDelegateModalOpen}
+						handleClose={toggleDelegateModal}
+						title="Delegate GOV tokens"
+						width="400px">
+						<ContractForm
+							contractName="GOV"
+							method="delegate"
+							labels={['Delegator address', 'Amount']}
+							postSubmitCallback={(success, result) => {
+								if (!success) {
+									alert(result.message);
+								}
+								toggleDelegateModal();
+							}}
+						/>
+					</Modal>
+					<Modal
+						isOpen={isRefundDelegationModalOpen}
+						handleClose={toggleRefundDelegationModal}
+						title="Refund delegated GOV tokens"
+						width="400px">
+						<ContractForm
+							contractName="GOV"
+							method="refundDelegation"
+							labels={['Delegator address', 'Amount']}
+							postSubmitCallback={(success, result) => {
+								if (!success) {
+									alert(result.message);
+								}
+								toggleRefundDelegationModal();
+							}}
+						/>
+					</Modal>
+				</Box>
+			</Container>
+		</>
 	);
 }
 
