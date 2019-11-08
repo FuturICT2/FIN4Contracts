@@ -11,6 +11,10 @@ import MessageIcon from '@material-ui/icons/Message';
 import SendIcon from '@material-ui/icons/Send'; // or Forward
 import EmailIcon from '@material-ui/icons/Email';
 import TokenBalances from '../../components/TokenBalances';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQrcode } from '@fortawesome/free-solid-svg-icons';
+import Modal from '../../components/Modal';
+var QRCode = require('qrcode.react');
 
 let config = null;
 try {
@@ -35,6 +39,13 @@ const buildIconLabelLink = (link, icon, label) => {
 
 function Home(props) {
 	const { t } = useTranslation();
+
+	const [iconIsHovered, setIconHovered] = useState(false);
+	const [isQRModalOpen, setQRModalOpen] = useState(false);
+	const toggleQRModal = () => {
+		setQRModalOpen(!isQRModalOpen);
+	};
+
 	return (
 		<Container>
 			<TokenBalances />
@@ -42,17 +53,31 @@ function Home(props) {
 				<p style={{ fontFamily: 'arial' }}>
 					{t('your-public-address')}
 					<br />
-					<small>
+					<span style={{ fontSize: 'x-small' }}>
 						{props.defaultAccount === null ? (
 							t('info-not-yet-available')
 						) : (
-							// TODO make network-generic
-							<a href={'https://rinkeby.etherscan.io/address/' + props.defaultAccount} target="_blank">
-								{props.defaultAccount}
-							</a>
+							<>
+								{/* TODO make network-generic */}
+								<a href={'https://rinkeby.etherscan.io/address/' + props.defaultAccount} target="_blank">
+									{props.defaultAccount}
+								</a>
+								<FontAwesomeIcon
+									style={iconIsHovered ? styles.QRiconHover : styles.QRicon}
+									icon={faQrcode}
+									onClick={toggleQRModal}
+									onMouseEnter={() => setIconHovered(true)}
+									onMouseLeave={() => setIconHovered(false)}
+								/>
+							</>
 						)}
-					</small>
+					</span>
 				</p>
+				<Modal isOpen={isQRModalOpen} handleClose={toggleQRModal} title="Your QR code" width="300px">
+					<center>
+						<QRCode value={props.defaultAccount} size="120" />
+					</center>
+				</Modal>
 				<div style={{ fontFamily: 'arial' }}>
 					Your balance:{' '}
 					{props.usersEthBalance === null
@@ -129,6 +154,21 @@ function Home(props) {
 		</Container>
 	);
 }
+
+const styles = {
+	QRicon: {
+		color: 'black',
+		width: '20px',
+		height: '20px',
+		paddingLeft: '10px'
+	},
+	QRiconHover: {
+		color: 'gray',
+		width: '20px',
+		height: '20px',
+		paddingLeft: '10px'
+	}
+};
 
 const RequestEth = styled.div`
 	font-family: arial;
