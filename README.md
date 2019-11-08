@@ -93,6 +93,32 @@ serve -s build
 
 Serving the DApp in production mode instead of development mode also solves an issue with sub-sites (e.g. `/tokens`) on mobile DApp browsers (observed in MetaMask on Android) where it would only show `cannot GET /URL` on reloading.
 
+### Serving via localhost
+
+To expose specific local ports temporarily to the public can be useful during development. For instance to test the DApp on mobile without having to deploy it on a testnet first and getting your code-changes to your server etc.
+
+One way of doing so, is using [localtunnel.me](https://localtunnel.me/):
+
+```sh
+npm install -g localtunnel
+```
+
+Running these commands in two terminal windows will make both your local Ganache as well as your DApp available via public URLs. If you don't specify `--subdomain` you will get a randomized one each time.
+
+```sh
+lt --port 3000 --subdomain finfour
+lt --port 7545 --subdomain finfour-ganache
+```
+
+This should result in:
+
+```sh
+your url is: https://finfour.localtunnel.me
+your url is: https://finfour-ganache.localtunnel.me
+```
+
+The Ganache-URL can now be used to set up a custom network in your mobile DApp-browser App. Then make sure to restore the mobile wallet using the seed phrase from your local Ganache, otherwise you won't have any ETH. Now you should be able to open and use the DApp at the generated localtunnel-URL.
+
 ## Using the Dapp
 
 If running locally, choose "import using account seed phrase" in MetaMask and use the `MNEMONIC` from Ganache. Create a network with `http://127.0.0.1:7545` as `custom RPC`. If running on Rinkeby, select that as your network in MetaMask and create or restore your respective account.
