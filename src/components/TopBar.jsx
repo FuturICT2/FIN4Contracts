@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { drizzleConnect } from 'drizzle-react';
 import NoNotificationsIcon from '@material-ui/icons/NotificationsNone';
 import NewNotificationsIcon from '@material-ui/icons/NotificationsActive';
-import SettingsIcon from '@material-ui/icons/SettingsOutlined';
-import InfoIcon from '@material-ui/icons/InfoOutlined';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -36,8 +37,17 @@ const useStyles = makeStyles(theme => ({
 		color: 'yellow',
 		'font-family': 'arial'
 	},
+	noNotification: {
+		color: 'white'
+	},
 	newNotification: {
 		color: 'yellow'
+	},
+	QRicon: {
+		color: 'white',
+		width: '20px',
+		height: '20px',
+		padding: '0 4px 4px 0'
 	}
 }));
 
@@ -53,19 +63,19 @@ function TopBar(props) {
 				</Link>
 			</center>
 			<div className={classes.alignRight}>
+				<FontAwesomeIcon
+					className={classes.QRicon}
+					//icon={faQrcode}
+					//onClick={toggleQRModal}
+				/>
+				<RefreshIcon onClick={() => alert('TODO')} />
 				<Link to={'/messages'}>
 					{props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 ? (
 						<NewNotificationsIcon className={classes.newNotification} />
 					) : (
-						<NoNotificationsIcon />
+						<NoNotificationsIcon className={classes.noNotification} />
 					)}
 				</Link>{' '}
-				<Link to={'/settings'}>
-					<SettingsIcon />
-				</Link>{' '}
-				<Link to={'/about'}>
-					<InfoIcon />
-				</Link>
 			</div>
 			{props.defaultAccount === null && (
 				<center className={classes.noWeb3Warning}>

@@ -16,6 +16,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../components/Modal';
 var QRCode = require('qrcode.react');
+import SettingsIcon from '@material-ui/icons/SettingsOutlined';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
 
 let config = null;
 try {
@@ -146,6 +148,8 @@ function Home(props) {
 			</Box>
 			<Box title="More" width="250px">
 				{/* TODO better title */}
+				{buildIconLabelLink('/about', <InfoIcon />, 'About')}
+				{buildIconLabelLink('/settings', <SettingsIcon />, 'Settings')}
 				{buildIconLabelLink('/messages', <EmailIcon />, 'Your messages')}
 				{buildIconLabelLink('/user/message', <MessageIcon />, 'Message user')}
 				{buildIconLabelLink('/user/transfer', <SendIcon />, 'Transfer token')}
