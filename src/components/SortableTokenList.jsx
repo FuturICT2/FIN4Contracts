@@ -177,11 +177,13 @@ function SortableTokenList(props, context) {
 											<Currency symbol={token.symbol} name={token.name} />
 										</span>
 										{token.isOPAT && (
-											<FontAwesomeIcon
-												title="This token is on the list of curated tokens"
-												icon={faStar}
-												style={styles.iconOPAT}
-											/>
+											<Link to="/governance/listing">
+												<FontAwesomeIcon
+													title="This token is on the list of curated tokens"
+													icon={faStar}
+													style={styles.iconOPAT}
+												/>
+											</Link>
 										)}
 									</>
 								),
