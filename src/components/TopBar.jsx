@@ -72,7 +72,7 @@ function TopBar(props) {
 				</center>
 				<div className={classes.alignRight}>
 					<FontAwesomeIcon className={classes.QRicon} icon={faQrcode} onClick={toggleQRModal} />
-					<RefreshIcon onClick={() => alert('TODO')} />
+					<RefreshIcon onClick={() => window.location.reload()} />
 					<Link to={'/messages'}>
 						{props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 ? (
 							<NewNotificationsIcon className={classes.newNotification} />
