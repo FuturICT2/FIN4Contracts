@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Modal from './Modal';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 var QRCode = require('qrcode.react');
 
 function QRModal(props) {
@@ -14,7 +15,11 @@ function QRModal(props) {
 				<br />
 				Your public address:
 				<br />
-				<span style={{ fontSize: 'x-small' }}>{props.publicAddress}</span>
+				<CopyToClipboard text={props.publicAddress} onCopy={() => {}}>
+					<span title="Click to copy to clipboard" style={{ fontSize: 'x-small' }}>
+						{props.publicAddress}
+					</span>
+				</CopyToClipboard>
 			</center>
 		</Modal>
 	);
