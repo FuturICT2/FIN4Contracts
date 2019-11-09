@@ -14,10 +14,9 @@ import StarIcon from '@material-ui/icons/Star';
 import TokenBalances from '../../components/TokenBalances';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQrcode } from '@fortawesome/free-solid-svg-icons';
-import Modal from '../../components/Modal';
-var QRCode = require('qrcode.react');
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
+import QRModal from '../../components/QRModal';
 
 let config = null;
 try {
@@ -76,11 +75,7 @@ function Home(props) {
 						)}
 					</span>
 				</p>
-				<Modal isOpen={isQRModalOpen} handleClose={toggleQRModal} title="Your QR code" width="300px">
-					<center>
-						<QRCode value={props.defaultAccount} size="120" />
-					</center>
-				</Modal>
+				<QRModal isOpen={isQRModalOpen} handleClose={toggleQRModal} publicAddress={props.defaultAccount} />
 				<div style={{ fontFamily: 'arial' }}>
 					Your balance:{' '}
 					{props.usersEthBalance === null
