@@ -13,4 +13,18 @@ const buildIconLabelLink = (link, icon, label) => {
 	);
 };
 
-export { buildIconLabelLink };
+const buildIconLabelCallback = (callback, icon, label) => {
+	return (
+		<>
+			<div
+				onClick={callback}
+				style={{ display: 'flex', alignItems: 'center', paddingLeft: '15px', fontFamily: 'arial', color: 'blue' }}>
+				{icon}
+				&nbsp;&nbsp;{label}
+			</div>
+			<br />
+		</>
+	);
+};
+
+export { buildIconLabelLink, buildIconLabelCallback };
