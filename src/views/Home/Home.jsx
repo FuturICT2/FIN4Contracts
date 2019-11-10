@@ -4,7 +4,6 @@ import Container from '../../components/Container';
 import Box from '../../components/Box';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import UsersIcon from '@material-ui/icons/Group';
 import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import MessageIcon from '@material-ui/icons/Message';
@@ -17,6 +16,7 @@ import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
 import QRModal from '../../components/QRModal';
+import { buildIconLabelLink } from '../../components/utils';
 
 let config = null;
 try {
@@ -26,18 +26,6 @@ try {
 }
 
 const axios = require('axios');
-
-const buildIconLabelLink = (link, icon, label) => {
-	return (
-		<Link to={link} style={{ textDecoration: 'none' }}>
-			<div style={{ display: 'flex', alignItems: 'center', paddingLeft: '15px', fontFamily: 'arial' }}>
-				{icon}
-				&nbsp;&nbsp;{label}
-			</div>
-			<br />
-		</Link>
-	);
-};
 
 function Home(props) {
 	const { t } = useTranslation();
