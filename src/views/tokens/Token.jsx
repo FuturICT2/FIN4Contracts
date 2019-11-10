@@ -165,10 +165,10 @@ function Token(props) {
 									return (
 										<li key={draftId} style={{ paddingBottom: '10px' }}>
 											<span onClick={() => previewDraft(draftId)} title="Click to see draft as JSON object">
-												{draft.name.length > 0 ? draft.name : <i>no-name-yet</i>}
+												{draft.name && draft.name.length > 0 ? draft.name : <i>no-name-yet</i>}
 											</span>
 											<small style={{ color: 'gray' }}>
-												{' last modified: '}
+												&nbsp;&nbsp;{'last modified: '}
 												{date}
 											</small>
 											<br />
