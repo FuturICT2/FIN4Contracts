@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import TokenOverview from './TokenOverview';
 import Box from '../../components/Box';
-import { buildIconLabelLink, buildIconLabelCallback } from '../../components/utils';
+import { buildIconLabelLink, buildIconLabelCallback, getFormattedSelectOptions } from '../../components/utils';
 import AddIcon from '@material-ui/icons/AddBox';
 import ImportIcon from '@material-ui/icons/ImportExport';
+import CopyIcon from '@material-ui/icons/FileCopy';
 import moment from 'moment';
+import Dropdown from '../../components/Dropdown';
+import Button from '../../components/Button';
 
 function Token(props) {
 	const { t } = useTranslation();
@@ -36,6 +39,22 @@ function Token(props) {
 		};
 	};
 
+	const [tokenChooserVisible, setTokenChooserVisible] = useState(false);
+	const toggleTokenChooserVisible = () => {
+		setTokenChooserVisible(!tokenChooserVisible);
+	};
+	const chosenTokenAddress = useRef(null);
+
+	const importTokenAsDraft = () => {
+		toggleTokenChooserVisible();
+		if (chosenTokenAddress.current === null || !props.fin4Tokens[chosenTokenAddress.current]) {
+			alert('Invalid or no token selected');
+			return;
+		}
+		let templateToken = props.fin4Tokens[chosenTokenAddress.current];
+		// TODO
+	};
+
 	return (
 		<Container>
 			<Box title={t('create-new-token')}>
@@ -49,6 +68,34 @@ function Token(props) {
 							onChange={e => onSelectFile(e.target.files[0])}
 							accept="application/json"
 						/>
+						<br />
+						<br />
+					</>
+				)}
+				{buildIconLabelCallback(toggleTokenChooserVisible, <CopyIcon />, 'Import existing token as draft')}
+				{tokenChooserVisible && (
+					<>
+						{' '}
+						{/*TODO something nicer more react/material-ui ish then <table>?*/}
+						<table>
+							<tbody>
+								<tr>
+									<td width="250px">
+										<Dropdown
+											key="token-chooser"
+											onChange={e => (chosenTokenAddress.current = e.value)}
+											options={getFormattedSelectOptions(props.fin4Tokens)}
+											label={t('token-type')}
+										/>
+									</td>
+									<td>
+										<Button style={{ paddingLeft: '20px' }} onClick={importTokenAsDraft}>
+											Import
+										</Button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 						<br />
 					</>
 				)}
@@ -90,7 +137,9 @@ function Token(props) {
 }
 
 const mapStateToProps = state => {
-	return {};
+	return {
+		fin4Tokens: state.fin4Store.fin4Tokens
+	};
 };
 
 export default drizzleConnect(Token, mapStateToProps);
