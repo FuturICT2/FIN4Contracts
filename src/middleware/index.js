@@ -271,7 +271,8 @@ const initialState = {
 	messages: [],
 	collections: {},
 	parameterizerParams: {},
-	systemParameters: {}
+	systemParameters: {},
+	tokenCreationDrafts: []
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -476,6 +477,10 @@ function fin4StoreReducer(state = initialState, action) {
 					[action.parameter.name]: action.parameter.value
 				}
 			};
+		case 'ADD_TOKEN_CREATION_DRAFT':
+			return Object.assign({}, state, {
+				tokenCreationDrafts: [...state.tokenCreationDrafts, action.draft]
+			});
 		default:
 			return state;
 	}

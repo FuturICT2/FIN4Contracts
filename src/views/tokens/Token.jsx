@@ -15,8 +15,6 @@ import Button from '../../components/Button';
 function Token(props) {
 	const { t } = useTranslation();
 
-	const [tokenDrafts, setTokenDrafts] = useState([]);
-
 	/* {
 		"name": "Test Token",
 		"symbol": "TTO",
@@ -34,8 +32,11 @@ function Token(props) {
 		reader.readAsText(file);
 		reader.onloadend = () => {
 			let importedDraft = JSON.parse(reader.result);
-			// TODO sanity checks before adding to tokenDrafts?
-			setTokenDrafts(tokenDrafts.concat(importedDraft));
+			// TODO sanity checks before adding?
+			props.dispatch({
+				type: 'ADD_TOKEN_CREATION_DRAFT',
+				draft: importedDraft
+			});
 		};
 	};
 
@@ -99,13 +100,13 @@ function Token(props) {
 						<br />
 					</>
 				)}
-				{tokenDrafts.length > 0 && (
+				{props.tokenCreationDrafts.length > 0 && (
 					<>
 						<br />
 						<div style={{ fontFamily: 'arial' }}>
-							<b>Your token creation drafts</b>
+							<b>Your token creation drafts:</b>
 							<ul>
-								{tokenDrafts.map((draft, index) => {
+								{props.tokenCreationDrafts.map((draft, index) => {
 									let date = moment.unix(Number(draft.lastModified) / 1000).calendar();
 									return (
 										<li key={'draft_' + index} style={{ paddingBottom: '10px' }}>
@@ -138,7 +139,8 @@ function Token(props) {
 
 const mapStateToProps = state => {
 	return {
-		fin4Tokens: state.fin4Store.fin4Tokens
+		fin4Tokens: state.fin4Store.fin4Tokens,
+		tokenCreationDrafts: state.fin4Store.tokenCreationDrafts
 	};
 };
 
