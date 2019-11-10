@@ -273,7 +273,7 @@ const initialState = {
 	collections: {},
 	parameterizerParams: {},
 	systemParameters: {},
-	tokenCreationDrafts: []
+	tokenCreationDrafts: {}
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -482,9 +482,13 @@ function fin4StoreReducer(state = initialState, action) {
 			if (action.addToCookies) {
 				Cookies.set(action.draft.id, JSON.stringify(action.draft));
 			}
-			return Object.assign({}, state, {
-				tokenCreationDrafts: [...state.tokenCreationDrafts, action.draft]
-			});
+			return {
+				...state,
+				tokenCreationDrafts: {
+					...state.tokenCreationDrafts,
+					[action.draft.id]: action.draft
+				}
+			};
 		default:
 			return state;
 	}

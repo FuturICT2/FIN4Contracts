@@ -77,8 +77,8 @@ function Token(props) {
 		});
 	};
 
-	const exportDraft = index => {
-		let draft = props.tokenCreationDrafts[index];
+	const exportDraft = draftId => {
+		let draft = props.tokenCreationDrafts[draftId];
 		let name = 'TokenCreationDraft_';
 		if (draft.name && draft.name.length > 0) {
 			name += slugify(draft.name);
@@ -96,13 +96,13 @@ function Token(props) {
 	};
 	const previewDraftStr = useRef('');
 
-	const previewDraft = index => {
-		let draft = props.tokenCreationDrafts[index];
+	const previewDraft = draftId => {
+		let draft = props.tokenCreationDrafts[draftId];
 		previewDraftStr.current = JSON.stringify(draft, null, 2);
 		togglePreviewDraftModalOpen();
 	};
 
-	const deleteDraft = index => {};
+	const deleteDraft = draftId => {};
 
 	return (
 		<Container>
@@ -148,17 +148,18 @@ function Token(props) {
 						<br />
 					</>
 				)}
-				{props.tokenCreationDrafts.length > 0 && (
+				{Object.keys(props.tokenCreationDrafts).length > 0 && (
 					<>
 						<br />
 						<div style={{ fontFamily: 'arial' }}>
 							<b>Your token creation drafts:</b>
 							<ul>
-								{props.tokenCreationDrafts.map((draft, index) => {
+								{Object.keys(props.tokenCreationDrafts).map((draftId, index) => {
+									let draft = props.tokenCreationDrafts[draftId];
 									let date = moment.unix(Number(draft.lastModified) / 1000).calendar();
 									return (
-										<li key={'draft_' + index} style={{ paddingBottom: '10px' }}>
-											<span onClick={() => previewDraft(index)} title="Click to see draft as JSON object">
+										<li key={draftId} style={{ paddingBottom: '10px' }}>
+											<span onClick={() => previewDraft(draftId)} title="Click to see draft as JSON object">
 												{draft.name.length > 0 ? draft.name : <i>no-name-yet</i>}
 											</span>
 											<small style={{ color: 'gray' }}>
@@ -169,9 +170,9 @@ function Token(props) {
 											<small style={{ color: 'green' }}>
 												<span>Continue editing</span>
 												<span style={{ color: 'silver' }}> | </span>
-												<span onClick={() => exportDraft(index)}>Export</span>
+												<span onClick={() => exportDraft(draftId)}>Export</span>
 												<span style={{ color: 'silver' }}> | </span>
-												<span onClick={() => deleteDraft(index)}>Delete</span>
+												<span onClick={() => deleteDraft(draftId)}>Delete</span>
 											</small>
 											<br />
 										</li>
