@@ -39,7 +39,8 @@ function Token(props) {
 			// TODO sanity checks before adding?
 			props.dispatch({
 				type: 'ADD_TOKEN_CREATION_DRAFT',
-				draft: importedDraft
+				draft: importedDraft,
+				addToCookies: true
 			});
 		};
 	};
@@ -65,7 +66,8 @@ function Token(props) {
 				symbol: (templateToken.symbol.length < 5 ? templateToken.symbol : templateToken.symbol.substring(0, 4)) + '2',
 				created: nowTimestamp,
 				lastModified: nowTimestamp
-			}
+			},
+			addToCookies: true
 		});
 	};
 

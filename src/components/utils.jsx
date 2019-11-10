@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const buildIconLabelLink = (link, icon, label) => {
 	return (
@@ -38,4 +39,15 @@ const getFormattedSelectOptions = tokens => {
 	});
 };
 
-export { buildIconLabelLink, buildIconLabelCallback, getFormattedSelectOptions };
+const getNextTokenCreationDraftIndexInCookies = () => {
+	let allCookies = Cookies.get();
+	let nextIndex = Object.keys(allCookies).filter(key => key.startsWith('TokenCreationDraft')).length;
+	return nextIndex;
+};
+
+export {
+	buildIconLabelLink,
+	buildIconLabelCallback,
+	getFormattedSelectOptions,
+	getNextTokenCreationDraftIndexInCookies
+};

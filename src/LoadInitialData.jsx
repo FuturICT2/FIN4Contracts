@@ -16,6 +16,7 @@ import {
 	fetchParameterizerParams
 } from './components/Contractor';
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 
 function LoadInitialData(props, context) {
 	const isInit = useRef({
@@ -30,7 +31,8 @@ function LoadInitialData(props, context) {
 		Parameterizer: false,
 		Fin4SystemParameters: false,
 		REP: false,
-		GOV: false
+		GOV: false,
+		tokenCreationDraftsLoaded: false // from cookies to store
 	});
 
 	useEffect(() => {
@@ -110,7 +112,25 @@ function LoadInitialData(props, context) {
 			isInit.current.Fin4Proofing = true;
 			fetchAndAddAllProofTypes(props, context.drizzle.contracts.Fin4Proofing, context.drizzle);
 		}
+
+		if (!isInit.current.tokenCreationDraftsLoaded) {
+			isInit.current.tokenCreationDraftsLoaded = true;
+			loadTokenCreationDraftsFromCookieToStore();
+		}
 	});
+
+	const loadTokenCreationDraftsFromCookieToStore = () => {
+		let allCookies = Cookies.get();
+		Object.keys(allCookies)
+			.filter(key => key.startsWith('TokenCreationDraft'))
+			.map(key => {
+				props.dispatch({
+					type: 'ADD_TOKEN_CREATION_DRAFT',
+					draft: JSON.parse(allCookies[key]),
+					addToCookies: false
+				});
+			});
+	};
 
 	return null;
 }
