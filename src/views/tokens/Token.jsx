@@ -58,7 +58,7 @@ function Token(props) {
 			type: 'ADD_TOKEN_CREATION_DRAFT',
 			draft: {
 				name: 'Copy of ' + templateToken.name,
-				symbol: (templateToken.symbol.length < 5 ? templateToken.symbol : templateToken.substring(0, 4)) + '2',
+				symbol: (templateToken.symbol.length < 5 ? templateToken.symbol : templateToken.symbol.substring(0, 4)) + '2',
 				created: nowTimestamp,
 				lastModified: nowTimestamp
 			}
