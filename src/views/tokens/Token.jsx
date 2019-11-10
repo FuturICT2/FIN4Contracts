@@ -71,8 +71,10 @@ function Token(props) {
 				id: getRandomTokenCreationDraftID(),
 				name: 'Copy of ' + templateToken.name,
 				symbol: (templateToken.symbol.length < 5 ? templateToken.symbol : templateToken.symbol.substring(0, 4)) + '2',
+				description: templateToken.description,
 				created: nowTimestamp,
 				lastModified: nowTimestamp
+				// TODO copy more (all) the fields...
 			},
 			addToCookies: true
 		});
