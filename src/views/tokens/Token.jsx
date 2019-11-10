@@ -7,12 +7,19 @@ import Box from '../../components/Box';
 import { buildIconLabelLink, buildIconLabelCallback } from '../../components/utils';
 import AddIcon from '@material-ui/icons/AddBox';
 import ImportIcon from '@material-ui/icons/ImportExport';
+import moment from 'moment';
 
 function Token(props) {
 	const { t } = useTranslation();
 
 	const [tokenDrafts, setTokenDrafts] = useState([]);
 
+	/* {
+		"name": "Test Token",
+		"symbol": "TTO",
+		"created": "1573390378626",
+		"lastModified": "1573390378626"
+	} */
 	const [uploadFileVisible, setUploadFileVisible] = useState(false);
 	const toggleUploadFileVisible = () => {
 		setUploadFileVisible(!uploadFileVisible);
@@ -20,7 +27,13 @@ function Token(props) {
 
 	const onSelectFile = file => {
 		toggleUploadFileVisible();
-		// TODO
+		let reader = new window.FileReader();
+		reader.readAsText(file);
+		reader.onloadend = () => {
+			let importedDraft = JSON.parse(reader.result);
+			// TODO sanity checks before adding to tokenDrafts?
+			setTokenDrafts(tokenDrafts.concat(importedDraft));
+		};
 	};
 
 	return (
@@ -37,6 +50,37 @@ function Token(props) {
 							accept="application/json"
 						/>
 						<br />
+					</>
+				)}
+				{tokenDrafts.length > 0 && (
+					<>
+						<br />
+						<div style={{ fontFamily: 'arial' }}>
+							<b>Your token creation drafts</b>
+							<ul>
+								{tokenDrafts.map((draft, index) => {
+									let date = moment.unix(Number(draft.lastModified) / 1000).calendar();
+									return (
+										<li key={'draft_' + index} style={{ paddingBottom: '10px' }}>
+											{draft.name.length > 0 ? draft.name : <i>no-name-yet</i>}
+											<small style={{ color: 'gray' }}>
+												{' last modified: '}
+												{date}
+											</small>
+											<br />
+											<small style={{ color: 'green' }}>
+												<span>Continue editing</span>
+												<span style={{ color: 'silver' }}> | </span>
+												<span>Export</span>
+												<span style={{ color: 'silver' }}> | </span>
+												<span>Delete</span>
+											</small>
+											<br />
+										</li>
+									);
+								})}
+							</ul>
+						</div>
 					</>
 				)}
 			</Box>
