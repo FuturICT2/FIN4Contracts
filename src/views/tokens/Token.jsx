@@ -5,7 +5,6 @@ import Container from '../../components/Container';
 import TokenOverview from './TokenOverview';
 import Box from '../../components/Box';
 import {
-	buildIconLabelLink,
 	buildIconLabelCallback,
 	getFormattedSelectOptions,
 	getRandomTokenCreationDraftID

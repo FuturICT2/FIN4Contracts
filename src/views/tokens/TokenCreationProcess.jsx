@@ -11,7 +11,7 @@ function TokenCreation(props, context) {
 
 	const [draftId, setDraftId] = useState(null);
 
-	const values = useRef({
+	const fields = useRef({
 		name: '',
 		symbol: '',
 		description: ''
@@ -24,7 +24,7 @@ function TokenCreation(props, context) {
 		let draftIdViaURL = props.match.params.draftId;
 		if (draftIdViaURL && Object.keys(props.tokenCreationDrafts).length > 0) {
 			let draftObj = props.tokenCreationDrafts['TokenCreationDraft_' + draftIdViaURL];
-			values.current = {
+			fields.current = {
 				name: draftObj.name && draftObj.name.length > 0 ? draftObj.name : '',
 				symbol: draftObj.symbol && draftObj.symbol.length > 0 ? draftObj.symbol : '',
 				description: draftObj.description && draftObj.description.length > 0 ? draftObj.description : ''
@@ -37,7 +37,7 @@ function TokenCreation(props, context) {
 		props.dispatch({
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,
-			fields: values.current
+			fields: fields.current
 		});
 	};
 
@@ -50,24 +50,24 @@ function TokenCreation(props, context) {
 							key="name-field"
 							type="text"
 							label="Name"
-							defaultValue={values.current.name}
-							onChange={e => (values.current.name = e.target.value)}
+							defaultValue={fields.current.name}
+							onChange={e => (fields.current.name = e.target.value)}
 							style={inputFieldStyle}
 						/>
 						<TextField
 							key="symbol-field"
 							type="text"
 							label="Symbol"
-							defaultValue={values.current.symbol}
-							onChange={e => (values.current.symbol = e.target.value)}
+							defaultValue={fields.current.symbol}
+							onChange={e => (fields.current.symbol = e.target.value)}
 							style={inputFieldStyle}
 						/>
 						<TextField
 							key="description-field"
 							type="text"
 							label="Description"
-							defaultValue={values.current.description}
-							onChange={e => (values.current.description = e.target.value)}
+							defaultValue={fields.current.description}
+							onChange={e => (fields.current.description = e.target.value)}
 							style={inputFieldStyle}
 						/>
 						<div style={{ float: 'right', padding: '10px 10px 10px 0' }}>
