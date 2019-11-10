@@ -502,6 +502,22 @@ function fin4StoreReducer(state = initialState, action) {
 				...state,
 				tokenCreationDrafts: newTokenCreationDrafts
 			};
+		case 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS':
+			let draftId = action.draftId;
+			for (var fieldName in action.fields) {
+				if (action.fields.hasOwnProperty(fieldName)) {
+					let fieldValue = action.fields[fieldName];
+					state = update(state, {
+						tokenCreationDrafts: {
+							[draftId]: {
+								[fieldName]: { $set: fieldValue }
+							}
+						}
+					});
+				}
+			}
+			Cookies.set(draftId, JSON.stringify(state.tokenCreationDrafts[draftId]));
+			return state;
 		default:
 			return state;
 	}
