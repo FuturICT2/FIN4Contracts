@@ -80,9 +80,9 @@ function Token(props) {
 	const exportDraft = index => {
 		let draft = props.tokenCreationDrafts[index];
 		let name = 'TokenCreationDraft_';
-		if (draft.name.length > 0) {
+		if (draft.name && draft.name.length > 0) {
 			name += slugify(draft.name);
-		} else if (draft.symbol.length > 0) {
+		} else if (draft.symbol && draft.symbol.length > 0) {
 			name += slugify(draft.symbol);
 		} else {
 			name = draft.id;
@@ -101,6 +101,8 @@ function Token(props) {
 		previewDraftStr.current = JSON.stringify(draft, null, 2);
 		togglePreviewDraftModalOpen();
 	};
+
+	const deleteDraft = index => {};
 
 	return (
 		<Container>
@@ -169,7 +171,7 @@ function Token(props) {
 												<span style={{ color: 'silver' }}> | </span>
 												<span onClick={() => exportDraft(index)}>Export</span>
 												<span style={{ color: 'silver' }}> | </span>
-												<span>Delete</span>
+												<span onClick={() => deleteDraft(index)}>Delete</span>
 											</small>
 											<br />
 										</li>
