@@ -18,19 +18,17 @@ function TokenCreation(props, context) {
 	});
 
 	useEffect(() => {
-		if (draftId) {
+		let draftIdViaURL = props.match.params.draftId;
+		if (draftId || !draftIdViaURL || Object.keys(props.tokenCreationDrafts).length === 0) {
 			return;
 		}
-		let draftIdViaURL = props.match.params.draftId;
-		if (draftIdViaURL && Object.keys(props.tokenCreationDrafts).length > 0) {
-			let draftObj = props.tokenCreationDrafts['TokenCreationDraft_' + draftIdViaURL];
-			fields.current = {
-				name: draftObj.name && draftObj.name.length > 0 ? draftObj.name : '',
-				symbol: draftObj.symbol && draftObj.symbol.length > 0 ? draftObj.symbol : '',
-				description: draftObj.description && draftObj.description.length > 0 ? draftObj.description : ''
-			};
-			setDraftId('TokenCreationDraft_' + draftIdViaURL);
-		}
+		let draft = props.tokenCreationDrafts[draftIdViaURL];
+		fields.current = {
+			name: draft.name && draft.name.length > 0 ? draft.name : '',
+			symbol: draft.symbol && draft.symbol.length > 0 ? draft.symbol : '',
+			description: draft.description && draft.description.length > 0 ? draft.description : ''
+		};
+		setDraftId(draftIdViaURL);
 	});
 
 	const submit = () => {

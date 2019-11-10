@@ -85,7 +85,7 @@ function Token(props) {
 		} else if (draft.symbol && draft.symbol.length > 0) {
 			name += slugify(draft.symbol);
 		} else {
-			name = draft.id;
+			name += draftId;
 		}
 		fileDownload(JSON.stringify(draft, null, 4), name + '.json');
 	};
@@ -110,22 +110,22 @@ function Token(props) {
 	};
 
 	const continueEditing = draftId => {
-		history.push('/token/create/' + draftId.split('_')[1]);
+		history.push('/token/create/' + draftId);
 	};
 
 	const createNewToken = () => {
 		let nowTimestamp = moment().valueOf();
-		let newDraft = {
-			id: getRandomTokenCreationDraftID(),
-			created: nowTimestamp,
-			lastModified: nowTimestamp
-		};
+		let newDraftId = getRandomTokenCreationDraftID();
 		props.dispatch({
 			type: 'ADD_TOKEN_CREATION_DRAFT',
-			draft: newDraft,
+			draft: {
+				id: newDraftId,
+				created: nowTimestamp,
+				lastModified: nowTimestamp
+			},
 			addToCookies: true
 		});
-		history.push('/token/create/' + newDraft.id.split('_')[1]);
+		history.push('/token/create/' + newDraftId);
 	};
 
 	return (
@@ -178,7 +178,7 @@ function Token(props) {
 						<div style={{ fontFamily: 'arial' }}>
 							<b>Your token creation drafts:</b>
 							<ul>
-								{Object.keys(props.tokenCreationDrafts).map((draftId, index) => {
+								{Object.keys(props.tokenCreationDrafts).map(draftId => {
 									let draft = props.tokenCreationDrafts[draftId];
 									let date = moment.unix(Number(draft.lastModified) / 1000).calendar();
 									return (

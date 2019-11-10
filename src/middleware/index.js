@@ -480,7 +480,7 @@ function fin4StoreReducer(state = initialState, action) {
 			};
 		case 'ADD_TOKEN_CREATION_DRAFT':
 			if (action.addToCookies) {
-				Cookies.set(action.draft.id, JSON.stringify(action.draft));
+				Cookies.set('TokenCreationDraft_' + action.draft.id, JSON.stringify(action.draft));
 			}
 			return {
 				...state,
@@ -490,7 +490,7 @@ function fin4StoreReducer(state = initialState, action) {
 				}
 			};
 		case 'DELETE_TOKEN_CREATION_DRAFT':
-			Cookies.remove(action.draftId);
+			Cookies.remove('TokenCreationDraft_' + action.draftId);
 			// via https://flaviocopes.com/how-to-remove-object-property-javascript/
 			const newTokenCreationDrafts = Object.keys(state.tokenCreationDrafts).reduce((object, key) => {
 				if (key !== action.draftId) {
@@ -516,7 +516,7 @@ function fin4StoreReducer(state = initialState, action) {
 					});
 				}
 			}
-			Cookies.set(draftId, JSON.stringify(state.tokenCreationDrafts[draftId]));
+			Cookies.set('TokenCreationDraft_' + draftId, JSON.stringify(state.tokenCreationDrafts[draftId]));
 			return state;
 		default:
 			return state;

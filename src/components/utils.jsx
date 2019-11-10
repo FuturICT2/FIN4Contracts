@@ -42,7 +42,7 @@ const getFormattedSelectOptions = tokens => {
 const getRandomTokenCreationDraftID = () => {
 	// let allCookies = Cookies.get();
 	// let nextIndex = Object.keys(allCookies).filter(key => key.startsWith('TokenCreationDraft')).length;
-	return 'TokenCreationDraft_' + nanoid(5);
+	return nanoid(5);
 };
 
 export { buildIconLabelLink, buildIconLabelCallback, getFormattedSelectOptions, getRandomTokenCreationDraftID };
