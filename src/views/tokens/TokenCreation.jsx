@@ -6,6 +6,7 @@ import Table from '../../components/Table';
 import TableRow from '../../components/TableRow';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
+import Container from '../../components/Container';
 
 function TokenCreation(props) {
 	const { t } = useTranslation();
@@ -17,7 +18,7 @@ function TokenCreation(props) {
 	};
 
 	return (
-		<>
+		<Container>
 			<Box title={t('create-new-token')}>
 				<ContractForm
 					contractName="Fin4TokenManagement"
@@ -49,7 +50,7 @@ function TokenCreation(props) {
 					</>
 				</Table>
 			</Modal>
-		</>
+		</Container>
 	);
 }
 

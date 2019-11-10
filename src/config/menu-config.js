@@ -20,6 +20,7 @@ import Listing from '../views/CuratedTokens/Listing';
 import Management from '../views/CuratedTokens/Management';
 import Governance from '../views/CuratedTokens/Governance';
 import Messages from '../views/Messages';
+import TokenCreation from '../views/tokens/TokenCreation';
 
 const menu = [
 	{
@@ -36,6 +37,11 @@ const menu = [
 		label: 'Tokens',
 		icon: ListIcon,
 		showInNavBar: true // SHOW IN NAVBAR
+	},
+	{
+		component: TokenCreation,
+		path: '/token/create/',
+		showInNavBar: false
 	},
 	{
 		component: TokenView,
