@@ -11,6 +11,8 @@ import CopyIcon from '@material-ui/icons/FileCopy';
 import moment from 'moment';
 import Dropdown from '../../components/Dropdown';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 const fileDownload = require('js-file-download');
 const slugify = require('slugify');
 
@@ -80,6 +82,18 @@ function Token(props) {
 		fileDownload(JSON.stringify(draft, null, 4), name + '.json');
 	};
 
+	const [isPreviewDraftModalOpen, setPreviewDraftModalOpen] = useState(false);
+	const togglePreviewDraftModalOpen = () => {
+		setPreviewDraftModalOpen(!isPreviewDraftModalOpen);
+	};
+	const previewDraftStr = useRef('');
+
+	const previewDraft = index => {
+		let draft = props.tokenCreationDrafts[index];
+		previewDraftStr.current = JSON.stringify(draft, null, 2);
+		togglePreviewDraftModalOpen();
+	};
+
 	return (
 		<Container>
 			<Box title={t('create-new-token')}>
@@ -134,7 +148,9 @@ function Token(props) {
 									let date = moment.unix(Number(draft.lastModified) / 1000).calendar();
 									return (
 										<li key={'draft_' + index} style={{ paddingBottom: '10px' }}>
-											{draft.name.length > 0 ? draft.name : <i>no-name-yet</i>}
+											<span onClick={() => previewDraft(index)} title="Click to see draft as JSON object">
+												{draft.name.length > 0 ? draft.name : <i>no-name-yet</i>}
+											</span>
 											<small style={{ color: 'gray' }}>
 												{' last modified: '}
 												{date}
@@ -155,6 +171,13 @@ function Token(props) {
 						</div>
 					</>
 				)}
+				<Modal
+					isOpen={isPreviewDraftModalOpen}
+					handleClose={togglePreviewDraftModalOpen}
+					title="Token creation draft"
+					width="400px">
+					<SyntaxHighlighter language="json">{previewDraftStr.current}</SyntaxHighlighter>
+				</Modal>
 			</Box>
 			<TokenOverview />
 		</Container>
