@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import { TextField } from '@material-ui/core';
 import Button from '../../components/Button';
+import moment from 'moment';
 
 function TokenCreation(props, context) {
 	const { t } = useTranslation();
@@ -14,7 +15,8 @@ function TokenCreation(props, context) {
 	const fields = useRef({
 		name: '',
 		symbol: '',
-		description: ''
+		description: '',
+		lastModified: ''
 	});
 
 	useEffect(() => {
@@ -26,12 +28,14 @@ function TokenCreation(props, context) {
 		fields.current = {
 			name: draft.name && draft.name.length > 0 ? draft.name : '',
 			symbol: draft.symbol && draft.symbol.length > 0 ? draft.symbol : '',
-			description: draft.description && draft.description.length > 0 ? draft.description : ''
+			description: draft.description && draft.description.length > 0 ? draft.description : '',
+			lastModified: draft.lastModified
 		};
 		setDraftId(draftIdViaURL);
 	});
 
 	const submit = () => {
+		fields.current.lastModified = moment().valueOf(); // TODO only set that if actual changes took place: compare
 		props.dispatch({
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,
