@@ -102,7 +102,12 @@ function Token(props) {
 		togglePreviewDraftModalOpen();
 	};
 
-	const deleteDraft = draftId => {};
+	const deleteDraft = draftId => {
+		props.dispatch({
+			type: 'DELETE_TOKEN_CREATION_DRAFT',
+			draftId: draftId
+		});
+	};
 
 	return (
 		<Container>

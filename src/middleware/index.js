@@ -489,6 +489,19 @@ function fin4StoreReducer(state = initialState, action) {
 					[action.draft.id]: action.draft
 				}
 			};
+		case 'DELETE_TOKEN_CREATION_DRAFT':
+			Cookies.remove(action.draftId);
+			// via https://flaviocopes.com/how-to-remove-object-property-javascript/
+			const newTokenCreationDrafts = Object.keys(state.tokenCreationDrafts).reduce((object, key) => {
+				if (key !== action.draftId) {
+					object[key] = state.tokenCreationDrafts[key];
+				}
+				return object;
+			}, {});
+			return {
+				...state,
+				tokenCreationDrafts: newTokenCreationDrafts
+			};
 		default:
 			return state;
 	}
