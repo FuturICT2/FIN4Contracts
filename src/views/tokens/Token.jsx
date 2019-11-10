@@ -18,6 +18,7 @@ import Dropdown from '../../components/Dropdown';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import SyntaxHighlighter from 'react-syntax-highlighter';
+import history from '../../components/history';
 const fileDownload = require('js-file-download');
 const slugify = require('slugify');
 
@@ -109,10 +110,29 @@ function Token(props) {
 		});
 	};
 
+	const continueEditing = draftId => {
+		history.push('/token/create/' + draftId.split('_')[1]);
+	};
+
+	const createNewToken = () => {
+		let nowTimestamp = moment().valueOf();
+		let newDraft = {
+			id: getRandomTokenCreationDraftID(),
+			created: nowTimestamp,
+			lastModified: nowTimestamp
+		};
+		props.dispatch({
+			type: 'ADD_TOKEN_CREATION_DRAFT',
+			draft: newDraft,
+			addToCookies: true
+		});
+		history.push('/token/create/' + newDraft.id.split('_')[1]);
+	};
+
 	return (
 		<Container>
 			<Box title={t('create-new-token')}>
-				{buildIconLabelLink('/token/create', <AddIcon />, 'Start a new token creation')}
+				{buildIconLabelCallback(createNewToken, <AddIcon />, 'Start a new token creation')}
 				{buildIconLabelCallback(toggleUploadFileVisible, <ImportIcon />, 'Import token creation draft')}
 				{uploadFileVisible && (
 					<>
@@ -173,7 +193,7 @@ function Token(props) {
 											</small>
 											<br />
 											<small style={{ color: 'green' }}>
-												<span>Continue editing</span>
+												<span onClick={() => continueEditing(draftId)}>Continue editing</span>
 												<span style={{ color: 'silver' }}> | </span>
 												<span onClick={() => exportDraft(draftId)}>Export</span>
 												<span style={{ color: 'silver' }}> | </span>
