@@ -53,7 +53,16 @@ function Token(props) {
 			return;
 		}
 		let templateToken = props.fin4Tokens[chosenTokenAddress.current];
-		// TODO
+		let nowTimestamp = moment().valueOf();
+		props.dispatch({
+			type: 'ADD_TOKEN_CREATION_DRAFT',
+			draft: {
+				name: 'Copy of ' + templateToken.name,
+				symbol: (templateToken.symbol.length < 5 ? templateToken.symbol : templateToken.substring(0, 4)) + '2',
+				created: nowTimestamp,
+				lastModified: nowTimestamp
+			}
+		});
 	};
 
 	return (
