@@ -27,4 +27,15 @@ const buildIconLabelCallback = (callback, icon, label) => {
 	);
 };
 
-export { buildIconLabelLink, buildIconLabelCallback };
+const getFormattedSelectOptions = tokens => {
+	return Object.keys(tokens).map(addr => {
+		let token = tokens[addr];
+		return {
+			value: token.address,
+			label: token.name,
+			symbol: token.symbol
+		};
+	});
+};
+
+export { buildIconLabelLink, buildIconLabelCallback, getFormattedSelectOptions };

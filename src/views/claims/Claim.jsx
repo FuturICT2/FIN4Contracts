@@ -13,6 +13,7 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import { findTokenBySymbol } from '../../components/Contractor.jsx';
 import PropTypes from 'prop-types';
+import { getFormattedSelectOptions } from '../../components/utils';
 
 function Claim(props, context) {
 	const { t } = useTranslation();
@@ -43,17 +44,6 @@ function Claim(props, context) {
 			});
 	};
 
-	const getFormattedSelectOptions = () => {
-		return Object.keys(props.fin4Tokens).map(addr => {
-			let token = props.fin4Tokens[addr];
-			return {
-				value: token.address,
-				label: token.name,
-				symbol: token.symbol
-			};
-		});
-	};
-
 	useEffect(() => {
 		let symbol = props.match.params.tokenSymbol;
 		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0 && symbol) {
@@ -80,7 +70,7 @@ function Claim(props, context) {
 					<Dropdown
 						key="token-dropdown"
 						onChange={e => updateSelectedOption(e.value)}
-						options={getFormattedSelectOptions()}
+						options={getFormattedSelectOptions(props.fin4Tokens)}
 						label={t('token-type')}
 						defaultValue={
 							tokenViaURL
