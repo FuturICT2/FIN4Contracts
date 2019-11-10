@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
+const nanoid = require('nanoid');
 
 const buildIconLabelLink = (link, icon, label) => {
 	return (
@@ -39,15 +40,10 @@ const getFormattedSelectOptions = tokens => {
 	});
 };
 
-const getNextTokenCreationDraftIndexInCookies = () => {
-	let allCookies = Cookies.get();
-	let nextIndex = Object.keys(allCookies).filter(key => key.startsWith('TokenCreationDraft')).length;
-	return nextIndex;
+const getRandomTokenCreationDraftID = () => {
+	// let allCookies = Cookies.get();
+	// let nextIndex = Object.keys(allCookies).filter(key => key.startsWith('TokenCreationDraft')).length;
+	return 'TokenCreationDraft_' + nanoid(10);
 };
 
-export {
-	buildIconLabelLink,
-	buildIconLabelCallback,
-	getFormattedSelectOptions,
-	getNextTokenCreationDraftIndexInCookies
-};
+export { buildIconLabelLink, buildIconLabelCallback, getFormattedSelectOptions, getRandomTokenCreationDraftID };

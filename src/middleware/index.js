@@ -4,7 +4,6 @@ import drizzleOptions from '../config/drizzle-config';
 import { toast } from 'react-toastify';
 import update from 'react-addons-update';
 import Cookies from 'js-cookie';
-import { getNextTokenCreationDraftIndexInCookies } from '../components/utils';
 const BN = require('bignumber.js');
 
 const contractEventNotifier = store => next => action => {
@@ -481,8 +480,7 @@ function fin4StoreReducer(state = initialState, action) {
 			};
 		case 'ADD_TOKEN_CREATION_DRAFT':
 			if (action.addToCookies) {
-				let nextIndex = getNextTokenCreationDraftIndexInCookies();
-				Cookies.set('TokenCreationDraft_' + nextIndex, JSON.stringify(action.draft));
+				Cookies.set(action.draft.id, JSON.stringify(action.draft));
 			}
 			return Object.assign({}, state, {
 				tokenCreationDrafts: [...state.tokenCreationDrafts, action.draft]

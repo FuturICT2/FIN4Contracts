@@ -4,7 +4,12 @@ import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import TokenOverview from './TokenOverview';
 import Box from '../../components/Box';
-import { buildIconLabelLink, buildIconLabelCallback, getFormattedSelectOptions } from '../../components/utils';
+import {
+	buildIconLabelLink,
+	buildIconLabelCallback,
+	getFormattedSelectOptions,
+	getRandomTokenCreationDraftID
+} from '../../components/utils';
 import AddIcon from '@material-ui/icons/AddBox';
 import ImportIcon from '@material-ui/icons/ImportExport';
 import CopyIcon from '@material-ui/icons/FileCopy';
@@ -62,6 +67,7 @@ function Token(props) {
 		props.dispatch({
 			type: 'ADD_TOKEN_CREATION_DRAFT',
 			draft: {
+				id: getRandomTokenCreationDraftID(),
 				name: 'Copy of ' + templateToken.name,
 				symbol: (templateToken.symbol.length < 5 ? templateToken.symbol : templateToken.symbol.substring(0, 4)) + '2',
 				created: nowTimestamp,
@@ -79,7 +85,7 @@ function Token(props) {
 		} else if (draft.symbol.length > 0) {
 			name += slugify(draft.symbol);
 		} else {
-			name += index; // or now-timestamp as fallback?
+			name = draft.id;
 		}
 		fileDownload(JSON.stringify(draft, null, 4), name + '.json');
 	};
