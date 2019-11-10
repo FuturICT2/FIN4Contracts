@@ -11,6 +11,8 @@ import CopyIcon from '@material-ui/icons/FileCopy';
 import moment from 'moment';
 import Dropdown from '../../components/Dropdown';
 import Button from '../../components/Button';
+const fileDownload = require('js-file-download');
+const slugify = require('slugify');
 
 function Token(props) {
 	const { t } = useTranslation();
@@ -63,6 +65,19 @@ function Token(props) {
 				lastModified: nowTimestamp
 			}
 		});
+	};
+
+	const exportDraft = index => {
+		let draft = props.tokenCreationDrafts[index];
+		let name = 'TokenCreationDraft_';
+		if (draft.name.length > 0) {
+			name += slugify(draft.name);
+		} else if (draft.symbol.length > 0) {
+			name += slugify(draft.symbol);
+		} else {
+			name += index; // or now-timestamp as fallback?
+		}
+		fileDownload(JSON.stringify(draft, null, 4), name + '.json');
 	};
 
 	return (
@@ -128,7 +143,7 @@ function Token(props) {
 											<small style={{ color: 'green' }}>
 												<span>Continue editing</span>
 												<span style={{ color: 'silver' }}> | </span>
-												<span>Export</span>
+												<span onClick={() => exportDraft(index)}>Export</span>
 												<span style={{ color: 'silver' }}> | </span>
 												<span>Delete</span>
 											</small>
