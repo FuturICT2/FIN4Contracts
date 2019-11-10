@@ -21,11 +21,11 @@ const Currency = props => {
 	const classes = useStyles();
 
 	const symbol = () => {
-		return <Symbol>{props.symbol}</Symbol>;
+		return props.symbol ? <Symbol>{props.symbol}</Symbol> : '';
 	};
 
 	const nameWithoutLink = () => {
-		return <span style={{ marginLeft: 5 }}>{props.name}</span>;
+		return <span style={{ marginLeft: props.symbol ? 5 : 0 }}>{props.name}</span>;
 	};
 
 	const nameWithLink = () => {

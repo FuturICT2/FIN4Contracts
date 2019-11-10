@@ -18,6 +18,7 @@ import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import history from '../../components/history';
+import Currency from '../../components/Currency';
 const fileDownload = require('js-file-download');
 const slugify = require('slugify');
 
@@ -181,18 +182,23 @@ function Token(props) {
 								{Object.keys(props.tokenCreationDrafts).map(draftId => {
 									let draft = props.tokenCreationDrafts[draftId];
 									let date = moment.unix(Number(draft.lastModified) / 1000).calendar();
+									let name = draft.name && draft.name.length > 0 ? draft.name : 'no-name-yet';
+									let symbol = draft.symbol && draft.symbol.length > 0 ? draft.symbol : null;
 									return (
 										<li key={draftId} style={{ paddingBottom: '10px' }}>
 											<span onClick={() => previewDraft(draftId)} title="Click to see draft as JSON object">
-												{draft.name && draft.name.length > 0 ? draft.name : <i>no-name-yet</i>}
+												<Currency name={name} symbol={symbol} />
 											</span>
+											<br />
 											<small style={{ color: 'gray' }}>
-												&nbsp;&nbsp;{'last modified: '}
+												{'Last modified: '}
 												{date}
 											</small>
 											<br />
 											<small style={{ color: 'green' }}>
-												<span onClick={() => continueEditing(draftId)}>Continue editing</span>
+												<span onClick={() => continueEditing(draftId)}>
+													<b>Continue editing</b>
+												</span>
 												<span style={{ color: 'silver' }}> | </span>
 												<span onClick={() => exportDraft(draftId)}>Export</span>
 												<span style={{ color: 'silver' }}> | </span>
