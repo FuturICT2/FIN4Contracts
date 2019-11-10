@@ -59,6 +59,9 @@ function Settings(props, context) {
 						}}>
 						DE
 					</a>
+					<br />
+					<br />
+					<small>We use cookies to store language preferences and token creation drafts.</small>
 				</div>
 			</Box>
 			<Box title="System parameters">
