@@ -3,6 +3,7 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { TextField } from '@material-ui/core';
+import StepsBottomNav from './StepsBottomNav';
 
 function StepBasics(props) {
 	const { t } = useTranslation();
@@ -28,7 +29,6 @@ function StepBasics(props) {
 			lastModified: draft.lastModified
 		};
 		setDraftId(draft.id);
-		props.addSubmitCallback('Basics', submit);
 	});
 
 	const submit = () => {
@@ -37,7 +37,8 @@ function StepBasics(props) {
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,
 			fields: fields.current
-        });*/
+		});*/
+		props.handleNext();
 	};
 
 	return (
@@ -68,6 +69,7 @@ function StepBasics(props) {
 						onChange={e => (fields.current.description = e.target.value)}
 						style={inputFieldStyle}
 					/>
+					<StepsBottomNav nav={props.nav} handleNext={submit} />
 				</>
 			)}
 		</>

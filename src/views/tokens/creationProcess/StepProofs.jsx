@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import StepsBottomNav from './StepsBottomNav';
 
 function StepProofs(props) {
 	const { t } = useTranslation();
@@ -23,15 +24,23 @@ function StepProofs(props) {
 			lastModified: draft.lastModified
 		};
 		setDraftId(draft.id);
-		props.addSubmitCallback('Proofs', submit);
 	});
 
 	const submit = () => {
 		fields.current.lastModified = moment().valueOf();
 		// TODO
+		props.handleNext();
 	};
 
-	return <>{draftId && <></>}</>;
+	return (
+		<>
+			{draftId && (
+				<>
+					<StepsBottomNav nav={props.nav} handleNext={submit} />
+				</>
+			)}
+		</>
+	);
 }
 
 const mapStateToProps = state => {

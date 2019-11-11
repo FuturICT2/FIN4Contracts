@@ -65,18 +65,7 @@ function TokenCreationProcess(props, context) {
 
 	const [activeStep, setActiveStep] = useState(0);
 
-	const submitCallbacks = useRef({});
-
-	// step components register their submit callback here via their useEffect() methods
-	// can be called multiple times, this method shields against that
-	const addSubmitCallback = (stepName, submitCallback) => {
-		if (!submitCallbacks.current[stepName]) {
-			submitCallbacks.current[stepName] = submitCallback;
-		}
-	};
-
 	const handleNext = () => {
-		submitCallbacks.current[steps[activeStep]]();
 		setActiveStep(prevActiveStep => prevActiveStep + 1);
 	};
 
@@ -105,34 +94,49 @@ function TokenCreationProcess(props, context) {
 								<Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
 							</center>
 						</div>
-
 						<center style={{ padding: '10px 20px 30px 20px' }}>
-							{activeStep === 0 && <StepBasics draft={draft} addSubmitCallback={addSubmitCallback} />}
-							{activeStep === 1 && <StepTraits draft={draft} addSubmitCallback={addSubmitCallback} />}
-							{activeStep === 2 && <StepActions draft={draft} addSubmitCallback={addSubmitCallback} />}
-							{activeStep === 3 && <StepValue draft={draft} addSubmitCallback={addSubmitCallback} />}
-							{activeStep === 4 && <StepProofs draft={draft} addSubmitCallback={addSubmitCallback} />}
+							{activeStep === 0 && (
+								<StepBasics
+									draft={draft}
+									nav={[activeStep, steps.length, classes, handleBack]}
+									handleNext={handleNext}
+								/>
+							)}
+							{activeStep === 1 && (
+								<StepTraits
+									draft={draft}
+									nav={[activeStep, steps.length, classes, handleBack]}
+									handleNext={handleNext}
+								/>
+							)}
+							{activeStep === 2 && (
+								<StepActions
+									draft={draft}
+									nav={[activeStep, steps.length, classes, handleBack]}
+									handleNext={handleNext}
+								/>
+							)}
+							{activeStep === 3 && (
+								<StepValue
+									draft={draft}
+									nav={[activeStep, steps.length, classes, handleBack]}
+									handleNext={handleNext}
+								/>
+							)}
+							{activeStep === 4 && (
+								<StepProofs
+									draft={draft}
+									nav={[activeStep, steps.length, classes, handleBack]}
+									handleNext={handleNext}
+								/>
+							)}
+							{activeStep === steps.length && (
+								<span>
+									<Typography className={classes.instructions}>All steps completed</Typography>
+									<Button onClick={handleReset}>Reset</Button>
+								</span>
+							)}
 						</center>
-
-						<div>
-							<center style={{ paddingBottom: '20px' }}>
-								{activeStep === steps.length ? (
-									<span>
-										<Typography className={classes.instructions}>All steps completed</Typography>
-										<Button onClick={handleReset}>Reset</Button>
-									</span>
-								) : (
-									<div>
-										<Button disabled={activeStep === 0} onClick={handleBack} className={classes.backButton}>
-											Back
-										</Button>
-										<Button variant="contained" color="primary" onClick={handleNext}>
-											{activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-										</Button>
-									</div>
-								)}
-							</center>
-						</div>
 					</Box>
 				</Container>
 			) : (
