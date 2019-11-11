@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
@@ -51,7 +51,7 @@ function TokenCreationProcess(props, context) {
 			case 0:
 				return 'Basic infos';
 			case 1:
-				return 'Fundamental properties of the token';
+				return 'Fundamental properties';
 			case 2:
 				return 'For what action(s) can people claim this token?';
 			case 3:
