@@ -34,14 +34,14 @@ function TokenCreationProcess(props, context) {
 	const { t } = useTranslation();
 	const classes = useStyles();
 
-	const [draft, setDraft] = useState(null);
+	const [draftId, setDraftId] = useState(null);
 
 	useEffect(() => {
-		let draftId = props.match.params.draftId;
-		if (draft || !draftId || !props.tokenCreationDrafts[draftId]) {
+		let draftIdViaURL = props.match.params.draftId;
+		if (draftId || !draftIdViaURL || !props.tokenCreationDrafts[draftIdViaURL]) {
 			return;
 		}
-		setDraft(props.tokenCreationDrafts[draftId]);
+		setDraftId(draftIdViaURL);
 	});
 
 	const steps = ['Basics', 'Traits', 'Actions', 'Value', 'Proofs']; // Disbursement/Valuation instead of Value?
@@ -79,7 +79,7 @@ function TokenCreationProcess(props, context) {
 
 	return (
 		<>
-			{draft ? (
+			{draftId ? (
 				<Container>
 					<Box title="Token creation">
 						<div className={classes.root}>
@@ -97,35 +97,35 @@ function TokenCreationProcess(props, context) {
 						<center style={{ padding: '10px 20px 30px 20px' }}>
 							{activeStep === 0 && (
 								<StepBasics
-									draft={draft}
+									draft={props.tokenCreationDrafts[draftId]}
 									nav={[activeStep, steps.length, classes, handleBack]}
 									handleNext={handleNext}
 								/>
 							)}
 							{activeStep === 1 && (
 								<StepTraits
-									draft={draft}
+									draft={props.tokenCreationDrafts[draftId]}
 									nav={[activeStep, steps.length, classes, handleBack]}
 									handleNext={handleNext}
 								/>
 							)}
 							{activeStep === 2 && (
 								<StepActions
-									draft={draft}
+									draft={props.tokenCreationDrafts[draftId]}
 									nav={[activeStep, steps.length, classes, handleBack]}
 									handleNext={handleNext}
 								/>
 							)}
 							{activeStep === 3 && (
 								<StepValue
-									draft={draft}
+									draft={props.tokenCreationDrafts[draftId]}
 									nav={[activeStep, steps.length, classes, handleBack]}
 									handleNext={handleNext}
 								/>
 							)}
 							{activeStep === 4 && (
 								<StepProofs
-									draft={draft}
+									draft={props.tokenCreationDrafts[draftId]}
 									nav={[activeStep, steps.length, classes, handleBack]}
 									handleNext={handleNext}
 								/>
