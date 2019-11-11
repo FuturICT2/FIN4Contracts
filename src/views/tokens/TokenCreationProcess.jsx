@@ -10,11 +10,11 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import StepBasics from './creationProcess/StepBasics';
-import StepTraits from './creationProcess/StepTraits';
-import StepActions from './creationProcess/StepActions';
-import StepValue from './creationProcess/StepValue';
-import StepProofs from './creationProcess/StepProofs';
+import StepBasics from './creationProcess/Step1Basics';
+import StepTraits from './creationProcess/Step2Traits';
+import StepActions from './creationProcess/Step3Actions';
+import StepValue from './creationProcess/Step4Value';
+import StepProofs from './creationProcess/Step5Proofs';
 
 const useStyles = makeStyles(theme => ({
 	// from https://material-ui.com/components/steppers/
