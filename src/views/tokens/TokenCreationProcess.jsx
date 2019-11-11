@@ -77,6 +77,14 @@ function TokenCreationProcess(props, context) {
 		setActiveStep(0);
 	};
 
+	const buildStepComponent = component => {
+		return React.createElement(component, {
+			draft: props.tokenCreationDrafts[draftId],
+			nav: [activeStep, steps.length, classes, handleBack],
+			handleNext: handleNext
+		});
+	};
+
 	return (
 		<>
 			{draftId ? (
@@ -95,41 +103,11 @@ function TokenCreationProcess(props, context) {
 							</center>
 						</div>
 						<center style={{ padding: '10px 20px 30px 20px' }}>
-							{activeStep === 0 && (
-								<StepBasics
-									draft={props.tokenCreationDrafts[draftId]}
-									nav={[activeStep, steps.length, classes, handleBack]}
-									handleNext={handleNext}
-								/>
-							)}
-							{activeStep === 1 && (
-								<StepTraits
-									draft={props.tokenCreationDrafts[draftId]}
-									nav={[activeStep, steps.length, classes, handleBack]}
-									handleNext={handleNext}
-								/>
-							)}
-							{activeStep === 2 && (
-								<StepActions
-									draft={props.tokenCreationDrafts[draftId]}
-									nav={[activeStep, steps.length, classes, handleBack]}
-									handleNext={handleNext}
-								/>
-							)}
-							{activeStep === 3 && (
-								<StepValue
-									draft={props.tokenCreationDrafts[draftId]}
-									nav={[activeStep, steps.length, classes, handleBack]}
-									handleNext={handleNext}
-								/>
-							)}
-							{activeStep === 4 && (
-								<StepProofs
-									draft={props.tokenCreationDrafts[draftId]}
-									nav={[activeStep, steps.length, classes, handleBack]}
-									handleNext={handleNext}
-								/>
-							)}
+							{activeStep === 0 && buildStepComponent(StepBasics)}
+							{activeStep === 1 && buildStepComponent(StepTraits)}
+							{activeStep === 2 && buildStepComponent(StepActions)}
+							{activeStep === 3 && buildStepComponent(StepValue)}
+							{activeStep === 4 && buildStepComponent(StepProofs)}
 							{activeStep === steps.length && (
 								<span>
 									<Typography className={classes.instructions}>All steps completed</Typography>
