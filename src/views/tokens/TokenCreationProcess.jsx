@@ -61,7 +61,18 @@ function TokenCreationProcess(props, context) {
 
 	const [activeStep, setActiveStep] = useState(0);
 
+	const submitCallbacks = useRef({});
+
+	// step components register their submit callback here via their useEffect() methods
+	// can be called multiple times, this method shields against that
+	const addSubmitCallback = (stepName, submitCallback) => {
+		if (!submitCallbacks.current[stepName]) {
+			submitCallbacks.current[stepName] = submitCallback;
+		}
+	};
+
 	const handleNext = () => {
+		submitCallbacks.current[steps[activeStep]]();
 		setActiveStep(prevActiveStep => prevActiveStep + 1);
 	};
 
@@ -92,7 +103,7 @@ function TokenCreationProcess(props, context) {
 						</div>
 
 						<center style={{ padding: '10px 20px 30px 20px' }}>
-							{activeStep === 0 && <StepBasics draft={draft} onSubmit={() => {}} />}
+							{activeStep === 0 && <StepBasics draft={draft} addSubmitCallback={addSubmitCallback} />}
 							{activeStep === 1 && <>Traits</>}
 							{activeStep === 2 && <>Actions</>}
 							{activeStep === 3 && <>Value</>}

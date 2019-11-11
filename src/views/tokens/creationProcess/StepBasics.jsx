@@ -28,6 +28,7 @@ function StepBasics(props) {
 			lastModified: draft.lastModified
 		};
 		setDraftId(draft.id);
+		props.addSubmitCallback('Basics', submit);
 	});
 
 	const submit = () => {
