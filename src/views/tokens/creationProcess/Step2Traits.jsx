@@ -3,7 +3,7 @@ import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import StepsBottomNav from './StepsBottomNav';
-import { Checkbox, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
+import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../../components/Modal';
@@ -40,23 +40,14 @@ function StepTraits(props) {
 	const toggleModal = () => {
 		setModalOpen(!isModalOpen);
 	};
-	const modalText = useRef('');
 
-	const buildCheckboxWithInfo = (label, infoText) => {
+	const buildCheckboxWithInfo = label => {
 		return (
 			<>
 				<FormControlLabel
 					control={<Checkbox checked={true} onChange={() => {}} />}
 					label={label}
 					style={{ marginRight: '6px' }}
-				/>
-				<FontAwesomeIcon
-					icon={faInfoCircle}
-					style={styles.infoIcon}
-					onClick={() => {
-						modalText.current = infoText;
-						toggleModal();
-					}}
 				/>
 				<br />
 			</>
@@ -68,12 +59,25 @@ function StepTraits(props) {
 			{draftId && (
 				<>
 					<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Info" width="350px">
-						<div style={{ fontFamily: 'arial' }}>{modalText.current}</div>
+						<div style={{ fontFamily: 'arial' }}>TODO</div>
 					</Modal>
-					{/* TODO: decimals, cap, initial supply */}
-					{buildCheckboxWithInfo('is burnable', 'TODO')}
-					{buildCheckboxWithInfo('is transferable', 'TODO')}
-					{buildCheckboxWithInfo('is mintable', 'TODO')}
+					<center>
+						<FontAwesomeIcon
+							icon={faInfoCircle}
+							style={styles.infoIcon}
+							onClick={() => {
+								toggleModal();
+							}}
+						/>
+					</center>
+					<div style={{ padding: '10px 0 0 85px' }}>
+						{buildCheckboxWithInfo('is burnable')}
+						{buildCheckboxWithInfo('is transferable')}
+						{buildCheckboxWithInfo('is mintable')}
+						<TextField type="number" label="Decimals" style={styles.numberField} />
+						<TextField type="number" label="Cap" style={styles.numberField} />
+						<TextField type="number" label="Initial supply" style={styles.numberField} />
+					</div>
 					<StepsBottomNav nav={props.nav} handleNext={submit} />
 				</>
 			)}
@@ -84,8 +88,11 @@ function StepTraits(props) {
 const styles = {
 	infoIcon: {
 		color: 'silver',
-		width: '16px',
-		height: '16px'
+		width: '20px',
+		height: '20px'
+	},
+	numberField: {
+		marginBottom: '15px'
 	}
 };
 
