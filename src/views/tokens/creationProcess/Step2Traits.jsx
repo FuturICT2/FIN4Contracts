@@ -58,6 +58,7 @@ function StepTraits(props) {
 						toggleModal();
 					}}
 				/>
+				<br />
 			</>
 		);
 	};

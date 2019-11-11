@@ -25,6 +25,7 @@ const useStyles = makeStyles(theme => ({
 		marginRight: theme.spacing(1)
 	},
 	instructions: {
+		fontSize: 'large',
 		marginTop: theme.spacing(1),
 		marginBottom: theme.spacing(1)
 	}
@@ -99,10 +100,12 @@ function TokenCreationProcess(props, context) {
 								))}
 							</Stepper>
 							<center>
-								<Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+								<Typography className={classes.instructions}>
+									<b>{getStepContent(activeStep)}</b>
+								</Typography>
 							</center>
 						</div>
-						<center style={{ padding: '10px 20px 30px 20px' }}>
+						<div style={{ padding: '10px 20px 30px 20px' }}>
 							{activeStep === 0 && buildStepComponent(StepBasics)}
 							{activeStep === 1 && buildStepComponent(StepTraits)}
 							{activeStep === 2 && buildStepComponent(StepActions)}
@@ -114,7 +117,7 @@ function TokenCreationProcess(props, context) {
 									<Button onClick={handleReset}>Reset</Button>
 								</span>
 							)}
-						</center>
+						</div>
 					</Box>
 				</Container>
 			) : (
