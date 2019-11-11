@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
+import Box from '../../components/Box';
 import StepBasics from './creationProcess/StepBasics';
 
 function TokenCreation(props, context) {
@@ -21,7 +22,9 @@ function TokenCreation(props, context) {
 		<>
 			{draft ? (
 				<Container>
-					<StepBasics draft={draft} onSubmit={() => {}} />
+					<Box title="Token creation">
+						<StepBasics draft={draft} onSubmit={() => {}} />
+					</Box>
 				</Container>
 			) : (
 				<center style={{ fontFamily: 'arial' }}>

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import Button from '../../../components/Button';
 import { TextField } from '@material-ui/core';
-import Box from '../../../components/Box';
 
 function StepBasics(props) {
 	const { t } = useTranslation();
@@ -43,7 +42,7 @@ function StepBasics(props) {
 	};
 
 	return (
-		<Box title="Token creation: step 1">
+		<>
 			{draftId && (
 				<>
 					<TextField
@@ -75,7 +74,7 @@ function StepBasics(props) {
 					</div>
 				</>
 			)}
-		</Box>
+		</>
 	);
 }
 
