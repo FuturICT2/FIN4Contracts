@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import Button from '../../../components/Button';
 import { TextField } from '@material-ui/core';
 
 function StepBasics(props) {
@@ -38,7 +37,6 @@ function StepBasics(props) {
 			draftId: draftId,
 			fields: fields.current
 		});
-		props.onSubmit();
 	};
 
 	return (
@@ -69,9 +67,6 @@ function StepBasics(props) {
 						onChange={e => (fields.current.description = e.target.value)}
 						style={inputFieldStyle}
 					/>
-					<div style={{ float: 'right', padding: '10px 10px 10px 0' }}>
-						<Button onClick={submit}>Next step</Button>
-					</div>
 				</>
 			)}
 		</>
@@ -84,9 +79,7 @@ const inputFieldStyle = {
 };
 
 const mapStateToProps = state => {
-	return {
-		proofTypes: state.fin4Store.proofTypes
-	};
+	return {};
 };
 
 export default drizzleConnect(StepBasics, mapStateToProps);
