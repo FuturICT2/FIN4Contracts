@@ -9,6 +9,8 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import StepBasics from './creationProcess/StepBasics';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
 	// from https://material-ui.com/components/steppers/
@@ -24,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function TokenCreation(props, context) {
+function TokenCreationProcess(props, context) {
 	const { t } = useTranslation();
 	const classes = useStyles();
 
@@ -89,7 +91,13 @@ function TokenCreation(props, context) {
 							</center>
 						</div>
 
-						<center style={{ padding: '10px 20px 30px 20px' }}>Components go here...</center>
+						<center style={{ padding: '10px 20px 30px 20px' }}>
+							{activeStep === 0 && <StepBasics draft={draft} onSubmit={() => {}} />}
+							{activeStep === 1 && <>Traits</>}
+							{activeStep === 2 && <>Actions</>}
+							{activeStep === 3 && <>Value</>}
+							{activeStep === 4 && <>Proofs</>}
+						</center>
 
 						<div>
 							<center style={{ paddingBottom: '20px' }}>
@@ -121,6 +129,10 @@ function TokenCreation(props, context) {
 	);
 }
 
+TokenCreationProcess.contextTypes = {
+	drizzle: PropTypes.object
+};
+
 const mapStateToProps = state => {
 	return {
 		tokenCreationDrafts: state.fin4Store.tokenCreationDrafts,
@@ -128,4 +140,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(TokenCreation, mapStateToProps);
+export default drizzleConnect(TokenCreationProcess, mapStateToProps);
