@@ -33,11 +33,11 @@ function StepBasics(props) {
 
 	const submit = () => {
 		fields.current.lastModified = moment().valueOf(); // TODO only set that if actual changes took place: compare
-		props.dispatch({
+		/*props.dispatch({
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,
 			fields: fields.current
-		});
+        });*/
 	};
 
 	return (

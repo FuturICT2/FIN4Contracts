@@ -9,8 +9,12 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import StepBasics from './creationProcess/StepBasics';
 import PropTypes from 'prop-types';
+import StepBasics from './creationProcess/StepBasics';
+import StepTraits from './creationProcess/StepTraits';
+import StepActions from './creationProcess/StepActions';
+import StepValue from './creationProcess/StepValue';
+import StepProofs from './creationProcess/StepProofs';
 
 const useStyles = makeStyles(theme => ({
 	// from https://material-ui.com/components/steppers/
@@ -104,10 +108,10 @@ function TokenCreationProcess(props, context) {
 
 						<center style={{ padding: '10px 20px 30px 20px' }}>
 							{activeStep === 0 && <StepBasics draft={draft} addSubmitCallback={addSubmitCallback} />}
-							{activeStep === 1 && <>Traits</>}
-							{activeStep === 2 && <>Actions</>}
-							{activeStep === 3 && <>Value</>}
-							{activeStep === 4 && <>Proofs</>}
+							{activeStep === 1 && <StepTraits draft={draft} addSubmitCallback={addSubmitCallback} />}
+							{activeStep === 2 && <StepActions draft={draft} addSubmitCallback={addSubmitCallback} />}
+							{activeStep === 3 && <StepValue draft={draft} addSubmitCallback={addSubmitCallback} />}
+							{activeStep === 4 && <StepProofs draft={draft} addSubmitCallback={addSubmitCallback} />}
 						</center>
 
 						<div>
