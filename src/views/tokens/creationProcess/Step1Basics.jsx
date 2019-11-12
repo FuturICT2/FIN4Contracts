@@ -17,16 +17,19 @@ function StepBasics(props) {
 		lastModified: ''
 	});
 
+	const getValue = (draft, prop) => {
+		return draft.properties.hasOwnProperty(prop) ? draft.properties[prop] : '';
+	};
+
 	useEffect(() => {
 		if (draftId || !props.draft) {
 			return;
 		}
 		let draft = props.draft;
 		fields.current = {
-			name: draft.name && draft.name.length > 0 ? draft.name : '',
-			symbol: draft.symbol && draft.symbol.length > 0 ? draft.symbol : '',
-			description: draft.description && draft.description.length > 0 ? draft.description : '',
-			lastModified: draft.lastModified
+			name: getValue(draft, 'name'),
+			symbol: getValue(draft, 'symbol'),
+			description: getValue(draft, 'description')
 		};
 		setDraftId(draft.id);
 	});
