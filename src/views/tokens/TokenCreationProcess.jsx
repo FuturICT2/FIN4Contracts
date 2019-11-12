@@ -106,6 +106,7 @@ function TokenCreationProcess(props, context) {
 							</center>
 						</div>
 						<div style={{ padding: '10px 20px 30px 20px' }}>
+							{/* Or create back/next buttons here and pass them down? */}
 							{activeStep === 0 && buildStepComponent(StepBasics)}
 							{activeStep === 1 && buildStepComponent(StepTraits)}
 							{activeStep === 2 && buildStepComponent(StepActions)}
