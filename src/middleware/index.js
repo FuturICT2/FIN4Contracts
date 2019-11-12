@@ -508,7 +508,8 @@ function fin4StoreReducer(state = initialState, action) {
 				if (action.fields.hasOwnProperty(fieldName)) {
 					// is either value of fieldName directly, or a sub-object with fieldName as key
 					let node = action.fields[fieldName];
-					if (Object.keys(node).length > 0) {
+					if (typeof node === 'object') {
+						// via stackoverflow.com/a/8511350/2474159
 						// only one further level supported, if more needed: implement tree descend
 						for (var subFieldName in node) {
 							if (node.hasOwnProperty(subFieldName)) {
