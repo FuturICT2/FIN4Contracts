@@ -110,7 +110,8 @@ function StepTraits(props) {
 						<div style={{ fontFamily: 'arial' }}>
 							<b>is transferable</b>
 							<br />
-							Users who have a balance on this token, can transfer some or all of it to other users.
+							Users who have a balance on this token, can transfer some or all of it to other users. In most cases users
+							want to be able to transfer positive action tokens (e.g. for trading).
 							<br />
 							<br />
 							<b>is mintable</b>

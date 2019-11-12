@@ -136,8 +136,8 @@ function Token(props) {
 	return (
 		<Container>
 			<Box title={t('create-new-token')}>
-				{buildIconLabelCallback(createNewToken, <AddIcon />, 'Start a new token creation')}
-				{buildIconLabelCallback(toggleUploadFileVisible, <ImportIcon />, 'Import token creation draft')}
+				{buildIconLabelCallback(createNewToken, <AddIcon />, 'Start token creation wizard')}
+				{buildIconLabelCallback(toggleUploadFileVisible, <ImportIcon />, 'Upload token draft (JSON)')}
 				{uploadFileVisible && (
 					<>
 						<input
@@ -150,7 +150,7 @@ function Token(props) {
 						<br />
 					</>
 				)}
-				{buildIconLabelCallback(toggleTokenChooserVisible, <CopyIcon />, 'Import existing token as draft')}
+				{buildIconLabelCallback(toggleTokenChooserVisible, <CopyIcon />, 'Copy an existing token')}
 				{tokenChooserVisible && (
 					<>
 						{' '}
@@ -204,7 +204,7 @@ function Token(props) {
 													<b>Continue editing</b>
 												</span>
 												<span style={{ color: 'silver' }}> | </span>
-												<span onClick={() => exportDraft(draftId)}>Export</span>
+												<span onClick={() => exportDraft(draftId)}>Download</span>
 												<span style={{ color: 'silver' }}> | </span>
 												<span onClick={() => deleteDraft(draftId)}>Delete</span>
 											</small>
