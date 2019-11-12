@@ -74,7 +74,8 @@ function Token(props) {
 				description: templateToken.description,
 				created: nowTimestamp,
 				lastModified: nowTimestamp,
-				properties: {}
+				properties: {},
+				value: {}
 				// TODO copy more (all) the fields...
 			},
 			addToCookies: true
@@ -126,7 +127,8 @@ function Token(props) {
 				id: newDraftId,
 				created: nowTimestamp,
 				lastModified: nowTimestamp,
-				properties: {}
+				properties: {},
+				value: {}
 			},
 			addToCookies: true
 		});
