@@ -15,6 +15,8 @@ import StepTraits from './creationProcess/Step2Traits';
 import StepActions from './creationProcess/Step3Actions';
 import StepValue from './creationProcess/Step4Value';
 import StepProofs from './creationProcess/Step5Proofs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles(theme => ({
 	// from https://material-ui.com/components/steppers/
@@ -103,6 +105,7 @@ function TokenCreationProcess(props, context) {
 								<Typography className={classes.instructions}>
 									<b>{getStepContent(activeStep)}</b>
 								</Typography>
+								<FontAwesomeIcon icon={faInfoCircle} style={styles.infoIcon} onClick={() => {}} />
 							</center>
 						</div>
 						<div style={{ padding: '10px 20px 30px 20px' }}>
@@ -120,6 +123,11 @@ function TokenCreationProcess(props, context) {
 							)}
 						</div>
 					</Box>
+					{false && (
+						<Box title="Info">
+							<div style={{ fontFamily: 'arial' }}>'TODO'</div>
+						</Box>
+					)}
 				</Container>
 			) : (
 				<center style={{ fontFamily: 'arial' }}>
@@ -129,6 +137,14 @@ function TokenCreationProcess(props, context) {
 		</>
 	);
 }
+
+const styles = {
+	infoIcon: {
+		color: 'silver',
+		width: '20px',
+		height: '20px'
+	}
+};
 
 TokenCreationProcess.contextTypes = {
 	drizzle: PropTypes.object

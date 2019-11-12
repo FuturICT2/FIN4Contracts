@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import StepsBottomNav from './StepsBottomNav';
 import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../../components/Modal';
 
 // put these somewhere central? #ConceptualDecision
@@ -68,11 +66,6 @@ function StepTraits(props) {
 		props.handleNext();
 	};
 
-	const [isModalOpen, setModalOpen] = useState(false);
-	const toggleModal = () => {
-		setModalOpen(!isModalOpen);
-	};
-
 	const [checkboxes, setCheckboxes] = useState({});
 
 	const buildCheckboxWithInfo = (label, fieldName, onChange) => {
@@ -104,7 +97,7 @@ function StepTraits(props) {
 		<>
 			{draftId && (
 				<>
-					<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Info" width="350px">
+					<Modal isOpen={false} handleClose={() => {}} title="Info" width="350px">
 						<div style={{ fontFamily: 'arial' }}>
 							<b>is transferable</b>
 							<br />
@@ -148,15 +141,6 @@ function StepTraits(props) {
 							<br />
 						</div>
 					</Modal>
-					<center>
-						<FontAwesomeIcon
-							icon={faInfoCircle}
-							style={styles.infoIcon}
-							onClick={() => {
-								toggleModal();
-							}}
-						/>
-					</center>
 					<div style={{ padding: '10px 0 0 85px' }}>
 						{buildCheckboxWithInfo('is transferable', 'isTransferable')}
 						{buildCheckboxWithInfo('is mintable', 'isMintable')}
@@ -197,11 +181,6 @@ function StepTraits(props) {
 }
 
 const styles = {
-	infoIcon: {
-		color: 'silver',
-		width: '20px',
-		height: '20px'
-	},
 	numberField: {
 		marginBottom: '15px'
 	}
