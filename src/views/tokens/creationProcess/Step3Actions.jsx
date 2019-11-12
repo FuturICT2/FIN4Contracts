@@ -10,10 +10,7 @@ function StepActions(props) {
 
 	const [draftId, setDraftId] = useState(null);
 
-	const fields = useRef({
-		// ...
-		lastModified: ''
-	});
+	const fields = useRef({});
 
 	useEffect(() => {
 		if (!props.draft || draftId) {
@@ -21,7 +18,7 @@ function StepActions(props) {
 		}
 		let draft = props.draft;
 		fields.current = {
-			// ...
+			actionsText: draft.actionsText ? draft.actionsText : '',
 			lastModified: draft.lastModified
 		};
 		setDraftId(draft.id);
@@ -29,7 +26,11 @@ function StepActions(props) {
 
 	const submit = () => {
 		fields.current.lastModified = moment().valueOf();
-		// TODO
+		props.dispatch({
+			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
+			draftId: draftId,
+			fields: fields.current
+		});
 		props.handleNext();
 	};
 
@@ -37,7 +38,14 @@ function StepActions(props) {
 		<>
 			{draftId && (
 				<>
-					<TextField label="" multiline rows="4" fullWidth variant="outlined" onChange={e => {}} />
+					<TextField
+						multiline
+						rows="4"
+						fullWidth
+						variant="outlined"
+						onChange={e => (fields.current.actionsText = e.target.value)}
+						defaultValue={fields.current.actionsText}
+					/>
 					<StepsBottomNav nav={props.nav} handleNext={submit} />
 				</>
 			)}
