@@ -67,7 +67,7 @@ function StepTraits(props) {
 
 	const [checkboxes, setCheckboxes] = useState({});
 
-	const buildCheckboxWithInfo = (label, fieldName, onChange) => {
+	const buildCheckboxWithLabel = (label, fieldName, onChange) => {
 		return (
 			<>
 				<FormControlLabel
@@ -97,10 +97,10 @@ function StepTraits(props) {
 			{draftId && (
 				<>
 					<div style={{ padding: '10px 0 0 85px' }}>
-						{buildCheckboxWithInfo('is transferable', 'isTransferable')}
-						{buildCheckboxWithInfo('is mintable', 'isMintable')}
-						{buildCheckboxWithInfo('is burnable', 'isBurnable')}
-						{buildCheckboxWithInfo('is capped', 'isCapped', () => {
+						{buildCheckboxWithLabel('is transferable', 'isTransferable')}
+						{buildCheckboxWithLabel('is mintable', 'isMintable')}
+						{buildCheckboxWithLabel('is burnable', 'isBurnable')}
+						{buildCheckboxWithLabel('is capped', 'isCapped', () => {
 							if (checkboxes['isCapped']) {
 								fields.current.properties.cap = null;
 							}
