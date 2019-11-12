@@ -17,9 +17,8 @@ function StepActions(props) {
 			return;
 		}
 		let draft = props.draft;
-		fields.current = {
-			actionsText: draft.hasOwnProperty('actionsText') ? draft.actionsText : '',
-			lastModified: draft.lastModified
+		fields.current.actions = {
+			text: draft.actions.hasOwnProperty('text') ? draft.actions.text : ''
 		};
 		setDraftId(draft.id);
 	});
@@ -43,8 +42,8 @@ function StepActions(props) {
 						rows="4"
 						fullWidth
 						variant="outlined"
-						onChange={e => (fields.current.actionsText = e.target.value)}
-						defaultValue={fields.current.actionsText}
+						onChange={e => (fields.current.actions.text = e.target.value)}
+						defaultValue={fields.current.actions.text}
 					/>
 					<br />
 					<StepsBottomNav nav={props.nav} handleNext={submit} />
