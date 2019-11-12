@@ -76,7 +76,8 @@ function Token(props) {
 				lastModified: nowTimestamp,
 				properties: {},
 				value: {},
-				actions: {}
+				actions: {},
+				proofs: []
 				// TODO copy more (all) the fields...
 			},
 			addToCookies: true
@@ -130,7 +131,8 @@ function Token(props) {
 				lastModified: nowTimestamp,
 				properties: {},
 				value: {},
-				actions: {}
+				actions: {},
+				proofs: []
 			},
 			addToCookies: true
 		});
