@@ -17,7 +17,7 @@ import StepValue from './creationProcess/Step4Value';
 import StepProofs from './creationProcess/Step5Proofs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { steps, getStepContent } from './creationProcess/TextContents';
+import { steps, getStepContent, getStepInfoBoxContent } from './creationProcess/TextContents';
 
 const useStyles = makeStyles(theme => ({
 	// from https://material-ui.com/components/steppers/
@@ -70,6 +70,8 @@ function TokenCreationProcess(props, context) {
 		});
 	};
 
+	const [infoBoxStep, setInfoBoxStep] = useState(null);
+
 	return (
 		<>
 			{draftId ? (
@@ -87,7 +89,13 @@ function TokenCreationProcess(props, context) {
 								<Typography className={classes.instructions}>
 									<b>{getStepContent(activeStep)}</b>
 								</Typography>
-								<FontAwesomeIcon icon={faInfoCircle} style={styles.infoIcon} onClick={() => {}} />
+								{activeStep < steps.length && (
+									<FontAwesomeIcon
+										icon={faInfoCircle}
+										style={styles.infoIcon}
+										onClick={() => setInfoBoxStep(activeStep === infoBoxStep ? null : activeStep)}
+									/>
+								)}
 							</center>
 						</div>
 						<div style={{ padding: '10px 20px 30px 20px' }}>
@@ -105,9 +113,17 @@ function TokenCreationProcess(props, context) {
 							)}
 						</div>
 					</Box>
-					{false && (
-						<Box title="Info">
-							<div style={{ fontFamily: 'arial' }}>'TODO'</div>
+					{infoBoxStep !== null && (
+						<Box title={steps[infoBoxStep] + ' info'}>
+							<div style={{ fontFamily: 'arial' }}>
+								<center>
+									<small style={{ color: 'gray' }} onClick={() => setInfoBoxStep(null)}>
+										CLOSE
+									</small>
+								</center>
+								<br />
+								{getStepInfoBoxContent(infoBoxStep)}
+							</div>
 						</Box>
 					)}
 				</Container>
