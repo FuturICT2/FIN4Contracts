@@ -73,7 +73,8 @@ function Token(props) {
 				symbol: (templateToken.symbol.length < 5 ? templateToken.symbol : templateToken.symbol.substring(0, 4)) + '2',
 				description: templateToken.description,
 				created: nowTimestamp,
-				lastModified: nowTimestamp
+				lastModified: nowTimestamp,
+				properties: {}
 				// TODO copy more (all) the fields...
 			},
 			addToCookies: true
@@ -124,7 +125,8 @@ function Token(props) {
 			draft: {
 				id: newDraftId,
 				created: nowTimestamp,
-				lastModified: nowTimestamp
+				lastModified: nowTimestamp,
+				properties: {}
 			},
 			addToCookies: true
 		});

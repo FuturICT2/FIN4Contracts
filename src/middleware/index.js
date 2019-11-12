@@ -506,14 +506,32 @@ function fin4StoreReducer(state = initialState, action) {
 			let draftId = action.draftId;
 			for (var fieldName in action.fields) {
 				if (action.fields.hasOwnProperty(fieldName)) {
-					let fieldValue = action.fields[fieldName];
-					state = update(state, {
-						tokenCreationDrafts: {
-							[draftId]: {
-								[fieldName]: { $set: fieldValue }
+					// is either value of fieldName directly, or a sub-object with fieldName as key
+					let node = action.fields[fieldName];
+					if (Object.keys(node).length > 0) {
+						// only one further level supported, if more needed: implement tree descend
+						for (var subFieldName in node) {
+							if (node.hasOwnProperty(subFieldName)) {
+								state = update(state, {
+									tokenCreationDrafts: {
+										[draftId]: {
+											[fieldName]: {
+												[subFieldName]: { $set: node[subFieldName] }
+											}
+										}
+									}
+								});
 							}
 						}
-					});
+					} else {
+						state = update(state, {
+							tokenCreationDrafts: {
+								[draftId]: {
+									[fieldName]: { $set: node }
+								}
+							}
+						});
+					}
 				}
 			}
 			Cookies.set('TokenCreationDraft_' + draftId, JSON.stringify(state.tokenCreationDrafts[draftId]));
