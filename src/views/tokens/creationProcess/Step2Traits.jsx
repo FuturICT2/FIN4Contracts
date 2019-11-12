@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import StepsBottomNav from './StepsBottomNav';
 import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
-import Modal from '../../../components/Modal';
 
 // put these somewhere central? #ConceptualDecision
 const PROPERTY_DEFAULT = {
@@ -97,50 +96,6 @@ function StepTraits(props) {
 		<>
 			{draftId && (
 				<>
-					<Modal isOpen={false} handleClose={() => {}} title="Info" width="350px">
-						<div style={{ fontFamily: 'arial' }}>
-							<b>is transferable</b>
-							<br />
-							Users who have a balance on this token, can transfer some or all of it to other users. In most cases users
-							want to be able to transfer positive action tokens (e.g. for trading).
-							<br />
-							<br />
-							<b>is mintable</b>
-							<br />
-							Eligible users or smart contracts can "mint" any amount to a public address of their choosing. The total
-							supply of this token gets increased by that amount.
-							<br />
-							<br />
-							<b>is burnable</b>
-							<br />
-							Users can burn some or all of their balance on this token. The burned amount gets deducted from their
-							balance and the total supply of the token shrinks by that amount.
-							<br />
-							<br />
-							<b>is capped</b>
-							<br />
-							Once the cap is reached, no more minting is possible on this token.
-							<br />
-							<br />
-							<b>Cap</b>
-							<br />
-							If the above is activated, this is the value of the cap.
-							<br />
-							<br />
-							<b>Decimals</b>
-							<br />
-							The digits by which your token is divisible. Zero means that users can only have natural numbers as
-							balance on your token and only amounts in natural numbers can be transferred.
-							<br />
-							<br />
-							<b>Initial supply</b>
-							<br />
-							Sets your initial balance on this token. It calls the mint function, so the total supply will also rise to
-							this amount.
-							<br />
-							<br />
-						</div>
-					</Modal>
 					<div style={{ padding: '10px 0 0 85px' }}>
 						{buildCheckboxWithInfo('is transferable', 'isTransferable')}
 						{buildCheckboxWithInfo('is mintable', 'isMintable')}
