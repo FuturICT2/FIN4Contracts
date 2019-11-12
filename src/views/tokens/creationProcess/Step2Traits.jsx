@@ -12,7 +12,6 @@ import Modal from '../../../components/Modal';
 const PROPERTY_DEFAULT = {
 	isTransferable: true,
 	isMintable: true,
-	creatorIsMinter: false,
 	isBurnable: false,
 	isCapped: false,
 	cap: null,
@@ -47,7 +46,6 @@ function StepTraits(props) {
 		setCheckboxes({
 			isTransferable: getValue(draft, 'isTransferable'),
 			isMintable: getValue(draft, 'isMintable'),
-			creatorIsMinter: getValue(draft, 'creatorIsMinter'),
 			isBurnable: getValue(draft, 'isBurnable'),
 			isCapped: getValue(draft, 'isCapped')
 		});
@@ -120,13 +118,6 @@ function StepTraits(props) {
 							supply of this token gets increased by that amount.
 							<br />
 							<br />
-							<b>you are minter</b>
-							<br />
-							You are allowed to mint this token. Note that this gives you the ability to circumvent the{' '}
-							claiming/proofing process that you demand from your users - you can directly mint yourself any amount.
-							Since everyone can see who are minters of a token, this might substantially reduce trust in your token.
-							<br />
-							<br />
 							<b>is burnable</b>
 							<br />
 							Users can burn some or all of their balance on this token. The burned amount gets deducted from their
@@ -169,7 +160,6 @@ function StepTraits(props) {
 					<div style={{ padding: '10px 0 0 85px' }}>
 						{buildCheckboxWithInfo('is transferable', 'isTransferable')}
 						{buildCheckboxWithInfo('is mintable', 'isMintable')}
-						{buildCheckboxWithInfo('you are minter', 'creatorIsMinter')}
 						{buildCheckboxWithInfo('is burnable', 'isBurnable')}
 						{buildCheckboxWithInfo('is capped', 'isCapped', () => {
 							if (checkboxes['isCapped']) {
