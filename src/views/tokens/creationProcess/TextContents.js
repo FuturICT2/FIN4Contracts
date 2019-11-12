@@ -69,7 +69,19 @@ const getStepInfoBoxContent = stepIndex => {
 		case 2:
 			return <>TODO</>;
 		case 3:
-			return <>TODO</>;
+			return (
+				<>
+					<b>Fixed</b>
+					<br />
+					Per successful claim, this amount will be minted to the user.
+					<br />
+					<br />
+					<b>User defined</b>
+					<br />
+					When claiming your token, users have to fill out a quantity field. Once the claim is successful, the amount
+					minted to the user is the self-defined quantity multiplied with the factor set here.
+				</>
+			);
 		case 4:
 			return <>TODO</>;
 		default:
