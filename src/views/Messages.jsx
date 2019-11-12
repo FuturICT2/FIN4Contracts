@@ -18,6 +18,7 @@ function Messages(props, context) {
 
 	useEffect(() => {
 		// missing messageType = indicator that this is only a message stub
+		// TODO shield against too many calls?
 		props.messages
 			.filter(msg => !msg.messageType)
 			.map(msg => {
