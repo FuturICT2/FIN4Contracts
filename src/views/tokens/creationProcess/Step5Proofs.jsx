@@ -18,14 +18,25 @@ function StepProofs(props) {
 	const proofs = useRef({});
 
 	useEffect(() => {
-		if (!props.draft || draftId) {
+		if (!props.draft || draftId || Object.keys(props.proofTypes).length === 0) {
 			return;
 		}
 		let draft = props.draft;
 		proofs.current = draft.proofs;
-		setProofsAdded(Object.keys(draft.proofs));
+		setProofsAdded(Object.keys(draft.proofs).map(name => findProofTypeAddressByName(name)));
 		setDraftId(draft.id);
 	});
+
+	const findProofTypeAddressByName = name => {
+		for (var addr in props.proofTypes) {
+			if (props.proofTypes.hasOwnProperty(addr)) {
+				if (props.proofTypes[addr].label === name) {
+					return addr;
+				}
+			}
+		}
+		return null;
+	};
 
 	const submit = () => {
 		props.dispatch({
@@ -43,17 +54,18 @@ function StepProofs(props) {
 
 	const addProof = addr => {
 		let proofType = props.proofTypes[addr];
+		let name = proofType.label;
 
-		proofs.current[addr] = {
+		proofs.current[name] = {
 			address: addr,
-			name: proofType.label,
-			parameters: {}
+			parameters: null
 		};
 
 		if (proofType.paramsEncoded) {
+			proofs.current[name].parameters = {};
 			proofType.paramsEncoded.split(',').map(paramStr => {
 				let paramName = paramStr.split(':')[1];
-				proofs.current[addr].parameters[paramName] = null;
+				proofs.current[name].parameters[paramName] = null;
 			});
 		}
 
@@ -63,7 +75,7 @@ function StepProofs(props) {
 
 	const removeProof = addr => {
 		setProofsAdded(proofsAdded.filter(a => a !== addr));
-		delete proofs.current[addr];
+		delete proofs.current[props.proofTypes[addr].label];
 	};
 
 	return (
@@ -74,6 +86,7 @@ function StepProofs(props) {
 						<div style={{ fontFamily: 'arial' }}>
 							{proofsAdded.map((proofAddress, index) => {
 								let proofType = props.proofTypes[proofAddress];
+								let name = proofType.label;
 								return (
 									<div key={'proof_' + index} style={{ paddingTop: '20px' }}>
 										<div
@@ -81,7 +94,7 @@ function StepProofs(props) {
 											title={proofType.description}
 											style={{ display: 'flex', alignItems: 'center' }}>
 											<ArrowRightIcon />
-											{proofType.label}
+											{name}
 											<FontAwesomeIcon
 												icon={faMinusCircle}
 												style={styles.removeIcon}
@@ -104,8 +117,8 @@ function StepProofs(props) {
 																<small> ({description})</small>
 															</>
 														}
-														defaultValue={proofs.current[proofAddress][paramName]}
-														onChange={e => (proofs.current[proofAddress][paramName] = e.target.value)}
+														defaultValue={proofs.current[name].parameters[paramName]}
+														onChange={e => (proofs.current[name].parameters[paramName] = e.target.value)}
 														style={inputFieldStyle}
 													/>
 												);
@@ -120,7 +133,7 @@ function StepProofs(props) {
 						<Dropdown
 							onChange={e => addProof(e.value)}
 							options={Object.keys(props.proofTypes)
-								.filter(addr => !proofs.current[addr])
+								.filter(addr => !proofs.current[props.proofTypes[addr].label])
 								.map(addr => props.proofTypes[addr])}
 							label="Add proof type"
 						/>
