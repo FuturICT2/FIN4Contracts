@@ -9,16 +9,10 @@ function StepBasics(props) {
 	const { t } = useTranslation();
 
 	const [draftId, setDraftId] = useState(null);
-
-	const fields = useRef({
-		name: '',
-		symbol: '',
-		description: '',
-		lastModified: ''
-	});
+	const basics = useRef({});
 
 	const getValue = (draft, prop) => {
-		return draft.properties.hasOwnProperty(prop) ? draft.properties[prop] : '';
+		return draft.basics.hasOwnProperty(prop) ? draft.basics[prop] : '';
 	};
 
 	useEffect(() => {
@@ -26,7 +20,7 @@ function StepBasics(props) {
 			return;
 		}
 		let draft = props.draft;
-		fields.current = {
+		basics.current = {
 			name: getValue(draft, 'name'),
 			symbol: getValue(draft, 'symbol'),
 			description: getValue(draft, 'description')
@@ -35,11 +29,12 @@ function StepBasics(props) {
 	});
 
 	const submit = () => {
-		fields.current.lastModified = moment().valueOf(); // TODO only set that if actual changes took place: compare
 		props.dispatch({
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,
-			fields: fields.current
+			lastModified: moment().valueOf(), // TODO only set that if actual changes took place: compare
+			nodeName: 'basics',
+			node: basics.current
 		});
 		props.handleNext();
 	};
@@ -52,24 +47,24 @@ function StepBasics(props) {
 						key="name-field"
 						type="text"
 						label="Name"
-						defaultValue={fields.current.name}
-						onChange={e => (fields.current.name = e.target.value)}
+						defaultValue={basics.current.name}
+						onChange={e => (basics.current.name = e.target.value)}
 						style={inputFieldStyle}
 					/>
 					<TextField
 						key="symbol-field"
 						type="text"
 						label="Symbol"
-						defaultValue={fields.current.symbol}
-						onChange={e => (fields.current.symbol = e.target.value)}
+						defaultValue={basics.current.symbol}
+						onChange={e => (basics.current.symbol = e.target.value)}
 						style={inputFieldStyle}
 					/>
 					<TextField
 						key="description-field"
 						type="text"
 						label="Description"
-						defaultValue={fields.current.description}
-						onChange={e => (fields.current.description = e.target.value)}
+						defaultValue={basics.current.description}
+						onChange={e => (basics.current.description = e.target.value)}
 						style={inputFieldStyle}
 					/>
 					<StepsBottomNav nav={props.nav} handleNext={submit} />

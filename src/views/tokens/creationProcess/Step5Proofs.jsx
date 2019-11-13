@@ -15,30 +15,26 @@ function StepProofs(props) {
 	const { t } = useTranslation();
 
 	const [draftId, setDraftId] = useState(null);
-
-	const fields = useRef({});
+	const proofs = useRef({});
 
 	useEffect(() => {
 		if (!props.draft || draftId) {
 			return;
 		}
 		let draft = props.draft;
-		fields.current = {
-			proofs: {} // TODO get from draft
-		};
+		proofs.current = {}; // TODO get from draft
 		setDraftId(draft.id);
 	});
 
 	const submit = () => {
-		fields.current.lastModified = moment().valueOf();
-		/*
 		props.dispatch({
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,
-			fields: fields.current
+			lastModified: moment().valueOf(),
+			nodeName: 'proofs',
+			node: proofs.current
 		});
 		props.handleNext();
-		*/
 	};
 
 	const [showDropdown, setShowDropdown] = useState(false);
@@ -47,18 +43,16 @@ function StepProofs(props) {
 	const addProof = addr => {
 		let proofType = props.proofTypes[addr];
 
-		fields.current.proofs[addr] = {
+		proofs.current[addr] = {
 			address: addr,
-			name: proofType.label
+			name: proofType.label,
+			parameters: {}
 		};
 
-		// TODO nicer would be to attach params to a sub-node params this would be
-		// 2 levels deep though and would require tree descend in in the store reducer...
-		// that should be doable with some thinking though, maybe even super elegant :)
 		if (proofType.paramsEncoded) {
 			proofType.paramsEncoded.split(',').map(paramStr => {
 				let paramName = paramStr.split(':')[1];
-				fields.current.proofs[addr][paramName] = null;
+				proofs.current[addr].parameters[paramName] = null;
 			});
 		}
 
@@ -68,16 +62,7 @@ function StepProofs(props) {
 
 	const removeProof = addr => {
 		setProofsAdded(proofsAdded.filter(a => a !== addr));
-		delete fields.current.proofs[addr];
-	};
-
-	const getIndex = addr => {
-		for (let i = 0; i < proofsAdded.length; i++) {
-			if (proofsAdded[i] === addr) {
-				return i;
-			}
-		}
-		return -1;
+		delete proofs.current[addr];
 	};
 
 	return (
@@ -88,7 +73,6 @@ function StepProofs(props) {
 						<div style={{ fontFamily: 'arial' }}>
 							{proofsAdded.map((proofAddress, index) => {
 								let proofType = props.proofTypes[proofAddress];
-
 								return (
 									<div key={'proof_' + index} style={{ padding: '20px 0 0 0' }}>
 										<div
@@ -119,8 +103,8 @@ function StepProofs(props) {
 																<small> ({description})</small>
 															</>
 														}
-														defaultValue={fields.current.proofs[proofAddress][paramName]}
-														onChange={e => (fields.current.proofs[proofAddress][paramName] = e.target.value)}
+														defaultValue={proofs.current[proofAddress][paramName]}
+														onChange={e => (proofs.current[proofAddress][paramName] = e.target.value)}
 														style={inputFieldStyle}
 													/>
 												);
@@ -135,7 +119,7 @@ function StepProofs(props) {
 						<Dropdown
 							onChange={e => addProof(e.value)}
 							options={Object.keys(props.proofTypes)
-								.filter(addr => getIndex(addr) === -1)
+								.filter(addr => !proofs.current[addr])
 								.map(addr => props.proofTypes[addr])}
 							label="Add proof type"
 						/>

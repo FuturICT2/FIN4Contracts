@@ -71,15 +71,17 @@ function Token(props) {
 			type: 'ADD_TOKEN_CREATION_DRAFT',
 			draft: {
 				id: getRandomTokenCreationDraftID(),
-				name: 'Copy of ' + templateToken.name,
-				symbol: (templateToken.symbol.length < 5 ? templateToken.symbol : templateToken.symbol.substring(0, 4)) + '2',
-				description: templateToken.description,
 				created: nowTimestamp,
 				lastModified: nowTimestamp,
+				basics: {
+					name: 'Copy of ' + templateToken.name,
+					symbol: (templateToken.symbol.length < 5 ? templateToken.symbol : templateToken.symbol.substring(0, 4)) + '2',
+					description: templateToken.description
+				},
 				properties: {},
-				value: {},
 				actions: {},
-				proofs: []
+				value: {},
+				proofs: {}
 				// TODO copy more (all) the fields...
 			},
 			addToCookies: true
@@ -131,10 +133,11 @@ function Token(props) {
 				id: newDraftId,
 				created: nowTimestamp,
 				lastModified: nowTimestamp,
+				basics: {},
 				properties: {},
-				value: {},
 				actions: {},
-				proofs: []
+				value: {},
+				proofs: {}
 			},
 			addToCookies: true
 		});

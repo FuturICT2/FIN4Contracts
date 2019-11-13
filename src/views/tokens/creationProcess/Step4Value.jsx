@@ -14,8 +14,7 @@ function StepValue(props) {
 	const { t } = useTranslation();
 
 	const [draftId, setDraftId] = useState(null);
-
-	const fields = useRef({});
+	const value = useRef({});
 
 	const getValue = (draft, prop) => {
 		return draft.value.hasOwnProperty(prop) ? draft.value[prop] : PROPERTY_DEFAULT[prop];
@@ -29,7 +28,7 @@ function StepValue(props) {
 
 		let fixed = getValue(draft, 'fixedQuantity');
 		let userDef = getValue(draft, 'userDefinedQuantityFactor');
-		fields.current.value = {
+		value.current = {
 			fixedQuantity: fixed,
 			userDefinedQuantityFactor: userDef
 		};
@@ -46,20 +45,20 @@ function StepValue(props) {
 	});
 
 	const submit = () => {
-		fields.current.lastModified = moment().valueOf();
-
 		if (choice === 'fixedQuantity') {
-			fields.current.value.userDefinedQuantityFactor = null;
+			value.current.userDefinedQuantityFactor = null;
 		}
 
 		if (choice === 'userDefinedQuantityFactor') {
-			fields.current.value.fixedQuantity = null;
+			value.current.fixedQuantity = null;
 		}
 
 		props.dispatch({
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,
-			fields: fields.current
+			lastModified: moment().valueOf(),
+			nodeName: 'value',
+			node: value.current
 		});
 		props.handleNext();
 	};
@@ -88,15 +87,15 @@ function StepValue(props) {
 										disabled={choice !== 'fixedQuantity'}
 										type="number"
 										label="per claim"
-										defaultValue={fields.current.value.fixedQuantity}
-										onChange={e => (fields.current.value.fixedQuantity = e.target.value)}
+										defaultValue={value.current.fixedQuantity}
+										onChange={e => (value.current.fixedQuantity = e.target.value)}
 									/>
 									<TextField
 										disabled={choice !== 'userDefinedQuantityFactor'}
 										type="number"
 										label="multiplication factor"
-										defaultValue={fields.current.value.userDefinedQuantityFactor}
-										onChange={e => (fields.current.value.userDefinedQuantityFactor = e.target.value)}
+										defaultValue={value.current.userDefinedQuantityFactor}
+										onChange={e => (value.current.userDefinedQuantityFactor = e.target.value)}
 									/>
 								</td>
 							</tr>

@@ -20,8 +20,7 @@ function StepTraits(props) {
 	const { t } = useTranslation();
 
 	const [draftId, setDraftId] = useState(null);
-
-	const fields = useRef({});
+	const properties = useRef({});
 
 	const getValue = (draft, prop) => {
 		return draft.properties.hasOwnProperty(prop) ? draft.properties[prop] : PROPERTY_DEFAULT[prop];
@@ -34,7 +33,7 @@ function StepTraits(props) {
 
 		let draft = props.draft;
 
-		fields.current.properties = {
+		properties.current = {
 			cap: getValue(draft, 'cap'),
 			decimals: getValue(draft, 'decimals'),
 			initialSupply: getValue(draft, 'initialSupply')
@@ -51,16 +50,17 @@ function StepTraits(props) {
 	});
 
 	const submit = () => {
-		fields.current.lastModified = moment().valueOf();
 		for (var fieldName in checkboxes) {
 			if (checkboxes.hasOwnProperty(fieldName)) {
-				fields.current.properties[fieldName] = checkboxes[fieldName];
+				properties.current[fieldName] = checkboxes[fieldName];
 			}
 		}
 		props.dispatch({
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,
-			fields: fields.current
+			lastModified: moment().valueOf(),
+			nodeName: 'properties',
+			node: properties.current
 		});
 		props.handleNext();
 	};
@@ -102,7 +102,7 @@ function StepTraits(props) {
 						{buildCheckboxWithLabel('is burnable', 'isBurnable')}
 						{buildCheckboxWithLabel('is capped', 'isCapped', () => {
 							if (checkboxes['isCapped']) {
-								fields.current.properties.cap = null;
+								properties.current.cap = null;
 							}
 						})}
 						<TextField
@@ -110,22 +110,22 @@ function StepTraits(props) {
 							type="number"
 							label="Cap"
 							style={styles.numberField}
-							defaultValue={fields.current.properties.cap}
-							onChange={e => (fields.current.properties.cap = e.target.value)}
+							defaultValue={properties.current.cap}
+							onChange={e => (properties.current.cap = e.target.value)}
 						/>
 						<TextField
 							type="number"
 							label="Decimals"
 							style={styles.numberField}
-							defaultValue={fields.current.properties.decimals}
-							onChange={e => (fields.current.properties.decimals = e.target.value)}
+							defaultValue={properties.current.decimals}
+							onChange={e => (properties.current.decimals = e.target.value)}
 						/>
 						<TextField
 							type="number"
 							label="Initial supply"
 							style={styles.numberField}
-							defaultValue={fields.current.properties.initialSupply}
-							onChange={e => (fields.current.properties.initialSupply = e.target.value)}
+							defaultValue={properties.current.initialSupply}
+							onChange={e => (properties.current.initialSupply = e.target.value)}
 						/>
 					</div>
 					<StepsBottomNav nav={props.nav} handleNext={submit} />

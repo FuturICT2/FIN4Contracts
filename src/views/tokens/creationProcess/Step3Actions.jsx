@@ -9,26 +9,26 @@ function StepActions(props) {
 	const { t } = useTranslation();
 
 	const [draftId, setDraftId] = useState(null);
-
-	const fields = useRef({});
+	const actions = useRef({});
 
 	useEffect(() => {
 		if (!props.draft || draftId) {
 			return;
 		}
 		let draft = props.draft;
-		fields.current.actions = {
+		actions.current = {
 			text: draft.actions.hasOwnProperty('text') ? draft.actions.text : ''
 		};
 		setDraftId(draft.id);
 	});
 
 	const submit = () => {
-		fields.current.lastModified = moment().valueOf();
 		props.dispatch({
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,
-			fields: fields.current
+			lastModified: moment().valueOf(),
+			nodeName: 'actions',
+			node: actions.current
 		});
 		props.handleNext();
 	};
@@ -42,8 +42,8 @@ function StepActions(props) {
 						rows="4"
 						fullWidth
 						variant="outlined"
-						onChange={e => (fields.current.actions.text = e.target.value)}
-						defaultValue={fields.current.actions.text}
+						onChange={e => (actions.current.text = e.target.value)}
+						defaultValue={actions.current.text}
 					/>
 					<br />
 					<StepsBottomNav nav={props.nav} handleNext={submit} />
