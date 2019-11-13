@@ -75,7 +75,7 @@ function StepProofs(props) {
 							{proofsAdded.map((proofAddress, index) => {
 								let proofType = props.proofTypes[proofAddress];
 								return (
-									<div key={'proof_' + index} style={{ padding: '20px 0 0 0' }}>
+									<div key={'proof_' + index} style={{ paddingTop: '20px' }}>
 										<div
 											key={'proofLabel_' + index}
 											title={proofType.description}
@@ -138,7 +138,7 @@ function StepProofs(props) {
 
 const inputFieldStyle = {
 	width: '80%',
-	marginLeft: '25px'
+	margin: '8px 0 8px 25px'
 };
 
 const Spacer = styled.div`
