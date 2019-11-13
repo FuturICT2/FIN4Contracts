@@ -70,7 +70,7 @@ function StepProofs(props) {
 		<>
 			{draftId && (
 				<>
-					{proofsAdded.length > 0 && (
+					{proofsAdded.length > 0 && Object.keys(props.proofTypes).length > 0 && (
 						<div style={{ fontFamily: 'arial' }}>
 							{proofsAdded.map((proofAddress, index) => {
 								let proofType = props.proofTypes[proofAddress];
