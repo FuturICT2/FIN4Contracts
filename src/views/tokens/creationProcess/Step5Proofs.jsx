@@ -22,7 +22,8 @@ function StepProofs(props) {
 			return;
 		}
 		let draft = props.draft;
-		proofs.current = {}; // TODO get from draft
+		proofs.current = draft.proofs;
+		setProofsAdded(Object.keys(draft.proofs));
 		setDraftId(draft.id);
 	});
 
