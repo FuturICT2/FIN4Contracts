@@ -43,6 +43,8 @@ function Token(props) {
 		reader.onloadend = () => {
 			let importedDraft = JSON.parse(reader.result);
 			// TODO sanity checks before adding?
+			importedDraft.importedId = importedDraft.id;
+			importedDraft.id = getRandomTokenCreationDraftID(); // assign new ID to avoid duplicate IDs in store
 			props.dispatch({
 				type: 'ADD_TOKEN_CREATION_DRAFT',
 				draft: importedDraft,
