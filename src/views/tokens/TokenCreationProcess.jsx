@@ -72,6 +72,10 @@ function TokenCreationProcess(props, context) {
 
 	const [infoBoxStep, setInfoBoxStep] = useState(null);
 
+	const createToken = () => {
+		// TODO
+	};
+
 	return (
 		<>
 			{draftId ? (
@@ -106,10 +110,17 @@ function TokenCreationProcess(props, context) {
 							{activeStep === 3 && buildStepComponent(StepValue)}
 							{activeStep === 4 && buildStepComponent(StepProofs)}
 							{activeStep === steps.length && (
-								<span>
+								<center>
 									<Typography className={classes.instructions}>All steps completed</Typography>
-									<Button onClick={handleReset}>Reset</Button>
-								</span>
+									<div style={{ paddingTop: '20px' }}>
+										<Button onClick={handleReset} className={classes.backButton}>
+											Restart
+										</Button>
+										<Button variant="contained" color="primary" onClick={createToken}>
+											Create token
+										</Button>
+									</div>
+								</center>
 							)}
 						</div>
 					</Box>
