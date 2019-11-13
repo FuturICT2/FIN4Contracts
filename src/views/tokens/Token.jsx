@@ -124,7 +124,7 @@ function Token(props) {
 		history.push('/token/create/' + draftId);
 	};
 
-	const createNewToken = () => {
+	const createNewTokenDraft = () => {
 		let nowTimestamp = moment().valueOf();
 		let newDraftId = getRandomTokenCreationDraftID();
 		props.dispatch({
@@ -147,7 +147,7 @@ function Token(props) {
 	return (
 		<Container>
 			<Box title={t('create-new-token')}>
-				{buildIconLabelCallback(createNewToken, <AddIcon />, 'Start token creation wizard')}
+				{buildIconLabelCallback(createNewTokenDraft, <AddIcon />, 'Start token creation wizard')}
 				{buildIconLabelCallback(toggleUploadFileVisible, <ImportIcon />, 'Upload token draft (JSON)')}
 				{uploadFileVisible && (
 					<>
