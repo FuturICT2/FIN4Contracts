@@ -45,4 +45,21 @@ const getRandomTokenCreationDraftID = () => {
 	return nanoid(5);
 };
 
-export { buildIconLabelLink, buildIconLabelCallback, getFormattedSelectOptions, getRandomTokenCreationDraftID };
+const findProofTypeAddressByName = (proofTypes, name) => {
+	for (var addr in proofTypes) {
+		if (proofTypes.hasOwnProperty(addr)) {
+			if (proofTypes[addr].label === name) {
+				return addr;
+			}
+		}
+	}
+	return null;
+};
+
+export {
+	buildIconLabelLink,
+	buildIconLabelCallback,
+	getFormattedSelectOptions,
+	getRandomTokenCreationDraftID,
+	findProofTypeAddressByName
+};

@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import { TextField } from '@material-ui/core';
 import styled from 'styled-components';
+import { findProofTypeAddressByName } from '../../../components/utils';
 
 function StepProofs(props) {
 	const { t } = useTranslation();
@@ -23,20 +24,10 @@ function StepProofs(props) {
 		}
 		let draft = props.draft;
 		proofs.current = draft.proofs;
-		setProofsAdded(Object.keys(draft.proofs).map(name => findProofTypeAddressByName(name)));
+
+		setProofsAdded(Object.keys(draft.proofs).map(name => findProofTypeAddressByName(props.proofTypes, name)));
 		setDraftId(draft.id);
 	});
-
-	const findProofTypeAddressByName = name => {
-		for (var addr in props.proofTypes) {
-			if (props.proofTypes.hasOwnProperty(addr)) {
-				if (props.proofTypes[addr].label === name) {
-					return addr;
-				}
-			}
-		}
-		return null;
-	};
 
 	const submit = () => {
 		props.dispatch({
@@ -57,7 +48,7 @@ function StepProofs(props) {
 		let name = proofType.label;
 
 		proofs.current[name] = {
-			address: addr,
+			// address: addr,
 			parameters: {}
 		};
 
