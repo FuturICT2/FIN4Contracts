@@ -197,8 +197,8 @@ function Token(props) {
 								{Object.keys(props.tokenCreationDrafts).map(draftId => {
 									let draft = props.tokenCreationDrafts[draftId];
 									let date = moment.unix(Number(draft.lastModified) / 1000).calendar();
-									let name = draft.name && draft.name.length > 0 ? draft.name : 'no-name-yet';
-									let symbol = draft.symbol && draft.symbol.length > 0 ? draft.symbol : null;
+									let name = draft.basics.name && draft.basics.name.length > 0 ? draft.basics.name : 'no-name-yet';
+									let symbol = draft.basics.symbol && draft.basics.symbol.length > 0 ? draft.basics.symbol : null;
 									return (
 										<li key={draftId} style={{ paddingBottom: '10px' }}>
 											<span onClick={() => previewDraft(draftId)} title="Click to see draft as JSON object">
