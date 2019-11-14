@@ -18,6 +18,7 @@ import StepProofs from './creationProcess/Step5Proofs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { steps, getStepContent, getStepInfoBoxContent } from './creationProcess/TextContents';
+import { findProofTypeAddressByName } from '../../components/utils';
 
 const useStyles = makeStyles(theme => ({
 	// from https://material-ui.com/components/steppers/
@@ -73,7 +74,41 @@ function TokenCreationProcess(props, context) {
 	const [infoBoxStep, setInfoBoxStep] = useState(null);
 
 	const createToken = () => {
-		// TODO
+		let draft = props.tokenCreationDrafts[draftId];
+
+		// TODO validation step: symbol already in use etc.
+
+		let tokenCreationArgs = [
+			draft.basics.name,
+			draft.basics.symbol,
+			draft.basics.description,
+			[
+				draft.properties.isTransferable,
+				draft.properties.isMintable,
+				draft.properties.isBurnable,
+				draft.properties.isCapped
+			],
+			[
+				draft.properties.cap,
+				draft.properties.decimals,
+				draft.properties.initialSupply,
+				draft.value.fixedQuantity,
+				draft.value.userDefinedQuantityFactor
+			],
+			draft.actions.text,
+			Object.keys(draft.proofs).map(name => findProofTypeAddressByName(props.proofTypes, name))
+		];
+
+		// console.log(tokenCreationArgs);
+
+		context.drizzle.contracts.Fin4TokenManagement.methods
+			.createNewToken(...tokenCreationArgs)
+			.send({
+				from: props.defaultAccount
+			})
+			.then(function(result) {
+				console.log('Results of submitting: ', result);
+			});
 	};
 
 	return (
@@ -162,7 +197,8 @@ TokenCreationProcess.contextTypes = {
 const mapStateToProps = state => {
 	return {
 		tokenCreationDrafts: state.fin4Store.tokenCreationDrafts,
-		proofTypes: state.fin4Store.proofTypes
+		proofTypes: state.fin4Store.proofTypes,
+		defaultAccount: state.fin4Store.defaultAccount
 	};
 };
 
