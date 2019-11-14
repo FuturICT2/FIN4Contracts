@@ -1,4 +1,5 @@
 pragma solidity ^0.5.0;
+// pragma experimental ABIEncoderV2; --> allows string[] memory
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/stub/MintingStub.sol';
@@ -33,6 +34,53 @@ contract Fin4TokenManagement {
     address[] public allFin4Tokens;
     mapping (string => bool) public symbolIsUsed;
 
+    function createNewToken(string memory name, string memory symbol, string memory description,
+        bool[] memory properties, uint[] memory values, string memory actionsText, address[] memory requiredProofTypes) public returns(address) {
+
+        uint symLen = symbol.length();
+        require(symLen >= 3 && symLen <= 5, "Symbol must have between 3 and 5 characters");
+        string memory _symbol = symbol.upper();
+        require(!symbolIsUsed[_symbol], "Symbol is already in use");
+
+        /*
+        bool isTransferable = properties[0];
+        bool isMintable = properties[1];
+        bool isBurnable = properties[2];
+        bool isCapped = properties[3];
+        uint cap = values[0];
+        uint8 decimals = uint8(values[1]);
+        uint initialSupply = values[2];
+        */
+
+        uint fixedQuantity = values[3];
+        uint userDefinedQuantityFactor = values[4];
+
+        require(
+            (fixedQuantity == 0 && userDefinedQuantityFactor != 0) ||
+            (fixedQuantity != 0 && userDefinedQuantityFactor == 0),
+            "Exactly one of fixedQuantity and userDefinedQuantityFactor must be nonzero");
+
+        Fin4TokenBase newToken = new Fin4Token(name, _symbol, msg.sender, properties, values);
+        //if (properties[3] == true) // isCapped
+        // TODO causes out-of-gas errors to have both here, it must be made possible though somehow...
+        // newToken = new Fin4TokenCapped(name, _symbol, msg.sender, properties, values);
+
+        newToken.init(Fin4ClaimingAddress, Fin4ProofingAddress, description, actionsText, msg.sender, fixedQuantity, userDefinedQuantityFactor);
+
+        newToken.addMinter(Fin4ClaimingAddress);
+        for (uint i = 0; i < requiredProofTypes.length; i++) {
+            newToken.addRequiredProofType(requiredProofTypes[i]);
+            // newToken.addMinter(requiredProofTypes[i]);
+        }
+
+        // Fin4TokenManagement (msg.sender in that case) doesn't need to have the MinterRole on tokens
+        newToken.renounceMinter();
+
+        symbolIsUsed[_symbol] = true;
+        return address(newToken);
+    }
+
+    /*
     function createNewToken(string memory name, string memory symbol, string memory description, string memory unit,
         address[] memory requiredProofTypes, uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
 
@@ -82,6 +130,7 @@ contract Fin4TokenManagement {
         emit Fin4TokenCreated(address(newToken), name, _symbol, description, unit, msg.sender, newToken.tokenCreationTime());
         return address(newToken);
     }
+    */
 
     function getAllFin4Tokens() public view returns(address[] memory) {
         return allFin4Tokens;

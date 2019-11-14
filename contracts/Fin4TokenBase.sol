@@ -10,19 +10,28 @@ contract Fin4TokenBase { // abstract class
   address public Fin4ProofingAddress;
   address public tokenCreator;
   string public description;
-  string public unit;
+  string public actionsText;
+  string public unit; // TODO remove? repurpose?
   uint public tokenCreationTime;
+  bool private initDone = false;
+  uint public fixedQuantity;
+  uint public userDefinedQuantityFactor;
 
-  constructor(string memory _description, string memory _unit, address _tokenCreator) public {
-    description = _description;
-    unit = _unit;
-    tokenCreator = _tokenCreator;
+  constructor() public {
     tokenCreationTime = now;
   }
 
-  function setAddresses(address Fin4ClaimingAddr, address Fin4ProofingAddr) public {
+  function init(address Fin4ClaimingAddr, address Fin4ProofingAddr, string memory _description,
+    string memory _actionsText, address _tokenCreator, uint _fixedQuantity, uint _userDefinedQuantityFactor) public {
+    require(!initDone, "init() can only be called once"); // TODO also require token creator?
     Fin4ClaimingAddress = Fin4ClaimingAddr;
     Fin4ProofingAddress = Fin4ProofingAddr;
+    description = _description;
+    actionsText = _actionsText;
+    tokenCreator = _tokenCreator;
+    fixedQuantity = _fixedQuantity;
+    userDefinedQuantityFactor = _userDefinedQuantityFactor;
+    initDone = true;
   }
 
   function name() public view returns(string memory);
@@ -175,6 +184,8 @@ contract Fin4TokenBase { // abstract class
   function isMinter(address account) public view returns (bool);
 
   function addMinter(address account) public;
+
+  function renounceMinter() public;
 
   function mint(address account, uint256 amount) public returns (bool);
 
