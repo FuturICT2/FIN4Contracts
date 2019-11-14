@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { steps, getStepContent, getStepInfoBoxContent } from './creationProcess/TextContents';
 import { findProofTypeAddressByName } from '../../components/utils';
+import { findTokenBySymbol } from '../../components/Contractor';
 
 const useStyles = makeStyles(theme => ({
 	// from https://material-ui.com/components/steppers/
@@ -73,10 +74,33 @@ function TokenCreationProcess(props, context) {
 
 	const [infoBoxStep, setInfoBoxStep] = useState(null);
 
+	const validateDraft = draft => {
+		// TODO do a proper validation with warning-signs in the respective steps
+
+		if (draft.basics.name.trim().length === 0) {
+			// check for letters only too?
+			return "Name can't be empty";
+		}
+
+		if (draft.basics.symbol.length < 3 || draft.basics.symbol.length > 5) {
+			return 'Symbol must have between 3 and 5 characters';
+		}
+
+		if (findTokenBySymbol(props, draft.basics.symbol) !== null) {
+			return 'Symbol is already in use';
+		}
+
+		return '';
+	};
+
 	const createToken = () => {
 		let draft = props.tokenCreationDrafts[draftId];
 
-		// TODO validation step: symbol already in use etc.
+		let validationResult = validateDraft(draft);
+		if (validationResult) {
+			alert(validationResult);
+			return;
+		}
 
 		let tokenCreationArgs = [
 			draft.basics.name,
@@ -198,6 +222,7 @@ const mapStateToProps = state => {
 	return {
 		tokenCreationDrafts: state.fin4Store.tokenCreationDrafts,
 		proofTypes: state.fin4Store.proofTypes,
+		fin4Tokens: state.fin4Store.fin4Tokens,
 		defaultAccount: state.fin4Store.defaultAccount
 	};
 };
