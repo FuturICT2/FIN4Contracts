@@ -168,13 +168,8 @@ contract Fin4TokenBase { // abstract class
   function approveClaim(uint claimId) private {
     claims[claimId].isApproved = true;
     claims[claimId].claimApprovalTime = now;
-    // here the minting happens, actual change of balance
-    // requires the proof type calling this method to have the Minter role on this Token
-    // that was granted him in Fin4Main.createNewToken()
-    // can alse be called from here (Fin4TokenBase) in case of no proof types required, therefore
-    // Fin4TokenBase must also have the Minter role
-    mint(claims[claimId].claimer, claims[claimId].quantity);
-    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId);
+    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(
+      address(this), claims[claimId].claimer, claimId, claims[claimId].quantity);
   }
 
   function isMinter(address account) public view returns (bool);

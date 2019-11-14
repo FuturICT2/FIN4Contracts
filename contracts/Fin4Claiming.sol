@@ -50,7 +50,11 @@ contract Fin4Claiming {
     }
 
     // called from Fin4TokenBase
-    function claimApprovedPingback(address tokenAddress, address claimer, uint claimId) public {
+    function claimApprovedPingback(address tokenAddress, address claimer, uint claimId, uint quantity) public {
+
+        // TODO verify this makes sense and msg.sender is the token
+        MintingStub(tokenAddress).mint(claimer, quantity);
+
         emit ClaimApproved(tokenAddress, claimId, claimer, Fin4Token(tokenAddress).balanceOf(claimer));
         // can changes to totalSupply happen at other places too though? Definitely if we use the
         // AllPurpose contract with burning for instance... #ConceptualDecision
