@@ -58,7 +58,7 @@ function StepProofs(props) {
 
 		proofs.current[name] = {
 			address: addr,
-			parameters: null
+			parameters: {}
 		};
 
 		if (proofType.paramsEncoded) {

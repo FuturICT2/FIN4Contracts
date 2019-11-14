@@ -11,7 +11,7 @@ const PROPERTY_DEFAULT = {
 	isMintable: true,
 	isBurnable: false,
 	isCapped: false,
-	cap: null,
+	cap: 0,
 	decimals: 0,
 	initialSupply: 0
 };

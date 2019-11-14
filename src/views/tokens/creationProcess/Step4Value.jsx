@@ -7,7 +7,7 @@ import { FormControlLabel, Radio, RadioGroup, TextField } from '@material-ui/cor
 
 const PROPERTY_DEFAULT = {
 	fixedQuantity: 1,
-	userDefinedQuantityFactor: null
+	userDefinedQuantityFactor: 0
 };
 
 function StepValue(props) {
@@ -33,11 +33,11 @@ function StepValue(props) {
 			userDefinedQuantityFactor: userDef
 		};
 
-		if (fixed && userDef) {
+		if (!(fixed === 0 || userDef === 0)) {
 			alert('Both fixedQuantity and userDefinedQuantityFactor are set. One of them must be null.');
 		}
 
-		if (userDef) {
+		if (userDef !== 0) {
 			setChoice('userDefinedQuantityFactor');
 		}
 
@@ -46,11 +46,11 @@ function StepValue(props) {
 
 	const submit = () => {
 		if (choice === 'fixedQuantity') {
-			value.current.userDefinedQuantityFactor = null;
+			value.current.userDefinedQuantityFactor = 0;
 		}
 
 		if (choice === 'userDefinedQuantityFactor') {
-			value.current.fixedQuantity = null;
+			value.current.fixedQuantity = 0;
 		}
 
 		props.dispatch({
