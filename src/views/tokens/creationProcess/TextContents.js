@@ -21,9 +21,9 @@ const getStepContent = stepIndex => {
 
 const getStepInfoBoxContent = stepIndex => {
 	switch (stepIndex) {
-		case 0:
+		case 0: // Basics
 			return <>TODO</>;
-		case 1:
+		case 1: // Traits (= Properties)
 			return (
 				<>
 					<b>is transferable</b>
@@ -66,9 +66,9 @@ const getStepInfoBoxContent = stepIndex => {
 					this amount.
 				</>
 			);
-		case 2:
+		case 2: // Actions
 			return <>TODO</>;
-		case 3:
+		case 3: // Value
 			return (
 				<>
 					<b>Fixed</b>
@@ -82,7 +82,7 @@ const getStepInfoBoxContent = stepIndex => {
 					minted to the user is the self-defined quantity multiplied with the factor set here.
 				</>
 			);
-		case 4:
+		case 4: // Proofs
 			return <>TODO</>;
 		default:
 			return <>TODO</>;
