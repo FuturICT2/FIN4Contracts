@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '../../components/Box';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import Currency from '../../components/Currency';
-import { getContractData, findTokenBySymbol } from '../../components/Contractor';
+import { getContractData, findTokenBySymbol, addContract } from '../../components/Contractor';
 import PropTypes from 'prop-types';
 import { Divider } from '@material-ui/core';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 function TokenView(props, context) {
 	const { t } = useTranslation();
@@ -17,25 +18,40 @@ function TokenView(props, context) {
 	const [details, setDetails] = useState(null);
 	const [proofTypesLoaded, setProofTypesLoaded] = useState(false);
 
-	const fetchDetailedTokenInfo = token => {
-		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-
-		// TODO also load & show value mapping here: fixedQuantity / userDefinedQuantityFactor
-
+	const fetchDetailedTokenInfo = () => {
 		getContractData(
-			context.drizzle.contracts.Fin4TokenManagement,
-			defaultAccount,
-			'getDetailedTokenInfo',
-			token.address
-		).then(({ 0: requiredProofTypes, 1: claimsCount, 2: usersBalance, 3: totalSupply, 4: tokenCreationTime }) => {
-			setDetails({
-				requiredProofTypes: requiredProofTypes,
-				claimsCount: claimsCount,
-				usersBalance: usersBalance,
-				totalSupply: totalSupply, // how much of this token has been minted
-				tokenCreationTime: moment.unix(tokenCreationTime).calendar()
-			});
-		});
+			context.drizzle.contracts['Fin4Token_' + tokenViaURL.symbol],
+			props.defaultAccount,
+			'getDetailedTokenInfo'
+		).then(
+			({
+				0: requiredProofTypes,
+				1: claimsCount,
+				2: usersBalance,
+				3: totalSupply,
+				4: tokenCreationTime,
+				5: boolPropertiesArr,
+				6: uintValuesArr,
+				7: actionsText
+			}) => {
+				setDetails({
+					requiredProofTypes: requiredProofTypes,
+					claimsCount: claimsCount,
+					usersBalance: usersBalance,
+					totalSupply: totalSupply, // how much of this token has been minted
+					tokenCreationTime: moment.unix(tokenCreationTime).calendar(),
+					isTransferable: boolPropertiesArr[0],
+					isMintable: boolPropertiesArr[1],
+					isBurnable: boolPropertiesArr[2],
+					isCapped: boolPropertiesArr[3],
+					cap: uintValuesArr[0],
+					decimals: uintValuesArr[1],
+					fixedQuantity: uintValuesArr[2],
+					userDefinedQuantityFactor: uintValuesArr[3],
+					actionsText: actionsText
+				});
+			}
+		);
 	};
 
 	const getProofTypesStr = () => {
@@ -46,6 +62,12 @@ function TokenView(props, context) {
 		return str.substring(0, str.length - 2);
 	};
 
+	const contractReady = name => {
+		return props.contracts[name] && props.contracts[name].initialized;
+	};
+
+	const detailsFetchingInitiated = useRef(false);
+
 	useEffect(() => {
 		let symbol = props.match.params.tokenSymbol;
 		if (!tokenViaURL && Object.keys(props.fin4Tokens).length > 0 && symbol) {
@@ -53,22 +75,51 @@ function TokenView(props, context) {
 			let token = findTokenBySymbol(props, symbol);
 			if (token) {
 				setTokenViaURL(token);
-				fetchDetailedTokenInfo(token);
+				let tokenNameSuffixed = 'Fin4Token_' + token.symbol;
+				if (!contractReady(tokenNameSuffixed)) {
+					addContract(props, context.drizzle, 'Fin4Token', token.address, [], tokenNameSuffixed);
+				}
 			}
 		}
+
+		if (!detailsFetchingInitiated.current && tokenViaURL && contractReady('Fin4Token_' + tokenViaURL.symbol)) {
+			detailsFetchingInitiated.current = true;
+			fetchDetailedTokenInfo();
+		}
+
+		// TODO is there no other way? seems awkward
 		if (!proofTypesLoaded && Object.keys(props.proofTypes).length > 0) {
 			setProofTypesLoaded(true);
 		}
 	});
+
+	const buildInfoLine = (label, value) => {
+		return (
+			<p>
+				<span style={{ color: 'gray' }}>{label}:</span> {value}
+			</p>
+		);
+	};
+
+	const buildCheckboxWithLabel = (label, checked) => {
+		return (
+			<>
+				<FormControlLabel control={<Checkbox checked={checked} disabled={true} />} label={label} />
+				<br />
+			</>
+		);
+	};
 
 	return (
 		<Container>
 			<Box>
 				{!tokenViaURL ? (
 					props.match.params.tokenSymbol ? (
-						'No token with symbol ' + props.match.params.tokenSymbol + ' found'
+						<span style={{ fontFamily: 'arial' }}>
+							No token with symbol <b>{props.match.params.tokenSymbol}</b> found
+						</span>
 					) : (
-						'No token-symbol passed via URL'
+						<span style={{ fontFamily: 'arial' }}>No token-symbol passed via URL</span>
 					)
 				) : (
 					<span style={{ fontFamily: 'arial' }}>
@@ -96,30 +147,37 @@ function TokenView(props, context) {
 					</span>
 				)}
 			</Box>
-			{!details ? (
-				'Loading details...'
-			) : (
-				<Box title="Details">
+			<Box title="Details">
+				{!details ? (
+					<span style={{ fontFamily: 'arial' }}>Loading details...</span>
+				) : (
 					<span style={{ fontFamily: 'arial' }}>
-						<p>
-							<span style={{ color: 'gray' }}>Your balance:</span> {details.usersBalance}
-						</p>
+						{buildInfoLine('Your balance', details.usersBalance)}
+
 						<Divider style={{ margin: '10px 0' }} variant="middle" />
-						<p>
-							<span style={{ color: 'gray' }}>Created at:</span> {details.tokenCreationTime}
-						</p>
-						<p>
-							<span style={{ color: 'gray' }}>Proof types:</span> {proofTypesLoaded ? getProofTypesStr() : 'Loading...'}
-						</p>
-						<p>
-							<span style={{ color: 'gray' }}>Total number of claims:</span> {details.claimsCount}
-						</p>
-						<p>
-							<span style={{ color: 'gray' }}>Total supply:</span> {details.totalSupply}
-						</p>
+
+						{buildInfoLine('Created at', details.tokenCreationTime)}
+						{buildInfoLine('Proof types', proofTypesLoaded ? getProofTypesStr() : 'Loading...')}
+						{buildInfoLine('Total number of claims', details.claimsCount)}
+						{buildInfoLine('Total supply', details.totalSupply)}
+
+						<Divider style={{ margin: '10px 0' }} variant="middle" />
+
+						{buildCheckboxWithLabel('is transferable', details.isTransferable)}
+						{buildCheckboxWithLabel('is mintable', details.isMintable)}
+						{buildCheckboxWithLabel('is burnable', details.isBurnable)}
+						{buildCheckboxWithLabel('is capped', details.isCapped)}
+
+						<Divider style={{ margin: '10px 0' }} variant="middle" />
+
+						{buildInfoLine('Cap', details.cap)}
+						{buildInfoLine('Decimals', details.decimals)}
+						{buildInfoLine('Fixed minting quantity per claim', details.fixedQuantity)}
+						{buildInfoLine('Minting user-given quantity times', details.userDefinedQuantityFactor)}
+						{buildInfoLine('Claimable actions', details.actionsText)}
 					</span>
-				</Box>
-			)}
+				)}
+			</Box>
 		</Container>
 	);
 }
@@ -130,6 +188,8 @@ TokenView.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
+		contracts: state.contracts,
+		defaultAccount: state.fin4Store.defaultAccount,
 		fin4Tokens: state.fin4Store.fin4Tokens,
 		proofTypes: state.fin4Store.proofTypes
 	};
