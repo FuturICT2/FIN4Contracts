@@ -67,7 +67,7 @@ function StepTraits(props) {
 
 	const [checkboxes, setCheckboxes] = useState({});
 
-	const buildCheckboxWithLabel = (label, fieldName, onChange) => {
+	const buildCheckboxWithLabel = (label, fieldName, onChange = null, enabled = true, tooltip = null) => {
 		return (
 			<>
 				<FormControlLabel
@@ -83,9 +83,11 @@ function StepTraits(props) {
 									[fieldName]: !checkboxes[fieldName]
 								});
 							}}
+							disabled={!enabled}
 						/>
 					}
 					label={label}
+					title={tooltip}
 				/>
 				<br />
 			</>
@@ -100,11 +102,17 @@ function StepTraits(props) {
 						{buildCheckboxWithLabel('is transferable', 'isTransferable')}
 						{buildCheckboxWithLabel('is mintable', 'isMintable')}
 						{buildCheckboxWithLabel('is burnable', 'isBurnable')}
-						{buildCheckboxWithLabel('is capped', 'isCapped', () => {
-							if (checkboxes['isCapped']) {
-								properties.current.cap = null;
-							}
-						})}
+						{buildCheckboxWithLabel(
+							'is capped',
+							'isCapped',
+							() => {
+								if (checkboxes['isCapped']) {
+									properties.current.cap = null;
+								}
+							},
+							false,
+							'Not supported yet'
+						)}
 						<TextField
 							disabled={!checkboxes['isCapped']}
 							type="number"
@@ -112,6 +120,7 @@ function StepTraits(props) {
 							style={styles.numberField}
 							defaultValue={properties.current.cap}
 							onChange={e => (properties.current.cap = e.target.value)}
+							title="Not supported yet"
 						/>
 						<TextField
 							type="number"
