@@ -101,8 +101,7 @@ const contractEventNotifier = store => next => action => {
 		}
 
 		let token = store.getState().fin4Store.fin4Tokens[claim.tokenAddr];
-		display =
-			'Claim approved: you got ' + usersClaims[id].quantity + ' ' + token.name + ' [' + token.symbol + '] tokens';
+		display = 'Claim approved: you got ' + claim.mintedQuantity + ' ' + token.name + ' [' + token.symbol + '] tokens';
 
 		store.dispatch({
 			type: 'APPROVE_CLAIM',

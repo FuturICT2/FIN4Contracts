@@ -8,7 +8,7 @@ contract Fin4Claiming {
 
     event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment,
         address[] requiredProofTypes);
-    event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint256 newBalance);
+    event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint mintedQuantity, uint256 newBalance);
     event ProofApproved(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
     event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
 
@@ -55,7 +55,7 @@ contract Fin4Claiming {
         // TODO verify this makes sense and msg.sender is the token
         MintingStub(tokenAddress).mint(claimer, quantity);
 
-        emit ClaimApproved(tokenAddress, claimId, claimer, Fin4Token(tokenAddress).balanceOf(claimer));
+        emit ClaimApproved(tokenAddress, claimId, claimer, quantity, Fin4Token(tokenAddress).balanceOf(claimer));
         // can changes to totalSupply happen at other places too though? Definitely if we use the
         // AllPurpose contract with burning for instance... #ConceptualDecision
         emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
