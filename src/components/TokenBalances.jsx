@@ -54,35 +54,50 @@ function TokenBalances(props, context) {
 		);
 	};
 
+	const sumOfBalances = () => {
+		let sum = 0;
+		Object.keys(props.usersFin4TokenBalances).map(tokenAddr => {
+			sum += props.usersFin4TokenBalances[tokenAddr];
+		});
+		return sum;
+	};
+
 	return (
 		<Box title={t('your-token-balances')}>
 			{noBalanceYet(props.usersFin4TokenBalances) && noBalanceYet(props.usersFin4GovernanceTokenBalances) ? (
 				<NoTokens>{t('no-tokens-yet')}</NoTokens>
 			) : (
-				<Table headers={[t('token-name'), t('token-balance')]} colWidths={[85, 15]}>
-					{props.contracts.GOV &&
-						props.contracts.GOV.initialized &&
-						buildGovernanceTokenBalance(context.drizzle.contracts.GOV, 'Fin4 Governance Token', 'GOV')}
-					{props.contracts.Fin4Reputation &&
-						props.contracts.Fin4Reputation.initialized &&
-						buildGovernanceTokenBalance(context.drizzle.contracts.Fin4Reputation, 'Fin4 Reputation Token', 'REP')}
-					{Object.keys(props.usersFin4TokenBalances).map((tokenAddr, index) => {
-						let token = props.fin4Tokens[tokenAddr];
-						return (
-							<TableRow
-								key={'balance_' + index}
-								data={{
-									name: (
-										<span title={'Description: ' + token.description + '\nUnit:' + token.unit}>
-											<Currency symbol={token.symbol} name={token.name} linkTo={'/token/view/' + token.symbol} />
-										</span>
-									),
-									balance: props.usersFin4TokenBalances[tokenAddr]
-								}}
-							/>
-						);
-					})}
-				</Table>
+				<>
+					<center style={{ fontFamily: 'arial' }}>
+						Your total balance <small>(without REP/GOV)</small>:<br />
+						<br />
+						<span style={{ fontSize: 'large', color: 'green' }}>{sumOfBalances()}</span>
+					</center>
+					<Table headers={[t('token-name'), t('token-balance')]} colWidths={[85, 15]}>
+						{props.contracts.GOV &&
+							props.contracts.GOV.initialized &&
+							buildGovernanceTokenBalance(context.drizzle.contracts.GOV, 'Fin4 Governance Token', 'GOV')}
+						{props.contracts.Fin4Reputation &&
+							props.contracts.Fin4Reputation.initialized &&
+							buildGovernanceTokenBalance(context.drizzle.contracts.Fin4Reputation, 'Fin4 Reputation Token', 'REP')}
+						{Object.keys(props.usersFin4TokenBalances).map((tokenAddr, index) => {
+							let token = props.fin4Tokens[tokenAddr];
+							return (
+								<TableRow
+									key={'balance_' + index}
+									data={{
+										name: (
+											<span title={'Description: ' + token.description + '\nUnit:' + token.unit}>
+												<Currency symbol={token.symbol} name={token.name} linkTo={'/token/view/' + token.symbol} />
+											</span>
+										),
+										balance: props.usersFin4TokenBalances[tokenAddr]
+									}}
+								/>
+							);
+						})}
+					</Table>
+				</>
 			)}
 			<Modal isOpen={isModalOpen} handleClose={toggleModal} title="Governance tokens" width="350px">
 				<div style={{ fontFamily: 'arial' }}>
