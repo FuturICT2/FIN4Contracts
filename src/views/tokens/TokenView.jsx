@@ -20,6 +20,8 @@ function TokenView(props, context) {
 	const fetchDetailedTokenInfo = token => {
 		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 
+		// TODO also load & show value mapping here: fixedQuantity / userDefinedQuantityFactor
+
 		getContractData(
 			context.drizzle.contracts.Fin4TokenManagement,
 			defaultAccount,
