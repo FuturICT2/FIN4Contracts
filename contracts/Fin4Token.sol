@@ -22,8 +22,23 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
     return (userIsCreator, userIsAdmin, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedQuantity != 0);
   }
 
-  function getDetailedTokenInfo(address user) public view returns(address[] memory, uint, uint256, uint256, uint) {
-    return (requiredProofTypes, nextClaimId, balanceOf(user), totalSupply(), tokenCreationTime);
+  function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
+    bool[] memory, uint[] memory, string memory) {
+
+    bool[] memory props = new bool[](4);
+    props[0] = isTransferable;
+    props[1] = isMintable;
+    props[2] = isBurnable;
+    props[3] = false; // isCapped
+
+    uint[] memory values = new uint[](4);
+    values[0] = 0; // cap
+    values[1] = uint(decimals());
+    values[2] = fixedQuantity;
+    values[3] = userDefinedQuantityFactor;
+    // initialSupply too? would have to be stored at constructing time
+
+    return (requiredProofTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
   }
 }
 

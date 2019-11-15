@@ -152,10 +152,6 @@ contract Fin4TokenManagement {
         return Fin4Token(tokenAddr).getTokenInfo(msg.sender);
     }
 
-    function getDetailedTokenInfo(address tokenAddr) public view returns(address[] memory, uint, uint256, uint256, uint) {
-        return Fin4Token(tokenAddr).getDetailedTokenInfo(msg.sender);
-    }
-
     // ------------------------- BALANCE -------------------------
 
     function getBalance(address user, address tokenAddress) public view returns(uint256) {
