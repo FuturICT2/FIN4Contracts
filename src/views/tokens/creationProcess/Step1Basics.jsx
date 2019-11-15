@@ -29,6 +29,7 @@ function StepBasics(props) {
 	});
 
 	const submit = () => {
+		basics.current.symbol = basics.current.symbol.toUpperCase();
 		props.dispatch({
 			type: 'UPDATE_TOKEN_CREATION_DRAFT_FIELDS',
 			draftId: draftId,

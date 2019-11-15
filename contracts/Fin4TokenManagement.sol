@@ -33,15 +33,19 @@ contract Fin4TokenManagement {
     }
 
     address[] public allFin4Tokens;
-    mapping (string => bool) public symbolIsUsed;
 
-    function createNewToken(string memory name, string memory symbol, string memory description,
+    function createNewToken(string memory name, string memory _symbol, string memory description,
         bool[] memory properties, uint[] memory values, string memory actionsText, address[] memory requiredProofTypes) public returns(address) {
-
+        /*
+            This check seems super costly as it brings this contract to out of gas errors during deployment quickly
+            Commenting it out until a better (cheaper) solution is found
+        // mapping (string => bool) public symbolIsUsed;
         uint symLen = symbol.length();
         require(symLen >= 3 && symLen <= 5, "Symbol must have between 3 and 5 characters");
         string memory _symbol = symbol.upper();
         require(!symbolIsUsed[_symbol], "Symbol is already in use");
+        symbolIsUsed[_symbol] = true;
+        */
 
         /*
         bool isTransferable = properties[0];
@@ -76,8 +80,6 @@ contract Fin4TokenManagement {
 
         // Fin4TokenManagement (msg.sender in that case) doesn't need to have the MinterRole on tokens
         newToken.renounceMinter();
-
-        symbolIsUsed[_symbol] = true;
 
          // REP reward for creating a new token
         MintingStub(Fin4ReputationAddress).mint(msg.sender, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
