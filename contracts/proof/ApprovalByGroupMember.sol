@@ -81,13 +81,15 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
       return "uint:Group ID:see table in groups overview";
     }
 
-    // @Override
-    function parametersSanityCheck(uint[] memory params) public view returns(bool) {
-        return Fin4Groups(Fin4GroupsAddress).groupExists(params[0]);
+    mapping (address => uint) public tokenToParameter;
+
+    function setParameters(address token, uint groupId) public {
+      require(Fin4Groups(Fin4GroupsAddress).groupExists(groupId), "Group ID does not exist");
+      tokenToParameter[token] = groupId;
     }
 
     function _getGroupId(address token) public view returns(uint) {
-        return fin4TokenToParametersSetOnThisProofType[token][0];
+        return tokenToParameter[token];
     }
 
     // copied method signature from SpecificAddress, then nothing has to be changed in Messages.jsx

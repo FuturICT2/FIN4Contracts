@@ -36,6 +36,13 @@ contract MinimumInterval is Fin4BaseProofType {
       return "uint:minimumInterval:days";
     }
 
+    mapping (address => uint) public tokenToParameter;
+
+    function setParameters(address token, uint minimumInterval) public {
+      // TODO safeguard
+      tokenToParameter[token] = minimumInterval;
+    }
+
     // @Override
     function getParameterizedDescription(address token) public view returns(string memory) {
       return string(abi.encodePacked(
@@ -45,7 +52,7 @@ contract MinimumInterval is Fin4BaseProofType {
     }
 
     function _getMinimumInterval(address token) private view returns(uint) {
-      return fin4TokenToParametersSetOnThisProofType[token][0] * 24 * 60 * 60 * 1000; // from days to miliseconds
+      return tokenToParameter[token] * 24 * 60 * 60 * 1000; // from days to miliseconds
     }
 
 }

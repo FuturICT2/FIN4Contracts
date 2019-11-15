@@ -11,8 +11,6 @@ contract Fin4BaseProofType is utils {
   address public Fin4MessagingAddress;
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
-  mapping (address => uint[]) public fin4TokenToParametersSetOnThisProofType; // holds the token-specific parameters for each proof type
-                                                                              // (one proof type is used by multiple tokens)
 
   constructor(address Fin4MessagingAddr) public {
     Fin4MessagingAddress = Fin4MessagingAddr;
@@ -31,11 +29,6 @@ contract Fin4BaseProofType is utils {
     return getDescription();
   }
 
-  // called from ProofSubmission in the frontend to display what the user has to submit for a given proof type
-  function getParameterizedInfo(address token) public view returns(string memory, string memory, uint[] memory) {
-    return (name, getParameterizedDescription(token), fin4TokenToParametersSetOnThisProofType[token]);
-  }
-
   function getInfo() public view returns(string memory, string memory, string memory) {
     return (name, description, getParameterForTokenCreatorToSetEncoded());
   }
@@ -45,19 +38,6 @@ contract Fin4BaseProofType is utils {
   // a proof type, see the first <Modal> in ContractForm.render()
   function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
     return "";
-  }
-
-  // Get's called from the contract Fin4Main.createNewToken() after the parameter arrays there have been dissected
-  // into portions for the respective proof types
-  function setParameters(address token, uint[] memory params) public returns(bool) {
-    // TODO require: only token creator can set this
-    require(parametersSanityCheck(params), 'Parameters did not pass the sanity check');
-    fin4TokenToParametersSetOnThisProofType[token] = params;
-  }
-
-  // to be overwritten on demand by proof types
-  function parametersSanityCheck(uint[] memory params) public view returns(bool) {
-    return true;
   }
 
   // Helper method for all proof types to go through the same method when sending their approvals

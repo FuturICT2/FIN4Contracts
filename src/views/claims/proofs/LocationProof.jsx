@@ -11,6 +11,7 @@ function LocationProof(props, context) {
 
 	const onSubmitLocation = () => {
 		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+		// TODO this method no longer exists on the Location contract
 		getContractData(context.drizzle.contracts.Location, defaultAccount, 'getParameterizedInfo', props.tokenAddr).then(
 			({ 0: name, 1: parameterizedDescription, 2: tokenSpecificParams }) => {
 				var multiplier = 10000000;

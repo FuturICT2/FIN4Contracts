@@ -28,21 +28,27 @@ contract Location is Fin4BaseProofType {
         return distanceToLocation <= _getMaxDistance(token);
     }
 
+    mapping (address => uint[]) public tokenToParameters;
+
+    function setParameters(address token, uint latitude, uint longitude, uint maxDistance) public {
+      tokenToParameters[token] = [latitude, longitude, maxDistance];
+    }
+
     // @Override
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
       return "string:latitude / longitude:gps,uint:maxDistance:m";
     }
 
     function _getLatitude(address token) private view returns(uint) {
-      return fin4TokenToParametersSetOnThisProofType[token][0];
+      return tokenToParameters[token][0];
     }
 
     function _getLongitude(address token) private view returns(uint) {
-      return fin4TokenToParametersSetOnThisProofType[token][1];
+      return tokenToParameters[token][1];
     }
 
     function _getMaxDistance(address token) private view returns(uint) {
-      return fin4TokenToParametersSetOnThisProofType[token][2];
+      return tokenToParameters[token][2];
     }
 
 }

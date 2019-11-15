@@ -41,6 +41,12 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       return "uint:interval:days,uint:maxQuantity:quantity";
     }
 
+    mapping (address => uint[]) public tokenToParameters;
+
+    function setParameters(address token, uint interval, uint maxQuantity) public {
+      tokenToParameters[token] = [interval, maxQuantity];
+    }
+
     // @Override
     function getParameterizedDescription(address token) public view returns(string memory) {
       return string(abi.encodePacked(
@@ -52,10 +58,10 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
     }
 
     function _getInterval(address token) private view returns(uint) {
-      return fin4TokenToParametersSetOnThisProofType[token][0] * 24 * 60 * 60 * 1000; // from days to miliseconds
+      return tokenToParameters[token][0] * 24 * 60 * 60 * 1000; // from days to miliseconds
     }
 
     function _getMaxQuantity(address token) private view returns(uint) {
-      return fin4TokenToParametersSetOnThisProofType[token][1];
+      return tokenToParameters[token][1];
     }
 }
