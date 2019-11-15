@@ -3,8 +3,6 @@ import Container from '../../components/Container';
 import Box from '../../components/Box';
 import Button from '../../components/Button';
 import { TextField } from '@material-ui/core';
-import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/moment';
 import moment from 'moment';
 import AddIcon from '@material-ui/icons/Add';
 import Dropdown from '../../components/Dropdown';
@@ -24,7 +22,6 @@ function Claim(props, context) {
 	const values = useRef({
 		tokenAddress: null,
 		quantity: 1, // or null and avoid submitting it? TODO --> #ConceptualDecision, EDIT: outdated comment
-		date: moment().valueOf(),
 		comment: ''
 	});
 
@@ -35,7 +32,7 @@ function Claim(props, context) {
 			return;
 		}
 		context.drizzle.contracts.Fin4Claiming.methods
-			.submitClaim(val.tokenAddress, val.quantity, val.date, val.comment)
+			.submitClaim(val.tokenAddress, val.quantity, moment().valueOf(), val.comment)
 			.send({
 				from: props.store.getState().fin4Store.defaultAccount
 			})
@@ -92,12 +89,6 @@ function Claim(props, context) {
 							style={inputFieldStyle}
 						/>
 					)}
-					<ClaimTimePicker
-						defaultDate={values.current.date}
-						updateDate={date => {
-							values.current.date = date.valueOf();
-						}}
-					/>
 					<TextField
 						key="comment-field"
 						type="text"
@@ -114,31 +105,6 @@ function Claim(props, context) {
 		</Container>
 	);
 }
-
-function ClaimTimePicker(props) {
-	const { t } = useTranslation();
-	const [date, setDate] = useState(moment(props.defaultDate));
-	return (
-		<MuiPickersUtilsProvider key="date-field" utils={DateFnsUtils}>
-			<DateTimePicker
-				ampm={false}
-				disableFuture
-				showTodayButton
-				key="date-picker"
-				label={t('date')}
-				format={dateFormat}
-				value={date}
-				onChange={moment => {
-					setDate(moment);
-					props.updateDate(moment);
-				}}
-				style={inputFieldStyle}
-			/>
-		</MuiPickersUtilsProvider>
-	);
-}
-
-const dateFormat = 'YYYY-MM-DD HH:mm';
 
 const inputFieldStyle = {
 	width: '100%',
