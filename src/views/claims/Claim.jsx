@@ -23,7 +23,7 @@ function Claim(props, context) {
 
 	const values = useRef({
 		tokenAddress: null,
-		quantity: 0, // or null and avoid submitting it? TODO --> #ConceptualDecision
+		quantity: 1, // or null and avoid submitting it? TODO --> #ConceptualDecision, EDIT: outdated comment
 		date: moment().valueOf(),
 		comment: ''
 	});
@@ -82,13 +82,16 @@ function Claim(props, context) {
 								: null
 						}
 					/>
-					<TextField
-						key="quantity-field"
-						type="number"
-						label={unit}
-						onChange={e => (values.current.quantity = e.target.value)}
-						style={inputFieldStyle}
-					/>
+					{tokenViaURL && !tokenViaURL.hasFixedMintingQuantity && (
+						<TextField
+							key="quantity-field"
+							type="number"
+							label={unit}
+							defaultValue={values.current.quantity}
+							onChange={e => (values.current.quantity = e.target.value)}
+							style={inputFieldStyle}
+						/>
+					)}
 					<ClaimTimePicker
 						defaultDate={values.current.date}
 						updateDate={date => {
