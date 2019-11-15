@@ -177,8 +177,20 @@ contract Fin4TokenBase { // abstract class
   function approveClaim(uint claimId) private {
     claims[claimId].isApproved = true;
     claims[claimId].claimApprovalTime = now;
-    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(
-      address(this), claims[claimId].claimer, claimId, claims[claimId].quantity);
+
+    uint quantity;
+
+    // a require() in Fin4TokenManagement.createNewToken() made sure they are not both zero or nonzero
+
+    if (fixedQuantity != 0) {
+      quantity = fixedQuantity;
+    }
+
+    if (userDefinedQuantityFactor != 0) {
+      quantity = claims[claimId].quantity * userDefinedQuantityFactor;
+    }
+
+    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId, quantity);
   }
 
   function isMinter(address account) public view returns (bool);
