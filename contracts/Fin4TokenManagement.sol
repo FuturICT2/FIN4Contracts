@@ -77,6 +77,12 @@ contract Fin4TokenManagement {
         newToken.renounceMinter();
 
         symbolIsUsed[_symbol] = true;
+
+         // REP reward for creating a new token
+        MintingStub(Fin4ReputationAddress).mint(msg.sender, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
+
+        allFin4Tokens.push(address(newToken));
+        emit Fin4TokenCreated(address(newToken), name, _symbol, description, "", msg.sender, newToken.tokenCreationTime());
         return address(newToken);
     }
 
