@@ -38,14 +38,6 @@ contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
       _removeMinter(tokenCreator);
     }
 
-  function getTokenInfo(address user) public view returns(bool, bool, string memory, string memory,
-    string memory, string memory, uint256, uint, bool) {
-    bool userIsCreator = user == tokenCreator;
-    bool userIsAdmin = userIsCreator; // TODO
-    return (userIsCreator, userIsAdmin, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedQuantity != 0);
-  }
-
-  function getDetailedTokenInfo(address user) public view returns(address[] memory, uint, uint256, uint256, uint) {
-    return (requiredProofTypes, nextClaimId, balanceOf(user), totalSupply(), tokenCreationTime);
-  }
+  // function getTokenInfo(address user)
+  // function getDetailedTokenInfo(address user)
 }
