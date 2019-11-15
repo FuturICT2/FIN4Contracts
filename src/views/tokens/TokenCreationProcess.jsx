@@ -130,8 +130,34 @@ function TokenCreationProcess(props, context) {
 			.send({
 				from: props.defaultAccount
 			})
-			.then(function(result) {
-				console.log('Results of submitting: ', result);
+			.then(result => {
+				console.log('Results of submitting Fin4TokenManagement.createNewToken: ', result);
+				let newTokenAddress = result.events.Fin4TokenCreated.returnValues.addr;
+
+				for (var name in draft.proofs) {
+					if (draft.proofs.hasOwnProperty(name)) {
+						let proof = draft.proofs[name];
+						let parameterNames = Object.keys(proof.parameters);
+						if (parameterNames.length === 0) {
+							continue;
+						}
+						let values = parameterNames.map(parampName => proof.parameters[parampName]);
+						// TODO is the correct order of values guaranteed?
+						// console.log(name, values);
+						setParamsOnProofContract(name, newTokenAddress, values);
+					}
+				}
+			});
+	};
+
+	const setParamsOnProofContract = (contractName, tokenAddr, values) => {
+		context.drizzle.contracts[contractName].methods
+			.setParameters(tokenAddr, ...values)
+			.send({
+				from: props.defaultAccount
+			})
+			.then(result => {
+				console.log('Results of submitting ' + contractName + '.setParameters: ', result);
 			});
 	};
 
