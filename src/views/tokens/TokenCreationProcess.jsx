@@ -148,6 +148,8 @@ function TokenCreationProcess(props, context) {
 					}
 				}
 			});
+
+		// TODO if all done, history.push('/tokens');
 	};
 
 	const setParamsOnProofContract = (contractName, tokenAddr, values) => {
