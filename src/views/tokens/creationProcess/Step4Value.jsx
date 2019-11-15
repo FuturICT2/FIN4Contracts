@@ -27,7 +27,7 @@ function StepValue(props) {
 		let draft = props.draft;
 
 		let fixed = getValue(draft, 'fixedQuantity');
-		let userDef = getValue(draft, 'userDefinedQuantityFactor');
+		let userDef = getValue(draft, 'userDefinedQuantityFactor'); // TODO rename to tokenCreatorDefined...?
 		value.current = {
 			fixedQuantity: fixed,
 			userDefinedQuantityFactor: userDef
