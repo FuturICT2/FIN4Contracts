@@ -20,6 +20,18 @@ const tokenHolders = config.token.tokenHolders;
 const TCRactive = false; // the other necessary switch is in src/components/utils.js
 
 module.exports = async function(deployer) {
+	await deployer.deploy(Fin4Reputation);
+	const Fin4ReputationInstance = await Fin4Reputation.deployed();
+
+	// add Fin4TokenManagement and Fin4Claiming as minters on the Fin4Reputation token
+	// as they will be the ones minting REP to users for certain types of activity
+	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
+	await Fin4TokenManagementInstance.setFin4ReputationAddress(Fin4ReputationInstance.address);
+	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
+	await Fin4ClaimingInstance.setFin4ReputationAddress(Fin4ReputationInstance.address);
+	await Fin4ReputationInstance.addMinter(Fin4TokenManagementInstance.address);
+	await Fin4ReputationInstance.addMinter(Fin4ClaimingInstance.address);
+
 	if (!TCRactive) {
 		return;
 	}
@@ -43,9 +55,6 @@ module.exports = async function(deployer) {
 	await deployer.link(AttributeStore, RegistryFactory);
 	const registryFactoryInstance = await deployer.deploy(RegistryFactory, ParameterizerFactory.address);
 
-	await deployer.deploy(Fin4Reputation);
-	const Fin4ReputationInstance = await Fin4Reputation.deployed();
-
 	const GOVToken = await deployer.deploy(
 		GOV,
 		config.token.name,
@@ -60,15 +69,6 @@ module.exports = async function(deployer) {
 
 	const GOVTokenInstance = await GOV.deployed();
 	await Fin4ReputationInstance.init(GOVTokenInstance.address);
-
-	// add Fin4TokenManagement and Fin4Claiming as minters on the Fin4Reputation token
-	// as they will be the ones minting REP to users for certain types of activity
-	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
-	await Fin4TokenManagementInstance.setFin4ReputationAddress(Fin4ReputationInstance.address);
-	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
-	await Fin4ClaimingInstance.setFin4ReputationAddress(Fin4ReputationInstance.address);
-	await Fin4ReputationInstance.addMinter(Fin4TokenManagementInstance.address);
-	await Fin4ReputationInstance.addMinter(Fin4ClaimingInstance.address);
 
 	// dev: give all tokenHolders 10000 reputation tokens
 	// await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 200000)));
