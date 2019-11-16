@@ -8,9 +8,10 @@ import Button from '../../../components/Button';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
-import { TextField } from '@material-ui/core';
+import { TextField, IconButton } from '@material-ui/core';
 import styled from 'styled-components';
 import { findProofTypeAddressByName } from '../../../components/utils';
+import AddLocation from '@material-ui/icons/AddLocation';
 
 function StepProofs(props) {
 	const { t } = useTranslation();
@@ -24,6 +25,9 @@ function StepProofs(props) {
 		}
 		let draft = props.draft;
 		proofs.current = draft.proofs;
+		if (proofs.current['Location']) {
+			setLocVal(proofs.current['Location'].parameters['latitude / longitude']);
+		}
 
 		setProofsAdded(Object.keys(draft.proofs).map(name => findProofTypeAddressByName(props.proofTypes, name)));
 		setDraftId(draft.id);
@@ -69,6 +73,24 @@ function StepProofs(props) {
 		delete proofs.current[props.proofTypes[addr].label];
 	};
 
+	const requestLocation = (proofName, paramName) => {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(pos => {
+				let latitude = pos.coords.latitude;
+				let longitude = pos.coords.longitude;
+				let locStr = latitude + ' / ' + longitude;
+				console.log('Captured location ' + locStr);
+				proofs.current[proofName].parameters[paramName] = locStr;
+				setLocVal(locStr);
+			});
+		} else {
+			console.error('Geolocation is not supported by this browser.');
+		}
+	};
+
+	// TODO make this a general solution instead of for one field of one proof type
+	const [locVal, setLocVal] = useState('');
+
 	return (
 		<>
 			{draftId && (
@@ -98,21 +120,53 @@ function StepProofs(props) {
 												let type = paramStr.split(':')[0];
 												let paramName = paramStr.split(':')[1];
 												let description = paramStr.split(':')[2];
-												return (
-													<TextField
-														key={'proof_' + index + '_param_' + paramIndex}
-														type={type === 'uint' ? 'number' : 'text'}
-														label={
-															<>
-																<span>{paramName}</span>
-																<small> ({description})</small>
-															</>
-														}
-														defaultValue={proofs.current[name].parameters[paramName]}
-														onChange={e => (proofs.current[name].parameters[paramName] = e.target.value)}
-														style={inputFieldStyle}
-													/>
-												);
+												let key = 'proof_' + index + '_param_' + paramIndex;
+
+												if (description === 'gps') {
+													// more solid indicator?
+													return (
+														<span key={key}>
+															<TextField
+																type="text"
+																label={
+																	<>
+																		<span>{paramName}</span>
+																		<small> ({description})</small>
+																	</>
+																}
+																value={locVal}
+																onChange={e => {
+																	proofs.current[name].parameters[paramName] = e.target.value;
+																	setLocVal(e.target.value);
+																}}
+																style={styles.shortenedField}
+																inputProps={{ style: { fontSize: 'small' } }}
+															/>
+															<IconButton
+																style={{ margin: '17px 0 0 6px', transform: 'scale(1.4)' }}
+																onClick={() => requestLocation(name, paramName)}>
+																<AddLocation />
+															</IconButton>
+														</span>
+													);
+												} else {
+													return (
+														<span key={key}>
+															<TextField
+																type={type === 'uint' ? 'number' : 'text'}
+																label={
+																	<>
+																		<span>{paramName}</span>
+																		<small> ({description})</small>
+																	</>
+																}
+																defaultValue={proofs.current[name].parameters[paramName]}
+																onChange={e => (proofs.current[name].parameters[paramName] = e.target.value)}
+																style={styles.normalField}
+															/>
+														</span>
+													);
+												}
 											})}
 									</div>
 								);
@@ -140,11 +194,6 @@ function StepProofs(props) {
 	);
 }
 
-const inputFieldStyle = {
-	width: '80%',
-	margin: '8px 0 8px 25px'
-};
-
 const Spacer = styled.div`
 	height: 30px;
 `;
@@ -155,6 +204,14 @@ const styles = {
 		width: '14px',
 		height: '14px',
 		paddingLeft: '7px'
+	},
+	normalField: {
+		width: '80%',
+		margin: '8px 0 8px 25px'
+	},
+	shortenedField: {
+		width: '68%',
+		margin: '8px 0 8px 25px'
 	}
 };
 
