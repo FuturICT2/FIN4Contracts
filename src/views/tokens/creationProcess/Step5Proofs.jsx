@@ -114,6 +114,13 @@ function StepProofs(props) {
 												onClick={() => removeProof(proofAddress)}
 											/>
 										</div>
+										{name === 'Location' && (
+											<small style={{ color: 'orange', padding: '' }}>
+												<b>Note</b>: Submitting location proof is currently not
+												<br />
+												possible for users of MetaMask mobile on Android
+											</small>
+										)}
 										{proofType.paramsEncoded &&
 											proofType.paramsEncoded.split(',').map((paramStr, paramIndex) => {
 												// e.g. uint:interval:days,uint:maxQuantity:quantity
