@@ -31,7 +31,7 @@ function TokenBalances(props, context) {
 		return true;
 	};
 
-	const buildGovernanceTokenBalance = (contract, name, symbol) => {
+	const buildGovernanceTokenBalance = (contract, name, symbol, tdStyle = null) => {
 		let balance = props.usersFin4GovernanceTokenBalances[contract.address];
 		if (balance === 0) {
 			return;
@@ -50,6 +50,7 @@ function TokenBalances(props, context) {
 					),
 					balance: balance
 				}}
+				tdStyle={tdStyle}
 			/>
 		);
 	};
@@ -65,7 +66,9 @@ function TokenBalances(props, context) {
 						buildGovernanceTokenBalance(context.drizzle.contracts.GOV, 'Fin4 Governance Token', 'GOV')}
 					{props.contracts.Fin4Reputation &&
 						props.contracts.Fin4Reputation.initialized &&
-						buildGovernanceTokenBalance(context.drizzle.contracts.Fin4Reputation, 'Fin4 Reputation Token', 'REP')}
+						buildGovernanceTokenBalance(context.drizzle.contracts.Fin4Reputation, 'Fin4 Reputation Token', 'REP', {
+							borderBottom: '2px dotted silver'
+						})}
 					{Object.keys(props.usersFin4TokenBalances).map((tokenAddr, index) => {
 						let token = props.fin4Tokens[tokenAddr];
 						return (

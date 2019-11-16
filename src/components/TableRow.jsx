@@ -7,7 +7,11 @@ const Fin4TableRow = props => {
 	return (
 		<TableRow>
 			{keys.map((key, index) => {
-				return <TableCell key={key}>{values[index]}</TableCell>;
+				return (
+					<TableCell style={props.tdStyle} key={key}>
+						{values[index]}
+					</TableCell>
+				);
 			})}
 		</TableRow>
 	);
