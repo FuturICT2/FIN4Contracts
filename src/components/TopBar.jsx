@@ -22,18 +22,17 @@ const useStyles = makeStyles(theme => ({
 		'font-family': 'arial'
 	},
 	headerImage: {
-		maxHeight: 50,
-		width: 300,
-		margin: '10px auto'
+		width: 220
+		//margin: '10px auto'
 	},
 	alignRight: {
 		'text-align': 'right',
 		'padding-right': '20px'
 	},
-	logoText: {
-		'text-decoration': 'none',
-		color: 'white'
-	},
+	//logoText: {
+	//	'text-decoration': 'none',
+	//	color: 'white'
+	//},
 	noWeb3Warning: {
 		color: 'yellow',
 		'font-family': 'arial'
@@ -65,22 +64,38 @@ function TopBar(props) {
 		<>
 			<QRModal isOpen={isQRModalOpen} handleClose={toggleQRModal} publicAddress={props.defaultAccount} />
 			<AppBar position="static" className={classes.bar}>
-				<center>
-					<Link to={'/'} className={classes.logoText}>
-						<b>FIN4Xplorer</b>
-					</Link>
-				</center>
-				<div className={classes.alignRight}>
-					<FontAwesomeIcon className={classes.QRicon} icon={faQrcode} onClick={toggleQRModal} />
-					<RefreshIcon onClick={() => window.location.reload()} />
-					<Link to={'/messages'}>
-						{props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 ? (
-							<NewNotificationsIcon className={classes.newNotification} />
-						) : (
-							<NoNotificationsIcon className={classes.noNotification} />
-						)}
-					</Link>{' '}
-				</div>
+				{/* TODO is there a better way to put the logo in the middle AND the icons at the right side at the same height?
+					The 'marginLeft' of <center> matches the 'width' of the icon-<td> to nudge the logo into the middle
+					of the page instead of the middle within its <td>*/}
+				<table style={{ width: '100%' }}>
+					<tbody>
+						<tr>
+							<td>
+								<center style={{ marginLeft: '75px' }}>
+									<Link to={'/'}>
+										{/* Logo made by @ShreshthaKriti */}
+										<img
+											src="/project-logos/fin4x_11_with_round_dots.png"
+											alt="FIN4Xplorer Logo"
+											className={classes.headerImage}
+										/>
+									</Link>
+								</center>
+							</td>
+							<td style={{ width: '75px', whiteSpace: 'nowrap' }}>
+								<FontAwesomeIcon className={classes.QRicon} icon={faQrcode} onClick={toggleQRModal} />
+								<RefreshIcon onClick={() => window.location.reload()} />
+								<Link to={'/messages'}>
+									{props.messages.filter(msg => !msg.hasBeenActedUpon).length > 0 ? (
+										<NewNotificationsIcon className={classes.newNotification} />
+									) : (
+										<NoNotificationsIcon className={classes.noNotification} />
+									)}
+								</Link>{' '}
+							</td>
+						</tr>
+					</tbody>
+				</table>
 				{props.defaultAccount === null && (
 					<center className={classes.noWeb3Warning}>
 						<div className={classes.activeLng}>
@@ -119,7 +134,6 @@ function TopBar(props) {
 		</>
 	);
 }
-// <a href="/"><img src="/header.png" alt="header of finfoo" className={classes.headerImage} />
 
 const mapStateToProps = state => {
 	return {
