@@ -55,6 +55,12 @@ function TokenBalances(props, context) {
 		);
 	};
 
+	const getTokenAddressesSortedByBalance = () => {
+		return Object.keys(props.usersFin4TokenBalances).sort((a, b) => {
+			return props.usersFin4TokenBalances[b] - props.usersFin4TokenBalances[a];
+		});
+	};
+
 	return (
 		<Box title={t('your-token-balances')}>
 			{noBalanceYet(props.usersFin4TokenBalances) && noBalanceYet(props.usersFin4GovernanceTokenBalances) ? (
@@ -69,7 +75,7 @@ function TokenBalances(props, context) {
 						buildGovernanceTokenBalance(context.drizzle.contracts.Fin4Reputation, 'Fin4 Reputation Token', 'REP', {
 							borderBottom: '2px dotted silver'
 						})}
-					{Object.keys(props.usersFin4TokenBalances).map((tokenAddr, index) => {
+					{getTokenAddressesSortedByBalance().map((tokenAddr, index) => {
 						let token = props.fin4Tokens[tokenAddr];
 						return (
 							<TableRow
