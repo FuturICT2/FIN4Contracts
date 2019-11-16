@@ -88,7 +88,7 @@ This starts the React app on port 5000:
 ```sh
 npm run build
 npm install -g serve
-serve -s build
+serve -s build # -l 3000 to use that port e.g.
 ```
 
 Serving the DApp in production mode instead of development mode also solves an issue with sub-sites (e.g. `/tokens`) on mobile DApp browsers (observed in MetaMask on Android) where it would only show `cannot GET /URL` on reloading.
