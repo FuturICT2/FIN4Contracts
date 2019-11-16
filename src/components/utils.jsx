@@ -2,9 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 const nanoid = require('nanoid');
 
-const buildIconLabelLink = (link, icon, label) => {
+const TCRactive = false; // the other necessary switch is in migrations/3_deploy_tcr.js
+
+const buildIconLabelLink = (link, icon, label, enabled = true) => {
+	let style = { textDecoration: 'none' };
+	let tooltip = null;
+	if (!enabled) {
+		style = { textDecoration: 'none', color: 'silver' };
+		tooltip = 'Available soon';
+	}
 	return (
-		<Link to={link} style={{ textDecoration: 'none' }}>
+		<Link to={enabled ? link : '#'} style={style} title={tooltip}>
 			<div style={{ display: 'flex', alignItems: 'center', paddingLeft: '15px', fontFamily: 'arial' }}>
 				{icon}
 				&nbsp;&nbsp;{label}
@@ -61,5 +69,6 @@ export {
 	buildIconLabelCallback,
 	getFormattedSelectOptions,
 	getRandomTokenCreationDraftID,
-	findProofTypeAddressByName
+	findProofTypeAddressByName,
+	TCRactive
 };

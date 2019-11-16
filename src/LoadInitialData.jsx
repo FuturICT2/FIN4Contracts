@@ -17,6 +17,7 @@ import {
 } from './components/Contractor';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
+import { TCRactive } from './components/utils';
 
 function LoadInitialData(props, context) {
 	const isInit = useRef({
@@ -44,14 +45,21 @@ function LoadInitialData(props, context) {
 			isInit.current.Fin4Main = true;
 			// can happen in parallel once Fin4Main is ready:
 			addSatelliteContracts(props, context.drizzle.contracts.Fin4Main, context.drizzle);
-			addTCRcontracts(props, context.drizzle.contracts.Fin4Main, context.drizzle);
+			if (TCRactive) {
+				addTCRcontracts(props, context.drizzle.contracts.Fin4Main, context.drizzle);
+			}
 		}
 
 		if (!isInit.current.Registry && props.contracts.Registry && props.contracts.Registry.initialized) {
 			isInit.current.Registry = true;
 		}
 
-		if (!isInit.current.Parameterizer && props.contracts.Parameterizer && props.contracts.Parameterizer.initialized) {
+		if (
+			TCRactive &&
+			!isInit.current.Parameterizer &&
+			props.contracts.Parameterizer &&
+			props.contracts.Parameterizer.initialized
+		) {
 			isInit.current.Parameterizer = true;
 			fetchParameterizerParams(props, context.drizzle.contracts.Parameterizer);
 		}
@@ -84,7 +92,9 @@ function LoadInitialData(props, context) {
 			isInit.current.Fin4TokenManagement = true;
 			let Fin4TokenManagementContract = context.drizzle.contracts.Fin4TokenManagement;
 			fetchAllTokens(props, Fin4TokenManagementContract, () => {
-				fetchOPATs(props, context.drizzle.contracts.Registry);
+				if (TCRactive) {
+					fetchOPATs(props, context.drizzle.contracts.Registry);
+				}
 				fetchUsersNonzeroTokenBalances(props, Fin4TokenManagementContract);
 			});
 		}
