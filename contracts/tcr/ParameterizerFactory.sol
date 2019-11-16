@@ -1,4 +1,4 @@
-pragma solidity ^0.5.8;
+pragma solidity ^0.5.0;
 
 import "./PLCR/PLCRFactory.sol";
 import "./PLCR/PLCRVoting.sol";

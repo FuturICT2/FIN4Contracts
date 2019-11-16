@@ -1,4 +1,4 @@
-pragma solidity ^0.5.8;
+pragma solidity ^0.5.0;
 
 import "./tcr/Parameterizer.sol";
 import "./tokens/ERC20Plus.sol";
