@@ -18,6 +18,13 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
         Fin4OracleHubAddress = _Fin4OracleHubAddress;
     }
 
+    function sensorSignalReceived(string memory sensorID, uint timestamp, string memory body) public {
+        for (uint i = 0; i < sensorIDtoTokens[sensorID].length; i++) {
+            // TODO
+            // sensorIDtoTokens[sensorID][i].getUnrejectedClaimsWithThisProofTypeUnapproved() ...
+        }
+    }
+
     function submitProof(address tokenAddrToReceiveProof, uint claimId) public {
 
         // TODO
@@ -33,9 +40,12 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
     }
 
     mapping (address => string) public tokenToSensorID;
+    mapping (string => address[]) public sensorIDtoTokens;
 
     function setParameters(address token, string memory sensorID) public {
         tokenToSensorID[token] = sensorID;
+        sensorIDtoTokens[sensorID].push(token);
+        Fin4OracleHub(Fin4OracleHubAddress).subscribeToSensorSignals(address(this), sensorID);
     }
 
     function _getSensorID(address token) private view returns(string memory) {
