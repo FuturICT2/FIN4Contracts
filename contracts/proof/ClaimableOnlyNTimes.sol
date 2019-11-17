@@ -22,6 +22,7 @@ contract ClaimableOnlyNTimes is Fin4BaseProofType {
               "\' got rejected from proof type \'ClaimableOnlyNTimes\' because you reached the",
               " maximum number of claims as capped by the token creator: ", uint2str(cap)));
           Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
+          _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
       } else {
           _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
           userToTheirClaimsCountOnToken[msg.sender][tokenAddrToReceiveProof] = usersClaimCountOnToken + 1;
