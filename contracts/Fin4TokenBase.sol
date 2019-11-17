@@ -162,7 +162,7 @@ contract Fin4TokenBase { // abstract class
   address[] public requiredProofTypes; // a subset of all existing ones linked to Fin4Main, defined by the token creator
 
   // called from ProofType contracts
-  function receiveProofApproval(address proofTypeAddress, uint claimId) public returns(bool) {
+  function receiveProofApproval(address proofTypeAddress, uint claimId) public {
     // TODO require something as guard?
     claims[claimId].proofStatuses[proofTypeAddress] = true;
     claims[claimId].proofApprovalTimes[proofTypeAddress] = now;
@@ -170,7 +170,6 @@ contract Fin4TokenBase { // abstract class
     if (_allProofTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }
-    return true;
   }
 
   function approveClaim(uint claimId) private {
