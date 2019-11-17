@@ -117,6 +117,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     }
 
     Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
+    _sendRejection(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
   }
 
 }

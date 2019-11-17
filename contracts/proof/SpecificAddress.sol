@@ -69,6 +69,9 @@ contract SpecificAddress is Fin4BaseProofType {
       " has rejected your approval request for ", Fin4TokenBase(pa.tokenAddrToReceiveProof).name()));
     Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
 
+    // TODO verify this workflow makes sense
+    _sendRejection(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
+
     // TODO boolean flag in PendingApproval? #ConceptualDecision
   }
 

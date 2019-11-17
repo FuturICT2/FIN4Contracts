@@ -22,6 +22,7 @@ contract MinimumInterval is Fin4BaseProofType {
           uint2str(_getMinimumInterval(tokenAddrToReceiveProof) / 1000), "s."
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
+        _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
       }
     }
 

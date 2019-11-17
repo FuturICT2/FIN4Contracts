@@ -16,9 +16,12 @@ contract Location is Fin4BaseProofType {
         _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-        Fin4TokenStub(tokenAddrToReceiveProof).name(),
-        ": Your location is not within the allowed distance to the defined location."));
+             "Your claim on token '",
+            Fin4TokenStub(tokenAddrToReceiveProof).name(),
+             "' got rejected from proof type 'Location' because",
+             " your location is not within a circle the token creator defined."));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
+        _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
       }
     }
 

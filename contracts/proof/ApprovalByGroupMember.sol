@@ -111,6 +111,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
             "A member of the appointed approver group has rejected your approval request for ",
             Fin4TokenBase(pa.tokenAddrToReceiveProof).name()));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
+        _sendRejection(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
     }
 
     function markMessagesAsRead(uint pendingApprovalId) public {

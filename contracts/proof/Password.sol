@@ -22,6 +22,7 @@ contract Password is Fin4BaseProofType {
               "\' got rejected from proof type \'Password\' because the password you",
               " provided does not match the one set by the token creator"));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
+        _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
       }
     }
 
