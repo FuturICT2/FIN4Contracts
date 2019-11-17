@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { getContractData } from '../../components/Contractor';
 import Container from '../../components/Container';
 import GovNavComponent from './GovNavComponent';
+import { TCRactive } from '../../components/utils';
 const BN = require('bignumber.js');
 
 function Management(props, context) {
@@ -24,7 +25,7 @@ function Management(props, context) {
 	let delegatedToMeFetched = useRef(false);
 
 	useEffect(() => {
-		if (!delegatedToMeFetched.current && props.contracts.GOV && props.contracts.GOV.initialized) {
+		if (TCRactive && !delegatedToMeFetched.current && props.contracts.GOV && props.contracts.GOV.initialized) {
 			delegatedToMeFetched.current = true;
 			fetchDelegatedToMe();
 		}

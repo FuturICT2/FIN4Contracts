@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
 import GovNavComponent from './GovNavComponent';
+import { TCRactive } from '../../components/utils';
 const BN = require('bignumber.js');
 
 function Listing(props, context) {
@@ -41,6 +42,7 @@ function Listing(props, context) {
 
 	useEffect(() => {
 		if (
+			TCRactive &&
 			!listingsFetched.current &&
 			props.fin4TokensInitiallyFetched &&
 			props.contracts.Registry &&

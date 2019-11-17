@@ -140,7 +140,7 @@ function Home(props) {
 				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
 				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections')}
 				{buildIconLabelLink('/proofs', <AssignmentIcon />, 'Proof types')}
-				{buildIconLabelLink('/governance/listing', <StarIcon />, 'Curated tokens', TCRactive)}
+				{buildIconLabelLink('/governance/listing', <StarIcon />, 'Curated tokens')}
 			</Box>
 		</Container>
 	);

@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import update from 'react-addons-update';
 import Container from '../../components/Container';
 import GovNavComponent from './GovNavComponent';
+import { TCRactive } from '../../components/utils';
 const BN = require('bignumber.js');
 
 function Governance(props, context) {
@@ -33,6 +34,9 @@ function Governance(props, context) {
 	const paramStatusesFetched = useRef(false);
 
 	useEffect(() => {
+		if (!TCRactive) {
+			return;
+		}
 		if (!paramsAugmented.current && Object.keys(props.parameterizerParams).length > 0) {
 			paramsAugmented.current = true;
 			augmentParams();
