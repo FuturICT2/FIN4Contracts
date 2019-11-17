@@ -12,7 +12,7 @@ contract ClaimableOnlyNTimes is Fin4BaseProofType {
         isAutoInitiable = true;
     }
 
-  function submitProof_ClaimableOnlyNTimes(address tokenAddrToReceiveProof, uint claimId) public {
+  function submitProof(address tokenAddrToReceiveProof, uint claimId) public {
       uint usersClaimCountOnToken = userToTheirClaimsCountOnToken[msg.sender][tokenAddrToReceiveProof];
       uint cap = tokenToClaimsCap[tokenAddrToReceiveProof];
       if (usersClaimCountOnToken == cap) {

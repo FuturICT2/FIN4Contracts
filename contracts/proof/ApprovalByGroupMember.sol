@@ -46,7 +46,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
     uint public nextPendingApprovalId = 0;
     mapping (uint => PendingApproval) public pendingApprovals; // just use an array? TODO
 
-    function submitProof_ApprovalByGroupMember(address tokenAddrToReceiveProof, uint claimId) public {
+    function submitProof(address tokenAddrToReceiveProof, uint claimId) public {
         PendingApproval memory pa;
         pa.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
         pa.claimIdOnTokenToReceiveProof = claimId;
