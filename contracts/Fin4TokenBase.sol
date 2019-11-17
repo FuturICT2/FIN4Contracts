@@ -50,7 +50,7 @@ contract Fin4TokenBase { // abstract class
     string comment;
     address[] requiredProofTypes;
     mapping(address => bool) proofStatuses;
-    mapping(address => uint) proofApprovalTimes;
+    mapping(address => uint) proofInteractionTimes;
     uint claimCreationTime;
     uint claimApprovalTime;
   }
@@ -165,7 +165,7 @@ contract Fin4TokenBase { // abstract class
   function receiveProofApproval(address proofTypeAddress, uint claimId) public {
     // TODO require something as guard?
     claims[claimId].proofStatuses[proofTypeAddress] = true;
-    claims[claimId].proofApprovalTimes[proofTypeAddress] = now;
+    claims[claimId].proofInteractionTimes[proofTypeAddress] = now;
     Fin4ClaimingStub(Fin4ClaimingAddress).proofApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
     if (_allProofTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
