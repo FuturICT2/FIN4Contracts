@@ -86,7 +86,7 @@ contract Fin4TokenBase { // abstract class
     return (nextClaimId - 1, claim.requiredProofTypes, claim.claimCreationTime);
   }
 
-  function getClaim(uint claimId) public view returns(address, bool, uint, uint, string memory, address[] memory, bool[] memory) {
+  function getClaim(uint claimId) public view returns(address, bool, bool, uint, uint, string memory, address[] memory, bool[] memory) {
     // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
 
     Claim storage claim = claims[claimId];
@@ -98,7 +98,8 @@ contract Fin4TokenBase { // abstract class
       proofTypeStatuses[i] = claim.proofStatuses[requiredProofTypes[i]];
     }
 
-    return (claim.claimer, claim.isApproved, claim.quantity, claim.claimCreationTime, claim.comment, requiredProofTypes, proofTypeStatuses);
+    return (claim.claimer, claim.isApproved, claim.gotRejected, claim.quantity, claim.claimCreationTime,
+      claim.comment, requiredProofTypes, proofTypeStatuses);
   }
 
   function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory) {

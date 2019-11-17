@@ -79,6 +79,7 @@ const contractEventNotifier = store => next => action => {
 				claimId: claim.claimId,
 				claimer: claim.claimer,
 				isApproved: false,
+				gotRejected: false,
 				quantity: quantity,
 				claimCreationTime: new BN(claim.claimCreationTime).toNumber(),
 				comment: claim.comment,

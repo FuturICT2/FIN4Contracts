@@ -326,11 +326,12 @@ const fetchCurrentUsersClaims = (props, Fin4ClaimingContract) => {
 								({
 									0: claimer,
 									1: isApproved,
-									2: quantityBN,
-									3: claimCreationTimeBN,
-									4: comment,
-									5: requiredProofTypes,
-									6: proofStatusesBool
+									2: gotRejected,
+									3: quantityBN,
+									4: claimCreationTimeBN,
+									5: comment,
+									6: requiredProofTypes,
+									7: proofStatusesBool
 								}) => {
 									let proofStatusesObj = {};
 									for (let i = 0; i < requiredProofTypes.length; i++) {
@@ -342,6 +343,7 @@ const fetchCurrentUsersClaims = (props, Fin4ClaimingContract) => {
 										claimId: claimId,
 										claimer: claimer,
 										isApproved: isApproved,
+										gotRejected: gotRejected,
 										quantity: new BN(quantityBN).toNumber(),
 										claimCreationTime: new BN(claimCreationTimeBN).toNumber(),
 										comment: comment,
