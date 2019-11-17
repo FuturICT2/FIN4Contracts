@@ -23,13 +23,9 @@ function PreviousClaims(props) {
 					Object.keys(props.usersClaims).map(pseudoClaimId => {
 						let claim = props.usersClaims[pseudoClaimId];
 						let token = props.store.getState().fin4Store.fin4Tokens[claim.token];
-						//let dateStr = claim.date.toString();
+						let date = moment.unix(claim.claimCreationTime).calendar();
 						let symbol = props.fin4Tokens[claim.token].symbol; // of token that gets claimed
 						let proofSite = '/claim/' + symbol + '/proof/' + claim.claimId;
-
-						// crop last 3 digits (milliseconds) of date and apply human readable .calendar() function
-						// TODO divide by 1000 instead?
-						//let date = moment.unix(Number(dateStr.substring(0, dateStr.length - 3))).calendar();
 						return (
 							<Claim isapproved={claim.isApproved ? 'true' : 'false'} key={`${claim.token}${claim.claimId}`}>
 								<div>
@@ -52,20 +48,18 @@ function PreviousClaims(props) {
 									)}
 								</div>
 								<Divider style={{ margin: '10px 0' }} variant="middle" />
-								{/*<ThemeProvider theme={chipTheme}>
+								<ThemeProvider theme={chipTheme}>
 									<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ margin: '0 7px 7px 0' }} />
-								</ThemeProvider>*/}
-								<center>
-									<ThemeProvider theme={buttonTheme}>
-										<Button
-											icon={ProofIcon}
-											onClick={() => history.push(proofSite)}
-											color={claim.isApproved ? 'primary' : 'secondary'}
-											style={{ margin: '0 7px 7px 0' }}>
-											{claim.isApproved ? t('approved') : t('submit-proof-short')}
-										</Button>
-									</ThemeProvider>
-								</center>
+								</ThemeProvider>
+								<ThemeProvider theme={buttonTheme}>
+									<Button
+										icon={ProofIcon}
+										onClick={() => history.push(proofSite)}
+										color={claim.isApproved ? 'primary' : 'secondary'}
+										style={{ margin: '0 7px 7px 0' }}>
+										{claim.isApproved ? t('approved') : t('submit-proof-short')}
+									</Button>
+								</ThemeProvider>
 							</Claim>
 						);
 					})}
