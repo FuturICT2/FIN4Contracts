@@ -150,6 +150,7 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 			addContract(props, drizzle, 'Fin4Claiming', Fin4ClaimingAddress, [
 				'ClaimSubmitted',
 				'ClaimApproved',
+				'ClaimRejected',
 				'ProofApproved',
 				'UpdatedTotalSupply'
 			]);

@@ -9,6 +9,7 @@ contract Fin4Claiming {
     event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint claimCreationTime,
         string comment, address[] requiredProofTypes);
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint mintedQuantity, uint256 newBalance);
+    event ClaimRejected(address tokenAddr, uint claimId, address claimer);
     event ProofApproved(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
     event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
 
@@ -61,6 +62,10 @@ contract Fin4Claiming {
 
         // REP reward for creating a new token
         MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
+    }
+
+    function proofAndClaimRejectionPingback(address tokenAddress, uint claimId, address claimer) public {
+        emit ClaimRejected(tokenAddress, claimId, claimer);
     }
 
     // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------

@@ -48,6 +48,10 @@ contract Fin4BaseProofType is utils {
     return true;
   }
 
+  function _sendRejection(address proofTypeAddress, address tokenAddrToReceiveProof, uint claimId) internal {
+    Fin4TokenStub(tokenAddrToReceiveProof).receiveProofRejection(proofTypeAddress, claimId);
+  }
+
   function registerTokenCreator(address tokenCreator) public returns(bool) {
     fin4TokenToItsCreator[msg.sender] = tokenCreator;
     return true;
