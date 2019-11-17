@@ -18,7 +18,7 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
         Fin4OracleHubAddress = _Fin4OracleHubAddress;
     }
 
-    function sensorSignalReceived(string memory sensorID, uint timestamp, string memory body) public {
+    function sensorSignalReceived(string memory sensorID, uint timestamp, string memory data) public {
         for (uint i = 0; i < sensorIDtoTokens[sensorID].length; i++) {
             // TODO
             // sensorIDtoTokens[sensorID][i].getUnrejectedClaimsWithThisProofTypeUnapproved() ...
