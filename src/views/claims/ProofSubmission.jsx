@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import LocationProof from './proofs/LocationProof';
 import SelfieTogetherProof from './proofs/SelfieTogetherProof';
 import PictureProof from './proofs/PictureProof';
+import { Link } from 'react-router-dom';
 
 function ProofSubmission(props) {
 	const [pseudoClaimId, setPseudoClaimId] = useState(null);
@@ -63,26 +64,42 @@ function ProofSubmission(props) {
 		pseudoClaimId && (
 			<Container>
 				<Box title="Proof Submission">
-					{Object.keys(props.usersClaims[pseudoClaimId].proofStatuses).map((proofTypeAddr, index) => {
-						let claim = props.usersClaims[pseudoClaimId];
-						let proofIsApproved = claim.proofStatuses[proofTypeAddr];
-						let proofObj = props.proofTypes[proofTypeAddr];
-						return (
-							<div key={index}>
-								{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
-								{proofIsApproved ? (
-									<Status isapproved="true">{'The proof ' + proofObj.label + ' was submitted successfully.'}</Status>
-								) : (
-									<>
-										<Status isapproved="false">
-											{'Your claim requires you to provide the following proof: ' + proofObj.description}
-										</Status>
-										{buildProofSubmissionForm(proofObj.label, claim.token, claim.claimId, index)}
-									</>
-								)}
-							</div>
-						);
-					})}
+					{props.usersClaims[pseudoClaimId].gotRejected ? (
+						<center style={{ fontFamily: 'arial' }}>
+							<b style={{ color: 'red' }}>Your claim got rejected.</b>
+							<br />
+							<br />
+							See the reason(s) in your <Link to={'/messages'}>messages</Link>.
+							<br />
+							If you want, you can submit <Link to={'/claim/' + props.match.params.tokenSymbol}>a new claim</Link>.
+							{/* TODO "or contact the token creator" too? #ConceptualDecision */}
+						</center>
+					) : (
+						<>
+							{Object.keys(props.usersClaims[pseudoClaimId].proofStatuses).map((proofTypeAddr, index) => {
+								let claim = props.usersClaims[pseudoClaimId];
+								let proofIsApproved = claim.proofStatuses[proofTypeAddr];
+								let proofObj = props.proofTypes[proofTypeAddr];
+								return (
+									<div key={index}>
+										{index > 0 && <Divider variant="middle" style={{ margin: '50px 0' }} />}
+										{proofIsApproved ? (
+											<Status isapproved="true">
+												{'The proof ' + proofObj.label + ' was submitted successfully.'}
+											</Status>
+										) : (
+											<>
+												<Status isapproved="false">
+													{'Your claim requires you to provide the following proof: ' + proofObj.description}
+												</Status>
+												{buildProofSubmissionForm(proofObj.label, claim.token, claim.claimId, index)}
+											</>
+										)}
+									</div>
+								);
+							})}
+						</>
+					)}
 				</Box>
 			</Container>
 		)
