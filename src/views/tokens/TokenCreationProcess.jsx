@@ -171,6 +171,11 @@ function TokenCreationProcess(props, context) {
 			});
 	};
 
+	const countProofsWithParams = () => {
+		let draft = props.tokenCreationDrafts[draftId];
+		return Object.keys(draft.proofs).filter(name => Object.keys(draft.proofs[name].parameters).length > 0).length;
+	};
+
 	return (
 		<>
 			{draftId ? (
@@ -207,6 +212,13 @@ function TokenCreationProcess(props, context) {
 							{activeStep === steps.length && (
 								<center>
 									<Typography className={classes.instructions}>All steps completed</Typography>
+									{countProofsWithParams() > 0 && (
+										<small style={{ color: 'gray', fontFamily: 'arial' }}>
+											You added {countProofsWithParams()} proofs with parameters. Each requires a separate transaction.
+											Plus one for the creation of the token. You will have to confirm all consecutive transactions to
+											complete the token creation.
+										</small>
+									)}
 									<div style={{ paddingTop: '20px' }}>
 										<Button onClick={handleReset} className={classes.backButton}>
 											Restart
