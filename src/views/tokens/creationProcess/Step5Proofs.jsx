@@ -130,6 +130,7 @@ function StepProofs(props) {
 												let key = 'proof_' + index + '_param_' + paramIndex;
 
 												if (description === 'gps') {
+													// ONLY FOR LAT/LON FIELD OF LOCATION
 													// more solid indicator?
 													return (
 														<span key={key}>
@@ -164,7 +165,7 @@ function StepProofs(props) {
 																label={
 																	<>
 																		<span>{paramName}</span>
-																		<small> ({description})</small>
+																		{description && <small> ({description})</small>}{' '}
 																	</>
 																}
 																defaultValue={proofs.current[name].parameters[paramName]}
