@@ -116,6 +116,28 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	// ------------------------------ ClaimRejected ------------------------------
+
+	if (contractEvent === 'ClaimRejected') {
+		let claim = action.event.returnValues;
+		let id = claim.tokenAddr + '_' + claim.claimId; // pseudoId
+		let isCurrentUsersClaim = claim.claimer === defaultAccount;
+
+		// block: current user is not claimer / duplicate events / claim is already rejected
+		let usersClaims = store.getState().fin4Store.usersClaims;
+		if (!isCurrentUsersClaim || (usersClaims[id] && usersClaims[id].gotRejected)) {
+			return next(action);
+		}
+
+		let token = store.getState().fin4Store.fin4Tokens[claim.tokenAddr];
+		display = 'Claim on token ' + token.name + ' rejected';
+
+		store.dispatch({
+			type: 'REJECT_CLAIM',
+			id: id
+		});
+	}
+
 	// ------------------------------ UpdatedTotalSupply ------------------------------
 
 	if (contractEvent === 'UpdatedTotalSupply') {
@@ -341,6 +363,17 @@ function fin4StoreReducer(state = initialState, action) {
 					[action.id]: {
 						...state.usersClaims[action.id],
 						isApproved: true
+					}
+				}
+			};
+		case 'REJECT_CLAIM':
+			return {
+				...state,
+				usersClaims: {
+					...state.usersClaims,
+					[action.id]: {
+						...state.usersClaims[action.id],
+						gotRejected: true
 					}
 				}
 			};
