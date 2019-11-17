@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';
 import 'contracts/stub/MintingStub.sol';
+import "contracts/proof/Fin4BaseProofType.sol";
 
 contract Fin4Claiming {
 
@@ -43,6 +44,14 @@ contract Fin4Claiming {
         uint claimCreationTime;
         (claimId, requiredProofTypes, claimCreationTime) = Fin4Token(tokenAddress).submitClaim(msg.sender, quantity, comment);
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredProofTypes);
+
+        // auto-init claims where user would only press an "init proof" button without having to supply more info
+        for (uint i = 0; i < requiredProofTypes.length; i++) {
+            // TODO instead of two calls, make .autoSubmitProofIfApplicable()?
+            if (Fin4BaseProofType(requiredProofTypes[i]).isAutoInitiable()) {
+                Fin4BaseProofType(requiredProofTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
+            }
+        }
     }
 
     function proofApprovalPingback(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public {

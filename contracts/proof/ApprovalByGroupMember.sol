@@ -46,11 +46,12 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
     uint public nextPendingApprovalId = 0;
     mapping (uint => PendingApproval) public pendingApprovals; // just use an array? TODO
 
-    function submitProof(address tokenAddrToReceiveProof, uint claimId) public {
+    // @Override
+    function autoSubmitProof(address user, address tokenAddrToReceiveProof, uint claimId) public {
         PendingApproval memory pa;
         pa.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
         pa.claimIdOnTokenToReceiveProof = claimId;
-        pa.requester = msg.sender;
+        pa.requester = user;
         uint groupId = _getGroupId(tokenAddrToReceiveProof);
         pa.approverGroupId = groupId;
         pa.pendingApprovalId = nextPendingApprovalId;
@@ -66,7 +67,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         for (uint i = 0; i < members.length; i ++) {
             pa.groupMemberAddresses[i] = members[i];
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(msg.sender, name, members[i], message, "", pa.pendingApprovalId);
+                .addPendingApprovalMessage(user, name, members[i], message, "", pa.pendingApprovalId);
         }
 
         pendingApprovals[nextPendingApprovalId] = pa;

@@ -12,8 +12,9 @@ contract ClaimableOnlyNTimes is Fin4BaseProofType {
         isAutoInitiable = true;
     }
 
-  function submitProof(address tokenAddrToReceiveProof, uint claimId) public {
-      uint usersClaimCountOnToken = userToTheirClaimsCountOnToken[msg.sender][tokenAddrToReceiveProof];
+  // @Override
+  function autoSubmitProof(address user, address tokenAddrToReceiveProof, uint claimId) public {
+      uint usersClaimCountOnToken = userToTheirClaimsCountOnToken[user][tokenAddrToReceiveProof];
       uint cap = tokenToClaimsCap[tokenAddrToReceiveProof];
       if (usersClaimCountOnToken == cap) {
           string memory message = string(abi.encodePacked(
@@ -21,11 +22,11 @@ contract ClaimableOnlyNTimes is Fin4BaseProofType {
               Fin4TokenStub(tokenAddrToReceiveProof).name(),
               "\' got rejected from proof type \'ClaimableOnlyNTimes\' because you reached the",
               " maximum number of claims as capped by the token creator: ", uint2str(cap)));
-          Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
+          Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), user, message);
           _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
       } else {
           _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
-          userToTheirClaimsCountOnToken[msg.sender][tokenAddrToReceiveProof] = usersClaimCountOnToken + 1;
+          userToTheirClaimsCountOnToken[user][tokenAddrToReceiveProof] = usersClaimCountOnToken + 1;
       }
   }
 
