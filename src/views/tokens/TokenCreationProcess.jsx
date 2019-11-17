@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../components/Container';
@@ -20,6 +20,9 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { steps, getStepContent, getStepInfoBoxContent } from './creationProcess/TextContents';
 import { findProofTypeAddressByName } from '../../components/utils';
 import { findTokenBySymbol } from '../../components/Contractor';
+import CheckIcon from '@material-ui/icons/CheckCircle';
+import { IconButton } from '@material-ui/core';
+import history from '../../components/history';
 
 const useStyles = makeStyles(theme => ({
 	// from https://material-ui.com/components/steppers/
@@ -131,8 +134,6 @@ function TokenCreationProcess(props, context) {
 			Object.keys(draft.proofs).map(name => findProofTypeAddressByName(props.proofTypes, name))
 		];
 
-		// console.log(tokenCreationArgs);
-
 		context.drizzle.contracts.Fin4TokenManagement.methods
 			.createNewToken(...tokenCreationArgs)
 			.send({
@@ -151,14 +152,20 @@ function TokenCreationProcess(props, context) {
 						}
 						let values = parameterNames.map(parampName => proof.parameters[parampName]);
 						// TODO is the correct order of values guaranteed?
-						// console.log(name, values);
 						setParamsOnProofContract(name, newTokenAddress, values);
 					}
 				}
-			});
 
-		// TODO if all done, history.push('/tokens');
+				if (countProofsWithParams() === 0) {
+					setTokenJustCreated(true);
+				}
+			});
 	};
+
+	// TODO combine these two with one useState-counter?
+	// Tried to do that but couldn't figure it out in reasonable time for some reason
+	const transactionCounter = useRef(0);
+	const [tokenJustCreated, setTokenJustCreated] = useState(false);
 
 	const setParamsOnProofContract = (contractName, tokenAddr, values) => {
 		context.drizzle.contracts[contractName].methods
@@ -168,6 +175,10 @@ function TokenCreationProcess(props, context) {
 			})
 			.then(result => {
 				console.log('Results of submitting ' + contractName + '.setParameters: ', result);
+				transactionCounter.current++;
+				if (transactionCounter.current == countProofsWithParams()) {
+					setTokenJustCreated(true);
+				}
 			});
 	};
 
@@ -209,7 +220,7 @@ function TokenCreationProcess(props, context) {
 							{activeStep === 2 && buildStepComponent(StepActions)}
 							{activeStep === 3 && buildStepComponent(StepValue)}
 							{activeStep === 4 && buildStepComponent(StepProofs)}
-							{activeStep === steps.length && (
+							{activeStep === steps.length && !tokenJustCreated && (
 								<center>
 									<Typography className={classes.instructions}>All steps completed</Typography>
 									{countProofsWithParams() > 0 && (
@@ -227,6 +238,17 @@ function TokenCreationProcess(props, context) {
 											Create token
 										</Button>
 									</div>
+								</center>
+							)}
+							{activeStep === steps.length && tokenJustCreated && (
+								<center>
+									<Typography className={classes.instructions}>Token successfully created!</Typography>
+									<br />
+									<IconButton
+										style={{ color: 'green', transform: 'scale(2.4)' }}
+										onClick={() => history.push('/tokens')}>
+										<CheckIcon />
+									</IconButton>
 								</center>
 							)}
 						</div>
