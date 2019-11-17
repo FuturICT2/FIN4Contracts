@@ -11,7 +11,7 @@ contract SpecificAddress is Fin4BaseProofType {
       setNameAndDescription();
     }
 
-  function setNameAndDescription() public returns(bool) {
+  function setNameAndDescription() public {
     name = "SpecificAddress";
     description = "The claimer specifies an address, which has to approve.";
   }
@@ -33,7 +33,7 @@ contract SpecificAddress is Fin4BaseProofType {
 
   mapping (address => PendingApproval[]) public pendingApprovals;
 
-  function submitProof_SpecificAddress(address tokenAddrToReceiveProof, uint claimId, address approver) public returns(bool) {
+  function submitProof_SpecificAddress(address tokenAddrToReceiveProof, uint claimId, address approver) public {
     PendingApproval memory pa;
     pa.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
     pa.claimIdOnTokenToReceiveProof = claimId;
@@ -47,22 +47,20 @@ contract SpecificAddress is Fin4BaseProofType {
     pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(msg.sender, name, approver, message, "", pa.pendingApprovalId);
 
     pendingApprovals[approver].push(pa);
-    return true;
   }
 
   function getMessageText() public pure returns(string memory) {
     return "You were requested to approve the proof type SpecificAddress on the token ";
   }
 
-  function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
+  function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public {
     PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
     require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
     Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
     _sendApproval(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
-    return true;
   }
 
-  function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public returns(bool) {
+  function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
     PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
     require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
     Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
@@ -72,8 +70,6 @@ contract SpecificAddress is Fin4BaseProofType {
     Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
 
     // TODO boolean flag in PendingApproval? #ConceptualDecision
-
-    return true;
   }
 
 }

@@ -42,19 +42,17 @@ contract Fin4BaseProofType is utils {
 
   // Helper method for all proof types to go through the same method when sending their approvals
   // to the respective claim on a token
-  function _sendApproval(address proofTypeAddress, address tokenAddrToReceiveProof, uint claimId) internal returns(bool) {
+  function _sendApproval(address proofTypeAddress, address tokenAddrToReceiveProof, uint claimId) internal {
     // TODO ensure it can only be called from within this SC?
     Fin4TokenStub(tokenAddrToReceiveProof).receiveProofApproval(proofTypeAddress, claimId);
-    return true;
   }
 
   function _sendRejection(address proofTypeAddress, address tokenAddrToReceiveProof, uint claimId) internal {
     Fin4TokenStub(tokenAddrToReceiveProof).receiveProofRejection(proofTypeAddress, claimId);
   }
 
-  function registerTokenCreator(address tokenCreator) public returns(bool) {
+  function registerTokenCreator(address tokenCreator) public {
     fin4TokenToItsCreator[msg.sender] = tokenCreator;
-    return true;
   }
 
   // Used by proof types that require the token creator to approve something

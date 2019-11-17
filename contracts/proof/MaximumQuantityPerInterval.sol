@@ -13,7 +13,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       // maxQuantity = 10;
     }
 
-    function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveProof, uint claimId) public returns(bool) {
+    function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveProof, uint claimId) {
       if (requirementMet(tokenAddrToReceiveProof, msg.sender, claimId)) {
         _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
       } else {
@@ -25,7 +25,6 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
       }
-      return true;
     }
 
     function requirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {

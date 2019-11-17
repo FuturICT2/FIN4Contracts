@@ -11,7 +11,7 @@ contract Password is Fin4BaseProofType {
       description = "Approval if the user provides the password matching the one the token creator set.";
     }
 
-    function submitProof_Password(address tokenAddrToReceiveProof, uint claimId, string memory password) public returns(bool) {
+    function submitProof_Password(address tokenAddrToReceiveProof, uint claimId, string memory password) public {
       // via https://ethereum.stackexchange.com/a/30914
       if (keccak256(abi.encodePacked((password))) == keccak256(abi.encodePacked((_getPassword(tokenAddrToReceiveProof))))) {
         _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
@@ -23,7 +23,6 @@ contract Password is Fin4BaseProofType {
               " provided does not match the one set by the token creator"));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
       }
-      return true;
     }
 
     // @Override

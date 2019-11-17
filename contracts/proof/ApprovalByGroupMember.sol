@@ -18,7 +18,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         Fin4GroupsAddress = Fin4GroupsAddr;
     }
 
-    function setNameAndDescription() public returns(bool) {
+    function setNameAndDescription() public {
         name = "ApprovalByGroupMember";
         description = "The token creator specifies one or more user groups, of which one member has to approve.";
     }

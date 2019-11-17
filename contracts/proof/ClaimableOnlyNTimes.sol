@@ -11,7 +11,7 @@ contract ClaimableOnlyNTimes is Fin4BaseProofType {
         description = "The token creator sets a cap how many times a token can be claimed";
     }
 
-  function submitProof_ClaimableOnlyNTimes(address tokenAddrToReceiveProof, uint claimId) public returns(bool) {
+  function submitProof_ClaimableOnlyNTimes(address tokenAddrToReceiveProof, uint claimId) public {
       uint usersClaimCountOnToken = userToTheirClaimsCountOnToken[msg.sender][tokenAddrToReceiveProof];
       uint cap = tokenToClaimsCap[tokenAddrToReceiveProof];
       if (usersClaimCountOnToken == cap) {

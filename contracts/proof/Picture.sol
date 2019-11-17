@@ -14,7 +14,7 @@ contract Picture is SpecificAddress {
     description = "The claimer has to supply a picture, based on which the approver will decide to approve.";
   }
 
-  function submitProof_Picture(address tokenAddrToReceiveProof, uint claimId, address approver, string memory IPFShash) public returns(bool) {
+  function submitProof_Picture(address tokenAddrToReceiveProof, uint claimId, address approver, string memory IPFShash) public {
     // TODO minimize duplicate code by reusing super method
     PendingApproval memory pa;
     pa.tokenAddrToReceiveProof = tokenAddrToReceiveProof;
@@ -28,7 +28,6 @@ contract Picture is SpecificAddress {
     pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
       msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
     pendingApprovals[approver].push(pa);
-    return true;
   }
 
   // @Override

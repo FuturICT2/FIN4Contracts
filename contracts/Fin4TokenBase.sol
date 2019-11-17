@@ -228,12 +228,11 @@ contract Fin4TokenBase { // abstract class
   }
 
   // called for each proof type from Fin4Main.createNewToken()
-  function addRequiredProofType(address proofType) public returns(bool) {
+  function addRequiredProofType(address proofType) public {
     require(Fin4Proofing(Fin4ProofingAddress).proofTypeIsRegistered(proofType),
       "This address is not registered as proof type in Fin4Proofing");
     requiredProofTypes.push(proofType);
     Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
-    return true;
   }
 
 }

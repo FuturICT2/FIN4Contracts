@@ -12,7 +12,7 @@ contract MinimumInterval is Fin4BaseProofType {
       // minimumInterval = 1 * 24 * 60 * 60 * 1000; // 1 day
     }
 
-    function submitProof_MinimumInterval(address tokenAddrToReceiveProof, uint claimId) public returns(bool) {
+    function submitProof_MinimumInterval(address tokenAddrToReceiveProof, uint claimId) public {
       if (minimumIntervalRequirementMet(tokenAddrToReceiveProof, msg.sender, claimId)) {
         _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
       } else {
@@ -23,7 +23,6 @@ contract MinimumInterval is Fin4BaseProofType {
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
       }
-      return true;
     }
 
     function minimumIntervalRequirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {

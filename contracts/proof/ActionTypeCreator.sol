@@ -9,12 +9,12 @@ contract TokenCreator is SpecificAddress {
     public {}
 
   // @Override
-  function setNameAndDescription() public returns(bool) {
+  function setNameAndDescription() public {
     name = "TokenCreator";
     description = "The token creator has to approve.";
   }
 
-  function submitProof_TokenCreator(address tokenAddrToReceiveProof, uint claimId) public returns(bool) {
+  function submitProof_TokenCreator(address tokenAddrToReceiveProof, uint claimId) public {
     submitProof_SpecificAddress(tokenAddrToReceiveProof, claimId, getCreatorOfToken(tokenAddrToReceiveProof));
   }
 
