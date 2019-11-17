@@ -10,16 +10,16 @@ const Fin4Proofing = artifacts.require('Fin4Proofing');
 const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const proofTypeContracts = [
-	artifacts.require('SelfApprove'),
-	artifacts.require('SpecificAddress'),
-	artifacts.require('TokenCreator'),
-	artifacts.require('MinimumInterval'),
-	artifacts.require('MaximumQuantityPerInterval'),
-	artifacts.require('Password'),
-	artifacts.require('Picture'),
-	artifacts.require('Location'),
-	artifacts.require('SelfieTogether'),
 	artifacts.require('ApprovalByGroupMember'),
+	artifacts.require('SelfApprove'),
+	//artifacts.require('SpecificAddress'),
+	//artifacts.require('TokenCreator'),
+	//artifacts.require('MinimumInterval'),
+	//artifacts.require('MaximumQuantityPerInterval'),
+	artifacts.require('Password'),
+	//artifacts.require('Picture'),
+	artifacts.require('Location'),
+	//artifacts.require('SelfieTogether'),
 	artifacts.require('ClaimableOnlyNTimes')
 ];
 
@@ -68,8 +68,8 @@ module.exports = async function(deployer) {
 	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4ProofingInstance.addProofType(address)));
 
-	await proofTypeInstances[9].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	await proofTypeInstances[8].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await proofTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	//await proofTypeInstances[8].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
 	// Write Fin4Main address to src/config/Fin4MainAddress.js
