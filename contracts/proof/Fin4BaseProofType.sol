@@ -8,6 +8,7 @@ contract Fin4BaseProofType is utils {
 
   string public name;
   string public description;
+  bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate proof", instead that's done automatically
   address public Fin4MessagingAddress;
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type

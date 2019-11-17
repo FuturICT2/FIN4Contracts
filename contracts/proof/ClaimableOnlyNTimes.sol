@@ -9,6 +9,7 @@ contract ClaimableOnlyNTimes is Fin4BaseProofType {
     public {
         name = "ClaimableOnlyNTimes";
         description = "The token creator sets a cap how many times a token can be claimed";
+        isAutoInitiable = true;
     }
 
   function submitProof_ClaimableOnlyNTimes(address tokenAddrToReceiveProof, uint claimId) public {

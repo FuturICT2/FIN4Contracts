@@ -21,6 +21,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
     function init() public {
         name = "ApprovalByGroupMember";
         description = "The token creator specifies one or more user groups, of which one member has to approve.";
+        isAutoInitiable = true;
     }
 
     struct PendingApproval {
