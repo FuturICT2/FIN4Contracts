@@ -87,7 +87,7 @@ function LoadInitialData(props, context) {
 			!isInit.current.Fin4TokenManagement &&
 			props.contracts.Fin4TokenManagement &&
 			props.contracts.Fin4TokenManagement.initialized &&
-			isInit.current.Registry
+			(isInit.current.Registry || !TCRactive)
 		) {
 			isInit.current.Fin4TokenManagement = true;
 			let Fin4TokenManagementContract = context.drizzle.contracts.Fin4TokenManagement;
