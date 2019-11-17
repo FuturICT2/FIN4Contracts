@@ -9,6 +9,7 @@ const Fin4Messaging = artifacts.require('Fin4Messaging');
 const Fin4Proofing = artifacts.require('Fin4Proofing');
 const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
+const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const proofTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
 	artifacts.require('SelfApprove'),
@@ -20,7 +21,8 @@ const proofTypeContracts = [
 	//artifacts.require('Picture'),
 	artifacts.require('Location'),
 	//artifacts.require('SelfieTogether'),
-	artifacts.require('ClaimableOnlyNTimes')
+	artifacts.require('ClaimableOnlyNTimes'),
+	artifacts.require('SensorOneTimeSignal')
 ];
 
 module.exports = async function(deployer) {
@@ -51,6 +53,9 @@ module.exports = async function(deployer) {
 	const Fin4MessagingInstance = await Fin4Messaging.deployed();
 	await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
 	const Fin4GroupsInstance = await Fin4Groups.deployed();
+
+	await deployer.deploy(Fin4OracleHub);
+	const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
 		Fin4TokenManagementInstance.address,
