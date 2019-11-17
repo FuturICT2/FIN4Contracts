@@ -140,6 +140,7 @@ contract Fin4TokenBase { // abstract class
       }
       previousId = ids[i];
     }
+    // TODO fallback return?
   }
 
   // Used by the MaximumQuantityPerInterval proof type
