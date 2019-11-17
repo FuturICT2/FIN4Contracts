@@ -90,6 +90,14 @@ function TokenCreationProcess(props, context) {
 			return 'Symbol is already in use';
 		}
 
+		if (draft.proofs.Location) {
+			let latLonStr = draft.proofs.Location.parameters['latitude / longitude'];
+			if (latLonStr.split('/').length !== 2) {
+				// also check for other possibly wrong cases?
+				return "The 'latitude / longitude' field of the location proof must use '/' as separator";
+			}
+		}
+
 		return '';
 	};
 
