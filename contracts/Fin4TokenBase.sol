@@ -46,7 +46,7 @@ contract Fin4TokenBase { // abstract class
     address claimer;
     bool isApproved;
     uint quantity;
-    uint date;
+    // uint timeGivenByUser; // TODO if useful? #ConceptualDecision
     string comment;
     address[] requiredProofTypes;
     mapping(address => bool) proofStatuses;
@@ -58,13 +58,12 @@ contract Fin4TokenBase { // abstract class
 	mapping (uint => Claim) public claims;
 
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
-	function submitClaim(address claimer, uint quantity, uint date, string memory comment) public returns (uint, address[] memory) {
+	function submitClaim(address claimer, uint quantity, string memory comment) public returns (uint, address[] memory, uint) {
     Claim storage claim = claims[nextClaimId];
     claim.claimCreationTime = now;
     claim.claimId = nextClaimId;
     claim.claimer = claimer;
     claim.quantity = quantity;
-    claim.date = date;
     claim.comment = comment;
     // make a deep copy because the token creator might change the required proof types, but throughout the lifecycle of a claim they should stay fix
     // TODO should they? --> #ConceptualDecision
@@ -81,7 +80,7 @@ contract Fin4TokenBase { // abstract class
     }
 
     nextClaimId ++;
-    return (nextClaimId - 1, claim.requiredProofTypes);
+    return (nextClaimId - 1, claim.requiredProofTypes, claim.claimCreationTime);
   }
 
   function getClaim(uint claimId) public view returns(address, bool, uint, uint, string memory, address[] memory, bool[] memory) {
@@ -96,12 +95,12 @@ contract Fin4TokenBase { // abstract class
       proofTypeStatuses[i] = claim.proofStatuses[requiredProofTypes[i]];
     }
 
-    return (claim.claimer, claim.isApproved, claim.quantity, claim.date, claim.comment, requiredProofTypes, proofTypeStatuses);
+    return (claim.claimer, claim.isApproved, claim.quantity, claim.claimCreationTime, claim.comment, requiredProofTypes, proofTypeStatuses);
   }
 
   function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory) {
     return (claims[claimId].claimer, claims[claimId].isApproved,
-      claims[claimId].quantity, claims[claimId].date, claims[claimId].comment);
+      claims[claimId].quantity, claims[claimId].claimCreationTime, claims[claimId].comment);
   }
 
   function getClaimIds(address claimer) public view returns(uint[] memory) {
@@ -133,7 +132,7 @@ contract Fin4TokenBase { // abstract class
     uint previousId;
     for (uint i = 0; i < ids.length; i ++) {
       if(ids[i] == claimId) {
-          return claims[claimId].date - claims[previousId].date;
+          return claims[claimId].claimCreationTime - claims[previousId].claimCreationTime;
       }
       previousId = ids[i];
     }
@@ -146,11 +145,11 @@ contract Fin4TokenBase { // abstract class
       return (0, claims[claimId].quantity);
     }
 
-    uint dateOfRequestingClaim = claims[claimId].date; // TODO check if that's actually the claimers claim
+    uint dateOfRequestingClaim = claims[claimId].claimCreationTime; // TODO check if that's actually the claimers claim
     uint sum = 0;
 
     for (uint i = 0; i < ids.length; i ++) {
-      if (ids[i] != claimId && dateOfRequestingClaim - claims[ids[i]].date <= interval) {
+      if (ids[i] != claimId && dateOfRequestingClaim - claims[ids[i]].claimCreationTime <= interval) {
           sum = sum + claims[ids[i]].quantity;
       }
     }

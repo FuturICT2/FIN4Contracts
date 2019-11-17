@@ -6,20 +6,18 @@ import 'contracts/stub/MintingStub.sol';
 
 contract Fin4Claiming {
 
-    event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint date, string comment,
-        address[] requiredProofTypes);
+    event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint claimCreationTime,
+        string comment, address[] requiredProofTypes);
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint mintedQuantity, uint256 newBalance);
     event ProofApproved(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
     event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
 
-    /*
+    /* If we go for the DNS pattern of this contract as Mark suggested #ConceptualDecision
     struct ClaimRef {
         address token;
         uint claimId;
     }
-
-    mapping (string => ClaimRef) public claimRefs;
-    */
+    mapping (string => ClaimRef) public claimRefs; */
 
     address public creator;
     address public Fin4SystemParametersAddress;
@@ -35,14 +33,15 @@ contract Fin4Claiming {
         Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
-    function submitClaim(address tokenAddress, uint quantity, uint date, string memory comment) public {
+    function submitClaim(address tokenAddress, uint quantity, string memory comment) public {
         if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {
             actionsWhereUserHasClaims[msg.sender].push(tokenAddress);
         }
         uint claimId;
         address[] memory requiredProofTypes;
-        (claimId, requiredProofTypes) = Fin4Token(tokenAddress).submitClaim(msg.sender, quantity, date, comment);
-        emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, date, comment, requiredProofTypes);
+        uint claimCreationTime;
+        (claimId, requiredProofTypes, claimCreationTime) = Fin4Token(tokenAddress).submitClaim(msg.sender, quantity, comment);
+        emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredProofTypes);
     }
 
     function proofApprovalPingback(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public {
