@@ -10,41 +10,42 @@ function LocationProof(props, context) {
 	const { t } = useTranslation();
 
 	const onSubmitLocation = () => {
+		if (!navigator.geolocation) {
+			alert('Location requests are not supported by this browser');
+			return;
+		}
+
 		let defaultAccount = props.store.getState().fin4Store.defaultAccount;
-		// TODO this method no longer exists on the Location contract
-		getContractData(context.drizzle.contracts.Location, defaultAccount, 'getParameterizedInfo', props.tokenAddr).then(
-			({ 0: name, 1: parameterizedDescription, 2: tokenSpecificParams }) => {
-				var multiplier = 10000000;
-				var tokenCreatorLatitude = Number(tokenSpecificParams[0]) / multiplier;
-				var tokenCreatorLongitude = Number(tokenSpecificParams[1]) / multiplier;
 
-				const positionCallback = pos => {
-					var latitude = pos.coords.latitude;
-					var longitude = pos.coords.longitude;
+		getContractData(
+			context.drizzle.contracts.Location,
+			defaultAccount,
+			'getLatitudeLongitudeString',
+			props.tokenAddr
+		).then(latLonStr => {
+			let tokenCreatorLatitude = Number(latLonStr.split('/')[0].trim());
+			let tokenCreatorLongitude = Number(latLonStr.split('/')[1].trim());
 
-					console.log('Captured location ' + latitude + ' / ' + longitude);
+			// via https://www.w3schools.com/html/html5_geolocation.asp
+			navigator.geolocation.getCurrentPosition(pos => {
+				let latitude = pos.coords.latitude;
+				let longitude = pos.coords.longitude;
 
-					// use an oracle instead!? Maybe http://provable.xyz
-					var distanceToTokenCreatorsLocation = Math.round(
-						distanceInKmBetweenEarthCoordinates(tokenCreatorLatitude, tokenCreatorLongitude, latitude, longitude) * 1000
-					);
+				console.log('Captured location ' + latitude + ' / ' + longitude);
 
-					context.drizzle.contracts.Location.methods
-						.submitProof_Location(props.tokenAddr, props.claimId, distanceToTokenCreatorsLocation)
-						.send({ from: defaultAccount })
-						.then(function(result) {
-							console.log('Results of submitting: ', result);
-						});
-				};
+				// use an oracle instead!? Maybe http://provable.xyz
+				let distanceToTokenCreatorsLocation = Math.round(
+					distanceInKmBetweenEarthCoordinates(tokenCreatorLatitude, tokenCreatorLongitude, latitude, longitude) * 1000
+				);
 
-				if (navigator.geolocation) {
-					// via https://www.w3schools.com/html/html5_geolocation.asp
-					navigator.geolocation.getCurrentPosition(positionCallback);
-				} else {
-					console.error('Geolocation is not supported by this browser.');
-				}
-			}
-		);
+				context.drizzle.contracts.Location.methods
+					.submitProof_Location(props.tokenAddr, props.claimId, distanceToTokenCreatorsLocation)
+					.send({ from: defaultAccount })
+					.then(result => {
+						console.log('Results of submitting Location.submitProof_Location: ', result);
+					});
+			});
+		});
 	};
 
 	return (

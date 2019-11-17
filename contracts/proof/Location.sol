@@ -23,15 +23,21 @@ contract Location is Fin4BaseProofType {
     }
 
     // TODO calculate distance here instead of trusting the front end?
-    // requires an oracle or using floating point math (sin etc.) here though
+    // requires an oracle or using floating point math (sin etc.) here though #ConceptualDecision
     function locationIsWithinMaxDistToSpecifiedLocation(address token, uint distanceToLocation) public view returns(bool) {
         return distanceToLocation <= _getMaxDistance(token);
     }
 
-    mapping (address => uint[]) public tokenToParameters;
+    mapping (address => uint) public tokenToMaxDistParameter;
+    mapping (address => string) public tokenToLatLonStrParameter;
 
-    function setParameters(address token, uint latitude, uint longitude, uint maxDistance) public {
-      tokenToParameters[token] = [latitude, longitude, maxDistance];
+    function setParameters(address token, string memory latLonString, uint maxDistance) public {
+      tokenToLatLonStrParameter[token] = latLonString;
+      tokenToMaxDistParameter[token] = maxDistance;
+    }
+
+    function getLatitudeLongitudeString(address token) public view returns(string memory) {
+      return _getLatLonStr(token);
     }
 
     // @Override
@@ -39,16 +45,12 @@ contract Location is Fin4BaseProofType {
       return "string:latitude / longitude:gps,uint:maxDistance:m";
     }
 
-    function _getLatitude(address token) private view returns(uint) {
-      return tokenToParameters[token][0];
-    }
-
-    function _getLongitude(address token) private view returns(uint) {
-      return tokenToParameters[token][1];
+    function _getLatLonStr(address token) private view returns(string memory) {
+      return tokenToLatLonStrParameter[token];
     }
 
     function _getMaxDistance(address token) private view returns(uint) {
-      return tokenToParameters[token][2];
+      return tokenToMaxDistParameter[token];
     }
 
 }
