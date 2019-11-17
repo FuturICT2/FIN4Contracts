@@ -26,8 +26,9 @@ function PreviousClaims(props) {
 						let date = moment.unix(claim.claimCreationTime).calendar();
 						let symbol = props.fin4Tokens[claim.token].symbol; // of token that gets claimed
 						let proofSite = '/claim/' + symbol + '/proof/' + claim.claimId;
+						let status = claim.gotRejected ? 'gotRejected' : claim.isApproved ? 'isApproved' : 'pendingApproval';
 						return (
-							<Claim isapproved={claim.isApproved ? 'true' : 'false'} key={`${claim.token}${claim.claimId}`}>
+							<Claim status={status} key={`${claim.token}${claim.claimId}`}>
 								<div>
 									<Grid container alignItems="center">
 										<Grid item xs>
@@ -51,15 +52,24 @@ function PreviousClaims(props) {
 								<ThemeProvider theme={chipTheme}>
 									<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ margin: '0 7px 7px 0' }} />
 								</ThemeProvider>
-								<ThemeProvider theme={buttonTheme}>
-									<Button
-										icon={ProofIcon}
-										onClick={() => history.push(proofSite)}
-										color={claim.isApproved ? 'primary' : 'secondary'}
-										style={{ margin: '0 7px 7px 0' }}>
-										{claim.isApproved ? t('approved') : t('submit-proof-short')}
-									</Button>
-								</ThemeProvider>
+								{status === 'gotRejected' && (
+									<span
+										style={{ fontFamily: 'arial', color: 'gray', fontSize: 'small', marginLeft: '20px' }}
+										onClick={() => history.push(proofSite)}>
+										REJECTED
+									</span>
+								)}
+								{status !== 'gotRejected' && (
+									<ThemeProvider theme={buttonTheme}>
+										<Button
+											icon={ProofIcon}
+											onClick={() => history.push(proofSite)}
+											color={claim.isApproved ? 'primary' : 'secondary'}
+											style={{ margin: '0 7px 7px 0' }}>
+											{claim.isApproved ? t('approved') : t('submit-proof-short')}
+										</Button>
+									</ThemeProvider>
+								)}
 							</Claim>
 						);
 					})}
@@ -95,7 +105,16 @@ const Claim = styled(Paper)`
 		box-sizing: border-box;
 		margin: 15px 0;
 		padding: 15px;
-		background: ${props => (props.isapproved === 'true' ? colors.true : colors.wrong)};
+		background: ${props => {
+			switch (props.status) {
+				case 'isApproved':
+					return colors.true;
+				case 'pendingApproval':
+					return colors.wrong;
+				case 'gotRejected':
+					return colors.gotRejected;
+			}
+		}};
 	}
 `;
 
