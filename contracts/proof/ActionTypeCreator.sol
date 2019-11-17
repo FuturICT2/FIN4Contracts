@@ -9,7 +9,7 @@ contract TokenCreator is SpecificAddress {
     public {}
 
   // @Override
-  function setNameAndDescription() public {
+  function init() public {
     name = "TokenCreator";
     description = "The token creator has to approve.";
   }

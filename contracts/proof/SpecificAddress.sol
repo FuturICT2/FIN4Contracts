@@ -8,10 +8,10 @@ contract SpecificAddress is Fin4BaseProofType {
   constructor(address Fin4MessagingAddress)
     Fin4BaseProofType(Fin4MessagingAddress)
     public {
-      setNameAndDescription();
+      init();
     }
 
-  function setNameAndDescription() public {
+  function init() public {
     name = "SpecificAddress";
     description = "The claimer specifies an address, which has to approve.";
   }

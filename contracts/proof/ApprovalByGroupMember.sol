@@ -9,7 +9,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
     constructor(address Fin4MessagingAddress)
         Fin4BaseProofType(Fin4MessagingAddress)
         public {
-            setNameAndDescription();
+            init();
         }
 
     address public Fin4GroupsAddress;
@@ -18,7 +18,7 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         Fin4GroupsAddress = Fin4GroupsAddr;
     }
 
-    function setNameAndDescription() public {
+    function init() public {
         name = "ApprovalByGroupMember";
         description = "The token creator specifies one or more user groups, of which one member has to approve.";
     }

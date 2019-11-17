@@ -9,7 +9,7 @@ contract Picture is SpecificAddress {
     public {}
 
   // @Override
-  function setNameAndDescription() public {
+  function init() public {
     name = "Picture";
     description = "The claimer has to supply a picture, based on which the approver will decide to approve.";
   }

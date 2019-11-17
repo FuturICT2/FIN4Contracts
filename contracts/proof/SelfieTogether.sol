@@ -9,7 +9,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     public {}
 
   // @Override
-  function setNameAndDescription() public {
+  function init() public {
     name = "SelfieTogether";
     description = "The claimer supplies a picture, based on which a self-chosen approver and a member of a group of users appointed by the token creator decide to approve.";
   }
