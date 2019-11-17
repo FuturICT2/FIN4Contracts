@@ -177,7 +177,7 @@ contract Fin4TokenBase { // abstract class
     }
   }
 
-  function receiveProofRejection(address proofTypeAddress, uint claimId) public {
+  function receiveProofRejection(address proofTypeAddress, uint claimId) public {
     // can there be multiple interaction times per proof type?
     claims[claimId].proofInteractionTimes[proofTypeAddress] = now;
     // also store reason here? Or enough to send as message to the user from the proof type as is done currently?
