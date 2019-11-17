@@ -75,7 +75,7 @@ function TokenCreationProcess(props, context) {
 		});
 	};
 
-	const [infoBoxStep, setInfoBoxStep] = useState(null);
+	const [showInfoBox, setShowInfoBox] = useState(false);
 
 	const validateDraft = draft => {
 		// TODO do a proper validation with warning-signs in the respective steps
@@ -208,7 +208,7 @@ function TokenCreationProcess(props, context) {
 									<FontAwesomeIcon
 										icon={faInfoCircle}
 										style={styles.infoIcon}
-										onClick={() => setInfoBoxStep(activeStep === infoBoxStep ? null : activeStep)}
+										onClick={() => setShowInfoBox(!showInfoBox)}
 									/>
 								)}
 							</center>
@@ -253,16 +253,16 @@ function TokenCreationProcess(props, context) {
 							)}
 						</div>
 					</Box>
-					{infoBoxStep !== null && (
-						<Box title={steps[infoBoxStep] + ' info'}>
+					{showInfoBox && (
+						<Box title={steps[activeStep] + ' info'}>
 							<div style={{ fontFamily: 'arial' }}>
 								<center>
-									<small style={{ color: 'gray' }} onClick={() => setInfoBoxStep(null)}>
+									<small style={{ color: 'gray' }} onClick={() => setShowInfoBox(false)}>
 										CLOSE
 									</small>
 								</center>
 								<br />
-								{getStepInfoBoxContent(infoBoxStep)}
+								{getStepInfoBoxContent(activeStep)}
 							</div>
 						</Box>
 					)}
