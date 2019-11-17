@@ -12,6 +12,7 @@ const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const proofTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
+	artifacts.require('SensorOneTimeSignal'),
 	artifacts.require('SelfApprove'),
 	//artifacts.require('SpecificAddress'),
 	//artifacts.require('TokenCreator'),
@@ -21,8 +22,7 @@ const proofTypeContracts = [
 	//artifacts.require('Picture'),
 	artifacts.require('Location'),
 	//artifacts.require('SelfieTogether'),
-	artifacts.require('ClaimableOnlyNTimes'),
-	artifacts.require('SensorOneTimeSignal')
+	artifacts.require('ClaimableOnlyNTimes')
 ];
 
 module.exports = async function(deployer) {
@@ -72,13 +72,14 @@ module.exports = async function(deployer) {
 	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagingInstance.address)));
 	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4ProofingInstance.addProofType(address)));
-
+	// ApprovalByGroupMember
 	await proofTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	//await proofTypeInstances[8].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	// SensorOneTimeSignal
+	await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
+
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
 	// Write Fin4Main address to src/config/Fin4MainAddress.js
-
 	let data = "const Fin4MainAddress = '" + Fin4MainInstance.address + "';\n" + 'export { Fin4MainAddress };\n';
 	fs.writeFile(path.join(__dirname, '../src/config/Fin4MainAddress.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;

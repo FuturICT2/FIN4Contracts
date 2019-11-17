@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/Fin4OracleHub.sol";
 
 contract SensorOneTimeSignal is Fin4BaseProofType {
 
@@ -10,6 +11,12 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
             name = "SensorOneTimeSignal";
             description = "Approval via a sensor that sends a signal. The token creator specifies the sensor via its ID.";
         }
+
+    address public Fin4OracleHubAddress;
+
+    function setFin4OracleHubAddress(address _Fin4OracleHubAddress) public {
+        Fin4OracleHubAddress = _Fin4OracleHubAddress;
+    }
 
     function submitProof(address tokenAddrToReceiveProof, uint claimId) public {
 
