@@ -80,7 +80,7 @@ const contractEventNotifier = store => next => action => {
 				claimer: claim.claimer,
 				isApproved: false,
 				quantity: quantity,
-				date: new BN(claim.date).toNumber(),
+				claimCreationTime: new BN(claim.claimCreationTime).toNumber(),
 				comment: claim.comment,
 				proofStatuses: proofStatusesObj
 			}

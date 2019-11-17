@@ -3,7 +3,6 @@ import Container from '../../components/Container';
 import Box from '../../components/Box';
 import Button from '../../components/Button';
 import { TextField } from '@material-ui/core';
-import moment from 'moment';
 import AddIcon from '@material-ui/icons/Add';
 import Dropdown from '../../components/Dropdown';
 import PreviousClaims from './PreviousClaims';
@@ -32,7 +31,7 @@ function Claim(props, context) {
 			return;
 		}
 		context.drizzle.contracts.Fin4Claiming.methods
-			.submitClaim(val.tokenAddress, val.quantity, moment().valueOf(), val.comment)
+			.submitClaim(val.tokenAddress, val.quantity, val.comment)
 			.send({
 				from: props.store.getState().fin4Store.defaultAccount
 			})

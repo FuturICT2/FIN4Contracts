@@ -326,7 +326,7 @@ const fetchCurrentUsersClaims = (props, Fin4ClaimingContract) => {
 									0: claimer,
 									1: isApproved,
 									2: quantityBN,
-									3: dateBN,
+									3: claimCreationTimeBN,
 									4: comment,
 									5: requiredProofTypes,
 									6: proofStatusesBool
@@ -342,7 +342,7 @@ const fetchCurrentUsersClaims = (props, Fin4ClaimingContract) => {
 										claimer: claimer,
 										isApproved: isApproved,
 										quantity: new BN(quantityBN).toNumber(),
-										date: new BN(dateBN).toNumber(),
+										claimCreationTime: new BN(claimCreationTimeBN).toNumber(),
 										comment: comment,
 										proofStatuses: proofStatusesObj
 									};
