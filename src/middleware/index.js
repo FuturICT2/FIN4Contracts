@@ -241,6 +241,28 @@ const contractEventNotifier = store => next => action => {
 		});
 	}
 
+	// ------------------------------ SubmissionAdded ------------------------------
+
+	if (contractEvent === 'SubmissionAdded') {
+		let submission = action.event.returnValues;
+		let tokenAddr = submission.tokenAddress;
+		let submissionPseudoId = tokenAddr + '_' + submission.submissionId;
+
+		if (store.getState().fin4Store.submissions[submissionPseudoId]) {
+			// block duplicate events, this submission is already here
+			return next(action);
+		}
+
+		let tokenObj = store.getState().fin4Store.fin4Tokens[tokenAddr];
+		display = 'Submission added to token ' + tokenObj.symbol;
+
+		store.dispatch({
+			type: 'ADD_SUBMISSION',
+			pseudoId: submissionPseudoId,
+			submission: submission
+		});
+	}
+
 	// ------------------------------------------------------------
 
 	if (display) {
@@ -296,7 +318,8 @@ const initialState = {
 	collections: {},
 	parameterizerParams: {},
 	systemParameters: {},
-	tokenCreationDrafts: {}
+	tokenCreationDrafts: {},
+	submissions: {}
 };
 
 function fin4StoreReducer(state = initialState, action) {
@@ -547,6 +570,16 @@ function fin4StoreReducer(state = initialState, action) {
 				}
 			});
 			Cookies.set('TokenCreationDraft_' + draftId, JSON.stringify(state.tokenCreationDrafts[draftId]));
+			return state;
+		case 'ADD_SUBMISSION':
+			state = {
+				...state,
+				submissions: {
+					...state.submissions,
+					[action.pseudoId]: action.submission
+				}
+			};
+			console.log(state.submissions);
 			return state;
 		default:
 			return state;
