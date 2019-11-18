@@ -22,7 +22,7 @@ import Governance from '../views/CuratedTokens/Governance';
 import Messages from '../views/Messages';
 import TokenCreationProcess from '../views/tokens/TokenCreationProcess';
 import ProofTypes from '../views/proofTypes/ProofTypes';
-import TokenSubmissions from '../views/tokens/TokenSubmissions';
+import TokenTextSubmissions from '../views/tokens/TokenTextSubmissions';
 
 const menu = [
 	{
@@ -63,7 +63,7 @@ const menu = [
 	// ------------------ SUBMISSIONS ON TOKENS ------------------
 	// Submissions on proof types or per user also possible #ConceptualDecision
 	{
-		component: TokenSubmissions,
+		component: TokenTextSubmissions,
 		path: '/token/submissions/:tokenSymbol/text',
 		showInNavBar: false
 	},

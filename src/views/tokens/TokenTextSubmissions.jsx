@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { findTokenBySymbol } from '../../components/Contractor';
 import moment from 'moment';
 
-function TokenSubmissions(props) {
+function TokenTextSubmissions(props) {
 	const { t } = useTranslation();
 
 	const [token, setToken] = useState();
@@ -77,4 +77,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default drizzleConnect(TokenSubmissions, mapStateToProps);
+export default drizzleConnect(TokenTextSubmissions, mapStateToProps);
