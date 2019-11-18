@@ -107,17 +107,19 @@ function Messages(props, context) {
 													Requested by {msg.sender}
 												</Typography>
 												<br />
-												{msg.attachment && msg.attachment.length > 0 && (
-													<>
-														<Button
-															center="true"
-															icon={Photo}
-															onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
-															Click to see the image
-														</Button>
-														<br />
-													</>
-												)}
+												{msg.attachment &&
+												msg.attachment.length > 0 &&
+												msg.proofTypeName !== 'Networking' && ( // TODO generic solution!
+														<>
+															<Button
+																center="true"
+																icon={Photo}
+																onClick={() => window.open('https://gateway.ipfs.io/ipfs/' + msg.attachment, '_blank')}>
+																Click to see the image
+															</Button>
+															<br />
+														</>
+													)}
 												<center>
 													<span style={{ color: 'green' }}>
 														<Button
