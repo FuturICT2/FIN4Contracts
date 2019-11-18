@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { drizzleConnect } from 'drizzle-react';
 import { useTranslation } from 'react-i18next';
 import { findTokenBySymbol } from '../../components/Contractor';
+import moment from 'moment';
 
 function TokenSubmissions(props) {
 	const { t } = useTranslation();
@@ -19,7 +20,6 @@ function TokenSubmissions(props) {
 	});
 
 	const getSubmissionsOnToken = () => {
-		console.log(props.submissions);
 		if (!token) {
 			return [];
 		}
@@ -53,9 +53,15 @@ function TokenSubmissions(props) {
 	return (
 		<div style={{ fontFamily: 'arial', padding: '0 50px 0 50px' }}>
 			{getSubmissionsOnToken().map(sub => {
+				let date = moment.unix(sub.timestamp).calendar();
 				return (
 					<>
-						<span style={{ color: getRandomFin4Color(), fontSize: getRandomFontSize() }}>{sub.content}</span>
+						<span
+							style={{ color: getRandomFin4Color(), fontSize: getRandomFontSize() }}
+							title={'By ' + sub.user + ', ' + date} // TODO add more fields here?
+						>
+							{sub.content}
+						</span>
 						&nbsp;&nbsp;
 					</>
 				);
