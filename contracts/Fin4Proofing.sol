@@ -4,6 +4,8 @@ import 'contracts/proof/Fin4BaseProofType.sol';
 
 contract Fin4Proofing {
 
+    event SubmissionAdded(uint submissionId, address proofType, address token, address user, uint timestamp, string content);
+
     // all the proof types that token creators can use
     address[] public proofTypes;
 
@@ -31,4 +33,31 @@ contract Fin4Proofing {
         return false;
     }
 
+    // ------------------------- COLLECTING SUBMISSIONS -------------------------
+
+    struct Submission {
+        uint submissionId;
+        address proofType; // The proof type who sent this submission in
+        address token;
+        address user;
+        uint timestamp;
+        string content;
+    }
+
+    Submission[] public submissions;
+    uint public nextSubmissionId = 0;
+
+    function addSubmission(address proofType, address token, address user, uint timestamp, string memory content) public {
+        submissions.push(Submission(nextSubmissionId, proofType, token, user, timestamp, content));
+        emit SubmissionAdded(nextSubmissionId, proofType, token, user, timestamp, content);
+        nextSubmissionId += 1;
+    }
+
+    function getSubmissionsCount() public view returns(uint) {
+        return submissions.length;
+    }
+
+    //function getSubmission(uint idx) public view returns(address proofType, address token, address user, uint timestamp, string memory content) {
+    //    Submission memory sub = submissions[idx];
+    //}
 }

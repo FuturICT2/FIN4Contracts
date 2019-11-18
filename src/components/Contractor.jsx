@@ -152,11 +152,10 @@ const addSatelliteContracts = (props, Fin4MainContract, drizzle) => {
 				'ClaimApproved',
 				'ClaimRejected',
 				'ProofApproved',
-				'UpdatedTotalSupply',
-				'SubmissionAdded'
+				'UpdatedTotalSupply'
 			]);
 			addContract(props, drizzle, 'Fin4Collections', Fin4CollectionsAddress, []);
-			addContract(props, drizzle, 'Fin4Proofing', Fin4ProofingAddress, []);
+			addContract(props, drizzle, 'Fin4Proofing', Fin4ProofingAddress, ['SubmissionAdded']);
 			addContract(props, drizzle, 'Fin4Groups', Fin4GroupsAddress, []);
 			addContract(props, drizzle, 'Fin4SystemParameters', Fin4SystemParametersAddress, []);
 		}

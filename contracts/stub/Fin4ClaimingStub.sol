@@ -8,5 +8,4 @@ contract Fin4ClaimingStub {
 
     function proofAndClaimRejectionPingback(address tokenAddress, uint claimId, address claimer) public;
 
-    function submissionAddedPingback(uint submissionId, address tokenAddress, address sender, uint timestamp, string memory content) public;
 }

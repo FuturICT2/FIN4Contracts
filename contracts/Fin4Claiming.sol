@@ -13,7 +13,6 @@ contract Fin4Claiming {
     event ClaimRejected(address tokenAddr, uint claimId, address claimer);
     event ProofApproved(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
     event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
-    event SubmissionAdded(uint submissionId, address tokenAddress, address sender, uint timestamp, string content);
 
     /* If we go for the DNS pattern of this contract as Mark suggested #ConceptualDecision
     struct ClaimRef {
@@ -106,13 +105,5 @@ contract Fin4Claiming {
     function getClaimOnThisToken(address token, uint claimId) public view
         returns(address, bool, bool, uint, uint, string memory, address[] memory, bool[] memory) {
         return Fin4Token(token).getClaim(claimId);
-    }
-
-    // ------------------------- COLLECTING SUBMISSIONS -------------------------
-
-    // TODO or should this event rather be emitted from Fin4TokenManagement? #ConceptualDecision
-    // was just laziness to do it here, because Fin4TokenManagement.address is currently not known to Fin4TokenBase
-    function submissionAddedPingback(uint submissionId, address tokenAddress, address sender, uint timestamp, string memory content) public {
-        emit SubmissionAdded(submissionId, tokenAddress, sender, timestamp, content);
     }
 }

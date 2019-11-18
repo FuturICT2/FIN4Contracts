@@ -245,20 +245,17 @@ const contractEventNotifier = store => next => action => {
 
 	if (contractEvent === 'SubmissionAdded') {
 		let submission = action.event.returnValues;
-		let tokenAddr = submission.tokenAddress;
-		let submissionPseudoId = tokenAddr + '_' + submission.submissionId;
 
-		if (store.getState().fin4Store.submissions[submissionPseudoId]) {
+		if (store.getState().fin4Store.submissions[submission.submissionId]) {
 			// block duplicate events, this submission is already here
 			return next(action);
 		}
 
-		let tokenObj = store.getState().fin4Store.fin4Tokens[tokenAddr];
+		let tokenObj = store.getState().fin4Store.fin4Tokens[submission.token];
 		display = 'Submission added to token ' + tokenObj.symbol;
 
 		store.dispatch({
 			type: 'ADD_SUBMISSION',
-			pseudoId: submissionPseudoId,
 			submission: submission
 		});
 	}
@@ -572,15 +569,13 @@ function fin4StoreReducer(state = initialState, action) {
 			Cookies.set('TokenCreationDraft_' + draftId, JSON.stringify(state.tokenCreationDrafts[draftId]));
 			return state;
 		case 'ADD_SUBMISSION':
-			state = {
+			return {
 				...state,
 				submissions: {
 					...state.submissions,
-					[action.pseudoId]: action.submission
+					[action.submission.submissionId]: action.submission
 				}
 			};
-			console.log(state.submissions);
-			return state;
 		default:
 			return state;
 	}
