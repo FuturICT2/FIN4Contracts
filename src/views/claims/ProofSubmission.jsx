@@ -45,18 +45,6 @@ function ProofSubmission(props) {
 				return <SelfieTogetherProof key={'selfie_' + index} tokenAddr={tokenAddrToReceiveProof} claimId={claimId} />;
 			case 'Picture':
 				return <PictureProof key={'pic_' + index} tokenAddr={tokenAddrToReceiveProof} claimId={claimId} />;
-			case 'Password':
-				return (
-					<ContractForm
-						contractName="Password"
-						method="submitProof_Password"
-						staticArgs={{
-							tokenAddrToReceiveProof: tokenAddrToReceiveProof,
-							claimId: claimId + ''
-						}}
-						buttonLabel="Initiate proof"
-					/>
-				);
 			default:
 				return (
 					<ContractForm
