@@ -52,10 +52,10 @@ function TokenTextSubmissions(props) {
 
 	return (
 		<div style={{ fontFamily: 'arial', padding: '0 50px 0 50px' }}>
-			{getSubmissionsOnToken().map(sub => {
+			{getSubmissionsOnToken().map((sub, idx) => {
 				let date = moment.unix(sub.timestamp).calendar();
 				return (
-					<>
+					<span key={'content_' + idx}>
 						<span
 							style={{ color: getRandomFin4Color(), fontSize: getRandomFontSize() }}
 							title={'By ' + sub.user + ', ' + date} // TODO add more fields here?
@@ -63,7 +63,7 @@ function TokenTextSubmissions(props) {
 							{sub.content}
 						</span>
 						&nbsp;&nbsp;
-					</>
+					</span>
 				);
 			})}
 		</div>
