@@ -19,8 +19,7 @@ contract Idea is Fin4BaseProofType {
     }
 
     function submitProof(address tokenAddrToReceiveProof, uint claimId, string memory idea) public {
-        uint timestamp = now;
-        Fin4Proofing(Fin4ProofingAddress).addSubmission(address(this), tokenAddrToReceiveProof, msg.sender, timestamp, idea);
+        Fin4Proofing(Fin4ProofingAddress).addSubmission(address(this), tokenAddrToReceiveProof, msg.sender, now, idea);
         _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
     }
 
