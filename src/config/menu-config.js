@@ -23,6 +23,7 @@ import Messages from '../views/Messages';
 import TokenCreationProcess from '../views/tokens/TokenCreationProcess';
 import ProofTypes from '../views/proofTypes/ProofTypes';
 import TokenTextSubmissions from '../views/tokens/TokenTextSubmissions';
+import TokenPictureSubmissions from '../views/tokens/TokenPictureSubmissions';
 
 const menu = [
 	{
@@ -65,6 +66,11 @@ const menu = [
 	{
 		component: TokenTextSubmissions,
 		path: '/token/submissions/:tokenSymbol/text',
+		showInNavBar: false
+	},
+	{
+		component: TokenPictureSubmissions,
+		path: '/token/submissions/:tokenSymbol/picture',
 		showInNavBar: false
 	},
 	// ------------------ CLAIMS ------------------
