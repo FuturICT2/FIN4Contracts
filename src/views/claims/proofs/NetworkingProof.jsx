@@ -39,7 +39,7 @@ function NetworkingProof(props, context) {
 				rows="2"
 				fullWidth
 				variant="outlined"
-				onChange={e => (contentValue.current.text = e.target.value)}
+				onChange={e => (contentValue.current = e.target.value)}
 			/>
 			<br />
 			<Button onClick={submit} center="true">
