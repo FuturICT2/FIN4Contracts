@@ -416,7 +416,6 @@ const fetchAllSubmissions = (props, Fin4ProofingContract) => {
 	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
 	getContractData(Fin4ProofingContract, defaultAccount, 'getSubmissionsCount')
 		.then(submissionsCount => {
-			console.log('submissionsCount', submissionsCount);
 			return Array(new BN(submissionsCount).toNumber())
 				.fill()
 				.map((x, i) => i)

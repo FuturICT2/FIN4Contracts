@@ -44,7 +44,7 @@ contract Fin4Proofing {
         string content;
     }
 
-    Submission[] public submissions;
+    Submission[] public submissions; // submissions() used directly as getter in frontend
     uint public nextSubmissionId = 0;
 
     function addSubmission(address proofType, address token, address user, uint timestamp, string memory content) public {
@@ -56,8 +56,4 @@ contract Fin4Proofing {
     function getSubmissionsCount() public view returns(uint) {
         return submissions.length;
     }
-
-    //function getSubmission(uint idx) public view returns(address proofType, address token, address user, uint timestamp, string memory content) {
-    //    Submission memory sub = submissions[idx];
-    //}
 }
