@@ -85,5 +85,7 @@ module.exports = async function(deployer) {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
+	console.log('-----------> Address of Fin4OracleHub: ', Fin4OracleHubInstance.address);
+
 	// await Fin4MainInstance.createNewToken('Token-Dev-1', 'TD1', [], [], []);
 };
