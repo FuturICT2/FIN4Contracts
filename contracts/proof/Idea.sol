@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/Fin4TokenBase.sol";
 
 contract Idea is Fin4BaseProofType {
 
@@ -12,7 +13,7 @@ contract Idea is Fin4BaseProofType {
     }
 
     function submitProof(address tokenAddrToReceiveProof, uint claimId, string memory idea) public {
-        //TODO
+        Fin4TokenBase(tokenAddrToReceiveProof).addSubmission(msg.sender, idea);
         _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
     }
 
