@@ -15,6 +15,7 @@ const proofTypeContracts = [
 	artifacts.require('SensorOneTimeSignal'),
 	artifacts.require('Idea'),
 	artifacts.require('Networking'),
+	artifacts.require('HappyMoment'),
 	artifacts.require('SelfApprove'),
 	//artifacts.require('SpecificAddress'),
 	//artifacts.require('TokenCreator'),
@@ -82,6 +83,8 @@ module.exports = async function(deployer) {
 	await proofTypeInstances[2].setFin4ProofingAddress(Fin4ProofingInstance.address);
 	// Networking
 	await proofTypeInstances[3].setFin4ProofingAddress(Fin4ProofingInstance.address);
+	// HappyMoment
+	await proofTypeInstances[4].setFin4ProofingAddress(Fin4ProofingInstance.address);
 
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
