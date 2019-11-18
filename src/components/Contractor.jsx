@@ -421,13 +421,14 @@ const fetchAllSubmissions = (props, Fin4ProofingContract) => {
 				.map((x, i) => i)
 				.map(submissionId => {
 					return getContractData(Fin4ProofingContract, defaultAccount, 'submissions', submissionId).then(
-						({ 0: submissionId, 1: proofType, 2: token, 3: user, 4: timestamp, 5: content }) => {
+						({ 0: submissionId, 1: proofType, 2: token, 3: user, 4: timestamp, 5: contentType, 6: content }) => {
 							return {
 								submissionId: submissionId,
 								proofType: proofType,
 								token: token,
 								user: user,
 								timestamp: timestamp,
+								contentType: contentType,
 								content: content
 							};
 						}

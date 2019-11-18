@@ -4,7 +4,7 @@ import 'contracts/proof/Fin4BaseProofType.sol';
 
 contract Fin4Proofing {
 
-    event SubmissionAdded(uint submissionId, address proofType, address token, address user, uint timestamp, string content);
+    event SubmissionAdded(uint submissionId, address proofType, address token, address user, uint timestamp, uint contentType, string content);
 
     // all the proof types that token creators can use
     address[] public proofTypes;
@@ -41,15 +41,16 @@ contract Fin4Proofing {
         address token;
         address user;
         uint timestamp;
+        uint contentType; // 0 = text, 1 = picture (IPFS hash)
         string content;
     }
 
     Submission[] public submissions; // submissions() used directly as getter in frontend
     uint public nextSubmissionId = 0;
 
-    function addSubmission(address proofType, address token, address user, uint timestamp, string memory content) public {
-        submissions.push(Submission(nextSubmissionId, proofType, token, user, timestamp, content));
-        emit SubmissionAdded(nextSubmissionId, proofType, token, user, timestamp, content);
+    function addSubmission(address proofType, address token, address user, uint timestamp, uint contentType, string memory content) public {
+        submissions.push(Submission(nextSubmissionId, proofType, token, user, timestamp, contentType, content));
+        emit SubmissionAdded(nextSubmissionId, proofType, token, user, timestamp, contentType, content);
         nextSubmissionId += 1;
     }
 

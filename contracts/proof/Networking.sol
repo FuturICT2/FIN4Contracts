@@ -59,7 +59,7 @@ contract Networking is Fin4BaseProofType {
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
         _sendApproval(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
-        Fin4Proofing(Fin4ProofingAddress).addSubmission(address(this), pa.tokenAddrToReceiveProof, pa.requester, pa.timestamp, pa.attachment);
+        Fin4Proofing(Fin4ProofingAddress).addSubmission(address(this), pa.tokenAddrToReceiveProof, pa.requester, pa.timestamp, 0, pa.attachment);
     }
 
     function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
