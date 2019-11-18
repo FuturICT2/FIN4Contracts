@@ -8,6 +8,7 @@ import {
 	fetchUsersNonzeroTokenBalances,
 	fetchCurrentUsersClaims,
 	fetchAndAddAllProofTypes,
+	fetchAllSubmissions,
 	fetchCollectionsInfo,
 	fetchOPATs,
 	fetchSystemParameters,
@@ -121,6 +122,7 @@ function LoadInitialData(props, context) {
 		if (!isInit.current.Fin4Proofing && props.contracts.Fin4Proofing && props.contracts.Fin4Proofing.initialized) {
 			isInit.current.Fin4Proofing = true;
 			fetchAndAddAllProofTypes(props, context.drizzle.contracts.Fin4Proofing, context.drizzle);
+			fetchAllSubmissions(props, context.drizzle.contracts.Fin4Proofing);
 		}
 
 		if (!isInit.current.tokenCreationDraftsLoaded) {

@@ -412,6 +412,38 @@ const fetchCollectionsInfo = (props, Fin4CollectionsContract) => {
 		});
 };
 
+const fetchAllSubmissions = (props, Fin4ProofingContract) => {
+	let defaultAccount = props.store.getState().fin4Store.defaultAccount;
+	getContractData(Fin4ProofingContract, defaultAccount, 'getSubmissionsCount')
+		.then(submissionsCount => {
+			console.log('submissionsCount', submissionsCount);
+			return Array(new BN(submissionsCount).toNumber())
+				.fill()
+				.map((x, i) => i)
+				.map(submissionId => {
+					return getContractData(Fin4ProofingContract, defaultAccount, 'submissions', submissionId).then(
+						({ 0: submissionId, 1: proofType, 2: token, 3: user, 4: timestamp, 5: content }) => {
+							return {
+								submissionId: submissionId,
+								proofType: proofType,
+								token: token,
+								user: user,
+								timestamp: timestamp,
+								content: content
+							};
+						}
+					);
+				});
+		})
+		.then(promises => Promise.all(promises))
+		.then(submissionsArr => {
+			props.dispatch({
+				type: 'ADD_MULTIPLE_SUBMISSIONS',
+				submissionsArr: submissionsArr
+			});
+		});
+};
+
 // --------------------- TCR ---------------------
 
 const fetchOPATs = (props, RegistryContract) => {
@@ -476,6 +508,7 @@ export {
 	fetchUsersNonzeroTokenBalances,
 	fetchCurrentUsersClaims,
 	fetchAndAddAllProofTypes,
+	fetchAllSubmissions,
 	findTokenBySymbol,
 	isValidPublicAddress,
 	getFin4TokensFormattedForSelectOptions,

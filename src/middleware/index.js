@@ -576,6 +576,18 @@ function fin4StoreReducer(state = initialState, action) {
 					[action.submission.submissionId]: action.submission
 				}
 			};
+		case 'ADD_MULTIPLE_SUBMISSIONS':
+			for (i = 0; i < action.submissionsArr.length; i++) {
+				let submission = action.submissionsArr[i];
+				state = {
+					...state,
+					submissions: {
+						...state.submissions,
+						[submission.submissionId]: submission
+					}
+				};
+			}
+			return state;
 		default:
 			return state;
 	}
