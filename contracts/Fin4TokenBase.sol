@@ -239,7 +239,7 @@ contract Fin4TokenBase { // abstract class
   function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
-      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i)) { // && !claims[i].proofStatuses[proofType]) {
+      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
         count ++;
       }
     }
@@ -247,7 +247,7 @@ contract Fin4TokenBase { // abstract class
     address[] memory claimers = new address[](count);
     count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
-      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i)) { // && !claims[i].proofStatuses[proofType]) {
+      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
         claimIDs[count] = i;
         claimers[count] = claims[i].claimer;
         count ++;
