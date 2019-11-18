@@ -14,6 +14,7 @@ const proofTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
 	artifacts.require('SensorOneTimeSignal'),
 	artifacts.require('Idea'),
+	artifacts.require('Networking'),
 	artifacts.require('SelfApprove'),
 	//artifacts.require('SpecificAddress'),
 	//artifacts.require('TokenCreator'),
@@ -79,6 +80,8 @@ module.exports = async function(deployer) {
 	await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	// Idea
 	await proofTypeInstances[2].setFin4ProofingAddress(Fin4ProofingInstance.address);
+	// Networking
+	await proofTypeInstances[3].setFin4ProofingAddress(Fin4ProofingInstance.address);
 
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
