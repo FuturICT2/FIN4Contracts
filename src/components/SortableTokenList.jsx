@@ -165,7 +165,7 @@ function SortableTokenList(props, context) {
 					)}
 				</>
 			)}
-			<Table headers={[t('token-name'), 'Supply', 'Actions']} colWidths={[65, 20, 15]}>
+			<Table headers={[t('token-name'), 'Supply', 'Actions']} colWidths={[74, 12, 14]}>
 				{tokens.map((token, index) => {
 					return (
 						<TableRow
