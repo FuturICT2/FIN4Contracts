@@ -147,7 +147,14 @@ function TokenView(props, context) {
 						</p>
 						{getSubmissionsOnToken().length > 0 && (
 							<p>
-								<Link to={'/token/submissions/' + tokenViaURL.symbol + '/text'}>See submissions</Link>
+								<Link
+									to={
+										'/token/submissions/' +
+										tokenViaURL.symbol + // weird to just look at [0]
+										(getSubmissionsOnToken()[0].contentType === '0' ? '/text' : '/picture')
+									}>
+									See submissions
+								</Link>
 							</p>
 						)}
 						{(tokenViaURL.userIsCreator || tokenViaURL.userIsAdmin) && (
