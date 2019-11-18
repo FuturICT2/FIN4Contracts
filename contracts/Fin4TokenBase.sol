@@ -236,7 +236,6 @@ contract Fin4TokenBase { // abstract class
     Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
   }
 
-  /*
   function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
@@ -265,6 +264,4 @@ contract Fin4TokenBase { // abstract class
     }
     return false;
   }
-  */
-
 }

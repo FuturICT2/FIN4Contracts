@@ -20,22 +20,19 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
     }
 
     function sensorSignalReceived(string memory sensorID, uint timestamp, string memory data) public {
-        /*for (uint i = 0; i < sensorIDtoTokens[sensorID].length; i ++) {
+        for (uint i = 0; i < sensorIDtoTokens[sensorID].length; i ++) {
             address token = sensorIDtoTokens[sensorID][i];
             uint[] memory claimIDs;
             address[] memory claimers;
             (claimIDs, claimers) = Fin4TokenBase(token).getUnrejectedClaimsWithThisProofTypeUnapproved(address(this));
-
-            //dev: _sendApproval(address(this), token, 0);
-
             for (uint j = 0; j < claimIDs.length; j ++) {
                 string memory message = string(abi.encodePacked(
                     "Your claim on token '", Fin4TokenStub(token).name(), "' got approved from sensor '",
                     sensorID, "' via proof type 'SensorOneTimeSignal' at timestamp ",
-                    uint2str(timestamp), ": ", data));
-                submitProofViaSensor(token, claimIDs[j], claimers[j]);
+                    uint2str(timestamp), ". Message from sensor: ", data));
+                submitProofViaSensor(token, claimIDs[j], claimers[j], message);
             }
-        }*/
+        }
     }
 
     function submitProofViaSensor(address tokenAddrToReceiveProof, uint claimId, address claimer, string memory message) public {
