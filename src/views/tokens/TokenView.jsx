@@ -110,6 +110,16 @@ function TokenView(props, context) {
 		);
 	};
 
+	// TODO move to utils and use that here and in TokenSubmission
+	const getSubmissionsOnToken = () => {
+		if (!tokenViaURL) {
+			return [];
+		}
+		return Object.keys(props.submissions)
+			.map(subId => props.submissions[subId])
+			.filter(sub => sub.token === tokenViaURL.address);
+	};
+
 	return (
 		<Container>
 			<Box>
@@ -135,9 +145,11 @@ function TokenView(props, context) {
 						<p>
 							<span style={{ color: 'gray' }}>Description:</span> {tokenViaURL.description}
 						</p>
-						<p>
-							<span style={{ color: 'gray' }}>Unit:</span> {tokenViaURL.unit}
-						</p>
+						{getSubmissionsOnToken().length > 0 && (
+							<p>
+								<Link to={'/token/submissions/' + tokenViaURL.symbol + '/text'}>See submissions</Link>
+							</p>
+						)}
 						{(tokenViaURL.userIsCreator || tokenViaURL.userIsAdmin) && (
 							<center>
 								<br />
@@ -191,6 +203,7 @@ const mapStateToProps = state => {
 		contracts: state.contracts,
 		defaultAccount: state.fin4Store.defaultAccount,
 		fin4Tokens: state.fin4Store.fin4Tokens,
+		submissions: state.fin4Store.submissions,
 		proofTypes: state.fin4Store.proofTypes
 	};
 };
