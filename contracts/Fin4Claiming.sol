@@ -13,7 +13,7 @@ contract Fin4Claiming {
     event ClaimRejected(address tokenAddr, uint claimId, address claimer);
     event ProofApproved(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
     event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
-    event SubmissionAdded(address tokenAddress, address sender, uint timestamp, string content);
+    event SubmissionAdded(uint submissionId, address tokenAddress, address sender, uint timestamp, string content);
 
     /* If we go for the DNS pattern of this contract as Mark suggested #ConceptualDecision
     struct ClaimRef {
@@ -110,7 +110,7 @@ contract Fin4Claiming {
 
     // ------------------------- COLLECTING SUBMISSIONS -------------------------
 
-    function submissionAddedPingback(address tokenAddress, address sender, uint timestamp, string memory content) public {
-        emit SubmissionAdded(tokenAddress, sender, timestamp, content);
+    function submissionAddedPingback(uint submissionId, address tokenAddress, address sender, uint timestamp, string memory content) public {
+        emit SubmissionAdded(submissionId, tokenAddress, sender, timestamp, content);
     }
 }

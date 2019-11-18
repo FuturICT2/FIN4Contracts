@@ -279,8 +279,8 @@ contract Fin4TokenBase { // abstract class
 
   function addSubmission(address sender, string memory content) public {
     uint timestamp = now;
+    Fin4ClaimingStub(Fin4ClaimingAddress).submissionAddedPingback(submissions.length, address(this), sender, timestamp, content);
     submissions.push(Submission(sender, timestamp, content));
-    Fin4ClaimingStub(Fin4ClaimingAddress).submissionAddedPingback(address(this), sender, timestamp, content);
   }
 
   function getSubmissionsCount() public view returns(uint) {
