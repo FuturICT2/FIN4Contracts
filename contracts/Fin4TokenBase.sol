@@ -236,4 +236,35 @@ contract Fin4TokenBase { // abstract class
     Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
   }
 
+  /*
+  function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {
+    uint count = 0;
+    for (uint i = 0; i < nextClaimId; i ++) {
+      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i)) { // && !claims[i].proofStatuses[proofType]) {
+        count ++;
+      }
+    }
+    uint[] memory claimIDs = new uint[](count);
+    address[] memory claimers = new address[](count);
+    count = 0;
+    for (uint i = 0; i < nextClaimId; i ++) {
+      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i)) { // && !claims[i].proofStatuses[proofType]) {
+        claimIDs[count] = i;
+        claimers[count] = claims[i].claimer;
+        count ++;
+      }
+    }
+    return (claimIDs, claimers);
+  }
+
+  function proofTypeIsRequired(address proofType, uint claimId) public view returns(bool) {
+    for (uint i = 0; i < claims[claimId].requiredProofTypes.length; i ++) {
+      if (claims[claimId].requiredProofTypes[i] == proofType) {
+          return true;
+      }
+    }
+    return false;
+  }
+  */
+
 }
