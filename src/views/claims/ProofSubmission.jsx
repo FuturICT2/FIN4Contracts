@@ -54,7 +54,7 @@ function ProofSubmission(props) {
 							tokenAddrToReceiveProof: tokenAddrToReceiveProof,
 							claimId: claimId + ''
 						}}
-						buttonLabel="Initiate proof"
+						buttonLabel="Submit proof"
 					/>
 				);
 		}
