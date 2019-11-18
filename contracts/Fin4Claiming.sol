@@ -110,6 +110,8 @@ contract Fin4Claiming {
 
     // ------------------------- COLLECTING SUBMISSIONS -------------------------
 
+    // TODO or should this event rather be emitted from Fin4TokenManagement? #ConceptualDecision
+    // was just laziness to do it here, because Fin4TokenManagement.address is currently not known to Fin4TokenBase
     function submissionAddedPingback(uint submissionId, address tokenAddress, address sender, uint timestamp, string memory content) public {
         emit SubmissionAdded(submissionId, tokenAddress, sender, timestamp, content);
     }
