@@ -94,6 +94,13 @@ module.exports = async function(deployer) {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
+	// Write Fin4OracleHub address to src/config/Fin4OracleHubAddress.js
+	data =
+		"const Fin4OracleHubAddress = '" + Fin4OracleHubInstance.address + "';\n" + 'export { Fin4OracleHubAddress };\n';
+	fs.writeFile(path.join(__dirname, '../src/config/Fin4OracleHubAddress.js'), data, err => {
+		if (err) throw 'Error writing file: ' + err;
+	});
+
 	console.log('-----------> Address of Fin4OracleHub: ', Fin4OracleHubInstance.address);
 
 	// await Fin4MainInstance.createNewToken('Token-Dev-1', 'TD1', [], [], []);

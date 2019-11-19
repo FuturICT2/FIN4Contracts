@@ -3,6 +3,7 @@ src/build/
 .idea/
 src/config/deployment-config.json
 src/config/Fin4MainAddress.js
+src/config/Fin4OracleHubAddress.js
 scripts/TCR/DeployedAddresses.json
 scripts/*.csv
 docs/_build/
