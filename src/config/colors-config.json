@@ -1,8 +1,15 @@
 {
-	"main": "#84aede",
-	"dark": "#242e5e",
+	"main": "#3d363f", /* Fin4 dark grey. was "#84aede"*/
+	"dark": "#695ead", /* Fin4 dark violet. was "#242e5e"*/
 	"light": "#ffffff",
 	"wrong": "rgba(248, 57, 48, 0.15)",
 	"true": "rgba(61, 219, 81, 0.15)",
 	"gotRejected": "lightgray"
 }
+
+/* FuturICT2 colors for reference.
+blue "#00a3ef"
+dark violet "#695ead"
+dark pink "#cc1c6e"
+dark grey "#3d363f"
+*/
