@@ -38,8 +38,8 @@ function TokenTextSubmissions(props) {
     };*/
 
 	const getRandomFin4Color = () => {
-		// first 4 taken from the Finance 4.0 logo, last 2 are main and dark from colors-config.json
-		let colors = ['#00a3f0', '#6a5fad', '#cd1d70', '#3d363e', '#84aede', '#242e5e'];
+		// official FuturICT2 colors
+		let colors = ['#00a3ef', '#695ead', '#cc1c6e', '#3d363f'];
 		return colors[Math.floor(Math.random() * colors.length)];
 	};
 
