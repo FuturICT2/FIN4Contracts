@@ -6,7 +6,7 @@ import Button from '../../components/Button';
 import { Chip, Typography, Divider, Grid, Paper, createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import colors from '../../config/colors-config';
-import DateIcon from '@material-ui/icons/AccessTime';
+// import DateIcon from '@material-ui/icons/AccessTime';
 import ProofIcon from '@material-ui/icons/Fingerprint';
 import moment from 'moment';
 import styled from 'styled-components';
@@ -50,7 +50,7 @@ function PreviousClaims(props) {
 								</div>
 								<Divider style={{ margin: '10px 0' }} variant="middle" />
 								<ThemeProvider theme={chipTheme}>
-									<Chip key="0" color="primary" icon={<DateIcon />} label={date} style={{ margin: '0 7px 7px 0' }} />
+									<Chip key="0" color="primary" label={date} style={{ margin: '0 7px 7px 0' }} />
 								</ThemeProvider>
 								{status === 'gotRejected' && (
 									<span
