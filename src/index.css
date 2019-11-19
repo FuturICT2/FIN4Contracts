@@ -19,12 +19,12 @@ body,
 }
 
 ::-moz-selection {
-	background: #84aede;
+	background: #3d363f;
 	color: white;
 }
 
 ::selection {
-	background: #84aede;
+	background: #3d363f;
 	color: white;
 }
 
