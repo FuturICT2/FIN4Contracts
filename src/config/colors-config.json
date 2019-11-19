@@ -1,15 +1,8 @@
 {
-	"main": "#3d363f", 
-	"dark": "#695ead", 
+	"main": "#3d363f",
+	"dark": "#695ead",
 	"light": "#ffffff",
 	"wrong": "rgba(248, 57, 48, 0.15)",
 	"true": "rgba(61, 219, 81, 0.15)",
 	"gotRejected": "lightgray"
 }
-
-/* FuturICT2 colors for reference.
-blue "#00a3ef"
-dark violet "#695ead"
-dark pink "#cc1c6e"
-dark grey "#3d363f"
-*/
