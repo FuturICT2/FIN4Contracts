@@ -47,7 +47,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       tokenToParameters[token] = [interval, maxQuantity];
     }
 
-    // @Override
+    /*
     function getParameterizedDescription(address token) public view returns(string memory) {
       return string(abi.encodePacked(
           "The token creator defined a maximum quantity of ",
@@ -55,7 +55,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
           " to be claimable in an interval of ",
           uint2str(_getInterval(token) / (1000 * 60 * 60 * 24)), " days."
         ));
-    }
+    }*/
 
     function _getInterval(address token) private view returns(uint) {
       return tokenToParameters[token][0] * 24 * 60 * 60 * 1000; // from days to miliseconds

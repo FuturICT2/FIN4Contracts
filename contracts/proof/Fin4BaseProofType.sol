@@ -25,11 +25,6 @@ contract Fin4BaseProofType is utils {
     return description;
   }
 
-  // includes the token-specific parameters if overriden
-  function getParameterizedDescription(address token) public view returns(string memory) {
-    return getDescription();
-  }
-
   function getInfo() public view returns(string memory, string memory, string memory) {
     return (name, description, getParameterForTokenCreatorToSetEncoded());
   }
