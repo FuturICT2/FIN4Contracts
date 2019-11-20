@@ -29,9 +29,8 @@ contract Fin4BaseProofType is utils {
     return (name, description, getParameterForTokenCreatorToSetEncoded());
   }
 
-  // This method gets overriden by the proof types and encode the parameter names (types are only uint for now TODO)
-  // to be filled by the token creator. He gets prompted to set them via a popup in the front end when adding
-  // a proof type, see the first <Modal> in ContractForm.render()
+  // This method gets overriden by the proof types and encode the parameter names
+  // to be filled by the token creator. He gets prompted to set them in the token creation process
   function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
     return "";
   }
