@@ -66,7 +66,7 @@ contract Fin4Claiming {
 
         emit ClaimApproved(tokenAddress, claimId, claimer, quantity, Fin4Token(tokenAddress).balanceOf(claimer));
         // can changes to totalSupply happen at other places too though? Definitely if we use the
-        // AllPurpose contract with burning for instance... #ConceptualDecision
+        // ERC20Plus contract with burning for instance... #ConceptualDecision
         emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
 
         // REP reward for creating a new token

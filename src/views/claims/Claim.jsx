@@ -20,7 +20,7 @@ function Claim(props, context) {
 
 	const values = useRef({
 		tokenAddress: null,
-		quantity: 1, // or null and avoid submitting it? TODO --> #ConceptualDecision, EDIT: outdated comment
+		quantity: 1,
 		comment: ''
 	});
 
