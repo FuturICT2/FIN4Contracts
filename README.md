@@ -2,7 +2,10 @@
 
 **FIN4Xplorer** is a decentralised design for a bottom-up and multidimensional finance system with the aim of making communities healthier, more social, and sustainable. It is part of the FLAG-ERA-funded project [FuturICT 2.0](https://futurict2.eu/).
 
-<table border="0"><tr><td>
+<table border="0"><tr>
+<td>
+<a href="https://futurict2.eu/"><img src="public/project-logos/fin4x_11_with_round_dots.png" width="200" ></a></td>
+<td>
 <a href="https://futurict2.eu/"><img src="public/project-logos/FuturICT2_logo_on_white.png" width="250" ></a></td>
 <td>
 <img src="public/project-logos/Fin4_logo_on_white.jpg" width="100">
