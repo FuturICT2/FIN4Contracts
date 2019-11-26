@@ -19,7 +19,7 @@ const getStepContent = stepIndex => {
 	}
 };
 
-const getStepInfoBoxContent = stepIndex => {
+const getStepInfoBoxContent = (stepIndex, proofTypes) => {
 	switch (stepIndex) {
 		case 0: // Basics
 			return (
@@ -124,6 +124,19 @@ const getStepInfoBoxContent = stepIndex => {
 					actions is a complex matter and we constantly work to improve the proving mechanisms.
 					<br />
 					<br />
+					{Object.keys(proofTypes).map((proofAddr, idx) => {
+						let proof = proofTypes[proofAddr];
+						return (
+							<span key={'proofInfo_' + idx}>
+								<b>Proof type: {proof.label}</b>
+								<br />
+								{proof.description}
+								<br />
+								<br />
+							</span>
+						);
+					})}
+					{/*
 					<b>Proof type: picture</b>
 					<br />
 					The claimer submits a picture, based on which the approver will decide on the claim.
@@ -174,6 +187,7 @@ const getStepInfoBoxContent = stepIndex => {
 					<b>Proof type: group member approval</b>
 					<br />
 					The token creator specifies one or more user groups, of which one member has to approve. Handle with care!
+					*/}
 				</>
 			);
 		default:

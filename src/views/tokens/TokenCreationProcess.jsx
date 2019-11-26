@@ -262,7 +262,7 @@ function TokenCreationProcess(props, context) {
 									</small>
 								</center>
 								<br />
-								{getStepInfoBoxContent(activeStep)}
+								{getStepInfoBoxContent(activeStep, props.proofTypes)}
 							</div>
 						</Box>
 					)}
