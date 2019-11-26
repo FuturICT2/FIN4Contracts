@@ -15,7 +15,7 @@ const fs = require('fs');
 //var path = require('path');
 const config = JSON.parse(fs.readFileSync('./config.json'));
 const paramConfig = config.paramConfig;
-const tokenHolders = config.token.tokenHolders;
+//const tokenHolders = config.token.tokenHolders;
 
 const TCRactive = false; // the other necessary switch is in src/components/utils.js
 
