@@ -124,21 +124,3 @@ The Ganache-URL can now be used to set up a custom network in your mobile DApp-b
 If running locally, choose "import using account seed phrase" in MetaMask and use the `MNEMONIC` from Ganache. Create a network with `http://127.0.0.1:7545` as `custom RPC`. If running on Rinkeby, select that as your network in MetaMask and create or restore your respective account.
 
 Once correctly connected the warnings should disappear and you are good to go.
-
-# Docs
-
-Our documentation is located at [fin4xplorer.readthedocs.io](https://fin4xplorer.readthedocs.io/en/latest/) in English and German.
-
-To update the `.po` files for the German translation in `docs/locales/de` run:
-
-```sh
-sphinx-intl update -p _build/gettext -l de
-```
-
-If you haven't done so before or if it doesn't update properly, delete the `_build` folder and run this `build` command:
-
-```sh
-sphinx-build -b gettext . _build/gettex
-```
-
-Then run the `update` command again.

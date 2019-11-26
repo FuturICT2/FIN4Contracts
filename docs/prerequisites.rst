@@ -1,4 +1,0 @@
-Prerequisites
-=============
-
-MetaMask installed
