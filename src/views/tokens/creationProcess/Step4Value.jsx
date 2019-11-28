@@ -78,8 +78,8 @@ function StepValue(props) {
 										row={true}
 										onChange={e => setChoice(e.target.value)}
 										value={choice}>
-										<FormControlLabel value="fixedQuantity" control={<Radio />} label="Fixed" />
-										<FormControlLabel value="userDefinedQuantityFactor" control={<Radio />} label="User defined" />
+										<FormControlLabel value="fixedQuantity" control={<Radio />} label="Fixed amount" />
+										<FormControlLabel value="userDefinedQuantityFactor" control={<Radio />} label="Fixed factor" />
 									</RadioGroup>
 								</td>
 								<td>
