@@ -158,9 +158,7 @@ function TokenView(props, context) {
 								</Link>
 							</p>
 						)}
-						<p>
-							<span style={{ color: 'gray' }}>Description:</span> {tokenViaURL.description}
-						</p>
+						<p>{buildInfoLine('Description', tokenViaURL.description)}</p>
 						{!details ? (
 							<span style={{ fontFamily: 'arial' }}>Loading details...</span>
 						) : (
@@ -197,12 +195,17 @@ function TokenView(props, context) {
 				) : (
 					<span style={{ fontFamily: 'arial' }}>
 						{buildInfoLine('Your balance', details.usersBalance)}
+						<Divider style={{ margin: '10px 0' }} variant="middle" />
+						<span style={{ color: 'gray' }}>Token actions: </span>
 						{(tokenViaURL.userIsCreator || tokenViaURL.userIsAdmin) && (
-							<center>
-								<br />
-								<Link to={'/token/edit/' + tokenViaURL.symbol}>Edit token</Link>
-							</center>
+							<>
+								<Link to={'/token/edit/' + tokenViaURL.symbol}>Edit</Link>
+								{', '}
+							</>
 						)}
+						<Link to={'/claim/' + tokenViaURL.symbol}>Claim</Link>
+						{', '}
+						<Link to={'/user/transfer'}>Transfer</Link> {/* TODO support symbol, no user */}
 					</span>
 				)}
 			</Box>
