@@ -1,19 +1,19 @@
 import React from 'react';
 
-const steps = ['Basics', 'Traits', 'Actions', 'Value', 'Proofs']; // Disbursement/Valuation instead of Value?
+const steps = ['Identity', 'Design', 'Actions', 'Minting', 'Proving']; // Disbursement/Valuation instead of Value?
 
 const getStepContent = stepIndex => {
 	switch (stepIndex) {
 		case 0:
-			return 'Token name'; // Formerly: Basic infos
+			return 'Token identity'; // Formerly: Basic infos
 		case 1:
-			return 'Token properties'; // Formerly: Fundamental properties
+			return 'Token design'; // Formerly: Fundamental properties
 		case 2:
-			return 'Actions'; // Formerly: For what action(s) can people claim this token?
+			return 'Action policy'; // Formerly: For what action(s) can people claim this token?
 		case 3:
-			return 'Positive actions'; // Formerly: What quantity can be obtained per claim?
+			return 'Minting policy'; // Formerly: What quantity can be obtained per claim?
 		case 4:
-			return 'Proofs of good work'; // Formerly: Add proof types that users will have to provide
+			return 'Proving policy'; // Formerly: Add proof types that users will have to provide
 		default:
 			return '';
 	}
