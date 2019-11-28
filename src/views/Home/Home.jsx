@@ -135,7 +135,7 @@ function Home(props) {
 			<Box title="More" width="250px">
 				{/* TODO better title */}
 				{buildIconLabelLink('/about', <InfoIcon />, 'About')}
-				{buildIconLabelLink('/settings', <SettingsIcon />, 'Settings')}
+				{buildIconLabelLink('/settings', <SettingsIcon />, 'System settings')}
 				{buildIconLabelLink('/messages', <EmailIcon />, 'Your messages')}
 				{buildIconLabelLink('/user/message', <MessageIcon />, 'Message user')}
 				{buildIconLabelLink('/user/transfer', <SendIcon />, 'Transfer token')}
