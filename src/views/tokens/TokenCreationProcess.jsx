@@ -10,11 +10,11 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import StepBasics from './creationProcess/Step1Basics';
-import StepTraits from './creationProcess/Step2Traits';
+import StepIdentity from './creationProcess/Step1Identity';
+import StepDesign from './creationProcess/Step2Design';
 import StepActions from './creationProcess/Step3Actions';
-import StepValue from './creationProcess/Step4Value';
-import StepProofs from './creationProcess/Step5Proofs';
+import StepMinting from './creationProcess/Step4Minting';
+import StepProving from './creationProcess/Step5Proving';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { steps, getStepContent, getStepInfoBoxContent } from './creationProcess/TextContents';
@@ -215,11 +215,11 @@ function TokenCreationProcess(props, context) {
 						</div>
 						<div style={{ padding: '10px 20px 30px 20px' }}>
 							{/* Or create back/next buttons here and pass them down? */}
-							{activeStep === 0 && buildStepComponent(StepBasics)}
-							{activeStep === 1 && buildStepComponent(StepTraits)}
+							{activeStep === 0 && buildStepComponent(StepIdentity)}
+							{activeStep === 1 && buildStepComponent(StepDesign)}
 							{activeStep === 2 && buildStepComponent(StepActions)}
-							{activeStep === 3 && buildStepComponent(StepValue)}
-							{activeStep === 4 && buildStepComponent(StepProofs)}
+							{activeStep === 3 && buildStepComponent(StepMinting)}
+							{activeStep === 4 && buildStepComponent(StepProving)}
 							{activeStep === steps.length && !tokenJustCreated && (
 								<center>
 									<Typography className={classes.instructions}>All steps completed</Typography>

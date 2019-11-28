@@ -16,7 +16,7 @@ const PROPERTY_DEFAULT = {
 	initialSupply: 0
 };
 
-function StepTraits(props) {
+function StepDesign(props) {
 	const { t } = useTranslation();
 
 	const [draftId, setDraftId] = useState(null);
@@ -154,4 +154,4 @@ const mapStateToProps = state => {
 	return {};
 };
 
-export default drizzleConnect(StepTraits, mapStateToProps);
+export default drizzleConnect(StepDesign, mapStateToProps);

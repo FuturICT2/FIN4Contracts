@@ -10,7 +10,7 @@ const PROPERTY_DEFAULT = {
 	userDefinedQuantityFactor: 0
 };
 
-function StepValue(props) {
+function StepMinting(props) {
 	const { t } = useTranslation();
 
 	const [draftId, setDraftId] = useState(null);
@@ -113,4 +113,4 @@ const mapStateToProps = state => {
 	return {};
 };
 
-export default drizzleConnect(StepValue, mapStateToProps);
+export default drizzleConnect(StepMinting, mapStateToProps);

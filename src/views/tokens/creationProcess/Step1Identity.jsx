@@ -5,7 +5,7 @@ import moment from 'moment';
 import { TextField } from '@material-ui/core';
 import StepsBottomNav from './StepsBottomNav';
 
-function StepBasics(props) {
+function StepIdentity(props) {
 	const { t } = useTranslation();
 
 	const [draftId, setDraftId] = useState(null);
@@ -84,4 +84,4 @@ const mapStateToProps = state => {
 	return {};
 };
 
-export default drizzleConnect(StepBasics, mapStateToProps);
+export default drizzleConnect(StepIdentity, mapStateToProps);
