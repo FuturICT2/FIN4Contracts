@@ -142,58 +142,67 @@ function TokenView(props, context) {
 								</a>
 							</span>
 						</center>
-						<p>
-							<span style={{ color: 'gray' }}>Description:</span> {tokenViaURL.description}
-						</p>
+						<br />
 						{getSubmissionsOnToken().length > 0 && (
+							// TODO make visible with 0 submissions too?
+							// Requires passing that info through back/frontend differently though
 							<p>
+								<span style={{ color: 'gray' }}>Submissions: </span>
 								<Link
 									to={
 										'/token/submissions/' +
 										tokenViaURL.symbol + // weird to just look at [0]
 										(getSubmissionsOnToken()[0].contentType === '0' ? '/text' : '/picture')
 									}>
-									See submissions
+									open {getSubmissionsOnToken()[0].contentType === '0' ? 'text' : 'picture'} collage
 								</Link>
 							</p>
 						)}
+						<p>
+							<span style={{ color: 'gray' }}>Description:</span> {tokenViaURL.description}
+						</p>
+						{!details ? (
+							<span style={{ fontFamily: 'arial' }}>Loading details...</span>
+						) : (
+							<span style={{ fontFamily: 'arial' }}>
+								<Divider style={{ margin: '10px 0' }} variant="middle" />
+
+								{buildInfoLine('Created at', details.tokenCreationTime)}
+								{buildInfoLine('Proof types', proofTypesLoaded ? getProofTypesStr() : 'Loading...')}
+								{buildInfoLine('Total number of claims', details.claimsCount)}
+								{buildInfoLine('Total supply', details.totalSupply)}
+
+								<Divider style={{ margin: '10px 0' }} variant="middle" />
+
+								{buildCheckboxWithLabel('is transferable', details.isTransferable)}
+								{buildCheckboxWithLabel('is mintable', details.isMintable)}
+								{buildCheckboxWithLabel('is burnable', details.isBurnable)}
+								{buildCheckboxWithLabel('is capped', details.isCapped)}
+
+								<Divider style={{ margin: '10px 0' }} variant="middle" />
+
+								{buildInfoLine('Cap', details.cap)}
+								{buildInfoLine('Decimals', details.decimals)}
+								{buildInfoLine('Fixed minting quantity per claim', details.fixedQuantity)}
+								{buildInfoLine('Minting user-given quantity times', details.userDefinedQuantityFactor)}
+								{buildInfoLine('Claimable actions', details.actionsText)}
+							</span>
+						)}
+					</span>
+				)}
+			</Box>
+			<Box title="Token Profile">
+				{!details ? (
+					<span style={{ fontFamily: 'arial' }}>Loading your profile...</span>
+				) : (
+					<span style={{ fontFamily: 'arial' }}>
+						{buildInfoLine('Your balance', details.usersBalance)}
 						{(tokenViaURL.userIsCreator || tokenViaURL.userIsAdmin) && (
 							<center>
 								<br />
 								<Link to={'/token/edit/' + tokenViaURL.symbol}>Edit token</Link>
 							</center>
 						)}
-					</span>
-				)}
-			</Box>
-			<Box title="Details">
-				{!details ? (
-					<span style={{ fontFamily: 'arial' }}>Loading details...</span>
-				) : (
-					<span style={{ fontFamily: 'arial' }}>
-						{buildInfoLine('Your balance', details.usersBalance)}
-
-						<Divider style={{ margin: '10px 0' }} variant="middle" />
-
-						{buildInfoLine('Created at', details.tokenCreationTime)}
-						{buildInfoLine('Proof types', proofTypesLoaded ? getProofTypesStr() : 'Loading...')}
-						{buildInfoLine('Total number of claims', details.claimsCount)}
-						{buildInfoLine('Total supply', details.totalSupply)}
-
-						<Divider style={{ margin: '10px 0' }} variant="middle" />
-
-						{buildCheckboxWithLabel('is transferable', details.isTransferable)}
-						{buildCheckboxWithLabel('is mintable', details.isMintable)}
-						{buildCheckboxWithLabel('is burnable', details.isBurnable)}
-						{buildCheckboxWithLabel('is capped', details.isCapped)}
-
-						<Divider style={{ margin: '10px 0' }} variant="middle" />
-
-						{buildInfoLine('Cap', details.cap)}
-						{buildInfoLine('Decimals', details.decimals)}
-						{buildInfoLine('Fixed minting quantity per claim', details.fixedQuantity)}
-						{buildInfoLine('Minting user-given quantity times', details.userDefinedQuantityFactor)}
-						{buildInfoLine('Claimable actions', details.actionsText)}
 					</span>
 				)}
 			</Box>
