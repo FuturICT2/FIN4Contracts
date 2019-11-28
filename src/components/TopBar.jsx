@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 	//	color: 'white'
 	//},
 	noWeb3Warning: {
-		color: 'yellow',
+		color: '#00a3ef',
 		'font-family': 'arial'
 	},
 	noNotification: {
