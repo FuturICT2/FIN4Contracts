@@ -40,7 +40,9 @@ function Home(props) {
 	return (
 		<Container>
 			<TokenBalances />
-			<Box title={t('about-you')}>
+			<Box title="You on the blockchain">
+				{' '}
+				{/*t('about-you')*/}
 				<p style={{ fontFamily: 'arial' }}>
 					{t('your-public-address')}
 					<br />
