@@ -21,7 +21,6 @@ import Management from '../views/CuratedTokens/Management';
 import Governance from '../views/CuratedTokens/Governance';
 import Messages from '../views/Messages';
 import TokenCreationProcess from '../views/tokens/TokenCreationProcess';
-import ProofTypes from '../views/proofTypes/ProofTypes';
 import TokenTextSubmissions from '../views/tokens/TokenTextSubmissions';
 import TokenPictureSubmissions from '../views/tokens/TokenPictureSubmissions';
 
@@ -89,12 +88,6 @@ const menu = [
 	{
 		component: ProofSubmission,
 		path: '/claim/:tokenSymbol/proof/:claimId',
-		showInNavBar: false
-	},
-	// ------------------ PROOF TYPES ------------------
-	{
-		component: ProofTypes,
-		path: '/proofs/',
 		showInNavBar: false
 	},
 	// ------------------ COLLECTIONS ------------------

@@ -141,8 +141,7 @@ function Home(props) {
 				{buildIconLabelLink('/user/message', <MessageIcon />, 'Message user')}
 				{buildIconLabelLink('/user/transfer', <SendIcon />, 'Transfer token')}
 				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
-				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections')}
-				{buildIconLabelLink('/proofs', <AssignmentIcon />, 'Proof types', true, false)}
+				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections', true, false)}
 			</Box>
 			<Box title="Token curation" width="250px">
 				{buildIconLabelLink('/governance/listing', <StarIcon />, 'Listing')}

@@ -6,6 +6,7 @@ import Container from '../components/Container';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Cookies from 'js-cookie';
+import { Divider } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
 	font: {
@@ -81,6 +82,36 @@ function Settings(props, context) {
 					)}
 				</div>
 			</Box>
+			<Box title="Proof type addresses">
+				<div style={{ fontFamily: 'arial' }}>
+					{Object.keys(props.proofTypes).map((addr, index) => {
+						let proofType = props.proofTypes[addr];
+						let name = proofType.label;
+						let address = proofType.value;
+						return (
+							<span key={'proof_' + index}>
+								{name}
+								<br />
+								<a
+									style={{ fontSize: 'small' }}
+									href={'https://rinkeby.etherscan.io/address/' + address}
+									target="_blank">
+									{address}
+								</a>
+								<br />
+								{proofType.paramsEncoded && (
+									<small style={{ color: 'gray' }}>
+										<b>Parameters</b>: {proofType.paramsEncoded}
+									</small>
+								)}
+								{index < Object.keys(props.proofTypes).length - 1 && (
+									<Divider style={{ margin: '10px 0' }} variant="middle" />
+								)}
+							</span>
+						);
+					})}
+				</div>
+			</Box>
 		</Container>
 	);
 }
@@ -91,7 +122,8 @@ Settings.contextTypes = {
 
 const mapStateToProps = state => {
 	return {
-		contracts: state.contracts
+		contracts: state.contracts,
+		proofTypes: state.fin4Store.proofTypes
 	};
 };
 
