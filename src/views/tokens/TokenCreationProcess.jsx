@@ -23,6 +23,7 @@ import { findTokenBySymbol } from '../../components/Contractor';
 import CheckIcon from '@material-ui/icons/CheckCircle';
 import { IconButton } from '@material-ui/core';
 import history from '../../components/history';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(theme => ({
 	// from https://material-ui.com/components/steppers/
@@ -134,6 +135,9 @@ function TokenCreationProcess(props, context) {
 			Object.keys(draft.proofs).map(name => findProofTypeAddressByName(props.proofTypes, name))
 		];
 
+		setTokenCreationStage('Waiting for the token creation to complete');
+		let proofsWithParamCount = countProofsWithParams();
+
 		context.drizzle.contracts.Fin4TokenManagement.methods
 			.createNewToken(...tokenCreationArgs)
 			.send({
@@ -142,6 +146,14 @@ function TokenCreationProcess(props, context) {
 			.then(result => {
 				console.log('Results of submitting Fin4TokenManagement.createNewToken: ', result);
 				let newTokenAddress = result.events.Fin4TokenCreated.returnValues.addr;
+
+				setTokenCreationStage(
+					'Waiting for the parameterization of ' +
+						(proofsWithParamCount > 1 ? proofsWithParamCount : 'one') +
+						' proof contract' +
+						(proofsWithParamCount > 1 ? 's' : '') +
+						' to complete'
+				);
 
 				for (var name in draft.proofs) {
 					if (draft.proofs.hasOwnProperty(name)) {
@@ -156,8 +168,8 @@ function TokenCreationProcess(props, context) {
 					}
 				}
 
-				if (countProofsWithParams() === 0) {
-					setTokenJustCreated(true);
+				if (proofsWithParamCount === 0) {
+					setTokenCreationStage('completed');
 				}
 			});
 	};
@@ -165,7 +177,7 @@ function TokenCreationProcess(props, context) {
 	// TODO combine these two with one useState-counter?
 	// Tried to do that but couldn't figure it out in reasonable time for some reason
 	const transactionCounter = useRef(0);
-	const [tokenJustCreated, setTokenJustCreated] = useState(false);
+	const [tokenCreationStage, setTokenCreationStage] = useState(null);
 
 	const setParamsOnProofContract = (contractName, tokenAddr, values) => {
 		context.drizzle.contracts[contractName].methods
@@ -177,7 +189,7 @@ function TokenCreationProcess(props, context) {
 				console.log('Results of submitting ' + contractName + '.setParameters: ', result);
 				transactionCounter.current++;
 				if (transactionCounter.current == countProofsWithParams()) {
-					setTokenJustCreated(true);
+					setTokenCreationStage('completed');
 				}
 			});
 	};
@@ -220,14 +232,16 @@ function TokenCreationProcess(props, context) {
 							{activeStep === 2 && buildStepComponent(StepActions)}
 							{activeStep === 3 && buildStepComponent(StepMinting)}
 							{activeStep === 4 && buildStepComponent(StepProving)}
-							{activeStep === steps.length && !tokenJustCreated && (
+							{activeStep === steps.length && tokenCreationStage === null && (
 								<center>
 									<Typography className={classes.instructions}>All steps completed</Typography>
 									{countProofsWithParams() > 0 && (
 										<small style={{ color: 'gray', fontFamily: 'arial' }}>
 											You added {countProofsWithParams()} proofs with parameters. Each requires a separate transaction.
 											Plus one for the creation of the token. You will have to confirm all consecutive transactions to
-											complete the token creation.
+											complete the token creation. The first transaction has to complete before continuing - all
+											following ones can be confirmed without waiting for their completion. Your token will be in a
+											disabled state until all parameterization transactions are completed.
 										</small>
 									)}
 									<div style={{ paddingTop: '20px' }}>
@@ -240,7 +254,17 @@ function TokenCreationProcess(props, context) {
 									</div>
 								</center>
 							)}
-							{activeStep === steps.length && tokenJustCreated && (
+							{activeStep === steps.length && tokenCreationStage !== null && tokenCreationStage !== 'completed' && (
+								<center>
+									<CircularProgress />
+									<br />
+									<br />
+									<span style={{ fontFamily: 'arial', color: 'gray', width: '200px', display: 'inline-block' }}>
+										{tokenCreationStage ? tokenCreationStage : ''}...
+									</span>
+								</center>
+							)}
+							{activeStep === steps.length && tokenCreationStage === 'completed' && (
 								<center>
 									<Typography className={classes.instructions}>Token successfully created!</Typography>
 									<br />
