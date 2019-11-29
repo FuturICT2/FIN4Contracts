@@ -70,7 +70,8 @@ contract Fin4TokenManagement {
         // TODO causes out-of-gas errors to have both here, it must be made possible though somehow...
         // newToken = new Fin4TokenCapped(name, _symbol, msg.sender, properties, values);
 
-        newToken.init(Fin4ClaimingAddress, Fin4ProofingAddress, description, actionsText, msg.sender, fixedQuantity, userDefinedQuantityFactor);
+        newToken.init(Fin4ClaimingAddress, Fin4ProofingAddress, description, actionsText,
+            msg.sender, fixedQuantity, userDefinedQuantityFactor, values[2]);
 
         newToken.addMinter(Fin4ClaimingAddress);
         for (uint i = 0; i < requiredProofTypes.length; i++) {

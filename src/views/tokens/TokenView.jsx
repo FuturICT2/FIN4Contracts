@@ -48,6 +48,7 @@ function TokenView(props, context) {
 					decimals: uintValuesArr[1],
 					fixedQuantity: uintValuesArr[2],
 					userDefinedQuantityFactor: uintValuesArr[3],
+					initialSupply: uintValuesArr[4],
 					actionsText: actionsText
 				});
 			}
@@ -181,6 +182,10 @@ function TokenView(props, context) {
 
 								{buildInfoLine('Cap', details.cap)}
 								{buildInfoLine('Decimals', details.decimals)}
+								{buildInfoLine('Initial supply', details.initialSupply)}
+
+								<Divider style={{ margin: '10px 0' }} variant="middle" />
+
 								{buildInfoLine('Fixed minting quantity per claim', details.fixedQuantity)}
 								{buildInfoLine('Minting user-given quantity times', details.userDefinedQuantityFactor)}
 								{buildInfoLine('Claimable actions', details.actionsText)}

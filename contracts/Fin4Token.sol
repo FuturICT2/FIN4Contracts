@@ -31,12 +31,12 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
     props[2] = isBurnable;
     props[3] = false; // isCapped
 
-    uint[] memory values = new uint[](4);
+    uint[] memory values = new uint[](5);
     values[0] = 0; // cap
     values[1] = uint(decimals());
     values[2] = fixedQuantity;
     values[3] = userDefinedQuantityFactor;
-    // initialSupply too? would have to be stored at constructing time
+    values[4] = initialSupply;
 
     return (requiredProofTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
   }
