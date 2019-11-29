@@ -61,6 +61,7 @@ contract Fin4TokenBase { // abstract class
 
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
 	function submitClaim(address claimer, uint quantity, string memory comment) public returns (uint, address[] memory, uint) {
+    require(tokenEnabled, "Token is not enabled");
     Claim storage claim = claims[nextClaimId];
     claim.claimCreationTime = now;
     claim.claimId = nextClaimId;
@@ -241,6 +242,8 @@ contract Fin4TokenBase { // abstract class
     }
   }
 
+  // used only as blocker in submitClaim() so far #ConceptualDecision use at more places?
+  // Only makes sense though if something can set tokenEnabled to false later on...
   bool public tokenEnabled = true;
   address[] public paramProofs; // requiredProofTypes where the token creator had to set a parameter
   mapping(address => bool) public paramProofsPingbacked; // the token can only be enabled once all of these are true
