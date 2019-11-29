@@ -34,7 +34,7 @@ function StepMinting(props) {
 		};
 
 		if (!(fixed === 0 || userDef === 0)) {
-			alert('Both fixedQuantity and userDefinedQuantityFactor are set. One of them must be null.');
+			alert('Both fixedQuantity and userDefinedQuantityFactor are set. One of them must be zero.');
 		}
 
 		if (userDef !== 0) {
