@@ -234,6 +234,31 @@ contract Fin4TokenBase { // abstract class
       "This address is not registered as proof type in Fin4Proofing");
     requiredProofTypes.push(proofType);
     Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
+    if (Fin4BaseProofType(proofType).hasParameterForTokenCreatorToSet()) {
+      tokenEnabled = false;
+      paramProofs.push(proofType);
+      paramProofsPingbacked[proofType] = false;
+    }
+  }
+
+  bool public tokenEnabled = true;
+  address[] public paramProofs; // requiredProofTypes where the token creator had to set a parameter
+  mapping(address => bool) public paramProofsPingbacked; // the token can only be enabled once all of these are true
+
+  function proofContractParameterizedPingback() public {
+    paramProofsPingbacked[msg.sender] = true;
+    if (_allParamProofsPingbacked()) {
+      tokenEnabled = true;
+    }
+  }
+
+  function _allParamProofsPingbacked() private view returns(bool) {
+    for (uint i = 0; i < paramProofs.length; i ++) {
+      if (paramProofsPingbacked[paramProofs[i]] == false) {
+        return false;
+      }
+    }
+    return true;
   }
 
   function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {

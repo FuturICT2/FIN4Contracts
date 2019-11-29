@@ -41,6 +41,7 @@ contract ClaimableOnlyNTimes is Fin4BaseProofType {
 
   function setParameters(address token, uint claimsCap) public {
       tokenToClaimsCap[token] = claimsCap;
+      tellTokenIamNowParameterized(token);
   }
 
 }

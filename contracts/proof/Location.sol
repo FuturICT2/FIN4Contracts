@@ -38,6 +38,7 @@ contract Location is Fin4BaseProofType {
     function setParameters(address token, string memory latLonString, uint maxDistance) public {
       tokenToLatLonStrParameter[token] = latLonString;
       tokenToMaxDistParameter[token] = maxDistance;
+      tellTokenIamNowParameterized(token);
     }
 
     function getLatitudeLongitudeString(address token) public view returns(string memory) {

@@ -36,6 +36,7 @@ contract Password is Fin4BaseProofType {
 
     function setParameters(address token, string memory password) public {
       tokenToParameter[token] = password;
+      tellTokenIamNowParameterized(token);
     }
 
     function _getPassword(address token) private view returns(string memory) {

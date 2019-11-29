@@ -46,6 +46,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
 
     function setParameters(address token, uint interval, uint maxQuantity) public {
       tokenToParameters[token] = [interval, maxQuantity];
+      tellTokenIamNowParameterized(token);
     }
 
     /*

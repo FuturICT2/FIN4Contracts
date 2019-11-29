@@ -38,6 +38,10 @@ contract Fin4BaseProofType is utils {
     return "";
   }
 
+  function tellTokenIamNowParameterized(address token) public {
+    Fin4TokenStub(token).proofContractParameterizedPingback();
+  }
+
   // Helper method for all proof types to go through the same method when sending their approvals
   // to the respective claim on a token
   function _sendApproval(address proofTypeAddress, address tokenAddrToReceiveProof, uint claimId) internal {

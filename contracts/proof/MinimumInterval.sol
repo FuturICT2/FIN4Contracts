@@ -42,6 +42,7 @@ contract MinimumInterval is Fin4BaseProofType {
     function setParameters(address token, uint minimumInterval) public {
       // TODO safeguard
       tokenToParameter[token] = minimumInterval;
+      tellTokenIamNowParameterized(token);
     }
 
     /*
