@@ -15,9 +15,10 @@ import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
 import BuildIcon from '@material-ui/icons/Build';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import QRModal from '../../components/QRModal';
-import { buildIconLabelLink, TCRactive } from '../../components/utils';
+import { buildIconLabelLink, TCRactive, buildIconLabelCallback } from '../../components/utils';
 
 let config = null;
 try {
@@ -35,6 +36,24 @@ function Home(props) {
 	const [isQRModalOpen, setQRModalOpen] = useState(false);
 	const toggleQRModal = () => {
 		setQRModalOpen(!isQRModalOpen);
+	};
+
+	const requestEther = () => {
+		let recipient = props.defaultAccount;
+		let networkID = window.ethereum.networkVersion;
+		let encodedURL = config.FAUCET_URL + '/faucet?recipient=' + recipient + '&networkID=' + networkID;
+		console.log('Calling faucet server: ' + encodedURL);
+		axios
+			.get(encodedURL)
+			.then(response => {
+				console.log('Successfully called faucet server. Response: ' + response.data);
+				alert(response.data);
+			})
+			.catch(error => {
+				console.log('Error calling faucet server', error);
+				alert('Failed to request Ether');
+			})
+			.finally(() => {});
 	};
 
 	return (
@@ -87,27 +106,7 @@ function Home(props) {
 				{config && config.FAUCET_URL && (
 					<>
 						<br />
-						<a
-							href="#"
-							onClick={() => {
-								let recipient = props.defaultAccount;
-								let networkID = window.ethereum.networkVersion;
-								let encodedURL = config.FAUCET_URL + '/faucet?recipient=' + recipient + '&networkID=' + networkID;
-								console.log('Calling faucet server: ' + encodedURL);
-								axios
-									.get(encodedURL)
-									.then(response => {
-										console.log('Successfully called faucet server. Response: ' + response.data);
-										alert(response.data);
-									})
-									.catch(error => {
-										console.log('Error calling faucet server', error);
-										alert('Failed to request Ether');
-									})
-									.finally(() => {});
-							}}>
-							<RequestEth>{t('request-ether')}</RequestEth>
-						</a>
+						{buildIconLabelCallback(() => {}, <SaveAltIcon />, t('request-ether'), false)}
 					</>
 				)}
 			</Box>
@@ -145,12 +144,6 @@ const styles = {
 		paddingLeft: '10px'
 	}
 };
-
-const RequestEth = styled.div`
-	font-family: arial;
-	font-size: small;
-	color: gray;
-`;
 
 const mapStateToProps = state => {
 	return {

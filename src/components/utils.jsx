@@ -22,7 +22,7 @@ const buildIconLabelLink = (link, icon, label, enabled = true, newLineAfterwards
 	);
 };
 
-const buildIconLabelCallback = (callback, icon, label) => {
+const buildIconLabelCallback = (callback, icon, label, newLineAfterwards = true) => {
 	return (
 		<>
 			<Link to="#" onClick={callback} style={{ textDecoration: 'none' }}>
@@ -30,7 +30,7 @@ const buildIconLabelCallback = (callback, icon, label) => {
 					{icon}
 					&nbsp;&nbsp;{label}
 				</div>
-				<br />
+				{newLineAfterwards && <br />}
 			</Link>
 		</>
 	);
