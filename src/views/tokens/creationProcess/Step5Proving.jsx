@@ -7,7 +7,7 @@ import Dropdown from '../../../components/Dropdown';
 import Button from '../../../components/Button';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMinusCircle, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { TextField, IconButton } from '@material-ui/core';
 import styled from 'styled-components';
 import { findProofTypeAddressByName } from '../../../components/utils';
@@ -113,6 +113,13 @@ function StepProving(props) {
 												style={styles.removeIcon}
 												onClick={() => removeProof(proofAddress)}
 											/>
+											{proofType.paramsEncoded.length > 0 && (
+												<FontAwesomeIcon
+													icon={faPlusSquare}
+													style={styles.plusIcon}
+													title="Since this proof has parameters to set, it will require an extra transaction when creating the token"
+												/>
+											)}
 										</div>
 										{name === 'Location' && (
 											<small style={{ color: 'orange', padding: '' }}>
@@ -211,6 +218,12 @@ const styles = {
 		color: 'lightsalmon',
 		width: '14px',
 		height: '14px',
+		paddingLeft: '7px'
+	},
+	plusIcon: {
+		color: 'lightgreen',
+		width: '16px',
+		height: '16px',
 		paddingLeft: '7px'
 	},
 	normalField: {
