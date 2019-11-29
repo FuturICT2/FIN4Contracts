@@ -36,13 +36,15 @@ contract Fin4Claiming {
     }
 
     function submitClaim(address tokenAddress, uint quantity, string memory comment) public {
-        if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {
-            actionsWhereUserHasClaims[msg.sender].push(tokenAddress);
-        }
         uint claimId;
         address[] memory requiredProofTypes;
         uint claimCreationTime;
         (claimId, requiredProofTypes, claimCreationTime) = Fin4Token(tokenAddress).submitClaim(msg.sender, quantity, comment);
+
+        if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {
+            actionsWhereUserHasClaims[msg.sender].push(tokenAddress);
+        }
+
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredProofTypes);
 
         // auto-init claims where user would only press an "init proof" button without having to supply more info
