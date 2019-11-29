@@ -65,7 +65,9 @@ function TokenBalances(props, context) {
 	};
 
 	return (
-		<Box title={t('your-token-balances')}>
+		<Box title="Wallet">
+			{' '}
+			{/*t('your-token-balances')}*/}
 			{noBalanceYet(props.usersFin4TokenBalances) && noBalanceYet(props.usersFin4GovernanceTokenBalances) ? (
 				<NoTokens>{t('no-tokens-yet')}</NoTokens>
 			) : (

@@ -40,7 +40,7 @@ function Home(props) {
 	return (
 		<Container>
 			<TokenBalances />
-			<Box title="You on the blockchain">
+			<Box title="On the blockchain">
 				{' '}
 				{/*t('about-you')*/}
 				<p style={{ fontFamily: 'arial' }}>
@@ -132,14 +132,16 @@ function Home(props) {
 					</>
 				)}
 			</Box>
-			<Box title="More" width="250px">
+			<Box title="Settings" width="250px">
 				{/* TODO better title */}
 				{buildIconLabelLink('/about', <InfoIcon />, 'About')}
 				{buildIconLabelLink('/settings', <SettingsIcon />, 'System settings')}
-				{buildIconLabelLink('/messages', <EmailIcon />, 'Your messages')}
-				{buildIconLabelLink('/user/message', <MessageIcon />, 'Message user')}
 				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
 				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections', true, false)}
+			</Box>
+			<Box title="Inbox" width="250px">
+				{buildIconLabelLink('/messages', <EmailIcon />, 'Your messages')}
+				{buildIconLabelLink('/user/message', <MessageIcon />, 'Message user', true, false)}
 			</Box>
 			<Box title="Token curation" width="250px">
 				{buildIconLabelLink('/governance/listing', <StarIcon />, 'Listing')}
