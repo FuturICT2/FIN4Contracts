@@ -41,6 +41,10 @@ function StepMinting(props) {
 			setChoice('userDefinedQuantityFactor');
 		}
 
+		if (!draft.properties.isMintable) {
+			setChoice('isMintableFalse');
+		}
+
 		setDraftId(draft.id);
 	});
 
@@ -51,6 +55,13 @@ function StepMinting(props) {
 
 		if (choice === 'userDefinedQuantityFactor') {
 			value.current.fixedQuantity = 0;
+		}
+
+		if (choice === 'isMintableFalse') {
+			// TODO otherwise errors on the smart contract
+			// handle this differently? #ConceptualDecision
+			value.current.fixedQuantity = 1;
+			value.current.userDefinedQuantityFactor = 0;
 		}
 
 		props.dispatch({
@@ -69,6 +80,12 @@ function StepMinting(props) {
 		<>
 			{draftId && (
 				<>
+					{choice === 'isMintableFalse' && (
+						<center style={{ fontFamily: 'arial', color: 'orange' }}>
+							You set your token to not be mintable in the design step. Approving claims won't mint a balance to the
+							claimer.
+						</center>
+					)}
 					<table>
 						<tbody>
 							<tr>
@@ -78,8 +95,18 @@ function StepMinting(props) {
 										row={true}
 										onChange={e => setChoice(e.target.value)}
 										value={choice}>
-										<FormControlLabel value="fixedQuantity" control={<Radio />} label="Fixed amount" />
-										<FormControlLabel value="userDefinedQuantityFactor" control={<Radio />} label="Fixed factor" />
+										<FormControlLabel
+											disabled={choice === 'isMintableFalse'}
+											value="fixedQuantity"
+											control={<Radio />}
+											label="Fixed amount"
+										/>
+										<FormControlLabel
+											disabled={choice === 'isMintableFalse'}
+											value="userDefinedQuantityFactor"
+											control={<Radio />}
+											label="Fixed factor"
+										/>
 									</RadioGroup>
 								</td>
 								<td>
