@@ -11,6 +11,7 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
         public {
             name = "SensorOneTimeSignal";
             description = "Approval via a sensor that sends a signal. The token creator specifies the sensor via its ID.";
+            hasParameterForTokenCreatorToSet = true;
         }
 
     address public Fin4OracleHubAddress;

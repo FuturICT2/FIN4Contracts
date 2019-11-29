@@ -11,6 +11,7 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       description = "Defines the maximum quantity a user can claim within a specified time interval.";
       // interval = 1 * 24 * 60 * 60 * 1000; // 1 day
       // maxQuantity = 10;
+      hasParameterForTokenCreatorToSet = true;
     }
 
     function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveProof, uint claimId) public {
