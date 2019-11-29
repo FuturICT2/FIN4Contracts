@@ -129,17 +129,17 @@ const menu = [
 	},
 	{
 		component: UserTransfer,
-		path: '/user/transfer/:userAddress',
+		path: '/user/transfer/:tokenSymbol',
 		showInNavBar: false
 	},
 	{
 		component: UserTransfer,
-		path: '/user/transfer/:userAddress/:tokenSymbol',
+		path: '/user/transfer/:tokenSymbol/:userAddress',
 		showInNavBar: false
 	},
 	{
 		component: UserTransfer,
-		path: '/user/transfer/:userAddress/:tokenSymbol/:transferAmount',
+		path: '/user/transfer/:tokenSymbol/:userAddress/:transferAmount',
 		showInNavBar: false
 	},
 	{

@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import UsersIcon from '@material-ui/icons/Group';
 import CollectionsIcon from '@material-ui/icons/CollectionsBookmark';
 import MessageIcon from '@material-ui/icons/Message';
-import SendIcon from '@material-ui/icons/Send'; // or Forward
 import EmailIcon from '@material-ui/icons/Email';
 import StarIcon from '@material-ui/icons/Star';
 import TokenBalances from '../../components/TokenBalances';
@@ -139,7 +138,6 @@ function Home(props) {
 				{buildIconLabelLink('/settings', <SettingsIcon />, 'System settings')}
 				{buildIconLabelLink('/messages', <EmailIcon />, 'Your messages')}
 				{buildIconLabelLink('/user/message', <MessageIcon />, 'Message user')}
-				{buildIconLabelLink('/user/transfer', <SendIcon />, 'Transfer token')}
 				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
 				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections', true, false)}
 			</Box>

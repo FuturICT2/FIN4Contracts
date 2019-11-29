@@ -10,6 +10,8 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import Modal from './Modal';
+import SendIcon from '@material-ui/icons/Send'; // or Forward
+import { Link } from 'react-router-dom';
 
 function TokenBalances(props, context) {
 	const { t } = useTranslation();
@@ -48,7 +50,8 @@ function TokenBalances(props, context) {
 							<FontAwesomeIcon icon={faInfoCircle} style={styles.infoIcon} onClick={toggleModal} />
 						</>
 					),
-					balance: balance
+					balance: balance,
+					transfer: null
 				}}
 				tdStyle={tdStyle}
 			/>
@@ -66,7 +69,7 @@ function TokenBalances(props, context) {
 			{noBalanceYet(props.usersFin4TokenBalances) && noBalanceYet(props.usersFin4GovernanceTokenBalances) ? (
 				<NoTokens>{t('no-tokens-yet')}</NoTokens>
 			) : (
-				<Table headers={[t('token-name'), t('token-balance')]} colWidths={[85, 15]}>
+				<Table headers={[t('token-name'), t('token-balance'), 'Transfer']} colWidths={[70, 15, 15]}>
 					{props.contracts.GOV &&
 						props.contracts.GOV.initialized &&
 						buildGovernanceTokenBalance(context.drizzle.contracts.GOV, 'Fin4 Governance Token', 'GOV')}
@@ -86,7 +89,12 @@ function TokenBalances(props, context) {
 											<Currency symbol={token.symbol} name={token.name} linkTo={'/token/view/' + token.symbol} />
 										</span>
 									),
-									balance: props.usersFin4TokenBalances[tokenAddr]
+									balance: props.usersFin4TokenBalances[tokenAddr],
+									transfer: (
+										<Link to={'/user/transfer/' + token.symbol}>
+											<SendIcon style={{ width: '17px' }} />
+										</Link>
+									)
 								}}
 							/>
 						);
