@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
+import BuildIcon from '@material-ui/icons/Build';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import QRModal from '../../components/QRModal';
 import { buildIconLabelLink, TCRactive } from '../../components/utils';
@@ -141,8 +142,12 @@ function Home(props) {
 				{buildIconLabelLink('/user/transfer', <SendIcon />, 'Transfer token')}
 				{buildIconLabelLink('/users/groups', <UsersIcon />, 'User groups')}
 				{buildIconLabelLink('/collections', <CollectionsIcon />, 'Token collections')}
-				{buildIconLabelLink('/proofs', <AssignmentIcon />, 'Proof types')}
-				{buildIconLabelLink('/governance/listing', <StarIcon />, 'Curated tokens')}
+				{buildIconLabelLink('/proofs', <AssignmentIcon />, 'Proof types', true, false)}
+			</Box>
+			<Box title="Token curation" width="250px">
+				{buildIconLabelLink('/governance/listing', <StarIcon />, 'Listing')}
+				{buildIconLabelLink('/governance/management', <AssignmentIcon />, 'Management')}
+				{buildIconLabelLink('/governance/parameters', <BuildIcon />, 'Parameters', true, false)}
 			</Box>
 		</Container>
 	);

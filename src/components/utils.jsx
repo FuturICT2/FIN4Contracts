@@ -4,7 +4,7 @@ const nanoid = require('nanoid');
 
 const TCRactive = false; // the other necessary switch is in migrations/3_deploy_tcr.js
 
-const buildIconLabelLink = (link, icon, label, enabled = true) => {
+const buildIconLabelLink = (link, icon, label, enabled = true, newLineAfterwards = true) => {
 	let style = { textDecoration: 'none' };
 	let tooltip = null;
 	if (!enabled) {
@@ -17,7 +17,7 @@ const buildIconLabelLink = (link, icon, label, enabled = true) => {
 				{icon}
 				&nbsp;&nbsp;{label}
 			</div>
-			<br />
+			{newLineAfterwards && <br />}
 		</Link>
 	);
 };
