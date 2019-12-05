@@ -210,7 +210,7 @@ function TokenView(props, context) {
 						)}
 						<Link to={'/claim/' + tokenViaURL.symbol}>Claim</Link>
 						{', '}
-						<Link to={'/user/transfer'}>Transfer</Link> {/* TODO support symbol, no user */}
+						<Link to={'/user/transfer/' + tokenViaURL.symbol}>Transfer</Link>
 					</span>
 				)}
 			</Box>
