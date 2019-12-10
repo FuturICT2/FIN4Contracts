@@ -1,19 +1,6 @@
-# FIN4Xplorer
+# FIN4Contracts
 
-**FIN4Xplorer** is a decentralised design for a bottom-up and multidimensional finance system with the aim of making communities healthier, more social, and sustainable. It is part of the FLAG-ERA-funded project [FuturICT 2.0](https://futurict2.eu/).
-
-<table border="0"><tr>
-<td>
-<a href="https://futurict2.eu/"><img src="public/project-logos/fin4x_11_with_round_dots.png" width="200" ></a></td>
-<td>
-<a href="https://futurict2.eu/"><img src="public/project-logos/FuturICT2_logo_on_white.png" width="250" ></a></td>
-<td>
-<img src="public/project-logos/Fin4_logo_on_white.jpg" width="100">
-</td></tr></table>
-
-ℹ️ [Explanatory video](http://www.youtube.com/watch?v=oNlKdHjvExo)
-
-**FIN4Xplorer** allows any person, organisation, and public institution to create tokens, which stand for a positive action. Users can claim and prove these actions, for which they receive said tokens. By designing the system to be open to markets tailored to the respective actions, incentives are generated. The main characteristics of this system are its decentralization, immutability, rewards, and bottom-up approach.
+These are the smart contracts of the [FIN4Xplorer](https://github.com/FuturICT2/FIN4Xplorer).
 
 # Setup
 
