@@ -9,7 +9,7 @@ try {
 }
 
 module.exports = {
-	contracts_build_directory: path.join(__dirname, 'src/build/contracts'),
+	contracts_build_directory: path.join(__dirname, config.CONTRACTS_BUILD_DIRECTORY),
 	networks: {
 		development: {
 			host: '127.0.0.1',
