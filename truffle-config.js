@@ -3,9 +3,9 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 var config;
 try {
-	config = require('./src/config/deployment-config.json');
+	config = require('./config.json');
 } catch (err) {
-	console.log('./src/config/deployment-config.json not found');
+	console.log('./config.json not found');
 }
 
 module.exports = {
