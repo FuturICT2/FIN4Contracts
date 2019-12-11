@@ -7,7 +7,7 @@ These are the smart contracts of the [FIN4Xplorer](https://github.com/FuturICT2/
 ## Dependencies
 
 ```sh
-# the basics
+# basics
 sudo apt-get install git build-essential python
 
 # node v10
@@ -21,15 +21,31 @@ npm explore npm -g -- npm install node-gyp@latest
 
 # truffle
 npm install -g truffle
-npm install -g ganache-cli # or the GUI app from trufflesuite.com/ganache
+# for local development: ganache-cli or the GUI app from trufflesuite.com/ganache
+npm install -g ganache-cli
 
 # project
-npm install # requires apparently more than 1GB of memory to run
+npm install
 ```
 
-Install the [MetaMask](https://metamask.io/) browser extension.
+### Config file
 
-## Deploying the smart contracts
+The file `config.json` at root level must be added and filled.
+
+The first two fields are only necessary for non-local deployments and are used in `truffle-config.js`. The account encoded by the mnemonic is paying the deployment costs. Therefore it has to have sufficient funds on the respective network. The *Infura API* key can be obtained by creating a project on infura.io: it is the *Project ID* under *View Project*.
+
+The last two fields define where `truffle` compiles the contract into JSON format and where the `Fin4Main` address will be stored after deployment. In the example below, these paths are set in a way that assumes this FIN4Contracts repo to be sitting next to the [FIN4Xplorer](https://github.com/FuturICT2/FIN4Xplorer) repo containing the frontend react app. There these files are required for running the app. If you don't build these contracts/addresses files directly there but want to run the frontend, you must manually make sure to place them where the frontend expects them.
+
+```json
+{
+    "MNEMONIC": "",
+    "INFURA_API_KEY": "",
+    "CONTRACTS_BUILD_DIRECTORY": "../FIN4Xplorer/src/build/contracts",
+    "ADDRESS_SAVING_LOCATION": "../../FIN4Xplorer/src/config"
+}
+```
+
+## Deployment
 
 To deploy the smart contracts to a local Ganache instance, run:
 ```sh
@@ -41,76 +57,3 @@ To deploy to the Rinkeby testnet, use:
 ```sh
 truffle migrate --network rinkeby
 ```
-
-This requires the file `src/config/deployment-config.json` to be added and filled. For deploying, only the first two fields are required. The *faucet-server* located under `scripts/faucet-server` uses the third field as well. If the fourth field is present, a *Request Ether* link is shown in the *About you* box on the landing page.
-```json
-{
-    "MNEMONIC": "",
-    "INFURA_API_KEY": "",
-    "PRIVATE_KEY_OF_FAUCET_ACCOUNT": "",
-    "FAUCET_URL": ""
-}
-```
-The account encoded by the mnemonic is paying the deployment costs. Therefore it has to have sufficient funds on the respective network. The Infura API key can be obtained by creating a project on infura.io: it is the "Project ID" under "View Project".
-
-## Serving the GUI
-
-Serving the GUI can happen right after deploying the smart contracts on the same computer - but does not have to.
-
-If they are not the same computers it is necessary:
-
-- to copy `src/config/Fin4MainAddress.js` onto the computer serving the GUI - this file was automatically created during `truffle migrate`
-
-- to run `truffle compile` on a computer serving the GUI that hasn't run `truffle migrate` beforehand - this creates JSON-files for each contract that are necessary for calling the contracts on the blockchain
-
-### Development mode
-
-This starts the React app on port 3000:
-
-```sh
-npm start
-```
-
-### Production mode
-
-This starts the React app on port 5000:
-
-```sh
-npm run build
-npm install -g serve
-serve -s build # -l 3000 to use that port e.g.
-```
-
-Serving the DApp in production mode instead of development mode also solves an issue with sub-sites (e.g. `/tokens`) on mobile DApp browsers (observed in MetaMask on Android) where it would only show `cannot GET /URL` on reloading.
-
-### Serving via localhost
-
-To expose specific local ports temporarily to the public can be useful during development. For instance to test the DApp on mobile without having to deploy it on a testnet first and getting your code-changes to your server etc.
-
-One way of doing so, is using [localtunnel.me](https://localtunnel.me/):
-
-```sh
-npm install -g localtunnel
-```
-
-Running these commands in two terminal windows will make both your local Ganache as well as your DApp available via public URLs. If you don't specify `--subdomain` you will get a randomized one each time.
-
-```sh
-lt --port 3000 --subdomain finfour
-lt --port 7545 --subdomain finfour-ganache
-```
-
-This should result in:
-
-```sh
-your url is: https://finfour.localtunnel.me
-your url is: https://finfour-ganache.localtunnel.me
-```
-
-The Ganache-URL can now be used to set up a custom network in your mobile DApp-browser App. Then make sure to restore the mobile wallet using the seed phrase from your local Ganache, otherwise you won't have any ETH. Now you should be able to open and use the DApp at the generated localtunnel-URL.
-
-## Using the Dapp
-
-If running locally, choose "import using account seed phrase" in MetaMask and use the `MNEMONIC` from Ganache. Create a network with `http://127.0.0.1:7545` as `custom RPC`. If running on Rinkeby, select that as your network in MetaMask and create or restore your respective account.
-
-Once correctly connected the warnings should disappear and you are good to go.
