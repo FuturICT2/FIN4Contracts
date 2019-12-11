@@ -1,12 +1,6 @@
-# truffle compiles contracts here
-src/build/
-
 .env/
 .idea/
 
-src/config/deployment-config.json
-src/config/Fin4MainAddress.js
-src/config/Fin4OracleHubAddress.js
 
 package-lock.json
 
