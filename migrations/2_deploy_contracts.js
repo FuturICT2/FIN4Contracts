@@ -1,5 +1,6 @@
 const fs = require('fs');
-var path = require('path');
+const path = require('path');
+const config = require('../config.json');
 
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
@@ -90,14 +91,14 @@ module.exports = async function(deployer) {
 
 	// Write Fin4Main address to src/config/Fin4MainAddress.js
 	let data = "const Fin4MainAddress = '" + Fin4MainInstance.address + "';\n" + 'export { Fin4MainAddress };\n';
-	fs.writeFile(path.join(__dirname, '../src/config/Fin4MainAddress.js'), data, err => {
+	fs.writeFile(path.join(__dirname, config.ADDRESS_SAVING_LOCATION + '/Fin4MainAddress.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
 	// Write Fin4OracleHub address to src/config/Fin4OracleHubAddress.js
 	data =
 		"const Fin4OracleHubAddress = '" + Fin4OracleHubInstance.address + "';\n" + 'export { Fin4OracleHubAddress };\n';
-	fs.writeFile(path.join(__dirname, '../src/config/Fin4OracleHubAddress.js'), data, err => {
+	fs.writeFile(path.join(__dirname, config.ADDRESS_SAVING_LOCATION + '/Fin4OracleHubAddress.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
 
