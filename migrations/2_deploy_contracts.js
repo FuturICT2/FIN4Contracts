@@ -7,7 +7,7 @@ const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
 const Fin4Messaging = artifacts.require('Fin4Messaging');
-const Fin4Proofing = artifacts.require('Fin4Proofing');
+const Fin4Proving = artifacts.require('Fin4Proving');
 const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const Fin4OracleHub = artifacts.require('Fin4OracleHub');
@@ -40,14 +40,14 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4SystemParameters);
 	const Fin4SystemParametersInstance = await Fin4SystemParameters.deployed();
 
-	await deployer.deploy(Fin4Proofing);
-	const Fin4ProofingInstance = await Fin4Proofing.deployed();
+	await deployer.deploy(Fin4Proving);
+	const Fin4ProvingInstance = await Fin4Proving.deployed();
 	await deployer.deploy(Fin4Claiming, Fin4SystemParametersInstance.address);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
 	await deployer.deploy(
 		Fin4TokenManagement,
 		Fin4ClaimingInstance.address,
-		Fin4ProofingInstance.address,
+		Fin4ProvingInstance.address,
 		Fin4SystemParametersInstance.address
 	);
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
@@ -66,7 +66,7 @@ module.exports = async function(deployer) {
 		Fin4ClaimingInstance.address,
 		Fin4CollectionsInstance.address,
 		Fin4MessagingInstance.address,
-		Fin4ProofingInstance.address,
+		Fin4ProvingInstance.address,
 		Fin4GroupsInstance.address,
 		Fin4SystemParametersInstance.address
 	);
@@ -75,17 +75,17 @@ module.exports = async function(deployer) {
 
 	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagingInstance.address)));
 	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
-	await Promise.all(proofTypeInstances.map(({ address }) => Fin4ProofingInstance.addProofType(address)));
+	await Promise.all(proofTypeInstances.map(({ address }) => Fin4ProvingInstance.addProofType(address)));
 	// ApprovalByGroupMember
 	await proofTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SensorOneTimeSignal
 	await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	// Idea
-	await proofTypeInstances[2].setFin4ProofingAddress(Fin4ProofingInstance.address);
+	await proofTypeInstances[2].setFin4ProvingAddress(Fin4ProvingInstance.address);
 	// Networking
-	await proofTypeInstances[3].setFin4ProofingAddress(Fin4ProofingInstance.address);
+	await proofTypeInstances[3].setFin4ProvingAddress(Fin4ProvingInstance.address);
 	// HappyMoment
-	await proofTypeInstances[4].setFin4ProofingAddress(Fin4ProofingInstance.address);
+	await proofTypeInstances[4].setFin4ProvingAddress(Fin4ProvingInstance.address);
 
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 

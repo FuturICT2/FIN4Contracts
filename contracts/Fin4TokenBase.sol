@@ -1,13 +1,13 @@
 pragma solidity ^0.5.0;
 
-import 'contracts/Fin4Proofing.sol';
+import 'contracts/Fin4Proving.sol';
 import "contracts/proof/Fin4BaseProofType.sol";
 import "contracts/stub/Fin4ClaimingStub.sol";
 
 contract Fin4TokenBase { // abstract class
 
   address public Fin4ClaimingAddress;
-  address public Fin4ProofingAddress;
+  address public Fin4ProvingAddress;
   address public tokenCreator;
   string public description;
   string public actionsText;
@@ -22,11 +22,11 @@ contract Fin4TokenBase { // abstract class
     tokenCreationTime = now;
   }
 
-  function init(address Fin4ClaimingAddr, address Fin4ProofingAddr, string memory _description, string memory _actionsText,
+  function init(address Fin4ClaimingAddr, address Fin4ProvingAddr, string memory _description, string memory _actionsText,
     address _tokenCreator, uint _fixedQuantity, uint _userDefinedQuantityFactor, uint _initialSupply) public {
     require(!initDone, "init() can only be called once"); // TODO also require token creator?
     Fin4ClaimingAddress = Fin4ClaimingAddr;
-    Fin4ProofingAddress = Fin4ProofingAddr;
+    Fin4ProvingAddress = Fin4ProvingAddr;
     description = _description;
     actionsText = _actionsText;
     tokenCreator = _tokenCreator;
@@ -233,8 +233,8 @@ contract Fin4TokenBase { // abstract class
 
   // called for each proof type from Fin4Main.createNewToken()
   function addRequiredProofType(address proofType) public {
-    require(Fin4Proofing(Fin4ProofingAddress).proofTypeIsRegistered(proofType),
-      "This address is not registered as proof type in Fin4Proofing");
+    require(Fin4Proving(Fin4ProvingAddress).proofTypeIsRegistered(proofType),
+      "This address is not registered as proof type in Fin4Proving");
     requiredProofTypes.push(proofType);
     Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
     if (Fin4BaseProofType(proofType).hasParameterForTokenCreatorToSet()) {

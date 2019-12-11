@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
-import "contracts/Fin4Proofing.sol";
+import "contracts/Fin4Proving.sol";
 
 contract HappyMoment is Fin4BaseProofType {
 
@@ -12,14 +12,14 @@ contract HappyMoment is Fin4BaseProofType {
       description = "Submit a picture of a happy moment.";
     }
 
-    address public Fin4ProofingAddress;
+    address public Fin4ProvingAddress;
 
-    function setFin4ProofingAddress(address Fin4ProofingAddr) public {
-        Fin4ProofingAddress = Fin4ProofingAddr;
+    function setFin4ProvingAddress(address Fin4ProvingAddr) public {
+        Fin4ProvingAddress = Fin4ProvingAddr;
     }
 
     function submitProof(address tokenAddrToReceiveProof, uint claimId, string memory IPFShash) public {
-        Fin4Proofing(Fin4ProofingAddress).addSubmission(address(this), tokenAddrToReceiveProof, msg.sender, now, 1, IPFShash);
+        Fin4Proving(Fin4ProvingAddress).addSubmission(address(this), tokenAddrToReceiveProof, msg.sender, now, 1, IPFShash);
         _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
     }
 

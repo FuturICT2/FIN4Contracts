@@ -15,14 +15,14 @@ contract Fin4TokenManagement {
 
     address public creator;
     address public Fin4ClaimingAddress;
-    address public Fin4ProofingAddress;
+    address public Fin4ProvingAddress;
     address public Fin4SystemParametersAddress;
     address public Fin4ReputationAddress;
 
-    constructor(address Fin4ClaimingAddr, address Fin4ProofingAddr, address Fin4SystemParametersAddr) public {
+    constructor(address Fin4ClaimingAddr, address Fin4ProvingAddr, address Fin4SystemParametersAddr) public {
         creator = msg.sender;
         Fin4ClaimingAddress = Fin4ClaimingAddr;
-        Fin4ProofingAddress = Fin4ProofingAddr;
+        Fin4ProvingAddress = Fin4ProvingAddr;
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
     }
 
@@ -70,7 +70,7 @@ contract Fin4TokenManagement {
         // TODO causes out-of-gas errors to have both here, it must be made possible though somehow...
         // newToken = new Fin4TokenCapped(name, _symbol, msg.sender, properties, values);
 
-        newToken.init(Fin4ClaimingAddress, Fin4ProofingAddress, description, actionsText,
+        newToken.init(Fin4ClaimingAddress, Fin4ProvingAddress, description, actionsText,
             msg.sender, fixedQuantity, userDefinedQuantityFactor, values[2]);
 
         newToken.addMinter(Fin4ClaimingAddress);
@@ -100,7 +100,7 @@ contract Fin4TokenManagement {
         require(!symbolIsUsed[_symbol], "Symbol is already in use");
 
         Fin4Token newToken = new Fin4Token(name, _symbol, description, unit, msg.sender);
-        newToken.setAddresses(Fin4ClaimingAddress, Fin4ProofingAddress);
+        newToken.setAddresses(Fin4ClaimingAddress, Fin4ProvingAddress);
         symbolIsUsed[_symbol] = true;
 
         for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the token creator
