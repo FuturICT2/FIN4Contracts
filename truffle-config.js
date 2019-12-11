@@ -1,12 +1,7 @@
 const path = require('path');
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-var config;
-try {
-	config = require('./config.json');
-} catch (err) {
-	console.log('./config.json not found');
-}
+const config = require('./config.json');
 
 module.exports = {
 	contracts_build_directory: path.join(__dirname, config.CONTRACTS_BUILD_DIRECTORY),
