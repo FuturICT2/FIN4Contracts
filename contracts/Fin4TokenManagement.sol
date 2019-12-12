@@ -90,58 +90,6 @@ contract Fin4TokenManagement {
         return address(newToken);
     }
 
-    /*
-    function createNewToken(string memory name, string memory symbol, string memory description, string memory unit,
-        address[] memory requiredProofTypes, uint[] memory paramValues, uint[] memory paramValuesIndices) public returns(address) {
-
-        uint symLen = symbol.length();
-        require(symLen >= 3 && symLen <= 5, "Symbol must have between 3 and 5 characters");
-        string memory _symbol = symbol.upper();
-        require(!symbolIsUsed[_symbol], "Symbol is already in use");
-
-        Fin4Token newToken = new Fin4Token(name, _symbol, description, unit, msg.sender);
-        newToken.setAddresses(Fin4ClaimingAddress, Fin4ProvingAddress);
-        symbolIsUsed[_symbol] = true;
-
-        for (uint i = 0; i < requiredProofTypes.length; i++) { // add the required proof types as selected by the token creator
-            newToken.addRequiredProofType(requiredProofTypes[i]);
-            // ProofTypes must be minters because "they" (via msg.sender) are the ones calling mint() if the last required proof type is set to true
-            newToken.addMinter(requiredProofTypes[i]);
-
-            // This approach enables setting integer-parameters for the proof types that require parameters.
-            // The challenge to solve here was that some don't need parameters and others need multiple.
-            // Therefore the paramValuesIndices array encodes successively the start- and end indices for
-            // each proof type as they appear in the paramValues array.
-            // An example:
-            //    Proof type A has parameter values 4, 7 and 9, Proof type B as no parameters and Proof type C has the parameter 5.
-            //    paramValues would look like this [4, 7, 9, 5] whereas paramValuesIndices would like like this: [0, 2, 99, 99, 3, 3]
-            //    --> Proof type A has the parameters from index 0 to index 2, Proof type b has no parameters as indicated by the 99
-            //        and Proof type C has the single parameter at index 3
-            uint indexStart = paramValuesIndices[i * 2];
-            uint indexEnd = paramValuesIndices[i * 2 + 1];
-            if (indexStart != 99) {
-                uint paramsCount = indexEnd - indexStart + 1;
-                uint[] memory params = new uint[](paramsCount);
-                for (uint j = indexStart; j <= indexEnd; j ++) {
-                    params[j - indexStart] = paramValues[j];
-                }
-                // Send parameters to proof type, it will be stored there linked to the new tokens address
-                Fin4BaseProofType(requiredProofTypes[i]).setParameters(address(newToken), params);
-            }
-        }
-
-        // required to mint token in case of no proof types, should it be restricted to if requiredProofTypes.length == 0 ?
-        newToken.addMinter(Fin4ClaimingAddress);
-
-        // REP reward for creating a new token
-        MintingStub(Fin4ReputationAddress).mint(msg.sender, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
-
-        allFin4Tokens.push(address(newToken));
-        emit Fin4TokenCreated(address(newToken), name, _symbol, description, unit, msg.sender, newToken.tokenCreationTime());
-        return address(newToken);
-    }
-    */
-
     function getAllFin4Tokens() public view returns(address[] memory) {
         return allFin4Tokens;
     }
