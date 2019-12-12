@@ -49,6 +49,8 @@ module.exports = async function(deployer) {
 
 	await deployer.deploy(Fin4TokenCreator, Fin4ClaimingInstance.address);
 	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address);
+	const Fin4TokenCreatorInstance = await Fin4TokenCreator.deployed();
+	const Fin4CappedTokenCreatorInstance = await Fin4CappedTokenCreator.deployed();
 
 	await deployer.deploy(
 		Fin4TokenManagement,
@@ -68,6 +70,8 @@ module.exports = async function(deployer) {
 	const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
+		Fin4TokenCreatorInstance.address,
+		Fin4CappedTokenCreatorInstance.address,
 		Fin4TokenManagementInstance.address,
 		Fin4ClaimingInstance.address,
 		Fin4CollectionsInstance.address,
