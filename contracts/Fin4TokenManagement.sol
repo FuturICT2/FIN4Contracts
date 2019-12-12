@@ -34,8 +34,8 @@ contract Fin4TokenManagement {
 
     address[] public allFin4Tokens;
 
-    function createNewToken(string memory name, string memory _symbol, string memory description,
-        bool[] memory properties, uint[] memory values, string memory actionsText, address[] memory requiredProofTypes) public returns(address) {
+    function initNewToken(address tokenAddress, string memory description, string memory actionsText,
+        uint fixedQuantity, uint userDefinedQuantityFactor, address[] memory requiredProofTypes) public {
         /*
             This check seems super costly as it brings this contract to out of gas errors during deployment quickly
             Commenting it out until a better (cheaper) solution is found
@@ -47,47 +47,25 @@ contract Fin4TokenManagement {
         symbolIsUsed[_symbol] = true;
         */
 
-        /*
-        bool isTransferable = properties[0];
-        bool isMintable = properties[1];
-        bool isBurnable = properties[2];
-        bool isCapped = properties[3];
-        uint cap = values[0];
-        uint8 decimals = uint8(values[1]);
-        uint initialSupply = values[2];
-        */
-
-        uint fixedQuantity = values[3];
-        uint userDefinedQuantityFactor = values[4];
-
         require(
             (fixedQuantity == 0 && userDefinedQuantityFactor != 0) ||
             (fixedQuantity != 0 && userDefinedQuantityFactor == 0),
             "Exactly one of fixedQuantity and userDefinedQuantityFactor must be nonzero");
 
-        Fin4TokenBase newToken = new Fin4Token(name, _symbol, msg.sender, properties, values);
-        //if (properties[3] == true) // isCapped
-        // TODO causes out-of-gas errors to have both here, it must be made possible though somehow...
-        // newToken = new Fin4TokenCapped(name, _symbol, msg.sender, properties, values);
+        Fin4TokenBase token = Fin4TokenBase(tokenAddress);
 
-        newToken.init(Fin4ClaimingAddress, Fin4ProvingAddress, description, actionsText,
-            msg.sender, fixedQuantity, userDefinedQuantityFactor, values[2]);
+        token.init(Fin4ClaimingAddress, Fin4ProvingAddress, description, actionsText, fixedQuantity, userDefinedQuantityFactor);
 
-        newToken.addMinter(Fin4ClaimingAddress);
         for (uint i = 0; i < requiredProofTypes.length; i++) {
-            newToken.addRequiredProofType(requiredProofTypes[i]);
-            // newToken.addMinter(requiredProofTypes[i]);
+            token.addRequiredProofType(requiredProofTypes[i]);
         }
 
-        // Fin4TokenManagement (msg.sender in that case) doesn't need to have the MinterRole on tokens
-        newToken.renounceMinter();
-
-         // REP reward for creating a new token
+        // REP reward for creating a new token
         MintingStub(Fin4ReputationAddress).mint(msg.sender, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
 
-        allFin4Tokens.push(address(newToken));
-        emit Fin4TokenCreated(address(newToken), name, _symbol, description, "", msg.sender, newToken.tokenCreationTime(), fixedQuantity != 0);
-        return address(newToken);
+        allFin4Tokens.push(tokenAddress);
+        emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), description, "",
+            msg.sender, token.tokenCreationTime(), fixedQuantity != 0);
     }
 
     function getAllFin4Tokens() public view returns(address[] memory) {

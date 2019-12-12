@@ -5,10 +5,13 @@ import 'contracts/Fin4TokenBase.sol';
 
 contract Fin4Token is Fin4TokenBase, ERC20Plus {
 
-  constructor(string memory name, string memory symbol, address tokenCreator, bool[] memory properties, uint[] memory values)
-    ERC20Plus(name, symbol, uint8(values[1]), tokenCreator, properties[2], properties[0], properties[1], values[2])
+  constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
+    bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply)
+    ERC20Plus(name, symbol, decimals, _tokenCreator, isBurnable, isTransferable, isMintable, _initialSupply)
     Fin4TokenBase()
     public {
+      tokenCreator = _tokenCreator;
+      initialSupply = _initialSupply;
       // Otherwise token creators can mint themselves rich via command line #ConceptualDecision
       _removeMinter(tokenCreator);
     }
