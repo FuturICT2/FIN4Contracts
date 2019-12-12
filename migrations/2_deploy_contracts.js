@@ -4,6 +4,7 @@ const config = require('../config.json');
 
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenCreator = artifacts.require('Fin4TokenCreator');
+const Fin4CappedTokenCreator = artifacts.require('Fin4CappedTokenCreator');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
@@ -47,6 +48,7 @@ module.exports = async function(deployer) {
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
 
 	await deployer.deploy(Fin4TokenCreator, Fin4ClaimingInstance.address);
+	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address);
 
 	await deployer.deploy(
 		Fin4TokenManagement,
