@@ -24,6 +24,8 @@ contract Fin4Main {
       Fin4MainCreator = msg.sender;
   }
 
+  address public Fin4UncappedTokenCreatorAddress;
+  address public Fin4CappedTokenCreatorAddress;
   address public Fin4TokenManagementAddress;
   address public Fin4ClaimingAddress;
   address public Fin4CollectionsAddress;
@@ -32,10 +34,12 @@ contract Fin4Main {
   address public Fin4GroupsAddress;
   address public Fin4SystemParametersAddress;
 
-  function setSatelliteAddresses(address tokenManagement, address claiming, address collections,
-    address messaging, address proving, address groups, address systemParameters) public {
+  function setSatelliteAddresses(address uncappedTokenCreator, address cappedTokenCreator, address tokenManagement, address claiming,
+  address collections, address messaging, address proving, address groups, address systemParameters) public {
     // TODO use TCR instead of giving this right only to the creator of Fin4Main? #ConceptualDecision
     require (msg.sender == Fin4MainCreator, "Only the creator of Fin4Main can set satellite addresses");
+    Fin4UncappedTokenCreatorAddress = uncappedTokenCreator;
+    Fin4CappedTokenCreatorAddress = cappedTokenCreator;
     Fin4TokenManagementAddress = tokenManagement;
     Fin4ClaimingAddress = claiming;
     Fin4CollectionsAddress = collections;
@@ -45,9 +49,9 @@ contract Fin4Main {
     Fin4SystemParametersAddress = systemParameters;
   }
 
-  function getSatelliteAddresses() public view returns(address, address, address, address, address, address, address) {
-    return (Fin4TokenManagementAddress, Fin4ClaimingAddress, Fin4CollectionsAddress, Fin4MessagingAddress,
-      Fin4ProvingAddress, Fin4GroupsAddress, Fin4SystemParametersAddress);
+  function getSatelliteAddresses() public view returns(address, address, address, address, address, address, address, address, address) {
+    return (Fin4UncappedTokenCreatorAddress, Fin4CappedTokenCreatorAddress, Fin4TokenManagementAddress, Fin4ClaimingAddress,
+      Fin4CollectionsAddress, Fin4MessagingAddress, Fin4ProvingAddress, Fin4GroupsAddress, Fin4SystemParametersAddress);
   }
 
   address public REPToken;

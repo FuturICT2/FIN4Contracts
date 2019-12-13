@@ -4,7 +4,7 @@
 	"private": true,
 	"dependencies": {
 		"@truffle/hdwallet-provider": "1.0.18",
-		"openzeppelin-solidity": "2.3.0",
+		"openzeppelin-solidity": "^2.4.0",
 		"solidity-util": "github:willitscale/solidity-util"
 	}
 }

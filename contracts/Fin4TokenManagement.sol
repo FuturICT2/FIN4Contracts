@@ -4,25 +4,19 @@ pragma solidity ^0.5.0;
 import 'contracts/Fin4Token.sol';
 import 'contracts/stub/MintingStub.sol';
 import 'contracts/Fin4SystemParameters.sol';
-import "solidity-util/lib/Strings.sol";
 
 contract Fin4TokenManagement {
-    using Strings for string;
 
     // TODO do we need the indexed keyword for event params?
     event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator,
         uint creationTime, bool hasFixedMintingQuantity);
 
     address public creator;
-    address public Fin4ClaimingAddress;
-    address public Fin4ProvingAddress;
     address public Fin4SystemParametersAddress;
     address public Fin4ReputationAddress;
 
-    constructor(address Fin4ClaimingAddr, address Fin4ProvingAddr, address Fin4SystemParametersAddr) public {
+    constructor(address Fin4SystemParametersAddr) public {
         creator = msg.sender;
-        Fin4ClaimingAddress = Fin4ClaimingAddr;
-        Fin4ProvingAddress = Fin4ProvingAddr;
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
     }
 
@@ -34,60 +28,17 @@ contract Fin4TokenManagement {
 
     address[] public allFin4Tokens;
 
-    function createNewToken(string memory name, string memory _symbol, string memory description,
-        bool[] memory properties, uint[] memory values, string memory actionsText, address[] memory requiredProofTypes) public returns(address) {
-        /*
-            This check seems super costly as it brings this contract to out of gas errors during deployment quickly
-            Commenting it out until a better (cheaper) solution is found
-        // mapping (string => bool) public symbolIsUsed;
-        uint symLen = symbol.length();
-        require(symLen >= 3 && symLen <= 5, "Symbol must have between 3 and 5 characters");
-        string memory _symbol = symbol.upper();
-        require(!symbolIsUsed[_symbol], "Symbol is already in use");
-        symbolIsUsed[_symbol] = true;
-        */
+    function registerNewToken(address tokenAddress) public {
+        Fin4TokenBase token = Fin4TokenBase(tokenAddress);
 
-        /*
-        bool isTransferable = properties[0];
-        bool isMintable = properties[1];
-        bool isBurnable = properties[2];
-        bool isCapped = properties[3];
-        uint cap = values[0];
-        uint8 decimals = uint8(values[1]);
-        uint initialSupply = values[2];
-        */
+        // REP reward for creating a new token
+        MintingStub(Fin4ReputationAddress).mint(token.tokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
 
-        uint fixedQuantity = values[3];
-        uint userDefinedQuantityFactor = values[4];
+        allFin4Tokens.push(tokenAddress);
 
-        require(
-            (fixedQuantity == 0 && userDefinedQuantityFactor != 0) ||
-            (fixedQuantity != 0 && userDefinedQuantityFactor == 0),
-            "Exactly one of fixedQuantity and userDefinedQuantityFactor must be nonzero");
-
-        Fin4TokenBase newToken = new Fin4Token(name, _symbol, msg.sender, properties, values);
-        //if (properties[3] == true) // isCapped
-        // TODO causes out-of-gas errors to have both here, it must be made possible though somehow...
-        // newToken = new Fin4TokenCapped(name, _symbol, msg.sender, properties, values);
-
-        newToken.init(Fin4ClaimingAddress, Fin4ProvingAddress, description, actionsText,
-            msg.sender, fixedQuantity, userDefinedQuantityFactor, values[2]);
-
-        newToken.addMinter(Fin4ClaimingAddress);
-        for (uint i = 0; i < requiredProofTypes.length; i++) {
-            newToken.addRequiredProofType(requiredProofTypes[i]);
-            // newToken.addMinter(requiredProofTypes[i]);
-        }
-
-        // Fin4TokenManagement (msg.sender in that case) doesn't need to have the MinterRole on tokens
-        newToken.renounceMinter();
-
-         // REP reward for creating a new token
-        MintingStub(Fin4ReputationAddress).mint(msg.sender, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
-
-        allFin4Tokens.push(address(newToken));
-        emit Fin4TokenCreated(address(newToken), name, _symbol, description, "", msg.sender, newToken.tokenCreationTime(), fixedQuantity != 0);
-        return address(newToken);
+        // or cheaper/better to get these values via one getter?
+        emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), token.description(), "",
+            token.tokenCreator(), token.tokenCreationTime(), token.fixedQuantity() != 0);
     }
 
     function getAllFin4Tokens() public view returns(address[] memory) {

@@ -3,6 +3,8 @@ const path = require('path');
 const config = require('../config.json');
 
 const Fin4Main = artifacts.require('Fin4Main');
+const Fin4UncappedTokenCreator = artifacts.require('Fin4UncappedTokenCreator');
+const Fin4CappedTokenCreator = artifacts.require('Fin4CappedTokenCreator');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
@@ -44,13 +46,15 @@ module.exports = async function(deployer) {
 	const Fin4ProvingInstance = await Fin4Proving.deployed();
 	await deployer.deploy(Fin4Claiming, Fin4SystemParametersInstance.address);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
-	await deployer.deploy(
-		Fin4TokenManagement,
-		Fin4ClaimingInstance.address,
-		Fin4ProvingInstance.address,
-		Fin4SystemParametersInstance.address
-	);
+
+	await deployer.deploy(Fin4TokenManagement, Fin4SystemParametersInstance.address);
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
+
+	await deployer.deploy(Fin4UncappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4ProvingInstance.address);
+	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4ProvingInstance.address);
+	const Fin4UncappedTokenCreatorInstance = await Fin4UncappedTokenCreator.deployed();
+	const Fin4CappedTokenCreatorInstance = await Fin4CappedTokenCreator.deployed();
+
 	await deployer.deploy(Fin4Collections);
 	const Fin4CollectionsInstance = await Fin4Collections.deployed();
 	await deployer.deploy(Fin4Messaging);
@@ -62,6 +66,8 @@ module.exports = async function(deployer) {
 	const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
+		Fin4UncappedTokenCreatorInstance.address,
+		Fin4CappedTokenCreatorInstance.address,
 		Fin4TokenManagementInstance.address,
 		Fin4ClaimingInstance.address,
 		Fin4CollectionsInstance.address,
