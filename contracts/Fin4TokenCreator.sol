@@ -79,7 +79,7 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
     Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4ProvingAddr)
     public {}
 
-    function createNewCappedToken(string memory name, string memory symbol, string memory description, string memory actionsText,
+    function createNewToken(string memory name, string memory symbol, string memory description, string memory actionsText,
         bool[] memory properties, uint[] memory values, address[] memory requiredProofTypes) public returns(address) {
 
         Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
