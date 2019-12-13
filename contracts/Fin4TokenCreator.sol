@@ -5,6 +5,11 @@ import 'contracts/Fin4TokenManagement.sol';
 import "solidity-util/lib/Strings.sol";
 
 contract Fin4TokenCreator {
+
+    // This event is only to be able to get the address of the new token into the frontend as return value of send()
+    // The "real" new-token event is emitted from Fin4TokenManagement.registerNewToken()
+    event NewFin4TokenAddress(address tokenAddress);
+
     using Strings for string;
 
     address public Fin4ClaimingAddress;
@@ -52,6 +57,7 @@ contract Fin4TokenCreator {
         }
 
         Fin4TokenManagement(Fin4TokenManagementAddress).registerNewToken(address(token));
+        emit NewFin4TokenAddress(address(token));
     }
 }
 
