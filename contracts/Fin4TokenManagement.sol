@@ -30,38 +30,17 @@ contract Fin4TokenManagement {
 
     address[] public allFin4Tokens;
 
-    function initNewToken(address tokenAddress, string memory description, string memory actionsText,
-        uint fixedQuantity, uint userDefinedQuantityFactor, address[] memory requiredProofTypes) public {
-        /*
-            This check seems super costly as it brings this contract to out of gas errors during deployment quickly
-            Commenting it out until a better (cheaper) solution is found
-        // mapping (string => bool) public symbolIsUsed;
-        uint symLen = symbol.length();
-        require(symLen >= 3 && symLen <= 5, "Symbol must have between 3 and 5 characters");
-        string memory _symbol = symbol.upper();
-        require(!symbolIsUsed[_symbol], "Symbol is already in use");
-        symbolIsUsed[_symbol] = true;
-        */
-
-        require(
-            (fixedQuantity == 0 && userDefinedQuantityFactor != 0) ||
-            (fixedQuantity != 0 && userDefinedQuantityFactor == 0),
-            "Exactly one of fixedQuantity and userDefinedQuantityFactor must be nonzero");
-
+    function registerNewToken(address tokenAddress) public {
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
 
-        token.init(Fin4ClaimingAddress, Fin4ProvingAddress, description, actionsText, fixedQuantity, userDefinedQuantityFactor);
-
-        for (uint i = 0; i < requiredProofTypes.length; i++) {
-            token.addRequiredProofType(requiredProofTypes[i]);
-        }
-
         // REP reward for creating a new token
-        MintingStub(Fin4ReputationAddress).mint(msg.sender, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
+        MintingStub(Fin4ReputationAddress).mint(token.tokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
 
         allFin4Tokens.push(tokenAddress);
-        emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), description, "",
-            msg.sender, token.tokenCreationTime(), fixedQuantity != 0);
+
+        // or cheaper/better to get these values via one getter?
+        emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), token.description(), "",
+            token.tokenCreator(), token.tokenCreationTime(), token.fixedQuantity() != 0);
     }
 
     function getAllFin4Tokens() public view returns(address[] memory) {
