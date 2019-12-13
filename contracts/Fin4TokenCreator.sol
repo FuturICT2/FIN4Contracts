@@ -9,35 +9,44 @@ contract Fin4TokenCreator {
         Fin4ClaimingAddress = Fin4ClaimingAddr;
     }
 
-    function createNewToken(string memory name, string memory _symbol, bool isBurnable, bool isTransferable,
-    bool isMintable, uint8 decimals, uint initialSupply) public returns(address) {
-
-        Fin4TokenBase newToken = new Fin4Token(name, _symbol, msg.sender,
-            isBurnable, isTransferable, isMintable, decimals, initialSupply);
-
-        newToken.addMinter(Fin4ClaimingAddress);
-        newToken.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
-
-        return address(newToken);
+    function postCreationSteps(Fin4TokenBase token) public {
+        token.addMinter(Fin4ClaimingAddress);
+        token.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
     }
 }
 
-contract Fin4CappedTokenCreator {
+contract Fin4UncappedTokenCreator is Fin4TokenCreator {
 
-    address public Fin4ClaimingAddress;
-    constructor(address Fin4ClaimingAddr) public {
-        Fin4ClaimingAddress = Fin4ClaimingAddr;
+    constructor(address Fin4ClaimingAddr)
+    Fin4TokenCreator(Fin4ClaimingAddr)
+    public {}
+
+    function createNewToken(string memory name, string memory _symbol, bool isBurnable, bool isTransferable,
+        bool isMintable, uint8 decimals, uint initialSupply) public returns(address) {
+
+        Fin4TokenBase token = new Fin4Token(name, _symbol, msg.sender,
+            isBurnable, isTransferable, isMintable, decimals, initialSupply);
+
+        postCreationSteps(token);
+
+        return address(token);
     }
+}
+
+contract Fin4CappedTokenCreator is Fin4TokenCreator {
+
+    constructor(address Fin4ClaimingAddr)
+    Fin4TokenCreator(Fin4ClaimingAddr)
+    public {}
 
     function createNewCappedToken(string memory name, string memory _symbol, bool isBurnable, bool isTransferable,
-    bool isMintable, uint8 decimals, uint initialSupply, uint cap) public returns(address) {
+        bool isMintable, uint8 decimals, uint initialSupply, uint cap) public returns(address) {
 
-        Fin4TokenBase newToken = new Fin4TokenCapped(name, _symbol, msg.sender,
+        Fin4TokenBase token = new Fin4TokenCapped(name, _symbol, msg.sender,
             isBurnable, isTransferable, isMintable, decimals, initialSupply, cap);
 
-        newToken.addMinter(Fin4ClaimingAddress);
-        newToken.renounceMinter(); // Fin4CappedTokenCreator should not have the MinterRole on tokens
+        postCreationSteps(token);
 
-        return address(newToken);
+        return address(token);
     }
 }

@@ -3,7 +3,7 @@ const path = require('path');
 const config = require('../config.json');
 
 const Fin4Main = artifacts.require('Fin4Main');
-const Fin4TokenCreator = artifacts.require('Fin4TokenCreator');
+const Fin4UncappedTokenCreator = artifacts.require('Fin4UncappedTokenCreator');
 const Fin4CappedTokenCreator = artifacts.require('Fin4CappedTokenCreator');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
@@ -47,9 +47,9 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4Claiming, Fin4SystemParametersInstance.address);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
 
-	await deployer.deploy(Fin4TokenCreator, Fin4ClaimingInstance.address);
+	await deployer.deploy(Fin4UncappedTokenCreator, Fin4ClaimingInstance.address);
 	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address);
-	const Fin4TokenCreatorInstance = await Fin4TokenCreator.deployed();
+	const Fin4UncappedTokenCreatorInstance = await Fin4UncappedTokenCreator.deployed();
 	const Fin4CappedTokenCreatorInstance = await Fin4CappedTokenCreator.deployed();
 
 	await deployer.deploy(
@@ -70,7 +70,7 @@ module.exports = async function(deployer) {
 	const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
-		Fin4TokenCreatorInstance.address,
+		Fin4UncappedTokenCreatorInstance.address,
 		Fin4CappedTokenCreatorInstance.address,
 		Fin4TokenManagementInstance.address,
 		Fin4ClaimingInstance.address,
