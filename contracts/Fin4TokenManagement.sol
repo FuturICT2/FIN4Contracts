@@ -14,15 +14,11 @@ contract Fin4TokenManagement {
         uint creationTime, bool hasFixedMintingQuantity);
 
     address public creator;
-    address public Fin4ClaimingAddress;
-    address public Fin4ProvingAddress;
     address public Fin4SystemParametersAddress;
     address public Fin4ReputationAddress;
 
-    constructor(address Fin4ClaimingAddr, address Fin4ProvingAddr, address Fin4SystemParametersAddr) public {
+    constructor(address Fin4SystemParametersAddr) public {
         creator = msg.sender;
-        Fin4ClaimingAddress = Fin4ClaimingAddr;
-        Fin4ProvingAddress = Fin4ProvingAddr;
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
     }
 

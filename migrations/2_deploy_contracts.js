@@ -47,18 +47,14 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4Claiming, Fin4SystemParametersInstance.address);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
 
-	await deployer.deploy(Fin4UncappedTokenCreator, Fin4ClaimingInstance.address);
-	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address);
+	await deployer.deploy(Fin4TokenManagement, Fin4SystemParametersInstance.address);
+	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
+
+	await deployer.deploy(Fin4UncappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4ProvingInstance.address);
+	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4ProvingInstance.address);
 	const Fin4UncappedTokenCreatorInstance = await Fin4UncappedTokenCreator.deployed();
 	const Fin4CappedTokenCreatorInstance = await Fin4CappedTokenCreator.deployed();
 
-	await deployer.deploy(
-		Fin4TokenManagement,
-		Fin4ClaimingInstance.address,
-		Fin4ProvingInstance.address,
-		Fin4SystemParametersInstance.address
-	);
-	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
 	await deployer.deploy(Fin4Collections);
 	const Fin4CollectionsInstance = await Fin4Collections.deployed();
 	await deployer.deploy(Fin4Messaging);

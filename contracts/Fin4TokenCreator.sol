@@ -5,8 +5,13 @@ import 'contracts/Fin4Token.sol';
 contract Fin4TokenCreator {
 
     address public Fin4ClaimingAddress;
-    constructor(address Fin4ClaimingAddr) public {
+    address public Fin4TokenManagementAddress;
+    address public Fin4ProvingAddress;
+
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4ProvingAddr) public {
         Fin4ClaimingAddress = Fin4ClaimingAddr;
+        Fin4TokenManagementAddress = Fin4TokenManagementAddr;
+        Fin4ProvingAddress = Fin4ProvingAddr;
     }
 
     function postCreationSteps(Fin4TokenBase token) public {
@@ -17,8 +22,8 @@ contract Fin4TokenCreator {
 
 contract Fin4UncappedTokenCreator is Fin4TokenCreator {
 
-    constructor(address Fin4ClaimingAddr)
-    Fin4TokenCreator(Fin4ClaimingAddr)
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4ProvingAddr)
+    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4ProvingAddr)
     public {}
 
     function createNewToken(string memory name, string memory _symbol, bool isBurnable, bool isTransferable,
@@ -35,8 +40,8 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
 
 contract Fin4CappedTokenCreator is Fin4TokenCreator {
 
-    constructor(address Fin4ClaimingAddr)
-    Fin4TokenCreator(Fin4ClaimingAddr)
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4ProvingAddr)
+    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4ProvingAddr)
     public {}
 
     function createNewCappedToken(string memory name, string memory _symbol, bool isBurnable, bool isTransferable,
