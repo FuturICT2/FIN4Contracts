@@ -19,6 +19,14 @@ contract Fin4TokenCreator {
         Fin4ProvingAddress = Fin4ProvingAddr;
     }
 
+    // these two methods are propbably super costly
+
+    function nameCheck(string memory name) public returns(string memory) {
+        uint len = name.length();
+        require(len > 0, "Name can't be empty");
+        return name;
+    }
+
     function symbolCheck(string memory symbol) public returns(string memory) {
         uint len = symbol.length();
         require(len >= 3 && len <= 5, "Symbol must have between 3 and 5 characters");
@@ -56,7 +64,7 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
     function createNewToken(string memory name, string memory symbol, string memory description, string memory actionsText,
         bool[] memory properties, uint[] memory values, address[] memory requiredProofTypes) public returns(address) {
 
-        Fin4TokenBase token = new Fin4Token(name, symbolCheck(symbol), msg.sender,
+        Fin4TokenBase token = new Fin4Token(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1]);
 
         postCreationSteps(token, description, actionsText, values, requiredProofTypes);
@@ -74,7 +82,7 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
     function createNewCappedToken(string memory name, string memory symbol, string memory description, string memory actionsText,
         bool[] memory properties, uint[] memory values, address[] memory requiredProofTypes) public returns(address) {
 
-        Fin4TokenBase token = new Fin4TokenCapped(name, symbolCheck(symbol), msg.sender,
+        Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[4]);
 
         postCreationSteps(token, description, actionsText, values, requiredProofTypes);
