@@ -2,17 +2,30 @@ pragma solidity ^0.5.0;
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4TokenManagement.sol';
+import "solidity-util/lib/Strings.sol";
 
 contract Fin4TokenCreator {
+    using Strings for string;
 
     address public Fin4ClaimingAddress;
     address public Fin4TokenManagementAddress;
     address public Fin4ProvingAddress;
 
+    mapping (string => bool) public symbolIsUsed;
+
     constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4ProvingAddr) public {
         Fin4ClaimingAddress = Fin4ClaimingAddr;
         Fin4TokenManagementAddress = Fin4TokenManagementAddr;
         Fin4ProvingAddress = Fin4ProvingAddr;
+    }
+
+    function symbolCheck(string memory symbol) public returns(string memory) {
+        uint len = symbol.length();
+        require(len >= 3 && len <= 5, "Symbol must have between 3 and 5 characters");
+        string memory sym = symbol.upper();
+        require(!symbolIsUsed[sym], "Symbol is already in use");
+        symbolIsUsed[sym] = true;
+        return sym;
     }
 
     function postCreationSteps(Fin4TokenBase token, string memory description, string memory actionsText,
@@ -43,7 +56,7 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
     function createNewToken(string memory name, string memory symbol, string memory description, string memory actionsText,
         bool[] memory properties, uint[] memory values, address[] memory requiredProofTypes) public returns(address) {
 
-        Fin4TokenBase token = new Fin4Token(name, symbol, msg.sender,
+        Fin4TokenBase token = new Fin4Token(name, symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1]);
 
         postCreationSteps(token, description, actionsText, values, requiredProofTypes);
@@ -61,7 +74,7 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
     function createNewCappedToken(string memory name, string memory symbol, string memory description, string memory actionsText,
         bool[] memory properties, uint[] memory values, address[] memory requiredProofTypes) public returns(address) {
 
-        Fin4TokenBase token = new Fin4TokenCapped(name, symbol, msg.sender,
+        Fin4TokenBase token = new Fin4TokenCapped(name, symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[4]);
 
         postCreationSteps(token, description, actionsText, values, requiredProofTypes);

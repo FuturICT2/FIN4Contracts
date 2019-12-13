@@ -4,10 +4,8 @@ pragma solidity ^0.5.0;
 import 'contracts/Fin4Token.sol';
 import 'contracts/stub/MintingStub.sol';
 import 'contracts/Fin4SystemParameters.sol';
-import "solidity-util/lib/Strings.sol";
 
 contract Fin4TokenManagement {
-    using Strings for string;
 
     // TODO do we need the indexed keyword for event params?
     event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator,
