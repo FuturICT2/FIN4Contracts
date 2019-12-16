@@ -60,13 +60,23 @@ contract Fin4TokenBase { // abstract class
 	mapping (uint => Claim) public claims;
 
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
-	function submitClaim(address claimer, uint quantity, string memory comment) public returns (uint, address[] memory, uint) {
+	function submitClaim(address claimer, uint userDefinedQuantity, string memory comment) public returns (uint, address[] memory, uint, uint) {
     require(tokenEnabled, "Token is not enabled");
     Claim storage claim = claims[nextClaimId];
     claim.claimCreationTime = now;
     claim.claimId = nextClaimId;
     claim.claimer = claimer;
-    claim.quantity = quantity;
+
+    // a require() in Fin4TokenManagement.createNewToken() made sure they are not both zero or nonzero
+
+    if (fixedQuantity != 0) {
+      claim.quantity = fixedQuantity;
+    }
+
+    if (userDefinedQuantityFactor != 0) {
+      claim.quantity = userDefinedQuantity * userDefinedQuantityFactor;
+    }
+
     claim.comment = comment;
     // make a deep copy because the token creator might change the required proof types, but throughout the lifecycle of a claim they should stay fix
     // TODO should they? --> #ConceptualDecision
@@ -84,7 +94,7 @@ contract Fin4TokenBase { // abstract class
     }
 
     nextClaimId ++;
-    return (nextClaimId - 1, claim.requiredProofTypes, claim.claimCreationTime);
+    return (nextClaimId - 1, claim.requiredProofTypes, claim.claimCreationTime, claim.quantity);
   }
 
   function getClaim(uint claimId) public view returns(address, bool, bool, uint, uint, string memory, address[] memory, bool[] memory) {
@@ -192,20 +202,7 @@ contract Fin4TokenBase { // abstract class
   function approveClaim(uint claimId) private {
     claims[claimId].isApproved = true;
     claims[claimId].claimApprovalTime = now;
-
-    uint quantity;
-
-    // a require() in Fin4TokenManagement.createNewToken() made sure they are not both zero or nonzero
-
-    if (fixedQuantity != 0) {
-      quantity = fixedQuantity;
-    }
-
-    if (userDefinedQuantityFactor != 0) {
-      quantity = claims[claimId].quantity * userDefinedQuantityFactor;
-    }
-
-    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId, quantity);
+    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId, claims[claimId].quantity);
   }
 
   function isMinter(address account) public view returns (bool);

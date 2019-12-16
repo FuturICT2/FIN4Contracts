@@ -35,11 +35,13 @@ contract Fin4Claiming {
         Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
-    function submitClaim(address tokenAddress, uint quantity, string memory comment) public {
+    function submitClaim(address tokenAddress, uint userDefinedQuantity, string memory comment) public {
         uint claimId;
         address[] memory requiredProofTypes;
         uint claimCreationTime;
-        (claimId, requiredProofTypes, claimCreationTime) = Fin4Token(tokenAddress).submitClaim(msg.sender, quantity, comment);
+        uint quantity;
+        (claimId, requiredProofTypes, claimCreationTime, quantity) = Fin4Token(tokenAddress)
+            .submitClaim(msg.sender, userDefinedQuantity, comment);
 
         if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {
             actionsWhereUserHasClaims[msg.sender].push(tokenAddress);
