@@ -11,7 +11,7 @@ contract Fin4TokenBase { // abstract class
   address public tokenCreator;
   string public description;
   string public actionsText;
-  string public unit; // TODO remove? repurpose?
+  string public unit;
   uint public tokenCreationTime;
   bool private initDone = false;
   uint public fixedQuantity;
@@ -23,7 +23,7 @@ contract Fin4TokenBase { // abstract class
   }
 
   function init(address Fin4ClaimingAddr, address Fin4ProvingAddr, string memory _description,
-    string memory _actionsText, uint _fixedQuantity, uint _userDefinedQuantityFactor) public {
+    string memory _actionsText, uint _fixedQuantity, uint _userDefinedQuantityFactor, string memory _unit) public {
     require(!initDone, "init() can only be called once"); // TODO also require token creator?
     Fin4ClaimingAddress = Fin4ClaimingAddr;
     Fin4ProvingAddress = Fin4ProvingAddr;
@@ -31,6 +31,7 @@ contract Fin4TokenBase { // abstract class
     actionsText = _actionsText;
     fixedQuantity = _fixedQuantity;
     userDefinedQuantityFactor = _userDefinedQuantityFactor;
+    unit = _unit;
     initDone = true;
   }
 
