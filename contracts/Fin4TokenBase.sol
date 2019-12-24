@@ -17,7 +17,7 @@ contract Fin4TokenBase { // abstract class
   uint public userDefinedQuantityFactor;
   uint public initialSupply;
 
-  bool public allParamProofsPingbacked = true;
+  bool public allProofsReady = true;
   bool private initDone = false;
 
   constructor() public {
@@ -63,7 +63,7 @@ contract Fin4TokenBase { // abstract class
 
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
 	function submitClaim(address claimer, uint userDefinedQuantity, string memory comment) public returns (uint, address[] memory, uint, uint) {
-    require(allParamProofsPingbacked && initDone, "Token is not initialized or not all proof types with params have pingbacked");
+    require(allProofsReady && initDone, "Token is not initialized or not all proof types with params have pingbacked");
     Claim storage claim = claims[nextClaimId];
     claim.claimCreationTime = now;
     claim.claimId = nextClaimId;
@@ -240,27 +240,27 @@ contract Fin4TokenBase { // abstract class
       Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
 
       if (Fin4BaseProofType(proofType).hasParameterForTokenCreatorToSet()) {
-        allParamProofsPingbacked = false;
-        paramProofs.push(proofType);
-        paramProofsPingbacked[proofType] = false;
+        allProofsReady = false;
+        // false is default in the requiredProofTypesReady mapping
+      } else {
+        requiredProofTypesReady[proofType] = true;
       }
     }
   }
 
   // used only as blocker in submitClaim() so far #ConceptualDecision use at more places?
-  address[] public paramProofs; // requiredProofTypes where the token creator had to set a parameter
-  mapping(address => bool) public paramProofsPingbacked; // the token can only be used once all of these are true
+  mapping(address => bool) public requiredProofTypesReady;
 
   function proofContractParameterizedPingback() public {
-    paramProofsPingbacked[msg.sender] = true;
-    if (_allParamProofsPingbacked()) {
-      allParamProofsPingbacked = true;
+    requiredProofTypesReady[msg.sender] = true;
+    if (_allProofsReady()) {
+      allProofsReady = true;
     }
   }
 
-  function _allParamProofsPingbacked() private view returns(bool) {
-    for (uint i = 0; i < paramProofs.length; i ++) {
-      if (paramProofsPingbacked[paramProofs[i]] == false) {
+  function _allProofsReady() private view returns(bool) {
+    for (uint i = 0; i < requiredProofTypes.length; i ++) {
+      if (requiredProofTypesReady[requiredProofTypes[i]] == false) {
         return false;
       }
     }
