@@ -24,11 +24,10 @@ contract Fin4TokenBase { // abstract class
     tokenCreationTime = now;
   }
 
-  function init(address Fin4ClaimingAddr, address Fin4ProvingAddr, string memory _description,
-    string memory _actionsText, uint _fixedQuantity, uint _userDefinedQuantityFactor, string memory _unit) public {
+  function init(address Fin4ClaimingAddr, string memory _description, string memory _actionsText,
+    uint _fixedQuantity, uint _userDefinedQuantityFactor, string memory _unit) public {
     require(!initDone, "init() can only be called once"); // TODO also require token creator?
     Fin4ClaimingAddress = Fin4ClaimingAddr;
-    Fin4ProvingAddress = Fin4ProvingAddr;
     description = _description;
     actionsText = _actionsText;
     fixedQuantity = _fixedQuantity;
@@ -229,16 +228,22 @@ contract Fin4TokenBase { // abstract class
     return requiredProofTypes;
   }
 
-  // called for each proof type from Fin4Main.createNewToken()
-  function addRequiredProofType(address proofType) public {
-    require(Fin4Proving(Fin4ProvingAddress).proofTypeIsRegistered(proofType),
-      "This address is not registered as proof type in Fin4Proving");
-    requiredProofTypes.push(proofType);
-    Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
-    if (Fin4BaseProofType(proofType).hasParameterForTokenCreatorToSet()) {
-      allParamProofsPingbacked = false;
-      paramProofs.push(proofType);
-      paramProofsPingbacked[proofType] = false;
+  function addProofTypes(address Fin4ProvingAddr, address[] memory _requiredProofTypes) public {
+    Fin4ProvingAddress = Fin4ProvingAddr;
+    Fin4Proving proving = Fin4Proving(Fin4ProvingAddress);
+
+    for (uint i = 0; i < _requiredProofTypes.length; i++) {
+      address proofType = _requiredProofTypes[i];
+
+      require(proving.proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Proving");
+      requiredProofTypes.push(proofType);
+      Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
+
+      if (Fin4BaseProofType(proofType).hasParameterForTokenCreatorToSet()) {
+        allParamProofsPingbacked = false;
+        paramProofs.push(proofType);
+        paramProofsPingbacked[proofType] = false;
+      }
     }
   }
 

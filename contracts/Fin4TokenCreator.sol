@@ -41,12 +41,6 @@ contract Fin4TokenCreator {
         return sym;
     }
 
-    function addProofTypes(address[] memory requiredProofTypes) private {
-        for (uint i = 0; i < requiredProofTypes.length; i++) {
-            token.addRequiredProofType(requiredProofTypes[i]);
-        }
-    }
-
     // must be called after Fin4UncappedTokenCreator/Fin4CappedTokenCreator.createNewToken()
     function postCreationSteps(address tokenAddress, string memory description, string memory actionsText,
         uint fixedQuantity, uint userDefinedQuantityFactor, string memory unit) public {
@@ -59,7 +53,7 @@ contract Fin4TokenCreator {
         token.addMinter(Fin4ClaimingAddress);
         token.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
 
-        token.init(Fin4ClaimingAddress, Fin4ProvingAddress, description, actionsText, fixedQuantity, userDefinedQuantityFactor, unit);
+        token.init(Fin4ClaimingAddress, description, actionsText, fixedQuantity, userDefinedQuantityFactor, unit);
 
         Fin4TokenManagement(Fin4TokenManagementAddress).registerNewToken(tokenAddress);
     }
@@ -77,7 +71,7 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
         Fin4TokenBase token = new Fin4Token(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1]);
 
-        addProofTypes(requiredProofTypes);
+        token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
 
         emit NewFin4TokenAddress(address(token));
     }
@@ -95,7 +89,7 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
         Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2]);
 
-        addProofTypes(requiredProofTypes);
+        token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
 
         emit NewFin4TokenAddress(address(token));
     }
