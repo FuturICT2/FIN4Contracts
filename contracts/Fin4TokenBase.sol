@@ -13,10 +13,12 @@ contract Fin4TokenBase { // abstract class
   string public actionsText;
   string public unit;
   uint public tokenCreationTime;
-  bool private initDone = false;
   uint public fixedQuantity;
   uint public userDefinedQuantityFactor;
   uint public initialSupply;
+
+  bool public allParamProofsPingbacked = true;
+  bool private initDone = false;
 
   constructor() public {
     tokenCreationTime = now;
@@ -62,7 +64,7 @@ contract Fin4TokenBase { // abstract class
 
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
 	function submitClaim(address claimer, uint userDefinedQuantity, string memory comment) public returns (uint, address[] memory, uint, uint) {
-    require(tokenEnabled, "Token is not enabled");
+    require(allParamProofsPingbacked && initDone, "Token is not initialized or not all proof types with params have pingbacked");
     Claim storage claim = claims[nextClaimId];
     claim.claimCreationTime = now;
     claim.claimId = nextClaimId;
@@ -176,7 +178,7 @@ contract Fin4TokenBase { // abstract class
 
   // ------------------------- PROOF TYPES -------------------------
 
-  address[] public requiredProofTypes; // a subset of all existing ones linked to Fin4Main, defined by the token creator
+  address[] public requiredProofTypes;
 
   // called from ProofType contracts
   function receiveProofApproval(address proofTypeAddress, uint claimId) public {
@@ -234,22 +236,20 @@ contract Fin4TokenBase { // abstract class
     requiredProofTypes.push(proofType);
     Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
     if (Fin4BaseProofType(proofType).hasParameterForTokenCreatorToSet()) {
-      tokenEnabled = false;
+      allParamProofsPingbacked = false;
       paramProofs.push(proofType);
       paramProofsPingbacked[proofType] = false;
     }
   }
 
   // used only as blocker in submitClaim() so far #ConceptualDecision use at more places?
-  // Only makes sense though if something can set tokenEnabled to false later on...
-  bool public tokenEnabled = true;
   address[] public paramProofs; // requiredProofTypes where the token creator had to set a parameter
-  mapping(address => bool) public paramProofsPingbacked; // the token can only be enabled once all of these are true
+  mapping(address => bool) public paramProofsPingbacked; // the token can only be used once all of these are true
 
   function proofContractParameterizedPingback() public {
     paramProofsPingbacked[msg.sender] = true;
     if (_allParamProofsPingbacked()) {
-      tokenEnabled = true;
+      allParamProofsPingbacked = true;
     }
   }
 
