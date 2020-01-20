@@ -7,13 +7,13 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
 
   constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
     bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply)
-    ERC20Plus(name, symbol, decimals, _tokenCreator, isBurnable, isTransferable, isMintable, _initialSupply)
+    ERC20Plus(name, symbol, decimals, address(0), isBurnable, isTransferable, isMintable, _initialSupply)
     Fin4TokenBase()
     public {
       tokenCreator = _tokenCreator;
       initialSupply = _initialSupply;
       // Otherwise token creators can mint themselves rich via command line #ConceptualDecision
-      _removeMinter(tokenCreator);
+      // _removeMinter(tokenCreator);
     }
 
   // TODO is it possible to move these two functions to Fin4TokenBase?
@@ -51,12 +51,11 @@ contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
 
   constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
     bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap)
-    ERC20PlusCapped(name, symbol, decimals, _tokenCreator, isBurnable, cap, isTransferable, isMintable, _initialSupply)
+    ERC20PlusCapped(name, symbol, decimals, address(0), isBurnable, cap, isTransferable, isMintable, _initialSupply)
     Fin4TokenBase()
     public {
       tokenCreator = _tokenCreator;
       initialSupply = _initialSupply;
-      _removeMinter(tokenCreator);
     }
 
   function getTokenInfo(address user) public view returns(bool, bool, string memory, string memory,
