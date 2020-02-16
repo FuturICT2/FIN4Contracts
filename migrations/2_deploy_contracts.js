@@ -12,10 +12,10 @@ const Fin4Messaging = artifacts.require('Fin4Messaging');
 const Fin4Proving = artifacts.require('Fin4Proving');
 const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
-const Fin4OracleHub = artifacts.require('Fin4OracleHub');
+//const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const proofTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
-	artifacts.require('SensorOneTimeSignal'),
+	//artifacts.require('SensorOneTimeSignal'),
 	artifacts.require('Idea'),
 	artifacts.require('Networking'),
 	artifacts.require('HappyMoment'),
@@ -62,8 +62,8 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
 	const Fin4GroupsInstance = await Fin4Groups.deployed();
 
-	await deployer.deploy(Fin4OracleHub);
-	const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
+	//await deployer.deploy(Fin4OracleHub);
+	//const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
 		Fin4UncappedTokenCreatorInstance.address,
@@ -85,13 +85,13 @@ module.exports = async function(deployer) {
 	// ApprovalByGroupMember
 	await proofTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SensorOneTimeSignal
-	await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
+	//await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	// Idea
-	await proofTypeInstances[2].setFin4ProvingAddress(Fin4ProvingInstance.address);
+	await proofTypeInstances[1].setFin4ProvingAddress(Fin4ProvingInstance.address);
 	// Networking
-	await proofTypeInstances[3].setFin4ProvingAddress(Fin4ProvingInstance.address);
+	await proofTypeInstances[2].setFin4ProvingAddress(Fin4ProvingInstance.address);
 	// HappyMoment
-	await proofTypeInstances[4].setFin4ProvingAddress(Fin4ProvingInstance.address);
+	await proofTypeInstances[3].setFin4ProvingAddress(Fin4ProvingInstance.address);
 
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
@@ -102,13 +102,13 @@ module.exports = async function(deployer) {
 	});
 
 	// Write Fin4OracleHub address to src/config/Fin4OracleHubAddress.js
-	data =
-		"const Fin4OracleHubAddress = '" + Fin4OracleHubInstance.address + "';\n" + 'export { Fin4OracleHubAddress };\n';
-	fs.writeFile(path.join(__dirname, config.ADDRESS_SAVING_LOCATION + '/Fin4OracleHubAddress.js'), data, err => {
-		if (err) throw 'Error writing file: ' + err;
-	});
+	//data =
+	//	"const Fin4OracleHubAddress = '" + Fin4OracleHubInstance.address + "';\n" + 'export { Fin4OracleHubAddress };\n';
+	//fs.writeFile(path.join(__dirname, config.ADDRESS_SAVING_LOCATION + '/Fin4OracleHubAddress.js'), data, err => {
+	//	if (err) throw 'Error writing file: ' + err;
+	//});
 
-	console.log('-----------> Address of Fin4OracleHub: ', Fin4OracleHubInstance.address);
+	//console.log('-----------> Address of Fin4OracleHub: ', Fin4OracleHubInstance.address);
 
 	// await Fin4MainInstance.createNewToken('Token-Dev-1', 'TD1', [], [], []);
 };
