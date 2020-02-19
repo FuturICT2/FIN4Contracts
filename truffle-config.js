@@ -27,6 +27,12 @@ module.exports = {
 			gas: 7465030, // 6465030
 			gasPrice: 10000000000
 		},
+		rinkeby_DAppNode: { // Requires VPN connection
+			provider: () => new HDWalletProvider(config.MNEMONIC, 'http://my.rinkeby.dnp.dappnode.eth:8545'),
+			network_id: '*',
+			gas: 7465030,
+			gasPrice: 10000000000,
+		},
 		goerli: {
 			provider: function() {
 				return new HDWalletProvider(config.MNEMONIC, 'https://goerli.infura.io/v3/' + config.INFURA_API_KEY);
