@@ -16,9 +16,12 @@ const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const proofTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
 	//artifacts.require('SensorOneTimeSignal'),
+	/* 
+	These include the submissions feature:
 	artifacts.require('Idea'),
 	artifacts.require('Networking'),
 	artifacts.require('HappyMoment'),
+	*/
 	artifacts.require('SelfApprove'),
 	//artifacts.require('SpecificAddress'),
 	//artifacts.require('TokenCreator'),
@@ -87,11 +90,11 @@ module.exports = async function(deployer) {
 	// SensorOneTimeSignal
 	//await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	// Idea
-	await proofTypeInstances[1].setFin4ProvingAddress(Fin4ProvingInstance.address);
+	//await proofTypeInstances[1].setFin4ProvingAddress(Fin4ProvingInstance.address);
 	// Networking
-	await proofTypeInstances[2].setFin4ProvingAddress(Fin4ProvingInstance.address);
+	//await proofTypeInstances[2].setFin4ProvingAddress(Fin4ProvingInstance.address);
 	// HappyMoment
-	await proofTypeInstances[3].setFin4ProvingAddress(Fin4ProvingInstance.address);
+	//await proofTypeInstances[3].setFin4ProvingAddress(Fin4ProvingInstance.address);
 
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
