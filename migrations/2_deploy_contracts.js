@@ -15,20 +15,24 @@ const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const proofTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
+	artifacts.require('SelfieTogether'),
 	//artifacts.require('SensorOneTimeSignal'),
+	/* 
+	These include the submissions feature:
 	artifacts.require('Idea'),
 	artifacts.require('Networking'),
 	artifacts.require('HappyMoment'),
+	*/
 	artifacts.require('SelfApprove'),
-	//artifacts.require('SpecificAddress'),
-	//artifacts.require('TokenCreator'),
-	//artifacts.require('MinimumInterval'),
-	//artifacts.require('MaximumQuantityPerInterval'),
+	artifacts.require('SpecificAddress'),
+	artifacts.require('TokenCreator'),
 	artifacts.require('Password'),
-	//artifacts.require('Picture'),
+	artifacts.require('Picture'),
 	artifacts.require('Location'),
-	//artifacts.require('SelfieTogether'),
-	artifacts.require('ClaimableOnlyNTimes')
+	// TODO conceptualize these as conditions? #ConceptualDecision
+	artifacts.require('ClaimableOnlyNTimes'),
+	artifacts.require('MinimumInterval'),
+	artifacts.require('MaximumQuantityPerInterval'),
 ];
 
 module.exports = async function(deployer) {
@@ -84,14 +88,16 @@ module.exports = async function(deployer) {
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4ProvingInstance.addProofType(address)));
 	// ApprovalByGroupMember
 	await proofTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	// SelfieTogether
+	await proofTypeInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SensorOneTimeSignal
 	//await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	// Idea
-	await proofTypeInstances[1].setFin4ProvingAddress(Fin4ProvingInstance.address);
+	//await proofTypeInstances[1].setFin4ProvingAddress(Fin4ProvingInstance.address);
 	// Networking
-	await proofTypeInstances[2].setFin4ProvingAddress(Fin4ProvingInstance.address);
+	//await proofTypeInstances[2].setFin4ProvingAddress(Fin4ProvingInstance.address);
 	// HappyMoment
-	await proofTypeInstances[3].setFin4ProvingAddress(Fin4ProvingInstance.address);
+	//await proofTypeInstances[3].setFin4ProvingAddress(Fin4ProvingInstance.address);
 
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
