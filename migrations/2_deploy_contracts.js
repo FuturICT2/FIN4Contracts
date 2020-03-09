@@ -15,6 +15,7 @@ const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const proofTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
+	artifacts.require('SelfieTogether'),
 	//artifacts.require('SensorOneTimeSignal'),
 	/* 
 	These include the submissions feature:
@@ -23,15 +24,15 @@ const proofTypeContracts = [
 	artifacts.require('HappyMoment'),
 	*/
 	artifacts.require('SelfApprove'),
-	//artifacts.require('SpecificAddress'),
-	//artifacts.require('TokenCreator'),
+	artifacts.require('SpecificAddress'),
+	artifacts.require('TokenCreator'),
+	artifacts.require('Password'),
+	artifacts.require('Picture'),
+	artifacts.require('Location'),
+	// TODO conceptualize these as conditions? #ConceptualDecision
+	artifacts.require('ClaimableOnlyNTimes')
 	//artifacts.require('MinimumInterval'),
 	//artifacts.require('MaximumQuantityPerInterval'),
-	artifacts.require('Password'),
-	//artifacts.require('Picture'),
-	artifacts.require('Location'),
-	//artifacts.require('SelfieTogether'),
-	artifacts.require('ClaimableOnlyNTimes')
 ];
 
 module.exports = async function(deployer) {
@@ -87,6 +88,8 @@ module.exports = async function(deployer) {
 	await Promise.all(proofTypeInstances.map(({ address }) => Fin4ProvingInstance.addProofType(address)));
 	// ApprovalByGroupMember
 	await proofTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	// SelfieTogether
+	await proofTypeInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SensorOneTimeSignal
 	//await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	// Idea
