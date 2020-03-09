@@ -72,4 +72,13 @@ contract Fin4Main {
     return (REPToken, GOVToken, Registry, PLCRVoting, Parameterizer);
   }
 
+  // FOR DEV
+  /*
+  uint public foo = 1;
+
+  function dev(uint _foo) public {
+    require(foo == 3, "foo is not 3");
+    foo = _foo;
+  }
+  */
 }
