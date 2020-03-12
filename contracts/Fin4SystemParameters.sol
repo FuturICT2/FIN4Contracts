@@ -2,8 +2,8 @@ pragma solidity ^0.5.0;
 
 contract Fin4SystemParameters {
 
-    uint public REPforTokenCreation = 50;
-    uint public REPforTokenClaim = 20;
+    uint public REPforTokenCreation = 300;
+    uint public REPforTokenClaim = 50;
 
     function getSystemParameters() public view returns(uint, uint) {
         return (REPforTokenCreation, REPforTokenClaim);
