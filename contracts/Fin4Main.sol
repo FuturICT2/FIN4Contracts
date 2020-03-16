@@ -73,12 +73,11 @@ contract Fin4Main {
   }
 
   // FOR DEV
-  /*
-  uint public foo = 1;
 
-  function dev(uint _foo) public {
-    require(foo == 3, "foo is not 3");
-    foo = _foo;
+  uint public foo = 3;
+
+  function dev(uint numb) public {
+    require(numb == foo, "numb is not foo");
   }
-  */
+
 }
