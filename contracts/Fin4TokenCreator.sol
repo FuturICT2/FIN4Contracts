@@ -41,12 +41,13 @@ contract Fin4TokenCreator {
         return sym;
     }
 
-    function postCreationSteps(Fin4TokenBase token, string memory description, string memory actionsText,
-        uint fixedQuantity, uint userDefinedQuantityFactor, string memory unit) public {
+    function postCreationSteps(Fin4TokenBase token, address[] memory requiredProofTypes, string memory description,
+        string memory actionsText, uint fixedQuantity, uint userDefinedQuantityFactor, string memory unit) public {
 
         require((fixedQuantity == 0 && userDefinedQuantityFactor != 0) || (fixedQuantity != 0 && userDefinedQuantityFactor == 0),
             "Exactly one of fixedQuantity and userDefinedQuantityFactor must be nonzero");
 
+        token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
         token.addMinter(Fin4ClaimingAddress);
         token.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
 
@@ -71,9 +72,7 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
         Fin4TokenBase token = new Fin4Token(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1]);
 
-        token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
-
-        postCreationSteps(token, description, actionsText, fixedQuantity, userDefinedQuantityFactor, unit);
+        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedQuantity, userDefinedQuantityFactor, unit);
     }
 }
 
@@ -90,8 +89,6 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
         Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2]);
 
-        token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
-
-        postCreationSteps(token, description, actionsText, fixedQuantity, userDefinedQuantityFactor, unit);
+        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedQuantity, userDefinedQuantityFactor, unit);
     }
 }
