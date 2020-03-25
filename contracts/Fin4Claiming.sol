@@ -73,7 +73,7 @@ contract Fin4Claiming {
         // ERC20Plus contract with burning for instance... #ConceptualDecision
         emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
 
-        // REP reward for creating a new token
+        // REP reward for a successful claim
         MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
     }
 
