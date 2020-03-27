@@ -42,13 +42,13 @@ contract Fin4TokenCreator {
     }
 
     function postCreationSteps(Fin4TokenBase token, address[] memory requiredProofTypes, string memory description,
-        string memory actionsText, uint fixedQuantity, string memory unit) public {
+        string memory actionsText, uint fixedAmount, string memory unit) public {
 
         token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
         token.addMinter(Fin4ClaimingAddress);
         token.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
 
-        token.init(Fin4ClaimingAddress, description, actionsText, fixedQuantity, unit);
+        token.init(Fin4ClaimingAddress, description, actionsText, fixedAmount, unit);
 
         Fin4TokenManagement(Fin4TokenManagementAddress).registerNewToken(address(token));
 
@@ -64,12 +64,12 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
         uint[] memory values, address[] memory requiredProofTypes, string memory description,
-        string memory actionsText, uint fixedQuantity, string memory unit) public {
+        string memory actionsText, uint fixedAmount, string memory unit) public {
 
         Fin4TokenBase token = new Fin4Token(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1]);
 
-        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedQuantity, unit);
+        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedAmount, unit);
     }
 }
 
@@ -81,11 +81,11 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
         uint[] memory values, address[] memory requiredProofTypes, string memory description,
-        string memory actionsText, uint fixedQuantity, string memory unit) public {
+        string memory actionsText, uint fixedAmount, string memory unit) public {
 
         Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2]);
 
-        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedQuantity, unit);
+        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedAmount, unit);
     }
 }

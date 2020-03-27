@@ -13,7 +13,7 @@ contract Fin4TokenBase { // abstract class
   string public actionsText;
   string public unit;
   uint public tokenCreationTime;
-  uint public fixedQuantity;
+  uint public fixedAmount;
   uint public initialSupply;
 
   bool public allProofsReady = true;
@@ -24,12 +24,12 @@ contract Fin4TokenBase { // abstract class
   }
 
   function init(address Fin4ClaimingAddr, string memory _description, string memory _actionsText,
-    uint _fixedQuantity, string memory _unit) public {
+    uint _fixedAmount, string memory _unit) public {
     require(!initDone, "init() can only be called once"); // TODO also require token creator?
     Fin4ClaimingAddress = Fin4ClaimingAddr;
     description = _description;
     actionsText = _actionsText;
-    fixedQuantity = _fixedQuantity;
+    fixedAmount = _fixedAmount;
     unit = _unit;
     initDone = true;
   }
@@ -60,7 +60,7 @@ contract Fin4TokenBase { // abstract class
 	mapping (uint => Claim) public claims;
 
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
-	function submitClaim(address claimer, uint userDefinedQuantity, string memory comment) public returns (uint, address[] memory, uint, uint) {
+	function submitClaim(address claimer, uint variableAmount, string memory comment) public returns (uint, address[] memory, uint, uint) {
     require(allProofsReady && initDone, "Token is not initialized or not all proof types with params have pingbacked");
     Claim storage claim = claims[nextClaimId];
     claim.claimCreationTime = now;
@@ -69,10 +69,10 @@ contract Fin4TokenBase { // abstract class
 
     // a require() in Fin4TokenManagement.createNewToken() made sure they are not both zero or nonzero
 
-    if (fixedQuantity == 0) {
-      claim.quantity = userDefinedQuantity;
+    if (fixedAmount == 0) {
+      claim.quantity = variableAmount;
     } else {
-      claim.quantity = fixedQuantity;
+      claim.quantity = fixedAmount;
     }
 
     claim.comment = comment;

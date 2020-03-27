@@ -38,7 +38,7 @@ contract Fin4TokenManagement {
 
         // or cheaper/better to get these values via one getter?
         emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), token.description(), token.unit(),
-            token.tokenCreator(), token.tokenCreationTime(), token.fixedQuantity() != 0);
+            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0);
     }
 
     function getAllFin4Tokens() public view returns(address[] memory) {

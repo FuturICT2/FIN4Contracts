@@ -22,7 +22,7 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
     string memory, string memory, uint256, uint, bool) {
     bool userIsCreator = user == tokenCreator;
     bool userIsAdmin = userIsCreator; // TODO
-    return (userIsCreator, userIsAdmin, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedQuantity != 0);
+    return (userIsCreator, userIsAdmin, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
   }
 
   function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
@@ -37,7 +37,7 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
     uint[] memory values = new uint[](4);
     values[0] = 0; // cap
     values[1] = uint(decimals());
-    values[2] = fixedQuantity;
+    values[2] = fixedAmount;
     values[3] = initialSupply;
 
     return (requiredProofTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
@@ -61,7 +61,7 @@ contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
     string memory, string memory, uint256, uint, bool) {
     bool userIsCreator = user == tokenCreator;
     bool userIsAdmin = userIsCreator; // TODO
-    return (userIsCreator, userIsAdmin, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedQuantity != 0);
+    return (userIsCreator, userIsAdmin, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
   }
 
   function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
@@ -76,7 +76,7 @@ contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
     uint[] memory values = new uint[](4);
     values[0] = cap();
     values[1] = uint(decimals());
-    values[2] = fixedQuantity;
+    values[2] = fixedAmount;
     values[3] = initialSupply;
 
     return (requiredProofTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
