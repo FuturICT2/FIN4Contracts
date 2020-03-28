@@ -50,6 +50,13 @@ contract Fin4TokenCreator {
 
         token.init(Fin4ClaimingAddress, description, actionsText, fixedAmount, unit);
 
+        /*bool Fin4ClaimingHasMinterRole = false;
+        for (uint i = 0; i < minterRoles.length; i++) {
+            token.addMinter(minterRoles[i]);
+            if (minterRoles[i] == Fin4ClaimingAddress) {
+                Fin4ClaimingHasMinterRole = true;
+            }
+        }*/
         Fin4TokenManagement(Fin4TokenManagementAddress).registerNewToken(address(token));
 
         emit NewFin4TokenAddress(address(token));

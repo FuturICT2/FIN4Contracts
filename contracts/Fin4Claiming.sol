@@ -64,14 +64,18 @@ contract Fin4Claiming {
 
     // called from Fin4TokenBase
     function claimApprovedPingback(address tokenAddress, address claimer, uint claimId, uint quantity) public {
+        // TODO require...
 
-        // TODO verify this makes sense and msg.sender is the token
-        MintingStub(tokenAddress).mint(claimer, quantity);
+        bool canMint = true; // TODO wire up
+        if (canMint) {
+            // TODO verify this makes sense and msg.sender is the token
+            MintingStub(tokenAddress).mint(claimer, quantity);
+            // can changes to totalSupply happen at other places too though? Definitely if we use the
+            // ERC20Plus contract with burning for instance... #ConceptualDecision
+            emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
+        }
 
         emit ClaimApproved(tokenAddress, claimId, claimer, quantity, Fin4Token(tokenAddress).balanceOf(claimer));
-        // can changes to totalSupply happen at other places too though? Definitely if we use the
-        // ERC20Plus contract with burning for instance... #ConceptualDecision
-        emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
 
         // REP reward for a successful claim
         MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
