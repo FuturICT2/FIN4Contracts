@@ -18,11 +18,9 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
 
   // TODO is it possible to move these two functions to Fin4TokenBase?
 
-  function getTokenInfo(address user) public view returns(bool, bool, string memory, string memory,
+  function getTokenInfo(address user) public view returns(bool, string memory, string memory,
     string memory, string memory, uint256, uint, bool) {
-    bool userIsCreator = user == tokenCreator;
-    bool userIsAdmin = userIsCreator; // TODO
-    return (userIsCreator, userIsAdmin, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
+    return (user == tokenCreator, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
   }
 
   function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
@@ -57,11 +55,9 @@ contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
       initialSupply = _initialSupply;
     }
 
-  function getTokenInfo(address user) public view returns(bool, bool, string memory, string memory,
+  function getTokenInfo(address user) public view returns(bool, string memory, string memory,
     string memory, string memory, uint256, uint, bool) {
-    bool userIsCreator = user == tokenCreator;
-    bool userIsAdmin = userIsCreator; // TODO
-    return (userIsCreator, userIsAdmin, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
+    return (user == tokenCreator, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
   }
 
   function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
