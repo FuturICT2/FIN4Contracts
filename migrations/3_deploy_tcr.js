@@ -5,7 +5,7 @@ const ParameterizerFactory = artifacts.require('tcr/ParameterizerFactory');
 const RegistryFactory = artifacts.require('tcr/RegistryFactory');
 const Registry = artifacts.require('tcr/Registry');
 const GOV = artifacts.require('tokens/GOV');
-const Fin4Reputation = artifacts.require('tokens/Fin4Reputation');
+const REP = artifacts.require('tokens/REP');
 
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
@@ -20,17 +20,17 @@ const paramConfig = config.paramConfig;
 const TCRactive = true; // the other necessary switch is in src/components/utils.js
 
 module.exports = async function(deployer) {
-	await deployer.deploy(Fin4Reputation);
-	const Fin4ReputationInstance = await Fin4Reputation.deployed();
+	await deployer.deploy(REP);
+	const REPTokenInstance = await REP.deployed();
 
 	// add Fin4TokenManagement and Fin4Claiming as minters on the Fin4Reputation token
 	// as they will be the ones minting REP to users for certain types of activity
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
-	await Fin4TokenManagementInstance.setFin4ReputationAddress(Fin4ReputationInstance.address);
+	await Fin4TokenManagementInstance.setFin4ReputationAddress(REPTokenInstance.address);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
-	await Fin4ClaimingInstance.setFin4ReputationAddress(Fin4ReputationInstance.address);
-	await Fin4ReputationInstance.addMinter(Fin4TokenManagementInstance.address);
-	await Fin4ReputationInstance.addMinter(Fin4ClaimingInstance.address);
+	await Fin4ClaimingInstance.setFin4ReputationAddress(REPTokenInstance.address);
+	await REPTokenInstance.addMinter(Fin4TokenManagementInstance.address);
+	await REPTokenInstance.addMinter(Fin4ClaimingInstance.address);
 
 	if (!TCRactive) {
 		return;
@@ -60,7 +60,7 @@ module.exports = async function(deployer) {
 		config.token.name,
 		config.token.symbol,
 		config.token.decimals,
-		Fin4ReputationInstance.address,
+		REPTokenInstance.address,
 		config.token.isBurnable,
 		config.token.isTransferable,
 		config.token.isMintable,
@@ -68,7 +68,7 @@ module.exports = async function(deployer) {
 	);
 
 	const GOVTokenInstance = await GOV.deployed();
-	await Fin4ReputationInstance.init(GOVTokenInstance.address);
+	await REPTokenInstance.init(GOVTokenInstance.address);
 
 	// dev: give all tokenHolders 10000 reputation tokens
 	// await Promise.all(tokenHolders.map(tokenHolder => Fin4ReputationInstance.mint(tokenHolder, 200000)));
@@ -112,7 +112,7 @@ module.exports = async function(deployer) {
 	const ParameterizerAddress = await RegistryInstance.parameterizer();
 
 	await Fin4MainInstance.setTCRaddresses(
-		Fin4ReputationInstance.address,
+		REPTokenInstance.address,
 		GOVTokenInstance.address,
 		RegistryInstance.address,
 		PLCRVotingAddress,
