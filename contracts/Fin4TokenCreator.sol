@@ -41,8 +41,10 @@ contract Fin4TokenCreator {
         return sym;
     }
 
-    function postCreationSteps(Fin4TokenBase token, address[] memory requiredProofTypes, string memory description,
+    function postCreationSteps(address tokenAddress, address[] memory requiredProofTypes, string memory description,
         string memory actionsText, uint fixedAmount, string memory unit) public {
+
+        Fin4TokenBase token = Fin4TokenBase(tokenAddress);
 
         token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
         token.addMinter(Fin4ClaimingAddress);
@@ -58,8 +60,6 @@ contract Fin4TokenCreator {
             }
         }*/
         Fin4TokenManagement(Fin4TokenManagementAddress).registerNewToken(address(token));
-
-        emit NewFin4TokenAddress(address(token));
     }
 }
 
@@ -70,13 +70,12 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
-        uint[] memory values, address[] memory requiredProofTypes, string memory description,
-        string memory actionsText, uint fixedAmount, string memory unit) public {
+        uint[] memory values) public {
 
         Fin4TokenBase token = new Fin4Token(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1]);
 
-        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedAmount, unit);
+        emit NewFin4TokenAddress(address(token));
     }
 }
 
@@ -87,12 +86,11 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
-        uint[] memory values, address[] memory requiredProofTypes, string memory description,
-        string memory actionsText, uint fixedAmount, string memory unit) public {
+        uint[] memory values) public {
 
         Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
             properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2]);
 
-        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedAmount, unit);
+        emit NewFin4TokenAddress(address(token));
     }
 }
