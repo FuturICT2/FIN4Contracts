@@ -1,8 +1,8 @@
 pragma solidity ^0.5.0;
 
-import "./tcr/Parameterizer.sol";
-import "./tokens/ERC20Plus.sol";
-import "./tokens/GOV.sol";
+import "../tcr/Parameterizer.sol";
+import "./ERC20Plus.sol";
+import "./GOV.sol";
 
 
 contract Fin4Reputation is ERC20Plus {

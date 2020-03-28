@@ -5,7 +5,7 @@ const ParameterizerFactory = artifacts.require('tcr/ParameterizerFactory');
 const RegistryFactory = artifacts.require('tcr/RegistryFactory');
 const Registry = artifacts.require('tcr/Registry');
 const GOV = artifacts.require('tokens/GOV');
-const Fin4Reputation = artifacts.require('Fin4Reputation');
+const Fin4Reputation = artifacts.require('tokens/Fin4Reputation');
 
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
