@@ -17,15 +17,17 @@ contract Fin4TokenBase { // abstract class
   uint public initialSupply;
 
   bool private initDone = false;
+  bool private Fin4ClaimingHasMinterRole = true;
 
   constructor() public {
     tokenCreationTime = now;
   }
 
-  function init(address Fin4ClaimingAddr, string memory _description, string memory _actionsText,
+  function init(address Fin4ClaimingAddr, bool _Fin4ClaimingHasMinterRole, string memory _description, string memory _actionsText,
     uint _fixedAmount, string memory _unit) public {
     require(!initDone, "init() can only be called once"); // TODO also require token creator?
     Fin4ClaimingAddress = Fin4ClaimingAddr;
+    Fin4ClaimingHasMinterRole = _Fin4ClaimingHasMinterRole;
     description = _description;
     actionsText = _actionsText;
     fixedAmount = _fixedAmount;
@@ -199,7 +201,8 @@ contract Fin4TokenBase { // abstract class
   function approveClaim(uint claimId) private {
     claims[claimId].isApproved = true;
     claims[claimId].claimApprovalTime = now;
-    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId, claims[claimId].quantity);
+    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId,
+      claims[claimId].quantity, Fin4ClaimingHasMinterRole);
   }
 
   function isMinter(address account) public view returns (bool);

@@ -63,10 +63,9 @@ contract Fin4Claiming {
     }
 
     // called from Fin4TokenBase
-    function claimApprovedPingback(address tokenAddress, address claimer, uint claimId, uint quantity) public {
+    function claimApprovedPingback(address tokenAddress, address claimer, uint claimId, uint quantity, bool canMint) public {
         // TODO require...
 
-        bool canMint = true; // TODO wire up
         if (canMint) {
             // TODO verify this makes sense and msg.sender is the token
             MintingStub(tokenAddress).mint(claimer, quantity);

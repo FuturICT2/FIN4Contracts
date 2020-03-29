@@ -40,25 +40,24 @@ contract Fin4TokenCreator {
         return sym;
     }
 
-    function postCreationSteps(address tokenAddress, address[] memory requiredProofTypes, string memory description,
-        string memory actionsText, uint fixedAmount, string memory unit) public {
+    function postCreationSteps(address tokenAddress, address[] memory requiredProofTypes, address[] memory minterRoles,
+        string memory description, string memory actionsText, uint fixedAmount, string memory unit) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
-
         token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
-        token.addMinter(Fin4ClaimingAddress);
-        token.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
 
-        token.init(Fin4ClaimingAddress, description, actionsText, fixedAmount, unit);
-        symbolIsUsed[token.symbol()] = true;
-
-        /*bool Fin4ClaimingHasMinterRole = false;
+        bool Fin4ClaimingHasMinterRole = false;
         for (uint i = 0; i < minterRoles.length; i++) {
             token.addMinter(minterRoles[i]);
             if (minterRoles[i] == Fin4ClaimingAddress) {
                 Fin4ClaimingHasMinterRole = true;
             }
-        }*/
+        }
+        token.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
+
+        token.init(Fin4ClaimingAddress, Fin4ClaimingHasMinterRole, description, actionsText, fixedAmount, unit);
+        symbolIsUsed[token.symbol()] = true;
+
         Fin4TokenManagement(Fin4TokenManagementAddress).registerNewToken(address(token));
     }
 }
