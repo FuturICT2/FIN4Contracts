@@ -37,7 +37,6 @@ contract Fin4TokenCreator {
         require(len >= 3 && len <= 5, "Symbol must have between 3 and 5 characters");
         string memory sym = symbol.upper();
         require(!symbolIsUsed[sym], "Symbol is already in use");
-        symbolIsUsed[sym] = true;
         return sym;
     }
 
@@ -51,6 +50,7 @@ contract Fin4TokenCreator {
         token.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
 
         token.init(Fin4ClaimingAddress, description, actionsText, fixedAmount, unit);
+        symbolIsUsed[token.symbol()] = true;
 
         /*bool Fin4ClaimingHasMinterRole = false;
         for (uint i = 0; i < minterRoles.length; i++) {
