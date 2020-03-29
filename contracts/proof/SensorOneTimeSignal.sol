@@ -11,7 +11,6 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
         public {
             name = "SensorOneTimeSignal";
             description = "Approval via a sensor that sends a signal. The token creator specifies the sensor via its ID.";
-            hasParameterForTokenCreatorToSet = true;
         }
 
     address public Fin4OracleHubAddress;
@@ -56,7 +55,6 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
         tokenToSensorID[token] = sensorID;
         sensorIDtoTokens[sensorID].push(token);
         Fin4OracleHub(Fin4OracleHubAddress).subscribeToSensorSignals(address(this), sensorID);
-        tellTokenIamNowParameterized(token);
     }
 
     function _getSensorID(address token) private view returns(string memory) {

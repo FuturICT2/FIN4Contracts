@@ -16,7 +16,6 @@ contract Fin4TokenBase { // abstract class
   uint public fixedAmount;
   uint public initialSupply;
 
-  bool public allProofsReady = true;
   bool private initDone = false;
 
   constructor() public {
@@ -61,7 +60,7 @@ contract Fin4TokenBase { // abstract class
 
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
 	function submitClaim(address claimer, uint variableAmount, string memory comment) public returns (uint, address[] memory, uint, uint) {
-    require(allProofsReady && initDone, "Token is not initialized or not all proof types with params have pingbacked");
+    require(initDone, "Token is not initialized");
     Claim storage claim = claims[nextClaimId];
     claim.claimCreationTime = now;
     claim.claimId = nextClaimId;
@@ -234,33 +233,7 @@ contract Fin4TokenBase { // abstract class
       require(proving.proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Proving");
       requiredProofTypes.push(proofType);
       Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
-
-      if (Fin4BaseProofType(proofType).hasParameterForTokenCreatorToSet()) {
-        allProofsReady = false;
-        // false is default in the requiredProofTypesReady mapping
-      } else {
-        requiredProofTypesReady[proofType] = true;
-      }
     }
-  }
-
-  // used only as blocker in submitClaim() so far #ConceptualDecision use at more places?
-  mapping(address => bool) public requiredProofTypesReady;
-
-  function proofContractParameterizedPingback() public {
-    requiredProofTypesReady[msg.sender] = true;
-    if (_allProofsReady()) {
-      allProofsReady = true;
-    }
-  }
-
-  function _allProofsReady() private view returns(bool) {
-    for (uint i = 0; i < requiredProofTypes.length; i ++) {
-      if (requiredProofTypesReady[requiredProofTypes[i]] == false) {
-        return false;
-      }
-    }
-    return true;
   }
 
   function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {

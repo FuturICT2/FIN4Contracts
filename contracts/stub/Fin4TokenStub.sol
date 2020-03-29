@@ -12,5 +12,4 @@ contract Fin4TokenStub {
 
   function sumUpQuantitiesWithinIntervalBeforeThisClaim(address claimer, uint claimId, uint interval) public view returns(uint, uint);
 
-  function proofContractParameterizedPingback() public;
 }

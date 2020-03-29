@@ -22,7 +22,6 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
         name = "ApprovalByGroupMember";
         description = "The token creator specifies one or more user groups, of which one member has to approve.";
         isAutoInitiable = true;
-        hasParameterForTokenCreatorToSet = true;
     }
 
     struct PendingApproval {
@@ -89,7 +88,6 @@ contract ApprovalByGroupMember is Fin4BaseProofType {
     function setParameters(address token, uint groupId) public {
       require(Fin4Groups(Fin4GroupsAddress).groupExists(groupId), "Group ID does not exist");
       tokenToParameter[token] = groupId;
-      tellTokenIamNowParameterized(token);
     }
 
     function _getGroupId(address token) public view returns(uint) {
