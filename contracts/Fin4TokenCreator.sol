@@ -41,7 +41,7 @@ contract Fin4TokenCreator {
     }
 
     function postCreationSteps(address tokenAddress, address[] memory requiredProofTypes, address[] memory minterRoles,
-        string memory description, string memory actionsText, uint fixedAmount, string memory unit) public {
+        string memory description, string memory actionsText, uint fixedAmount, string memory unit, address initialSupplyOwner) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
         token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
@@ -53,7 +53,12 @@ contract Fin4TokenCreator {
                 Fin4ClaimingHasMinterRole = true;
             }
         }
-        token.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
+        token.renounceMinter(); // Fin4(Un)cappedTokenCreator should not have the MinterRole on tokens
+
+        // Upon token creation the initial supply was minted to the Fin4(Un)cappedTokenCreator in the ERC20Plus constructor
+        if (token.initialSupply() > 0 && initialSupplyOwner != address(0)) {
+            Fin4Token(tokenAddress).transfer(initialSupplyOwner, token.initialSupply());
+        }
 
         token.init(Fin4ClaimingAddress, Fin4ClaimingHasMinterRole, description, actionsText, fixedAmount, unit);
         symbolIsUsed[token.symbol()] = true;
