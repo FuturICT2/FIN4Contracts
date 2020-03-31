@@ -57,6 +57,7 @@ contract Fin4TokenCreator {
 
         // Upon token creation the initial supply was minted to the Fin4(Un)cappedTokenCreator in the ERC20Plus constructor
         if (token.initialSupply() > 0 && initialSupplyOwner != address(0)) {
+            // TODO doesn't work if token is not transferable
             Fin4Token(tokenAddress).transfer(initialSupplyOwner, token.initialSupply());
         }
 
