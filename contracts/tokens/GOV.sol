@@ -30,7 +30,7 @@ contract GOV is ERC20Plus {
     bool _isTransferable,
     bool _isMintable,
     uint _initialSupply)
-      ERC20Plus(_name,_symbol, _decimals, minter, _isBurnable, _isTransferable, _isMintable, _initialSupply)
+      ERC20Plus(_name,_symbol, _decimals, minter, _isBurnable, _isTransferable, _isMintable, _initialSupply, address(0))
       public{}
 
   function init(address _registry, address _parameterizer, address _voting) public {

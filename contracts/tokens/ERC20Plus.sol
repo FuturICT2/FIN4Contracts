@@ -92,7 +92,9 @@ contract ERC20Plus is ERC20Detailed, ERC20Mintable, ERC20Burnable, ERC20Pausable
     bool isBurnable_,
     bool isTransferable_,
     bool isMintable_,
-    uint initialSupply)
+    uint initialSupply,
+    address initialSupplyOwner
+    )
       ERC20Detailed(name_, symbol_, decimals_)
       ERC20Mintable()
       ERC20Burnable()
@@ -109,7 +111,11 @@ contract ERC20Plus is ERC20Detailed, ERC20Mintable, ERC20Burnable, ERC20Pausable
     if(address(minter) != address(0)) {
         _addMinter(minter);
     }
-    _mint(msg.sender, initialSupply);
+    if (initialSupplyOwner == address(0)) {
+      _mint(msg.sender, initialSupply);
+    } else {
+      _mint(initialSupplyOwner, initialSupply);
+    }
     // To indicate construction is over, and block pause() and unpause()
     // from being used
     constructing = false;
@@ -132,7 +138,9 @@ contract ERC20PlusCapped is ERC20Capped, ERC20Plus {
     uint cap_,
     bool isTransferable_,
     bool isMintable_,
-    uint initialSupply)
+    uint initialSupply,
+    address initialSupplyOwner
+    )
       public
       // ERC20Capped constructor
       ERC20Capped(cap_)
@@ -145,7 +153,8 @@ contract ERC20PlusCapped is ERC20Capped, ERC20Plus {
           isBurnable_,
           isTransferable_,
           isMintable_,
-          initialSupply)
+          initialSupply,
+          initialSupplyOwner)
   {
   }
 }

@@ -10,7 +10,7 @@ contract REP is ERC20Plus {
     GOV public GOVToken;
 
     constructor()
-      ERC20Plus("Fin4Reputation", "REP", 250, address(0), true, true, true, 0)
+      ERC20Plus("Fin4Reputation", "REP", 250, address(0), true, true, true, 0, address(0))
       public{}
 
     function init(address _token) public {

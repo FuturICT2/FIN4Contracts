@@ -6,8 +6,8 @@ import 'contracts/Fin4TokenBase.sol';
 contract Fin4Token is Fin4TokenBase, ERC20Plus {
 
   constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
-    bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply)
-    ERC20Plus(name, symbol, decimals, address(0), isBurnable, isTransferable, isMintable, _initialSupply)
+    bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, address initialSupplyOwner)
+    ERC20Plus(name, symbol, decimals, address(0), isBurnable, isTransferable, isMintable, _initialSupply, initialSupplyOwner)
     Fin4TokenBase()
     public {
       tokenCreator = _tokenCreator;
@@ -47,8 +47,8 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
 contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
 
   constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
-    bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap)
-    ERC20PlusCapped(name, symbol, decimals, address(0), isBurnable, cap, isTransferable, isMintable, _initialSupply)
+    bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap, address initialSupplyOwner)
+    ERC20PlusCapped(name, symbol, decimals, address(0), isBurnable, cap, isTransferable, isMintable, _initialSupply, initialSupplyOwner)
     Fin4TokenBase()
     public {
       tokenCreator = _tokenCreator;

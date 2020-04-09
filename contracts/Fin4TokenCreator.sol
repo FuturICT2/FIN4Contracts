@@ -41,7 +41,7 @@ contract Fin4TokenCreator {
     }
 
     function postCreationSteps(address tokenAddress, address[] memory requiredProofTypes, address[] memory minterRoles,
-        string memory description, string memory actionsText, uint fixedAmount, string memory unit, address initialSupplyOwner) public {
+        string memory description, string memory actionsText, uint fixedAmount, string memory unit) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
         token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
@@ -54,12 +54,6 @@ contract Fin4TokenCreator {
             }
         }
         token.renounceMinter(); // Fin4(Un)cappedTokenCreator should not have the MinterRole on tokens
-
-        // Upon token creation the initial supply was minted to the Fin4(Un)cappedTokenCreator in the ERC20Plus constructor
-        if (token.initialSupply() > 0 && initialSupplyOwner != address(0)) {
-            // TODO doesn't work if token is not transferable
-            Fin4Token(tokenAddress).transfer(initialSupplyOwner, token.initialSupply());
-        }
 
         token.init(Fin4ClaimingAddress, Fin4ClaimingHasMinterRole, description, actionsText, fixedAmount, unit);
         symbolIsUsed[token.symbol()] = true;
@@ -75,10 +69,10 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
-        uint[] memory values) public {
+        uint[] memory values, address initialSupplyOwner) public {
 
         Fin4TokenBase token = new Fin4Token(nameCheck(name), symbolCheck(symbol), msg.sender,
-            properties[0], properties[1], properties[2], uint8(values[0]), values[1]);
+            properties[0], properties[1], properties[2], uint8(values[0]), values[1], initialSupplyOwner);
 
         emit NewFin4TokenAddress(address(token));
     }
@@ -91,10 +85,10 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
-        uint[] memory values) public {
+        uint[] memory values, address initialSupplyOwner) public {
 
         Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
-            properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2]);
+            properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2], initialSupplyOwner);
 
         emit NewFin4TokenAddress(address(token));
     }
