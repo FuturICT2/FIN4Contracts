@@ -9,7 +9,7 @@ contract Fin4TokenManagement {
 
     // TODO do we need the indexed keyword for event params?
     event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator,
-        uint creationTime, bool hasFixedMintingQuantity);
+        uint creationTime, bool hasFixedMintingQuantity, bytes32[] mechanisms);
 
     address public creator;
     address public Fin4SystemParametersAddress;
@@ -38,7 +38,7 @@ contract Fin4TokenManagement {
 
         // or cheaper/better to get these values via one getter?
         emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), token.description(), token.unit(),
-            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0);
+            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0, token.getMechanismsOnToken());
     }
 
     function getAllFin4Tokens() public view returns(address[] memory) {
@@ -79,4 +79,24 @@ contract Fin4TokenManagement {
         }
         return (nonzeroBalanceTokens, balances);
     }
+
+    // ------------------------- UNDERLYING MECHANISMS / SOURCE OF TOKEN VALUE -------------------------
+    // this will move into its own contract as we specify requirements further
+
+    bytes32[] public mechanisms;
+    mapping (bytes32 => bool) public existingMechanisms;
+
+    function getMechanisms() public view returns(bytes32[] memory) {
+        return mechanisms;
+    }
+
+    function checkForNewMechanisms(bytes32[] memory mechanismsToCheck) public {
+        for (uint i = 0; i < mechanismsToCheck.length; i++) {
+            if (!existingMechanisms[mechanismsToCheck[i]]) {
+                mechanisms.push(mechanismsToCheck[i]);
+                existingMechanisms[mechanismsToCheck[i]] = true;
+            }
+        }
+    }
+
 }

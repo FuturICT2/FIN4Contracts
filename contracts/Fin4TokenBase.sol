@@ -19,6 +19,10 @@ contract Fin4TokenBase { // abstract class
   bool private initDone = false;
   bool private Fin4ClaimingHasMinterRole = true;
 
+  // TODO instead of keeping copies here, instead just store indizes
+  // of the array in Fin4TokenManagement?
+  bytes32[] public mechanisms;
+
   constructor() public {
     tokenCreationTime = now;
   }
@@ -33,6 +37,14 @@ contract Fin4TokenBase { // abstract class
     fixedAmount = _fixedAmount;
     unit = _unit;
     initDone = true;
+  }
+
+  function setMechanismsOnToken(bytes32[] memory _mechanisms) public {
+    mechanisms = _mechanisms;
+  }
+
+  function getMechanismsOnToken() public view returns(bytes32[] memory) {
+    return mechanisms;
   }
 
   function name() public view returns(string memory);
