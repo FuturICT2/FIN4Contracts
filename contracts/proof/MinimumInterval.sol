@@ -27,9 +27,29 @@ contract MinimumInterval is Fin4BaseProofType {
     }
 
     function minimumIntervalRequirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
+      /*
       uint timeBetween = Fin4TokenStub(tokenAddressUsingThisProofType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
       return timeBetween >= _getMinimumInterval(tokenAddressUsingThisProofType);
+      */
+      return true; // TODO
     }
+
+    /* // Archived here from Fin4TokenBase
+    function getTimeBetweenThisClaimAndThatClaimersPreviousOne(address claimer, uint claimId) public view returns(uint) {
+      uint[] memory ids = getClaimIds(claimer);
+      if (ids.length < 2 || ids[0] == claimId) {
+        return 365 * 24 * 60 * 60 * 1000; // a year as indicator that it's not applicable (can't do -1 unfortunately)
+      }
+      uint previousId;
+      for (uint i = 0; i < ids.length; i ++) {
+        if(ids[i] == claimId) {
+          return claims[claimId].claimCreationTime - claims[previousId].claimCreationTime;
+        }
+        previousId = ids[i];
+      }
+      // TODO fallback return?
+    }
+    */
 
     // @Override
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {

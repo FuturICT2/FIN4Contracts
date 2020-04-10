@@ -137,40 +137,8 @@ contract Fin4TokenBase { // abstract class
 
   // ------------------------- METHODS USED BY PROOF TYPES -------------------------
 
-  // Used by the MinimumInterval proof type
-  function getTimeBetweenThisClaimAndThatClaimersPreviousOne(address claimer, uint claimId) public view returns(uint) {
-    uint[] memory ids = getClaimIds(claimer);
-    if (ids.length < 2 || ids[0] == claimId) {
-      return 365 * 24 * 60 * 60 * 1000; // a year as indicator that it's not applicable (can't do -1 unfortunately)
-    }
-    uint previousId;
-    for (uint i = 0; i < ids.length; i ++) {
-      if(ids[i] == claimId) {
-          return claims[claimId].claimCreationTime - claims[previousId].claimCreationTime;
-      }
-      previousId = ids[i];
-    }
-    // TODO fallback return?
-  }
-
-  // Used by the MaximumQuantityPerInterval proof type
-  function sumUpQuantitiesWithinIntervalBeforeThisClaim(address claimer, uint claimId, uint interval) public view returns(uint, uint) {
-    uint[] memory ids = getClaimIds(claimer);
-    if (ids.length < 2 || ids[0] == claimId) {
-      return (0, claims[claimId].quantity);
-    }
-
-    uint dateOfRequestingClaim = claims[claimId].claimCreationTime; // TODO check if that's actually the claimers claim
-    uint sum = 0;
-
-    for (uint i = 0; i < ids.length; i ++) {
-      if (ids[i] != claimId && dateOfRequestingClaim - claims[ids[i]].claimCreationTime <= interval) {
-          sum = sum + claims[ids[i]].quantity;
-      }
-    }
-
-    return (sum, claims[claimId].quantity);
-  }
+  // function getTimeBetweenThisClaimAndThatClaimersPreviousOne archived in MinimumInterval
+  // function sumUpQuantitiesWithinIntervalBeforeThisClaim archived in MaximumQuantityPerInterval
 
   // ------------------------- PROOF TYPES -------------------------
 
@@ -239,25 +207,7 @@ contract Fin4TokenBase { // abstract class
     }
   }
 
-  function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {
-    uint count = 0;
-    for (uint i = 0; i < nextClaimId; i ++) {
-      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
-        count ++;
-      }
-    }
-    uint[] memory claimIDs = new uint[](count);
-    address[] memory claimers = new address[](count);
-    count = 0;
-    for (uint i = 0; i < nextClaimId; i ++) {
-      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
-        claimIDs[count] = i;
-        claimers[count] = claims[i].claimer;
-        count ++;
-      }
-    }
-    return (claimIDs, claimers);
-  }
+  // function getUnrejectedClaimsWithThisProofTypeUnapproved archived in SensorOneTimeSignal
 
   function proofTypeIsRequired(address proofType, uint claimId) public view returns(bool) {
     for (uint i = 0; i < claims[claimId].requiredProofTypes.length; i ++) {

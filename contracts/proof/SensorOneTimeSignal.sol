@@ -20,6 +20,7 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
     }
 
     function sensorSignalReceived(string memory sensorID, uint timestamp, string memory data) public {
+        /* // TODO reactivate
         for (uint i = 0; i < sensorIDtoTokens[sensorID].length; i ++) {
             address token = sensorIDtoTokens[sensorID][i];
             uint[] memory claimIDs;
@@ -33,7 +34,30 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
                 submitProofViaSensor(token, claimIDs[j], claimers[j], message);
             }
         }
+        */
     }
+
+    /* // Archived here from Fin4TokenBase
+    function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < nextClaimId; i ++) {
+            if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
+                count ++;
+            }
+        }
+        uint[] memory claimIDs = new uint[](count);
+        address[] memory claimers = new address[](count);
+        count = 0;
+        for (uint i = 0; i < nextClaimId; i ++) {
+            if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
+                claimIDs[count] = i;
+                claimers[count] = claims[i].claimer;
+                count ++;
+            }
+        }
+        return (claimIDs, claimers);
+    }
+    */
 
     function submitProofViaSensor(address tokenAddrToReceiveProof, uint claimId, address claimer, string memory message) public {
         // TODO build message here? Requires all the arguments to be shifted around...

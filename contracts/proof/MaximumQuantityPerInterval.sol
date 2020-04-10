@@ -29,12 +29,35 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
     }
 
     function requirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
+      /*
       uint sum;
       uint requestedQuantity;
       (sum, requestedQuantity) = Fin4TokenStub(tokenAddressUsingThisProofType)
         .sumUpQuantitiesWithinIntervalBeforeThisClaim(claimer, claimId, _getInterval(tokenAddressUsingThisProofType));
       return sum + requestedQuantity <= _getMaxQuantity(tokenAddressUsingThisProofType);
+      */
+      return true; // TODO
     }
+
+    /* // Archived here from Fin4TokenBase
+    function sumUpQuantitiesWithinIntervalBeforeThisClaim(address claimer, uint claimId, uint interval) public view returns(uint, uint) {
+      uint[] memory ids = getClaimIds(claimer);
+      if (ids.length < 2 || ids[0] == claimId) {
+        return (0, claims[claimId].quantity);
+      }
+
+      uint dateOfRequestingClaim = claims[claimId].claimCreationTime; // TODO check if that's actually the claimers claim
+      uint sum = 0;
+
+      for (uint i = 0; i < ids.length; i ++) {
+        if (ids[i] != claimId && dateOfRequestingClaim - claims[ids[i]].claimCreationTime <= interval) {
+          sum = sum + claims[ids[i]].quantity;
+        }
+      }
+
+      return (sum, claims[claimId].quantity);
+    }
+    */
 
     // @Override
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
