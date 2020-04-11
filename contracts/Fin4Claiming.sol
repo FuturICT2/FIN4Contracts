@@ -35,13 +35,13 @@ contract Fin4Claiming {
         Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
-    function submitClaim(address tokenAddress, uint userDefinedQuantity, string memory comment) public {
+    function submitClaim(address tokenAddress, uint variableAmount, string memory comment) public {
         uint claimId;
         address[] memory requiredProofTypes;
         uint claimCreationTime;
         uint quantity;
         (claimId, requiredProofTypes, claimCreationTime, quantity) = Fin4Token(tokenAddress)
-            .submitClaim(msg.sender, userDefinedQuantity, comment);
+            .submitClaim(msg.sender, variableAmount, comment);
 
         if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {
             actionsWhereUserHasClaims[msg.sender].push(tokenAddress);
@@ -63,15 +63,18 @@ contract Fin4Claiming {
     }
 
     // called from Fin4TokenBase
-    function claimApprovedPingback(address tokenAddress, address claimer, uint claimId, uint quantity) public {
+    function claimApprovedPingback(address tokenAddress, address claimer, uint claimId, uint quantity, bool canMint) public {
+        // TODO require...
 
-        // TODO verify this makes sense and msg.sender is the token
-        MintingStub(tokenAddress).mint(claimer, quantity);
+        if (canMint) {
+            // TODO verify this makes sense and msg.sender is the token
+            MintingStub(tokenAddress).mint(claimer, quantity);
+            // can changes to totalSupply happen at other places too though? Definitely if we use the
+            // ERC20Plus contract with burning for instance... #ConceptualDecision
+            emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
+        }
 
         emit ClaimApproved(tokenAddress, claimId, claimer, quantity, Fin4Token(tokenAddress).balanceOf(claimer));
-        // can changes to totalSupply happen at other places too though? Definitely if we use the
-        // ERC20Plus contract with burning for instance... #ConceptualDecision
-        emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
 
         // REP reward for a successful claim
         MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());

@@ -13,27 +13,38 @@ contract Fin4TokenBase { // abstract class
   string public actionsText;
   string public unit;
   uint public tokenCreationTime;
-  uint public fixedQuantity;
-  uint public userDefinedQuantityFactor;
+  uint public fixedAmount;
   uint public initialSupply;
 
-  bool public allProofsReady = true;
   bool private initDone = false;
+  bool private Fin4ClaimingHasMinterRole = true;
+
+  // TODO instead of keeping copies here, instead just store indizes
+  // of the array in Fin4TokenManagement?
+  bytes32[] public mechanisms;
 
   constructor() public {
     tokenCreationTime = now;
   }
 
-  function init(address Fin4ClaimingAddr, string memory _description, string memory _actionsText,
-    uint _fixedQuantity, uint _userDefinedQuantityFactor, string memory _unit) public {
+  function init(address Fin4ClaimingAddr, bool _Fin4ClaimingHasMinterRole, string memory _description, string memory _actionsText,
+    uint _fixedAmount, string memory _unit) public {
     require(!initDone, "init() can only be called once"); // TODO also require token creator?
     Fin4ClaimingAddress = Fin4ClaimingAddr;
+    Fin4ClaimingHasMinterRole = _Fin4ClaimingHasMinterRole;
     description = _description;
     actionsText = _actionsText;
-    fixedQuantity = _fixedQuantity;
-    userDefinedQuantityFactor = _userDefinedQuantityFactor;
+    fixedAmount = _fixedAmount;
     unit = _unit;
     initDone = true;
+  }
+
+  function setMechanismsOnToken(bytes32[] memory _mechanisms) public {
+    mechanisms = _mechanisms;
+  }
+
+  function getMechanismsOnToken() public view returns(bytes32[] memory) {
+    return mechanisms;
   }
 
   function name() public view returns(string memory);
@@ -62,8 +73,8 @@ contract Fin4TokenBase { // abstract class
 	mapping (uint => Claim) public claims;
 
   // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
-	function submitClaim(address claimer, uint userDefinedQuantity, string memory comment) public returns (uint, address[] memory, uint, uint) {
-    require(allProofsReady && initDone, "Token is not initialized or not all proof types with params have pingbacked");
+	function submitClaim(address claimer, uint variableAmount, string memory comment) public returns (uint, address[] memory, uint, uint) {
+    require(initDone, "Token is not initialized");
     Claim storage claim = claims[nextClaimId];
     claim.claimCreationTime = now;
     claim.claimId = nextClaimId;
@@ -71,12 +82,10 @@ contract Fin4TokenBase { // abstract class
 
     // a require() in Fin4TokenManagement.createNewToken() made sure they are not both zero or nonzero
 
-    if (fixedQuantity != 0) {
-      claim.quantity = fixedQuantity;
-    }
-
-    if (userDefinedQuantityFactor != 0) {
-      claim.quantity = userDefinedQuantity * userDefinedQuantityFactor;
+    if (fixedAmount == 0) {
+      claim.quantity = variableAmount;
+    } else {
+      claim.quantity = fixedAmount;
     }
 
     claim.comment = comment;
@@ -140,40 +149,8 @@ contract Fin4TokenBase { // abstract class
 
   // ------------------------- METHODS USED BY PROOF TYPES -------------------------
 
-  // Used by the MinimumInterval proof type
-  function getTimeBetweenThisClaimAndThatClaimersPreviousOne(address claimer, uint claimId) public view returns(uint) {
-    uint[] memory ids = getClaimIds(claimer);
-    if (ids.length < 2 || ids[0] == claimId) {
-      return 365 * 24 * 60 * 60 * 1000; // a year as indicator that it's not applicable (can't do -1 unfortunately)
-    }
-    uint previousId;
-    for (uint i = 0; i < ids.length; i ++) {
-      if(ids[i] == claimId) {
-          return claims[claimId].claimCreationTime - claims[previousId].claimCreationTime;
-      }
-      previousId = ids[i];
-    }
-    // TODO fallback return?
-  }
-
-  // Used by the MaximumQuantityPerInterval proof type
-  function sumUpQuantitiesWithinIntervalBeforeThisClaim(address claimer, uint claimId, uint interval) public view returns(uint, uint) {
-    uint[] memory ids = getClaimIds(claimer);
-    if (ids.length < 2 || ids[0] == claimId) {
-      return (0, claims[claimId].quantity);
-    }
-
-    uint dateOfRequestingClaim = claims[claimId].claimCreationTime; // TODO check if that's actually the claimers claim
-    uint sum = 0;
-
-    for (uint i = 0; i < ids.length; i ++) {
-      if (ids[i] != claimId && dateOfRequestingClaim - claims[ids[i]].claimCreationTime <= interval) {
-          sum = sum + claims[ids[i]].quantity;
-      }
-    }
-
-    return (sum, claims[claimId].quantity);
-  }
+  // function getTimeBetweenThisClaimAndThatClaimersPreviousOne archived in MinimumInterval
+  // function sumUpQuantitiesWithinIntervalBeforeThisClaim archived in MaximumQuantityPerInterval
 
   // ------------------------- PROOF TYPES -------------------------
 
@@ -204,7 +181,8 @@ contract Fin4TokenBase { // abstract class
   function approveClaim(uint claimId) private {
     claims[claimId].isApproved = true;
     claims[claimId].claimApprovalTime = now;
-    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId, claims[claimId].quantity);
+    Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId,
+      claims[claimId].quantity, Fin4ClaimingHasMinterRole);
   }
 
   function isMinter(address account) public view returns (bool);
@@ -238,54 +216,10 @@ contract Fin4TokenBase { // abstract class
       require(proving.proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Proving");
       requiredProofTypes.push(proofType);
       Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
-
-      if (Fin4BaseProofType(proofType).hasParameterForTokenCreatorToSet()) {
-        allProofsReady = false;
-        // false is default in the requiredProofTypesReady mapping
-      } else {
-        requiredProofTypesReady[proofType] = true;
-      }
     }
   }
 
-  // used only as blocker in submitClaim() so far #ConceptualDecision use at more places?
-  mapping(address => bool) public requiredProofTypesReady;
-
-  function proofContractParameterizedPingback() public {
-    requiredProofTypesReady[msg.sender] = true;
-    if (_allProofsReady()) {
-      allProofsReady = true;
-    }
-  }
-
-  function _allProofsReady() private view returns(bool) {
-    for (uint i = 0; i < requiredProofTypes.length; i ++) {
-      if (requiredProofTypesReady[requiredProofTypes[i]] == false) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {
-    uint count = 0;
-    for (uint i = 0; i < nextClaimId; i ++) {
-      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
-        count ++;
-      }
-    }
-    uint[] memory claimIDs = new uint[](count);
-    address[] memory claimers = new address[](count);
-    count = 0;
-    for (uint i = 0; i < nextClaimId; i ++) {
-      if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
-        claimIDs[count] = i;
-        claimers[count] = claims[i].claimer;
-        count ++;
-      }
-    }
-    return (claimIDs, claimers);
-  }
+  // function getUnrejectedClaimsWithThisProofTypeUnapproved archived in SensorOneTimeSignal
 
   function proofTypeIsRequired(address proofType, uint claimId) public view returns(bool) {
     for (uint i = 0; i < claims[claimId].requiredProofTypes.length; i ++) {

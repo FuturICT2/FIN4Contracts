@@ -10,7 +10,6 @@ contract ClaimableOnlyNTimes is Fin4BaseProofType {
         name = "ClaimableOnlyNTimes";
         description = "The token creator sets a cap how many times a token can be claimed";
         isAutoInitiable = true;
-        hasParameterForTokenCreatorToSet = true;
     }
 
   // @Override
@@ -41,7 +40,6 @@ contract ClaimableOnlyNTimes is Fin4BaseProofType {
 
   function setParameters(address token, uint claimsCap) public {
       tokenToClaimsCap[token] = claimsCap;
-      tellTokenIamNowParameterized(token);
   }
 
 }

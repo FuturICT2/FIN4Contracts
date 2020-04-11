@@ -9,7 +9,6 @@ contract Password is Fin4BaseProofType {
     public {
       name = "Password";
       description = "Approval if the user provides the password matching the one the token creator set.";
-      hasParameterForTokenCreatorToSet = true;
     }
 
     function submitProof_Password(address tokenAddrToReceiveProof, uint claimId, string memory password) public {
@@ -36,7 +35,6 @@ contract Password is Fin4BaseProofType {
 
     function setParameters(address token, string memory password) public {
       tokenToParameter[token] = password;
-      tellTokenIamNowParameterized(token);
     }
 
     function _getPassword(address token) private view returns(string memory) {

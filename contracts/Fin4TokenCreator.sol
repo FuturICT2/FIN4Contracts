@@ -37,25 +37,31 @@ contract Fin4TokenCreator {
         require(len >= 3 && len <= 5, "Symbol must have between 3 and 5 characters");
         string memory sym = symbol.upper();
         require(!symbolIsUsed[sym], "Symbol is already in use");
-        symbolIsUsed[sym] = true;
         return sym;
     }
 
-    function postCreationSteps(Fin4TokenBase token, address[] memory requiredProofTypes, string memory description,
-        string memory actionsText, uint fixedQuantity, uint userDefinedQuantityFactor, string memory unit) public {
+    function postCreationSteps(address tokenAddress, address[] memory requiredProofTypes, address[] memory minterRoles,
+        string memory description, string memory actionsText, uint fixedAmount, string memory unit, bytes32[] memory mechanisms) public {
 
-        require((fixedQuantity == 0 && userDefinedQuantityFactor != 0) || (fixedQuantity != 0 && userDefinedQuantityFactor == 0),
-            "Exactly one of fixedQuantity and userDefinedQuantityFactor must be nonzero");
-
+        Fin4TokenBase token = Fin4TokenBase(tokenAddress);
         token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
-        token.addMinter(Fin4ClaimingAddress);
-        token.renounceMinter(); // Fin4TokenCreator should not have the MinterRole on tokens
 
-        token.init(Fin4ClaimingAddress, description, actionsText, fixedQuantity, userDefinedQuantityFactor, unit);
+        Fin4TokenManagement(Fin4TokenManagementAddress).checkForNewMechanisms(mechanisms);
+        token.setMechanismsOnToken(mechanisms);
+
+        bool Fin4ClaimingHasMinterRole = false;
+        for (uint i = 0; i < minterRoles.length; i++) {
+            token.addMinter(minterRoles[i]);
+            if (minterRoles[i] == Fin4ClaimingAddress) {
+                Fin4ClaimingHasMinterRole = true;
+            }
+        }
+        token.renounceMinter(); // Fin4(Un)cappedTokenCreator should not have the MinterRole on tokens
+
+        token.init(Fin4ClaimingAddress, Fin4ClaimingHasMinterRole, description, actionsText, fixedAmount, unit);
+        symbolIsUsed[token.symbol()] = true;
 
         Fin4TokenManagement(Fin4TokenManagementAddress).registerNewToken(address(token));
-
-        emit NewFin4TokenAddress(address(token));
     }
 }
 
@@ -66,13 +72,12 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
-        uint[] memory values, address[] memory requiredProofTypes, string memory description,
-        string memory actionsText, uint fixedQuantity, uint userDefinedQuantityFactor, string memory unit) public {
+        uint[] memory values, address initialSupplyOwner) public {
 
         Fin4TokenBase token = new Fin4Token(nameCheck(name), symbolCheck(symbol), msg.sender,
-            properties[0], properties[1], properties[2], uint8(values[0]), values[1]);
+            properties[0], properties[1], properties[2], uint8(values[0]), values[1], initialSupplyOwner);
 
-        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedQuantity, userDefinedQuantityFactor, unit);
+        emit NewFin4TokenAddress(address(token));
     }
 }
 
@@ -83,12 +88,11 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
-        uint[] memory values, address[] memory requiredProofTypes, string memory description,
-        string memory actionsText, uint fixedQuantity, uint userDefinedQuantityFactor, string memory unit) public {
+        uint[] memory values, address initialSupplyOwner) public {
 
         Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
-            properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2]);
+            properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2], initialSupplyOwner);
 
-        postCreationSteps(token, requiredProofTypes, description, actionsText, fixedQuantity, userDefinedQuantityFactor, unit);
+        emit NewFin4TokenAddress(address(token));
     }
 }

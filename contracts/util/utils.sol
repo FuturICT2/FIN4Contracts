@@ -37,4 +37,12 @@ contract utils {
     return string(str);
   }
 
+/*function _countNonZeroBytes(bytes32 value) private returns(uint8) {
+    // via https://ethereum.stackexchange.com/a/80456/56047
+    uint8 i = 0;
+    while(i < 32 && value[i] != 0) {
+      i++;
+    }
+    return i;
+  }*/
 }

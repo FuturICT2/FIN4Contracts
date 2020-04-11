@@ -10,9 +10,6 @@ contract Fin4BaseProofType is utils {
   string public description;
   bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate proof", instead that's done automatically
   address public Fin4MessagingAddress;
-  // could also do this without extra bool via getParameterForTokenCreatorToSetEncoded().length > 0
-  // but that string function would cost (much) more? #ConceptualDecision
-  bool public hasParameterForTokenCreatorToSet = false;
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
 
@@ -36,10 +33,6 @@ contract Fin4BaseProofType is utils {
   // to be filled by the token creator. He gets prompted to set them in the token creation process
   function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
     return "";
-  }
-
-  function tellTokenIamNowParameterized(address token) public {
-    Fin4TokenStub(token).proofContractParameterizedPingback();
   }
 
   // Helper method for all proof types to go through the same method when sending their approvals
