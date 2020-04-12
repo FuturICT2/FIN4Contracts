@@ -30,7 +30,8 @@ const proofTypeContracts = [
 	artifacts.require('Picture'),
 	artifacts.require('Location'),
 	// TODO conceptualize these as conditions? #ConceptualDecision
-	artifacts.require('ClaimableOnlyNTimes')
+	artifacts.require('ClaimableOnlyNTimes'),
+	artifacts.require('ClaimableOnlyNTimesPerUser')
 	//artifacts.require('MinimumInterval'),
 	//artifacts.require('MaximumQuantityPerInterval'),
 ];

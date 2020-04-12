@@ -58,4 +58,6 @@ contract Fin4BaseProofType is utils {
 
   // On purpose not abstract so that deriving classes don't HAVE to implement it
   function autoSubmitProof(address user, address tokenAddrToReceiveProof, uint claimId) public {}
+  function autoCheck(address user, address tokenAddrToReceiveProof, uint claimId) public {}
+
 }
