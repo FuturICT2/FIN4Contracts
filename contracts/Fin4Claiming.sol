@@ -43,8 +43,8 @@ contract Fin4Claiming {
         (claimId, requiredProofTypes, claimCreationTime, quantity) = Fin4Token(tokenAddress)
             .submitClaim(msg.sender, variableAmount, comment);
 
-        if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {
-            actionsWhereUserHasClaims[msg.sender].push(tokenAddress);
+        if (!userClaimedOnThisTokenAlready(msg.sender, tokenAddress)) {
+            tokensWhereUserHasClaims[msg.sender].push(tokenAddress);
         }
 
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredProofTypes);
@@ -84,14 +84,14 @@ contract Fin4Claiming {
         emit ClaimRejected(tokenAddress, claimId, claimer);
     }
 
-    // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
+    // ------------------------- TOKENS WHERE USER HAS CLAIMS -------------------------
 
     // to keep track on which tokens the user has claims (independent of their approval-statuses)
-    mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
+    mapping (address => address[]) public tokensWhereUserHasClaims; // key = user, value = token addresses
 
-    function userClaimedOnThisActionAlready(address user, address action) private view returns (bool) {
-        for (uint i = 0; i < actionsWhereUserHasClaims[user].length; i++) {
-            if (actionsWhereUserHasClaims[user][i] == action) {
+    function userClaimedOnThisTokenAlready(address user, address tokenAddress) private view returns (bool) {
+        for (uint i = 0; i < tokensWhereUserHasClaims[user].length; i++) {
+            if (tokensWhereUserHasClaims[user][i] == tokenAddress) {
                 return true;
             }
         }
@@ -99,8 +99,8 @@ contract Fin4Claiming {
     }
 
     // used in PreviousClaims
-    function getActionsWhereUserHasClaims() public view returns(address[] memory) {
-        return actionsWhereUserHasClaims[msg.sender];
+    function getTokensWhereUserHasClaims() public view returns(address[] memory) {
+        return tokensWhereUserHasClaims[msg.sender];
     }
 
     // ------------------------- CLAIM IDS -------------------------
