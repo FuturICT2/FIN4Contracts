@@ -18,7 +18,7 @@ contract Fin4Proving {
         return proofTypes;
     }
 
-    function getProofTypeInfo(address proofType) public view returns(string memory, string memory, string memory) {
+    function getProofTypeInfo(address proofType) public view returns(string memory, string memory, string memory, bool) {
         // require(proofTypeIsRegistered(proofType), "Address is not registered as proof type");
         return Fin4BaseProofType(proofType).getInfo();
     }
