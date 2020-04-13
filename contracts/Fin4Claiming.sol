@@ -49,11 +49,20 @@ contract Fin4Claiming {
 
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredProofTypes);
 
-        // auto-init claims where user would only press an "init proof" button without having to supply more info
         for (uint i = 0; i < requiredProofTypes.length; i++) {
-            // TODO instead of two calls, make .autoSubmitProofIfApplicable()?
-            if (Fin4BaseProofType(requiredProofTypes[i]).isAutoInitiable()) {
-                Fin4BaseProofType(requiredProofTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
+            if (Fin4BaseProofType(requiredProofTypes[i]).isConstraint()) {
+                Fin4BaseProofType(requiredProofTypes[i]).autoCheck(msg.sender, tokenAddress, claimId);
+            }
+        }
+
+        // Only auto-init applicable proof types if the claim didn't already got automatically rejected from a constraint in the previous loop
+        if (!Fin4Token(tokenAddress).claimGotRejected(claimId)) {
+            // auto-init claims where user would only press an "init proof" button without having to supply more info
+            for (uint i = 0; i < requiredProofTypes.length; i++) {
+                // TODO instead of two calls, make .autoSubmitProofIfApplicable()?
+                if (Fin4BaseProofType(requiredProofTypes[i]).isAutoInitiable()) {
+                    Fin4BaseProofType(requiredProofTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
+                }
             }
         }
     }

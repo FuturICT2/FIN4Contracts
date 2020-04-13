@@ -147,6 +147,10 @@ contract Fin4TokenBase { // abstract class
     return ids;
   }
 
+  function claimGotRejected(uint claimId) public view returns(bool) {
+    return claims[claimId].gotRejected;
+  }
+
   // ------------------------- METHODS USED BY PROOF TYPES -------------------------
 
   // function getTimeBetweenThisClaimAndThatClaimersPreviousOne archived in MinimumInterval
