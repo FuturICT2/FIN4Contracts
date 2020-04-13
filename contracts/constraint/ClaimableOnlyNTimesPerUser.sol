@@ -14,10 +14,9 @@ contract ClaimableOnlyNTimesPerUser is Fin4BaseProofType {
 
   // @Override
   function autoCheck(address user, address tokenAddrToReceiveProof, uint claimId) public {
-      uint usersClaimCountOnToken = 0;
-
-      // TODO count via for loop on token
-
+      // This would allow several parallel claims to go through if they are not approved one after the other
+      // have to check when all other proofs are approved instead // TODO
+      uint usersClaimCountOnToken = Fin4TokenStub(tokenAddrToReceiveProof).countApprovedClaimsOfThisUser(user);
       uint cap = tokenToClaimsCap[tokenAddrToReceiveProof];
       if (usersClaimCountOnToken == cap) {
           string memory message = string(abi.encodePacked(
