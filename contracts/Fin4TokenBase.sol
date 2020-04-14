@@ -21,7 +21,7 @@ contract Fin4TokenBase { // abstract class
 
   // TODO instead of keeping copies here, instead just store indizes
   // of the array in Fin4TokenManagement?
-  bytes32[] public mechanisms;
+  bytes32[] public underlyings;
 
   constructor() public {
     tokenCreationTime = now;
@@ -39,12 +39,12 @@ contract Fin4TokenBase { // abstract class
     initDone = true;
   }
 
-  function setMechanismsOnToken(bytes32[] memory _mechanisms) public {
-    mechanisms = _mechanisms;
+  function setUnderlyingsOnToken(bytes32[] memory _underlyings) public {
+    underlyings = _underlyings;
   }
 
-  function getMechanismsOnToken() public view returns(bytes32[] memory) {
-    return mechanisms;
+  function getUnderlyingsOnToken() public view returns(bytes32[] memory) {
+    return underlyings;
   }
 
   function name() public view returns(string memory);

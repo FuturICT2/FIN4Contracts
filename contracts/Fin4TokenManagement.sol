@@ -9,7 +9,7 @@ contract Fin4TokenManagement {
 
     // TODO do we need the indexed keyword for event params?
     event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator,
-        uint creationTime, bool hasFixedMintingQuantity, bytes32[] mechanisms);
+        uint creationTime, bool hasFixedMintingQuantity, bytes32[] underlyings);
 
     address public creator;
     address public Fin4SystemParametersAddress;
@@ -38,7 +38,7 @@ contract Fin4TokenManagement {
 
         // or cheaper/better to get these values via one getter?
         emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), token.description(), token.unit(),
-            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0, token.getMechanismsOnToken());
+            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0, token.getUnderlyingsOnToken());
     }
 
     function getAllFin4Tokens() public view returns(address[] memory) {
@@ -80,21 +80,21 @@ contract Fin4TokenManagement {
         return (nonzeroBalanceTokens, balances);
     }
 
-    // ------------------------- UNDERLYING MECHANISMS / SOURCE OF TOKEN VALUE -------------------------
+    // ------------------------- UNDERLYINGS / SOURCE OF TOKEN VALUE -------------------------
     // this will move into its own contract as we specify requirements further
 
-    bytes32[] public mechanisms;
-    mapping (bytes32 => bool) public existingMechanisms;
+    bytes32[] public underlyings;
+    mapping (bytes32 => bool) public existingUnderlyings;
 
-    function getMechanisms() public view returns(bytes32[] memory) {
-        return mechanisms;
+    function getUnderlyings() public view returns(bytes32[] memory) {
+        return underlyings;
     }
 
-    function checkForNewMechanisms(bytes32[] memory mechanismsToCheck) public {
-        for (uint i = 0; i < mechanismsToCheck.length; i++) {
-            if (!existingMechanisms[mechanismsToCheck[i]]) {
-                mechanisms.push(mechanismsToCheck[i]);
-                existingMechanisms[mechanismsToCheck[i]] = true;
+    function checkForNewUnderlyings(bytes32[] memory underlyingsToCheck) public {
+        for (uint i = 0; i < underlyingsToCheck.length; i++) {
+            if (!existingUnderlyings[underlyingsToCheck[i]]) {
+                underlyings.push(underlyingsToCheck[i]);
+                existingUnderlyings[underlyingsToCheck[i]] = true;
             }
         }
     }

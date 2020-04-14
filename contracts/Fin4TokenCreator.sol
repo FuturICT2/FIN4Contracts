@@ -41,13 +41,13 @@ contract Fin4TokenCreator {
     }
 
     function postCreationSteps(address tokenAddress, address[] memory requiredProofTypes, address[] memory minterRoles,
-        string memory description, string memory actionsText, uint fixedAmount, string memory unit, bytes32[] memory mechanisms) public {
+        string memory description, string memory actionsText, uint fixedAmount, string memory unit, bytes32[] memory underlyings) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
         token.addProofTypes(Fin4ProvingAddress, requiredProofTypes);
 
-        Fin4TokenManagement(Fin4TokenManagementAddress).checkForNewMechanisms(mechanisms);
-        token.setMechanismsOnToken(mechanisms);
+        Fin4TokenManagement(Fin4TokenManagementAddress).checkForNewUnderlyings(underlyings);
+        token.setUnderlyingsOnToken(underlyings);
 
         bool Fin4ClaimingHasMinterRole = false;
         for (uint i = 0; i < minterRoles.length; i++) {
