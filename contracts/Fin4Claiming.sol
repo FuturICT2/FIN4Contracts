@@ -83,6 +83,7 @@ contract Fin4Claiming {
             emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
         }
 
+        // listen to this event if you provide your own minting policy
         emit ClaimApproved(tokenAddress, claimId, claimer, quantity, Fin4Token(tokenAddress).balanceOf(claimer));
 
         // REP reward for a successful claim
