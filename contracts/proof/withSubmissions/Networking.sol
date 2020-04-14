@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
 import "contracts/proof/Fin4BaseProofType.sol";
-import "contracts/Fin4Proving.sol";
+import "contracts/Fin4Verifying.sol";
 import "contracts/Fin4TokenBase.sol";
 
 contract Networking is Fin4BaseProofType {
@@ -13,10 +13,10 @@ contract Networking is Fin4BaseProofType {
       description = "Submit content of your networking activity and your counterpart has to approve your claim.";
     }
 
-    address public Fin4ProvingAddress;
+    address public Fin4VerifyingAddress;
 
-    function setFin4ProvingAddress(address Fin4ProvingAddr) public {
-        Fin4ProvingAddress = Fin4ProvingAddr;
+    function setFin4VerifyingAddress(address Fin4VerifyingAddr) public {
+        Fin4VerifyingAddress = Fin4VerifyingAddr;
     }
 
     struct PendingApproval {
@@ -59,7 +59,8 @@ contract Networking is Fin4BaseProofType {
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
         _sendApproval(address(this), pa.tokenAddrToReceiveProof, pa.claimIdOnTokenToReceiveProof);
-        Fin4Proving(Fin4ProvingAddress).addSubmission(address(this), pa.tokenAddrToReceiveProof, pa.requester, pa.timestamp, 0, pa.attachment);
+        Fin4Verifying(Fin4VerifyingAddress).addSubmission(
+            address(this), pa.tokenAddrToReceiveProof, pa.requester, pa.timestamp, 0, pa.attachment);
     }
 
     function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {

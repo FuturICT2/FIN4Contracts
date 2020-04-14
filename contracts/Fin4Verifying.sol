@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 import 'contracts/proof/Fin4BaseProofType.sol';
 
-contract Fin4Proving {
+contract Fin4Verifying {
 
     event SubmissionAdded(uint submissionId, address proofType, address token, address user, uint timestamp, uint contentType, string content);
 
