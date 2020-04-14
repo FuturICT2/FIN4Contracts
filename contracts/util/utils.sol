@@ -37,6 +37,15 @@ contract utils {
     return string(str);
   }
 
+  function arrayContainsAddress(address[] memory arr, address addrToCheck) public view returns(bool) {
+    for (uint i = 0; i < arr.length; i++) {
+      if (arr[i] == addrToCheck) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 /*function _countNonZeroBytes(bytes32 value) private returns(uint8) {
     // via https://ethereum.stackexchange.com/a/80456/56047
     uint8 i = 0;
