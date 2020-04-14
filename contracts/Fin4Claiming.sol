@@ -43,17 +43,26 @@ contract Fin4Claiming {
         (claimId, requiredProofTypes, claimCreationTime, quantity) = Fin4Token(tokenAddress)
             .submitClaim(msg.sender, variableAmount, comment);
 
-        if (!userClaimedOnThisActionAlready(msg.sender, tokenAddress)) {
-            actionsWhereUserHasClaims[msg.sender].push(tokenAddress);
+        if (!userClaimedOnThisTokenAlready(msg.sender, tokenAddress)) {
+            tokensWhereUserHasClaims[msg.sender].push(tokenAddress);
         }
 
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredProofTypes);
 
-        // auto-init claims where user would only press an "init proof" button without having to supply more info
         for (uint i = 0; i < requiredProofTypes.length; i++) {
-            // TODO instead of two calls, make .autoSubmitProofIfApplicable()?
-            if (Fin4BaseProofType(requiredProofTypes[i]).isAutoInitiable()) {
-                Fin4BaseProofType(requiredProofTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
+            if (Fin4BaseProofType(requiredProofTypes[i]).isConstraint()) {
+                Fin4BaseProofType(requiredProofTypes[i]).autoCheck(msg.sender, tokenAddress, claimId);
+            }
+        }
+
+        // Only auto-init applicable proof types if the claim didn't already got automatically rejected from a constraint in the previous loop
+        if (!Fin4Token(tokenAddress).claimGotRejected(claimId)) {
+            // auto-init claims where user would only press an "init proof" button without having to supply more info
+            for (uint i = 0; i < requiredProofTypes.length; i++) {
+                // TODO instead of two calls, make .autoSubmitProofIfApplicable()?
+                if (Fin4BaseProofType(requiredProofTypes[i]).isAutoInitiable()) {
+                    Fin4BaseProofType(requiredProofTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
+                }
             }
         }
     }
@@ -84,14 +93,14 @@ contract Fin4Claiming {
         emit ClaimRejected(tokenAddress, claimId, claimer);
     }
 
-    // ------------------------- ACTION WHERE USER HAS CLAIMS -------------------------
+    // ------------------------- TOKENS WHERE USER HAS CLAIMS -------------------------
 
     // to keep track on which tokens the user has claims (independent of their approval-statuses)
-    mapping (address => address[]) public actionsWhereUserHasClaims; // key = user, value = action addresses
+    mapping (address => address[]) public tokensWhereUserHasClaims; // key = user, value = token addresses
 
-    function userClaimedOnThisActionAlready(address user, address action) private view returns (bool) {
-        for (uint i = 0; i < actionsWhereUserHasClaims[user].length; i++) {
-            if (actionsWhereUserHasClaims[user][i] == action) {
+    function userClaimedOnThisTokenAlready(address user, address tokenAddress) private view returns (bool) {
+        for (uint i = 0; i < tokensWhereUserHasClaims[user].length; i++) {
+            if (tokensWhereUserHasClaims[user][i] == tokenAddress) {
                 return true;
             }
         }
@@ -99,8 +108,8 @@ contract Fin4Claiming {
     }
 
     // used in PreviousClaims
-    function getActionsWhereUserHasClaims() public view returns(address[] memory) {
-        return actionsWhereUserHasClaims[msg.sender];
+    function getTokensWhereUserHasClaims() public view returns(address[] memory) {
+        return tokensWhereUserHasClaims[msg.sender];
     }
 
     // ------------------------- CLAIM IDS -------------------------

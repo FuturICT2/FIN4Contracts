@@ -10,6 +10,7 @@ contract Fin4BaseProofType is utils {
   string public description;
   bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate proof", instead that's done automatically
   address public Fin4MessagingAddress;
+  bool public isConstraint = false;
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
 
@@ -25,8 +26,8 @@ contract Fin4BaseProofType is utils {
     return description;
   }
 
-  function getInfo() public view returns(string memory, string memory, string memory) {
-    return (name, description, getParameterForTokenCreatorToSetEncoded());
+  function getInfo() public view returns(string memory, string memory, string memory, bool) {
+    return (name, description, getParameterForTokenCreatorToSetEncoded(), isConstraint);
   }
 
   // This method gets overriden by the proof types and encode the parameter names
@@ -57,4 +58,6 @@ contract Fin4BaseProofType is utils {
 
   // On purpose not abstract so that deriving classes don't HAVE to implement it
   function autoSubmitProof(address user, address tokenAddrToReceiveProof, uint claimId) public {}
+  function autoCheck(address user, address tokenAddrToReceiveProof, uint claimId) public {}
+
 }

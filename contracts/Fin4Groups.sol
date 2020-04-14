@@ -111,4 +111,14 @@ contract Fin4Groups is utils {
     function getGroupMembers(uint groupId) public view returns(address[] memory) {
         return groups[groupId].members;
     }
+
+    // used by the Black- and Whitelisting constraint proof types
+    function userIsInOneOfTheseGroups(uint[] memory groupIds, address user) public view returns(bool) {
+        for (uint i = 0; i < groupIds.length; i ++) {
+            if (isMember(groupIds[i], user)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

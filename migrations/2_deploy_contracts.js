@@ -16,6 +16,8 @@ const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const proofTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
 	artifacts.require('SelfieTogether'),
+	artifacts.require('Blacklisting'),
+	artifacts.require('Whitelisting'),
 	//artifacts.require('SensorOneTimeSignal'),
 	/* 
 	These include the submissions feature:
@@ -30,7 +32,8 @@ const proofTypeContracts = [
 	artifacts.require('Picture'),
 	artifacts.require('Location'),
 	// TODO conceptualize these as conditions? #ConceptualDecision
-	artifacts.require('ClaimableOnlyNTimes')
+	artifacts.require('ClaimableOnlyNTimes'),
+	artifacts.require('ClaimableOnlyNTimesPerUser')
 	//artifacts.require('MinimumInterval'),
 	//artifacts.require('MaximumQuantityPerInterval'),
 ];
@@ -90,6 +93,10 @@ module.exports = async function(deployer) {
 	await proofTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SelfieTogether
 	await proofTypeInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	// Blacklisting
+	await proofTypeInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	// Whitelisting
+	await proofTypeInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SensorOneTimeSignal
 	//await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	// Idea

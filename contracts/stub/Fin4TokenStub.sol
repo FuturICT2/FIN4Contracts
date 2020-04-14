@@ -8,4 +8,5 @@ contract Fin4TokenStub {
 
   function receiveProofRejection(address proofTypeAddress, uint claimId) public;
 
+  function countApprovedClaimsOfThisUser(address user) public returns(uint);
 }
