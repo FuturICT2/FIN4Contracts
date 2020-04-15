@@ -11,7 +11,7 @@ contract Fin4Claiming {
         string comment, address[] requiredVerifierTypes);
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint mintedQuantity, uint256 newBalance);
     event ClaimRejected(address tokenAddr, uint claimId, address claimer);
-    event ProofApproved(address tokenAddrToReceiveVerifierDecision, address verifierTypeAddress, uint claimId, address claimer);
+    event VerifierApproved(address tokenAddrToReceiveVerifierDecision, address verifierTypeAddress, uint claimId, address claimer);
     event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
 
     /* If we go for the DNS pattern of this contract as Mark suggested #ConceptualDecision
@@ -67,8 +67,8 @@ contract Fin4Claiming {
         }
     }
 
-    function proofApprovalPingback(address tokenAddrToReceiveVerifierDecision, address verifierTypeAddress, uint claimId, address claimer) public {
-        emit ProofApproved(tokenAddrToReceiveVerifierDecision, verifierTypeAddress, claimId, claimer);
+    function verifierApprovalPingback(address tokenAddrToReceiveVerifierDecision, address verifierTypeAddress, uint claimId, address claimer) public {
+        emit VerifierApproved(tokenAddrToReceiveVerifierDecision, verifierTypeAddress, claimId, claimer);
     }
 
     // called from Fin4TokenBase
@@ -90,7 +90,7 @@ contract Fin4Claiming {
         MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
     }
 
-    function proofAndClaimRejectionPingback(address tokenAddress, uint claimId, address claimer) public {
+    function verifierAndClaimRejectionPingback(address tokenAddress, uint claimId, address claimer) public {
         emit ClaimRejected(tokenAddress, claimId, claimer);
     }
 

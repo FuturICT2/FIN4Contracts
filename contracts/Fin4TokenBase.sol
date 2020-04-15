@@ -175,7 +175,7 @@ contract Fin4TokenBase { // abstract class
     // TODO require something as guard?
     claims[claimId].proofStatuses[proofTypeAddress] = true;
     claims[claimId].proofInteractionTimes[proofTypeAddress] = now;
-    Fin4ClaimingStub(Fin4ClaimingAddress).proofApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
+    Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
     if (_allProofTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }
@@ -188,7 +188,7 @@ contract Fin4TokenBase { // abstract class
     claims[claimId].rejectedByProofTypes.push(proofTypeAddress);
     if (!claims[claimId].gotRejected) {
       claims[claimId].gotRejected = true;
-      Fin4ClaimingStub(Fin4ClaimingAddress).proofAndClaimRejectionPingback(address(this), claimId, claims[claimId].claimer);
+      Fin4ClaimingStub(Fin4ClaimingAddress).verifierAndClaimRejectionPingback(address(this), claimId, claims[claimId].claimer);
     }
   }
 
