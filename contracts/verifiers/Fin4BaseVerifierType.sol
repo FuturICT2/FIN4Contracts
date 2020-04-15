@@ -8,11 +8,11 @@ contract Fin4BaseVerifierType is utils {
 
   string public name;
   string public description;
-  bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate proof", instead that's done automatically
+  bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate verifier", instead that's done automatically
   address public Fin4MessagingAddress;
   bool public isConstraint = false;
 
-  mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this proof type
+  mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this verifier type
 
   constructor(address Fin4MessagingAddr) public {
     Fin4MessagingAddress = Fin4MessagingAddr;
@@ -30,13 +30,13 @@ contract Fin4BaseVerifierType is utils {
     return (name, description, getParameterForTokenCreatorToSetEncoded(), isConstraint);
   }
 
-  // This method gets overriden by the proof types and encode the parameter names
+  // This method gets overriden by the verifier types and encode the parameter names
   // to be filled by the token creator. He gets prompted to set them in the token creation process
   function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
     return "";
   }
 
-  // Helper method for all proof types to go through the same method when sending their approvals
+  // Helper method for all verifier types to go through the same method when sending their approvals
   // to the respective claim on a token
   function _sendApproval(address verifierTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
     // TODO ensure it can only be called from within this SC?
@@ -51,7 +51,7 @@ contract Fin4BaseVerifierType is utils {
     fin4TokenToItsCreator[msg.sender] = tokenCreator;
   }
 
-  // Used by proof types that require the token creator to approve something
+  // Used by verifier types that require the token creator to approve something
   function getCreatorOfToken(address tokenAddress) public view returns(address) {
     return fin4TokenToItsCreator[tokenAddress];
   }

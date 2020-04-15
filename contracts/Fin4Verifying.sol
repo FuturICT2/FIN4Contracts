@@ -7,7 +7,7 @@ contract Fin4Verifying {
     event SubmissionAdded(uint submissionId, address verifierType, address token, address user,
         uint timestamp, uint contentType, string content);
 
-    // all the proof types that token creators can use
+    // all the verifier types that token creators can use
     address[] public verifierTypes;
 
     function addVerifierType(address verifierType) public returns(bool) {

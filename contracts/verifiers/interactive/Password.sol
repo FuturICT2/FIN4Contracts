@@ -19,7 +19,7 @@ contract Password is Fin4BaseVerifierType {
         string memory message = string(abi.encodePacked(
               "Your claim on token \'",
               Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
-              "\' got rejected from proof type \'Password\' because the password you",
+              "\' got rejected from verifier type \'Password\' because the password you",
               " provided does not match the one set by the token creator"));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
         _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);

@@ -15,7 +15,7 @@ contract ClaimableOnlyNTimesPerUser is Fin4BaseVerifierType {
   // @Override
   function autoCheck(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {
       // This would allow several parallel claims to go through if they are not approved one after the other
-      // have to check when all other proofs are approved instead // TODO
+      // have to check when all other verifiers are approved instead // TODO
       uint usersClaimCountOnToken = Fin4TokenStub(tokenAddrToReceiveVerifierDecision).countApprovedClaimsOfThisUser(user);
       uint cap = tokenToClaimsCap[tokenAddrToReceiveVerifierDecision];
       if (usersClaimCountOnToken == cap) {

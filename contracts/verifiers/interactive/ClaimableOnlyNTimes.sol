@@ -20,7 +20,7 @@ contract ClaimableOnlyNTimes is Fin4BaseVerifierType {
           string memory message = string(abi.encodePacked(
               "Your claim on token \'",
               Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
-              "\' got rejected from proof type \'ClaimableOnlyNTimes\' because you reached the",
+              "\' got rejected from verifier type \'ClaimableOnlyNTimes\' because you reached the",
               " maximum number of claims as capped by the token creator: ", uint2str(cap)));
           Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), user, message);
           _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);

@@ -50,7 +50,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
   }
 
   function getMessageText() public pure returns(string memory) {
-    return "You were requested to approve the proof type SpecificAddress on the token ";
+    return "You were requested to approve the verifier type SpecificAddress on the token ";
   }
 
   function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public {

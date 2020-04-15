@@ -20,7 +20,7 @@ contract TokenCreator is SpecificAddress {
 
   // @Override
   function getMessageText() public pure returns(string memory) {
-    return "You as the token creator were requested to approve the proof type TokenCreator on the token ";
+    return "You as the token creator were requested to approve the verifier type TokenCreator on the token ";
   }
 
 }

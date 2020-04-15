@@ -89,10 +89,10 @@ contract Fin4TokenBase { // abstract class
     }
 
     claim.comment = comment;
-    // make a deep copy because the token creator might change the required proof types, but throughout the lifecycle of a claim they should stay fix
+    // make a deep copy because the token creator might change the required verifier types, but throughout the lifecycle of a claim they should stay fix
     // TODO should they? --> #ConceptualDecision
     claim.requiredVerifierTypes = getRequiredVerifierTypes();
-    // initialize all the proofs required by the token creator with false
+    // initialize all the verifiers required by the token creator with false
     // TODO isn't the default initialization false?
     for (uint i = 0; i < claim.requiredVerifierTypes.length; i ++) {
       claim.verifierStatuses[claim.requiredVerifierTypes[i]] = false;
@@ -112,8 +112,8 @@ contract Fin4TokenBase { // abstract class
     // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
 
     Claim storage claim = claims[claimId];
-    // This assumes the proof types are still the same as when the claim was submitted
-    // We probably want to support an evolving set of proof types though? TODO
+    // This assumes the verifier types are still the same as when the claim was submitted
+    // We probably want to support an evolving set of verifier types though? TODO
     address[] memory requiredVerifierTypes = getRequiredVerifierTypes();
     bool[] memory verifierTypeStatuses = new bool[](requiredVerifierTypes.length);
     for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
@@ -151,7 +151,7 @@ contract Fin4TokenBase { // abstract class
     return claims[claimId].gotRejected;
   }
 
-  // ------------------------- METHODS USED BY PROOF TYPES -------------------------
+  // ------------------------- METHODS USED BY VERIFIER TYPES -------------------------
 
   // function getTimeBetweenThisClaimAndThatClaimersPreviousOne archived in MinimumInterval
   // function sumUpQuantitiesWithinIntervalBeforeThisClaim archived in MaximumQuantityPerInterval
@@ -166,7 +166,7 @@ contract Fin4TokenBase { // abstract class
     return count;
   }
 
-  // ------------------------- PROOF TYPES -------------------------
+  // ------------------------- VERIFIER TYPES -------------------------
 
   address[] public requiredVerifierTypes;
 
@@ -182,9 +182,9 @@ contract Fin4TokenBase { // abstract class
   }
 
   function receiveProofRejection(address verifierTypeAddress, uint claimId) public {
-    // can there be multiple interaction times per proof type?
     claims[claimId].proofInteractionTimes[verifierTypeAddress] = now;
-    // also store reason here? Or enough to send as message to the user from the proof type as is done currently?
+    // can there be multiple interaction times per verifier type?
+    // also store reason here? Or enough to send as message to the user from the verifier type as is done currently?
     claims[claimId].rejectedByVerifierTypes.push(verifierTypeAddress);
     if (!claims[claimId].gotRejected) {
       claims[claimId].gotRejected = true;

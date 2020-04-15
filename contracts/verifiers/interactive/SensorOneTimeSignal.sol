@@ -29,7 +29,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
             for (uint j = 0; j < claimIDs.length; j ++) {
                 string memory message = string(abi.encodePacked(
                     "Your claim on token '", Fin4TokenStub(token).name(), "' got approved from sensor '",
-                    sensorID, "' via proof type 'SensorOneTimeSignal' at timestamp ",
+                    sensorID, "' via verifier type 'SensorOneTimeSignal' at timestamp ",
                     uint2str(timestamp), ". Message from sensor: ", data));
                 submitEvidenceViaSensor(token, claimIDs[j], claimers[j], message);
             }

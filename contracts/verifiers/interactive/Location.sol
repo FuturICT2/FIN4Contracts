@@ -18,7 +18,7 @@ contract Location is Fin4BaseVerifierType {
         string memory message = string(abi.encodePacked(
              "Your claim on token '",
             Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
-             "' got rejected from proof type 'Location' because",
+             "' got rejected from verifier type 'Location' because",
              " your location is not within a circle the token creator defined."));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
         _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);
