@@ -1,13 +1,13 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4OracleHub.sol";
 import "contracts/Fin4TokenBase.sol";
 
-contract SensorOneTimeSignal is Fin4BaseProofType {
+contract SensorOneTimeSignal is Fin4BaseVerifierType {
 
     constructor(address Fin4MessagingAddress)
-        Fin4BaseProofType(Fin4MessagingAddress)
+        Fin4BaseVerifierType(Fin4MessagingAddress)
         public {
             name = "SensorOneTimeSignal";
             description = "Approval via a sensor that sends a signal. The token creator specifies the sensor via its ID.";

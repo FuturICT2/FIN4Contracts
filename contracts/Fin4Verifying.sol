@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import 'contracts/proof/Fin4BaseProofType.sol';
+import 'contracts/verifiers/Fin4BaseVerifierType.sol';
 
 contract Fin4Verifying {
 
@@ -20,7 +20,7 @@ contract Fin4Verifying {
 
     function getProofTypeInfo(address proofType) public view returns(string memory, string memory, string memory, bool) {
         // require(proofTypeIsRegistered(proofType), "Address is not registered as proof type");
-        return Fin4BaseProofType(proofType).getInfo();
+        return Fin4BaseVerifierType(proofType).getInfo();
     }
 
     // called from Fin4Token instances to ensure the required proof types there are a subset of the proofTypes here

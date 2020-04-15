@@ -1,13 +1,13 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4Verifying.sol";
 import "contracts/Fin4TokenBase.sol";
 
-contract Networking is Fin4BaseProofType {
+contract Networking is Fin4BaseVerifierType {
 
   constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
       name = "Networking";
       description = "Submit content of your networking activity and your counterpart has to approve your claim.";

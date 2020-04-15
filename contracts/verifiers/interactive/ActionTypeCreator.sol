@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/SpecificAddress.sol";
+import "contracts/verifiers/interactive/SpecificAddress.sol";
 
 contract TokenCreator is SpecificAddress {
 

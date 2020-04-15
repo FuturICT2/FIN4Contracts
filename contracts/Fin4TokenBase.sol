@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
 import 'contracts/Fin4Verifying.sol';
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/stub/Fin4ClaimingStub.sol";
 
 contract Fin4TokenBase { // abstract class
@@ -229,7 +229,7 @@ contract Fin4TokenBase { // abstract class
 
       require(verifying.proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Verifying");
       requiredProofTypes.push(proofType);
-      Fin4BaseProofType(proofType).registerTokenCreator(tokenCreator);
+      Fin4BaseVerifierType(proofType).registerTokenCreator(tokenCreator);
     }
   }
 

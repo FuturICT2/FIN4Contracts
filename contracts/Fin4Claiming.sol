@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';
 import 'contracts/stub/MintingStub.sol';
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 
 contract Fin4Claiming {
 
@@ -50,8 +50,8 @@ contract Fin4Claiming {
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredProofTypes);
 
         for (uint i = 0; i < requiredProofTypes.length; i++) {
-            if (Fin4BaseProofType(requiredProofTypes[i]).isConstraint()) {
-                Fin4BaseProofType(requiredProofTypes[i]).autoCheck(msg.sender, tokenAddress, claimId);
+            if (Fin4BaseVerifierType(requiredProofTypes[i]).isConstraint()) {
+                Fin4BaseVerifierType(requiredProofTypes[i]).autoCheck(msg.sender, tokenAddress, claimId);
             }
         }
 
@@ -60,8 +60,8 @@ contract Fin4Claiming {
             // auto-init claims where user would only press an "init proof" button without having to supply more info
             for (uint i = 0; i < requiredProofTypes.length; i++) {
                 // TODO instead of two calls, make .autoSubmitProofIfApplicable()?
-                if (Fin4BaseProofType(requiredProofTypes[i]).isAutoInitiable()) {
-                    Fin4BaseProofType(requiredProofTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
+                if (Fin4BaseVerifierType(requiredProofTypes[i]).isAutoInitiable()) {
+                    Fin4BaseVerifierType(requiredProofTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
                 }
             }
         }

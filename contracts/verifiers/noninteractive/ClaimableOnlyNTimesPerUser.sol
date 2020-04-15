@@ -1,11 +1,11 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 
-contract ClaimableOnlyNTimesPerUser is Fin4BaseProofType {
+contract ClaimableOnlyNTimesPerUser is Fin4BaseVerifierType {
 
     constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
         name = "ClaimableOnlyNTimesPerUser";
         description = "The token creator sets a cap how many times a token can be successfully claimed";

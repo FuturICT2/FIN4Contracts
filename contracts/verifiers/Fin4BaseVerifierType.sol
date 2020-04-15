@@ -4,7 +4,7 @@ import "contracts/stub/Fin4TokenStub.sol";
 import "contracts/Fin4Messaging.sol";
 import "contracts/util/utils.sol";
 
-contract Fin4BaseProofType is utils {
+contract Fin4BaseVerifierType is utils {
 
   string public name;
   string public description;

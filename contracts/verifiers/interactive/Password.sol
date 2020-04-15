@@ -1,11 +1,11 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 
-contract Password is Fin4BaseProofType {
+contract Password is Fin4BaseVerifierType {
 
   constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
       name = "Password";
       description = "Approval if the user provides the password matching the one the token creator set.";

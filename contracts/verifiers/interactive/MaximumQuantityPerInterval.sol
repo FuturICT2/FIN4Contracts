@@ -1,11 +1,11 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 
-contract MaximumQuantityPerInterval is Fin4BaseProofType {
+contract MaximumQuantityPerInterval is Fin4BaseVerifierType {
 
   constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
       name = "MaximumQuantityPerInterval";
       description = "Defines the maximum quantity a user can claim within a specified time interval.";

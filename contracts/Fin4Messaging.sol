@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import 'contracts/stub/Fin4BaseProofTypeStub.sol';
+import 'contracts/stub/Fin4BaseVerifierTypeStub.sol';
 
 contract Fin4Messaging {
 
@@ -11,7 +11,7 @@ contract Fin4Messaging {
 
   struct Message {
     uint messageId;
-    uint messageType; // is an Enum in Fin4BaseProofType
+    uint messageType; // is an Enum in Fin4BaseVerifierType
     address sender;
     string senderStr;
     address receiver;

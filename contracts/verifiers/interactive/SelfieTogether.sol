@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/ApprovalByGroupMember.sol";
+import "contracts/verifiers/interactive/ApprovalByGroupMember.sol";
 
 contract SelfieTogether is ApprovalByGroupMember {
 

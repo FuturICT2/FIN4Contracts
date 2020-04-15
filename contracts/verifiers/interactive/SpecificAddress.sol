@@ -1,12 +1,12 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4TokenBase.sol";
 
-contract SpecificAddress is Fin4BaseProofType {
+contract SpecificAddress is Fin4BaseVerifierType {
 
   constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
       init();
     }
