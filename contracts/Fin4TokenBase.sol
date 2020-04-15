@@ -63,7 +63,7 @@ contract Fin4TokenBase { // abstract class
     string comment;
     address[] requiredVerifierTypes;
     mapping(address => bool) verifierStatuses;
-    mapping(address => uint) proofInteractionTimes;
+    mapping(address => uint) verifierInteractionTimes;
     uint claimCreationTime;
     uint claimApprovalTime;
     bool gotRejected;
@@ -171,19 +171,19 @@ contract Fin4TokenBase { // abstract class
   address[] public requiredVerifierTypes;
 
   // called from verifierType contracts
-  function receiveProofApproval(address verifierTypeAddress, uint claimId) public {
+  function receiveVerifierApproval(address verifierTypeAddress, uint claimId) public {
     // TODO require something as guard?
     claims[claimId].verifierStatuses[verifierTypeAddress] = true;
-    claims[claimId].proofInteractionTimes[verifierTypeAddress] = now;
+    claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
     Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), verifierTypeAddress, claimId, claims[claimId].claimer);
     if (_allverifierTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }
   }
 
-  function receiveProofRejection(address verifierTypeAddress, uint claimId) public {
-    claims[claimId].proofInteractionTimes[verifierTypeAddress] = now;
+  function receiveVerifierRejection(address verifierTypeAddress, uint claimId) public {
     // can there be multiple interaction times per verifier type?
+    claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
     // also store reason here? Or enough to send as message to the user from the verifier type as is done currently?
     claims[claimId].rejectedByVerifierTypes.push(verifierTypeAddress);
     if (!claims[claimId].gotRejected) {

@@ -40,11 +40,11 @@ contract Fin4BaseVerifierType is utils {
   // to the respective claim on a token
   function _sendApproval(address verifierTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
     // TODO ensure it can only be called from within this SC?
-    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveProofApproval(verifierTypeAddress, claimId);
+    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveVerifierApproval(verifierTypeAddress, claimId);
   }
 
   function _sendRejection(address verifierTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
-    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveProofRejection(verifierTypeAddress, claimId);
+    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveVerifierRejection(verifierTypeAddress, claimId);
   }
 
   function registerTokenCreator(address tokenCreator) public {

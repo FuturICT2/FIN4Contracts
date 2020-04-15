@@ -18,7 +18,7 @@ contract Picture is SpecificAddress {
     // TODO minimize duplicate code by reusing super method
     PendingApproval memory pa;
     pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
-    pa.claimIdOnTokenToReceiveProof = claimId;
+    pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
     pa.requester = msg.sender;
     pa.approver = approver;
     pa.attachment = IPFShash;

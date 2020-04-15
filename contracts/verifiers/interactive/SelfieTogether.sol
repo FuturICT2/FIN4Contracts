@@ -20,7 +20,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     // to user-chosen approver
     PendingApproval memory pa;
     pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
-    pa.claimIdOnTokenToReceiveProof = claimId;
+    pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
     pa.requester = msg.sender;
     pa.groupMemberAddresses = new address[](1);
     pa.groupMemberAddresses[0] = approver;
@@ -41,7 +41,7 @@ contract SelfieTogether is ApprovalByGroupMember {
 
     PendingApproval memory paG;
     paG.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
-    paG.claimIdOnTokenToReceiveProof = claimId;
+    paG.claimIdOnTokenToReceiveVerifierDecision = claimId;
     paG.requester = msg.sender;
     uint groupId = _getGroupId(tokenAddrToReceiveVerifierDecision);
     paG.approverGroupId = groupId;
@@ -95,7 +95,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     pa.isApproved = true;
 
     if (pendingApprovals[pa.linkedWithPendingApprovalId].isApproved) {
-      _sendApproval(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveProof);
+      _sendApproval(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
     }
   }
 
@@ -117,7 +117,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     }
 
     Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
-    _sendRejection(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveProof);
+    _sendRejection(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
   }
 
 }

@@ -27,7 +27,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
     struct PendingApproval {
         uint pendingApprovalId;
         address tokenAddrToReceiveVerifierDecision;
-        uint claimIdOnTokenToReceiveProof;
+        uint claimIdOnTokenToReceiveVerifierDecision;
         address requester;
 
         bool isIndividualApprover; // false means group-usage
@@ -50,7 +50,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
     function autoSubmitEvidence(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {
         PendingApproval memory pa;
         pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
-        pa.claimIdOnTokenToReceiveProof = claimId;
+        pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = user;
         uint groupId = _getGroupId(tokenAddrToReceiveVerifierDecision);
         pa.approverGroupId = groupId;
@@ -101,7 +101,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
         markMessagesAsRead(pendingApprovalId);
 
-        _sendApproval(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveProof);
+        _sendApproval(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
     }
 
     function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
@@ -113,7 +113,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
             "A member of the appointed approver group has rejected your approval request for ",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierDecision).name()));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
-        _sendRejection(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveProof);
+        _sendRejection(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
     }
 
     function markMessagesAsRead(uint pendingApprovalId) public {

@@ -22,7 +22,7 @@ contract Networking is Fin4BaseVerifierType {
     struct PendingApproval {
         uint pendingApprovalId;
         address tokenAddrToReceiveVerifierDecision;
-        uint claimIdOnTokenToReceiveProof;
+        uint claimIdOnTokenToReceiveVerifierDecision;
         address requester;
         address approver;
         string attachment;
@@ -36,7 +36,7 @@ contract Networking is Fin4BaseVerifierType {
     function submitEvidence(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver, string memory content) public {
         PendingApproval memory pa;
         pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
-        pa.claimIdOnTokenToReceiveProof = claimId;
+        pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = msg.sender;
         pa.approver = approver;
         pa.pendingApprovalId = pendingApprovals[approver].length;
@@ -58,7 +58,7 @@ contract Networking is Fin4BaseVerifierType {
         PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
-        _sendApproval(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveProof);
+        _sendApproval(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
         Fin4Verifying(Fin4VerifyingAddress).addSubmission(
             address(this), pa.tokenAddrToReceiveVerifierDecision, pa.requester, pa.timestamp, 0, pa.attachment);
     }
@@ -71,6 +71,6 @@ contract Networking is Fin4BaseVerifierType {
             "' has rejected your approval request for the 'Networking' proof on a claim on token '",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierDecision).name(), "'"));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
-        _sendRejection(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveProof);
+        _sendRejection(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
     }
 }
