@@ -13,18 +13,18 @@ contract MaximumQuantityPerInterval is Fin4BaseVerifierType {
       // maxQuantity = 10;
     }
 
-    function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveProof, uint claimId) public {
-      if (requirementMet(tokenAddrToReceiveProof, msg.sender, claimId)) {
-        _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
+    function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+      if (requirementMet(tokenAddrToReceiveVerifierDecision, msg.sender, claimId)) {
+        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStub(tokenAddrToReceiveProof).name(),
+          Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
           ": The quantity you are claiming would take you beyond the allowed amount for the given interval. Interval: ",
-          uint2str(_getInterval(tokenAddrToReceiveProof) / 1000), "s, max. quantity: ",
-          uint2str(_getMaxQuantity(tokenAddrToReceiveProof)), "."
+          uint2str(_getInterval(tokenAddrToReceiveVerifierDecision) / 1000), "s, max. quantity: ",
+          uint2str(_getMaxQuantity(tokenAddrToReceiveVerifierDecision)), "."
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
+        _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       }
     }
 

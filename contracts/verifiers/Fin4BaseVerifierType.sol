@@ -38,13 +38,13 @@ contract Fin4BaseVerifierType is utils {
 
   // Helper method for all proof types to go through the same method when sending their approvals
   // to the respective claim on a token
-  function _sendApproval(address proofTypeAddress, address tokenAddrToReceiveProof, uint claimId) internal {
+  function _sendApproval(address proofTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
     // TODO ensure it can only be called from within this SC?
-    Fin4TokenStub(tokenAddrToReceiveProof).receiveProofApproval(proofTypeAddress, claimId);
+    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveProofApproval(proofTypeAddress, claimId);
   }
 
-  function _sendRejection(address proofTypeAddress, address tokenAddrToReceiveProof, uint claimId) internal {
-    Fin4TokenStub(tokenAddrToReceiveProof).receiveProofRejection(proofTypeAddress, claimId);
+  function _sendRejection(address proofTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
+    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveProofRejection(proofTypeAddress, claimId);
   }
 
   function registerTokenCreator(address tokenCreator) public {
@@ -57,7 +57,7 @@ contract Fin4BaseVerifierType is utils {
   }
 
   // On purpose not abstract so that deriving classes don't HAVE to implement it
-  function autoSubmitProof(address user, address tokenAddrToReceiveProof, uint claimId) public {}
-  function autoCheck(address user, address tokenAddrToReceiveProof, uint claimId) public {}
+  function autoSubmitProof(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {}
+  function autoCheck(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {}
 
 }

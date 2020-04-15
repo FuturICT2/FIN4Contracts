@@ -12,17 +12,17 @@ contract MinimumInterval is Fin4BaseVerifierType {
       // minimumInterval = 1 * 24 * 60 * 60 * 1000; // 1 day
     }
 
-    function submitProof_MinimumInterval(address tokenAddrToReceiveProof, uint claimId) public {
-      if (minimumIntervalRequirementMet(tokenAddrToReceiveProof, msg.sender, claimId)) {
-        _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
+    function submitProof_MinimumInterval(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+      if (minimumIntervalRequirementMet(tokenAddrToReceiveVerifierDecision, msg.sender, claimId)) {
+        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStub(tokenAddrToReceiveProof).name(),
+          Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
           ": The time between your previous claim and this one is shorter than the minimum required timespan of ",
-          uint2str(_getMinimumInterval(tokenAddrToReceiveProof) / 1000), "s."
+          uint2str(_getMinimumInterval(tokenAddrToReceiveVerifierDecision) / 1000), "s."
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
+        _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       }
     }
 
