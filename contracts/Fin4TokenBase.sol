@@ -62,7 +62,7 @@ contract Fin4TokenBase { // abstract class
     // uint timeGivenByUser; // TODO if useful? #ConceptualDecision
     string comment;
     address[] requiredVerifierTypes;
-    mapping(address => bool) proofStatuses;
+    mapping(address => bool) verifierStatuses;
     mapping(address => uint) proofInteractionTimes;
     uint claimCreationTime;
     uint claimApprovalTime;
@@ -95,7 +95,7 @@ contract Fin4TokenBase { // abstract class
     // initialize all the proofs required by the token creator with false
     // TODO isn't the default initialization false?
     for (uint i = 0; i < claim.requiredVerifierTypes.length; i ++) {
-      claim.proofStatuses[claim.requiredVerifierTypes[i]] = false;
+      claim.verifierStatuses[claim.requiredVerifierTypes[i]] = false;
     }
     claim.isApproved = false;
     claim.gotRejected = false;
@@ -117,7 +117,7 @@ contract Fin4TokenBase { // abstract class
     address[] memory requiredVerifierTypes = getRequiredVerifierTypes();
     bool[] memory verifierTypeStatuses = new bool[](requiredVerifierTypes.length);
     for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
-      verifierTypeStatuses[i] = claim.proofStatuses[requiredVerifierTypes[i]];
+      verifierTypeStatuses[i] = claim.verifierStatuses[requiredVerifierTypes[i]];
     }
 
     return (claim.claimer, claim.isApproved, claim.gotRejected, claim.quantity, claim.claimCreationTime,
@@ -173,7 +173,7 @@ contract Fin4TokenBase { // abstract class
   // called from verifierType contracts
   function receiveProofApproval(address verifierTypeAddress, uint claimId) public {
     // TODO require something as guard?
-    claims[claimId].proofStatuses[verifierTypeAddress] = true;
+    claims[claimId].verifierStatuses[verifierTypeAddress] = true;
     claims[claimId].proofInteractionTimes[verifierTypeAddress] = now;
     Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), verifierTypeAddress, claimId, claims[claimId].claimer);
     if (_allverifierTypesApprovedOnClaim(claimId)) {
@@ -209,7 +209,7 @@ contract Fin4TokenBase { // abstract class
 
   function _allverifierTypesApprovedOnClaim(uint claimId) private view returns(bool) {
     for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
-      if (!claims[claimId].proofStatuses[requiredVerifierTypes[i]]) {
+      if (!claims[claimId].verifierStatuses[requiredVerifierTypes[i]]) {
         return false;
       }
     }

@@ -41,7 +41,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
     function getUnrejectedClaimsWithThisverifierTypeUnapproved(address verifierType) public view returns(uint[] memory, address[] memory) {
         uint count = 0;
         for (uint i = 0; i < nextClaimId; i ++) {
-            if (!claims[i].gotRejected && verifierTypeIsRequired(verifierType, i) && !claims[i].proofStatuses[verifierType]) {
+            if (!claims[i].gotRejected && verifierTypeIsRequired(verifierType, i) && !claims[i].verifierStatuses[verifierType]) {
                 count ++;
             }
         }
@@ -49,7 +49,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
         address[] memory claimers = new address[](count);
         count = 0;
         for (uint i = 0; i < nextClaimId; i ++) {
-            if (!claims[i].gotRejected && verifierTypeIsRequired(verifierType, i) && !claims[i].proofStatuses[verifierType]) {
+            if (!claims[i].gotRejected && verifierTypeIsRequired(verifierType, i) && !claims[i].verifierStatuses[verifierType]) {
                 claimIDs[count] = i;
                 claimers[count] = claims[i].claimer;
                 count ++;
