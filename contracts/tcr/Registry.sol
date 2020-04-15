@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "../tokens/GOV.sol";
 import "./Parameterizer.sol";
 import "./PLCR/PLCRVoting.sol";
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract Registry {
 

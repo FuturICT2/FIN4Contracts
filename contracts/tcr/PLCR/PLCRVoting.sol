@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 import "../../tokens/GOV.sol";
 import "./dependencies/DLL.sol";
 import "./dependencies/AttributeStore.sol";
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 /**
 @title Partial-Lock-Commit-Reveal Voting scheme with ERC20 tokens

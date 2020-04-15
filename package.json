@@ -3,8 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@openzeppelin/contracts": "^2.5.0",
 		"@truffle/hdwallet-provider": "1.0.18",
-		"openzeppelin-solidity": "^2.4.0",
 		"solidity-util": "github:willitscale/solidity-util"
 	}
 }
