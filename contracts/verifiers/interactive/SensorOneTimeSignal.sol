@@ -25,7 +25,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
             address token = sensorIDtoTokens[sensorID][i];
             uint[] memory claimIDs;
             address[] memory claimers;
-            (claimIDs, claimers) = Fin4TokenBase(token).getUnrejectedClaimsWithThisProofTypeUnapproved(address(this));
+            (claimIDs, claimers) = Fin4TokenBase(token).getUnrejectedClaimsWithThisverifierTypeUnapproved(address(this));
             for (uint j = 0; j < claimIDs.length; j ++) {
                 string memory message = string(abi.encodePacked(
                     "Your claim on token '", Fin4TokenStub(token).name(), "' got approved from sensor '",
@@ -38,10 +38,10 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
     }
 
     /* // Archived here from Fin4TokenBase
-    function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {
+    function getUnrejectedClaimsWithThisverifierTypeUnapproved(address verifierType) public view returns(uint[] memory, address[] memory) {
         uint count = 0;
         for (uint i = 0; i < nextClaimId; i ++) {
-            if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
+            if (!claims[i].gotRejected && verifierTypeIsRequired(verifierType, i) && !claims[i].proofStatuses[verifierType]) {
                 count ++;
             }
         }
@@ -49,7 +49,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
         address[] memory claimers = new address[](count);
         count = 0;
         for (uint i = 0; i < nextClaimId; i ++) {
-            if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
+            if (!claims[i].gotRejected && verifierTypeIsRequired(verifierType, i) && !claims[i].proofStatuses[verifierType]) {
                 claimIDs[count] = i;
                 claimers[count] = claims[i].claimer;
                 count ++;

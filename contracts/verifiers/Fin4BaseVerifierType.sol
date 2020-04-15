@@ -38,13 +38,13 @@ contract Fin4BaseVerifierType is utils {
 
   // Helper method for all proof types to go through the same method when sending their approvals
   // to the respective claim on a token
-  function _sendApproval(address proofTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
+  function _sendApproval(address verifierTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
     // TODO ensure it can only be called from within this SC?
-    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveProofApproval(proofTypeAddress, claimId);
+    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveProofApproval(verifierTypeAddress, claimId);
   }
 
-  function _sendRejection(address proofTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
-    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveProofRejection(proofTypeAddress, claimId);
+  function _sendRejection(address verifierTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
+    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveProofRejection(verifierTypeAddress, claimId);
   }
 
   function registerTokenCreator(address tokenCreator) public {

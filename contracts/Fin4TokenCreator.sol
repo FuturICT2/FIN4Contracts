@@ -40,11 +40,11 @@ contract Fin4TokenCreator {
         return sym;
     }
 
-    function postCreationSteps(address tokenAddress, address[] memory requiredProofTypes, address[] memory minterRoles,
+    function postCreationSteps(address tokenAddress, address[] memory requiredVerifierTypes, address[] memory minterRoles,
         string memory description, string memory actionsText, uint fixedAmount, string memory unit, bytes32[] memory underlyings) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
-        token.addProofTypes(Fin4VerifyingAddress, requiredProofTypes);
+        token.addverifierTypes(Fin4VerifyingAddress, requiredVerifierTypes);
 
         Fin4TokenManagement(Fin4TokenManagementAddress).checkForNewUnderlyings(underlyings);
         token.setUnderlyingsOnToken(underlyings);

@@ -61,13 +61,13 @@ contract Fin4TokenBase { // abstract class
     uint quantity;
     // uint timeGivenByUser; // TODO if useful? #ConceptualDecision
     string comment;
-    address[] requiredProofTypes;
+    address[] requiredVerifierTypes;
     mapping(address => bool) proofStatuses;
     mapping(address => uint) proofInteractionTimes;
     uint claimCreationTime;
     uint claimApprovalTime;
     bool gotRejected;
-    address[] rejectedByProofTypes;
+    address[] rejectedByVerifierTypes;
   }
 
 	mapping (uint => Claim) public claims;
@@ -91,21 +91,21 @@ contract Fin4TokenBase { // abstract class
     claim.comment = comment;
     // make a deep copy because the token creator might change the required proof types, but throughout the lifecycle of a claim they should stay fix
     // TODO should they? --> #ConceptualDecision
-    claim.requiredProofTypes = getRequiredProofTypes();
+    claim.requiredVerifierTypes = getRequiredVerifierTypes();
     // initialize all the proofs required by the token creator with false
     // TODO isn't the default initialization false?
-    for (uint i = 0; i < claim.requiredProofTypes.length; i ++) {
-      claim.proofStatuses[claim.requiredProofTypes[i]] = false;
+    for (uint i = 0; i < claim.requiredVerifierTypes.length; i ++) {
+      claim.proofStatuses[claim.requiredVerifierTypes[i]] = false;
     }
     claim.isApproved = false;
     claim.gotRejected = false;
 
-    if (claim.requiredProofTypes.length == 0) {
+    if (claim.requiredVerifierTypes.length == 0) {
       approveClaim(nextClaimId);
     }
 
     nextClaimId ++;
-    return (nextClaimId - 1, claim.requiredProofTypes, claim.claimCreationTime, claim.quantity);
+    return (nextClaimId - 1, claim.requiredVerifierTypes, claim.claimCreationTime, claim.quantity);
   }
 
   function getClaim(uint claimId) public view returns(address, bool, bool, uint, uint, string memory, address[] memory, bool[] memory) {
@@ -114,14 +114,14 @@ contract Fin4TokenBase { // abstract class
     Claim storage claim = claims[claimId];
     // This assumes the proof types are still the same as when the claim was submitted
     // We probably want to support an evolving set of proof types though? TODO
-    address[] memory requiredProofTypes = getRequiredProofTypes();
-    bool[] memory proofTypeStatuses = new bool[](requiredProofTypes.length);
-    for (uint i = 0; i < requiredProofTypes.length; i ++) {
-      proofTypeStatuses[i] = claim.proofStatuses[requiredProofTypes[i]];
+    address[] memory requiredVerifierTypes = getRequiredVerifierTypes();
+    bool[] memory verifierTypeStatuses = new bool[](requiredVerifierTypes.length);
+    for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
+      verifierTypeStatuses[i] = claim.proofStatuses[requiredVerifierTypes[i]];
     }
 
     return (claim.claimer, claim.isApproved, claim.gotRejected, claim.quantity, claim.claimCreationTime,
-      claim.comment, requiredProofTypes, proofTypeStatuses);
+      claim.comment, requiredVerifierTypes, verifierTypeStatuses);
   }
 
   function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory) {
@@ -168,24 +168,24 @@ contract Fin4TokenBase { // abstract class
 
   // ------------------------- PROOF TYPES -------------------------
 
-  address[] public requiredProofTypes;
+  address[] public requiredVerifierTypes;
 
-  // called from ProofType contracts
-  function receiveProofApproval(address proofTypeAddress, uint claimId) public {
+  // called from verifierType contracts
+  function receiveProofApproval(address verifierTypeAddress, uint claimId) public {
     // TODO require something as guard?
-    claims[claimId].proofStatuses[proofTypeAddress] = true;
-    claims[claimId].proofInteractionTimes[proofTypeAddress] = now;
-    Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), proofTypeAddress, claimId, claims[claimId].claimer);
-    if (_allProofTypesApprovedOnClaim(claimId)) {
+    claims[claimId].proofStatuses[verifierTypeAddress] = true;
+    claims[claimId].proofInteractionTimes[verifierTypeAddress] = now;
+    Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), verifierTypeAddress, claimId, claims[claimId].claimer);
+    if (_allverifierTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }
   }
 
-  function receiveProofRejection(address proofTypeAddress, uint claimId) public {
+  function receiveProofRejection(address verifierTypeAddress, uint claimId) public {
     // can there be multiple interaction times per proof type?
-    claims[claimId].proofInteractionTimes[proofTypeAddress] = now;
+    claims[claimId].proofInteractionTimes[verifierTypeAddress] = now;
     // also store reason here? Or enough to send as message to the user from the proof type as is done currently?
-    claims[claimId].rejectedByProofTypes.push(proofTypeAddress);
+    claims[claimId].rejectedByVerifierTypes.push(verifierTypeAddress);
     if (!claims[claimId].gotRejected) {
       claims[claimId].gotRejected = true;
       Fin4ClaimingStub(Fin4ClaimingAddress).verifierAndClaimRejectionPingback(address(this), claimId, claims[claimId].claimer);
@@ -207,37 +207,37 @@ contract Fin4TokenBase { // abstract class
 
   function mint(address account, uint256 amount) public returns (bool);
 
-  function _allProofTypesApprovedOnClaim(uint claimId) private view returns(bool) {
-    for (uint i = 0; i < requiredProofTypes.length; i ++) {
-      if (!claims[claimId].proofStatuses[requiredProofTypes[i]]) {
+  function _allverifierTypesApprovedOnClaim(uint claimId) private view returns(bool) {
+    for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
+      if (!claims[claimId].proofStatuses[requiredVerifierTypes[i]]) {
         return false;
       }
     }
     return true;
   }
 
-  function getRequiredProofTypes() public view returns(address[] memory) {
-    return requiredProofTypes;
+  function getRequiredVerifierTypes() public view returns(address[] memory) {
+    return requiredVerifierTypes;
   }
 
-  function addProofTypes(address Fin4VerifyingAddr, address[] memory _requiredProofTypes) public {
+  function addverifierTypes(address Fin4VerifyingAddr, address[] memory _requiredVerifierTypes) public {
     Fin4VerifyingAddress = Fin4VerifyingAddr;
     Fin4Verifying verifying = Fin4Verifying(Fin4VerifyingAddress);
 
-    for (uint i = 0; i < _requiredProofTypes.length; i++) {
-      address proofType = _requiredProofTypes[i];
+    for (uint i = 0; i < _requiredVerifierTypes.length; i++) {
+      address verifierType = _requiredVerifierTypes[i];
 
-      require(verifying.verifierTypeIsRegistered(proofType), "This address is not registered as verifier type in Fin4Verifying");
-      requiredProofTypes.push(proofType);
-      Fin4BaseVerifierType(proofType).registerTokenCreator(tokenCreator);
+      require(verifying.verifierTypeIsRegistered(verifierType), "This address is not registered as verifier type in Fin4Verifying");
+      requiredVerifierTypes.push(verifierType);
+      Fin4BaseVerifierType(verifierType).registerTokenCreator(tokenCreator);
     }
   }
 
-  // function getUnrejectedClaimsWithThisProofTypeUnapproved archived in SensorOneTimeSignal
+  // function getUnrejectedClaimsWithThisverifierTypeUnapproved archived in SensorOneTimeSignal
 
-  function proofTypeIsRequired(address proofType, uint claimId) public view returns(bool) {
-    for (uint i = 0; i < claims[claimId].requiredProofTypes.length; i ++) {
-      if (claims[claimId].requiredProofTypes[i] == proofType) {
+  function verifierTypeIsRequired(address verifierType, uint claimId) public view returns(bool) {
+    for (uint i = 0; i < claims[claimId].requiredVerifierTypes.length; i ++) {
+      if (claims[claimId].requiredVerifierTypes[i] == verifierType) {
           return true;
       }
     }

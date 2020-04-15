@@ -4,9 +4,9 @@ contract Fin4TokenStub {
 
   function name() public view returns(string memory);
 
-  function receiveProofApproval(address proofTypeAddress, uint claimId) public;
+  function receiveProofApproval(address verifierTypeAddress, uint claimId) public;
 
-  function receiveProofRejection(address proofTypeAddress, uint claimId) public;
+  function receiveProofRejection(address verifierTypeAddress, uint claimId) public;
 
   function countApprovedClaimsOfThisUser(address user) public returns(uint);
 }

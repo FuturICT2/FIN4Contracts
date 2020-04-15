@@ -26,10 +26,10 @@ contract MinimumInterval is Fin4BaseVerifierType {
       }
     }
 
-    function minimumIntervalRequirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
+    function minimumIntervalRequirementMet(address tokenAddressUsingThisverifierType, address claimer, uint claimId) private view returns(bool) {
       /*
-      uint timeBetween = Fin4TokenStub(tokenAddressUsingThisProofType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
-      return timeBetween >= _getMinimumInterval(tokenAddressUsingThisProofType);
+      uint timeBetween = Fin4TokenStub(tokenAddressUsingThisverifierType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
+      return timeBetween >= _getMinimumInterval(tokenAddressUsingThisverifierType);
       */
       return true; // TODO
     }

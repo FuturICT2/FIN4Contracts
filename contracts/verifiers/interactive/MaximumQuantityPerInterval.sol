@@ -28,13 +28,13 @@ contract MaximumQuantityPerInterval is Fin4BaseVerifierType {
       }
     }
 
-    function requirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
+    function requirementMet(address tokenAddressUsingThisverifierType, address claimer, uint claimId) private view returns(bool) {
       /*
       uint sum;
       uint requestedQuantity;
-      (sum, requestedQuantity) = Fin4TokenStub(tokenAddressUsingThisProofType)
-        .sumUpQuantitiesWithinIntervalBeforeThisClaim(claimer, claimId, _getInterval(tokenAddressUsingThisProofType));
-      return sum + requestedQuantity <= _getMaxQuantity(tokenAddressUsingThisProofType);
+      (sum, requestedQuantity) = Fin4TokenStub(tokenAddressUsingThisverifierType)
+        .sumUpQuantitiesWithinIntervalBeforeThisClaim(claimer, claimId, _getInterval(tokenAddressUsingThisverifierType));
+      return sum + requestedQuantity <= _getMaxQuantity(tokenAddressUsingThisverifierType);
       */
       return true; // TODO
     }
