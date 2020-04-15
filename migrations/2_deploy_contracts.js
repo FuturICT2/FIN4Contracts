@@ -13,7 +13,7 @@ const Fin4Verifying = artifacts.require('Fin4Verifying');
 const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
-const proofTypeContracts = [
+const verifierTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
 	artifacts.require('SelfieTogether'),
 	artifacts.require('Blacklisting'),
@@ -84,27 +84,27 @@ module.exports = async function(deployer) {
 		Fin4SystemParametersInstance.address
 	);
 
-	// PROOF TYPES
+	// VERIFIER TYPES
 
-	await Promise.all(proofTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagingInstance.address)));
-	const proofTypeInstances = await Promise.all(proofTypeContracts.map(contract => contract.deployed()));
-	await Promise.all(proofTypeInstances.map(({ address }) => Fin4VerifyingInstance.addProofType(address)));
+	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagingInstance.address)));
+	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
+	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addProofType(address)));
 	// ApprovalByGroupMember
-	await proofTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SelfieTogether
-	await proofTypeInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierTypeInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// Blacklisting
-	await proofTypeInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierTypeInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// Whitelisting
-	await proofTypeInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierTypeInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SensorOneTimeSignal
-	//await proofTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
+	//await verifierTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	// Idea
-	//await proofTypeInstances[1].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	//await verifierTypeInstances[1].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 	// Networking
-	//await proofTypeInstances[2].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	//await verifierTypeInstances[2].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 	// HappyMoment
-	//await proofTypeInstances[3].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	//await verifierTypeInstances[3].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
