@@ -13,7 +13,7 @@ contract MaximumQuantityPerInterval is Fin4BaseVerifierType {
       // maxQuantity = 10;
     }
 
-    function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+    function submitEvidence_MaximumQuantityPerInterval(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
       if (requirementMet(tokenAddrToReceiveVerifierDecision, msg.sender, claimId)) {
         _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {

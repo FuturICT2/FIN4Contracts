@@ -14,7 +14,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     description = "The claimer supplies a picture, based on which a self-chosen approver and a member of a group of users appointed by the token creator decide to approve.";
   }
 
-  function submitProof_SelfieTogether(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver,
+  function submitEvidence_SelfieTogether(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver,
     string memory IPFShash) public {
 
     // to user-chosen approver

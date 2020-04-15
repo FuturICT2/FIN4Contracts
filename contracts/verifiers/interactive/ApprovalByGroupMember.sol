@@ -47,7 +47,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
     mapping (uint => PendingApproval) public pendingApprovals; // just use an array? TODO
 
     // @Override
-    function autoSubmitProof(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+    function autoSubmitEvidence(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {
         PendingApproval memory pa;
         pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
         pa.claimIdOnTokenToReceiveProof = claimId;

@@ -12,7 +12,7 @@ contract MinimumInterval is Fin4BaseVerifierType {
       // minimumInterval = 1 * 24 * 60 * 60 * 1000; // 1 day
     }
 
-    function submitProof_MinimumInterval(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+    function submitEvidence_MinimumInterval(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
       if (minimumIntervalRequirementMet(tokenAddrToReceiveVerifierDecision, msg.sender, claimId)) {
         _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {

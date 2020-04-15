@@ -33,7 +33,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
 
   mapping (address => PendingApproval[]) public pendingApprovals;
 
-  function submitProof_SpecificAddress(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver) public {
+  function submitEvidence_SpecificAddress(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver) public {
     PendingApproval memory pa;
     pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
     pa.claimIdOnTokenToReceiveProof = claimId;

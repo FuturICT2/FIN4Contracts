@@ -18,7 +18,7 @@ contract Idea is Fin4BaseVerifierType {
         Fin4VerifyingAddress = Fin4VerifyingAddr;
     }
 
-    function submitProof(address tokenAddrToReceiveVerifierDecision, uint claimId, string memory idea) public {
+    function submitEvidence(address tokenAddrToReceiveVerifierDecision, uint claimId, string memory idea) public {
         Fin4Verifying(Fin4VerifyingAddress).addSubmission(address(this), tokenAddrToReceiveVerifierDecision, msg.sender, now, 0, idea);
         _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
     }

@@ -11,7 +11,7 @@ contract Location is Fin4BaseVerifierType {
       description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";
     }
 
-    function submitProof_Location(address tokenAddrToReceiveVerifierDecision, uint claimId, uint distanceToLocation) public {
+    function submitEvidence_Location(address tokenAddrToReceiveVerifierDecision, uint claimId, uint distanceToLocation) public {
       if (locationIsWithinMaxDistToSpecifiedLocation(tokenAddrToReceiveVerifierDecision, distanceToLocation)) {
         _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {

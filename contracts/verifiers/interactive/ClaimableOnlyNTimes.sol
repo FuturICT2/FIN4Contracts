@@ -13,7 +13,7 @@ contract ClaimableOnlyNTimes is Fin4BaseVerifierType {
     }
 
   // @Override
-  function autoSubmitProof(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+  function autoSubmitEvidence(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {
       uint usersClaimCountOnToken = userToTheirClaimsCountOnToken[user][tokenAddrToReceiveVerifierDecision];
       uint cap = tokenToClaimsCap[tokenAddrToReceiveVerifierDecision];
       if (usersClaimCountOnToken == cap) {
