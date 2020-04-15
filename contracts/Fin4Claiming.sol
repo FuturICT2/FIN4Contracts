@@ -67,7 +67,8 @@ contract Fin4Claiming {
         }
     }
 
-    function verifierApprovalPingback(address tokenAddrToReceiveVerifierDecision, address verifierTypeAddress, uint claimId, address claimer) public {
+    function verifierApprovalPingback(address tokenAddrToReceiveVerifierDecision, address verifierTypeAddress, uint claimId, address claimer)
+        public {
         emit VerifierApproved(tokenAddrToReceiveVerifierDecision, verifierTypeAddress, claimId, claimer);
     }
 

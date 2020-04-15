@@ -68,7 +68,7 @@ contract Networking is Fin4BaseVerifierType {
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
         string memory message = string(abi.encodePacked("Your chosen approver '", addressToString(pa.approver),
-            "' has rejected your approval request for the 'Networking' proof on a claim on token '",
+            "' has rejected your approval request for the 'Networking' verifier on a claim on token '",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierDecision).name(), "'"));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
         _sendRejection(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);

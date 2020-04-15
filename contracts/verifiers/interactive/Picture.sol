@@ -33,7 +33,7 @@ contract Picture is SpecificAddress {
   // @Override
   function getMessageText() public pure returns(string memory) {
     // TODO include the quantity into the message
-    return "Please check this picture proof and approve the correct amount of this token: ";
+    return "Please check this picture verifier and approve the correct amount of this token: ";
   }
 
 }
