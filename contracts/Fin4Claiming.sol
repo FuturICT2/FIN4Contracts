@@ -8,10 +8,10 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 contract Fin4Claiming {
 
     event ClaimSubmitted(address tokenAddr, uint claimId, address claimer, uint quantity, uint claimCreationTime,
-        string comment, address[] requiredProofTypes);
+        string comment, address[] requiredVerifierTypes);
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint mintedQuantity, uint256 newBalance);
     event ClaimRejected(address tokenAddr, uint claimId, address claimer);
-    event ProofApproved(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer);
+    event ProofApproved(address tokenAddrToReceiveProof, address verifierTypeAddress, uint claimId, address claimer);
     event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
 
     /* If we go for the DNS pattern of this contract as Mark suggested #ConceptualDecision
@@ -37,38 +37,38 @@ contract Fin4Claiming {
 
     function submitClaim(address tokenAddress, uint variableAmount, string memory comment) public {
         uint claimId;
-        address[] memory requiredProofTypes;
+        address[] memory requiredVerifierTypes;
         uint claimCreationTime;
         uint quantity;
-        (claimId, requiredProofTypes, claimCreationTime, quantity) = Fin4Token(tokenAddress)
+        (claimId, requiredVerifierTypes, claimCreationTime, quantity) = Fin4Token(tokenAddress)
             .submitClaim(msg.sender, variableAmount, comment);
 
         if (!userClaimedOnThisTokenAlready(msg.sender, tokenAddress)) {
             tokensWhereUserHasClaims[msg.sender].push(tokenAddress);
         }
 
-        emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredProofTypes);
+        emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredVerifierTypes);
 
-        for (uint i = 0; i < requiredProofTypes.length; i++) {
-            if (Fin4BaseVerifierType(requiredProofTypes[i]).isConstraint()) {
-                Fin4BaseVerifierType(requiredProofTypes[i]).autoCheck(msg.sender, tokenAddress, claimId);
+        for (uint i = 0; i < requiredVerifierTypes.length; i++) {
+            if (Fin4BaseVerifierType(requiredVerifierTypes[i]).isConstraint()) {
+                Fin4BaseVerifierType(requiredVerifierTypes[i]).autoCheck(msg.sender, tokenAddress, claimId);
             }
         }
 
-        // Only auto-init applicable proof types if the claim didn't already got automatically rejected from a constraint in the previous loop
+        // Only auto-init applicable verifier types if the claim didn't already got automatically rejected from a constraint in the previous loop
         if (!Fin4Token(tokenAddress).claimGotRejected(claimId)) {
-            // auto-init claims where user would only press an "init proof" button without having to supply more info
-            for (uint i = 0; i < requiredProofTypes.length; i++) {
+            // auto-init claims where user would only press an "init verifier" button without having to supply more info
+            for (uint i = 0; i < requiredVerifierTypes.length; i++) {
                 // TODO instead of two calls, make .autoSubmitProofIfApplicable()?
-                if (Fin4BaseVerifierType(requiredProofTypes[i]).isAutoInitiable()) {
-                    Fin4BaseVerifierType(requiredProofTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
+                if (Fin4BaseVerifierType(requiredVerifierTypes[i]).isAutoInitiable()) {
+                    Fin4BaseVerifierType(requiredVerifierTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
                 }
             }
         }
     }
 
-    function proofApprovalPingback(address tokenAddrToReceiveProof, address proofTypeAddress, uint claimId, address claimer) public {
-        emit ProofApproved(tokenAddrToReceiveProof, proofTypeAddress, claimId, claimer);
+    function proofApprovalPingback(address tokenAddrToReceiveProof, address verifierTypeAddress, uint claimId, address claimer) public {
+        emit ProofApproved(tokenAddrToReceiveProof, verifierTypeAddress, claimId, claimer);
     }
 
     // called from Fin4TokenBase

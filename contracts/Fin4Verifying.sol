@@ -4,29 +4,30 @@ import 'contracts/verifiers/Fin4BaseVerifierType.sol';
 
 contract Fin4Verifying {
 
-    event SubmissionAdded(uint submissionId, address proofType, address token, address user, uint timestamp, uint contentType, string content);
+    event SubmissionAdded(uint submissionId, address verifierType, address token, address user,
+        uint timestamp, uint contentType, string content);
 
     // all the proof types that token creators can use
-    address[] public proofTypes;
+    address[] public verifierTypes;
 
-    function addProofType(address proofType) public returns(bool) {
-        proofTypes.push(proofType);
+    function addVerifierType(address verifierType) public returns(bool) {
+        verifierTypes.push(verifierType);
         return true;
     }
 
-    function getProofTypes() public view returns(address[] memory) {
-        return proofTypes;
+    function getVerifierTypes() public view returns(address[] memory) {
+        return verifierTypes;
     }
 
-    function getProofTypeInfo(address proofType) public view returns(string memory, string memory, string memory, bool) {
-        // require(proofTypeIsRegistered(proofType), "Address is not registered as proof type");
-        return Fin4BaseVerifierType(proofType).getInfo();
+    function getVerifierTypeInfo(address verifierType) public view returns(string memory, string memory, string memory, bool) {
+        // require(verifierTypeIsRegistered(verifierType), "Address is not registered as verifier type");
+        return Fin4BaseVerifierType(verifierType).getInfo();
     }
 
-    // called from Fin4Token instances to ensure the required proof types there are a subset of the proofTypes here
-    function proofTypeIsRegistered(address proofTypeToCheck) public view returns(bool) {
-        for (uint i = 0; i < proofTypes.length; i++) {
-            if (proofTypes[i] == proofTypeToCheck) {
+    // called from Fin4Token instances to ensure the required verifier types there are a subset of the verifierTypes here
+    function verifierTypeIsRegistered(address verifierTypeToCheck) public view returns(bool) {
+        for (uint i = 0; i < verifierTypes.length; i++) {
+            if (verifierTypes[i] == verifierTypeToCheck) {
                 return true;
             }
         }
@@ -37,7 +38,7 @@ contract Fin4Verifying {
 
     struct Submission {
         uint submissionId;
-        address proofType; // The proof type who sent this submission in
+        address verifierType; // The verifier type who sent this submission in
         address token;
         address user;
         uint timestamp;
@@ -48,9 +49,9 @@ contract Fin4Verifying {
     Submission[] public submissions; // submissions() used directly as getter in frontend
     uint public nextSubmissionId = 0;
 
-    function addSubmission(address proofType, address token, address user, uint timestamp, uint contentType, string memory content) public {
-        submissions.push(Submission(nextSubmissionId, proofType, token, user, timestamp, contentType, content));
-        emit SubmissionAdded(nextSubmissionId, proofType, token, user, timestamp, contentType, content);
+    function addSubmission(address verifierType, address token, address user, uint timestamp, uint contentType, string memory content) public {
+        submissions.push(Submission(nextSubmissionId, verifierType, token, user, timestamp, contentType, content));
+        emit SubmissionAdded(nextSubmissionId, verifierType, token, user, timestamp, contentType, content);
         nextSubmissionId += 1;
     }
 

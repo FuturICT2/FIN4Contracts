@@ -88,7 +88,7 @@ module.exports = async function(deployer) {
 
 	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagingInstance.address)));
 	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
-	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addProofType(address)));
+	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
 	// ApprovalByGroupMember
 	await verifierTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SelfieTogether

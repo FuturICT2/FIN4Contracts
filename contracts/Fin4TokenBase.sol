@@ -227,7 +227,7 @@ contract Fin4TokenBase { // abstract class
     for (uint i = 0; i < _requiredProofTypes.length; i++) {
       address proofType = _requiredProofTypes[i];
 
-      require(verifying.proofTypeIsRegistered(proofType), "This address is not registered as proof type in Fin4Verifying");
+      require(verifying.verifierTypeIsRegistered(proofType), "This address is not registered as verifier type in Fin4Verifying");
       requiredProofTypes.push(proofType);
       Fin4BaseVerifierType(proofType).registerTokenCreator(tokenCreator);
     }
