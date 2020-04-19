@@ -10,7 +10,7 @@ contract Blacklisting is Fin4BaseVerifierType {
     public {
         name = "Blacklisting";
         description = "The token creator defines group(s) and/or individual accounts that can not claim a token";
-        isConstraint = true;
+        isNoninteractive = true;
     }
 
     address public Fin4GroupsAddress;

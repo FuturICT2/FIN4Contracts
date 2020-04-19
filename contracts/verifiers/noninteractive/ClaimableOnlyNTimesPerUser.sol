@@ -9,7 +9,7 @@ contract ClaimableOnlyNTimesPerUser is Fin4BaseVerifierType {
     public {
         name = "ClaimableOnlyNTimesPerUser";
         description = "The token creator sets a cap how many times a token can be successfully claimed";
-        isConstraint = true;
+        isNoninteractive = true;
     }
 
   // @Override

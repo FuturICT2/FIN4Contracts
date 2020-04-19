@@ -10,7 +10,7 @@ contract Whitelisting is Fin4BaseVerifierType { // TODO make it extend Blacklist
     public {
         name = "Whitelisting";
         description = "The token creator defines group(s) and/or individual accounts that can claim a token while everyone else can not";
-        isConstraint = true;
+        isNoninteractive = true;
     }
 
     address public Fin4GroupsAddress;

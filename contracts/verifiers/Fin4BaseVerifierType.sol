@@ -10,7 +10,7 @@ contract Fin4BaseVerifierType is utils {
   string public description;
   bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate verifier", instead that's done automatically
   address public Fin4MessagingAddress;
-  bool public isConstraint = false;
+  bool public isNoninteractive = false;
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this verifier type
 
@@ -27,7 +27,7 @@ contract Fin4BaseVerifierType is utils {
   }
 
   function getInfo() public view returns(string memory, string memory, string memory, bool) {
-    return (name, description, getParameterForTokenCreatorToSetEncoded(), isConstraint);
+    return (name, description, getParameterForTokenCreatorToSetEncoded(), isNoninteractive);
   }
 
   // This method gets overriden by the verifier types and encode the parameter names

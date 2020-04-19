@@ -50,7 +50,7 @@ contract Fin4Claiming {
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredVerifierTypes);
 
         for (uint i = 0; i < requiredVerifierTypes.length; i++) {
-            if (Fin4BaseVerifierType(requiredVerifierTypes[i]).isConstraint()) {
+            if (Fin4BaseVerifierType(requiredVerifierTypes[i]).isNoninteractive()) {
                 Fin4BaseVerifierType(requiredVerifierTypes[i]).autoCheck(msg.sender, tokenAddress, claimId);
             }
         }
