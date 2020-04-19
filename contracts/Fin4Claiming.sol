@@ -59,9 +59,9 @@ contract Fin4Claiming {
         if (!Fin4Token(tokenAddress).claimGotRejected(claimId)) {
             // auto-init claims where user would only press an "init verifier" button without having to supply more info
             for (uint i = 0; i < requiredVerifierTypes.length; i++) {
-                // TODO instead of two calls, make .autoSubmitEvidenceIfApplicable()?
+                // TODO instead of two calls, make .autoSubmitProofIfApplicable()?
                 if (Fin4BaseVerifierType(requiredVerifierTypes[i]).isAutoInitiable()) {
-                    Fin4BaseVerifierType(requiredVerifierTypes[i]).autoSubmitEvidence(msg.sender, tokenAddress, claimId);
+                    Fin4BaseVerifierType(requiredVerifierTypes[i]).autoSubmitProof(msg.sender, tokenAddress, claimId);
                 }
             }
         }

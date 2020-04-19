@@ -57,7 +57,7 @@ contract Fin4BaseVerifierType is utils {
   }
 
   // On purpose not abstract so that deriving classes don't HAVE to implement it
-  function autoSubmitEvidence(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {}
+  function autoSubmitProof(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {}
   function autoCheck(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {}
 
 }

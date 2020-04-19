@@ -14,7 +14,7 @@ contract Picture is SpecificAddress {
     description = "The claimer has to supply a picture, based on which the approver will decide to approve.";
   }
 
-  function submitEvidence_Picture(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver, string memory IPFShash) public {
+  function submitProof_Picture(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver, string memory IPFShash) public {
     // TODO minimize duplicate code by reusing super method
     PendingApproval memory pa;
     pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;

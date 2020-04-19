@@ -14,8 +14,8 @@ contract TokenCreator is SpecificAddress {
     description = "The token creator has to approve.";
   }
 
-  function submitEvidence_TokenCreator(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
-    submitEvidence_SpecificAddress(tokenAddrToReceiveVerifierDecision, claimId, getCreatorOfToken(tokenAddrToReceiveVerifierDecision));
+  function submitProof_TokenCreator(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+    submitProof_SpecificAddress(tokenAddrToReceiveVerifierDecision, claimId, getCreatorOfToken(tokenAddrToReceiveVerifierDecision));
   }
 
   // @Override

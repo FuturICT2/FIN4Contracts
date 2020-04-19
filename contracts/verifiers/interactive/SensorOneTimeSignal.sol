@@ -31,7 +31,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
                     "Your claim on token '", Fin4TokenStub(token).name(), "' got approved from sensor '",
                     sensorID, "' via verifier type 'SensorOneTimeSignal' at timestamp ",
                     uint2str(timestamp), ". Message from sensor: ", data));
-                submitEvidenceViaSensor(token, claimIDs[j], claimers[j], message);
+                submitProofViaSensor(token, claimIDs[j], claimers[j], message);
             }
         }
         */
@@ -59,7 +59,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
     }
     */
 
-    function submitEvidenceViaSensor(address tokenAddrToReceiveVerifierDecision, uint claimId, address claimer, string memory message) public {
+    function submitProofViaSensor(address tokenAddrToReceiveVerifierDecision, uint claimId, address claimer, string memory message) public {
         // TODO build message here? Requires all the arguments to be shifted around...
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), claimer, message);
         _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);

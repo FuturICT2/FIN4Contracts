@@ -33,7 +33,7 @@ contract Networking is Fin4BaseVerifierType {
 
     mapping (address => PendingApproval[]) public pendingApprovals;
 
-    function submitEvidence(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver, string memory content) public {
+    function submitProof(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver, string memory content) public {
         PendingApproval memory pa;
         pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
