@@ -52,6 +52,9 @@ contract Fin4TokenBase { // abstract class
 
   // ------------------------- CLAIM -------------------------
 
+  // ProofAndVerifierStatusEnum
+  enum Status { UNSUBMITTED, PENDING, APPROVED, REJECTED } // from https://ethereum.stackexchange.com/a/24087/56047
+
   uint nextClaimId = 0;
 
 	struct Claim {
@@ -62,7 +65,7 @@ contract Fin4TokenBase { // abstract class
     // uint timeGivenByUser; // TODO if useful? #ConceptualDecision
     string comment;
     address[] requiredVerifierTypes;
-    mapping(address => bool) verifierStatuses;
+    mapping(address => Status) verifierStatuses;
     mapping(address => uint) verifierInteractionTimes;
     uint claimCreationTime;
     uint claimApprovalTime;
@@ -91,10 +94,9 @@ contract Fin4TokenBase { // abstract class
     // make a deep copy because the token creator might change the required verifier types, but throughout the lifecycle of a claim they should stay fix
     // TODO should they? --> #ConceptualDecision
     claim.requiredVerifierTypes = getRequiredVerifierTypes();
-    // initialize all the verifiers required by the token creator with false
-    // TODO isn't the default initialization false?
+
     for (uint i = 0; i < claim.requiredVerifierTypes.length; i ++) {
-      claim.verifierStatuses[claim.requiredVerifierTypes[i]] = false;
+      claim.verifierStatuses[claim.requiredVerifierTypes[i]] = Status.UNSUBMITTED;
     }
     claim.isApproved = false;
     claim.gotRejected = false;
@@ -107,16 +109,16 @@ contract Fin4TokenBase { // abstract class
     return (nextClaimId - 1, claim.requiredVerifierTypes, claim.claimCreationTime, claim.quantity);
   }
 
-  function getClaim(uint claimId) public view returns(address, bool, bool, uint, uint, string memory, address[] memory, bool[] memory) {
+  function getClaim(uint claimId) public view returns(address, bool, bool, uint, uint, string memory, address[] memory, uint[] memory) {
     // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
 
     Claim storage claim = claims[claimId];
     // This assumes the verifier types are still the same as when the claim was submitted
     // We probably want to support an evolving set of verifier types though? TODO
     address[] memory requiredVerifierTypes = getRequiredVerifierTypes();
-    bool[] memory verifierTypeStatuses = new bool[](requiredVerifierTypes.length);
+    uint[] memory verifierTypeStatuses = new uint[](requiredVerifierTypes.length);
     for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
-      verifierTypeStatuses[i] = claim.verifierStatuses[requiredVerifierTypes[i]];
+      verifierTypeStatuses[i] = uint(claim.verifierStatuses[requiredVerifierTypes[i]]);
     }
 
     return (claim.claimer, claim.isApproved, claim.gotRejected, claim.quantity, claim.claimCreationTime,
@@ -172,7 +174,7 @@ contract Fin4TokenBase { // abstract class
   // called from verifierType contracts
   function receiveVerifierApproval(address verifierTypeAddress, uint claimId) public {
     // TODO require something as guard?
-    claims[claimId].verifierStatuses[verifierTypeAddress] = true;
+    claims[claimId].verifierStatuses[verifierTypeAddress] = Status.APPROVED;
     claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
     Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), verifierTypeAddress, claimId, claims[claimId].claimer);
     if (_allVerifierTypesApprovedOnClaim(claimId)) {
@@ -181,6 +183,7 @@ contract Fin4TokenBase { // abstract class
   }
 
   function receiveVerifierRejection(address verifierTypeAddress, uint claimId) public {
+    claims[claimId].verifierStatuses[verifierTypeAddress] = Status.REJECTED;
     // can there be multiple interaction times per verifier type?
     claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
     if (!claims[claimId].gotRejected) {
@@ -206,7 +209,7 @@ contract Fin4TokenBase { // abstract class
 
   function _allVerifierTypesApprovedOnClaim(uint claimId) private view returns(bool) {
     for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
-      if (!claims[claimId].verifierStatuses[requiredVerifierTypes[i]]) {
+      if (claims[claimId].verifierStatuses[requiredVerifierTypes[i]] != Status.APPROVED) {
         return false;
       }
     }
