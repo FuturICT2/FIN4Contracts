@@ -1,11 +1,11 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 
-contract MaximumQuantityPerInterval is Fin4BaseProofType {
+contract MaximumQuantityPerInterval is Fin4BaseVerifierType {
 
   constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
       name = "MaximumQuantityPerInterval";
       description = "Defines the maximum quantity a user can claim within a specified time interval.";
@@ -13,28 +13,28 @@ contract MaximumQuantityPerInterval is Fin4BaseProofType {
       // maxQuantity = 10;
     }
 
-    function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveProof, uint claimId) public {
-      if (requirementMet(tokenAddrToReceiveProof, msg.sender, claimId)) {
-        _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
+    function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+      if (requirementMet(tokenAddrToReceiveVerifierDecision, msg.sender, claimId)) {
+        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStub(tokenAddrToReceiveProof).name(),
+          Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
           ": The quantity you are claiming would take you beyond the allowed amount for the given interval. Interval: ",
-          uint2str(_getInterval(tokenAddrToReceiveProof) / 1000), "s, max. quantity: ",
-          uint2str(_getMaxQuantity(tokenAddrToReceiveProof)), "."
+          uint2str(_getInterval(tokenAddrToReceiveVerifierDecision) / 1000), "s, max. quantity: ",
+          uint2str(_getMaxQuantity(tokenAddrToReceiveVerifierDecision)), "."
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
+        _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       }
     }
 
-    function requirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
+    function requirementMet(address tokenAddressUsingThisverifierType, address claimer, uint claimId) private view returns(bool) {
       /*
       uint sum;
       uint requestedQuantity;
-      (sum, requestedQuantity) = Fin4TokenStub(tokenAddressUsingThisProofType)
-        .sumUpQuantitiesWithinIntervalBeforeThisClaim(claimer, claimId, _getInterval(tokenAddressUsingThisProofType));
-      return sum + requestedQuantity <= _getMaxQuantity(tokenAddressUsingThisProofType);
+      (sum, requestedQuantity) = Fin4TokenStub(tokenAddressUsingThisverifierType)
+        .sumUpQuantitiesWithinIntervalBeforeThisClaim(claimer, claimId, _getInterval(tokenAddressUsingThisverifierType));
+      return sum + requestedQuantity <= _getMaxQuantity(tokenAddressUsingThisverifierType);
       */
       return true; // TODO
     }

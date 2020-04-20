@@ -1,16 +1,16 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4Groups.sol";
 
-contract Blacklisting is Fin4BaseProofType {
+contract Blacklisting is Fin4BaseVerifierType {
 
     constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
         name = "Blacklisting";
         description = "The token creator defines group(s) and/or individual accounts that can not claim a token";
-        isConstraint = true;
+        isNoninteractive = true;
     }
 
     address public Fin4GroupsAddress;

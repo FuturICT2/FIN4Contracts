@@ -1,16 +1,16 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4Groups.sol";
 
-contract Whitelisting is Fin4BaseProofType { // TODO make it extend Blacklisting?
+contract Whitelisting is Fin4BaseVerifierType { // TODO make it extend Blacklisting?
 
     constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
         name = "Whitelisting";
         description = "The token creator defines group(s) and/or individual accounts that can claim a token while everyone else can not";
-        isConstraint = true;
+        isNoninteractive = true;
     }
 
     address public Fin4GroupsAddress;

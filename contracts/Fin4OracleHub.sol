@@ -14,8 +14,8 @@ contract Fin4OracleHub {
         }
     }
 
-    function subscribeToSensorSignals(address proofType, string memory sensorID) public {
-        sensorIDtoSubscribers[sensorID].push(proofType);
+    function subscribeToSensorSignals(address verifierType, string memory sensorID) public {
+        sensorIDtoSubscribers[sensorID].push(verifierType);
     }
 
 }

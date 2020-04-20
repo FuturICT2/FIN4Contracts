@@ -1,13 +1,13 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4OracleHub.sol";
 import "contracts/Fin4TokenBase.sol";
 
-contract SensorOneTimeSignal is Fin4BaseProofType {
+contract SensorOneTimeSignal is Fin4BaseVerifierType {
 
     constructor(address Fin4MessagingAddress)
-        Fin4BaseProofType(Fin4MessagingAddress)
+        Fin4BaseVerifierType(Fin4MessagingAddress)
         public {
             name = "SensorOneTimeSignal";
             description = "Approval via a sensor that sends a signal. The token creator specifies the sensor via its ID.";
@@ -25,11 +25,11 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
             address token = sensorIDtoTokens[sensorID][i];
             uint[] memory claimIDs;
             address[] memory claimers;
-            (claimIDs, claimers) = Fin4TokenBase(token).getUnrejectedClaimsWithThisProofTypeUnapproved(address(this));
+            (claimIDs, claimers) = Fin4TokenBase(token).getUnrejectedClaimsWithThisverifierTypeUnapproved(address(this));
             for (uint j = 0; j < claimIDs.length; j ++) {
                 string memory message = string(abi.encodePacked(
                     "Your claim on token '", Fin4TokenStub(token).name(), "' got approved from sensor '",
-                    sensorID, "' via proof type 'SensorOneTimeSignal' at timestamp ",
+                    sensorID, "' via verifier type 'SensorOneTimeSignal' at timestamp ",
                     uint2str(timestamp), ". Message from sensor: ", data));
                 submitProofViaSensor(token, claimIDs[j], claimers[j], message);
             }
@@ -38,10 +38,10 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
     }
 
     /* // Archived here from Fin4TokenBase
-    function getUnrejectedClaimsWithThisProofTypeUnapproved(address proofType) public view returns(uint[] memory, address[] memory) {
+    function getUnrejectedClaimsWithThisverifierTypeUnapproved(address verifierType) public view returns(uint[] memory, address[] memory) {
         uint count = 0;
         for (uint i = 0; i < nextClaimId; i ++) {
-            if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
+            if (!claims[i].gotRejected && verifierTypeIsRequired(verifierType, i) && !claims[i].verifierStatuses[verifierType]) {
                 count ++;
             }
         }
@@ -49,7 +49,7 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
         address[] memory claimers = new address[](count);
         count = 0;
         for (uint i = 0; i < nextClaimId; i ++) {
-            if (!claims[i].gotRejected && proofTypeIsRequired(proofType, i) && !claims[i].proofStatuses[proofType]) {
+            if (!claims[i].gotRejected && verifierTypeIsRequired(verifierType, i) && !claims[i].verifierStatuses[verifierType]) {
                 claimIDs[count] = i;
                 claimers[count] = claims[i].claimer;
                 count ++;
@@ -59,10 +59,10 @@ contract SensorOneTimeSignal is Fin4BaseProofType {
     }
     */
 
-    function submitProofViaSensor(address tokenAddrToReceiveProof, uint claimId, address claimer, string memory message) public {
+    function submitProofViaSensor(address tokenAddrToReceiveVerifierDecision, uint claimId, address claimer, string memory message) public {
         // TODO build message here? Requires all the arguments to be shifted around...
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), claimer, message);
-        _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
+        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
         // Rejection makes no sense? Only a timeout maybe? Or token creator can turn it off?
         // Taking the sensor offline as action could trigger that... #ConceptualDecision
     }

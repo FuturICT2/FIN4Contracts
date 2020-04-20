@@ -1,35 +1,35 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 
-contract MinimumInterval is Fin4BaseProofType {
+contract MinimumInterval is Fin4BaseVerifierType {
 
   constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
       name = "MinimumInterval";
       description = "Defines a minimum time that has to pass between claims.";
       // minimumInterval = 1 * 24 * 60 * 60 * 1000; // 1 day
     }
 
-    function submitProof_MinimumInterval(address tokenAddrToReceiveProof, uint claimId) public {
-      if (minimumIntervalRequirementMet(tokenAddrToReceiveProof, msg.sender, claimId)) {
-        _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
+    function submitProof_MinimumInterval(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+      if (minimumIntervalRequirementMet(tokenAddrToReceiveVerifierDecision, msg.sender, claimId)) {
+        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {
         string memory message = string(abi.encodePacked(
-          Fin4TokenStub(tokenAddrToReceiveProof).name(),
+          Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
           ": The time between your previous claim and this one is shorter than the minimum required timespan of ",
-          uint2str(_getMinimumInterval(tokenAddrToReceiveProof) / 1000), "s."
+          uint2str(_getMinimumInterval(tokenAddrToReceiveVerifierDecision) / 1000), "s."
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
+        _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       }
     }
 
-    function minimumIntervalRequirementMet(address tokenAddressUsingThisProofType, address claimer, uint claimId) private view returns(bool) {
+    function minimumIntervalRequirementMet(address tokenAddressUsingThisverifierType, address claimer, uint claimId) private view returns(bool) {
       /*
-      uint timeBetween = Fin4TokenStub(tokenAddressUsingThisProofType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
-      return timeBetween >= _getMinimumInterval(tokenAddressUsingThisProofType);
+      uint timeBetween = Fin4TokenStub(tokenAddressUsingThisverifierType).getTimeBetweenThisClaimAndThatClaimersPreviousOne(claimer, claimId);
+      return timeBetween >= _getMinimumInterval(tokenAddressUsingThisverifierType);
       */
       return true; // TODO
     }

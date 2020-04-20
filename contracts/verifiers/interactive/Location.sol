@@ -1,27 +1,27 @@
 pragma solidity ^0.5.0;
 
-import "contracts/proof/Fin4BaseProofType.sol";
+import "contracts/verifiers/Fin4BaseVerifierType.sol";
 
-contract Location is Fin4BaseProofType {
+contract Location is Fin4BaseVerifierType {
 
   constructor(address Fin4MessagingAddress)
-    Fin4BaseProofType(Fin4MessagingAddress)
+    Fin4BaseVerifierType(Fin4MessagingAddress)
     public {
       name = "Location";
       description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";
     }
 
-    function submitProof_Location(address tokenAddrToReceiveProof, uint claimId, uint distanceToLocation) public {
-      if (locationIsWithinMaxDistToSpecifiedLocation(tokenAddrToReceiveProof, distanceToLocation)) {
-        _sendApproval(address(this), tokenAddrToReceiveProof, claimId);
+    function submitProof_Location(address tokenAddrToReceiveVerifierDecision, uint claimId, uint distanceToLocation) public {
+      if (locationIsWithinMaxDistToSpecifiedLocation(tokenAddrToReceiveVerifierDecision, distanceToLocation)) {
+        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {
         string memory message = string(abi.encodePacked(
              "Your claim on token '",
-            Fin4TokenStub(tokenAddrToReceiveProof).name(),
-             "' got rejected from proof type 'Location' because",
+            Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
+             "' got rejected from verifier type 'Location' because",
              " your location is not within a circle the token creator defined."));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejection(address(this), tokenAddrToReceiveProof, claimId);
+        _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       }
     }
 

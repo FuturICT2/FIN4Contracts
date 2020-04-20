@@ -38,7 +38,7 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
     values[2] = fixedAmount;
     values[3] = initialSupply;
 
-    return (requiredProofTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
+    return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
   }
 }
 
@@ -75,6 +75,6 @@ contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
     values[2] = fixedAmount;
     values[3] = initialSupply;
 
-    return (requiredProofTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
+    return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
   }
 }
