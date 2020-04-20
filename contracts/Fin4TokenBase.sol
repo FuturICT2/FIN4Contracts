@@ -175,7 +175,7 @@ contract Fin4TokenBase { // abstract class
     claims[claimId].verifierStatuses[verifierTypeAddress] = true;
     claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
     Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), verifierTypeAddress, claimId, claims[claimId].claimer);
-    if (_allverifierTypesApprovedOnClaim(claimId)) {
+    if (_allVerifierTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }
   }
@@ -204,7 +204,7 @@ contract Fin4TokenBase { // abstract class
 
   function mint(address account, uint256 amount) public returns (bool);
 
-  function _allverifierTypesApprovedOnClaim(uint claimId) private view returns(bool) {
+  function _allVerifierTypesApprovedOnClaim(uint claimId) private view returns(bool) {
     for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
       if (!claims[claimId].verifierStatuses[requiredVerifierTypes[i]]) {
         return false;
