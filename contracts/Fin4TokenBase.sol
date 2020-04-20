@@ -67,7 +67,6 @@ contract Fin4TokenBase { // abstract class
     uint claimCreationTime;
     uint claimApprovalTime;
     bool gotRejected;
-    address[] rejectedByVerifierTypes;
   }
 
 	mapping (uint => Claim) public claims;
@@ -184,8 +183,6 @@ contract Fin4TokenBase { // abstract class
   function receiveVerifierRejection(address verifierTypeAddress, uint claimId) public {
     // can there be multiple interaction times per verifier type?
     claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
-    // also store reason here? Or enough to send as message to the user from the verifier type as is done currently?
-    claims[claimId].rejectedByVerifierTypes.push(verifierTypeAddress);
     if (!claims[claimId].gotRejected) {
       claims[claimId].gotRejected = true;
       Fin4ClaimingStub(Fin4ClaimingAddress).verifierAndClaimRejectionPingback(address(this), claimId, claims[claimId].claimer);
