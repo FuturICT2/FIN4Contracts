@@ -47,6 +47,8 @@ contract SpecificAddress is Fin4BaseVerifierType {
     pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(msg.sender, name, approver, message, "", pa.pendingApprovalId);
 
     pendingApprovals[approver].push(pa);
+
+    _sendPendingNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
   }
 
   function getMessageText() public pure returns(string memory) {

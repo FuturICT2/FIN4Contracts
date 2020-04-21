@@ -72,6 +72,8 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
 
         pendingApprovals[nextPendingApprovalId] = pa;
         nextPendingApprovalId ++;
+
+        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
     }
 
     function getMessageText() public pure returns(string memory) {

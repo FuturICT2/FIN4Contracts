@@ -70,6 +70,8 @@ contract SelfieTogether is ApprovalByGroupMember {
     paG.isApproved = false;
     pa.linkedWithPendingApprovalId = paG.pendingApprovalId;
     paG.linkedWithPendingApprovalId = pa.pendingApprovalId;
+
+    _sendPendingNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
   }
 
   // @Override
