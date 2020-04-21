@@ -13,20 +13,20 @@ contract ClaimableOnlyNTimes is Fin4BaseVerifierType {
     }
 
   // @Override
-  function autoSubmitProof(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {
-      uint usersClaimCountOnToken = userToTheirClaimsCountOnToken[user][tokenAddrToReceiveVerifierDecision];
-      uint cap = tokenToClaimsCap[tokenAddrToReceiveVerifierDecision];
+  function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
+      uint usersClaimCountOnToken = userToTheirClaimsCountOnToken[user][tokenAddrToReceiveVerifierNotice];
+      uint cap = tokenToClaimsCap[tokenAddrToReceiveVerifierNotice];
       if (usersClaimCountOnToken == cap) {
           string memory message = string(abi.encodePacked(
               "Your claim on token \'",
-              Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
+              Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name(),
               "\' got rejected from verifier type \'ClaimableOnlyNTimes\' because you reached the",
               " maximum number of claims as capped by the token creator: ", uint2str(cap)));
           Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), user, message);
-          _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+          _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
       } else {
-          _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
-          userToTheirClaimsCountOnToken[user][tokenAddrToReceiveVerifierDecision] = usersClaimCountOnToken + 1;
+          _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
+          userToTheirClaimsCountOnToken[user][tokenAddrToReceiveVerifierNotice] = usersClaimCountOnToken + 1;
       }
   }
 

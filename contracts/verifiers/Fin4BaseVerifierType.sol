@@ -38,17 +38,17 @@ contract Fin4BaseVerifierType is utils {
 
   // Helper method for all verifier types to go through the same method when sending their approvals
   // to the respective claim on a token
-  function _sendApprovalNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
+  function _sendApprovalNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId) internal {
     // TODO ensure it can only be called from within this SC?
-    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveVerifierApprovalNotice(verifierTypeAddress, claimId);
+    Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierApprovalNotice(verifierTypeAddress, claimId);
   }
 
-  function _sendRejectionNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
-    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveVerifierRejectionNotice(verifierTypeAddress, claimId);
+  function _sendRejectionNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId) internal {
+    Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierRejectionNotice(verifierTypeAddress, claimId);
   }
 
-  function _sendPendingNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
-    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveVerifierPendingNotice(verifierTypeAddress, claimId);
+  function _sendPendingNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId) internal {
+    Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierPendingNotice(verifierTypeAddress, claimId);
   }
 
   function registerTokenCreator(address tokenCreator) public {
@@ -61,7 +61,7 @@ contract Fin4BaseVerifierType is utils {
   }
 
   // On purpose not abstract so that deriving classes don't HAVE to implement it
-  function autoSubmitProof(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {}
-  function autoCheck(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {}
+  function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {}
+  function autoCheck(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {}
 
 }

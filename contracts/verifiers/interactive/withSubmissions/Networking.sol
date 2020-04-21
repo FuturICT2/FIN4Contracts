@@ -21,7 +21,7 @@ contract Networking is Fin4BaseVerifierType {
 
     struct PendingApproval {
         uint pendingApprovalId;
-        address tokenAddrToReceiveVerifierDecision;
+        address tokenAddrToReceiveVerifierNotice;
         uint claimIdOnTokenToReceiveVerifierDecision;
         address requester;
         address approver;
@@ -33,9 +33,9 @@ contract Networking is Fin4BaseVerifierType {
 
     mapping (address => PendingApproval[]) public pendingApprovals;
 
-    function submitProof(address tokenAddrToReceiveVerifierDecision, uint claimId, address approver, string memory content) public {
+    function submitProof(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver, string memory content) public {
         PendingApproval memory pa;
-        pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
+        pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = msg.sender;
         pa.approver = approver;
@@ -45,7 +45,7 @@ contract Networking is Fin4BaseVerifierType {
 
         string memory message = string(abi.encodePacked(
             "You were requested to approve a networking claim on the token '",
-            Fin4TokenBase(tokenAddrToReceiveVerifierDecision).name(),
+            Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
             "'. The submitted content is '", content, "'."));
 
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
@@ -58,9 +58,9 @@ contract Networking is Fin4BaseVerifierType {
         PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
-        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
+        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
         Fin4Verifying(Fin4VerifyingAddress).addSubmission(
-            address(this), pa.tokenAddrToReceiveVerifierDecision, pa.requester, pa.timestamp, 0, pa.attachment);
+            address(this), pa.tokenAddrToReceiveVerifierNotice, pa.requester, pa.timestamp, 0, pa.attachment);
     }
 
     function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
@@ -69,8 +69,8 @@ contract Networking is Fin4BaseVerifierType {
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
         string memory message = string(abi.encodePacked("Your chosen approver '", addressToString(pa.approver),
             "' has rejected your approval request for the 'Networking' verifier on a claim on token '",
-            Fin4TokenBase(pa.tokenAddrToReceiveVerifierDecision).name(), "'"));
+            Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name(), "'"));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
-        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
+        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
     }
 }

@@ -26,7 +26,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
 
     struct PendingApproval {
         uint pendingApprovalId;
-        address tokenAddrToReceiveVerifierDecision;
+        address tokenAddrToReceiveVerifierNotice;
         uint claimIdOnTokenToReceiveVerifierDecision;
         address requester;
 
@@ -47,17 +47,17 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
     mapping (uint => PendingApproval) public pendingApprovals; // just use an array? TODO
 
     // @Override
-    function autoSubmitProof(address user, address tokenAddrToReceiveVerifierDecision, uint claimId) public {
+    function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
         PendingApproval memory pa;
-        pa.tokenAddrToReceiveVerifierDecision = tokenAddrToReceiveVerifierDecision;
+        pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = user;
-        uint groupId = _getGroupId(tokenAddrToReceiveVerifierDecision);
+        uint groupId = _getGroupId(tokenAddrToReceiveVerifierNotice);
         pa.approverGroupId = groupId;
         pa.pendingApprovalId = nextPendingApprovalId;
         pa.isIndividualApprover = false;
 
-        string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveVerifierDecision).name(),
+        string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
             ". Once a member of the group approves, these messages get marked as read for all others."));
 
         address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
@@ -73,7 +73,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
         pendingApprovals[nextPendingApprovalId] = pa;
         nextPendingApprovalId ++;
 
-        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
     }
 
     function getMessageText() public pure returns(string memory) {
@@ -103,7 +103,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
         markMessagesAsRead(pendingApprovalId);
 
-        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
+        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
     }
 
     function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
@@ -113,9 +113,9 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
 
         string memory message = string(abi.encodePacked(
             "A member of the appointed approver group has rejected your approval request for ",
-            Fin4TokenBase(pa.tokenAddrToReceiveVerifierDecision).name()));
+            Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
-        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
+        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
     }
 
     function markMessagesAsRead(uint pendingApprovalId) public {

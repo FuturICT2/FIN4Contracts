@@ -59,10 +59,10 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
     }
     */
 
-    function submitProofViaSensor(address tokenAddrToReceiveVerifierDecision, uint claimId, address claimer, string memory message) public {
+    function submitProofViaSensor(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, string memory message) public {
         // TODO build message here? Requires all the arguments to be shifted around...
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), claimer, message);
-        _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+        _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
         // Rejection makes no sense? Only a timeout maybe? Or token creator can turn it off?
         // Taking the sensor offline as action could trigger that... #ConceptualDecision
     }
