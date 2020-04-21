@@ -47,6 +47,10 @@ contract Fin4BaseVerifierType is utils {
     Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveVerifierRejection(verifierTypeAddress, claimId);
   }
 
+  function _sendPendingNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierDecision, uint claimId) internal {
+    Fin4TokenStub(tokenAddrToReceiveVerifierDecision).receiveVerifierPendingNotice(verifierTypeAddress, claimId);
+  }
+
   function registerTokenCreator(address tokenCreator) public {
     fin4TokenToItsCreator[msg.sender] = tokenCreator;
   }

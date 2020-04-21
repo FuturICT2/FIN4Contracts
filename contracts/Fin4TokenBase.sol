@@ -171,6 +171,15 @@ contract Fin4TokenBase { // abstract class
 
   address[] public requiredVerifierTypes;
 
+  function receiveVerifierPendingNotice(address verifierTypeAddress, uint claimId) public {
+    claims[claimId].verifierStatuses[verifierTypeAddress] = Status.PENDING;
+    // include that in verifierInteractionTimes? How?
+
+    // decided not to forward this to Fin4Claiming and dispatch an event there,
+    // frontend should set status of verifier to pending as soon as something that can be pending
+    // (e.g. someone else has to approve) is submitted
+  }
+
   // called from verifierType contracts
   function receiveVerifierApproval(address verifierTypeAddress, uint claimId) public {
     // TODO require something as guard?

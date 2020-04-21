@@ -8,5 +8,7 @@ contract Fin4TokenStub {
 
   function receiveVerifierRejection(address verifierTypeAddress, uint claimId) public;
 
+  function receiveVerifierPendingNotice(address verifierTypeAddress, uint claimId) public;
+
   function countApprovedClaimsOfThisUser(address user) public returns(uint);
 }
