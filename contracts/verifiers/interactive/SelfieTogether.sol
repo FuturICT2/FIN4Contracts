@@ -97,7 +97,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     pa.isApproved = true;
 
     if (pendingApprovals[pa.linkedWithPendingApprovalId].isApproved) {
-      _sendApproval(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
+      _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
     }
   }
 
@@ -119,7 +119,7 @@ contract SelfieTogether is ApprovalByGroupMember {
     }
 
     Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
-    _sendRejection(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
+    _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierDecision, pa.claimIdOnTokenToReceiveVerifierDecision);
   }
 
 }

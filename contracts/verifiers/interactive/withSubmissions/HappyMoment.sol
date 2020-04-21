@@ -20,7 +20,7 @@ contract HappyMoment is Fin4BaseVerifierType {
 
     function submitProof(address tokenAddrToReceiveVerifierDecision, uint claimId, string memory IPFShash) public {
         Fin4Verifying(Fin4VerifyingAddress).addSubmission(address(this), tokenAddrToReceiveVerifierDecision, msg.sender, now, 1, IPFShash);
-        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+        _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
     }
 
 }

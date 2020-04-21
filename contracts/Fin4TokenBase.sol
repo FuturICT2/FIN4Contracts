@@ -181,7 +181,7 @@ contract Fin4TokenBase { // abstract class
   }
 
   // called from verifierType contracts
-  function receiveVerifierApproval(address verifierTypeAddress, uint claimId) public {
+  function receiveVerifierApprovalNotice(address verifierTypeAddress, uint claimId) public {
     // TODO require something as guard?
     claims[claimId].verifierStatuses[verifierTypeAddress] = Status.APPROVED;
     claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
@@ -191,7 +191,7 @@ contract Fin4TokenBase { // abstract class
     }
   }
 
-  function receiveVerifierRejection(address verifierTypeAddress, uint claimId) public {
+  function receiveVerifierRejectionNotice(address verifierTypeAddress, uint claimId) public {
     claims[claimId].verifierStatuses[verifierTypeAddress] = Status.REJECTED;
     // can there be multiple interaction times per verifier type?
     claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;

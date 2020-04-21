@@ -15,7 +15,7 @@ contract MaximumQuantityPerInterval is Fin4BaseVerifierType {
 
     function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveVerifierDecision, uint claimId) public {
       if (requirementMet(tokenAddrToReceiveVerifierDecision, msg.sender, claimId)) {
-        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+        _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {
         string memory message = string(abi.encodePacked(
           Fin4TokenStub(tokenAddrToReceiveVerifierDecision).name(),
@@ -24,7 +24,7 @@ contract MaximumQuantityPerInterval is Fin4BaseVerifierType {
           uint2str(_getMaxQuantity(tokenAddrToReceiveVerifierDecision)), "."
         ));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       }
     }
 

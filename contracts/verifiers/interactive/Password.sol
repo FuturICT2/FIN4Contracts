@@ -14,7 +14,7 @@ contract Password is Fin4BaseVerifierType {
     function submitProof_Password(address tokenAddrToReceiveVerifierDecision, uint claimId, string memory password) public {
       // via https://ethereum.stackexchange.com/a/30914
       if (keccak256(abi.encodePacked((password))) == keccak256(abi.encodePacked((_getPassword(tokenAddrToReceiveVerifierDecision))))) {
-        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+        _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {
         string memory message = string(abi.encodePacked(
               "Your claim on token \'",
@@ -22,7 +22,7 @@ contract Password is Fin4BaseVerifierType {
               "\' got rejected from verifier type \'Password\' because the password you",
               " provided does not match the one set by the token creator"));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       }
     }
 

@@ -13,7 +13,7 @@ contract Location is Fin4BaseVerifierType {
 
     function submitProof_Location(address tokenAddrToReceiveVerifierDecision, uint claimId, uint distanceToLocation) public {
       if (locationIsWithinMaxDistToSpecifiedLocation(tokenAddrToReceiveVerifierDecision, distanceToLocation)) {
-        _sendApproval(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+        _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       } else {
         string memory message = string(abi.encodePacked(
              "Your claim on token '",
@@ -21,7 +21,7 @@ contract Location is Fin4BaseVerifierType {
              "' got rejected from verifier type 'Location' because",
              " your location is not within a circle the token creator defined."));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejection(address(this), tokenAddrToReceiveVerifierDecision, claimId);
+        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierDecision, claimId);
       }
     }
 

@@ -4,9 +4,9 @@ contract Fin4TokenStub {
 
   function name() public view returns(string memory);
 
-  function receiveVerifierApproval(address verifierTypeAddress, uint claimId) public;
+  function receiveVerifierApprovalNotice(address verifierTypeAddress, uint claimId) public;
 
-  function receiveVerifierRejection(address verifierTypeAddress, uint claimId) public;
+  function receiveVerifierRejectionNotice(address verifierTypeAddress, uint claimId) public;
 
   function receiveVerifierPendingNotice(address verifierTypeAddress, uint claimId) public;
 
