@@ -59,7 +59,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
     PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
     require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
     Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
-    _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
+    _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
   }
 
   function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
@@ -72,7 +72,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
     Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
 
     // TODO verify this workflow makes sense
-    _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
+    _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
 
     // TODO boolean flag in PendingApproval? #ConceptualDecision
   }

@@ -25,9 +25,9 @@ contract ClaimableOnlyNTimesPerUser is Fin4BaseVerifierType {
               "\' got rejected from the constraint \'ClaimableOnlyNTimesPerUser\' because you reached the",
               " maximum number of successful claims as defined by the token creator: ", uint2str(cap)));
           Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), user, message);
-          _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
+          _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
       } else {
-          _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
+          _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
       }
   }
 

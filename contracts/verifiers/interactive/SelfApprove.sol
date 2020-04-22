@@ -12,7 +12,7 @@ contract SelfApprove is Fin4BaseVerifierType {
     }
 
     function submitProof_SelfApprove(address tokenAddrToReceiveVerifierNotice, uint claimId) public {
-      _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
+      _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
     }
 
 }

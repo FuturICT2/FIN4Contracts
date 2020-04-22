@@ -23,7 +23,7 @@ contract Whitelisting is Fin4BaseVerifierType { // TODO make it extend Blacklist
     function autoCheck(address user, address tokenAddress, uint claimId) public {
         if (arrayContainsAddress(tokenToWhitelistedUsers[tokenAddress], user) ||
             Fin4Groups(Fin4GroupsAddress).userIsInOneOfTheseGroups(tokenToWhitelistedGroups[tokenAddress], user)) {
-            _sendApprovalNotice(address(this), tokenAddress, claimId);
+            _sendApprovalNotice(address(this), tokenAddress, claimId, "");
         } else {
             string memory message = string(abi.encodePacked(
                 "Your claim on token \'",
@@ -31,7 +31,7 @@ contract Whitelisting is Fin4BaseVerifierType { // TODO make it extend Blacklist
                 "\' got rejected from the constraint \'Whitelisting\' because you are note whitelisted on this token"
                 " - neither directly nor via group membership"));
             Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), user, message);
-            _sendRejectionNotice(address(this), tokenAddress, claimId);
+            _sendRejectionNotice(address(this), tokenAddress, claimId, "");
         }
     }
 

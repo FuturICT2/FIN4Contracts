@@ -58,7 +58,7 @@ contract Networking is Fin4BaseVerifierType {
         PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
-        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
+        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
         Fin4Verifying(Fin4VerifyingAddress).addSubmission(
             address(this), pa.tokenAddrToReceiveVerifierNotice, pa.requester, pa.timestamp, 0, pa.attachment);
     }
@@ -71,6 +71,6 @@ contract Networking is Fin4BaseVerifierType {
             "' has rejected your approval request for the 'Networking' verifier on a claim on token '",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name(), "'"));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
-        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
+        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
     }
 }

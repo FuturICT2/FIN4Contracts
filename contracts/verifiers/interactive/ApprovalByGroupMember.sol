@@ -103,7 +103,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
         markMessagesAsRead(pendingApprovalId);
 
-        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
+        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
     }
 
     function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
@@ -115,7 +115,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
             "A member of the appointed approver group has rejected your approval request for ",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
         Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
-        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision);
+        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
     }
 
     function markMessagesAsRead(uint pendingApprovalId) public {
