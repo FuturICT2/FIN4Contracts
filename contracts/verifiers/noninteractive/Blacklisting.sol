@@ -5,9 +5,7 @@ import "contracts/Fin4Groups.sol";
 
 contract Blacklisting is Fin4BaseVerifierType {
 
-    constructor(address Fin4MessagingAddress)
-    Fin4BaseVerifierType(Fin4MessagingAddress)
-    public {
+     constructor() public  {
         name = "Blacklisting";
         description = "The token creator defines group(s) and/or individual accounts that can not claim a token";
         isNoninteractive = true;

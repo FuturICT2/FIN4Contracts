@@ -4,9 +4,7 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 
 contract SelfApprove is Fin4BaseVerifierType {
 
-  constructor(address Fin4MessagingAddress)
-    Fin4BaseVerifierType(Fin4MessagingAddress)
-    public {
+   constructor() public  {
       name = "SelfApprove";
       description = "Claimers approve their own claim.";
     }

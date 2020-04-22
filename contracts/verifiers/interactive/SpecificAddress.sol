@@ -2,18 +2,24 @@ pragma solidity ^0.5.0;
 
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4TokenBase.sol";
+import "contracts/Fin4Messaging.sol";
 
 contract SpecificAddress is Fin4BaseVerifierType {
 
-  constructor(address Fin4MessagingAddress)
-    Fin4BaseVerifierType(Fin4MessagingAddress)
-    public {
+   constructor() public  {
+      // gets called by overwriting classes
       init();
     }
 
   function init() public {
     name = "SpecificAddress";
     description = "The claimer specifies an address, which has to approve.";
+  }
+
+  address public Fin4MessagingAddress;
+
+  function setFin4MessagingAddress(address Fin4MessagingAddr) public {
+    Fin4MessagingAddress = Fin4MessagingAddr;
   }
 
   // Holds the info of a pending approval: who should approve what on which token

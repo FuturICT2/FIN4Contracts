@@ -4,9 +4,7 @@ import "contracts/verifiers/interactive/ApprovalByGroupMember.sol";
 
 contract SelfieTogether is ApprovalByGroupMember {
 
-  constructor(address Fin4MessagingAddress)
-    ApprovalByGroupMember(Fin4MessagingAddress)
-    public {}
+   constructor() public  {}
 
   // @Override
   function init() public {

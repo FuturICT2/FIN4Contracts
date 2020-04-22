@@ -3,19 +3,23 @@ pragma solidity ^0.5.0;
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4TokenBase.sol";
 import "contracts/Fin4Groups.sol";
+import "contracts/Fin4Messaging.sol";
 
 contract ApprovalByGroupMember is Fin4BaseVerifierType {
 
-    constructor(address Fin4MessagingAddress)
-        Fin4BaseVerifierType(Fin4MessagingAddress)
-        public {
-            init();
-        }
+     constructor() public  {
+        init();
+    }
 
     address public Fin4GroupsAddress;
+    address public Fin4MessagingAddress;
 
     function setFin4GroupsAddress(address Fin4GroupsAddr) public {
         Fin4GroupsAddress = Fin4GroupsAddr;
+    }
+
+    function setFin4MessagingAddress(address Fin4MessagingAddr) public {
+        Fin4MessagingAddress = Fin4MessagingAddr;
     }
 
     function init() public {

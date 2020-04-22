@@ -5,9 +5,7 @@ import "contracts/Fin4Groups.sol";
 
 contract Whitelisting is Fin4BaseVerifierType { // TODO make it extend Blacklisting?
 
-    constructor(address Fin4MessagingAddress)
-    Fin4BaseVerifierType(Fin4MessagingAddress)
-    public {
+     constructor() public  {
         name = "Whitelisting";
         description = "The token creator defines group(s) and/or individual accounts that can claim a token while everyone else can not";
         isNoninteractive = true;

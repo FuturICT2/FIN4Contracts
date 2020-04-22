@@ -4,9 +4,7 @@ import "contracts/verifiers/interactive/SpecificAddress.sol";
 
 contract TokenCreator is SpecificAddress {
 
-  constructor(address Fin4MessagingAddress)
-    SpecificAddress(Fin4MessagingAddress)
-    public {}
+   constructor() public  {}
 
   // @Override
   function init() public {

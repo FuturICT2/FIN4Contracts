@@ -4,9 +4,7 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 
 contract MinimumInterval is Fin4BaseVerifierType {
 
-  constructor(address Fin4MessagingAddress)
-    Fin4BaseVerifierType(Fin4MessagingAddress)
-    public {
+   constructor() public  {
       name = "MinimumInterval";
       description = "Defines a minimum time that has to pass between claims.";
       // minimumInterval = 1 * 24 * 60 * 60 * 1000; // 1 day

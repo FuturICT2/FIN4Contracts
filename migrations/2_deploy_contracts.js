@@ -86,25 +86,30 @@ module.exports = async function(deployer) {
 
 	// VERIFIER TYPES
 
-	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract, Fin4MessagingInstance.address)));
+	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract)));
 	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
+
+	// Add contract addresses that verifier need
+	// TODO think about something better then identifiying them by indices
+
 	// ApprovalByGroupMember
 	await verifierTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierTypeInstances[0].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// SelfieTogether
 	await verifierTypeInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierTypeInstances[1].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Blacklisting
 	await verifierTypeInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// Whitelisting
 	await verifierTypeInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	// SensorOneTimeSignal
-	//await verifierTypeInstances[1].setFin4OracleHubAddress(Fin4OracleHubInstance.address);
-	// Idea
-	//await verifierTypeInstances[1].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
-	// Networking
-	//await verifierTypeInstances[2].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
-	// HappyMoment
-	//await verifierTypeInstances[3].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	// SpecificAddress
+	await verifierTypeInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	// Picture
+	await verifierTypeInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
+
+	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
+	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 

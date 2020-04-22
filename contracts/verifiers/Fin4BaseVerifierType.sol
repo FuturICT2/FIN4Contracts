@@ -1,7 +1,6 @@
 pragma solidity ^0.5.0;
 
 import "contracts/stub/Fin4TokenStub.sol";
-import "contracts/Fin4Messaging.sol";
 import "contracts/util/utils.sol";
 
 contract Fin4BaseVerifierType is utils {
@@ -9,14 +8,9 @@ contract Fin4BaseVerifierType is utils {
   string public name;
   string public description;
   bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate verifier", instead that's done automatically
-  address public Fin4MessagingAddress;
   bool public isNoninteractive = false;
 
   mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this verifier type
-
-  constructor(address Fin4MessagingAddr) public {
-    Fin4MessagingAddress = Fin4MessagingAddr;
-  }
 
   function getName() public view returns(string memory) {
     return name;
