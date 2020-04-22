@@ -10,6 +10,6 @@ contract Fin4ClaimingStub {
     function verifierRejectionPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress,
         uint claimId, address claimer) public;
 
-    function verifierAndClaimRejectionPingback(address tokenAddress, uint claimId, address claimer) public;
+    function claimRejectionPingback(address tokenAddress, uint claimId, address claimer) public;
 
 }

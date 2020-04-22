@@ -97,7 +97,7 @@ contract Fin4Claiming {
         MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
     }
 
-    function verifierAndClaimRejectionPingback(address tokenAddress, uint claimId, address claimer) public {
+    function claimRejectionPingback(address tokenAddress, uint claimId, address claimer) public {
         emit ClaimRejected(tokenAddress, claimId, claimer);
     }
 

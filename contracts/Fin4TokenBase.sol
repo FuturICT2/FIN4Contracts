@@ -198,7 +198,7 @@ contract Fin4TokenBase { // abstract class
     Fin4ClaimingStub(Fin4ClaimingAddress).verifierRejectionPingback(address(this), verifierTypeAddress, claimId, claims[claimId].claimer);
     if (!claims[claimId].gotRejected) {
       claims[claimId].gotRejected = true;
-      Fin4ClaimingStub(Fin4ClaimingAddress).verifierAndClaimRejectionPingback(address(this), claimId, claims[claimId].claimer);
+      Fin4ClaimingStub(Fin4ClaimingAddress).claimRejectionPingback(address(this), claimId, claims[claimId].claimer);
     }
   }
 
