@@ -26,7 +26,7 @@ contract Whitelisting is Fin4BaseVerifierType { // TODO make it extend Blacklist
             string memory message = string(abi.encodePacked(
                 "Your claim on token \'",
                 Fin4TokenStub(tokenAddress).name(),
-                "\' got rejected from the constraint \'Whitelisting\' because you are note whitelisted on this token"
+                "\' got rejected from the noninteractive verifier \'Whitelisting\' because you are note whitelisted on this token"
                 " - neither directly nor via group membership"));
             _sendRejectionNotice(address(this), tokenAddress, claimId, message);
         }

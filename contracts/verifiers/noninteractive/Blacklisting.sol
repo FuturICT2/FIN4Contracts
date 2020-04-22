@@ -24,7 +24,7 @@ contract Blacklisting is Fin4BaseVerifierType {
             string memory message = string(abi.encodePacked(
                 "Your claim on token \'",
                 Fin4TokenStub(tokenAddress).name(),
-                "\' got rejected from the constraint \'Blacklisting\' because you are blacklisted on this token"
+                "\' got rejected from the noninteractive verifier \'Blacklisting\' because you are blacklisted on this token"
                 " - either directly or via a group you are a member of"));
             _sendRejectionNotice(address(this), tokenAddress, claimId, message);
         } else {

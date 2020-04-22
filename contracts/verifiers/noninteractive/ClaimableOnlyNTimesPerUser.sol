@@ -20,7 +20,7 @@ contract ClaimableOnlyNTimesPerUser is Fin4BaseVerifierType {
           string memory message = string(abi.encodePacked(
               "Your claim on token \'",
               Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name(),
-              "\' got rejected from the constraint \'ClaimableOnlyNTimesPerUser\' because you reached the",
+              "\' got rejected from the noninteractive verifier \'ClaimableOnlyNTimesPerUser\' because you reached the",
               " maximum number of successful claims as defined by the token creator: ", uint2str(cap)));
           _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, message);
       } else {
