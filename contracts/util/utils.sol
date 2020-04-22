@@ -37,7 +37,7 @@ contract utils {
     return string(str);
   }
 
-  function arrayContainsAddress(address[] memory arr, address addrToCheck) public view returns(bool) {
+  function arrayContainsAddress(address[] memory arr, address addrToCheck) public pure returns(bool) {
     for (uint i = 0; i < arr.length; i++) {
       if (arr[i] == addrToCheck) {
         return true;
