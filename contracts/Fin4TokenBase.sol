@@ -66,7 +66,6 @@ contract Fin4TokenBase { // abstract class
     string comment;
     address[] requiredVerifierTypes;
     mapping(address => Status) verifierStatuses; // TODO store messages here too, as bytes32
-    mapping(address => uint) verifierInteractionTimes;
     uint claimCreationTime;
     uint claimApprovalTime;
     bool gotRejected;
@@ -173,7 +172,6 @@ contract Fin4TokenBase { // abstract class
 
   function receiveVerifierPendingNotice(address verifierTypeAddress, uint claimId) public {
     claims[claimId].verifierStatuses[verifierTypeAddress] = Status.PENDING;
-    // include that in verifierInteractionTimes? How?
 
     // decided not to forward this to Fin4Claiming and dispatch an event there,
     // frontend should set status of verifier to pending as soon as something that can be pending
@@ -184,7 +182,6 @@ contract Fin4TokenBase { // abstract class
   function receiveVerifierApprovalNotice(address verifierTypeAddress, uint claimId, string memory message) public {
     // TODO require something as guard?
     claims[claimId].verifierStatuses[verifierTypeAddress] = Status.APPROVED;
-    claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
     Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), verifierTypeAddress, claimId,
       claims[claimId].claimer, message);
     if (_allVerifierTypesApprovedOnClaim(claimId)) {
@@ -194,8 +191,6 @@ contract Fin4TokenBase { // abstract class
 
   function receiveVerifierRejectionNotice(address verifierTypeAddress, uint claimId, string memory message) public {
     claims[claimId].verifierStatuses[verifierTypeAddress] = Status.REJECTED;
-    // can there be multiple interaction times per verifier type?
-    claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
     Fin4ClaimingStub(Fin4ClaimingAddress).verifierRejectionPingback(address(this), verifierTypeAddress, claimId,
       claims[claimId].claimer, message);
     if (!claims[claimId].gotRejected) {
