@@ -65,7 +65,7 @@ contract Fin4TokenBase { // abstract class
     // uint timeGivenByUser; // TODO if useful? #ConceptualDecision
     string comment;
     address[] requiredVerifierTypes;
-    mapping(address => Status) verifierStatuses;
+    mapping(address => Status) verifierStatuses; // TODO store messages here too, as bytes32
     mapping(address => uint) verifierInteractionTimes;
     uint claimCreationTime;
     uint claimApprovalTime;
