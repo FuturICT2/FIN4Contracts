@@ -23,8 +23,7 @@ contract MaximumQuantityPerInterval is Fin4BaseVerifierType {
           uint2str(_getInterval(tokenAddrToReceiveVerifierNotice) / 1000), "s, max. quantity: ",
           uint2str(_getMaxQuantity(tokenAddrToReceiveVerifierNotice)), "."
         ));
-        Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
+        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, message);
       }
     }
 

@@ -70,7 +70,6 @@ contract Networking is Fin4BaseVerifierType {
         string memory message = string(abi.encodePacked("Your chosen approver '", addressToString(pa.approver),
             "' has rejected your approval request for the 'Networking' verifier on a claim on token '",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name(), "'"));
-        Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), pa.requester, message);
-        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
+        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
     }
 }

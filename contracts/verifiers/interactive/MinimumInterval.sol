@@ -21,8 +21,7 @@ contract MinimumInterval is Fin4BaseVerifierType {
           ": The time between your previous claim and this one is shorter than the minimum required timespan of ",
           uint2str(_getMinimumInterval(tokenAddrToReceiveVerifierNotice) / 1000), "s."
         ));
-        Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
+        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, message);
       }
     }
 

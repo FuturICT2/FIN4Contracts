@@ -21,8 +21,7 @@ contract Password is Fin4BaseVerifierType {
               Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name(),
               "\' got rejected from verifier type \'Password\' because the password you",
               " provided does not match the one set by the token creator"));
-        Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
+        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, message);
       }
     }
 

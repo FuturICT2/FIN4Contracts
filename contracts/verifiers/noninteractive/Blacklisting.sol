@@ -28,8 +28,7 @@ contract Blacklisting is Fin4BaseVerifierType {
                 Fin4TokenStub(tokenAddress).name(),
                 "\' got rejected from the constraint \'Blacklisting\' because you are blacklisted on this token"
                 " - either directly or via a group you are a member of"));
-            Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), user, message);
-            _sendRejectionNotice(address(this), tokenAddress, claimId, "");
+            _sendRejectionNotice(address(this), tokenAddress, claimId, message);
         } else {
             _sendApprovalNotice(address(this), tokenAddress, claimId, "");
         }

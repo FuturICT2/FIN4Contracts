@@ -20,8 +20,7 @@ contract Location is Fin4BaseVerifierType {
             Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name(),
              "' got rejected from verifier type 'Location' because",
              " your location is not within a circle the token creator defined."));
-        Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), msg.sender, message);
-        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
+        _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, message);
       }
     }
 

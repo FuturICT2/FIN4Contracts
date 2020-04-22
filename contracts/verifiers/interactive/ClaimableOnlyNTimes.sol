@@ -22,8 +22,7 @@ contract ClaimableOnlyNTimes is Fin4BaseVerifierType {
               Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name(),
               "\' got rejected from verifier type \'ClaimableOnlyNTimes\' because you reached the",
               " maximum number of claims as capped by the token creator: ", uint2str(cap)));
-          Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), user, message);
-          _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
+          _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, message);
       } else {
           _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
           userToTheirClaimsCountOnToken[user][tokenAddrToReceiveVerifierNotice] = usersClaimCountOnToken + 1;

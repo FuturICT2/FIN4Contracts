@@ -30,8 +30,7 @@ contract Whitelisting is Fin4BaseVerifierType { // TODO make it extend Blacklist
                 Fin4TokenStub(tokenAddress).name(),
                 "\' got rejected from the constraint \'Whitelisting\' because you are note whitelisted on this token"
                 " - neither directly nor via group membership"));
-            Fin4Messaging(Fin4MessagingAddress).addInfoMessage(address(this), user, message);
-            _sendRejectionNotice(address(this), tokenAddress, claimId, "");
+            _sendRejectionNotice(address(this), tokenAddress, claimId, message);
         }
     }
 
