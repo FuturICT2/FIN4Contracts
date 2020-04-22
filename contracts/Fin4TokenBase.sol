@@ -195,6 +195,7 @@ contract Fin4TokenBase { // abstract class
     claims[claimId].verifierStatuses[verifierTypeAddress] = Status.REJECTED;
     // can there be multiple interaction times per verifier type?
     claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
+    Fin4ClaimingStub(Fin4ClaimingAddress).verifierRejectionPingback(address(this), verifierTypeAddress, claimId, claims[claimId].claimer);
     if (!claims[claimId].gotRejected) {
       claims[claimId].gotRejected = true;
       Fin4ClaimingStub(Fin4ClaimingAddress).verifierAndClaimRejectionPingback(address(this), claimId, claims[claimId].claimer);
