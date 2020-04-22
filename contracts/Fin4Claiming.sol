@@ -11,8 +11,10 @@ contract Fin4Claiming {
         string comment, address[] requiredVerifierTypes);
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint mintedQuantity, uint256 newBalance);
     event ClaimRejected(address tokenAddr, uint claimId, address claimer);
-    event VerifierApproved(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId, address claimer);
-    event VerifierRejected(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId, address claimer);
+    event VerifierApproved(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
+        address claimer, string message);
+    event VerifierRejected(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
+        address claimer, string message);
     event UpdatedTotalSupply(address tokenAddr, uint256 totalSupply);
 
     /* If we go for the DNS pattern of this contract as Mark suggested #ConceptualDecision
@@ -68,14 +70,14 @@ contract Fin4Claiming {
         }
     }
 
-    function verifierApprovalPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId, address claimer)
-        public {
-        emit VerifierApproved(tokenAddrToReceiveVerifierNotice, verifierTypeAddress, claimId, claimer);
+    function verifierApprovalPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
+        address claimer, string memory message) public {
+        emit VerifierApproved(tokenAddrToReceiveVerifierNotice, verifierTypeAddress, claimId, claimer, message);
     }
 
-    function verifierRejectionPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId, address claimer)
-        public {
-        emit VerifierRejected(tokenAddrToReceiveVerifierNotice, verifierTypeAddress, claimId, claimer);
+    function verifierRejectionPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
+        address claimer, string memory message) public {
+        emit VerifierRejected(tokenAddrToReceiveVerifierNotice, verifierTypeAddress, claimId, claimer, message);
     }
 
     // called from Fin4TokenBase

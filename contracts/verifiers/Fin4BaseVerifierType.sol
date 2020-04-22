@@ -38,13 +38,15 @@ contract Fin4BaseVerifierType is utils {
 
   // Helper method for all verifier types to go through the same method when sending their approvals
   // to the respective claim on a token
-  function _sendApprovalNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId) internal {
+  function _sendApprovalNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId,
+    string memory message) internal {
     // TODO ensure it can only be called from within this SC?
-    Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierApprovalNotice(verifierTypeAddress, claimId);
+    Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierApprovalNotice(verifierTypeAddress, claimId, message);
   }
 
-  function _sendRejectionNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId) internal {
-    Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierRejectionNotice(verifierTypeAddress, claimId);
+  function _sendRejectionNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId,
+    string memory message) internal {
+    Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierRejectionNotice(verifierTypeAddress, claimId, message);
   }
 
   function _sendPendingNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId) internal {

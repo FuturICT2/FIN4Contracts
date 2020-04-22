@@ -181,21 +181,23 @@ contract Fin4TokenBase { // abstract class
   }
 
   // called from verifierType contracts
-  function receiveVerifierApprovalNotice(address verifierTypeAddress, uint claimId) public {
+  function receiveVerifierApprovalNotice(address verifierTypeAddress, uint claimId, string memory message) public {
     // TODO require something as guard?
     claims[claimId].verifierStatuses[verifierTypeAddress] = Status.APPROVED;
     claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
-    Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), verifierTypeAddress, claimId, claims[claimId].claimer);
+    Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), verifierTypeAddress, claimId,
+      claims[claimId].claimer, message);
     if (_allVerifierTypesApprovedOnClaim(claimId)) {
       approveClaim(claimId);
     }
   }
 
-  function receiveVerifierRejectionNotice(address verifierTypeAddress, uint claimId) public {
+  function receiveVerifierRejectionNotice(address verifierTypeAddress, uint claimId, string memory message) public {
     claims[claimId].verifierStatuses[verifierTypeAddress] = Status.REJECTED;
     // can there be multiple interaction times per verifier type?
     claims[claimId].verifierInteractionTimes[verifierTypeAddress] = now;
-    Fin4ClaimingStub(Fin4ClaimingAddress).verifierRejectionPingback(address(this), verifierTypeAddress, claimId, claims[claimId].claimer);
+    Fin4ClaimingStub(Fin4ClaimingAddress).verifierRejectionPingback(address(this), verifierTypeAddress, claimId,
+      claims[claimId].claimer, message);
     if (!claims[claimId].gotRejected) {
       claims[claimId].gotRejected = true;
       Fin4ClaimingStub(Fin4ClaimingAddress).claimRejectionPingback(address(this), claimId, claims[claimId].claimer);
