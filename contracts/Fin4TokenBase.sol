@@ -256,6 +256,7 @@ contract Fin4TokenBase { // abstract class
 
   // function getUnrejectedClaimsWithThisverifierTypeUnapproved archived in SensorOneTimeSignal
 
+  /* // used in SensorOneTimeSignal
   function verifierTypeIsRequired(address verifierType, uint claimId) public view returns(bool) {
     for (uint i = 0; i < claims[claimId].requiredVerifierTypes.length; i ++) {
       if (claims[claimId].requiredVerifierTypes[i] == verifierType) {
@@ -264,4 +265,5 @@ contract Fin4TokenBase { // abstract class
     }
     return false;
   }
+  */
 }
