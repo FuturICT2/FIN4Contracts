@@ -55,6 +55,11 @@ contract Fin4TokenBase { // abstract class
   // ProofAndVerifierStatusEnum
   enum Status { UNSUBMITTED, PENDING, APPROVED, REJECTED } // from https://ethereum.stackexchange.com/a/24087/56047
 
+  struct StatusObj {
+    Status status;
+    string message;
+  }
+
   uint nextClaimId = 0;
 
 	struct Claim {
@@ -65,7 +70,7 @@ contract Fin4TokenBase { // abstract class
     // uint timeGivenByUser; // TODO if useful? #ConceptualDecision
     string comment;
     address[] requiredVerifierTypes;
-    mapping(address => Status) verifierStatuses; // TODO store messages here too, as bytes32
+    mapping(address => StatusObj) verifierStatuses;
     uint claimCreationTime;
     uint claimApprovalTime;
     bool gotRejected;
@@ -95,7 +100,8 @@ contract Fin4TokenBase { // abstract class
     claim.requiredVerifierTypes = getRequiredVerifierTypes();
 
     for (uint i = 0; i < claim.requiredVerifierTypes.length; i ++) {
-      claim.verifierStatuses[claim.requiredVerifierTypes[i]] = Status.UNSUBMITTED;
+      StatusObj memory statusObj = StatusObj(Status.UNSUBMITTED, "");
+      claim.verifierStatuses[claim.requiredVerifierTypes[i]] = statusObj;
     }
     claim.isApproved = false;
     claim.gotRejected = false;
@@ -117,7 +123,7 @@ contract Fin4TokenBase { // abstract class
     address[] memory requiredVerifierTypes = getRequiredVerifierTypes();
     uint[] memory verifierTypeStatuses = new uint[](requiredVerifierTypes.length);
     for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
-      verifierTypeStatuses[i] = uint(claim.verifierStatuses[requiredVerifierTypes[i]]);
+      verifierTypeStatuses[i] = uint(claim.verifierStatuses[requiredVerifierTypes[i]].status);
     }
 
     return (claim.claimer, claim.isApproved, claim.gotRejected, claim.quantity, claim.claimCreationTime,
@@ -166,7 +172,8 @@ contract Fin4TokenBase { // abstract class
   address[] public requiredVerifierTypes;
 
   function receiveVerifierPendingNotice(address verifierTypeAddress, uint claimId) public {
-    claims[claimId].verifierStatuses[verifierTypeAddress] = Status.PENDING;
+    claims[claimId].verifierStatuses[verifierTypeAddress].status = Status.PENDING;
+    claims[claimId].verifierStatuses[verifierTypeAddress].message = ""; // TODO pass message here too
 
     // decided not to forward this to Fin4Claiming and dispatch an event there,
     // frontend should set status of verifier to pending as soon as something that can be pending
@@ -176,7 +183,8 @@ contract Fin4TokenBase { // abstract class
   // called from verifierType contracts
   function receiveVerifierApprovalNotice(address verifierTypeAddress, uint claimId, string memory message) public {
     // TODO require something as guard?
-    claims[claimId].verifierStatuses[verifierTypeAddress] = Status.APPROVED;
+    claims[claimId].verifierStatuses[verifierTypeAddress].status = Status.APPROVED;
+    claims[claimId].verifierStatuses[verifierTypeAddress].message = message;
     Fin4ClaimingStub(Fin4ClaimingAddress).verifierApprovalPingback(address(this), verifierTypeAddress, claimId,
       claims[claimId].claimer, message);
     if (_allVerifierTypesApprovedOnClaim(claimId)) {
@@ -185,7 +193,8 @@ contract Fin4TokenBase { // abstract class
   }
 
   function receiveVerifierRejectionNotice(address verifierTypeAddress, uint claimId, string memory message) public {
-    claims[claimId].verifierStatuses[verifierTypeAddress] = Status.REJECTED;
+    claims[claimId].verifierStatuses[verifierTypeAddress].status = Status.REJECTED;
+    claims[claimId].verifierStatuses[verifierTypeAddress].message = message;
     Fin4ClaimingStub(Fin4ClaimingAddress).verifierRejectionPingback(address(this), verifierTypeAddress, claimId,
       claims[claimId].claimer, message);
     if (!claims[claimId].gotRejected) {
@@ -211,7 +220,7 @@ contract Fin4TokenBase { // abstract class
 
   function _allVerifierTypesApprovedOnClaim(uint claimId) private view returns(bool) {
     for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
-      if (claims[claimId].verifierStatuses[requiredVerifierTypes[i]] != Status.APPROVED) {
+      if (claims[claimId].verifierStatuses[requiredVerifierTypes[i]].status != Status.APPROVED) {
         return false;
       }
     }
