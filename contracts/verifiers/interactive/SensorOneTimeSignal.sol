@@ -29,7 +29,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
             address token = sensorIDtoTokens[sensorID][i];
             uint[] memory claimIDs;
             address[] memory claimers;
-            (claimIDs, claimers) = Fin4TokenBase(token).getUnrejectedClaimsWithThisverifierTypeUnapproved(address(this));
+            (claimIDs, claimers) = Fin4TokenBase(token).getUnrejectedClaimsWithThisVerifierTypeUnapproved(address(this));
             for (uint j = 0; j < claimIDs.length; j ++) {
                 string memory message = string(abi.encodePacked(
                     "Your claim on token '", Fin4TokenStub(token).name(), "' got approved from sensor '",
@@ -42,7 +42,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
     }
 
     /* // Archived here from Fin4TokenBase
-    function getUnrejectedClaimsWithThisverifierTypeUnapproved(address verifierType) public view returns(uint[] memory, address[] memory) {
+    function getUnrejectedClaimsWithThisVerifierTypeUnapproved(address verifierType) public view returns(uint[] memory, address[] memory) {
         uint count = 0;
         for (uint i = 0; i < nextClaimId; i ++) {
             if (!claims[i].gotRejected && verifierTypeIsRequired(verifierType, i) && !claims[i].verifierStatuses[verifierType]) {

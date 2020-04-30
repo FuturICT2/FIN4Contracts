@@ -44,7 +44,7 @@ contract Fin4TokenCreator {
         string memory description, string memory actionsText, uint fixedAmount, string memory unit, bytes32[] memory underlyings) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
-        token.addverifierTypes(Fin4VerifyingAddress, requiredVerifierTypes);
+        token.addVerifierTypes(Fin4VerifyingAddress, requiredVerifierTypes);
 
         Fin4TokenManagement(Fin4TokenManagementAddress).checkForNewUnderlyings(underlyings);
         token.setUnderlyingsOnToken(underlyings);

@@ -241,7 +241,7 @@ contract Fin4TokenBase { // abstract class
     return requiredVerifierTypes;
   }
 
-  function addverifierTypes(address Fin4VerifyingAddr, address[] memory _requiredVerifierTypes) public {
+  function addVerifierTypes(address Fin4VerifyingAddr, address[] memory _requiredVerifierTypes) public {
     Fin4VerifyingAddress = Fin4VerifyingAddr;
     Fin4Verifying verifying = Fin4Verifying(Fin4VerifyingAddress);
 
