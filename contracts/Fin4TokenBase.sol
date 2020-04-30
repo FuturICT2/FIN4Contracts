@@ -124,11 +124,6 @@ contract Fin4TokenBase { // abstract class
       claim.comment, requiredVerifierTypes, verifierTypeStatuses);
   }
 
-  function getClaimInfo(uint claimId) public view returns(address, bool, uint, uint, string memory) {
-    return (claims[claimId].claimer, claims[claimId].isApproved,
-      claims[claimId].quantity, claims[claimId].claimCreationTime, claims[claimId].comment);
-  }
-
   function getClaimIds(address claimer) public view returns(uint[] memory) {
     uint count = 0;
     for (uint i = 0; i < nextClaimId; i ++) {
