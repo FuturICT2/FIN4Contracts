@@ -129,7 +129,7 @@ contract Fin4Claiming {
     }
 
     function getClaimOnThisToken(address token, uint claimId) public view
-        returns(address, bool, bool, uint, uint, string memory, address[] memory, uint[] memory) {
+        returns(address, bool, bool, uint, uint, string memory, address[] memory, uint[] memory, address[] memory) {
         return Fin4Token(token).getClaim(claimId);
     }
 }

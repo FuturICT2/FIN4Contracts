@@ -114,7 +114,8 @@ contract Fin4TokenBase { // abstract class
     return (nextClaimId - 1, claim.requiredVerifierTypes, claim.claimCreationTime, claim.quantity);
   }
 
-  function getClaim(uint claimId) public view returns(address, bool, bool, uint, uint, string memory, address[] memory, uint[] memory) {
+  function getClaim(uint claimId) public view returns(address, bool, bool, uint, uint, string memory, address[] memory,
+    uint[] memory, address[] memory) {
     // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
 
     Claim storage claim = claims[claimId];
@@ -126,8 +127,17 @@ contract Fin4TokenBase { // abstract class
       verifierTypeStatuses[i] = uint(claim.verifierStatuses[requiredVerifierTypes[i]].status);
     }
 
+    address[] memory verifiersWithMessages = new address[](requiredVerifierTypes.length);
+    uint count = 0;
+    for (uint i = 0; i < requiredVerifierTypes.length; i ++) {
+      if (bytes(claim.verifierStatuses[requiredVerifierTypes[i]].message).length > 0) {
+        verifiersWithMessages[count] = requiredVerifierTypes[i];
+        count ++;
+      }
+    }
+
     return (claim.claimer, claim.isApproved, claim.gotRejected, claim.quantity, claim.claimCreationTime,
-      claim.comment, requiredVerifierTypes, verifierTypeStatuses);
+      claim.comment, requiredVerifierTypes, verifierTypeStatuses, verifiersWithMessages);
   }
 
   function getClaimIds(address claimer) public view returns(uint[] memory) {
