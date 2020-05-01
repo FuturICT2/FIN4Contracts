@@ -240,17 +240,9 @@ contract Fin4TokenBase { // abstract class
     return requiredVerifierTypes;
   }
 
-  function addVerifierTypes(address Fin4VerifyingAddr, address[] memory _requiredVerifierTypes) public {
-    Fin4VerifyingAddress = Fin4VerifyingAddr;
-    Fin4Verifying verifying = Fin4Verifying(Fin4VerifyingAddress);
-
-    for (uint i = 0; i < _requiredVerifierTypes.length; i++) {
-      address verifierType = _requiredVerifierTypes[i];
-
-      require(verifying.verifierTypeIsRegistered(verifierType), "This address is not registered as verifier type in Fin4Verifying");
-      requiredVerifierTypes.push(verifierType);
-      Fin4BaseVerifierType(verifierType).registerTokenCreator(tokenCreator);
-    }
+  function addVerifierTypes(address[] memory _requiredVerifierTypes) public {
+    requiredVerifierTypes = _requiredVerifierTypes;
+    // TODO check if verifierTypeIsRegistered()
   }
 
   // function getUnrejectedClaimsWithThisverifierTypeUnapproved archived in SensorOneTimeSignal

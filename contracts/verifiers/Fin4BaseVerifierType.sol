@@ -10,8 +10,6 @@ contract Fin4BaseVerifierType is utils {
   bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate verifier", instead that's done automatically
   bool public isNoninteractive = false;
 
-  mapping (address => address) public fin4TokenToItsCreator; // at the same time a register of Fin4Tokens using this verifier type
-
   function getName() public view returns(string memory) {
     return name;
   }
@@ -45,10 +43,6 @@ contract Fin4BaseVerifierType is utils {
 
   function _sendPendingNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId) internal {
     Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierPendingNotice(verifierTypeAddress, claimId);
-  }
-
-  function registerTokenCreator(address tokenCreator) public {
-    fin4TokenToItsCreator[msg.sender] = tokenCreator;
   }
 
   // Used by verifier types that require the token creator to approve something
