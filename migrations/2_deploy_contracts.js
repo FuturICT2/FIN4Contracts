@@ -27,7 +27,7 @@ const verifierTypeContracts = [
 	*/
 	artifacts.require('SelfApprove'),
 	artifacts.require('SpecificAddress'),
-	artifacts.require('TokenCreator'),
+	artifacts.require('TokenCreatorApproval'),
 	artifacts.require('Password'),
 	artifacts.require('Picture'),
 	artifacts.require('Location'),

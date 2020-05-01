@@ -2,23 +2,23 @@ pragma solidity ^0.5.0;
 
 import "contracts/verifiers/interactive/SpecificAddress.sol";
 
-contract TokenCreator is SpecificAddress {
+contract TokenCreatorApproval is SpecificAddress {
 
    constructor() public  {}
 
   // @Override
   function init() public {
-    name = "TokenCreator";
+    name = "TokenCreatorApproval";
     description = "The token creator has to approve.";
   }
 
-  function submitProof_TokenCreator(address tokenAddrToReceiveVerifierNotice, uint claimId) public {
+  function submitProof_TokenCreatorApproval(address tokenAddrToReceiveVerifierNotice, uint claimId) public {
     submitProof_SpecificAddress(tokenAddrToReceiveVerifierNotice, claimId, getCreatorOfToken(tokenAddrToReceiveVerifierNotice));
   }
 
   // @Override
   function getMessageText() public pure returns(string memory) {
-    return "You as the token creator were requested to approve the verifier type TokenCreator on the token ";
+    return "You as the token creator were requested to approve the verifier type TokenCreatorApproval on the token ";
   }
 
 }
