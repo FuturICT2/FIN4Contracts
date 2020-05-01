@@ -103,6 +103,8 @@ module.exports = async function(deployer) {
 	await verifierTypeInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SpecificAddress
 	await verifierTypeInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	// TokenCreatorApproval
+	await verifierTypeInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Picture
 	await verifierTypeInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
 
