@@ -122,7 +122,7 @@ contract Fin4Claiming {
         return tokensWhereUserHasClaims[msg.sender];
     }
 
-    // ------------------------- CLAIM IDS -------------------------
+    // ------------------------- CLAIMS -------------------------
 
     function getMyClaimIdsOnThisToken(address token) public view returns(uint[] memory) {
         return Fin4Token(token).getClaimIds(msg.sender);
@@ -132,4 +132,9 @@ contract Fin4Claiming {
         returns(address, bool, bool, uint, uint, string memory, address[] memory, uint[] memory, address[] memory) {
         return Fin4Token(token).getClaim(claimId);
     }
+
+    function getVerifierMessageOnClaim(address token, uint claimId, address verifierAddress) public view returns(string memory) {
+        return Fin4Token(token).getVerifierMessageOnClaim(claimId, verifierAddress);
+    }
+
 }

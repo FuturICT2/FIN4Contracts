@@ -165,6 +165,10 @@ contract Fin4TokenBase { // abstract class
     return claims[claimId].gotRejected;
   }
 
+  function getVerifierMessageOnClaim(uint claimId, address verifierAddress) public view returns(string memory) {
+    return claims[claimId].verifierStatuses[verifierAddress].message;
+  }
+
   // ------------------------- METHODS USED BY VERIFIER TYPES -------------------------
 
   // function getTimeBetweenThisClaimAndThatClaimersPreviousOne archived in MinimumInterval
