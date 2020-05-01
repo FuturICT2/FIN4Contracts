@@ -49,6 +49,10 @@ contract Fin4TokenBase { // abstract class
   function name() public view returns(string memory);
   function symbol() public view returns(string memory);
 
+  function getTokenCreator() public view returns(address) {
+    return tokenCreator;
+  }
+
   // ------------------------- CLAIM -------------------------
 
   // ProofAndVerifierStatusEnum

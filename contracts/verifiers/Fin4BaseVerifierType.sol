@@ -47,7 +47,7 @@ contract Fin4BaseVerifierType is utils {
 
   // Used by verifier types that require the token creator to approve something
   function getCreatorOfToken(address tokenAddress) public view returns(address) {
-    return fin4TokenToItsCreator[tokenAddress];
+    return Fin4TokenStub(tokenAddress).getTokenCreator();
   }
 
   // On purpose not abstract so that deriving classes don't HAVE to implement it
