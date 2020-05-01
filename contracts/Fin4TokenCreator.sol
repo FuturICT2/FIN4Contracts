@@ -14,14 +14,12 @@ contract Fin4TokenCreator {
 
     address public Fin4ClaimingAddress;
     address public Fin4TokenManagementAddress;
-    address public Fin4VerifyingAddress;
 
     mapping (string => bool) public symbolIsUsed;
 
-    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4VerifyingAddr) public {
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr) public {
         Fin4ClaimingAddress = Fin4ClaimingAddr;
         Fin4TokenManagementAddress = Fin4TokenManagementAddr;
-        Fin4VerifyingAddress = Fin4VerifyingAddr;
     }
 
     // these two methods are propbably super costly
@@ -44,7 +42,7 @@ contract Fin4TokenCreator {
         string memory description, string memory actionsText, uint fixedAmount, string memory unit, bytes32[] memory underlyings) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
-        token.addVerifierTypes(Fin4VerifyingAddress, requiredVerifierTypes);
+        token.addVerifierTypes(requiredVerifierTypes);
 
         Fin4TokenManagement(Fin4TokenManagementAddress).checkForNewUnderlyings(underlyings);
         token.setUnderlyingsOnToken(underlyings);
@@ -67,8 +65,8 @@ contract Fin4TokenCreator {
 
 contract Fin4UncappedTokenCreator is Fin4TokenCreator {
 
-    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4VerifyingAddr)
-    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4VerifyingAddr)
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr)
+    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr)
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
@@ -83,8 +81,8 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
 
 contract Fin4CappedTokenCreator is Fin4TokenCreator {
 
-    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4VerifyingAddr)
-    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4VerifyingAddr)
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr)
+    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr)
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,

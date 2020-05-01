@@ -7,7 +7,6 @@ import "contracts/stub/Fin4ClaimingStub.sol";
 contract Fin4TokenBase { // abstract class
 
   address public Fin4ClaimingAddress;
-  address public Fin4VerifyingAddress;
   address public tokenCreator;
   string public description;
   string public actionsText;
