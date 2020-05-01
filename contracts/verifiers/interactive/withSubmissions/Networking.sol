@@ -58,22 +58,26 @@ contract Networking is Fin4BaseVerifierType {
         pendingApprovals[approver].push(pa);
     }
 
-    function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public {
+    function receiveApprovalFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
-        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
+        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
         Fin4Verifying(Fin4VerifyingAddress).addSubmission(
             address(this), pa.tokenAddrToReceiveVerifierNotice, pa.requester, pa.timestamp, 0, pa.attachment);
     }
 
-    function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
+    function receiveRejectionFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
         string memory message = string(abi.encodePacked("Your chosen approver '", addressToString(pa.approver),
             "' has rejected your approval request for the 'Networking' verifier on a claim on token '",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name(), "'"));
+
+        if (bytes(attachedMessage).length > 0) {
+            message = string(abi.encodePacked(message, ': ', attachedMessage));
+        }
         _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
     }
 }

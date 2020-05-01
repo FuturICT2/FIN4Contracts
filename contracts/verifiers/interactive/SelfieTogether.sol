@@ -82,7 +82,7 @@ contract SelfieTogether is ApprovalByGroupMember {
   }
 
   // @Override
-  function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public {
+  function receiveApprovalFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
     PendingApproval storage pa = pendingApprovals[pendingApprovalId];
 
     if (pa.isIndividualApprover) {
@@ -95,11 +95,11 @@ contract SelfieTogether is ApprovalByGroupMember {
     pa.isApproved = true;
 
     if (pendingApprovals[pa.linkedWithPendingApprovalId].isApproved) {
-      _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
+      _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
     }
   }
 
-  function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
+  function receiveRejectionFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
     PendingApproval memory pa = pendingApprovals[pendingApprovalId];
     string memory message;
 
@@ -114,6 +114,10 @@ contract SelfieTogether is ApprovalByGroupMember {
       message = string(abi.encodePacked(
         "A member of the appointed approver group has rejected your approval request for ",
         Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
+    }
+
+    if (bytes(attachedMessage).length > 0) {
+      message = string(abi.encodePacked(message, ': ', attachedMessage));
     }
 
     _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);

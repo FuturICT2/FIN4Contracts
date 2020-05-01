@@ -102,15 +102,15 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
 
     // copied method signature from SpecificAddress, then nothing has to be changed in Messages.jsx
 
-    function receiveApprovalFromSpecificAddress(uint pendingApprovalId) public {
+    function receiveApprovalFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
         markMessagesAsRead(pendingApprovalId);
 
-        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
+        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
     }
 
-    function receiveRejectionFromSpecificAddress(uint pendingApprovalId) public {
+    function receiveRejectionFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
         markMessagesAsRead(pendingApprovalId);
@@ -118,6 +118,9 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
         string memory message = string(abi.encodePacked(
             "A member of the appointed approver group has rejected your approval request for ",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
+        if (bytes(attachedMessage).length > 0) {
+            message = string(abi.encodePacked(message, ': ', attachedMessage));
+        }
         _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
     }
 
