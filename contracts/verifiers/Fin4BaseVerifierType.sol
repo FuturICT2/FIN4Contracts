@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.17;
 
 import "contracts/stub/Fin4TokenStub.sol";
 import "contracts/util/utils.sol";
