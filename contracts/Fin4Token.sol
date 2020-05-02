@@ -5,76 +5,76 @@ import 'contracts/Fin4TokenBase.sol';
 
 contract Fin4Token is Fin4TokenBase, ERC20Plus {
 
-  constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
-    bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, address initialSupplyOwner)
-    ERC20Plus(name, symbol, decimals, address(0), isBurnable, isTransferable, isMintable, _initialSupply, initialSupplyOwner)
-    Fin4TokenBase()
-    public {
-      tokenCreator = _tokenCreator;
-      initialSupply = _initialSupply;
-      // Otherwise token creators can mint themselves rich via command line #ConceptualDecision
-      // _removeMinter(tokenCreator);
+    constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
+        bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, address initialSupplyOwner)
+        ERC20Plus(name, symbol, decimals, address(0), isBurnable, isTransferable, isMintable, _initialSupply, initialSupplyOwner)
+        Fin4TokenBase()
+        public {
+            tokenCreator = _tokenCreator;
+            initialSupply = _initialSupply;
+            // Otherwise token creators can mint themselves rich via command line #ConceptualDecision
+            // _removeMinter(tokenCreator);
+        }
+
+    // TODO is it possible to move these two functions to Fin4TokenBase?
+
+    function getTokenInfo(address user) public view returns(bool, string memory, string memory,
+        string memory, string memory, uint256, uint, bool) {
+        return (user == tokenCreator, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
     }
 
-  // TODO is it possible to move these two functions to Fin4TokenBase?
+    function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
+        bool[] memory, uint[] memory, string memory) {
 
-  function getTokenInfo(address user) public view returns(bool, string memory, string memory,
-    string memory, string memory, uint256, uint, bool) {
-    return (user == tokenCreator, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
-  }
+        bool[] memory props = new bool[](4);
+        props[0] = isTransferable;
+        props[1] = isMintable;
+        props[2] = isBurnable;
+        props[3] = false; // isCapped
 
-  function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
-    bool[] memory, uint[] memory, string memory) {
+        uint[] memory values = new uint[](4);
+        values[0] = 0; // cap
+        values[1] = uint(decimals());
+        values[2] = fixedAmount;
+        values[3] = initialSupply;
 
-    bool[] memory props = new bool[](4);
-    props[0] = isTransferable;
-    props[1] = isMintable;
-    props[2] = isBurnable;
-    props[3] = false; // isCapped
-
-    uint[] memory values = new uint[](4);
-    values[0] = 0; // cap
-    values[1] = uint(decimals());
-    values[2] = fixedAmount;
-    values[3] = initialSupply;
-
-    return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
-  }
+        return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
+    }
 }
 
 // ----------------------------------------------------------------------------------------------------
 
 contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
 
-  constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
-    bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap, address initialSupplyOwner)
-    ERC20PlusCapped(name, symbol, decimals, address(0), isBurnable, cap, isTransferable, isMintable, _initialSupply, initialSupplyOwner)
-    Fin4TokenBase()
-    public {
-      tokenCreator = _tokenCreator;
-      initialSupply = _initialSupply;
+    constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
+        bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap, address initialSupplyOwner)
+        ERC20PlusCapped(name, symbol, decimals, address(0), isBurnable, cap, isTransferable, isMintable, _initialSupply, initialSupplyOwner)
+        Fin4TokenBase()
+        public {
+            tokenCreator = _tokenCreator;
+            initialSupply = _initialSupply;
+        }
+
+    function getTokenInfo(address user) public view returns(bool, string memory, string memory,
+        string memory, string memory, uint256, uint, bool) {
+        return (user == tokenCreator, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
     }
 
-  function getTokenInfo(address user) public view returns(bool, string memory, string memory,
-    string memory, string memory, uint256, uint, bool) {
-    return (user == tokenCreator, name(), symbol(), description, unit, totalSupply(), tokenCreationTime, fixedAmount != 0);
-  }
+    function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
+        bool[] memory, uint[] memory, string memory) {
 
-  function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
-    bool[] memory, uint[] memory, string memory) {
+        bool[] memory props = new bool[](4);
+        props[0] = isTransferable;
+        props[1] = isMintable;
+        props[2] = isBurnable;
+        props[3] = true; // isCapped
 
-    bool[] memory props = new bool[](4);
-    props[0] = isTransferable;
-    props[1] = isMintable;
-    props[2] = isBurnable;
-    props[3] = true; // isCapped
+        uint[] memory values = new uint[](4);
+        values[0] = cap();
+        values[1] = uint(decimals());
+        values[2] = fixedAmount;
+        values[3] = initialSupply;
 
-    uint[] memory values = new uint[](4);
-    values[0] = cap();
-    values[1] = uint(decimals());
-    values[2] = fixedAmount;
-    values[3] = initialSupply;
-
-    return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
-  }
+        return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
+    }
 }

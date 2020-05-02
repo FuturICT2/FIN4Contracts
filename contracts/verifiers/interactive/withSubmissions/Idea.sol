@@ -5,9 +5,9 @@ import "contracts/Fin4Verifying.sol";
 
 contract Idea is Fin4BaseVerifierType {
 
-   constructor() public  {
-      name = "Idea";
-      description = "Submit an idea."; // TODO better description?
+    constructor() public  {
+        name = "Idea";
+        description = "Submit an idea."; // TODO better description?
     }
 
     address public Fin4VerifyingAddress;

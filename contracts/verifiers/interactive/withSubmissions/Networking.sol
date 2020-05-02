@@ -7,9 +7,9 @@ import "contracts/Fin4Messaging.sol";
 
 contract Networking is Fin4BaseVerifierType {
 
-   constructor() public  {
-      name = "Networking";
-      description = "Submit content of your networking activity and your counterpart has to approve your claim.";
+    constructor() public  {
+        name = "Networking";
+        description = "Submit content of your networking activity and your counterpart has to approve your claim.";
     }
 
     address public Fin4VerifyingAddress;

@@ -18,46 +18,40 @@ contract REP is ERC20Plus {
         GOVToken = GOV(_token);
     }
 
- /**
-   * @dev Function to mint tokens
-   * @param to The address that will receive the minted tokens.
-   * @param value The amount of tokens to mint.
-   * @return A boolean that indicates if the operation was successful.
-   */
-  function mint(
-    address to,
-    uint256 value
-  )
-    public
-    returns (bool)
-  {
-    return super.mint(to, value);
-  }
+    /**
+    * @dev Function to mint tokens
+    * @param to The address that will receive the minted tokens.
+    * @param value The amount of tokens to mint.
+    * @return A boolean that indicates if the operation was successful.
+    */
+    function mint(address to, uint256 value) public returns (bool) {
+      return super.mint(to, value);
+    }
 
-  /**
-    @dev                Used to mint GOV tokens based on existing REP tokens 
-  */
-  function getGOVFromReputation() public returns (bool) {
-    Parameterizer parameterizer = GOVToken.parameterizer();
-    require(balanceOf(msg.sender) > parameterizer.get("pminReputation"), "user has less than pminReputation");
-    getGOVFromReputation(msg.sender);
-    return true;
-  }
+    /**
+    @dev Used to mint GOV tokens based on existing REP tokens
+    */
+    function getGOVFromReputation() public returns (bool) {
+      Parameterizer parameterizer = GOVToken.parameterizer();
+      require(balanceOf(msg.sender) > parameterizer.get("pminReputation"), "user has less than pminReputation");
+      getGOVFromReputation(msg.sender);
+      return true;
+    }
 
-  // for deployment-dev only, make sure this can't be misused => change access modifier to internal or private
-  function getGOVFromReputation(address tokenHolder) public returns (bool) {
-    require(GOVToken.balanceOf(tokenHolder) + GOVToken.getAmountsDelegatedByAUser(tokenHolder) < balanceOf(tokenHolder),
-      "Can't reset GOV balance because the user has more GOV than REP tokens (including delegated tokens).");
-    GOVToken.mint(tokenHolder, balanceOf(tokenHolder) - GOVToken.balanceOf(tokenHolder));
-    return true;
-  }
+    // for deployment-dev only, make sure this can't be misused => change access modifier to internal or private
+    function getGOVFromReputation(address tokenHolder) public returns (bool) {
+        require(GOVToken.balanceOf(tokenHolder) + GOVToken.getAmountsDelegatedByAUser(tokenHolder) < balanceOf(tokenHolder),
+            "Can't reset GOV balance because the user has more GOV than REP tokens (including delegated tokens).");
+        GOVToken.mint(tokenHolder, balanceOf(tokenHolder) - GOVToken.balanceOf(tokenHolder));
+        return true;
+    }
 
-  function getGOVTokenAddress() public view returns (address) {
-      return address(GOVToken);
-  }
+    function getGOVTokenAddress() public view returns (address) {
+        return address(GOVToken);
+    }
 
-  function getGOVTokenAmount() public view returns (uint256) {
-      return GOVToken.balanceOf(msg.sender);
-  }
+    function getGOVTokenAmount() public view returns (uint256) {
+        return GOVToken.balanceOf(msg.sender);
+    }
 
 }
