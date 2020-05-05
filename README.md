@@ -34,14 +34,14 @@ The file `config.json` at root level must be added and filled.
 
 The first two fields are only necessary for non-local deployments and are used in `truffle-config.js`. The account encoded by the mnemonic is paying the deployment costs. Therefore it has to have sufficient funds on the respective network. The *Infura API* key can be obtained by creating a project on infura.io: it is the *Project ID* under *View Project*.
 
-The last two fields define where `truffle` compiles the contract into JSON format and where the `Fin4Main` address will be stored after deployment. In the example below, these paths are set in a way that assumes this FIN4Contracts repo to be sitting next to the [FIN4Xplorer](https://github.com/FuturICT2/FIN4Xplorer) repo containing the frontend react app. There these files are required for running the app. If you don't build these contracts/addresses files directly there but want to run the frontend, you must manually make sure to place them where the frontend expects them.
+The last two fields define where `truffle` compiles the contract into JSON format and where the deployment info (`Fin4Main` address and the name of the network) will be saved to during deployment. In the example below, these paths are set in a way that assumes this FIN4Contracts repo to be sitting next to the [FIN4Xplorer](https://github.com/FuturICT2/FIN4Xplorer) repo containing the frontend react app. There these files are required for running the app. If you don't build these contracts/addresses files directly there but want to run the frontend, you must manually make sure to place them where the frontend expects them.
 
 ```json
 {
     "MNEMONIC": "",
     "INFURA_API_KEY": "",
     "CONTRACTS_BUILD_DIRECTORY": "../FIN4Xplorer/src/build/contracts",
-    "ADDRESS_SAVING_LOCATION": "../../FIN4Xplorer/src/config"
+    "DEPLOYMENT_INFO_SAVING_LOCATION": "../../FIN4Xplorer/src/config"
 }
 ```
 
