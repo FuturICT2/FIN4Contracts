@@ -12,6 +12,7 @@ const Fin4Messaging = artifacts.require('Fin4Messaging');
 const Fin4Verifying = artifacts.require('Fin4Verifying');
 const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
+const Fin4Underlyings = artifacts.require('Fin4Underlyings');
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const verifierTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
@@ -70,6 +71,9 @@ module.exports = async function(deployer) {
 	//await deployer.deploy(Fin4OracleHub);
 	//const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
+	await deployer.deploy(Fin4Underlyings);
+	const Fin4UnderlyingsInstance = await Fin4Underlyings.deployed();
+
 	await Fin4MainInstance.setSatelliteAddresses(
 		Fin4UncappedTokenCreatorInstance.address,
 		Fin4CappedTokenCreatorInstance.address,
@@ -79,7 +83,8 @@ module.exports = async function(deployer) {
 		Fin4MessagingInstance.address,
 		Fin4VerifyingInstance.address,
 		Fin4GroupsInstance.address,
-		Fin4SystemParametersInstance.address
+		Fin4SystemParametersInstance.address,
+		Fin4UnderlyingsInstance.address
 	);
 
 	// VERIFIER TYPES
