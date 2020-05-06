@@ -13,6 +13,10 @@ const Fin4Verifying = artifacts.require('Fin4Verifying');
 const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const Fin4Underlyings = artifacts.require('Fin4Underlyings');
+const MintingUnderlying = artifacts.require('MintingUnderlying');
+const TransferUnderlying = artifacts.require('TransferUnderlying');
+const SwapUnderlying = artifacts.require('SwapUnderlying');
+
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const verifierTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
@@ -92,6 +96,17 @@ module.exports = async function(deployer) {
 	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract)));
 	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
+
+	// FIN4 UNDERLYINGS IMPLEMENTATIONS
+	await deployer.deploy(MintingUnderlying);
+	await deployer.deploy(TransferUnderlying);
+	await deployer.deploy(SwapUnderlying);
+	const MintingUnderlyingInstance = await MintingUnderlying.deployed();
+	const TransferUnderlyingInstance = await TransferUnderlying.deployed();
+	const SwapUnderlyingInstance = await SwapUnderlying.deployed();
+	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("Minting Underlying"), MintingUnderlyingInstance.address);
+	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("Transfer Underlying"), TransferUnderlyingInstance.address);
+	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("Swap Underlying"), SwapUnderlyingInstance.address);
 
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices
