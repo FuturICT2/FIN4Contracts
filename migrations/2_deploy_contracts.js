@@ -48,9 +48,12 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4SystemParameters);
 	const Fin4SystemParametersInstance = await Fin4SystemParameters.deployed();
 
+	await deployer.deploy(Fin4Underlyings);
+	const Fin4UnderlyingsInstance = await Fin4Underlyings.deployed();
+
 	await deployer.deploy(Fin4Verifying);
 	const Fin4VerifyingInstance = await Fin4Verifying.deployed();
-	await deployer.deploy(Fin4Claiming, Fin4SystemParametersInstance.address);
+	await deployer.deploy(Fin4Claiming, Fin4SystemParametersInstance.address, Fin4UnderlyingsInstance.address);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
 
 	await deployer.deploy(Fin4TokenManagement, Fin4SystemParametersInstance.address);
@@ -70,9 +73,6 @@ module.exports = async function(deployer) {
 
 	//await deployer.deploy(Fin4OracleHub);
 	//const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
-
-	await deployer.deploy(Fin4Underlyings);
-	const Fin4UnderlyingsInstance = await Fin4Underlyings.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
 		Fin4UncappedTokenCreatorInstance.address,

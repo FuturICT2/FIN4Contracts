@@ -18,9 +18,7 @@ contract Fin4TokenBase { // abstract class
     bool private initDone = false;
     bool private Fin4ClaimingHasMinterRole = true;
 
-    // TODO instead of keeping copies here, instead just store indizes
-    // of the array in Fin4TokenManagement?
-    bytes32[] public underlyings;
+    uint[] public fin4UnderlyingIds; // those provided by Fin4
 
     constructor() public {
         tokenCreationTime = now;
@@ -38,12 +36,12 @@ contract Fin4TokenBase { // abstract class
         initDone = true;
     }
 
-    function setUnderlyingsOnToken(bytes32[] memory _underlyings) public {
-        underlyings = _underlyings;
+    function setFin4UnderlyingIds(uint[] memory _fin4UnderlyingIds) public {
+        fin4UnderlyingIds = _fin4UnderlyingIds;
     }
 
-    function getUnderlyingsOnToken() public view returns(bytes32[] memory) {
-        return underlyings;
+    function getFin4UnderlyingIds() public view returns(uint[] memory) {
+        return fin4UnderlyingIds;
     }
 
     function name() public view returns(string memory);

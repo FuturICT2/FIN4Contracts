@@ -1,5 +1,8 @@
 pragma solidity ^0.5.17;
 
+import 'contracts/Fin4TokenBase.sol';
+import 'contracts/underlyings/UnderlyingInterface.sol';
+
 contract Fin4Underlyings {
 
     constructor() public {}
@@ -34,6 +37,17 @@ contract Fin4Underlyings {
             contractAddresses[i] = underlyings[i].contractAddress;
         }
         return (ids, names, contractAddresses);
+    }
+
+    // called upon a succesful claim from Fin4Claiming
+    function triggerUnderlyings(address tokenAddress, address claimer, uint quantity) public {
+        uint[] memory underlyingIds = Fin4TokenBase(tokenAddress).getFin4UnderlyingIds();
+        for (uint i = 0; i < underlyingIds.length; i ++) {
+            address contractAddress = underlyings[underlyingIds[i]].contractAddress;
+            if (contractAddress != address(0)) {
+                UnderlyingInterface(contractAddress).successfulClaimCallback(tokenAddress, claimer, quantity);
+            }
+        }
     }
 
 }
