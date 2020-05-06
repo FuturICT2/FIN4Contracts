@@ -19,6 +19,8 @@ contract Fin4TokenBase { // abstract class
     bool private Fin4ClaimingHasMinterRole = true;
 
     uint[] public fin4UnderlyingIds; // those provided by Fin4
+    // TODO alongside Fin4 underlyings, token creators must also be able to add their own ones (that implement UnderlyingInterface)
+    // address[] public customUnderlyingAddresses
 
     constructor() public {
         tokenCreationTime = now;

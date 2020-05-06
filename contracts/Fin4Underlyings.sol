@@ -15,6 +15,7 @@ contract Fin4Underlyings {
         bytes32 name;
         address contractAddress; // can be external to Fin4, must implement xyz
         // TODO: valid for / editable later on / what else?
+        // TODO a visibility boolean to optionally hide it in frontend?
     }
 
     uint public nextUnderlyingId = 0;
