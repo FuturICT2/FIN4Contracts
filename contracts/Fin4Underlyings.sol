@@ -2,6 +2,7 @@ pragma solidity ^0.5.17;
 
 import 'contracts/Fin4TokenBase.sol';
 import 'contracts/underlyings/UnderlyingInterface.sol';
+import 'contracts/underlyings/UnderlyingParameterizedInterface.sol';
 
 contract Fin4Underlyings {
 
@@ -38,6 +39,10 @@ contract Fin4Underlyings {
             contractAddresses[i] = underlyings[i].contractAddress;
         }
         return (ids, names, contractAddresses);
+    }
+
+    function getParamsEncodedOnUnderlyingContract(address contractAddress) public view returns(string memory) {
+        return UnderlyingParameterizedInterface(contractAddress).getParameterForTokenCreatorToSetEncoded();
     }
 
     // called upon a succesful claim from Fin4Claiming
