@@ -8,4 +8,10 @@ contract MintingUnderlying is UnderlyingInterface {
         // TODO
     }
 
+    // if beneficiary is the zero address, mint to the claimer
+    function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
+        return "address:tokenToMint:address of token to mint,address:beneficiary:leave blank for it to be the claimer,"
+            "uint:fixedAmount:per successful claim:int,uint:quantityFactor:claimed quantity gets multiplied by this";
+    }
+
 }
