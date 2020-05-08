@@ -2,7 +2,7 @@ pragma solidity ^0.5.17;
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';
-import 'contracts/stub/MintingStub.sol';
+import 'contracts/stub/MintTransferStub.sol';
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4Underlyings.sol";
 
@@ -89,7 +89,7 @@ contract Fin4Claiming {
 
         if (canMint) {
             // TODO verify this makes sense and msg.sender is the token
-            MintingStub(tokenAddress).mint(claimer, quantity);
+            MintTransferStub(tokenAddress).mint(claimer, quantity);
             // can changes to totalSupply happen at other places too though? Definitely if we use the
             // ERC20Plus contract with burning for instance... #ConceptualDecision
             emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
@@ -101,7 +101,7 @@ contract Fin4Claiming {
         emit ClaimApproved(tokenAddress, claimId, claimer, quantity, Fin4Token(tokenAddress).balanceOf(claimer));
 
         // REP reward for a successful claim
-        MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
+        MintTransferStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
     }
 
     function claimRejectionPingback(address tokenAddress, uint claimId, address claimer) public {

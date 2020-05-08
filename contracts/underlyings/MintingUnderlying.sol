@@ -2,7 +2,7 @@ pragma solidity ^0.5.17;
 
 import 'contracts/underlyings/UnderlyingInterface.sol';
 import 'contracts/underlyings/UnderlyingParameterizedInterface.sol';
-import 'contracts/stub/MintingStub.sol';
+import 'contracts/stub/MintTransferStub.sol';
 
 contract MintingUnderlying is UnderlyingInterface, UnderlyingParameterizedInterface {
 
@@ -24,7 +24,7 @@ contract MintingUnderlying is UnderlyingInterface, UnderlyingParameterizedInterf
             amount = parameterSet.fixedAmount;
         }
 
-        MintingStub(parameterSet.tokenToMint).mint(beneficiary, amount);
+        MintTransferStub(parameterSet.tokenToMint).mint(beneficiary, amount);
     }
 
     // if beneficiary is the zero address, mint to the claimer

@@ -2,7 +2,7 @@ pragma solidity ^0.5.17;
 // pragma experimental ABIEncoderV2; --> allows string[] memory
 
 import 'contracts/Fin4Token.sol';
-import 'contracts/stub/MintingStub.sol';
+import 'contracts/stub/MintTransferStub.sol';
 import 'contracts/Fin4SystemParameters.sol';
 
 contract Fin4TokenManagement {
@@ -32,7 +32,7 @@ contract Fin4TokenManagement {
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
 
         // REP reward for creating a new token
-        MintingStub(Fin4ReputationAddress).mint(token.tokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
+        MintTransferStub(Fin4ReputationAddress).mint(token.tokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
 
         allFin4Tokens.push(tokenAddress);
 
