@@ -98,16 +98,16 @@ module.exports = async function(deployer) {
 	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
 
-	// FIN4 UNDERLYINGS IMPLEMENTATIONS
+	// FIN4 UNDERLYINGS IMPLEMENTATIONS - note that the name passed in must match the contract name exactly for those with contract addresses
 	await deployer.deploy(MintingUnderlying);
 	const MintingUnderlyingInstance = await MintingUnderlying.deployed();
-	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("Minting Underlying"), MintingUnderlyingInstance.address);
+	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("MintingUnderlying"), MintingUnderlyingInstance.address);
 	// await deployer.deploy(TransferUnderlying);
 	// const TransferUnderlyingInstance = await TransferUnderlying.deployed();
-	// await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("Transfer Underlying"), TransferUnderlyingInstance.address);
+	// await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("TransferUnderlying"), TransferUnderlyingInstance.address);
 	// await deployer.deploy(SwapUnderlying);
 	// const SwapUnderlyingInstance = await SwapUnderlying.deployed();
-	// await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("Swap Underlying"), SwapUnderlyingInstance.address);
+	// await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("SwapUnderlying"), SwapUnderlyingInstance.address);
 
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices
