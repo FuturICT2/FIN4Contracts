@@ -1,9 +1,10 @@
 pragma solidity ^0.5.17;
 
 import 'contracts/underlyings/UnderlyingInterface.sol';
+import 'contracts/underlyings/UnderlyingParameterizedInterface.sol';
 import 'contracts/stub/MintingStub.sol';
 
-contract MintingUnderlying is UnderlyingInterface {
+contract MintingUnderlying is UnderlyingInterface, UnderlyingParameterizedInterface {
 
     function successfulClaimCallback(address hostTokenForUnderlying, address claimer, uint quantity) public {
         // msg.sender must be Fin4Underlying, plus other security checks?
