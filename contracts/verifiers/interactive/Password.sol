@@ -28,7 +28,7 @@ contract Password is Fin4BaseVerifierType {
         return "string:password:alphanumeric string";
     }
 
-    mapping (address => string) public tokenToParameter;
+    mapping (address => string) private tokenToParameter;
 
     function setParameters(address token, string memory password) public {
         tokenToParameter[token] = password;

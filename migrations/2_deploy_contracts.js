@@ -12,19 +12,15 @@ const Fin4Messaging = artifacts.require('Fin4Messaging');
 const Fin4Verifying = artifacts.require('Fin4Verifying');
 const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
+const Trigonometry = artifacts.require('Trigonometry');
+const Strings = artifacts.require('strings');
+// const Location = artifacts.require('Location');
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const verifierTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
 	artifacts.require('SelfieTogether'),
 	artifacts.require('Blacklisting'),
 	artifacts.require('Whitelisting'),
-	//artifacts.require('SensorOneTimeSignal'),
-	/* 
-	These include the submissions feature:
-	artifacts.require('Idea'),
-	artifacts.require('Networking'),
-	artifacts.require('HappyMoment'),
-	*/
 	artifacts.require('SelfApprove'),
 	artifacts.require('SpecificAddress'),
 	artifacts.require('TokenCreatorApproval'),
@@ -32,6 +28,13 @@ const verifierTypeContracts = [
 	artifacts.require('Picture'),
 	artifacts.require('Location'),
 	artifacts.require('ClaimableOnlyNTimesPerUser')
+	//artifacts.require('SensorOneTimeSignal'),
+	/*
+	These include the submissions feature:
+	artifacts.require('Idea'),
+	artifacts.require('Networking'),
+	artifacts.require('HappyMoment'),
+	*/
 	//artifacts.require('MinimumInterval'),
 	//artifacts.require('MaximumQuantityPerInterval'),
 ];
@@ -41,6 +44,17 @@ module.exports = async function(deployer) {
 
 	await deployer.deploy(Fin4Main);
 	const Fin4MainInstance = await Fin4Main.deployed();
+
+	await deployer.deploy(Trigonometry);
+	const TrigonometryInstance = await Trigonometry.deployed();
+	deployer.link(Trigonometry, verifierTypeContracts[9]);
+
+	await deployer.deploy(Strings);
+	const StringsInstance = await Strings.deployed();
+	deployer.link(Strings, verifierTypeContracts[9]);
+
+	// await deployer.deploy(Location);
+	// const LocationInstance = await Location.deployed();
 
 	// SATELLITE CONTRACTS
 
@@ -87,7 +101,6 @@ module.exports = async function(deployer) {
 	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract)));
 	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
-
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices
 
