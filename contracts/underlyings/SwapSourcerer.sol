@@ -67,8 +67,8 @@ contract SwapSourcerer is UnderlyingParameterizedInterface {
     }
 
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
-        return "address:pat:address of PAT,address:collateral:address of collateral token,"
-            "uint:exchangeRatio:give n get n*x collateral";
+        // omit pat address because frontend passes it as first argument always with setParameters()
+        return "address:collateral:address of collateral token,uint:exchangeRatio:give n get n*x collateral";
     }
 
     function getCollateralBalanceOnSwapPair(address pat, address collateral) public view returns(uint) {
