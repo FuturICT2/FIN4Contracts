@@ -68,7 +68,7 @@ contract SwapUnderlying {
 
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
         return "address:pat:address of PAT,address:collateral:address of collateral token,"
-            "uint:exchangeRatio:give n token and get n*x collateral";
+            "uint:exchangeRatio:give n, get n*x collateral";
     }
 
     function getCollateralBalanceOnSwapPair(address pat, address collateral) public view returns(uint) {
