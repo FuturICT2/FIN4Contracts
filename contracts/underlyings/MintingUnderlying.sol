@@ -5,6 +5,7 @@ import 'contracts/stub/MintTransferStub.sol';
 
 contract MintingUnderlying is UnderlyingParameterizedInterface {
 
+    // DEPRECATED
     function successfulClaimCallback(address hostTokenForUnderlying, address claimer, uint quantity) public {
         // msg.sender must be Fin4Underlying, plus other security checks?
         ParameterSet storage parameterSet = tokenToParameterSet[hostTokenForUnderlying];
