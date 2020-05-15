@@ -71,4 +71,24 @@ contract SwapUnderlying {
             "uint:exchangeRatio:give n token and get n*x collateral";
     }
 
+    function getCollateralBalanceOnSwapPair(address pat, address collateral) public view returns(uint) {
+        bytes32 id = getId(pat, collateral);
+        require(pairs[id].exists, "Swap pair does not exist");
+        return pairs[id].totalCollateralBalance;
+    }
+
+    function getSwapPairs() public view returns(address[] memory, address[] memory, uint[] memory, uint[] memory) {
+        address[] memory pats = new address[](ids.length);
+        address[] memory collaterals = new address[](ids.length);
+        uint[] memory collateralBalances = new uint[](ids.length);
+        uint[] memory exchangeRatios = new uint[](ids.length);
+        for (uint i = 0; i < ids.length; i ++) {
+            pats[i] = pairs[ids[i]].pat;
+            collaterals[i] = pairs[ids[i]].collateral;
+            collateralBalances[i] = pairs[ids[i]].totalCollateralBalance;
+            exchangeRatios[i] = pairs[ids[i]].exchangeRatio;
+        }
+        return (pats, collaterals, collateralBalances, exchangeRatios);
+    }
+
 }
