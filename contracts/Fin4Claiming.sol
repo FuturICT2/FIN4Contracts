@@ -4,7 +4,6 @@ import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';
 import 'contracts/stub/MintTransferStub.sol';
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
-import "contracts/Fin4Underlyings.sol";
 
 contract Fin4Claiming {
 
@@ -28,12 +27,10 @@ contract Fin4Claiming {
     address public creator;
     address public Fin4SystemParametersAddress;
     address public Fin4ReputationAddress;
-    address public Fin4UnderlyingsAddress;
 
-    constructor(address Fin4SystemParametersAddr, address Fin4UnderlyingsAddr) public {
+    constructor(address Fin4SystemParametersAddr) public {
         creator = msg.sender;
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
-        Fin4UnderlyingsAddress = Fin4UnderlyingsAddr;
     }
 
     function setFin4ReputationAddress(address Fin4ReputationAddr) public {
@@ -94,8 +91,6 @@ contract Fin4Claiming {
             // ERC20Plus contract with burning for instance... #ConceptualDecision
             emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
         }
-
-        Fin4Underlyings(Fin4UnderlyingsAddress).triggerUnderlyings(tokenAddress, claimer, quantity);
 
         // listen to this event if you provide your own minting policy
         emit ClaimApproved(tokenAddress, claimId, claimer, quantity, Fin4Token(tokenAddress).balanceOf(claimer));
