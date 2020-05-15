@@ -3,7 +3,7 @@ pragma solidity ^0.5.17;
 import 'contracts/underlyings/UnderlyingParameterizedInterface.sol';
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract SwapUnderlying {
+contract SwapSourcerer is UnderlyingParameterizedInterface {
 
     struct SwapPair {
         bool exists;

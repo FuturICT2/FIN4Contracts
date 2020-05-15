@@ -13,7 +13,7 @@ const Fin4Verifying = artifacts.require('Fin4Verifying');
 const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const Fin4Underlyings = artifacts.require('Fin4Underlyings');
-const SwapUnderlying = artifacts.require('SwapUnderlying');
+const SwapSourcerer = artifacts.require('SwapSourcerer');
 
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const verifierTypeContracts = [
@@ -96,9 +96,9 @@ module.exports = async function(deployer) {
 	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
 
 	// FIN4 UNDERLYINGS IMPLEMENTATIONS - note that the name passed in must match the contract name exactly for those with contract addresses
-	await deployer.deploy(SwapUnderlying);
-	const SwapUnderlyingInstance = await SwapUnderlying.deployed();
-	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("SwapUnderlying"), SwapUnderlyingInstance.address);
+	await deployer.deploy(SwapSourcerer);
+	const SwapSourcererInstance = await SwapSourcerer.deployed();
+	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("SwapSourcerer"), SwapSourcererInstance.address);
 
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices
