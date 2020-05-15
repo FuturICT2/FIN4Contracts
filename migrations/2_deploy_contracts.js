@@ -14,7 +14,6 @@ const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const Fin4Underlyings = artifacts.require('Fin4Underlyings');
 const MintingUnderlying = artifacts.require('MintingUnderlying');
-const TransferUnderlying = artifacts.require('TransferUnderlying');
 // const SwapUnderlying = artifacts.require('SwapUnderlying');
 // const BurnUnderlying = artifacts.require('BurnUnderlying');
 
@@ -102,9 +101,6 @@ module.exports = async function(deployer) {
 	await deployer.deploy(MintingUnderlying);
 	const MintingUnderlyingInstance = await MintingUnderlying.deployed();
 	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("MintingUnderlying"), MintingUnderlyingInstance.address);
-	await deployer.deploy(TransferUnderlying);
-	const TransferUnderlyingInstance = await TransferUnderlying.deployed();
-	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("TransferUnderlying"), TransferUnderlyingInstance.address);
 	// await deployer.deploy(SwapUnderlying);
 	// const SwapUnderlyingInstance = await SwapUnderlying.deployed();
 	// await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("SwapUnderlying"), SwapUnderlyingInstance.address);
