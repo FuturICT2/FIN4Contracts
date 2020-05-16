@@ -13,6 +13,7 @@ contract SwapSourcerer is UnderlyingParameterizedInterface {
         address collateral;
         uint exchangeRatio;
         uint totalCollateralBalance;
+        uint totalSwappedPatAmount;
         mapping(address => uint) contributions;
         address[] contributors;
     }
@@ -63,6 +64,7 @@ contract SwapSourcerer is UnderlyingParameterizedInterface {
         // send COLLATERAL --> TODO check balance before
         ERC20(collateral).transfer(msg.sender, amount * pairs[id].exchangeRatio);
 
+        pairs[id].totalSwappedPatAmount += amount;
         pairs[id].totalCollateralBalance -= amount;
     }
 
