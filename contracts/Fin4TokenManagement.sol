@@ -9,7 +9,7 @@ contract Fin4TokenManagement {
 
     // TODO do we need the indexed keyword for event params?
     event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator,
-        uint creationTime, bool hasFixedMintingQuantity, uint[] underlyings);
+        uint creationTime, bool hasFixedMintingQuantity);
 
     address public creator;
     address public Fin4SystemParametersAddress;
@@ -38,7 +38,7 @@ contract Fin4TokenManagement {
 
         // or cheaper/better to get these values via one getter?
         emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), token.description(), token.unit(),
-            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0, token.getFin4UnderlyingIds());
+            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0);
     }
 
     function getAllFin4Tokens() public view returns(address[] memory) {

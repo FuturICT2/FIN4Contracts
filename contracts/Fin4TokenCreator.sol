@@ -39,12 +39,10 @@ contract Fin4TokenCreator {
     }
 
     function postCreationSteps(address tokenAddress, address[] memory requiredVerifierTypes, address[] memory minterRoles,
-        string memory description, string memory actionsText, uint fixedAmount, string memory unit, uint[] memory fin4UnderlyingIds) public {
+        string memory description, string memory actionsText, uint fixedAmount, string memory unit) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
         token.addVerifierTypes(requiredVerifierTypes);
-
-        token.setFin4UnderlyingIds(fin4UnderlyingIds);
 
         bool Fin4ClaimingHasMinterRole = false;
         for (uint i = 0; i < minterRoles.length; i++) {

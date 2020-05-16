@@ -18,10 +18,6 @@ contract Fin4TokenBase { // abstract class
     bool private initDone = false;
     bool private Fin4ClaimingHasMinterRole = true;
 
-    uint[] public fin4UnderlyingIds; // those provided by Fin4
-    // TODO alongside Fin4 underlyings, token creators must also be able to add their own ones
-    // address[] public customUnderlyingAddresses
-
     constructor() public {
         tokenCreationTime = now;
     }
@@ -36,14 +32,6 @@ contract Fin4TokenBase { // abstract class
         fixedAmount = _fixedAmount;
         unit = _unit;
         initDone = true;
-    }
-
-    function setFin4UnderlyingIds(uint[] memory _fin4UnderlyingIds) public {
-        fin4UnderlyingIds = _fin4UnderlyingIds;
-    }
-
-    function getFin4UnderlyingIds() public view returns(uint[] memory) {
-        return fin4UnderlyingIds;
     }
 
     function name() public view returns(string memory);
