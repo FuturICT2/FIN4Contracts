@@ -47,6 +47,7 @@ contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
         ids.push(id);
     }
 
+    // omit pat address because frontend passes it as first argument always with setParameters()
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory);
 
     function exchange(address pat, address collateral, uint amount) public;

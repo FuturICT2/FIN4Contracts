@@ -32,8 +32,8 @@ contract SwapSourcerer is BaseSourcerer {
     }
 
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
-        // omit pat address because frontend passes it as first argument always with setParameters()
-        return "address:collateral:address of collateral token,uint:exchangeRatio:give n get n*x collateral";
+        return "address:collateral:address of collateral token,address:beneficiary:leave blank for it to be the claimer,"
+            "uint:exchangeRatio:give n get n*x collateral";
     }
 
 }
