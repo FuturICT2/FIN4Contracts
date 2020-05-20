@@ -14,6 +14,7 @@ const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const Fin4Underlyings = artifacts.require('Fin4Underlyings');
 const SwapSourcerer = artifacts.require('SwapSourcerer');
+const MintingSourcerer = artifacts.require('MintingSourcerer');
 
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const verifierTypeContracts = [
@@ -99,6 +100,10 @@ module.exports = async function(deployer) {
 	await deployer.deploy(SwapSourcerer);
 	const SwapSourcererInstance = await SwapSourcerer.deployed();
 	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("SwapSourcerer"), SwapSourcererInstance.address);
+
+	await deployer.deploy(MintingSourcerer);
+	const MintingSourcererInstance = await MintingSourcerer.deployed();
+	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("MintingSourcerer"), MintingSourcererInstance.address);
 
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices
