@@ -31,6 +31,13 @@ contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
         return id;
     }
 
+    function getBeneficiary(bytes32 id, address msgSender) internal view returns(address) {
+        if (pairs[id].beneficiary == address(0)) {
+            return msgSender;
+        }
+        return pairs[id].beneficiary;
+    }
+
     function setParameters(address pat, address collateral, address beneficiary, uint exchangeRatio) public {
         bytes32 id = _getId(pat, collateral);
         require(!pairs[id].exists, "Pair already exists");

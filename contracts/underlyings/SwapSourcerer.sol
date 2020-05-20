@@ -25,7 +25,7 @@ contract SwapSourcerer is BaseSourcerer {
         // collect approved PAT, requires the amount to be approved by the user on the PAT token beforend (allowances)
         ERC20(pat).transferFrom(msg.sender, address(this), amount);
         // send COLLATERAL --> TODO check balance before
-        ERC20(collateral).transfer(msg.sender, amount * pairs[id].exchangeRatio);
+        ERC20(collateral).transfer(getBeneficiary(id, msg.sender), amount * pairs[id].exchangeRatio);
 
         pairs[id].totalExchangedPatAmount += amount;
         pairs[id].totalCollateralBalance -= amount;
