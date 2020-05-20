@@ -5,9 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract SwapSourcerer is BaseSourcerer {
 
-    function depositCollateral(address intendedForPat, address collateral, uint amount) public {
+    function depositCollateral(address pat, address collateral, uint amount) public {
         require(amount > 0, "Amount must be > 0");
-        bytes32 id = getId(intendedForPat, collateral);
+        bytes32 id = getId(pat, collateral);
 
         // collect approved COLLATERAL, requires the amount to be approved by the user on the collateral token beforend (allowances)
         ERC20(collateral).transferFrom(msg.sender, address(this), amount);
