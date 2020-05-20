@@ -19,7 +19,7 @@ contract SwapSourcerer is BaseSourcerer {
         // pairs[id].contributions[msg.sender] += amount;
     }
 
-    function swap(address pat, address collateral, uint amount) public {
+    function exchange(address pat, address collateral, uint amount) public {
         bytes32 id = getId(pat, collateral);
 
         // collect approved PAT, requires the amount to be approved by the user on the PAT token beforend (allowances)

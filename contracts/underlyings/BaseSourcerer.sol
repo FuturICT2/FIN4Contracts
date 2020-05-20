@@ -49,6 +49,8 @@ contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
 
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory);
 
+    function exchange(address pat, address collateral, uint amount) public;
+
     function getCollateralBalanceOnPair(address pat, address collateral) public view returns(uint) {
         bytes32 id = getId(pat, collateral);
         return pairs[id].totalCollateralBalance;
