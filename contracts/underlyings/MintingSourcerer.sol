@@ -12,10 +12,10 @@ contract MintingSourcerer is BaseSourcerer {
         // collect approved PAT, requires the amount to be approved by the user on the PAT token beforend (allowances)
         ERC20(pat).transferFrom(msg.sender, address(this), amount);
 
-        let exchangeAmount = amount * pairs[id].exchangeRatio;
+        uint exchangeAmount = amount * pairs[id].exchangeRatio;
 
         // mint COLLATERAL, requires this contract to have the minter role
-        ERC20(collateral).mint(getBeneficiary(id, msg.sender), exchangeAmount);
+        ERC20Mintable(collateral).mint(getBeneficiary(id, msg.sender), exchangeAmount);
 
         pairs[id].totalExchangedPatAmount += amount;
         pairs[id].totalCollateralBalance += exchangeAmount; // gets up too because of minting
