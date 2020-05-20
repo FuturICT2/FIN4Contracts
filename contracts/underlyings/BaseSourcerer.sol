@@ -21,12 +21,18 @@ contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
     mapping(bytes32 => Pair) public pairs;
     bytes32[] public ids;
 
-    function getId(address pat, address collateral) public view returns(bytes32) {
+    function _getId(address pat, address collateral) private view returns(bytes32) {
         return keccak256(abi.encodePacked(pat, collateral));
     }
 
+    function getId(address pat, address collateral) public view returns(bytes32) {
+        bytes32 id = _getId(pat, collateral);
+        require(pairs[id].exists, "Pair does not exist");
+        return id;
+    }
+
     function setParameters(address pat, address collateral, uint exchangeRatio, address beneficiary) public {
-        bytes32 id = getId(pat, collateral);
+        bytes32 id = _getId(pat, collateral);
         require(!pairs[id].exists, "Pair already exists");
 
         Pair storage pair = pairs[id];
@@ -45,7 +51,6 @@ contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
 
     function getCollateralBalanceOnPair(address pat, address collateral) public view returns(uint) {
         bytes32 id = getId(pat, collateral);
-        require(pairs[id].exists, "Pair does not exist");
         return pairs[id].totalCollateralBalance;
     }
 
