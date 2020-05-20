@@ -1,44 +1,9 @@
 pragma solidity ^0.5.17;
 
-import 'contracts/underlyings/UnderlyingParameterizedInterface.sol';
+import 'contracts/underlyings/BaseSourcerer.sol';
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract SwapSourcerer is UnderlyingParameterizedInterface {
-
-    struct SwapPair {
-        bool exists;
-        bytes32 id;
-        address creator;
-        address pat;
-        address collateral;
-        uint exchangeRatio;
-        uint totalCollateralBalance;
-        uint totalSwappedPatAmount;
-        mapping(address => uint) contributions;
-        address[] contributors;
-    }
-
-    mapping(bytes32 => SwapPair) public pairs;
-    bytes32[] public ids;
-
-    function getId(address pat, address collateral) public view returns(bytes32) {
-        return keccak256(abi.encodePacked(pat, collateral));
-    }
-
-    function setParameters(address pat, address collateral, uint exchangeRatio) public {
-        bytes32 id = getId(pat, collateral);
-        require(!pairs[id].exists, "Swap pair already exists");
-
-        SwapPair storage swapPair = pairs[id];
-        swapPair.exists = true; // to query the mapping without having an extra mapping(bytes32 => true) public existingPairIds;
-        swapPair.id = id;
-        swapPair.creator = msg.sender;
-        swapPair.pat = pat;
-        swapPair.collateral = collateral;
-        swapPair.exchangeRatio = exchangeRatio;
-
-        ids.push(id);
-    }
+contract SwapSourcerer is BaseSourcerer {
 
     function depositCollateral(address intendedForPat, address collateral, uint amount) public {
         require(amount > 0, "Amount must be > 0");
@@ -49,10 +14,10 @@ contract SwapSourcerer is UnderlyingParameterizedInterface {
         ERC20(collateral).transferFrom(msg.sender, address(this), amount);
 
         pairs[id].totalCollateralBalance += amount;
-        if (pairs[id].contributions[msg.sender] == 0) { // 0 is default value
-            pairs[id].contributors.push(msg.sender);
-        }
-        pairs[id].contributions[msg.sender] += amount;
+        // if (pairs[id].contributions[msg.sender] == 0) { // 0 is default value
+        //     pairs[id].contributors.push(msg.sender);
+        // }
+        // pairs[id].contributions[msg.sender] += amount;
     }
 
     function swap(address pat, address collateral, uint amount) public {
@@ -64,33 +29,13 @@ contract SwapSourcerer is UnderlyingParameterizedInterface {
         // send COLLATERAL --> TODO check balance before
         ERC20(collateral).transfer(msg.sender, amount * pairs[id].exchangeRatio);
 
-        pairs[id].totalSwappedPatAmount += amount;
+        pairs[id].totalExchangedPatAmount += amount;
         pairs[id].totalCollateralBalance -= amount;
     }
 
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
         // omit pat address because frontend passes it as first argument always with setParameters()
         return "address:collateral:address of collateral token,uint:exchangeRatio:give n get n*x collateral";
-    }
-
-    function getCollateralBalanceOnSwapPair(address pat, address collateral) public view returns(uint) {
-        bytes32 id = getId(pat, collateral);
-        require(pairs[id].exists, "Swap pair does not exist");
-        return pairs[id].totalCollateralBalance;
-    }
-
-    function getSwapPairs() public view returns(address[] memory, address[] memory, uint[] memory, uint[] memory) {
-        address[] memory pats = new address[](ids.length);
-        address[] memory collaterals = new address[](ids.length);
-        uint[] memory collateralBalances = new uint[](ids.length);
-        uint[] memory exchangeRatios = new uint[](ids.length);
-        for (uint i = 0; i < ids.length; i ++) {
-            pats[i] = pairs[ids[i]].pat;
-            collaterals[i] = pairs[ids[i]].collateral;
-            collateralBalances[i] = pairs[ids[i]].totalCollateralBalance;
-            exchangeRatios[i] = pairs[ids[i]].exchangeRatio;
-        }
-        return (pats, collaterals, collateralBalances, exchangeRatios);
     }
 
 }
