@@ -21,10 +21,6 @@ contract BaseSourcerer { // abstract class
     mapping(bytes32 => Pair) public pairs;
     bytes32[] public ids;
 
-    function getPairsCount() public view returns(uint) {
-        return ids.length;
-    }
-
     function _getId(address pat, address collateral) private view returns(bytes32) {
         return keccak256(abi.encodePacked(pat, collateral));
     }
@@ -80,9 +76,25 @@ contract BaseSourcerer { // abstract class
         return pairs[id].totalCollateralBalance;
     }
 
-    function getPair(bytes32 id) public view returns(address, address, address, uint, uint, uint) {
-        return (pairs[id].pat, pairs[id].collateral, pairs[id].beneficiary, pairs[id].exchangeRatio,
-            pairs[id].totalCollateralBalance, pairs[id].totalExchangedPatAmount);
+    // are there cheaper / more effective ways to implement this method? Seems bloated
+    function getPairs() public view returns(address[] memory, address[] memory, address[] memory,
+        uint[] memory, uint[] memory, uint[] memory) {
+        address[] memory pat_arr = new address[](ids.length);
+        address[] memory collateral_arr = new address[](ids.length);
+        address[] memory beneficiary_arr = new address[](ids.length);
+        uint[] memory exchangeRatio_arr = new uint[](ids.length);
+        uint[] memory totalCollBalance_arr = new uint[](ids.length);
+        uint[] memory totalExPatAmount_arr = new uint[](ids.length);
+        for (uint i = 0; i < ids.length; i ++) {
+            bytes32 id = ids[i];
+            pat_arr[i] = pairs[id].pat;
+            collateral_arr[i] = pairs[id].collateral;
+            beneficiary_arr[i] = pairs[id].beneficiary;
+            exchangeRatio_arr[i] = pairs[id].exchangeRatio;
+            totalCollBalance_arr[i] = pairs[id].totalCollateralBalance;
+            totalExPatAmount_arr[i] = pairs[id].totalExchangedPatAmount;
+        }
+        return (pat_arr, collateral_arr, beneficiary_arr, exchangeRatio_arr, totalCollBalance_arr, totalExPatAmount_arr);
     }
 
     // TO OVERWRITE BY EXTENDING CLASSES
