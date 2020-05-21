@@ -100,15 +100,15 @@ module.exports = async function(deployer) {
 	// FIN4 UNDERLYINGS IMPLEMENTATIONS - note that the name passed in must match the contract name exactly for those with contract addresses
 	await deployer.deploy(SwapSourcerer);
 	const SwapSourcererInstance = await SwapSourcerer.deployed();
-	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("SwapSourcerer"), SwapSourcererInstance.address);
+	await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("SwapSourcerer"), SwapSourcererInstance.address);
 
 	await deployer.deploy(MintingSourcerer);
 	const MintingSourcererInstance = await MintingSourcerer.deployed();
-	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("MintingSourcerer"), MintingSourcererInstance.address);
+	await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("MintingSourcerer"), MintingSourcererInstance.address);
 
 	await deployer.deploy(BurnSourcerer);
 	const BurnSourcererInstance = await BurnSourcerer.deployed();
-	await Fin4UnderlyingsInstance.addUnderlying(web3.utils.fromAscii("BurnSourcerer"), BurnSourcererInstance.address);
+	await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("BurnSourcerer"), BurnSourcererInstance.address);
 
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices

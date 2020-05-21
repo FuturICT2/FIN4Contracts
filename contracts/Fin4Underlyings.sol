@@ -7,8 +7,8 @@ contract Fin4Underlyings {
 
     constructor() public {}
 
-    mapping (uint => Underlying) public underlyings;
-    // 2nd mapping with contractAddress as key?
+    mapping (uint => Underlying) public underlyings; // 2nd mapping with contractAddress as key?
+    address[] public sourcererAddresses;
 
     struct Underlying {
         uint id;
@@ -26,6 +26,11 @@ contract Fin4Underlyings {
         underlying.name = name;
         underlying.contractAddress = contractAddress;
         nextUnderlyingId ++;
+    }
+
+    function addSourcerer(bytes32 name, address contractAddress) public {
+        sourcererAddresses.push(contractAddress);
+        addUnderlying(name, contractAddress);
     }
 
     function getUnderlyings() public view returns(uint[] memory, bytes32[] memory, address[] memory) {
