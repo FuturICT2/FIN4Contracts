@@ -1,6 +1,7 @@
 pragma solidity ^0.5.17;
 
 import 'contracts/underlyings/UnderlyingParameterizedInterface.sol';
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
 
@@ -52,6 +53,21 @@ contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
         pair.exchangeRatio = exchangeRatio;
 
         ids.push(id);
+    }
+
+    // having it here in Base means Minting can also receive collateral, if that's not wanted we can overwrite the method there
+    function depositCollateral(address pat, address collateral, uint amount) public {
+        require(amount > 0, "Amount must be > 0");
+        bytes32 id = getId(pat, collateral);
+
+        // collect approved COLLATERAL, requires the amount to be approved by the user on the collateral token beforend (allowances)
+        ERC20(collateral).transferFrom(msg.sender, address(this), amount);
+
+        pairs[id].totalCollateralBalance += amount;
+        // if (pairs[id].contributions[msg.sender] == 0) { // 0 is default value
+        //     pairs[id].contributors.push(msg.sender);
+        // }
+        // pairs[id].contributions[msg.sender] += amount;
     }
 
     // omit pat address because frontend passes it as first argument always with setParameters()
