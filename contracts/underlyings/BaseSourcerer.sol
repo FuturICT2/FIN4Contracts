@@ -79,22 +79,22 @@ contract BaseSourcerer { // abstract class
     // are there cheaper / more effective ways to implement this method? Seems bloated
     function getPairs() public view returns(address[] memory, address[] memory, address[] memory,
         uint[] memory, uint[] memory, uint[] memory) {
-        address[] memory pat_arr = new address[](ids.length);
-        address[] memory collateral_arr = new address[](ids.length);
-        address[] memory beneficiary_arr = new address[](ids.length);
-        uint[] memory exchangeRatio_arr = new uint[](ids.length);
-        uint[] memory totalCollBalance_arr = new uint[](ids.length);
-        uint[] memory totalExPatAmount_arr = new uint[](ids.length);
+        address[] memory pats = new address[](ids.length);
+        address[] memory collaterals = new address[](ids.length);
+        address[] memory beneficiaries = new address[](ids.length);
+        uint[] memory exchangeRatios = new uint[](ids.length);
+        uint[] memory totalCollateralBalances = new uint[](ids.length);
+        uint[] memory totalExchangedPatAmounts = new uint[](ids.length);
         for (uint i = 0; i < ids.length; i ++) {
             bytes32 id = ids[i];
-            pat_arr[i] = pairs[id].pat;
-            collateral_arr[i] = pairs[id].collateral;
-            beneficiary_arr[i] = pairs[id].beneficiary;
-            exchangeRatio_arr[i] = pairs[id].exchangeRatio;
-            totalCollBalance_arr[i] = pairs[id].totalCollateralBalance;
-            totalExPatAmount_arr[i] = pairs[id].totalExchangedPatAmount;
+            pats[i] = pairs[id].pat;
+            collaterals[i] = pairs[id].collateral;
+            beneficiaries[i] = pairs[id].beneficiary;
+            exchangeRatios[i] = pairs[id].exchangeRatio;
+            totalCollateralBalances[i] = pairs[id].totalCollateralBalance;
+            totalExchangedPatAmounts[i] = pairs[id].totalExchangedPatAmount;
         }
-        return (pat_arr, collateral_arr, beneficiary_arr, exchangeRatio_arr, totalCollBalance_arr, totalExPatAmount_arr);
+        return (pats, collaterals, beneficiaries, exchangeRatios, totalCollateralBalances, totalExchangedPatAmounts);
     }
 
     // TO OVERWRITE BY EXTENDING CLASSES
