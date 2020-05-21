@@ -1,7 +1,7 @@
 pragma solidity ^0.5.17;
 
 import 'contracts/Fin4TokenBase.sol';
-import 'contracts/underlyings/UnderlyingParameterizedInterface.sol';
+import 'contracts/underlyings/BaseSourcerer.sol';
 
 contract Fin4Underlyings {
 
@@ -41,7 +41,7 @@ contract Fin4Underlyings {
     }
 
     function getParamsEncodedOnUnderlyingContract(address contractAddress) public view returns(string memory) {
-        return UnderlyingParameterizedInterface(contractAddress).getParameterForTokenCreatorToSetEncoded();
+        return BaseSourcerer(contractAddress).getParameterForTokenCreatorToSetEncoded();
     }
 
 }

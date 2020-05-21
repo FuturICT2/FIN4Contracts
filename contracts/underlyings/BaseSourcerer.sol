@@ -1,9 +1,8 @@
 pragma solidity ^0.5.17;
 
-import 'contracts/underlyings/UnderlyingParameterizedInterface.sol';
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
+contract BaseSourcerer { // abstract class
 
     struct Pair {
         bool exists;
@@ -70,9 +69,6 @@ contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
         // pairs[id].contributions[msg.sender] += amount;
     }
 
-    // omit pat address because frontend passes it as first argument always with setParameters()
-    function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory);
-
     function exchange(address pat, address collateral, uint amount) public;
 
     function getCollateralBalanceOnPair(address pat, address collateral) public view returns(uint) {
@@ -91,5 +87,16 @@ contract BaseSourcerer is UnderlyingParameterizedInterface { // abstract class
         }
         return (pats, collaterals, exchangeRatios);
     }
+
+    // TO OVERWRITE BY EXTENDING CLASSES
+
+    // format: "type:name:description,type:name:description"
+    // will be displayed as "name (description)" in the respective frontend input fields
+    // omit PAT address because frontend passes it as first argument always with setParameters()
+    function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory);
+
+    // extending classes must also have this function:
+    // function setParameters() public;
+    // the arguments vary though based on what is encoded in getParameterForTokenCreatorToSetEncoded()
 
 }
