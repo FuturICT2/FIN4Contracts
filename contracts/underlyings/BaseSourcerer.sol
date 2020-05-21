@@ -21,6 +21,10 @@ contract BaseSourcerer { // abstract class
     mapping(bytes32 => Pair) public pairs;
     bytes32[] public ids;
 
+    function getPairsCount() public view returns(uint) {
+        return ids.length;
+    }
+
     function _getId(address pat, address collateral) private view returns(bytes32) {
         return keccak256(abi.encodePacked(pat, collateral));
     }
@@ -76,16 +80,9 @@ contract BaseSourcerer { // abstract class
         return pairs[id].totalCollateralBalance;
     }
 
-    function getPairs() public view returns(address[] memory, address[] memory, uint[] memory) {
-        address[] memory pats = new address[](ids.length);
-        address[] memory collaterals = new address[](ids.length);
-        uint[] memory exchangeRatios = new uint[](ids.length);
-        for (uint i = 0; i < ids.length; i ++) {
-            pats[i] = pairs[ids[i]].pat;
-            collaterals[i] = pairs[ids[i]].collateral;
-            exchangeRatios[i] = pairs[ids[i]].exchangeRatio;
-        }
-        return (pats, collaterals, exchangeRatios);
+    function getPair(bytes32 id) public view returns(address, address, address, uint, uint, uint) {
+        return (pairs[id].pat, pairs[id].collateral, pairs[id].beneficiary, pairs[id].exchangeRatio,
+            pairs[id].totalCollateralBalance, pairs[id].totalExchangedPatAmount);
     }
 
     // TO OVERWRITE BY EXTENDING CLASSES

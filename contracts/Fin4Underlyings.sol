@@ -49,4 +49,44 @@ contract Fin4Underlyings {
         return BaseSourcerer(contractAddress).getParameterForTokenCreatorToSetEncoded();
     }
 
+    // are there cheaper / more effective ways to implement this method? Seems bloated
+    function getAllSourcererPairs() public view returns(address[] memory, address[] memory, address[] memory,
+        uint[] memory, uint[] memory, uint[] memory) {
+        uint totalPairsCount = 0;
+        uint[] memory pairsCountPerSourcerer = new uint[](sourcererAddresses.length);
+        for (uint i = 0; i < sourcererAddresses.length; i ++) {
+            uint pairsCount = BaseSourcerer(sourcererAddresses[i]).getPairsCount();
+            totalPairsCount += pairsCount;
+            pairsCountPerSourcerer[i] = pairsCount;
+        }
+        address[] memory pat_arr = new address[](totalPairsCount);
+        address[] memory collateral_arr = new address[](totalPairsCount);
+        address[] memory beneficiary_arr = new address[](totalPairsCount);
+        uint[] memory exchangeRatio_arr = new uint[](totalPairsCount);
+        uint[] memory totalCollBalance_arr = new uint[](totalPairsCount);
+        uint[] memory totalExPatAmount_arr = new uint[](totalPairsCount);
+        address pat;
+        address collateral;
+        address beneficiary;
+        uint exchangeRatio;
+        uint totalCollBalance;
+        uint totalExPatAmount;
+        uint count = 0;
+        for (uint i = 0; i < sourcererAddresses.length; i ++) {
+            for (uint j = 0; j < pairsCountPerSourcerer[i]; j ++) {
+                bytes32 id = BaseSourcerer(sourcererAddresses[i]).ids(j);
+                (pat, collateral, beneficiary, exchangeRatio,
+                    totalCollBalance, totalExPatAmount) = BaseSourcerer(sourcererAddresses[i]).getPair(id);
+                pat_arr[count] = pat;
+                collateral_arr[count] = collateral;
+                beneficiary_arr[count] = beneficiary;
+                exchangeRatio_arr[count] = exchangeRatio;
+                totalCollBalance_arr[count] = totalCollBalance;
+                totalExPatAmount_arr[count] = totalExPatAmount;
+                count ++;
+            }
+        }
+        return (pat_arr, collateral_arr, beneficiary_arr, exchangeRatio_arr, totalCollBalance_arr, totalExPatAmount_arr);
+    }
+
 }
