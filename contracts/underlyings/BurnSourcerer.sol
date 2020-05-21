@@ -11,6 +11,7 @@ contract BurnSourcerer is BaseSourcerer {
 
         // collect approved PAT, requires the amount to be approved by the user on the PAT token beforend (allowances)
         ERC20(pat).transferFrom(msg.sender, address(this), amount);
+        // Option to burn PAT too?
 
         uint exchangeAmount = amount * pairs[id].exchangeRatio;
 
@@ -23,8 +24,7 @@ contract BurnSourcerer is BaseSourcerer {
     }
 
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
-        return "address:collateral:address of token to burn,address:beneficiary:leave blank for it to be the claimer,"
-            "uint:exchangeRatio:give n to burn n*x collateral";
+        return "address:collateral:address of token to burn,uint:exchangeRatio:give n to burn n*x collateral";
     }
 
 }
