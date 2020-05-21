@@ -1,7 +1,6 @@
 pragma solidity ^0.5.17;
 
 import 'contracts/underlyings/BaseSourcerer.sol';
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Mintable.sol";
 
 contract MintingSourcerer is BaseSourcerer {
