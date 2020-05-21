@@ -49,12 +49,12 @@ contract Fin4Underlyings {
         return (ids, names, isSourcerers, contractAddresses);
     }
 
-    function getParamsEncodedOnUnderlyingContract(address contractAddress) public view returns(string memory) {
-        return BaseSourcerer(contractAddress).getParameterForTokenCreatorToSetEncoded();
+    function getSourcererParams(address sourcererAddress) public view returns(string memory) {
+        return BaseSourcerer(sourcererAddress).getParameterForTokenCreatorToSetEncoded();
     }
 
-    function getSourcererPairs(address sourcererAddress) public view returns(address[] memory, address[] memory, address[] memory,
-        uint[] memory, uint[] memory, uint[] memory) {
+    function getSourcererPairs(address sourcererAddress) public view returns(address[] memory,
+        address[] memory, address[] memory, uint[] memory, uint[] memory, uint[] memory) {
         return BaseSourcerer(sourcererAddress).getPairs();
     }
 
