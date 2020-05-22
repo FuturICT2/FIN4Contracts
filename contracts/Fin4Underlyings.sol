@@ -35,6 +35,7 @@ contract Fin4Underlyings {
         if (usableForAll) {
             countUsableForAll ++;
         }
+        names.push(name);
     }
 
     function addUnderlyings(bytes32[] memory _names, address[] memory contractAddresses, bytes32[] memory attachments,
