@@ -1,6 +1,7 @@
 pragma solidity ^0.5.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 
 contract BaseSourcerer { // abstract class
 
@@ -70,6 +71,13 @@ contract BaseSourcerer { // abstract class
     }
 
     function convert(address pat, address collateral, uint amount) public;
+
+    function fetchAndBurnPAT(address pat, address sender, uint amount) internal {
+        // collect approved PAT, requires the amount to be approved by the user on the PAT token beforend (allowances)
+        ERC20(pat).transferFrom(sender, address(this), amount);
+        // burn that PAT amount
+        ERC20Burnable(pat).burn(amount);
+    }
 
     function getCollateralBalanceOnPair(address pat, address collateral) public view returns(uint) {
         bytes32 id = getId(pat, collateral);

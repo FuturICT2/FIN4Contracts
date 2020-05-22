@@ -6,9 +6,7 @@ contract SwapSourcerer is BaseSourcerer {
 
     function convert(address pat, address collateral, uint amount) public {
         bytes32 id = getId(pat, collateral);
-
-        // collect approved PAT, requires the amount to be approved by the user on the PAT token beforend (allowances)
-        ERC20(pat).transferFrom(msg.sender, address(this), amount);
+        fetchAndBurnPAT(pat, msg.sender, amount);
 
         uint exchangeAmount = amount * pairs[id].exchangeRatio;
 
