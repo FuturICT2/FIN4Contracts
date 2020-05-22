@@ -37,6 +37,15 @@ contract Fin4Underlyings {
         }
     }
 
+    function addUnderlyings(bytes32[] memory _names, address[] memory contractAddresses, bytes32[] memory attachments,
+        bool[] memory usableForAlls) public {
+        for (uint i = 0; i < _names.length; i ++) {
+            if (!underlyings[_names[i]].exists) { // or use require here?
+                addUnderlying(_names[i], contractAddresses[i], false, attachments[i], usableForAlls[i]);
+            }
+        }
+    }
+
     function addSourcerer(bytes32 name, address contractAddress) public {
         addUnderlying(name, contractAddress, true, "", true);
     }
@@ -66,14 +75,7 @@ contract Fin4Underlyings {
         return BaseSourcerer(sourcererAddress).getPairs();
     }
 
-    // or better to split this method into two? add new ones and register with token
-    function registerUnderlyingsWithToken(address tokenAddress, bytes32[] memory _names, address[] memory contractAddresses,
-        bytes32[] memory attachments, bool[] memory usableForAlls) public {
-        for (uint i = 0; i < _names.length; i ++) {
-            if (!underlyings[_names[i]].exists) {
-                addUnderlying(_names[i], contractAddresses[i], false, attachments[i], usableForAlls[i]);
-            }
-        }
+    function registerUnderlyingsWithToken(address tokenAddress, bytes32[] memory _names) public {
         tokenToRegisteredUnderlyings[tokenAddress] = _names;
         // TODO shield against underylings being added multiple times to a token
     }
