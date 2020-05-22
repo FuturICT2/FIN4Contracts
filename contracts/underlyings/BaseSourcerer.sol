@@ -39,6 +39,8 @@ contract BaseSourcerer { // abstract class
         return pairs[id].beneficiary;
     }
 
+    // TODO support creation of multiple pairs per token creation - either by array'ing this method or by calling
+    // this function multiple time from the frontend
     function setParameters(address pat, address collateral, address beneficiary, uint exchangeRatio) public {
         bytes32 id = _getId(pat, collateral);
         require(!pairs[id].exists, "Pair already exists");
