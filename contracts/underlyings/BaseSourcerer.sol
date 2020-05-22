@@ -69,7 +69,7 @@ contract BaseSourcerer { // abstract class
         // pairs[id].contributions[msg.sender] += amount;
     }
 
-    function exchange(address pat, address collateral, uint amount) public;
+    function convert(address pat, address collateral, uint amount) public;
 
     function getCollateralBalanceOnPair(address pat, address collateral) public view returns(uint) {
         bytes32 id = getId(pat, collateral);
