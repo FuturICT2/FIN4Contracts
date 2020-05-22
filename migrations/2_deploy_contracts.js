@@ -16,6 +16,7 @@ const Fin4Underlyings = artifacts.require('Fin4Underlyings');
 const SwapSourcerer = artifacts.require('SwapSourcerer');
 const MintingSourcerer = artifacts.require('MintingSourcerer');
 const BurnSourcerer = artifacts.require('BurnSourcerer');
+// const TestImplOfSuccClaimNotifer = artifacts.require('TestImplOfSuccClaimNotifer');
 
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const verifierTypeContracts = [
@@ -153,4 +154,7 @@ module.exports = async function(deployer) {
 	//console.log('-----------> Address of Fin4OracleHub: ', Fin4OracleHubInstance.address);
 
 	// await Fin4MainInstance.createNewToken('Token-Dev-1', 'TD1', [], [], []);
+
+
+	// await deployer.deploy(TestImplOfSuccClaimNotifer);
 };
