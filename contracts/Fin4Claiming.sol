@@ -4,6 +4,7 @@ import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';
 import 'contracts/stub/MintTransferStub.sol';
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
+import "contracts/Fin4Underlyings.sol";
 
 contract Fin4Claiming {
 
@@ -26,11 +27,13 @@ contract Fin4Claiming {
 
     address public creator;
     address public Fin4SystemParametersAddress;
+    address public Fin4UnderlyingsAddress;
     address public Fin4ReputationAddress;
 
-    constructor(address Fin4SystemParametersAddr) public {
+    constructor(address Fin4SystemParametersAddr, address Fin4UnderlyingsAddr) public {
         creator = msg.sender;
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
+        Fin4UnderlyingsAddress = Fin4UnderlyingsAddr;
     }
 
     function setFin4ReputationAddress(address Fin4ReputationAddr) public {
