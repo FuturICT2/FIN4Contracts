@@ -55,7 +55,6 @@ contract BaseSourcerer { // abstract class
         ids.push(id);
     }
 
-    // having it here in Base means Minting can also receive collateral, if that's not wanted we can overwrite the method there
     function depositCollateral(address pat, address collateral, uint amount) public {
         require(amount > 0, "Amount must be > 0");
         bytes32 id = getId(pat, collateral);
