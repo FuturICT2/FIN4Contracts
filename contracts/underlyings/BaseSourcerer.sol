@@ -55,6 +55,7 @@ contract BaseSourcerer { // abstract class
         ids.push(id);
     }
 
+    // TODO token creator should be able to limit who can deposit and maybe up to which amount(s) etc.?
     function depositCollateral(address pat, address collateral, uint amount) public {
         require(amount > 0, "Amount must be > 0");
         bytes32 id = getId(pat, collateral);
