@@ -4,10 +4,10 @@ import 'contracts/underlyings/SuccessfulClaimNotifierInterface.sol';
 
 contract TestImplOfSuccClaimNotifer is SuccessfulClaimNotifierInterface {
 
-    uint public dev = 1;
+    string public dev = "nothing happened";
 
     function successfulClaimNotify(address tokenAddress, address claimer, uint claimedQuantity) public {
-        dev = 2;
+        dev = "that worked!";
     }
 
 }

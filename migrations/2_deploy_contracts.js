@@ -16,7 +16,9 @@ const Fin4Underlyings = artifacts.require('Fin4Underlyings');
 const SwapSourcerer = artifacts.require('SwapSourcerer');
 const MintingSourcerer = artifacts.require('MintingSourcerer');
 const BurnSourcerer = artifacts.require('BurnSourcerer');
-// const TestImplOfSuccClaimNotifer = artifacts.require('TestImplOfSuccClaimNotifer');
+// dev
+const TestImplOfSuccClaimNotifer = artifacts.require('TestImplOfSuccClaimNotifer');
+const ERC20Mintable = artifacts.require('ERC20Mintable');
 
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const verifierTypeContracts = [
@@ -155,6 +157,7 @@ module.exports = async function(deployer) {
 
 	// await Fin4MainInstance.createNewToken('Token-Dev-1', 'TD1', [], [], []);
 
-
-	// await deployer.deploy(TestImplOfSuccClaimNotifer);
+	// dev
+	await deployer.deploy(TestImplOfSuccClaimNotifer);
+	await deployer.deploy(ERC20Mintable);
 };
