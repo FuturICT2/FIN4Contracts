@@ -48,6 +48,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
 
         string attachment;
         uint nbApproved;
+        uint nbRejected;
         bool isApproved; // in case of multiple PendingApprovals waiting for each other
         uint linkedWithPendingApprovalId;
     }
@@ -62,6 +63,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.approverGroupId = groupId;
         pa.pendingApprovalId = nextPendingApprovalId;
         pa.nbApproved = 0;
+        pa.nbRejected = 0;
         pa.isIndividualApprover = false;
 
         string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
@@ -91,7 +93,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
       return "uint:Number of Users";
     }
-
+    // TO DO: Make this parameter actually number of users instead of group id
     mapping (address => uint) public tokenToParameter;
 
     function setParameters(address token, uint groupId) public {
@@ -110,25 +112,27 @@ contract LimitedVoting is Fin4BaseVerifierType {
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
         markMessageAsRead(pendingApprovalId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
         pa.nbApproved = pa.nbApproved + 1;
-        if(pa.nbApproved > 1){
+        if(pa.nbApproved > pa.groupMemberAddresses.length/2){
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
         }
         pendingApprovals[pendingApprovalId] = pa;
-        // _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
     }
 
     function receiveRejectionFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
-        markMessagesAsRead(pendingApprovalId);
-
+        markMessageAsRead(pendingApprovalId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
         string memory message = string(abi.encodePacked(
             "A member of the appointed approver group has rejected your approval request for ",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
         if (bytes(attachedMessage).length > 0) {
             message = string(abi.encodePacked(message, ': ', attachedMessage));
         }
-        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
+        pa.nbRejected = pa.nbRejected + 1;
+        if(pa.nbRejected > pa.groupMemberAddresses.length/2){
+            _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
+        }
+        pendingApprovals[pendingApprovalId] = pa;
     }
 
     function markMessagesAsRead(uint pendingApprovalId) public {
