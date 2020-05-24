@@ -27,7 +27,8 @@ const verifierTypeContracts = [
 	artifacts.require('Password'),
 	artifacts.require('Picture'),
 	artifacts.require('Location'),
-	artifacts.require('ClaimableOnlyNTimesPerUser')
+	artifacts.require('ClaimableOnlyNTimesPerUser'),
+	artifacts.require('LimitedVoting')
 	//artifacts.require('SensorOneTimeSignal'),
 	/*
 	These include the submissions feature:
@@ -120,6 +121,9 @@ module.exports = async function(deployer) {
 	await verifierTypeInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Picture
 	await verifierTypeInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	// ApprovalByGroupMember
+	await verifierTypeInstances[11].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierTypeInstances[11].setFin4MessagingAddress(Fin4MessagingInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);

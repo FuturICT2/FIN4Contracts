@@ -93,7 +93,7 @@ contract Fin4Groups is utils {
         }
     }
 
-    function getIndexOfMember(uint groupId, address member) private view returns(uint) {
+    function getIndexOfMember(uint groupId, address member) public view returns(uint) {
         Group memory group = groups[groupId];
         for (uint i = 0; i < group.members.length; i ++) {
             if (group.members[i] == member) {
