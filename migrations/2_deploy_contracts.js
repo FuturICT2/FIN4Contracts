@@ -39,7 +39,8 @@ const verifierTypeContracts = [
 	artifacts.require('Password'),
 	artifacts.require('Picture'),
 	artifacts.require('Location'),
-	artifacts.require('ClaimableOnlyNTimesPerUser')
+	artifacts.require('ClaimableOnlyNTimesPerUser'),
+	artifacts.require('Blocker')
 	//artifacts.require('MinimumInterval'),
 	//artifacts.require('MaximumQuantityPerInterval'),
 ];
