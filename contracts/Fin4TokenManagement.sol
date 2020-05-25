@@ -2,14 +2,14 @@ pragma solidity ^0.5.17;
 // pragma experimental ABIEncoderV2; --> allows string[] memory
 
 import 'contracts/Fin4Token.sol';
-import 'contracts/stub/MintingStub.sol';
+import 'contracts/stub/MintTransferStub.sol';
 import 'contracts/Fin4SystemParameters.sol';
 
 contract Fin4TokenManagement {
 
     // TODO do we need the indexed keyword for event params?
     event Fin4TokenCreated(address addr, string name, string symbol, string description, string unit, address creator,
-        uint creationTime, bool hasFixedMintingQuantity, bytes32[] underlyings);
+        uint creationTime, bool hasFixedMintingQuantity);
 
     address public creator;
     address public Fin4SystemParametersAddress;
@@ -32,13 +32,13 @@ contract Fin4TokenManagement {
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
 
         // REP reward for creating a new token
-        MintingStub(Fin4ReputationAddress).mint(token.tokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
+        MintTransferStub(Fin4ReputationAddress).mint(token.tokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
 
         allFin4Tokens.push(tokenAddress);
 
         // or cheaper/better to get these values via one getter?
         emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), token.description(), token.unit(),
-            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0, token.getUnderlyingsOnToken());
+            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0);
     }
 
     function getAllFin4Tokens() public view returns(address[] memory) {
@@ -78,25 +78,6 @@ contract Fin4TokenManagement {
             }
         }
         return (nonzeroBalanceTokens, balances);
-    }
-
-    // ------------------------- UNDERLYINGS / SOURCE OF TOKEN VALUE -------------------------
-    // this will move into its own contract as we specify requirements further
-
-    bytes32[] public underlyings;
-    mapping (bytes32 => bool) public existingUnderlyings;
-
-    function getUnderlyings() public view returns(bytes32[] memory) {
-        return underlyings;
-    }
-
-    function checkForNewUnderlyings(bytes32[] memory underlyingsToCheck) public {
-        for (uint i = 0; i < underlyingsToCheck.length; i++) {
-            if (!existingUnderlyings[underlyingsToCheck[i]]) {
-                underlyings.push(underlyingsToCheck[i]);
-                existingUnderlyings[underlyingsToCheck[i]] = true;
-            }
-        }
     }
 
 }

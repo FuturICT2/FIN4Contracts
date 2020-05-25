@@ -2,8 +2,9 @@ pragma solidity ^0.5.17;
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';
-import 'contracts/stub/MintingStub.sol';
+import 'contracts/stub/MintTransferStub.sol';
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
+import "contracts/Fin4Underlyings.sol";
 
 contract Fin4Claiming {
 
@@ -26,11 +27,13 @@ contract Fin4Claiming {
 
     address public creator;
     address public Fin4SystemParametersAddress;
+    address public Fin4UnderlyingsAddress;
     address public Fin4ReputationAddress;
 
-    constructor(address Fin4SystemParametersAddr) public {
+    constructor(address Fin4SystemParametersAddr, address Fin4UnderlyingsAddr) public {
         creator = msg.sender;
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
+        Fin4UnderlyingsAddress = Fin4UnderlyingsAddr;
     }
 
     function setFin4ReputationAddress(address Fin4ReputationAddr) public {
@@ -86,17 +89,19 @@ contract Fin4Claiming {
 
         if (canMint) {
             // TODO verify this makes sense and msg.sender is the token
-            MintingStub(tokenAddress).mint(claimer, quantity);
+            MintTransferStub(tokenAddress).mint(claimer, quantity);
             // can changes to totalSupply happen at other places too though? Definitely if we use the
             // ERC20Plus contract with burning for instance... #ConceptualDecision
             emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
         }
 
+        Fin4Underlyings(Fin4UnderlyingsAddress).callSuccessfulClaimNotifiers(tokenAddress, claimer, quantity);
+
         // listen to this event if you provide your own minting policy
         emit ClaimApproved(tokenAddress, claimId, claimer, quantity, Fin4Token(tokenAddress).balanceOf(claimer));
 
         // REP reward for a successful claim
-        MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
+        MintTransferStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
     }
 
     function claimRejectionPingback(address tokenAddress, uint claimId, address claimer) public {

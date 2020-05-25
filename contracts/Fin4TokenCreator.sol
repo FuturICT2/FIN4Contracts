@@ -3,6 +3,7 @@ pragma solidity ^0.5.17;
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4TokenManagement.sol';
 import "solidity-util/lib/Strings.sol";
+import "contracts/Fin4Underlyings.sol";
 
 contract Fin4TokenCreator {
 
@@ -14,12 +15,14 @@ contract Fin4TokenCreator {
 
     address public Fin4ClaimingAddress;
     address public Fin4TokenManagementAddress;
+    address public Fin4UnderlyingsAddress;
 
     mapping (string => bool) public symbolIsUsed;
 
-    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr) public {
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4UnderlyingsAddr) public {
         Fin4ClaimingAddress = Fin4ClaimingAddr;
         Fin4TokenManagementAddress = Fin4TokenManagementAddr;
+        Fin4UnderlyingsAddress = Fin4UnderlyingsAddr;
     }
 
     // these two methods are propbably super costly
@@ -39,13 +42,14 @@ contract Fin4TokenCreator {
     }
 
     function postCreationSteps(address tokenAddress, address[] memory requiredVerifierTypes, address[] memory minterRoles,
-        string memory description, string memory actionsText, uint fixedAmount, string memory unit, bytes32[] memory underlyings) public {
+        string memory description, string memory actionsText, uint fixedAmount, string memory unit, bytes32[] memory underlyingNames) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
         token.addVerifierTypes(requiredVerifierTypes);
 
-        Fin4TokenManagement(Fin4TokenManagementAddress).checkForNewUnderlyings(underlyings);
-        token.setUnderlyingsOnToken(underlyings);
+        if (underlyingNames.length > 0) {
+            Fin4Underlyings(Fin4UnderlyingsAddress).registerUnderlyingsWithToken(tokenAddress, underlyingNames);
+        }
 
         bool Fin4ClaimingHasMinterRole = false;
         for (uint i = 0; i < minterRoles.length; i++) {
@@ -65,8 +69,8 @@ contract Fin4TokenCreator {
 
 contract Fin4UncappedTokenCreator is Fin4TokenCreator {
 
-    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr)
-    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr)
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4UnderlyingsAddr)
+    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4UnderlyingsAddr)
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
@@ -81,8 +85,8 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
 
 contract Fin4CappedTokenCreator is Fin4TokenCreator {
 
-    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr)
-    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr)
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4UnderlyingsAddr)
+    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4UnderlyingsAddr)
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
