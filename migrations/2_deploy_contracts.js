@@ -41,7 +41,8 @@ const verifierTypeContracts = [
 	artifacts.require('Location'),
 	artifacts.require('ClaimableOnlyNTimesPerUser'),
 	artifacts.require('Blocker'),
-	artifacts.require('Statement') // has submissions
+	artifacts.require('Statement'), // has submissions
+	artifacts.require('Vote') // has submissions
 	//artifacts.require('MinimumInterval'),
 	//artifacts.require('MaximumQuantityPerInterval'),
 ];
@@ -136,6 +137,8 @@ module.exports = async function(deployer) {
 	await verifierTypeInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Statement
 	await verifierTypeInstances[12].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	// Vote
+	await verifierTypeInstances[13].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);
