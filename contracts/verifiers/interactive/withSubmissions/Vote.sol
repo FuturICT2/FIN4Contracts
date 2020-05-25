@@ -26,4 +26,14 @@ contract Vote is Fin4BaseVerifierType {
         return "string:options:comma separated options";
     }
 
+    mapping (address => string) public tokenToVoteOptionsStrings;
+
+    function setParameters(address token, string memory voteOptionsString) public {
+        tokenToVoteOptionsStrings[token] = voteOptionsString;
+    }
+
+    function getVoteOptionsStringForToken(address token) public returns(string memory) {
+        return tokenToVoteOptionsStrings[token];
+    }
+
 }
