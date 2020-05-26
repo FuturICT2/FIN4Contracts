@@ -127,6 +127,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         markMessageAsRead(pendingApprovalId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
         pa.nbApproved = pa.nbApproved + 1;
         if(pa.nbApproved > pa.groupMemberAddresses.length/2){
+            markMessagesAsRead(pendingApprovalId);
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
         }
         pendingApprovals[pendingApprovalId] = pa;
@@ -144,6 +145,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         }
         pa.nbRejected = pa.nbRejected + 1;
         if(pa.nbRejected > pa.groupMemberAddresses.length/2){
+            markMessagesAsRead(pendingApprovalId);
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
         }
         pendingApprovals[pendingApprovalId] = pa;
