@@ -17,7 +17,7 @@ contract Vote is Fin4BaseVerifierType {
     }
 
     function submitProof_Vote(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory chosenOption) public {
-        Fin4Verifying(Fin4VerifyingAddress).addSubmission(address(this), tokenAddrToReceiveVerifierNotice, msg.sender, now, 0, chosenOption);
+        Fin4Verifying(Fin4VerifyingAddress).addSubmission(address(this), tokenAddrToReceiveVerifierNotice, msg.sender, now, 2, chosenOption);
         _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, chosenOption);
     }
 

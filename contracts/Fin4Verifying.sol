@@ -42,7 +42,7 @@ contract Fin4Verifying {
         address token;
         address user;
         uint timestamp;
-        uint contentType; // 0 = text, 1 = picture (IPFS hash) / TODO use enum
+        uint contentType; // 0 = text, 1 = picture (IPFS hash), 2 = vote / TODO use enum
         string content;
     }
 
