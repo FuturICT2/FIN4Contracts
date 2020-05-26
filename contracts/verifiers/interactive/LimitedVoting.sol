@@ -87,8 +87,8 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.messageIds = new uint[](members.length);
         for (uint i = 0; i < members.length; i ++) {
             pa.groupMemberAddresses[i] = members[i];
-            // pa.reputation[i] = Fin4TokenManagement(Fin4TokenManagementAddr).getBalance(members[i], Fin4ReputationAddress);
-            Fin4TokenManagement(Fin4TokenManagementAddr);
+            pa.reputation[i] = Fin4TokenManagement(Fin4TokenManagementAddr).getBalance(members[i], Fin4ReputationAddress);
+            // Fin4TokenManagement(Fin4TokenManagementAddr);
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
                 .addPendingApprovalMessage(user, name, members[i], message, "", pa.pendingApprovalId);
         }

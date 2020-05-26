@@ -56,6 +56,7 @@ module.exports = async function(deployer) {
 	await Fin4ClaimingInstance.setFin4ReputationAddress(REPTokenInstance.address);
 	await REPTokenInstance.addMinter(Fin4TokenManagementInstance.address);
 	await REPTokenInstance.addMinter(Fin4ClaimingInstance.address);
+	
 	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
 	await verifierTypeInstances[11].setFin4ReputationAddress(REPTokenInstance.address);
 	if (!TCRactive) {
