@@ -4,22 +4,34 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4TokenBase.sol";
 import "contracts/Fin4Groups.sol";
 import "contracts/Fin4Messaging.sol";
+import "contracts/Fin4TokenManagement.sol";
 
 contract LimitedVoting is Fin4BaseVerifierType {
-
      constructor() public  {
+        creator = msg.sender;
         init();
     }
 
+    address public creator;
     address public Fin4GroupsAddress;
     address public Fin4MessagingAddress;
+    address public Fin4ReputationAddress;
+    address public Fin4TokenManagementAddr;
     // Set in 2_deploy_contracts.js
     function setFin4GroupsAddress(address Fin4GroupsAddr) public {
         Fin4GroupsAddress = Fin4GroupsAddr;
     }
     // Set in 2_deploy_contracts.js
+    function setFin4tokenManagementAddress(address Fin4TokenManagementAddress) public {
+        Fin4TokenManagementAddr = Fin4TokenManagementAddress;
+    }
+    // Set in 2_deploy_contracts.js
     function setFin4MessagingAddress(address Fin4MessagingAddr) public {
         Fin4MessagingAddress = Fin4MessagingAddr;
+    }
+    function setFin4ReputationAddress(address Fin4ReputationAddr) public {
+        require(msg.sender == creator, "Only the creator of this smart contract can call this function");
+        Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
     // @Override
@@ -45,7 +57,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         address[] groupMemberAddresses; // store a snapshot of those here or not? #ConceptualDecision
                                         // if not, a mechanism to mark messages as read is needed
         uint[] messageIds;
-
+        uint[] reputation;
         string attachment;
         uint nbApproved;
         uint nbRejected;
@@ -75,6 +87,8 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.messageIds = new uint[](members.length);
         for (uint i = 0; i < members.length; i ++) {
             pa.groupMemberAddresses[i] = members[i];
+            // pa.reputation[i] = Fin4TokenManagement(Fin4TokenManagementAddr).getBalance(members[i], Fin4ReputationAddress);
+            Fin4TokenManagement(Fin4TokenManagementAddr);
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
                 .addPendingApprovalMessage(user, name, members[i], message, "", pa.pendingApprovalId);
         }

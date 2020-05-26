@@ -121,9 +121,10 @@ module.exports = async function(deployer) {
 	await verifierTypeInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Picture
 	await verifierTypeInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// ApprovalByGroupMember
+	// LimitedVoting
 	await verifierTypeInstances[11].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierTypeInstances[11].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierTypeInstances[11].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);

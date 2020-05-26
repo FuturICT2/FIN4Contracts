@@ -11,6 +11,31 @@ const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 
+const verifierTypeContracts = [
+	artifacts.require('ApprovalByGroupMember'),
+	artifacts.require('SelfieTogether'),
+	artifacts.require('Blacklisting'),
+	artifacts.require('Whitelisting'),
+	artifacts.require('SelfApprove'),
+	artifacts.require('SpecificAddress'),
+	artifacts.require('TokenCreatorApproval'),
+	artifacts.require('Password'),
+	artifacts.require('Picture'),
+	artifacts.require('Location'),
+	artifacts.require('ClaimableOnlyNTimesPerUser'),
+	artifacts.require('LimitedVoting')
+	//artifacts.require('SensorOneTimeSignal'),
+	/*
+	These include the submissions feature:
+	artifacts.require('Idea'),
+	artifacts.require('Networking'),
+	artifacts.require('HappyMoment'),
+	*/
+	//artifacts.require('MinimumInterval'),
+	//artifacts.require('MaximumQuantityPerInterval'),
+];
+
+
 const fs = require('fs');
 //var path = require('path');
 const config = JSON.parse(fs.readFileSync('./config.json'));
@@ -31,7 +56,8 @@ module.exports = async function(deployer) {
 	await Fin4ClaimingInstance.setFin4ReputationAddress(REPTokenInstance.address);
 	await REPTokenInstance.addMinter(Fin4TokenManagementInstance.address);
 	await REPTokenInstance.addMinter(Fin4ClaimingInstance.address);
-
+	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
+	await verifierTypeInstances[11].setFin4ReputationAddress(REPTokenInstance.address);
 	if (!TCRactive) {
 		return;
 	}
