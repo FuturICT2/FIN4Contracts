@@ -12,6 +12,8 @@ contract Fin4Claiming {
         string comment, address[] requiredVerifierTypes);
     event ClaimApproved(address tokenAddr, uint claimId, address claimer, uint mintedQuantity, uint256 newBalance);
     event ClaimRejected(address tokenAddr, uint claimId, address claimer);
+    event VerifierPending(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
+        address claimer, string message);
     event VerifierApproved(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
         address claimer, string message);
     event VerifierRejected(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
@@ -57,6 +59,8 @@ contract Fin4Claiming {
 
         for (uint i = 0; i < requiredVerifierTypes.length; i++) {
             if (Fin4BaseVerifierType(requiredVerifierTypes[i]).isNoninteractive()) {
+                // Also emit VerifierPending? For now they decide immediately and so the VerifierApprove/Rejected event will follow
+                // as soon as there is some time delay (asking oracle etc.) the VerifierPending should probably be emitted
                 Fin4BaseVerifierType(requiredVerifierTypes[i]).autoCheck(msg.sender, tokenAddress, claimId);
             }
         }
@@ -71,6 +75,11 @@ contract Fin4Claiming {
                 }
             }
         }
+    }
+
+    function verifierPendingPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
+        address claimer, string memory message) public {
+        emit VerifierPending(tokenAddrToReceiveVerifierNotice, verifierTypeAddress, claimId, claimer, message);
     }
 
     function verifierApprovalPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,

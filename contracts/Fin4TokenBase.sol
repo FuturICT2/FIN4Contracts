@@ -179,10 +179,8 @@ contract Fin4TokenBase { // abstract class
     function receiveVerifierPendingNotice(address verifierTypeAddress, uint claimId) public {
         claims[claimId].verifierStatuses[verifierTypeAddress].status = Status.PENDING;
         claims[claimId].verifierStatuses[verifierTypeAddress].message = ""; // TODO pass message here too
-
-        // decided not to forward this to Fin4Claiming and dispatch an event there,
-        // frontend should set status of verifier to pending as soon as something that can be pending
-        // (e.g. someone else has to approve) is submitted
+        Fin4ClaimingStub(Fin4ClaimingAddress).verifierPendingPingback(address(this), verifierTypeAddress, claimId,
+            claims[claimId].claimer, "");
     }
 
     // called from verifierType contracts

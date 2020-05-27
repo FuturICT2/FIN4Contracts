@@ -4,6 +4,9 @@ contract Fin4ClaimingStub {
 
     function claimApprovedPingback(address tokenAddress, address claimer, uint claimId, uint quantity, bool Fin4ClaimingHasMinterRole) public;
 
+    function verifierPendingPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress,
+        uint claimId, address claimer, string memory message) public;
+
     function verifierApprovalPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress,
         uint claimId, address claimer, string memory message) public;
 
