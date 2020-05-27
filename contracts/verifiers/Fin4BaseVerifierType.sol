@@ -41,8 +41,9 @@ contract Fin4BaseVerifierType is utils {
         Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierRejectionNotice(verifierTypeAddress, claimId, message);
     }
 
-    function _sendPendingNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId) internal {
-        Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierPendingNotice(verifierTypeAddress, claimId);
+    function _sendPendingNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId,
+        string memory message) internal {
+        Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierPendingNotice(verifierTypeAddress, claimId, message);
     }
 
     // Used by verifier types that require the token creator to approve something

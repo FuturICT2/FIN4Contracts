@@ -176,11 +176,11 @@ contract Fin4TokenBase { // abstract class
 
     address[] public requiredVerifierTypes;
 
-    function receiveVerifierPendingNotice(address verifierTypeAddress, uint claimId) public {
+    function receiveVerifierPendingNotice(address verifierTypeAddress, uint claimId, string memory message) public {
         claims[claimId].verifierStatuses[verifierTypeAddress].status = Status.PENDING;
-        claims[claimId].verifierStatuses[verifierTypeAddress].message = ""; // TODO pass message here too
+        claims[claimId].verifierStatuses[verifierTypeAddress].message = message;
         Fin4ClaimingStub(Fin4ClaimingAddress).verifierPendingPingback(address(this), verifierTypeAddress, claimId,
-            claims[claimId].claimer, "");
+            claims[claimId].claimer, message);
     }
 
     // called from verifierType contracts

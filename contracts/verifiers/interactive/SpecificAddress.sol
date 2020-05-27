@@ -55,7 +55,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
 
         pendingApprovals[approver].push(pa);
 
-        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
+        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "Your approver has been notified about the request.");
     }
 
     function getMessageText() public pure returns(string memory) {

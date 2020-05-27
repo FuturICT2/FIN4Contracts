@@ -26,7 +26,7 @@ contract Picture is SpecificAddress {
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
             msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
         pendingApprovals[approver].push(pa);
-        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
+        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "Your approver has been notified about the request.");
     }
 
     // @Override
