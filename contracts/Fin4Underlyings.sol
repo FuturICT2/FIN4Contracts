@@ -81,6 +81,10 @@ contract Fin4Underlyings {
         // TODO shield against underylings being added multiple times to a token
     }
 
+    function getUnderlyingsRegisteredOnToken(address tokenAddress) public returns(bytes32[] memory) {
+        return tokenToRegisteredUnderlyings[tokenAddress];
+    }
+
     function callSuccessfulClaimNotifiers(address tokenAddress, address claimer, uint quantity) public {
         // TODO require Fin4Claiming must be msg.sender, plus other safeguards?
         for (uint i = 0; i < tokenToRegisteredUnderlyings[tokenAddress].length; i ++) {
