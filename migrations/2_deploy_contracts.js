@@ -14,6 +14,7 @@ const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const Trigonometry = artifacts.require('Trigonometry');
 const Strings = artifacts.require('strings');
+const Fin4Voting = artifacts.require('Fin4Voting');
 // const Location = artifacts.require('Location');
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 const verifierTypeContracts = [
@@ -81,6 +82,9 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
 	const Fin4GroupsInstance = await Fin4Groups.deployed();
 
+	await deployer.deploy(Fin4Voting, Fin4SystemParametersInstance.address);
+	const Fin4VotingInstance = await Fin4Voting.deployed();
+
 	//await deployer.deploy(Fin4OracleHub);
 	//const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
@@ -93,7 +97,8 @@ module.exports = async function(deployer) {
 		Fin4MessagingInstance.address,
 		Fin4VerifyingInstance.address,
 		Fin4GroupsInstance.address,
-		Fin4SystemParametersInstance.address
+		Fin4SystemParametersInstance.address,
+		Fin4VotingInstance.address
 	);
 
 	// VERIFIER TYPES
