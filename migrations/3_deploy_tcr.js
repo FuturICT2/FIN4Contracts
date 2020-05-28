@@ -31,6 +31,7 @@ module.exports = async function(deployer) {
 	await Fin4ClaimingInstance.setFin4ReputationAddress(REPTokenInstance.address);
 	await REPTokenInstance.addMinter(Fin4TokenManagementInstance.address);
 	await REPTokenInstance.addMinter(Fin4ClaimingInstance.address);
+	await REPTokenInstance.renounceMinter(); // deployer account must not be able to mint REP, potential exploit
 
 	if (!TCRactive) {
 		return;
@@ -68,6 +69,7 @@ module.exports = async function(deployer) {
 	);
 
 	const GOVTokenInstance = await GOV.deployed();
+	await GOVTokenInstance.renounceMinter(); // deployer account must not be able to mint GOV, potential exploit
 	await REPTokenInstance.init(GOVTokenInstance.address);
 
 	// dev: give all tokenHolders 10000 reputation tokens
