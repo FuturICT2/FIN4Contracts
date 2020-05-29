@@ -5,6 +5,8 @@ import "contracts/Fin4TokenBase.sol";
 import "contracts/Fin4Groups.sol";
 import "contracts/Fin4Messaging.sol";
 import "contracts/Fin4TokenManagement.sol";
+import 'contracts/stub/MintingStub.sol';
+import 'contracts/Fin4SystemParameters.sol';
 
 contract LimitedVoting is Fin4BaseVerifierType {
      constructor() public  {
@@ -15,6 +17,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     address public creator;
     address public Fin4GroupsAddress;
     address public Fin4MessagingAddress;
+    address public Fin4SystemParametersAddress;
     address public Fin4ReputationAddress;
     address public Fin4TokenManagementAddr;
     // Set in 2_deploy_contracts.js
@@ -28,6 +31,10 @@ contract LimitedVoting is Fin4BaseVerifierType {
     // Set in 2_deploy_contracts.js
     function setFin4MessagingAddress(address Fin4MessagingAddr) public {
         Fin4MessagingAddress = Fin4MessagingAddr;
+    }
+    // Set in 2_deploy_contracts.js
+    function setFin4SystemParametersAddress(address SystemParametersAddr) public {
+        Fin4SystemParametersAddress = SystemParametersAddr;
     }
     function setFin4ReputationAddress(address Fin4ReputationAddr) public {
         require(msg.sender == creator, "Only the creator of this smart contract can call this function");
@@ -57,6 +64,8 @@ contract LimitedVoting is Fin4BaseVerifierType {
         address[] groupMemberAddresses; // store a snapshot of those here or not? #ConceptualDecision
                                         // if not, a mechanism to mark messages as read is needed
         uint[] messageIds;
+        address[] Approved;
+        address[] Rejected;
         uint[] reputation;
         string attachment;
         uint nbApproved;
@@ -71,24 +80,32 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = user;
+        /*
+        
+        PIOTR CODE Given the number of users to be sent to(which I will implement and provide to you by calling a function)
+
+         */
+        // Then on this line we use the group ID you give me
         uint groupId = _getGroupId(tokenAddrToReceiveVerifierNotice);
+        // The rest of the code can run as planned
         pa.approverGroupId = groupId;
         pa.pendingApprovalId = nextPendingApprovalId;
         pa.nbApproved = 0;
         pa.nbRejected = 0;
         pa.isIndividualApprover = false;
-
         string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
             ". Once a member of the group approves, these messages get marked as read for all others."));
 
         address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
 
         pa.groupMemberAddresses = new address[](members.length);
+        pa.Approved = new address[](members.length);
+        pa.Rejected = new address[](members.length);
         pa.messageIds = new uint[](members.length);
+        pa.reputation = new uint[](members.length);
         for (uint i = 0; i < members.length; i ++) {
             pa.groupMemberAddresses[i] = members[i];
-            pa.reputation[i] = Fin4TokenManagement(Fin4TokenManagementAddr).getBalance(members[i], Fin4ReputationAddress);
-            // Fin4TokenManagement(Fin4TokenManagementAddr);
+            // pa.reputation[i] = Fin4TokenManagement(Fin4TokenManagementAddr).getBalance(members[i], Fin4ReputationAddress);
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
                 .addPendingApprovalMessage(user, name, members[i], message, "", pa.pendingApprovalId);
         }
@@ -125,9 +142,13 @@ contract LimitedVoting is Fin4BaseVerifierType {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
         markMessageAsRead(pendingApprovalId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
+        pa.Approved[pa.nbApproved] = msg.sender;
         pa.nbApproved = pa.nbApproved + 1;
         if(pa.nbApproved > pa.groupMemberAddresses.length/2){
             markMessagesAsRead(pendingApprovalId);
+            for (uint i = 0; i < pa.nbApproved; i++) {
+               MintingStub(Fin4ReputationAddress).mint(pa.Approved[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote());
+            }
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
         }
         pendingApprovals[pendingApprovalId] = pa;
@@ -143,21 +164,25 @@ contract LimitedVoting is Fin4BaseVerifierType {
         if (bytes(attachedMessage).length > 0) {
             message = string(abi.encodePacked(message, ': ', attachedMessage));
         }
+        pa.Rejected[pa.nbRejected] = msg.sender;
         pa.nbRejected = pa.nbRejected + 1;
         if(pa.nbRejected > pa.groupMemberAddresses.length/2){
             markMessagesAsRead(pendingApprovalId);
+            for (uint i = 0; i < pa.nbRejected; i++) {
+                MintingStub(Fin4ReputationAddress).mint(pa.Rejected[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote());
+            }
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
         }
         pendingApprovals[pendingApprovalId] = pa;
     }
-
+    // Mark messages of all users as read
     function markMessagesAsRead(uint pendingApprovalId) public {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         for (uint i = 0; i < pa.messageIds.length; i ++) {
             Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(pa.groupMemberAddresses[i], pa.messageIds[i]);
         }
     }
-
+    // Mark message of current user as read
     function markMessageAsRead(uint pendingApprovalId, uint index) public {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(pa.groupMemberAddresses[index], pa.messageIds[index]);

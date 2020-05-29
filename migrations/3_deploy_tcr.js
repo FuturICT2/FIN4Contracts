@@ -10,30 +10,8 @@ const REP = artifacts.require('tokens/REP');
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
+const LimitedVoting = artifacts.require('LimitedVoting');
 
-const verifierTypeContracts = [
-	artifacts.require('ApprovalByGroupMember'),
-	artifacts.require('SelfieTogether'),
-	artifacts.require('Blacklisting'),
-	artifacts.require('Whitelisting'),
-	artifacts.require('SelfApprove'),
-	artifacts.require('SpecificAddress'),
-	artifacts.require('TokenCreatorApproval'),
-	artifacts.require('Password'),
-	artifacts.require('Picture'),
-	artifacts.require('Location'),
-	artifacts.require('ClaimableOnlyNTimesPerUser'),
-	artifacts.require('LimitedVoting')
-	//artifacts.require('SensorOneTimeSignal'),
-	/*
-	These include the submissions feature:
-	artifacts.require('Idea'),
-	artifacts.require('Networking'),
-	artifacts.require('HappyMoment'),
-	*/
-	//artifacts.require('MinimumInterval'),
-	//artifacts.require('MaximumQuantityPerInterval'),
-];
 
 
 const fs = require('fs');
@@ -48,6 +26,9 @@ module.exports = async function(deployer) {
 	await deployer.deploy(REP);
 	const REPTokenInstance = await REP.deployed();
 
+	const LimitedVotingInstance = await LimitedVoting.deployed();
+	await LimitedVotingInstance.setFin4ReputationAddress(REPTokenInstance.address);
+
 	// add Fin4TokenManagement and Fin4Claiming as minters on the Fin4Reputation token
 	// as they will be the ones minting REP to users for certain types of activity
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
@@ -56,9 +37,9 @@ module.exports = async function(deployer) {
 	await Fin4ClaimingInstance.setFin4ReputationAddress(REPTokenInstance.address);
 	await REPTokenInstance.addMinter(Fin4TokenManagementInstance.address);
 	await REPTokenInstance.addMinter(Fin4ClaimingInstance.address);
+	await REPTokenInstance.addMinter(LimitedVotingInstance.address);
 	
-	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
-	await verifierTypeInstances[11].setFin4ReputationAddress(REPTokenInstance.address);
+	
 	if (!TCRactive) {
 		return;
 	}
