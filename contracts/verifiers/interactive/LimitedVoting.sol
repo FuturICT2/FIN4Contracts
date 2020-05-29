@@ -6,6 +6,7 @@ import "contracts/Fin4Groups.sol";
 import "contracts/Fin4Messaging.sol";
 import "contracts/Fin4TokenManagement.sol";
 import 'contracts/stub/MintingStub.sol';
+import 'contracts/stub/BurningStub.sol';
 import 'contracts/Fin4SystemParameters.sol';
 
 contract LimitedVoting is Fin4BaseVerifierType {
@@ -146,8 +147,13 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.nbApproved = pa.nbApproved + 1;
         if(pa.nbApproved > pa.groupMemberAddresses.length/2){
             markMessagesAsRead(pendingApprovalId);
+            // Reward voters that approved
             for (uint i = 0; i < pa.nbApproved; i++) {
                MintingStub(Fin4ReputationAddress).mint(pa.Approved[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote());
+            }
+            // Punish voters that rejected
+            for (uint i = 0; i < pa.nbRejected; i++) {
+                BurningStub(Fin4ReputationAddress).burnFrom(pa.Rejected[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforFailedVote());
             }
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
         }
@@ -170,6 +176,9 @@ contract LimitedVoting is Fin4BaseVerifierType {
             markMessagesAsRead(pendingApprovalId);
             for (uint i = 0; i < pa.nbRejected; i++) {
                 MintingStub(Fin4ReputationAddress).mint(pa.Rejected[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote());
+            }
+            for (uint i = 0; i < pa.nbApproved; i++) {
+                BurningStub(Fin4ReputationAddress).burnFrom(pa.Approved[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforFailedVote());
             }
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
         }
