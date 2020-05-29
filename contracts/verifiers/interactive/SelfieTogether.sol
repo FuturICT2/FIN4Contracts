@@ -14,6 +14,7 @@ contract SelfieTogether is ApprovalByGroupMember {
 
     function submitProof_SelfieTogether(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver,
         string memory IPFShash) public {
+        require(msg.sender != approver, "Self-approval is not allowed.");
 
         // to user-chosen approver
         PendingApproval memory pa;

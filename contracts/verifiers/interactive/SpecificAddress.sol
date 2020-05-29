@@ -40,6 +40,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
     mapping (address => PendingApproval[]) public pendingApprovals;
 
     function submitProof_SpecificAddress(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver) public {
+        require(msg.sender != approver, "Self-approval is not allowed.");
         PendingApproval memory pa;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
