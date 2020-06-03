@@ -47,7 +47,7 @@ const verifierTypeContracts = [
 	//artifacts.require('MaximumQuantityPerInterval'),
 ];
 
-const UnderlyingsActive = true;
+const UnderlyingsActive = false; // the other necessary switch is in src/components/utils.js
 
 module.exports = async function(deployer) {
 	// FIN4MAIN
