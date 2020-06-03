@@ -13,7 +13,7 @@ contract Fin4TokenManagement {
 
     address public creator;
     address public Fin4SystemParametersAddress;
-    address public Fin4ReputationAddress;
+    address public Fin4ReputationAddress = address(0);
 
     constructor(address Fin4SystemParametersAddr) public {
         creator = msg.sender;
@@ -31,8 +31,10 @@ contract Fin4TokenManagement {
     function registerNewToken(address tokenAddress) public {
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
 
-        // REP reward for creating a new token
-        MintTransferStub(Fin4ReputationAddress).mint(token.tokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
+        if (Fin4ReputationAddress != address(0)) {
+            // REP reward for creating a new token
+            MintTransferStub(Fin4ReputationAddress).mint(token.tokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
+        }
 
         allFin4Tokens.push(tokenAddress);
 

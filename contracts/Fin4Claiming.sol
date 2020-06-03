@@ -30,7 +30,7 @@ contract Fin4Claiming {
     address public creator;
     address public Fin4SystemParametersAddress;
     address public Fin4UnderlyingsAddress;
-    address public Fin4ReputationAddress;
+    address public Fin4ReputationAddress = address(0);
 
     constructor(address Fin4SystemParametersAddr, address Fin4UnderlyingsAddr) public {
         creator = msg.sender;
@@ -113,8 +113,10 @@ contract Fin4Claiming {
         // listen to this event if you provide your own minting policy
         emit ClaimApproved(tokenAddress, claimId, claimer, mintedQuantity, Fin4Token(tokenAddress).balanceOf(claimer));
 
-        // REP reward for a successful claim
-        MintTransferStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
+        if (Fin4ReputationAddress != address(0)) {
+            // REP reward for a successful claim
+            MintTransferStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
+        }
     }
 
     function claimRejectionPingback(address tokenAddress, uint claimId, address claimer) public {
