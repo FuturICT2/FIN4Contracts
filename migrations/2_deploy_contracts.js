@@ -47,6 +47,8 @@ const verifierTypeContracts = [
 	//artifacts.require('MaximumQuantityPerInterval'),
 ];
 
+const UnderlyingsActive = true;
+
 module.exports = async function(deployer) {
 	// FIN4MAIN
 
@@ -58,19 +60,24 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4SystemParameters);
 	const Fin4SystemParametersInstance = await Fin4SystemParameters.deployed();
 
-	await deployer.deploy(Fin4Underlyings);
-	const Fin4UnderlyingsInstance = await Fin4Underlyings.deployed();
+	let Fin4UnderlyingsInstanceAddress = '0x0000000000000000000000000000000000000000';
+	let Fin4UnderlyingsInstance;
+	if (UnderlyingsActive) {
+		await deployer.deploy(Fin4Underlyings);
+		Fin4UnderlyingsInstance = await Fin4Underlyings.deployed();
+		Fin4UnderlyingsInstanceAddress = Fin4UnderlyingsInstance.address;
+	}
 
 	await deployer.deploy(Fin4Verifying);
 	const Fin4VerifyingInstance = await Fin4Verifying.deployed();
-	await deployer.deploy(Fin4Claiming, Fin4SystemParametersInstance.address, Fin4UnderlyingsInstance.address);
+	await deployer.deploy(Fin4Claiming, Fin4SystemParametersInstance.address, Fin4UnderlyingsInstanceAddress);
 	const Fin4ClaimingInstance = await Fin4Claiming.deployed();
 
 	await deployer.deploy(Fin4TokenManagement, Fin4SystemParametersInstance.address);
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
 
-	await deployer.deploy(Fin4UncappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstance.address);
-	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstance.address);
+	await deployer.deploy(Fin4UncappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstanceAddress);
+	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstanceAddress);
 	const Fin4UncappedTokenCreatorInstance = await Fin4UncappedTokenCreator.deployed();
 	const Fin4CappedTokenCreatorInstance = await Fin4CappedTokenCreator.deployed();
 
@@ -94,7 +101,7 @@ module.exports = async function(deployer) {
 		Fin4VerifyingInstance.address,
 		Fin4GroupsInstance.address,
 		Fin4SystemParametersInstance.address,
-		Fin4UnderlyingsInstance.address
+		Fin4UnderlyingsInstanceAddress
 	);
 
 	// VERIFIER TYPES
@@ -104,17 +111,20 @@ module.exports = async function(deployer) {
 	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
 
 	// FIN4 UNDERLYINGS IMPLEMENTATIONS - note that the name passed in must match the contract name exactly for those with contract addresses
-	await deployer.deploy(SwapSourcerer);
-	const SwapSourcererInstance = await SwapSourcerer.deployed();
-	await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("SwapSourcerer"), SwapSourcererInstance.address);
+	
+	if (UnderlyingsActive) {
+		await deployer.deploy(SwapSourcerer);
+		const SwapSourcererInstance = await SwapSourcerer.deployed();
+		await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("SwapSourcerer"), SwapSourcererInstance.address);
 
-	await deployer.deploy(MintingSourcerer);
-	const MintingSourcererInstance = await MintingSourcerer.deployed();
-	await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("MintingSourcerer"), MintingSourcererInstance.address);
+		await deployer.deploy(MintingSourcerer);
+		const MintingSourcererInstance = await MintingSourcerer.deployed();
+		await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("MintingSourcerer"), MintingSourcererInstance.address);
 
-	await deployer.deploy(BurnSourcerer);
-	const BurnSourcererInstance = await BurnSourcerer.deployed();
-	await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("BurnSourcerer"), BurnSourcererInstance.address);
+		await deployer.deploy(BurnSourcerer);
+		const BurnSourcererInstance = await BurnSourcerer.deployed();
+		await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("BurnSourcerer"), BurnSourcererInstance.address);
+	}
 
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices

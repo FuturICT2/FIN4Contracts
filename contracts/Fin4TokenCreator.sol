@@ -47,7 +47,7 @@ contract Fin4TokenCreator {
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
         token.addVerifierTypes(requiredVerifierTypes);
 
-        if (underlyingNames.length > 0) {
+        if (underlyingNames.length > 0 && Fin4UnderlyingsAddress != address(0)) {
             Fin4Underlyings(Fin4UnderlyingsAddress).registerUnderlyingsWithToken(tokenAddress, underlyingNames);
         }
 

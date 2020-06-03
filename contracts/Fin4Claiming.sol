@@ -106,7 +106,9 @@ contract Fin4Claiming {
             emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
         }
 
-        Fin4Underlyings(Fin4UnderlyingsAddress).callSuccessfulClaimNotifiers(tokenAddress, claimer, quantity);
+        if (Fin4UnderlyingsAddress != address(0)) {
+            Fin4Underlyings(Fin4UnderlyingsAddress).callSuccessfulClaimNotifiers(tokenAddress, claimer, quantity);
+        }
 
         // listen to this event if you provide your own minting policy
         emit ClaimApproved(tokenAddress, claimId, claimer, mintedQuantity, Fin4Token(tokenAddress).balanceOf(claimer));
