@@ -20,6 +20,11 @@ const paramConfig = config.paramConfig;
 const TCRactive = true; // the other necessary switch is in src/components/utils.js
 
 module.exports = async function(deployer) {
+
+	if (!TCRactive) {
+		return;
+	}
+
 	await deployer.deploy(REP);
 	const REPTokenInstance = await REP.deployed();
 
@@ -32,10 +37,6 @@ module.exports = async function(deployer) {
 	await REPTokenInstance.addMinter(Fin4TokenManagementInstance.address);
 	await REPTokenInstance.addMinter(Fin4ClaimingInstance.address);
 	await REPTokenInstance.renounceMinter(); // deployer account must not be able to mint REP, potential exploit
-
-	if (!TCRactive) {
-		return;
-	}
 
 	// Deploy Dependencies
 	await deployer.deploy(DLL);
