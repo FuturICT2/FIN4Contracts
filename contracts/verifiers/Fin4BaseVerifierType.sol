@@ -23,8 +23,8 @@ contract Fin4BaseVerifierType is utils {
         return description;
     }
 
-    function getInfo() public view returns(string memory, string memory, string memory, bool) {
-        return (name, description, getParameterForTokenCreatorToSetEncoded(), isNoninteractive);
+    function getInfo() public view returns(string memory, string memory, string memory, string memory, bool) {
+        return (contractName, name, description, getParameterForTokenCreatorToSetEncoded(), isNoninteractive);
     }
 
     // This method gets overriden by the verifier types and encode the parameter names
