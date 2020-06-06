@@ -21,31 +21,36 @@ const BurnSourcerer = artifacts.require('BurnSourcerer');
 // const ERC20Mintable = artifacts.require('ERC20Mintable');
 
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
-const verifierTypeContracts = [
-	artifacts.require('ApprovalByGroupMember'),
-	artifacts.require('SelfieTogether'),
-	artifacts.require('Blacklisting'),
-	artifacts.require('Whitelisting'),
-	//artifacts.require('SensorOneTimeSignal'),
+
+const verifierContractNames = [
+	'ApprovalByGroupMember',
+	'SelfieTogether',
+	'Blacklisting',
+	'Whitelisting',
+	// 'SensorOneTimeSignal',
 	/* 
 	These include the submissions feature:
-	artifacts.require('Idea'),
-	artifacts.require('Networking'),
-	artifacts.require('HappyMoment'),
+	'Idea',
+	'Networking',
+	'HappyMoment',
 	*/
-	artifacts.require('SelfApprove'),
-	artifacts.require('SpecificAddress'),
-	artifacts.require('TokenCreatorApproval'),
-	artifacts.require('Password'),
-	artifacts.require('Picture'),
-	artifacts.require('Location'),
-	artifacts.require('ClaimableOnlyNTimesPerUser'),
-	artifacts.require('Blocker'),
-	artifacts.require('Statement'), // has submissions
-	artifacts.require('Vote') // has submissions
-	//artifacts.require('MinimumInterval'),
-	//artifacts.require('MaximumQuantityPerInterval'),
+	'SelfApprove',
+	'SpecificAddress',
+	'TokenCreatorApproval',
+	'Password',
+	'Picture',
+	'Location',
+	'ClaimableOnlyNTimesPerUser',
+	'Blocker',
+	'Statement', // has submissions
+	'Vote' // has submissions
+	// 'MinimumInterval',
+	// 'MaximumQuantityPerInterval'
 ];
+
+const verifierContracts = verifierContractNames.map(contractName => {
+	return 	artifacts.require(contractName);
+});
 
 const UnderlyingsActive = false; // the other necessary switch is in src/components/utils.js
 
@@ -106,9 +111,10 @@ module.exports = async function(deployer) {
 
 	// VERIFIER TYPES
 
-	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract)));
-	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
-	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
+	await Promise.all(verifierContracts.map((contract, index) => deployer.deploy(contract)));
+	const verifierInstances = await Promise.all(verifierContracts.map(contract => contract.deployed()));
+	await Promise.all(verifierInstances.map((instance, index) => instance.setContractName(verifierContractNames[index])));
+	await Promise.all(verifierInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
 
 	// FIN4 UNDERLYINGS IMPLEMENTATIONS - note that the name passed in must match the contract name exactly for those with contract addresses
 	
@@ -130,25 +136,25 @@ module.exports = async function(deployer) {
 	// TODO think about something better then identifiying them by indices
 
 	// ApprovalByGroupMember
-	await verifierTypeInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	await verifierTypeInstances[0].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierInstances[0].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// SelfieTogether
-	await verifierTypeInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	await verifierTypeInstances[1].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierInstances[1].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Blacklisting
-	await verifierTypeInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// Whitelisting
-	await verifierTypeInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SpecificAddress
-	await verifierTypeInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// TokenCreatorApproval
-	await verifierTypeInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Picture
-	await verifierTypeInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Statement
-	await verifierTypeInstances[12].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	await verifierInstances[12].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 	// Vote
-	await verifierTypeInstances[13].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	await verifierInstances[13].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);

@@ -5,10 +5,15 @@ import "contracts/util/utils.sol";
 
 contract Fin4BaseVerifierType is utils {
 
+    string public contractName;
     string public name;
     string public description;
     bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate verifier", instead that's done automatically
     bool public isNoninteractive = false;
+
+    function setContractName(string memory _contractName) public {
+        contractName = _contractName;
+    }
 
     function getName() public view returns(string memory) {
         return name;
