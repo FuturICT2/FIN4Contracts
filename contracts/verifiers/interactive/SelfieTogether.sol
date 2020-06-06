@@ -58,7 +58,7 @@ contract SelfieTogether is ApprovalByGroupMember {
         for (uint i = 0; i < members.length; i ++) {
             paG.groupMemberAddresses[i] = members[i];
             paG.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(msg.sender, name, members[i], messageG, IPFShash, paG.pendingApprovalId);
+                .addPendingApprovalMessage(msg.sender, contractName, members[i], messageG, IPFShash, paG.pendingApprovalId);
         }
 
         pendingApprovals[nextPendingApprovalId] = paG;

@@ -25,7 +25,7 @@ contract Picture is SpecificAddress {
         string memory message = string(abi.encodePacked(getMessageText(),
             Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name()));
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
-            msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
+            msg.sender, contractName, approver, message, IPFShash, pa.pendingApprovalId);
         pendingApprovals[approver].push(pa);
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "Your approver has been notified about the request.");
     }

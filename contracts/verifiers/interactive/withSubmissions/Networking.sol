@@ -53,7 +53,7 @@ contract Networking is Fin4BaseVerifierType {
             "'. The submitted content is '", content, "'."));
 
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
-            msg.sender, name, approver, message, content, pa.pendingApprovalId);
+            msg.sender, contractName, approver, message, content, pa.pendingApprovalId);
 
         pendingApprovals[approver].push(pa);
     }

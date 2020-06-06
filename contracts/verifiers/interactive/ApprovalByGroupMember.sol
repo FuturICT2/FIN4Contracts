@@ -71,7 +71,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
         for (uint i = 0; i < members.length; i ++) {
             pa.groupMemberAddresses[i] = members[i];
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(user, name, members[i], message, "", pa.pendingApprovalId);
+                .addPendingApprovalMessage(user, contractName, members[i], message, "", pa.pendingApprovalId);
         }
 
         pendingApprovals[nextPendingApprovalId] = pa;
