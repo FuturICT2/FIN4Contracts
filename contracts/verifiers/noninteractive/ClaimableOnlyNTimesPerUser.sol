@@ -5,8 +5,8 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 contract ClaimableOnlyNTimesPerUser is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "ClaimableOnlyNTimesPerUser";
-        description = "The token creator sets a cap how many times a token can be successfully claimed";
+        name = "sc.verifier.claimable-only-n-times-per-user.name";
+        description = "sc.verifier.claimable-only-n-times-per-user.description";
         isNoninteractive = true;
     }
 

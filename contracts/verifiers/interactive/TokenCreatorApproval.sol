@@ -8,8 +8,8 @@ contract TokenCreatorApproval is SpecificAddress {
 
     // @Override
     function init() public {
-        name = "TokenCreatorApproval";
-        description = "The token creator has to approve.";
+        name = "sc.verifier.token-creator-approval.name";
+        description = "sc.verifier.token-creator-approval.description";
     }
 
     function submitProof_TokenCreatorApproval(address tokenAddrToReceiveVerifierNotice, uint claimId) public {

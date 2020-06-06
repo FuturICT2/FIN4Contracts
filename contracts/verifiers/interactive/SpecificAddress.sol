@@ -12,8 +12,8 @@ contract SpecificAddress is Fin4BaseVerifierType {
     }
 
     function init() public {
-        name = "SpecificAddress";
-        description = "The claimer specifies an address, which has to approve.";
+        name = "sc.verifier.specific-address.name";
+        description = "sc.verifier.specific-address.description";
     }
 
     address public Fin4MessagingAddress;

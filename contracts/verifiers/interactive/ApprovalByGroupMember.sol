@@ -23,8 +23,8 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
     }
 
     function init() public {
-        name = "ApprovalByGroupMember";
-        description = "The token creator specifies one or more user groups, of which one member has to approve.";
+        name = "sc.verifier.approval-by-group-member.name";
+        description = "sc.verifier.approval-by-group-member.description";
         isAutoInitiable = true;
     }
 

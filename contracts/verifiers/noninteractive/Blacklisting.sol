@@ -6,8 +6,8 @@ import "contracts/Fin4Groups.sol";
 contract Blacklisting is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "Blacklisting";
-        description = "The token creator defines group(s) and/or individual accounts that can not claim a token";
+        name = "sc.verifier.blacklisting.name";
+        description = "sc.verifier.blacklisting.description";
         isNoninteractive = true;
     }
 

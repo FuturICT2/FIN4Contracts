@@ -5,8 +5,8 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 contract Blocker is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "Blocker";
-        description = "Reject any claim on this token immediately";
+        name = "sc.verifier.blocker.name";
+        description = "sc.verifier.blocker.description";
         isNoninteractive = true;
     }
 

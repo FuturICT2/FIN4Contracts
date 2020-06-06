@@ -6,8 +6,8 @@ import "contracts/Fin4Groups.sol";
 contract Whitelisting is Fin4BaseVerifierType { // TODO make it extend Blacklisting?
 
     constructor() public  {
-        name = "Whitelisting";
-        description = "The token creator defines group(s) and/or individual accounts that can claim a token while everyone else can not";
+        name = "sc.verifier.whitelisting.name";
+        description = "sc.verifier.whitelisting.description";
         isNoninteractive = true;
     }
 

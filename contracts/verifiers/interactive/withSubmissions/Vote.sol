@@ -6,8 +6,8 @@ import "contracts/Fin4Verifying.sol";
 contract Vote is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "Vote";
-        description = "Submit a vote on one of the given option.";
+        name = "sc.verifier.vote.name";
+        description = "sc.verifier.vote.description";
     }
 
     address public Fin4VerifyingAddress;

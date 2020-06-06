@@ -5,8 +5,8 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 contract Password is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "Password";
-        description = "Approval if the user provides the password matching the one the token creator set.";
+        name = "sc.verifier.password.name";
+        description = "sc.verifier.password.description";
     }
 
     function submitProof_Password(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory password) public {

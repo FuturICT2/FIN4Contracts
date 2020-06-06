@@ -6,8 +6,8 @@ import "contracts/Fin4Verifying.sol";
 contract Statement is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "Statement";
-        description = "Submit a statement.";
+        name = "sc.verifier.statement.name";
+        description = "sc.verifier.statement.description";
     }
 
     address public Fin4VerifyingAddress;

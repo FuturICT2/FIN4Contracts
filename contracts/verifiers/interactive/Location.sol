@@ -5,8 +5,8 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 contract Location is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "Location";
-        description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";
+        name = "sc.verifier.location.name";
+        description = "sc.verifier.location.description";
     }
 
     function submitProof_Location(address tokenAddrToReceiveVerifierNotice, uint claimId, uint distanceToLocation) public {

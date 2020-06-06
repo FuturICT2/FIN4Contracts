@@ -8,8 +8,8 @@ import "contracts/Fin4Messaging.sol";
 contract SensorOneTimeSignal is Fin4BaseVerifierType {
 
      constructor() public  {
-        name = "SensorOneTimeSignal";
-        description = "Approval via a sensor that sends a signal. The token creator specifies the sensor via its ID.";
+        name = "sc.verifier.sensor-one-time-signal.name";
+        description = "sc.verifier.sensor-one-time-signal.description";
     }
 
     address public Fin4OracleHubAddress;

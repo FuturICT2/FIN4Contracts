@@ -5,8 +5,8 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 contract MaximumQuantityPerInterval is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "MaximumQuantityPerInterval";
-        description = "Defines the maximum quantity a user can claim within a specified time interval.";
+        name = "sc.verifier.maximum-quantity-per-interval.name";
+        description = "sc.verifier.maximum-quantity-per-interval.description";
         // interval = 1 * 24 * 60 * 60 * 1000; // 1 day
         // maxQuantity = 10;
     }

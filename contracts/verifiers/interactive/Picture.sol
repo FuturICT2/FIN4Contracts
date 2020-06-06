@@ -8,8 +8,8 @@ contract Picture is SpecificAddress {
 
     // @Override
     function init() public {
-        name = "Picture";
-        description = "The claimer has to supply a picture, based on which the approver will decide to approve.";
+        name = "sc.verifier.picture.name";
+        description = "sc.verifier.picture.description";
     }
 
     function submitProof_Picture(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver, string memory IPFShash) public {
