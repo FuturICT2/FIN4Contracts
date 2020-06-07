@@ -8,8 +8,8 @@ contract SelfieTogether is ApprovalByGroupMember {
 
     // @Override
     function init() public {
-        name = "SelfieTogether";
-        description = "The claimer supplies a picture, based on which a self-chosen approver and a member of a group of users appointed by the token creator decide to approve.";
+        name = "sc.verifier.selfie-together.name";
+        description = "sc.verifier.selfie-together.description";
     }
 
     function submitProof_SelfieTogether(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver,
@@ -58,7 +58,7 @@ contract SelfieTogether is ApprovalByGroupMember {
         for (uint i = 0; i < members.length; i ++) {
             paG.groupMemberAddresses[i] = members[i];
             paG.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(msg.sender, name, members[i], messageG, IPFShash, paG.pendingApprovalId);
+                .addPendingApprovalMessage(msg.sender, contractName, members[i], messageG, IPFShash, paG.pendingApprovalId);
         }
 
         pendingApprovals[nextPendingApprovalId] = paG;

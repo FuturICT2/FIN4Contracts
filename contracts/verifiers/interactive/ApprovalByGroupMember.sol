@@ -23,8 +23,8 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
     }
 
     function init() public {
-        name = "ApprovalByGroupMember";
-        description = "The token creator specifies one or more user groups, of which one member has to approve.";
+        name = "sc.verifier.approval-by-group-member.name";
+        description = "sc.verifier.approval-by-group-member.description";
         isAutoInitiable = true;
     }
 
@@ -71,7 +71,7 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
         for (uint i = 0; i < members.length; i ++) {
             pa.groupMemberAddresses[i] = members[i];
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(user, name, members[i], message, "", pa.pendingApprovalId);
+                .addPendingApprovalMessage(user, contractName, members[i], message, "", pa.pendingApprovalId);
         }
 
         pendingApprovals[nextPendingApprovalId] = pa;

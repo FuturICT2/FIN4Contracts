@@ -19,7 +19,7 @@ contract Fin4Verifying {
         return verifierTypes;
     }
 
-    function getVerifierTypeInfo(address verifierType) public view returns(string memory, string memory, string memory, bool) {
+    function getVerifierTypeInfo(address verifierType) public view returns(string memory, string memory, string memory, string memory, bool) {
         // require(verifierTypeIsRegistered(verifierType), "Address is not registered as verifier type");
         return Fin4BaseVerifierType(verifierType).getInfo();
     }

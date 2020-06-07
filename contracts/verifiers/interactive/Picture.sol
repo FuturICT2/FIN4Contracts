@@ -8,8 +8,8 @@ contract Picture is SpecificAddress {
 
     // @Override
     function init() public {
-        name = "Picture";
-        description = "The claimer has to supply a picture, based on which the approver will decide to approve.";
+        name = "sc.verifier.picture.name";
+        description = "sc.verifier.picture.description";
     }
 
     function submitProof_Picture(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver, string memory IPFShash) public {
@@ -25,7 +25,7 @@ contract Picture is SpecificAddress {
         string memory message = string(abi.encodePacked(getMessageText(),
             Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name()));
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
-            msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
+            msg.sender, contractName, approver, message, IPFShash, pa.pendingApprovalId);
         pendingApprovals[approver].push(pa);
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "Your approver has been notified about the request.");
     }

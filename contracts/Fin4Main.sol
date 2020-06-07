@@ -19,6 +19,13 @@ pragma solidity ^0.5.17;
 
 contract Fin4Main {
 
+    // NOTE:
+    // User-facing strings have been replaced with translation-keys. These will be exchanged
+    // with the full string in the respective language in the frontend. Should you use these
+    // contracts by command line or via a different GUI, this is the english translation file:
+    // https://github.com/FuturICT2/FIN4Xplorer/blob/master/src/locale/en.json
+    // All smart contract strings are under "sc".
+
     address public Fin4MainCreator;
     constructor() public {
         Fin4MainCreator = msg.sender;

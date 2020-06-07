@@ -12,8 +12,8 @@ contract SpecificAddress is Fin4BaseVerifierType {
     }
 
     function init() public {
-        name = "SpecificAddress";
-        description = "The claimer specifies an address, which has to approve.";
+        name = "sc.verifier.specific-address.name";
+        description = "sc.verifier.specific-address.description";
     }
 
     address public Fin4MessagingAddress;
@@ -52,7 +52,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
         string memory message = string(abi.encodePacked(getMessageText(),
             Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name()));
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
-            msg.sender, name, approver, message, "", pa.pendingApprovalId);
+            msg.sender, contractName, approver, message, "", pa.pendingApprovalId);
 
         pendingApprovals[approver].push(pa);
 

@@ -6,8 +6,8 @@ import "contracts/Fin4Verifying.sol";
 contract HappyMoment is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "HappyMoment";
-        description = "Submit a picture of a happy moment.";
+        name = "sc.verifier.happy-moment.name";
+        description = "sc.verifier.happy-moment.description";
     }
 
     address public Fin4VerifyingAddress;

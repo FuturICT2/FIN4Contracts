@@ -8,8 +8,8 @@ import "contracts/Fin4Messaging.sol";
 contract Networking is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "Networking";
-        description = "Submit content of your networking activity and your counterpart has to approve your claim.";
+        name = "sc.verifier.networking.name";
+        description = "sc.verifier.networking.description";
     }
 
     address public Fin4VerifyingAddress;
@@ -53,7 +53,7 @@ contract Networking is Fin4BaseVerifierType {
             "'. The submitted content is '", content, "'."));
 
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
-            msg.sender, name, approver, message, content, pa.pendingApprovalId);
+            msg.sender, contractName, approver, message, content, pa.pendingApprovalId);
 
         pendingApprovals[approver].push(pa);
     }
