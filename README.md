@@ -51,6 +51,7 @@ To deploy the smart contracts to a local Ganache instance, run:
 ```sh
 truffle migrate
 ```
+To avoid weird in-between states I would recommend to delete the `/build/contract` folder each time before migrating the contracts again. If the repos are sitting next to each other, that would look like this: `rm -r ../FIN4Xplorer/src/builds`.
 
 To deploy to the Rinkeby testnet, use:
 
