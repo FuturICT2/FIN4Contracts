@@ -3,11 +3,11 @@ pragma solidity ^0.5.17;
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4Groups.sol";
 
-contract Blacklisting is Fin4BaseVerifierType {
+contract BlockThese is Fin4BaseVerifierType {
 
     constructor() public  {
-        name = "sc.verifier.blacklisting.name";
-        description = "sc.verifier.blacklisting.description";
+        name = "sc.verifier.block-these.name";
+        description = "sc.verifier.block-these.description";
         isNoninteractive = true;
     }
 
@@ -19,12 +19,12 @@ contract Blacklisting is Fin4BaseVerifierType {
 
     // @Override
     function autoCheck(address user, address tokenAddress, uint claimId) public {
-        if (arrayContainsAddress(tokenToBlacklistedUsers[tokenAddress], user) ||
-            Fin4Groups(Fin4GroupsAddress).userIsInOneOfTheseGroups(tokenToBlacklistedGroups[tokenAddress], user)) {
+        if (arrayContainsAddress(tokenToBlockedUsers[tokenAddress], user) ||
+            Fin4Groups(Fin4GroupsAddress).userIsInOneOfTheseGroups(tokenToBlockedGroups[tokenAddress], user)) {
             string memory message = string(abi.encodePacked(
                 "Your claim on token \'",
                 Fin4TokenStub(tokenAddress).name(),
-                "\' got rejected from the noninteractive verifier \'Blacklisting\' because you are blacklisted on this token"
+                "\' got rejected from the noninteractive verifier \'BlockThese\' because you are blocked on this token"
                 " - either directly or via a group you are a member of"));
             _sendRejectionNotice(address(this), tokenAddress, claimId, message);
         } else {
@@ -34,16 +34,16 @@ contract Blacklisting is Fin4BaseVerifierType {
 
     // @Override
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
-        return "address[]:blacklisted users:,uint[]:blacklisted groups:";
+        return "address[]:blocked users:,uint[]:blocked groups:";
     }
 
     // TODO use boolean-mapping for value instead?
-    mapping (address => address[]) public tokenToBlacklistedUsers;
-    mapping (address => uint[]) public tokenToBlacklistedGroups;
+    mapping (address => address[]) public tokenToBlockedUsers;
+    mapping (address => uint[]) public tokenToBlockedGroups;
 
-    function setParameters(address token, address[] memory blacklistedUsers, uint[] memory blacklistedGroupIds) public {
-        tokenToBlacklistedUsers[token] = blacklistedUsers;
-        tokenToBlacklistedGroups[token] = blacklistedGroupIds;
+    function setParameters(address token, address[] memory blockedUsers, uint[] memory blockedGroupIds) public {
+        tokenToBlockedUsers[token] = blockedUsers;
+        tokenToBlockedGroups[token] = blockedGroupIds;
     }
 
 }

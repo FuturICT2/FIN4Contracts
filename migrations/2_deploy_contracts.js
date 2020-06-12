@@ -25,8 +25,8 @@ const BurnSourcerer = artifacts.require('BurnSourcerer');
 const verifierContractNames = [
 	'ApprovalByGroupMember',
 	'SelfieTogether',
-	'Blacklisting',
-	'Whitelisting',
+	'BlockThese',
+	'AllowOnlyThese',
 	// 'SensorOneTimeSignal',
 	/* 
 	These include the submissions feature:
@@ -141,9 +141,9 @@ module.exports = async function(deployer) {
 	// SelfieTogether
 	await verifierInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierInstances[1].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// Blacklisting
+	// BlockThese
 	await verifierInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	// Whitelisting
+	// AllowOnlyThese
 	await verifierInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SpecificAddress
 	await verifierInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
