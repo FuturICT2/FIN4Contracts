@@ -15,6 +15,9 @@ contract LimitedVoting is Fin4BaseVerifierType {
         init();
     }
 
+    // function mint(address account, uint256 amount) public returns (bool);
+    // function burnFrom(address from, uint256 value) public;
+
     address public creator;
     address public Fin4GroupsAddress;
     address public Fin4MessagingAddress;
@@ -46,7 +49,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     function init() public {
         name = "LimitedVoting";
         description = "The proof is sent to the users due to a random mechanism";
-        isAutoInitiable = true;
+        isAutoInitiable = false;
     }
 
     uint public nextPendingApprovalId = 0;
@@ -76,11 +79,11 @@ contract LimitedVoting is Fin4BaseVerifierType {
     }
 
     // @Override
-    function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
+    function submitProof_LimitedVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory IPFShash) public {
         PendingApproval memory pa;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
-        pa.requester = user;
+        pa.requester = msg.sender;
         /*
         
         PIOTR CODE Given the number of users to be sent to(which I will implement and provide to you by calling a function)
@@ -93,9 +96,10 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.pendingApprovalId = nextPendingApprovalId;
         pa.nbApproved = 0;
         pa.nbRejected = 0;
+        pa.attachment = IPFShash;
         pa.isIndividualApprover = false;
         string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
-            ". Once a member of the group approves, these messages get marked as read for all others."));
+            ". Consensus is reached using Absolute Majority. The action that is supposed to be done is: ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).getAction()));
 
         address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
 
@@ -108,7 +112,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
             pa.groupMemberAddresses[i] = members[i];
             // pa.reputation[i] = Fin4TokenManagement(Fin4TokenManagementAddr).getBalance(members[i], Fin4ReputationAddress);
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(user, name, members[i], message, "", pa.pendingApprovalId);
+                .addPendingApprovalMessage(msg.sender, name, members[i], message, IPFShash, pa.pendingApprovalId);
         }
 
         pendingApprovals[nextPendingApprovalId] = pa;
@@ -118,7 +122,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     }
 
     function getMessageText() public pure returns(string memory) {
-        return "You are a member of a user group that was appointed for approving this claim on the token ";
+        return "You have been randomly selected to participate in voting for this claim on the token ";
     }
 
     // @Override
@@ -128,9 +132,13 @@ contract LimitedVoting is Fin4BaseVerifierType {
     // TO DO: Make this parameter actually number of users instead of group id
     mapping (address => uint) public tokenToParameter;
 
-    function setParameters(address token, uint groupId) public {
+    function setParameters(address token, uint nbUsers) public {
     //   require(Fin4Groups(Fin4GroupsAddress).groupExists(groupId), "Group ID does not exist");
-      tokenToParameter[token] = groupId;
+        // if(nbUsers > 3)
+            tokenToParameter[token] = nbUsers;
+        // else
+            // tokenToParameter[token] = 3;
+
     }
 
     function _getGroupId(address token) public view returns(uint) {
@@ -147,13 +155,19 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.nbApproved = pa.nbApproved + 1;
         if(pa.nbApproved > pa.groupMemberAddresses.length/2){
             markMessagesAsRead(pendingApprovalId);
+            uint REPS = 0;
+            uint REPF = 0;
+            if(pa.nbApproved != 0)
+                REPS = Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote() / pa.nbApproved;
+            if(pa.nbRejected != 0)
+                REPF = Fin4SystemParameters(Fin4SystemParametersAddress).REPforFailedVote() / pa.nbRejected;
             // Reward voters that approved
             for (uint i = 0; i < pa.nbApproved; i++) {
-               MintingStub(Fin4ReputationAddress).mint(pa.Approved[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote());
+               MintingStub(Fin4ReputationAddress).mint(pa.Approved[i], REPS);
             }
             // Punish voters that rejected
             for (uint i = 0; i < pa.nbRejected; i++) {
-                BurningStub(Fin4ReputationAddress).burnFrom(pa.Rejected[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforFailedVote());
+               BurningStub(Fin4ReputationAddress).burnFrom(pa.Rejected[i], REPF);
             }
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
         }
@@ -173,12 +187,18 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.Rejected[pa.nbRejected] = msg.sender;
         pa.nbRejected = pa.nbRejected + 1;
         if(pa.nbRejected > pa.groupMemberAddresses.length/2){
+            uint REPS = 0;
+            uint REPF = 0;
             markMessagesAsRead(pendingApprovalId);
+            if(pa.nbApproved != 0)
+                REPS = Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote() / pa.nbRejected;
+            if(pa.nbRejected != 0)
+                REPF = Fin4SystemParameters(Fin4SystemParametersAddress).REPforFailedVote() / pa.nbApproved;
             for (uint i = 0; i < pa.nbRejected; i++) {
-                MintingStub(Fin4ReputationAddress).mint(pa.Rejected[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote());
+                MintingStub(Fin4ReputationAddress).mint(pa.Rejected[i], REPS);
             }
             for (uint i = 0; i < pa.nbApproved; i++) {
-                BurningStub(Fin4ReputationAddress).burnFrom(pa.Approved[i], Fin4SystemParameters(Fin4SystemParametersAddress).REPforFailedVote());
+                BurningStub(Fin4ReputationAddress).burnFrom(pa.Approved[i], REPF);
             }
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
         }
