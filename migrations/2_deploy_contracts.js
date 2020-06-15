@@ -28,7 +28,9 @@ const verifierTypeContracts = [
 	artifacts.require('Picture'),
 	artifacts.require('Location'),
 	artifacts.require('ClaimableOnlyNTimesPerUser'),
-	artifacts.require('LimitedVoting')
+	artifacts.require('LimitedVoting'),
+	artifacts.require('PictureVoting'),
+	artifacts.require('VideoVoting')
 	//artifacts.require('SensorOneTimeSignal'),
 	/*
 	These include the submissions feature:
@@ -126,6 +128,16 @@ module.exports = async function(deployer) {
 	await verifierTypeInstances[11].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	await verifierTypeInstances[11].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
 	await verifierTypeInstances[11].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
+	// PictureVoting
+	await verifierTypeInstances[12].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierTypeInstances[12].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierTypeInstances[12].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
+	await verifierTypeInstances[12].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
+	// VideoVoting
+	await verifierTypeInstances[13].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierTypeInstances[13].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierTypeInstances[13].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
+	await verifierTypeInstances[13].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);
