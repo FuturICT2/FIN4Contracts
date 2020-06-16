@@ -48,7 +48,7 @@ contract Fin4Main {
         Fin4VerifyingAddress = verifying;
         Fin4GroupsAddress = groups;
         Fin4SystemParametersAddress = systemParameters;
-        Fin4VotingAddress = fin4voting
+        Fin4VotingAddress = fin4voting;
     }
 
     function getSatelliteAddresses() public view returns(address, address, address, address, address, address, address, address, address, address) {
