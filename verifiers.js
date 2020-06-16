@@ -3,23 +3,27 @@
  */
 
 const verifierOptions = {
-  name: {
-    type: {
-      values: ["Non-Interactive", "Interactive", "Both"],
+  type: {
+    values: ["Non-Interactive", "Interactive", "Both"],
+    description:
+      "Determines whether the input is verified by other users, the system or both.",
+  },
+  claimerInput: {
+    inputType: [
+      "System/Sensor generated data",
+      "User generated data",
+      "Both",
+      "None",
+    ],
+    sensorData: {
+      values: ["None", "Location", "Time"],
       description:
-        "Determines whether the input is verified by other users, the system or both.",
+        "Determines if and which sensor data must be provided by the claimer.",
     },
-    claimerInput: {
-      sensorData: {
-        values: ["None", "Location", "Time"],
-        description:
-          "Determines if and which sensor data must be provided by the claimer.",
-      },
-      userData: {
-        values: ["None", "Picture", "Video", "Password", "Address"],
-        description:
-          "Determines if and which content must be uploaded by the claimer.",
-      },
+    userData: {
+      values: ["None", "Picture", "Video", "Password", "Address"],
+      description:
+        "Determines if and which content must be uploaded by the claimer.",
     },
   },
 };
@@ -28,6 +32,7 @@ const verifiers = {
   Password: {
     type: "Non-Interactive",
     claimerInput: {
+      inputType: "User generated data",
       sensorData: "None",
       userData: "Password",
     },
@@ -38,6 +43,7 @@ const verifiers = {
   Picture: {
     type: "Interactive",
     claimerInput: {
+      inputType: "User generated data",
       sensorData: "None",
       userData: "Picture",
     },
@@ -48,8 +54,9 @@ const verifiers = {
   Blacklisting: {
     type: "Non-Interactive",
     claimerInput: {
-      sensorData: "None",
-      userData: "Address",
+      inputType: "System/Sensor generated data",
+      sensorData: "Address",
+      userData: "None",
     },
     description:
       "The token creator defines group(s) and/or individual accounts that can not claim a token.",
@@ -58,8 +65,9 @@ const verifiers = {
   Location: {
     type: "Non-Interactive",
     claimerInput: {
-      sensorData: "Location",
-      userData: "None",
+      inputType: "User generated data",
+      sensorData: "None",
+      userData: "Location",
     },
     description:
       "A location, which is within a radius of a location the token creator defines, needs to be provided.",
