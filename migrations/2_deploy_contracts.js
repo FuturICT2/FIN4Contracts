@@ -197,8 +197,8 @@ module.exports = async function (deployer) {
     }
   }
   let verifierData =
-    `const verifierOptions = ${JSON.stringify(verifierOptions)};\n` +
-    `const verifiers = ${JSON.stringify(verifiers)};\n`;
+    `export const verifierOptions = ${JSON.stringify(verifierOptions)};\n` +
+    `export const verifiers = ${JSON.stringify(verifiers)};\n`;
   fs.writeFile(
     path.join(
       __dirname,
