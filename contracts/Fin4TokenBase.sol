@@ -14,6 +14,7 @@ contract Fin4TokenBase { // abstract class
     uint public tokenCreationTime;
     uint public fixedAmount;
     uint public initialSupply;
+    address public initialSupplyOwner;
 
     bool private initDone = false;
     bool private Fin4ClaimingHasMinterRole = true;
