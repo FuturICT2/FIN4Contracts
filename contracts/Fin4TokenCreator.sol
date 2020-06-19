@@ -45,7 +45,7 @@ contract Fin4TokenCreator {
         string memory description, string memory actionsText, uint fixedAmount, string memory unit, bytes32[] memory underlyingNames) public {
 
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
-        token.addVerifierTypes(requiredVerifierTypes);
+        token.storeVerifierTypesAndMinters(requiredVerifierTypes, minterRoles);
 
         if (underlyingNames.length > 0 && Fin4UnderlyingsAddress != address(0)) {
             Fin4Underlyings(Fin4UnderlyingsAddress).registerUnderlyingsWithToken(tokenAddress, underlyingNames);
@@ -58,7 +58,6 @@ contract Fin4TokenCreator {
                 Fin4ClaimingHasMinterRole = true;
             }
         }
-        token.storeAddressesWithMinterRole(minterRoles);
         token.renounceMinter(); // Fin4(Un)cappedTokenCreator should not have the MinterRole on tokens
                                 // TODO unless it was given explicitely in this array?
 

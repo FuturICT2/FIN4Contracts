@@ -44,10 +44,6 @@ contract Fin4TokenBase { // abstract class
 
     address[] public addressesWithMinterRoles;
 
-    function storeAddressesWithMinterRole(address[] memory minters) public {
-        addressesWithMinterRoles = minters;
-    }
-
     function getInitialSupplyOwnerAndMinterRoles() internal view returns(address[] memory) {
         address[] memory initialSupplyOwnerAndMinterRoles = new address[](1 + addressesWithMinterRoles.length);
         initialSupplyOwnerAndMinterRoles[0] = initialSupplyOwner;
@@ -250,9 +246,10 @@ contract Fin4TokenBase { // abstract class
         return requiredVerifierTypes;
     }
 
-    function addVerifierTypes(address[] memory _requiredVerifierTypes) public {
+    function storeVerifierTypesAndMinters(address[] memory _requiredVerifierTypes, address[] memory minters) public {
         requiredVerifierTypes = _requiredVerifierTypes;
         // TODO check if verifierTypeIsRegistered()
+        addressesWithMinterRoles = minters;
     }
 
     // function getUnrejectedClaimsWithThisverifierTypeUnapproved archived in SensorOneTimeSignal
