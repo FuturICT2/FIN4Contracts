@@ -49,12 +49,13 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
 contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
 
     constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
-        bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap, address initialSupplyOwner)
-        ERC20PlusCapped(name, symbol, decimals, address(0), isBurnable, cap, isTransferable, isMintable, _initialSupply, initialSupplyOwner)
+        bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap, address _initialSupplyOwner)
+        ERC20PlusCapped(name, symbol, decimals, address(0), isBurnable, cap, isTransferable, isMintable, _initialSupply, _initialSupplyOwner)
         Fin4TokenBase()
         public {
             tokenCreator = _tokenCreator;
             initialSupply = _initialSupply;
+            initialSupplyOwner = _initialSupplyOwner;
         }
 
     function getTokenInfo(address user) public view returns(bool, string memory, string memory,
