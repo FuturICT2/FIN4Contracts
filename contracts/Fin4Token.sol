@@ -25,7 +25,7 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
     }
 
     function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
-        bool[] memory, uint[] memory, string memory) {
+        bool[] memory, uint[] memory, string memory, address[] memory) {
 
         bool[] memory props = new bool[](4);
         props[0] = isTransferable;
@@ -39,7 +39,8 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
         values[2] = fixedAmount;
         values[3] = initialSupply;
 
-        return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
+        return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values,
+            actionsText, getInitialSupplyOwnerAndMinterRoles());
     }
 }
 
@@ -62,7 +63,7 @@ contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
     }
 
     function getDetailedTokenInfo() public view returns(address[] memory, uint, uint256, uint256, uint,
-        bool[] memory, uint[] memory, string memory) {
+        bool[] memory, uint[] memory, string memory, address[] memory) {
 
         bool[] memory props = new bool[](4);
         props[0] = isTransferable;
@@ -76,6 +77,7 @@ contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
         values[2] = fixedAmount;
         values[3] = initialSupply;
 
-        return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values, actionsText);
+        return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values,
+            actionsText, getInitialSupplyOwnerAndMinterRoles());
     }
 }

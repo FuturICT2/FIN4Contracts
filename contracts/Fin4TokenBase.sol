@@ -48,6 +48,15 @@ contract Fin4TokenBase { // abstract class
         addressesWithMinterRoles = minters;
     }
 
+    function getInitialSupplyOwnerAndMinterRoles() internal view returns(address[] memory) {
+        address[] memory initialSupplyOwnerAndMinterRoles = new address[](1 + addressesWithMinterRoles.length);
+        initialSupplyOwnerAndMinterRoles[0] = initialSupplyOwner;
+        for (uint i = 0; i < addressesWithMinterRoles.length; i++) {
+            initialSupplyOwnerAndMinterRoles[1 + i] = addressesWithMinterRoles[i];
+        }
+        return initialSupplyOwnerAndMinterRoles;
+    }
+
     // ------------------------- CLAIM -------------------------
 
     // ProofAndVerifierStatusEnum
