@@ -44,13 +44,14 @@ contract Fin4TokenBase { // abstract class
 
     address[] public addressesWithMinterRoles;
 
-    function getInitialSupplyOwnerAndMinterRoles() internal view returns(address[] memory) {
-        address[] memory initialSupplyOwnerAndMinterRoles = new address[](1 + addressesWithMinterRoles.length);
-        initialSupplyOwnerAndMinterRoles[0] = initialSupplyOwner;
+    function getInitialSupplyOwnerAndTokenCreatorAndMinterRoles() internal view returns(address[] memory) {
+        address[] memory addresses = new address[](2 + addressesWithMinterRoles.length);
+        addresses[0] = initialSupplyOwner;
+        addresses[1] = tokenCreator;
         for (uint i = 0; i < addressesWithMinterRoles.length; i++) {
-            initialSupplyOwnerAndMinterRoles[1 + i] = addressesWithMinterRoles[i];
+            addresses[2 + i] = addressesWithMinterRoles[i];
         }
-        return initialSupplyOwnerAndMinterRoles;
+        return addresses;
     }
 
     // ------------------------- CLAIM -------------------------
