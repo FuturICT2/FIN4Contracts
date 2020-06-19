@@ -41,6 +41,12 @@ contract Fin4TokenBase { // abstract class
         return tokenCreator;
     }
 
+    address[] public addressesWithMinterRoles;
+
+    function storeAddressesWithMinterRole(address[] memory minters) public {
+        addressesWithMinterRoles = minters;
+    }
+
     // ------------------------- CLAIM -------------------------
 
     // ProofAndVerifierStatusEnum

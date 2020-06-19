@@ -58,7 +58,9 @@ contract Fin4TokenCreator {
                 Fin4ClaimingHasMinterRole = true;
             }
         }
+        token.storeAddressesWithMinterRole(minterRoles);
         token.renounceMinter(); // Fin4(Un)cappedTokenCreator should not have the MinterRole on tokens
+                                // TODO unless it was given explicitely in this array?
 
         token.init(Fin4ClaimingAddress, Fin4ClaimingHasMinterRole, description, actionsText, fixedAmount, unit);
         symbolIsUsed[token.symbol()] = true;
