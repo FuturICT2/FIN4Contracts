@@ -6,15 +6,15 @@ import "contracts/stub/Fin4ClaimingStub.sol";
 
 contract Fin4TokenBase { // abstract class
 
-    address public Fin4ClaimingAddress;
-    address public tokenCreator;
+    address Fin4ClaimingAddress;
+    address tokenCreator;
     string public description;
     string public actionsText;
     string public unit;
     uint public tokenCreationTime;
     uint public fixedAmount;
-    uint public initialSupply;
-    address public initialSupplyOwner;
+    uint initialSupply;
+    address initialSupplyOwner;
 
     bool private initDone = false;
     bool private Fin4ClaimingHasMinterRole = true;
@@ -64,7 +64,7 @@ contract Fin4TokenBase { // abstract class
         string message;
     }
 
-    uint nextClaimId = 0;
+    uint public nextClaimId = 0;
 
     struct Claim {
         uint claimId;

@@ -33,14 +33,14 @@ contract Fin4TokenManagement {
 
         if (Fin4ReputationAddress != address(0)) {
             // REP reward for creating a new token
-            MintTransferStub(Fin4ReputationAddress).mint(token.tokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
+            MintTransferStub(Fin4ReputationAddress).mint(token.getTokenCreator(), Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenCreation());
         }
 
         allFin4Tokens.push(tokenAddress);
 
         // or cheaper/better to get these values via one getter?
         emit Fin4TokenCreated(tokenAddress, token.name(), token.symbol(), token.description(), token.unit(),
-            token.tokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0);
+            token.getTokenCreator(), token.tokenCreationTime(), token.fixedAmount() != 0);
     }
 
     function getAllFin4Tokens() public view returns(address[] memory) {
