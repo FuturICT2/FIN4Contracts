@@ -148,15 +148,15 @@ contract Fin4TokenBase { // abstract class
         uint count = 0;
         for (uint i = 0; i < nextClaimId; i ++) {
             if (claims[i].claimer == claimer) {
-                    count ++;
+                count ++;
             }
         }
         uint[] memory ids = new uint[](count);
         count = 0;
         for (uint i = 0; i < nextClaimId; i ++) {
             if (claims[i].claimer == claimer) {
-                    ids[count] = i;
-                    count ++;
+                ids[count] = i;
+                count ++;
             }
         }
         return ids;
