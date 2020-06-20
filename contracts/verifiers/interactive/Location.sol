@@ -159,6 +159,7 @@ contract Location is Fin4BaseVerifierType {
 
         return result;
     } 
+
     function convertStringToBytes(string memory str) private returns (bytes memory) {
         return bytes(str);
     }

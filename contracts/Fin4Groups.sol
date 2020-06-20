@@ -28,6 +28,10 @@ contract Fin4Groups is utils {
         return groupId < nextGroupId; // in the future, consider group deletion? #ConceptualDecision
     }
 
+    function DeleteGroup(uint groupId) public{
+        delete groups[groupId];
+    }
+
     modifier userIsCreator(uint groupId) {
         require(groups[groupId].creator == msg.sender, "User is not group creator");
         _;

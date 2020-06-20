@@ -170,6 +170,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
                BurningStub(Fin4ReputationAddress).burnFrom(pa.Rejected[i], REPF);
             }
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
+            Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
         pendingApprovals[pendingApprovalId] = pa;
     }
@@ -201,6 +202,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
                 BurningStub(Fin4ReputationAddress).burnFrom(pa.Approved[i], REPF);
             }
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
+            Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
         pendingApprovals[pendingApprovalId] = pa;
     }
