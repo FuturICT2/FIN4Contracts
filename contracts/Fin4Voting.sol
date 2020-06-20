@@ -14,6 +14,8 @@ contract Fin4Voting{
     mapping (address => VoterInfo) public voters;
     address[] public votersAddresses;
 
+    mapping (address => uint) index;
+    address[] store;
 
     address public creator;
     address public Fin4SystemParametersAddress;
@@ -51,18 +53,38 @@ contract Fin4Voting{
 
 
         uint startIdx = uint(blockhash(block.number-1))%votersAddresses.length;
-        uint interval = uint(blockhash(block.number-2))%(votersAddresses.length/numberOfUsers);
-
+        // uint interval = uint(blockhash(block.number-2))%(votersAddresses.length/numberOfUsers);
+        uint interval = 1;
         uint groupId = Fin4Groups(Fin4GroupsAddress).createGroup(groupName, false);
 
-        address[] memory newVoters = new address[](numberOfUsers);
+        // address[] memory newVoters = new address[](numberOfUsers);
         for(uint i=0; i<numberOfUsers; i++){
-            newVoters[i] = votersAddresses[(startIdx + i*interval)%votersAddresses.length];
+            address who = votersAddresses[(startIdx + i*interval)%votersAddresses.length];
+            addToArray(who);
         }
 
-        Fin4Groups(Fin4GroupsAddress).addMembers(groupId, newVoters);
-
+        Fin4Groups(Fin4GroupsAddress).addMembers(groupId, store);
+        for(uint i = 0; i<store.length; i++){
+            delete index[store[i]];
+        }
+        delete store;
         return groupId;
+    }
+
+    function addToArray(address who) public {
+        if (!inArray(who)) {
+            // Append
+            index[who] = store.length + 1;
+            store.push(who);
+        }
+    }
+
+    function inArray(address who) public view returns (bool) {
+        // address 0x0 is not valid if pos is 0 is not in the array
+        if (index[who] > 0) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -72,10 +94,6 @@ contract Fin4Voting{
         for (uint i=0; i<votersAddresses.length; i++) {
             emit Voter(votersAddresses[i], voters[votersAddresses[i]].currentVotings);
         }
-
-
-
-
     }
 
 
