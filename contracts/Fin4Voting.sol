@@ -37,6 +37,7 @@ contract Fin4Voting{
     }
 
     function isEligibleToBeAVoter() public returns(bool) {
+        require(isVoter()==false);
         return isVoter()==false; //TODO ADD CHECK OF REP OF USER
     }
 
