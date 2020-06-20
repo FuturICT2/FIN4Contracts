@@ -76,7 +76,7 @@ contract Fin4TokenBase { // abstract class
         address[] requiredVerifierTypes;
         mapping(address => StatusObj) verifierStatuses;
         uint claimCreationTime;
-        uint claimApprovalTime;
+        uint claimApprovalOrRejectionTime;
         bool gotRejected;
     }
 
@@ -118,7 +118,7 @@ contract Fin4TokenBase { // abstract class
         return (nextClaimId - 1, claim.requiredVerifierTypes, claim.claimCreationTime, claim.quantity);
     }
 
-    function getClaim(uint claimId) public view returns(address, bool, bool, uint, uint, string memory, address[] memory,
+    function getClaim(uint claimId) public view returns(address, bool, bool, uint, uint, uint, string memory, address[] memory,
         uint[] memory, address[] memory) {
         // require(claims[claimId].claimer == msg.sender, "This claim was not submitted by the sender");
 
@@ -141,7 +141,7 @@ contract Fin4TokenBase { // abstract class
         }
 
         return (claim.claimer, claim.isApproved, claim.gotRejected, claim.quantity, claim.claimCreationTime,
-            claim.comment, requiredVerifierTypes, verifierTypeStatuses, verifiersWithMessages);
+            claim.claimApprovalOrRejectionTime, claim.comment, requiredVerifierTypes, verifierTypeStatuses, verifiersWithMessages);
     }
 
     function getClaimIds(address claimer) public view returns(uint[] memory) {
@@ -213,17 +213,24 @@ contract Fin4TokenBase { // abstract class
         claims[claimId].verifierStatuses[verifierTypeAddress].message = message;
         Fin4ClaimingStub(Fin4ClaimingAddress).verifierRejectionPingback(address(this), verifierTypeAddress, claimId,
             claims[claimId].claimer, message);
-        if (!claims[claimId].gotRejected) {
-            claims[claimId].gotRejected = true;
-            Fin4ClaimingStub(Fin4ClaimingAddress).claimRejectionPingback(address(this), claimId, claims[claimId].claimer);
-        }
+        rejectClaim(claimId);
     }
 
     function approveClaim(uint claimId) private {
-        claims[claimId].isApproved = true;
-        claims[claimId].claimApprovalTime = now;
-        Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId,
-            claims[claimId].quantity, Fin4ClaimingHasMinterRole);
+        if (!claims[claimId].isApproved) {
+            claims[claimId].isApproved = true;
+            claims[claimId].claimApprovalOrRejectionTime = now;
+            Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId,
+                claims[claimId].quantity, Fin4ClaimingHasMinterRole);
+        }
+    }
+
+    function rejectClaim(uint claimId) private {
+        if (!claims[claimId].gotRejected) {
+            claims[claimId].gotRejected = true;
+            claims[claimId].claimApprovalOrRejectionTime = now;
+            Fin4ClaimingStub(Fin4ClaimingAddress).claimRejectionPingback(address(this), claimId, claims[claimId].claimer);
+        }
     }
 
     function isMinter(address account) public view returns (bool);
