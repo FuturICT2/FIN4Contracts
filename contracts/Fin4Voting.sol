@@ -55,14 +55,14 @@ contract Fin4Voting{
 
         uint groupId = Fin4Groups(Fin4GroupsAddress).createGroup(groupName, false);
 
-        address[] memory newVoters; 
-        for(uint i=0; i<numberOfUsers; i++){
-            newVoters[i] = votersAddresses[(startIdx + i*interval)%votersAddresses.length];
-        }
+        // address[] memory newVoters; 
+        // for(uint i=0; i<numberOfUsers; i++){
+        //     newVoters[i] = votersAddresses[(startIdx + i*interval)%votersAddresses.length];
+        // }
 
-        Fin4Groups(Fin4GroupsAddress).addMembers(groupId, newVoters);
+        // Fin4Groups(Fin4GroupsAddress).addMembers(groupId, newVoters);
 
-        return groupId;
+        return 0;
     }
 
 

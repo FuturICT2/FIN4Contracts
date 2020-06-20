@@ -8,6 +8,7 @@ import "contracts/Fin4TokenManagement.sol";
 import 'contracts/stub/MintingStub.sol';
 import 'contracts/stub/BurningStub.sol';
 import 'contracts/Fin4SystemParameters.sol';
+import 'contracts/Fin4Voting.sol';
 
 contract LimitedVoting is Fin4BaseVerifierType {
      constructor() public  {
@@ -24,6 +25,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     address public Fin4SystemParametersAddress;
     address public Fin4ReputationAddress;
     address public Fin4TokenManagementAddr;
+    address public Fin4VotingAddress;
     // Set in 2_deploy_contracts.js
     function setFin4GroupsAddress(address Fin4GroupsAddr) public {
         Fin4GroupsAddress = Fin4GroupsAddr;
@@ -39,6 +41,10 @@ contract LimitedVoting is Fin4BaseVerifierType {
     // Set in 2_deploy_contracts.js
     function setFin4SystemParametersAddress(address SystemParametersAddr) public {
         Fin4SystemParametersAddress = SystemParametersAddr;
+    }
+    // Set in 2_deploy_contracts.js
+    function setFin4VotingAddress(address VotingAddr) public {
+        Fin4VotingAddress = VotingAddr;
     }
     function setFin4ReputationAddress(address Fin4ReputationAddr) public {
         require(msg.sender == creator, "Only the creator of this smart contract can call this function");
@@ -84,13 +90,9 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = msg.sender;
-        /*
-        
-        PIOTR CODE Given the number of users to be sent to(which I will implement and provide to you by calling a function)
-
-         */
+        uint groupId = Fin4Voting(Fin4VotingAddress).createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), "test");
         // Then on this line we use the group ID you give me
-        uint groupId = _getGroupId(tokenAddrToReceiveVerifierNotice);
+        // uint groupId = _getGroupId(tokenAddrToReceiveVerifierNotice);
         // The rest of the code can run as planned
         pa.approverGroupId = groupId;
         pa.pendingApprovalId = nextPendingApprovalId;
@@ -135,13 +137,13 @@ contract LimitedVoting is Fin4BaseVerifierType {
     function setParameters(address token, uint nbUsers) public {
     //   require(Fin4Groups(Fin4GroupsAddress).groupExists(groupId), "Group ID does not exist");
         // if(nbUsers > 3)
-            tokenToParameter[token] = nbUsers;
+        //     tokenToParameter[token] = nbUsers;
         // else
-            // tokenToParameter[token] = 3;
-
+        //     tokenToParameter[token] = 3;
+        tokenToParameter[token] = nbUsers;
     }
 
-    function _getGroupId(address token) public view returns(uint) {
+    function _getNbUsers(address token) public view returns(uint) {
         return tokenToParameter[token];
     }
 

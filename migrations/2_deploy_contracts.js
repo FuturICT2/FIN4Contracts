@@ -133,16 +133,19 @@ module.exports = async function(deployer) {
 	await verifierTypeInstances[11].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	await verifierTypeInstances[11].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
 	await verifierTypeInstances[11].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
+	await verifierTypeInstances[11].setFin4VotingAddress(Fin4VotingInstance.address);
 	// PictureVoting
 	await verifierTypeInstances[12].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierTypeInstances[12].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	await verifierTypeInstances[12].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
 	await verifierTypeInstances[12].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
+	await verifierTypeInstances[12].setFin4VotingAddress(Fin4VotingInstance.address);
 	// VideoVoting
 	await verifierTypeInstances[13].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierTypeInstances[13].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	await verifierTypeInstances[13].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
 	await verifierTypeInstances[13].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
+	await verifierTypeInstances[13].setFin4VotingAddress(Fin4VotingInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);
