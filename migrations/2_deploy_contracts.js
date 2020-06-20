@@ -109,6 +109,7 @@ module.exports = async function(deployer) {
 	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract)));
 	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
+	await Fin4VotingInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices
 

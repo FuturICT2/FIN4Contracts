@@ -193,9 +193,9 @@ contract LimitedVoting is Fin4BaseVerifierType {
             uint REPS = 0;
             uint REPF = 0;
             markMessagesAsRead(pendingApprovalId);
-            if(pa.nbApproved != 0)
-                REPS = Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote() / pa.nbRejected;
             if(pa.nbRejected != 0)
+                REPS = Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote() / pa.nbRejected;
+            if(pa.nbApproved != 0)
                 REPF = Fin4SystemParameters(Fin4SystemParametersAddress).REPforFailedVote() / pa.nbApproved;
             for (uint i = 0; i < pa.nbRejected; i++) {
                 MintingStub(Fin4ReputationAddress).mint(pa.Rejected[i], REPS);
