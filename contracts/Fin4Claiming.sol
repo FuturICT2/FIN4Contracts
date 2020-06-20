@@ -144,6 +144,10 @@ contract Fin4Claiming {
 
     // ------------------------- CLAIMS -------------------------
 
+    function getClaimsCountOnThisToken(address token) public view returns(uint) {
+        return Fin4Token(token).nextClaimId();
+    }
+
     function getMyClaimIdsOnThisToken(address token) public view returns(uint[] memory) {
         return Fin4Token(token).getClaimIds(msg.sender);
     }
