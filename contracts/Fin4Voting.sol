@@ -39,12 +39,12 @@ contract Fin4Voting{
     }
 
     function isEligibleToBeAVoter() public returns(bool) {
-        require(isVoter()==false);
-        return isVoter()==false; //TODO ADD CHECK OF REP OF USER
+        require(isVoter(msg.sender)==false);
+        return isVoter(msg.sender)==false; //TODO ADD CHECK OF REP OF USER
     }
 
-    function isVoter() public returns(bool) {
-        return voters[msg.sender].voter != address(0);
+    function isVoter(address add) public view returns(bool) {
+        return voters[add].voter != address(0);
     }
 
     function createRandomGroupOfUsers(uint numberOfUsers,  string memory groupName)  public returns(uint) {
