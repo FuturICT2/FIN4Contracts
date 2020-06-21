@@ -217,7 +217,9 @@ contract Fin4TokenBase { // abstract class
     }
 
     function approveClaim(uint claimId) private {
-        if (!claims[claimId].isApproved) {
+        // TODO outsource the if into own method and use it via require here and in rejectClaim()
+        // couldn't do it because of out of gas error
+        if (!claims[claimId].isApproved && !claims[claimId].gotRejected) {
             claims[claimId].isApproved = true;
             claims[claimId].claimApprovalOrRejectionTime = now;
             Fin4ClaimingStub(Fin4ClaimingAddress).claimApprovedPingback(address(this), claims[claimId].claimer, claimId,
@@ -226,7 +228,7 @@ contract Fin4TokenBase { // abstract class
     }
 
     function rejectClaim(uint claimId) private {
-        if (!claims[claimId].gotRejected) {
+        if (!claims[claimId].isApproved && !claims[claimId].gotRejected) {
             claims[claimId].gotRejected = true;
             claims[claimId].claimApprovalOrRejectionTime = now;
             Fin4ClaimingStub(Fin4ClaimingAddress).claimRejectionPingback(address(this), claimId, claims[claimId].claimer);
