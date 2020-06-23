@@ -161,9 +161,14 @@ module.exports = async function(deployer) {
 
 	await Fin4CollectionsInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 
+	let networkName = deployer.network;
+	if (networkName.split('-fork').length > 1) {
+		networkName = networkName.split('-fork')[0];
+	}
+
 	// Write Fin4Main address to src/config/deployment-info.js
 	let data = "const Fin4MainAddress = '" + Fin4MainInstance.address + "';\n" +
-		"const networkName = '" + deployer.network + "';\n" +
+		"const networkName = '" + networkName + "';\n" +
 		"export { Fin4MainAddress, networkName };\n";
 	fs.writeFile(path.join(__dirname, config.DEPLOYMENT_INFO_SAVING_LOCATION + '/deployment-info.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
