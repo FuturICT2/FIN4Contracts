@@ -1,6 +1,7 @@
 pragma solidity ^0.5.17;
 
 import "contracts/Fin4Groups.sol";
+import 'contracts/stub/Fin4TokenStub.sol';
 
 contract Fin4Voting{
 
@@ -9,8 +10,9 @@ contract Fin4Voting{
         address[] currentVotings;
         string content;
         address voter;
-
     }
+    address public Fin4ReputationAddress;
+
     mapping (address => VoterInfo) public voters;
     address[] public votersAddresses;
 
@@ -26,6 +28,11 @@ contract Fin4Voting{
         Fin4GroupsAddress = Fin4GroupsAddr;
     }
 
+    function setFin4ReputationAddress(address Fin4ReputationAddr) public {
+        require(msg.sender == creator, "Only the creator of this smart contract can call this function");
+        Fin4ReputationAddress = Fin4ReputationAddr;
+    }
+
     constructor(address Fin4SystemParametersAddr) public {
         creator = msg.sender;
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
@@ -39,8 +46,10 @@ contract Fin4Voting{
     }
 
     function isEligibleToBeAVoter() public returns(bool) {
-        require(isVoter(msg.sender)==false);
-        return isVoter(msg.sender)==false; //TODO ADD CHECK OF REP OF USER
+        // require(isVoter(msg.sender)==false);
+        if(Fin4TokenStub(Fin4ReputationAddress).balanceOf(msg.sender) > 100 && !isVoter(msg.sender))
+            return true;
+        return false;
     }
 
     function isVoter(address add) public view returns(bool) {
@@ -49,7 +58,7 @@ contract Fin4Voting{
 
     function createRandomGroupOfUsers(uint numberOfUsers,  string memory groupName)  public returns(uint) {
         
-        require(numberOfUsers >=votersAddresses.length, "Not enough active voters in the system!" );
+        require(numberOfUsers <= votersAddresses.length, "Not enough active voters in the system!" );
 
 
         uint startIdx = uint(blockhash(block.number-1))%votersAddresses.length;

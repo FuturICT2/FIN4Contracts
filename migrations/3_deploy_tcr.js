@@ -10,6 +10,7 @@ const REP = artifacts.require('tokens/REP');
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
+const Fin4Voting = artifacts.require('Fin4Voting');
 const LimitedVoting = artifacts.require('LimitedVoting');
 const Picture = artifacts.require('PictureVoting');
 const Video = artifacts.require('VideoVoting');
@@ -27,7 +28,8 @@ const TCRactive = true; // the other necessary switch is in src/components/utils
 module.exports = async function(deployer) {
 	await deployer.deploy(REP);
 	const REPTokenInstance = await REP.deployed();
-
+	const Fin4VotingInstance = await Fin4Voting.deployed();
+	await Fin4VotingInstance.setFin4ReputationAddress(REPTokenInstance.address);
 	const LimitedVotingInstance = await LimitedVoting.deployed();
 	await LimitedVotingInstance.setFin4ReputationAddress(REPTokenInstance.address);
 
