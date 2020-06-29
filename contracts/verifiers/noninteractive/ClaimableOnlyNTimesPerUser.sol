@@ -16,7 +16,7 @@ contract ClaimableOnlyNTimesPerUser is Fin4BaseVerifierType {
         // have to check when all other verifiers are approved instead // TODO
         uint usersClaimCountOnToken = Fin4TokenStub(tokenAddrToReceiveVerifierNotice).countApprovedClaimsOfThisUser(user);
         uint cap = tokenToClaimsCap[tokenAddrToReceiveVerifierNotice];
-        if (usersClaimCountOnToken == cap) {
+        if (usersClaimCountOnToken >= cap) {
             string memory message = string(abi.encodePacked(
                 "Your claim on token \'",
                 Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name(),

@@ -58,6 +58,13 @@ contract Fin4Claiming {
         emit ClaimSubmitted(tokenAddress, claimId, msg.sender, quantity, claimCreationTime, comment, requiredVerifierTypes);
 
         for (uint i = 0; i < requiredVerifierTypes.length; i++) {
+
+            // TODO here we need to distingiush more refined then just isNonInteractive --> autoCheck
+            // e.g. ClaimableOnlyNTimesPerUser must not be checked immediately, but as last verifier before a claim-approval.
+            // Otherwise a scenario is possible in which someone makes a token with ClaimableOnlyNTimesPerUser = 3 and another interactive verifier.
+            // Then a user makes 10 claims without submitting proof to the interactive verifier. ClaimableOnlyNTimesPerUser will give its blessing
+            // 10 times and can't "undo" it when the user provides the proof for the interactive verifier. Result: 10 approved claims despite the limit of 3
+
             if (Fin4BaseVerifierType(requiredVerifierTypes[i]).isNoninteractive()) {
                 // Also emit VerifierPending? For now they decide immediately and so the VerifierApprove/Rejected event will follow
                 // as soon as there is some time delay (asking oracle etc.) the VerifierPending should probably be emitted
