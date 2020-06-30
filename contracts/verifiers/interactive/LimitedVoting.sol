@@ -90,7 +90,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = msg.sender;
-        uint groupId = Fin4Voting(Fin4VotingAddress).createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), "test");
+        uint groupId = Fin4Voting(Fin4VotingAddress).createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), "test", msg.sender);
         // Then on this line we use the group ID you give me
         // uint groupId = _getGroupId(tokenAddrToReceiveVerifierNotice);
         // The rest of the code can run as planned
