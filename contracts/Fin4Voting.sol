@@ -46,7 +46,6 @@ contract Fin4Voting{
     }
 
     function isEligibleToBeAVoter() public returns(bool) {
-        // require(isVoter(msg.sender)==false);
         if(Fin4TokenStub(Fin4ReputationAddress).balanceOf(msg.sender) > 100 && !isVoter(msg.sender))
             return true;
         return false;
@@ -56,42 +55,55 @@ contract Fin4Voting{
         return voters[add].voter != address(0);
     }
 
-    function createRandomGroupOfUsers(uint numberOfUsers,  string memory groupName)  public returns(uint) {
+    function createRandomGroupOfUsers(uint numberOfUsers,  string memory groupName, address claimer)  public returns(uint) {
         
-        require(numberOfUsers <= votersAddresses.length, "Not enough active voters in the system!" );
+        uint subtractNumberOfVoters = 0;
 
+        if(isVoter(claimer)){
+            subtractNumberOfVoters = 1;
+        }
+
+        require(numberOfUsers <= (votersAddresses.length -subtractNumberOfVoters ), "Not enough active voters in the system!" );
 
         uint startIdx = uint(blockhash(block.number-1))%votersAddresses.length;
-        // uint interval = uint(blockhash(block.number-2))%(votersAddresses.length/numberOfUsers);
-        uint interval = 1;
+        uint interval = uint(blockhash(block.number-2))%3;
         uint groupId = Fin4Groups(Fin4GroupsAddress).createGroup(groupName, false);
 
-        // address[] memory newVoters = new address[](numberOfUsers);
-        for(uint i=0; i<numberOfUsers; i++){
+        address[] memory newVoters = new address[](numberOfUsers);
+
+        for(uint i = 0; i<numberOfUsers; i++){
             address who = votersAddresses[(startIdx + i*interval)%votersAddresses.length];
-            addToArray(who);
+
+            uint offset = 1;
+            while(who ==claimer || inArray(who, newVoters)){
+                    who = votersAddresses[(startIdx + i*interval +offset)%votersAddresses.length];
+                    offset = offset +1;
+            }
+            newVoters[i] = who;
         }
 
-        Fin4Groups(Fin4GroupsAddress).addMembers(groupId, store);
-        for(uint i = 0; i<store.length; i++){
-            delete index[store[i]];
-        }
-        delete store;
+        Fin4Groups(Fin4GroupsAddress).addMembers(groupId, newVoters);
+        // for(uint i = 0; i<store.length; i++){
+        //     delete index[store[i]];
+        // }
+        // delete store;
         return groupId;
     }
 
-    function addToArray(address who) public {
-        if (!inArray(who)) {
-            // Append
-            index[who] = store.length + 1;
-            store.push(who);
-        }
-    }
+    // function addToArray(address who) public {
+    //     if (!inArray(who)) {
+    //         // Append
+    //         index[who] = store.length + 1;
+    //         store.push(who);
+    //     }
+    // }
 
-    function inArray(address who) public view returns (bool) {
+    function inArray(address who, address[] memory arr) public view returns (bool) {
         // address 0x0 is not valid if pos is 0 is not in the array
-        if (index[who] > 0) {
-            return true;
+        for(uint i = 0; i<arr.length; i++){
+            if(arr[i] == who){
+                return true;
+            }
         }
         return false;
     }

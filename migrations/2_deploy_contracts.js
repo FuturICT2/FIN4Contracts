@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const config = require('../config.json');
+const { verifiers, verifierOptions } = require("../verifiers");
 
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4UncappedTokenCreator = artifacts.require('Fin4UncappedTokenCreator');
@@ -33,16 +34,7 @@ const verifierTypeContracts = [
 	artifacts.require('PictureVoting'),
 	artifacts.require('VideoVoting')
 	//artifacts.require('SensorOneTimeSignal'),
-	/*
-	These include the submissions feature:
-	artifacts.require('Idea'),
-	artifacts.require('Networking'),
-	artifacts.require('HappyMoment'),
-	*/
-	//artifacts.require('MinimumInterval'),
-	//artifacts.require('MaximumQuantityPerInterval'),
 ];
-
 module.exports = async function(deployer) {
 	// FIN4MAIN
 
@@ -160,6 +152,27 @@ module.exports = async function(deployer) {
 	fs.writeFile(path.join(__dirname, config.DEPLOYMENT_INFO_SAVING_LOCATION + '/deployment-info.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
+  
+    // Write Verifier info with instance addresses to src/config/verifier-info.js
+  for (let i = 0; i < verifierTypeContracts.length; i++) {
+    let verifierObject = verifiers[verifierTypeContracts[i]._json.contractName];
+    if (verifierObject !== undefined) {
+      verifierObject.address = verifierTypeInstances[i].address;
+    }
+  }
+  let verifierData =
+    `export const verifierOptions = ${JSON.stringify(verifierOptions)};\n` +
+    `export const verifiers = ${JSON.stringify(verifiers)};\n`;
+  fs.writeFile(
+    path.join(
+      __dirname,
+      config.DEPLOYMENT_INFO_SAVING_LOCATION + "/verifier-info.js"
+    ),
+    verifierData,
+    (err) => {
+      if (err) throw "Error writing file: " + err;
+    }
+  );
 
 	// Write Fin4OracleHub address to src/config/Fin4OracleHubAddress.js
 	//data =
