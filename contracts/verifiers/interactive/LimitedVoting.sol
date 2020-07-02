@@ -58,15 +58,15 @@ contract LimitedVoting is Fin4BaseVerifierType {
         isAutoInitiable = false;
     }
 
-    uint public nextPendingApprovalId = 0;
+    uint public nextclaimId = 0;
     mapping (uint => PendingApproval) public pendingApprovals; // just use an array? TODO
 
     struct PendingApproval {
-        uint pendingApprovalId;
+        uint claimId;
         address tokenAddrToReceiveVerifierNotice;
         uint claimIdOnTokenToReceiveVerifierDecision;
         address requester;
-
+        uint start;
         bool isIndividualApprover; // false means group-usage
 
         uint approverGroupId;
@@ -81,21 +81,23 @@ contract LimitedVoting is Fin4BaseVerifierType {
         uint nbApproved;
         uint nbRejected;
         bool isApproved; // in case of multiple PendingApprovals waiting for each other
-        uint linkedWithPendingApprovalId;
+        uint linkedWithclaimId;
     }
 
     // @Override
     function submitProof_LimitedVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory IPFShash) public {
         PendingApproval memory pa;
+        pa.start = block.timestamp;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
+        pa.claimId = claimId;
         pa.requester = msg.sender;
         uint groupId = Fin4Voting(Fin4VotingAddress).createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), "test");
         // Then on this line we use the group ID you give me
         // uint groupId = _getGroupId(tokenAddrToReceiveVerifierNotice);
         // The rest of the code can run as planned
         pa.approverGroupId = groupId;
-        pa.pendingApprovalId = nextPendingApprovalId;
+        // pa.claimId = nextclaimId;
         pa.nbApproved = 0;
         pa.nbRejected = 0;
         pa.attachment = IPFShash;
@@ -114,13 +116,38 @@ contract LimitedVoting is Fin4BaseVerifierType {
             pa.groupMemberAddresses[i] = members[i];
             // pa.reputation[i] = Fin4TokenManagement(Fin4TokenManagementAddr).getBalance(members[i], Fin4ReputationAddress);
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(msg.sender, name, members[i], message, IPFShash, pa.pendingApprovalId);
+                .addPendingApprovalMessage(msg.sender, name, members[i], message, IPFShash, pa.claimId);
         }
 
-        pendingApprovals[nextPendingApprovalId] = pa;
-        nextPendingApprovalId ++;
+        pendingApprovals[claimId] = pa;
+        // nextclaimId ++;
 
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
+    }
+
+    function endVotePossible(uint claimId) public view returns (bool){
+        PendingApproval memory pa = pendingApprovals[claimId];
+        if (block.timestamp > pa.start + _getTimeInMinutes(pa.tokenAddrToReceiveVerifierNotice) * 1 minutes)
+            return true;
+        return false;
+    }
+    function endVote(uint claimId) public{
+        PendingApproval memory pa = pendingApprovals[claimId];
+        if (endVotePossible(claimId)){
+            markMessagesAsRead(claimId);
+            uint quorum = pa.nbApproved + pa.nbRejected;
+            if(quorum <= pa.groupMemberAddresses.length/2){
+                _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
+            }
+            else{
+                if(pa.nbApproved > quorum/2){
+                    _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
+                }
+                else {
+                    _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
+                }
+            }
+        }
     }
 
     function getMessageText() public pure returns(string memory) {
@@ -129,34 +156,40 @@ contract LimitedVoting is Fin4BaseVerifierType {
 
     // @Override
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
-      return "uint:Number of Users";
+      return "uint:Number of Users,uint:Time in Minutes";
     }
-    // TO DO: Make this parameter actually number of users instead of group id
-    mapping (address => uint) public tokenToParameter;
 
-    function setParameters(address token, uint nbUsers) public {
+    mapping (address => uint) public tokenToParameter;
+    mapping (address => uint) public tokenToParameterTime;
+
+    function setParameters(address token, uint nbUsers, uint timeInMinutes) public {
     //   require(Fin4Groups(Fin4GroupsAddress).groupExists(groupId), "Group ID does not exist");
         // if(nbUsers > 3)
         //     tokenToParameter[token] = nbUsers;
         // else
         //     tokenToParameter[token] = 3;
         tokenToParameter[token] = nbUsers;
+        tokenToParameterTime[token] = timeInMinutes;
     }
 
     function _getNbUsers(address token) public view returns(uint) {
         return tokenToParameter[token];
     }
 
+    function _getTimeInMinutes(address token) public view returns(uint){
+        return tokenToParameterTime[token];
+    }
+
     // copied method signature from SpecificAddress, then nothing has to be changed in Messages.jsx
 
-    function receiveApprovalFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
-        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+    function receiveApprovalFromSpecificAddress(uint claimId, string memory attachedMessage) public {
+        PendingApproval memory pa = pendingApprovals[claimId];
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
-        markMessageAsRead(pendingApprovalId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
+        markMessageAsRead(claimId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
         pa.Approved[pa.nbApproved] = msg.sender;
         pa.nbApproved = pa.nbApproved + 1;
         if(pa.nbApproved > pa.groupMemberAddresses.length/2){
-            markMessagesAsRead(pendingApprovalId);
+            markMessagesAsRead(claimId);
             uint REPS = 0;
             uint REPF = 0;
             if(pa.nbApproved != 0)
@@ -174,13 +207,13 @@ contract LimitedVoting is Fin4BaseVerifierType {
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
             Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
-        pendingApprovals[pendingApprovalId] = pa;
+        pendingApprovals[claimId] = pa;
     }
 
-    function receiveRejectionFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
-        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+    function receiveRejectionFromSpecificAddress(uint claimId, string memory attachedMessage) public {
+        PendingApproval memory pa = pendingApprovals[claimId];
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
-        markMessageAsRead(pendingApprovalId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
+        markMessageAsRead(claimId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
         string memory message = string(abi.encodePacked(
             "A member of the appointed approver group has rejected your approval request for ",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
@@ -192,7 +225,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         if(pa.nbRejected > pa.groupMemberAddresses.length/2){
             uint REPS = 0;
             uint REPF = 0;
-            markMessagesAsRead(pendingApprovalId);
+            markMessagesAsRead(claimId);
             if(pa.nbRejected != 0)
                 REPS = Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote() / pa.nbRejected;
             if(pa.nbApproved != 0)
@@ -206,18 +239,18 @@ contract LimitedVoting is Fin4BaseVerifierType {
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
             Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
-        pendingApprovals[pendingApprovalId] = pa;
+        pendingApprovals[claimId] = pa;
     }
     // Mark messages of all users as read
-    function markMessagesAsRead(uint pendingApprovalId) public {
-        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+    function markMessagesAsRead(uint claimId) public {
+        PendingApproval memory pa = pendingApprovals[claimId];
         for (uint i = 0; i < pa.messageIds.length; i ++) {
             Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(pa.groupMemberAddresses[i], pa.messageIds[i]);
         }
     }
     // Mark message of current user as read
-    function markMessageAsRead(uint pendingApprovalId, uint index) public {
-        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+    function markMessageAsRead(uint claimId, uint index) public {
+        PendingApproval memory pa = pendingApprovals[claimId];
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(pa.groupMemberAddresses[index], pa.messageIds[index]);
     }
 }
