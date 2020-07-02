@@ -55,7 +55,7 @@ contract Fin4Voting{
         return voters[add].voter != address(0);
     }
 
-    function createRandomGroupOfUsers(uint numberOfUsers,  string memory groupName, address claimer)  public returns(uint) {
+    function createRandomGroupOfUsers(uint numberOfUsers,  string memory groupName, address claimer)  public returns(address[] memory) {
         
         uint subtractNumberOfVoters = 0;
 
@@ -82,21 +82,9 @@ contract Fin4Voting{
             newVoters[i] = who;
         }
 
-        Fin4Groups(Fin4GroupsAddress).addMembers(groupId, newVoters);
-        // for(uint i = 0; i<store.length; i++){
-        //     delete index[store[i]];
-        // }
-        // delete store;
-        return groupId;
+        // Fin4Groups(Fin4GroupsAddress).addMembers(groupId, newVoters);
+        return newVoters;
     }
-
-    // function addToArray(address who) public {
-    //     if (!inArray(who)) {
-    //         // Append
-    //         index[who] = store.length + 1;
-    //         store.push(who);
-    //     }
-    // }
 
     function inArray(address who, address[] memory arr) public view returns (bool) {
         // address 0x0 is not valid if pos is 0 is not in the array

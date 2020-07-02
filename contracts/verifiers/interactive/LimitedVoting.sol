@@ -1,10 +1,16 @@
 pragma solidity ^0.5.17;
-
+// Will be a part of verifier system
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
+// Can be replaced by direct call
 import "contracts/Fin4TokenBase.sol";
+
+//Should be made independent of it 
 import "contracts/Fin4Groups.sol";
+
+// Cannot be made independant of it
 import "contracts/Fin4Messaging.sol";
-import "contracts/Fin4TokenManagement.sol";
+
+// Should be done on Fin4 Side
 import 'contracts/stub/MintingStub.sol';
 import 'contracts/stub/BurningStub.sol';
 import 'contracts/Fin4SystemParameters.sol';
@@ -15,9 +21,6 @@ contract LimitedVoting is Fin4BaseVerifierType {
         creator = msg.sender;
         init();
     }
-
-    // function mint(address account, uint256 amount) public returns (bool);
-    // function burnFrom(address from, uint256 value) public;
 
     address public creator;
     address public Fin4GroupsAddress;
@@ -92,12 +95,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.claimId = claimId;
         pa.requester = msg.sender;
-        uint groupId = Fin4Voting(Fin4VotingAddress).createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), "test", msg.sender);
-        // Then on this line we use the group ID you give me
-        // uint groupId = _getGroupId(tokenAddrToReceiveVerifierNotice);
-        // The rest of the code can run as planned
-        pa.approverGroupId = groupId;
-        // pa.claimId = nextclaimId;
+        address[] memory members = Fin4Voting(Fin4VotingAddress).createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), "test", msg.sender);
         pa.nbApproved = 0;
         pa.nbRejected = 0;
         pa.attachment = IPFShash;
@@ -105,8 +103,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
             ". Consensus is reached using Absolute Majority. The action that is supposed to be done is: ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).getAction()));
 
-        address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
-
+        // address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
         pa.groupMemberAddresses = new address[](members.length);
         pa.Approved = new address[](members.length);
         pa.Rejected = new address[](members.length);
@@ -114,7 +111,6 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.reputation = new uint[](members.length);
         for (uint i = 0; i < members.length; i ++) {
             pa.groupMemberAddresses[i] = members[i];
-            // pa.reputation[i] = Fin4TokenManagement(Fin4TokenManagementAddr).getBalance(members[i], Fin4ReputationAddress);
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
                 .addPendingApprovalMessage(msg.sender, name, members[i], message, IPFShash, pa.claimId);
         }
@@ -163,11 +159,6 @@ contract LimitedVoting is Fin4BaseVerifierType {
     mapping (address => uint) public tokenToParameterTime;
 
     function setParameters(address token, uint nbUsers, uint timeInMinutes) public {
-    //   require(Fin4Groups(Fin4GroupsAddress).groupExists(groupId), "Group ID does not exist");
-        // if(nbUsers > 3)
-        //     tokenToParameter[token] = nbUsers;
-        // else
-        //     tokenToParameter[token] = 3;
         tokenToParameter[token] = nbUsers;
         tokenToParameterTime[token] = timeInMinutes;
     }
@@ -182,10 +173,18 @@ contract LimitedVoting is Fin4BaseVerifierType {
 
     // copied method signature from SpecificAddress, then nothing has to be changed in Messages.jsx
 
+    function getIndexOf(address[] memory voters, address member) public view returns(uint) {
+        for (uint i = 0; i < voters.length; i ++) {
+            if (voters[i] == member) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     function receiveApprovalFromSpecificAddress(uint claimId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[claimId];
-        require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
-        markMessageAsRead(claimId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
+        markMessageAsRead(claimId, getIndexOf(pa.groupMemberAddresses, msg.sender));
         pa.Approved[pa.nbApproved] = msg.sender;
         pa.nbApproved = pa.nbApproved + 1;
         if(pa.nbApproved > pa.groupMemberAddresses.length/2){
@@ -205,15 +204,14 @@ contract LimitedVoting is Fin4BaseVerifierType {
                BurningStub(Fin4ReputationAddress).burnFrom(pa.Rejected[i], REPF);
             }
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
-            Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
+            // Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
         pendingApprovals[claimId] = pa;
     }
 
     function receiveRejectionFromSpecificAddress(uint claimId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[claimId];
-        require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
-        markMessageAsRead(claimId, Fin4Groups(Fin4GroupsAddress).getIndexOfMember(pa.approverGroupId, msg.sender));
+        markMessageAsRead(claimId, getIndexOf(pa.groupMemberAddresses, msg.sender));
         string memory message = string(abi.encodePacked(
             "A member of the appointed approver group has rejected your approval request for ",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
@@ -237,7 +235,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
                 BurningStub(Fin4ReputationAddress).burnFrom(pa.Approved[i], REPF);
             }
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
-            Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
+            // Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
         pendingApprovals[claimId] = pa;
     }
