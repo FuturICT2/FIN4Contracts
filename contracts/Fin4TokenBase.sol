@@ -45,6 +45,9 @@ contract Fin4TokenBase { // abstract class
     function getUnderlyingsOnToken() public view returns(bytes32[] memory) {
         return underlyings;
     }
+    function getAction() public view returns(string memory){
+        return actionsText;
+    }
 
     function name() public view returns(string memory);
     function symbol() public view returns(string memory);

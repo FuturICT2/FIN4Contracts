@@ -28,6 +28,10 @@ contract Fin4Groups is utils {
         return groupId < nextGroupId; // in the future, consider group deletion? #ConceptualDecision
     }
 
+    function DeleteGroup(uint groupId) public{
+        delete groups[groupId];
+    }
+
     modifier userIsCreator(uint groupId) {
         require(groups[groupId].creator == msg.sender, "User is not group creator");
         _;
@@ -67,6 +71,15 @@ contract Fin4Groups is utils {
         return nextGroupId - 1;
     }
 
+    function createGroup2(string memory name) public view returns(uint) {
+        // Group storage group = groups[nextGroupId];
+        // group.creator = msg.sender;
+        // group.name = name;
+        // nextGroupId ++;
+        // return nextGroupId - 1;
+        return 0;
+    }
+
     function addMembers(uint groupId, address[] memory newMembers) public  userIsCreator(groupId) {
         for (uint i = 0; i < newMembers.length; i ++) {
             groups[groupId].members.push(newMembers[i]);
@@ -93,7 +106,7 @@ contract Fin4Groups is utils {
         }
     }
 
-    function getIndexOfMember(uint groupId, address member) private view returns(uint) {
+    function getIndexOfMember(uint groupId, address member) public view returns(uint) {
         Group memory group = groups[groupId];
         for (uint i = 0; i < group.members.length; i ++) {
             if (group.members[i] == member) {

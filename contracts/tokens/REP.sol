@@ -8,9 +8,10 @@ import "./GOV.sol";
 contract REP is ERC20Plus {
 
     GOV public GOVToken;
+    mapping (address => uint256) private _balances;
 
     constructor()
-      ERC20Plus("Fin4Reputation", "REP", 250, address(0), true, true, true, 0, address(0))
+      ERC20Plus("Fin4Reputation", "REP", 250, address(0), true, false, true, 0, address(0))
       public{}
 
     function init(address _token) public {
@@ -26,6 +27,23 @@ contract REP is ERC20Plus {
     */
     function mint(address to, uint256 value) public returns (bool) {
       return super.mint(to, value);
+    }
+
+    /**
+     * @dev Burns a specific amount of tokens from the target address and decrements allowance
+     * @param from address The address which you want to send tokens from
+     * @param value uint256 The amount of token to be burned
+     */
+    function burnFrom(address from, uint256 value) public {
+        // Checks whether token is burnable before minting
+        require(isBurnable, "Coin not burnable");
+        // Gets REP balance of user
+        uint balance = balanceOf(from);
+        // Handles special case where user does not have enough REP in his balance as the amount to be deducted
+        if(balance<value)
+          _burn(from, balance);
+        else
+          _burn(from, value);
     }
 
     /**

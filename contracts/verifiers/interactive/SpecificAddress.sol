@@ -7,7 +7,7 @@ import "contracts/Fin4Messaging.sol";
 contract SpecificAddress is Fin4BaseVerifierType {
 
     constructor() public {
-        // gets called by overwriting classes
+	 // gets called by overwriting classes
         init();
     }
 
