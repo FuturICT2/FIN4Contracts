@@ -24,7 +24,7 @@ const BurnSourcerer = artifacts.require('BurnSourcerer');
 
 const verifierContractNames = [
 	'ApprovalByUsersOrGroups',
-	'SelfieTogether',
+	// 'SelfieTogether',
 	'BlockThese',
 	'AllowOnlyThese',
 	// 'SensorOneTimeSignal',

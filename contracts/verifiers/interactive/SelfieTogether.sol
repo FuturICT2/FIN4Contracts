@@ -1,3 +1,4 @@
+/*
 pragma solidity ^0.5.17;
 
 import "contracts/verifiers/interactive/ApprovalByUsersOrGroups.sol";
@@ -125,3 +126,4 @@ contract SelfieTogether is ApprovalByUsersOrGroups {
     }
 
 }
+*/
