@@ -61,7 +61,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         uint count = 0;
 
         // INDIVIDUAL APPROVERS
-        address[] individualApprovers = tokenToIndividualApprovers[token];
+        address[] memory individualApprovers = tokenToIndividualApprovers[tokenAddrToReceiveVerifierNotice];
         for (uint i = 0; i < individualApprovers.length; i ++) {
             require(individualApprovers[i] != user, "Claimer is listed as individual approver, no self-approval allowed");
             pa.messageReceivers[count] = individualApprovers[i];
@@ -71,7 +71,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         }
 
         // APPROVER GROUPS
-        uint[] approverGroupIds = tokenToApproverGroupIDs[token];
+        uint[] memory approverGroupIds = tokenToApproverGroupIDs[tokenAddrToReceiveVerifierNotice];
         for (uint i = 0; i < approverGroupIds.length; i ++) {
             address[] memory groupMembers = Fin4Groups(Fin4GroupsAddress).getGroupMembers(approverGroupIds[i]);
             for (uint j = 0; j < groupMembers.length; j ++) {
@@ -98,7 +98,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
     mapping (address => address[]) public tokenToIndividualApprovers;
     mapping (address => uint[]) public tokenToApproverGroupIDs;
 
-    function setParameters(address token, address[] individualApprovers, uint[] approverGroupIDs) public {
+    function setParameters(address token, address[] memory individualApprovers, uint[] memory approverGroupIDs) public {
         for (uint i = 0; i < approverGroupIDs.length; i ++) {
             require(Fin4Groups(Fin4GroupsAddress).groupExists(approverGroupIDs[i]), "At least one of the approver group IDs does not exist");
         }
@@ -142,7 +142,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
     }
 
     function isIndividualApprover(address token, address user) internal returns(bool) {
-        address[] individualApprovers = tokenToIndividualApprovers[token];
+        address[] memory individualApprovers = tokenToIndividualApprovers[token];
         for (uint i = 0; i < individualApprovers.length; i ++) {
             if (individualApprovers[i] == user) {
                 return true;
