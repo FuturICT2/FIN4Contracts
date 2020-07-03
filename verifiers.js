@@ -3,8 +3,16 @@
  */
 
 const verifierOptions = {
+  chain: {
+    values: ["On-Chain", "Off-Chain"],
+    description:
+      "Determines whether the verification is done on or off chain",
+  },
   type: {
-    values: ["Non-Interactive", "Interactive", "Both"],
+    // Interactive: Requires Claimer to do something
+    // Non-Interactive: Does not require Claimer to do anything
+    // Social: Requires other users to do something
+    values: ["Non-Interactive", "Interactive", "Social"],
     description:
       "Determines whether the input is verified by other users, the system or both.",
   },
@@ -16,21 +24,22 @@ const verifierOptions = {
       "None",
     ],
     sensorData: {
-      values: ["None", "Location", "Time"],
+      values: ["None", "Location", "Time", "Gyroscope"],
       description:
         "Determines if and which sensor data must be provided by the claimer.",
     },
     userData: {
-      values: ["None", "Picture", "Video", "Password", "Address"],
+      values: ["None", "Picture", "Video", "Password", "Address", "File", "GroupID"],
       description:
-        "Determines if and which content must be uploaded by the claimer.",
+        "Determines if and which content must be provided by the claimer.",
     },
   },
 };
 
 const verifiers = {
   Password: {
-    type: "Non-Interactive",
+    chain: "On-Chain",
+    type: "Interactive",
     claimerInput: {
       inputType: "User generated data",
       sensorData: "None",
@@ -41,6 +50,7 @@ const verifiers = {
     address: "",
   },
   Picture: {
+    chain: "On-Chain",
     type: "Interactive",
     claimerInput: {
       inputType: "User generated data",
@@ -52,6 +62,7 @@ const verifiers = {
     address: "",
   },
   Blacklisting: {
+    chain: "On-Chain",
     type: "Non-Interactive",
     claimerInput: {
       inputType: "System/Sensor generated data",
@@ -63,6 +74,7 @@ const verifiers = {
     address: "",
   },
   Whitelisting: {
+    chain: "On-Chain",
     type: "Non-Interactive",
     claimerInput: {
       inputType: "System/Sensor generated data",
@@ -74,7 +86,8 @@ const verifiers = {
     address: "",
   },
   Location: {
-    type: "Non-Interactive",
+    chain: "On-Chain",
+    type: "Interactive",
     claimerInput: {
       inputType: "User generated data",
       sensorData: "None",
@@ -85,7 +98,8 @@ const verifiers = {
     address: "",
   },
   SelfApprove: {
-    type: "Non-Interactive",
+    chain: "On-Chain",
+    type: "Interactive",
     claimerInput: {
       inputType: "None",
       sensorData: "None",
@@ -95,7 +109,8 @@ const verifiers = {
     address: "",
   },
   SelfieTogether: {
-    type: "Interactive",
+    chain: "On-Chain",
+    type: "Social",
     claimerInput: {
       inputType: "User generated data",
       sensorData: "None",
@@ -110,46 +125,50 @@ const verifiers = {
   //  type: "Non-Interactive",
   //  claimerInput: {
   //    inputType: "User generated data",
-  //    sensorData: "None",
-  //    userData: "Picture",
+  //    sensorData: "Gyroscope",
+  //    userData: "None",
   //  },
   //  description:
   //    "Approval via a sensor that sends a signal. The token creator specifies the sensor via its ID.",
   //  address: "",
   //},
   ApprovalByGroupMember: {
-    type: "Inveractive",
+    chain: "On-Chain",
+    type: "Social",
     claimerInput: {
       inputType: "None",
       sensorData: "None",
-      userData: "None",
+      userData: "GroupID",
     },
     description:
       "The token creator specifies one or more user groups, of which one member has to approve.",
     address: "",
   },
   SpecificAddress: {
-    type: "Inveractive",
+    chain: "On-Chain",
+    type: "Social",
     claimerInput: {
       inputType: "None",
       sensorData: "None",
-      userData: "None",
+      userData: "Address",
     },
     description: "The claimer specifies an address, which has to approve.",
     address: "",
   },
   LimitedVoting: {
-    type: "Inveractive",
+    chain: "On-Chain",
+    type: "Social",
     claimerInput: {
-      inputType: "None",
+      inputType: "User generated data",
       sensorData: "None",
-      userData: "None",
+      userData: "File",
     },
     description: "The proof is sent to the users due to a random mechanism",
     address: "",
   },
   // verifiers that are commented out are not deployed in 2_deploy_contracts.js yet
   //MaximumQuantityPerInterval: {
+    // chain: "On-Chain",
   //  type: "Non-Inveractive",
   //  claimerInput: {
   //    inputType: "None",
@@ -161,6 +180,7 @@ const verifiers = {
   //  address: "",
   //},
   //MinimumInterval: {
+    // chain: "On-Chain",
   //  type: "Non-Inveractive",
   //  claimerInput: {
   //    inputType: "None",
@@ -171,7 +191,8 @@ const verifiers = {
   //  address: "",
   //},
   PictureVoting: {
-    type: "Inveractive",
+    chain: "On-Chain",
+    type: "Social",
     claimerInput: {
       inputType: "User generated data",
       sensorData: "None",
@@ -182,7 +203,8 @@ const verifiers = {
     address: "",
   },
   TokenCreatorApproval: {
-    type: "Inveractive",
+    chain: "On-Chain",
+    type: "Social",
     claimerInput: {
       inputType: "None",
       sensorData: "None",
@@ -192,7 +214,8 @@ const verifiers = {
     address: "",
   },
   VideoVoting: {
-    type: "Inveractive",
+    chain: "On-Chain",
+    type: "Social",
     claimerInput: {
       inputType: "User generated data",
       sensorData: "None",
@@ -203,6 +226,7 @@ const verifiers = {
     address: "",
   },
   ClaimableOnlyNTimesPerUser: {
+    chain: "On-Chain",
     type: "Non-Interactive",
     claimerInput: {
       inputType: "None",

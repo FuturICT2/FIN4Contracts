@@ -22,7 +22,7 @@ contract SensorOneTimeSignal is Fin4BaseVerifierType {
     function setFin4MessagingAddress(address Fin4MessagingAddr) public {
         Fin4MessagingAddress = Fin4MessagingAddr;
     }
-
+    // Function called to provide sensor data, It calls submitProofViaSensor automatically
     function sensorSignalReceived(string memory sensorID, uint timestamp, string memory data) public {
         /* // TODO reactivate
         for (uint i = 0; i < sensorIDtoTokens[sensorID].length; i ++) {

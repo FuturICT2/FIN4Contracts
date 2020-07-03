@@ -1,6 +1,6 @@
 pragma solidity ^0.5.17;
 
-import "contracts/verifiers/interactive/SpecificAddress.sol";
+import "contracts/verifiers/onchain/social/SpecificAddress.sol";
 
 contract Picture is SpecificAddress {
 

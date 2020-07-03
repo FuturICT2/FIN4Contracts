@@ -14,7 +14,7 @@ contract Location is Fin4BaseVerifierType {
         int cosine = Trigonometry.cos(uint16(rtres(900000, 0, degree, 4096, 0)));
         return rtres(32767, -32767, cosine, 10000, -10000);
     }
-        //rule of three
+    // rule of three
     function rtres(int256 _max1, int256 _min1, int256 _value, int256 _max2, int256 _min2) private pure returns (int256)
     {
         assert(_max1 > _min1);
@@ -44,12 +44,7 @@ contract Location is Fin4BaseVerifierType {
         int256 radiands = degree * (PI / 180 ) / 10000;
         return radiands;
     }
-    /*function distance (int lat0, int lon0, int lat1, int lon1) public view returns (uint distanceNanometers_) {
-        int deglen = 110;
-        uint across = (lat1 - lat0) < 0 ? uint((lat1 - lat0) * -1) : uint(lat1 - lat0);
-        uint up = (lon1 - lon0) < 0 ? uint((lon1 - lon0) * -1)*cosNanodegrees(lat0) : uint(lon1 - lon0)*cosNanodegrees(lat0);
-        return nanodegreesToNanoradians(deglen*sqrt(int(across * across) + int(up * up)));
-    }*/
+
     // https://jonisalonen.com/2014/computing-distance-between-coordinates-can-be-simple-and-fast/
     function calculateDistance(int256 lat0, int256 lon0, int256 lat1, int256 lon1) public view returns (uint){
         //converts to radiands
@@ -66,7 +61,7 @@ contract Location is Fin4BaseVerifierType {
         name = "Location";
         description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";
     }
-
+    // (Depricated) Function that assumes location is calculated in front end 
     function submitProof_Location(address tokenAddrToReceiveVerifierNotice, uint claimId, uint distanceToLocation) public {
         if (locationIsWithinMaxDistToSpecifiedLocation(tokenAddrToReceiveVerifierNotice, distanceToLocation)) {
             _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
@@ -79,7 +74,7 @@ contract Location is Fin4BaseVerifierType {
             _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, message);
         }
     }
-
+    // Calculates distance on chain using a cheap approximation algorithm
     function submitProof_Location_Server(address tokenAddrToReceiveVerifierNotice, uint claimId, int256 lat1, int256 lon1) public {
         uint distanceToLocation = calculateDistance(lat0[tokenAddrToReceiveVerifierNotice],lon0[tokenAddrToReceiveVerifierNotice], lat1, lon1);        
         if (locationIsWithinMaxDistToSpecifiedLocation(tokenAddrToReceiveVerifierNotice, distanceToLocation)) {
@@ -130,6 +125,7 @@ contract Location is Fin4BaseVerifierType {
     function _getMaxDistance(address token) private view returns(uint) {
         return tokenToMaxDistParameter[token];
     }
+
     function convertStringToInt(string memory stringValue) private returns (int) {
         bytes memory byteValue = convertStringToBytes(stringValue);
 

@@ -16,8 +16,8 @@ const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const Trigonometry = artifacts.require('Trigonometry');
 const Strings = artifacts.require('strings');
 const Fin4Voting = artifacts.require('Fin4Voting');
-// const Location = artifacts.require('Location');
-//const Fin4OracleHub = artifacts.require('Fin4OracleHub');
+
+// Verifiers
 const verifierTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
 	artifacts.require('SelfieTogether'),
@@ -35,6 +35,7 @@ const verifierTypeContracts = [
 	artifacts.require('VideoVoting')
 	//artifacts.require('SensorOneTimeSignal'),
 ];
+
 module.exports = async function(deployer) {
 	// FIN4MAIN
 

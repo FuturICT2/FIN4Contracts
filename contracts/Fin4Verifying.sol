@@ -1,6 +1,10 @@
 pragma solidity ^0.5.17;
 
-import 'contracts/verifiers/Fin4BaseVerifierType.sol';
+import 'contracts/verifiers/onchain/social/PictureVoting.sol';
+import 'contracts/verifiers/onchain/social/VideoVoting.sol';
+import 'contracts/verifiers/onchain/social/LimitedVoting.sol';
+// import 'contracts/verifiers/*';
+
 
 contract Fin4Verifying {
 
@@ -9,9 +13,11 @@ contract Fin4Verifying {
 
     // all the verifier types that token creators can use
     address[] public verifierTypes;
+    mapping (string => address) public verifiers;
 
     function addVerifierType(address verifierType) public returns(bool) {
         verifierTypes.push(verifierType);
+        verifiers[Fin4BaseVerifierType(verifierType).getName()] = verifierType;
         return true;
     }
 
@@ -32,6 +38,15 @@ contract Fin4Verifying {
             }
         }
         return false;
+    }
+
+    function submit_Proof(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName, string memory IPFShash) public {
+        if(keccak256(abi.encodePacked((verifierName))) == keccak256(abi.encodePacked(("PictureVoting"))))
+            PictureVoting(verifiers[verifierName]).submitProof_PictureVoting(tokenAddrToReceiveVerifierNotice, claimId, IPFShash);
+        else if(keccak256(abi.encodePacked((verifierName))) == keccak256(abi.encodePacked(("LimitedVoting"))))
+            LimitedVoting(verifiers[verifierName]).submitProof_LimitedVoting(tokenAddrToReceiveVerifierNotice, claimId, IPFShash);
+        else if(keccak256(abi.encodePacked((verifierName))) == keccak256(abi.encodePacked(("VideoVoting"))))
+            VideoVoting(verifiers[verifierName]).submitProof_VideoVoting(tokenAddrToReceiveVerifierNotice, claimId, IPFShash);
     }
 
     // ------------------------- COLLECTING SUBMISSIONS -------------------------

@@ -1,6 +1,6 @@
 pragma solidity ^0.5.17;
 
-import "contracts/verifiers/interactive/LimitedVoting.sol";
+import "contracts/verifiers/onchain/social/LimitedVoting.sol";
 
 contract VideoVoting is LimitedVoting {
 

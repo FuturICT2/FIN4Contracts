@@ -1,13 +1,7 @@
 pragma solidity ^0.5.17;
-// Will be a part of verifier system
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
-// Can be replaced by direct call
 import "contracts/Fin4TokenBase.sol";
-
-// Cannot be made independant of it
 import "contracts/Fin4Messaging.sol";
-
-// Should be done on Fin4 Side
 import 'contracts/stub/MintingStub.sol';
 import 'contracts/stub/BurningStub.sol';
 import 'contracts/Fin4SystemParameters.sol';
@@ -121,6 +115,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     }
     function endVote(uint claimId) public{
         PendingApproval memory pa = pendingApprovals[claimId];
+        require(endVotePossible(claimId), "End Vote Not Possible");
         if (endVotePossible(claimId)){
             markMessagesAsRead(claimId);
             uint quorum = pa.nbApproved + pa.nbRejected;
