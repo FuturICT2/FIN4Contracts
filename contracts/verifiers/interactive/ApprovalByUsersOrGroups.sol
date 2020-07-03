@@ -7,20 +7,14 @@ import "contracts/Fin4Messaging.sol";
 
 contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
 
-     constructor() public  {
+    constructor() public {
         init();
     }
 
     address public Fin4GroupsAddress;
     address public Fin4MessagingAddress;
-
-    function setFin4GroupsAddress(address Fin4GroupsAddr) public {
-        Fin4GroupsAddress = Fin4GroupsAddr;
-    }
-
-    function setFin4MessagingAddress(address Fin4MessagingAddr) public {
-        Fin4MessagingAddress = Fin4MessagingAddr;
-    }
+    function setFin4GroupsAddress(address Fin4GroupsAddr) public { Fin4GroupsAddress = Fin4GroupsAddr; }
+    function setFin4MessagingAddress(address Fin4MessagingAddr) public { Fin4MessagingAddress = Fin4MessagingAddr; }
 
     function init() public {
         name = "sc.verifier.approval-by-users-or-groups.name";

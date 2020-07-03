@@ -112,7 +112,7 @@ contract Fin4Groups is utils {
         return groups[groupId].members;
     }
 
-    // used by the Black- and Whitelisting constraint verifier types
+    // used by ApprovalByUsersOrGroups and in the BlockThese and AllowOnlyThese noninteractive verifiers
     function userIsInOneOfTheseGroups(uint[] memory groupIds, address user) public view returns(bool) {
         for (uint i = 0; i < groupIds.length; i ++) {
             if (isMember(groupIds[i], user)) {
