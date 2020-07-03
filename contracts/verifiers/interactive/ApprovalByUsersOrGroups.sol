@@ -22,8 +22,8 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         isAutoInitiable = true;
     }
 
-    struct PendingApproval {
-        uint pendingApprovalId;
+    struct PendingRequest {
+        uint pendingRequestId;
         address tokenAddrToReceiveVerifierNotice;
         uint claimIdOnTokenToReceiveVerifierDecision;
         address requester;
@@ -38,19 +38,19 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         bool isDecided;
 
         // string attachment;
-        // uint linkedWithPendingApprovalId;
+        // uint linkedWithPendingRequestId;
     }
 
-    uint public nextPendingApprovalId = 0;
-    mapping (uint => PendingApproval) public pendingApprovals; // just use an array? TODO
+    uint public nextPendingRequestId = 0;
+    mapping (uint => PendingRequest) public PendingRequests; // just use an array? TODO
 
     // @Override
     function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
-        PendingApproval memory pa;
+        PendingRequest memory pa;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = user;
-        pa.pendingApprovalId = nextPendingApprovalId;
+        pa.pendingRequestId = nextPendingRequestId;
         pa.isDecided = false;
 
         string memory message = string(abi.encodePacked(
@@ -66,7 +66,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
             require(individualApprovers[i] != user, "Claimer is listed as individual approver, no self-approval allowed");
             pa.messageReceivers[count] = individualApprovers[i];
             pa.messageIds[count] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(user, contractName, individualApprovers[i], message, "", pa.pendingApprovalId);
+                .addPendingRequestMessage(user, contractName, individualApprovers[i], message, "", pa.pendingRequestId);
             count ++;
         }
 
@@ -78,13 +78,13 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
                 require(groupMembers[j] != user, "Claimer is in at least one of the approver groups, no self-approval allowed");
                 pa.messageReceivers[count] = groupMembers[j];
                 pa.messageIds[count] = Fin4Messaging(Fin4MessagingAddress)
-                    .addPendingApprovalMessage(user, contractName, groupMembers[j], message, "", pa.pendingApprovalId);
+                    .addPendingRequestMessage(user, contractName, groupMembers[j], message, "", pa.pendingRequestId);
                 count ++;
             }
         }
 
-        pendingApprovals[nextPendingApprovalId] = pa;
-        nextPendingApprovalId ++;
+        PendingRequests[nextPendingRequestId] = pa;
+        nextPendingRequestId ++;
 
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId,
             "The appointed approvers have been notified about your approval request.");
@@ -106,16 +106,16 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         tokenToApproverGroupIDs[token] = approverGroupIDs;
     }
 
-    function receiveApproval(uint pendingApprovalId, string memory attachedMessage) public {
-        receiveDecision(pendingApprovalId, attachedMessage, true);
+    function receiveApproval(uint pendingRequestId, string memory attachedMessage) public {
+        receiveDecision(pendingRequestId, attachedMessage, true);
     }
 
-    function receiveRejection(uint pendingApprovalId, string memory attachedMessage) public {
-        receiveDecision(pendingApprovalId, attachedMessage, false);
+    function receiveRejection(uint pendingRequestId, string memory attachedMessage) public {
+        receiveDecision(pendingRequestId, attachedMessage, false);
     }
 
-    function receiveDecision(uint pendingApprovalId, string memory attachedMessage, bool approved) internal {
-        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+    function receiveDecision(uint pendingRequestId, string memory attachedMessage, bool approved) internal {
+        PendingRequest memory pa = PendingRequests[pendingRequestId];
         address token = pa.tokenAddrToReceiveVerifierNotice;
         bool userHasPermission = isIndividualApprover(token, msg.sender) ||
             Fin4Groups(Fin4GroupsAddress).userIsInOneOfTheseGroups(tokenToApproverGroupIDs[token], msg.sender);
@@ -132,7 +132,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
             _sendApprovalNotice(address(this), token, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
         } else {
             string memory message = string(abi.encodePacked(
-                "A member of the appointed approver group has rejected your approval request for ",
+                "One of the appointed approvers has rejected your approval request for ",
                 Fin4TokenBase(token).name()));
             if (bytes(attachedMessage).length > 0) {
                 message = string(abi.encodePacked(message, ': ', attachedMessage));

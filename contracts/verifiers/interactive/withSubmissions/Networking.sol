@@ -52,7 +52,7 @@ contract Networking is Fin4BaseVerifierType {
             Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
             "'. The submitted content is '", content, "'."));
 
-        pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
+        pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingRequestMessage(
             msg.sender, contractName, approver, message, content, pa.pendingApprovalId);
 
         pendingApprovals[approver].push(pa);

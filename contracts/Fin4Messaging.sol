@@ -18,7 +18,7 @@ contract Fin4Messaging {
         string message;
         bool hasBeenActedUpon;
         string attachment;
-        uint pendingApprovalId;
+        uint pendingRequestId;
     }
 
     mapping (address => Message[]) public messages;
@@ -46,14 +46,14 @@ contract Fin4Messaging {
         return messageId;
     }
 
-    function addPendingApprovalMessage(address sender, string memory senderStr, address receiver, string memory message,
-        string memory attachment, uint pendingApprovalId) public returns(uint) {
+    function addPendingRequestMessage(address sender, string memory senderStr, address receiver, string memory message,
+        string memory attachment, uint pendingRequestId) public returns(uint) {
         uint messageId = addMessage(uint(MessageType.APPROVAL), sender, receiver, message);
         Message storage m = messages[receiver][messageId];
         m.senderStr = senderStr;
         m.hasBeenActedUpon = false;
         m.attachment = attachment;
-        m.pendingApprovalId = pendingApprovalId;
+        m.pendingRequestId = pendingRequestId;
         emit NewMessage(receiver, messageId);
         return messageId;
     }
@@ -65,7 +65,7 @@ contract Fin4Messaging {
     // have to get messages one by one because returning string arrays is not possible
     function getMyMessage(uint index) public view returns(uint, uint, address, string memory, string memory, bool, string memory, uint) {
         Message memory m = messages[msg.sender][index];
-        return (m.messageId, m.messageType, m.sender, m.senderStr, m.message, m.hasBeenActedUpon, m.attachment, m.pendingApprovalId);
+        return (m.messageId, m.messageType, m.sender, m.senderStr, m.message, m.hasBeenActedUpon, m.attachment, m.pendingRequestId);
     }
 
     // after a picture is approved for instance, the message doesn't need to be shown to the approver anymore
