@@ -38,7 +38,7 @@ const verifierContractNames = [
 	'SpecificAddress',
 	'TokenCreatorApproval',
 	'Password',
-	'Picture',
+	'PictureSelfChosenApprover',
 	'Location',
 	'ClaimableOnlyNTimesPerUser',
 	'Blocker',

@@ -2,14 +2,14 @@ pragma solidity ^0.5.17;
 
 import "contracts/verifiers/interactive/SpecificAddress.sol";
 
-contract Picture is SpecificAddress {
+contract PictureSelfChosenApprover is SpecificAddress {
 
     constructor() public  {}
 
     // @Override
     function init() public {
-        name = "sc.verifier.picture.name";
-        description = "sc.verifier.picture.description";
+        name = "sc.verifier.picture-self-chosen-approver.name";
+        description = "sc.verifier.picture-self-chosen-approver.description";
     }
 
     function submitProof_Picture(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver, string memory IPFShash) public {
