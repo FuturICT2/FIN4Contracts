@@ -63,6 +63,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         // INDIVIDUAL APPROVERS
         address[] individualApprovers = tokenToIndividualApprovers[token];
         for (uint i = 0; i < individualApprovers.length; i ++) {
+            require(individualApprovers[i] != user, "Claimer is listed as individual approver, no self-approval allowed");
             pa.messageReceivers[count] = individualApprovers[i];
             pa.messageIds[count] = Fin4Messaging(Fin4MessagingAddress)
                 .addPendingApprovalMessage(user, contractName, individualApprovers[i], message, "", pa.pendingApprovalId);
@@ -74,6 +75,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         for (uint i = 0; i < approverGroupIds.length; i ++) {
             address[] memory groupMembers = Fin4Groups(Fin4GroupsAddress).getGroupMembers(approverGroupIds[i]);
             for (uint j = 0; j < groupMembers.length; j ++) {
+                require(groupMembers[j] != user, "Claimer is in at least one of the approver groups, no self-approval allowed");
                 pa.messageReceivers[count] = groupMembers[j];
                 pa.messageIds[count] = Fin4Messaging(Fin4MessagingAddress)
                     .addPendingApprovalMessage(user, contractName, groupMembers[j], message, "", pa.pendingApprovalId);
