@@ -86,14 +86,18 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
 
     // @Override
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
-      return "uint:Group ID:see table in groups overview";
+        return "address[]:Individual approvers:comma separated,uint[]:Approver groups:Group IDs comma separated";
     }
 
-    mapping (address => uint) public tokenToParameter;
+    mapping (address => address[]) public tokenToIndividualApprovers;
+    mapping (address => uint[]) public tokenToApproverGroupIDs;
 
-    function setParameters(address token, uint groupId) public {
-      require(Fin4Groups(Fin4GroupsAddress).groupExists(groupId), "Group ID does not exist");
-      tokenToParameter[token] = groupId;
+    function setParameters(address token, address[] individualApprovers, uint[] approverGroupIDs) public {
+        for (uint i = 0; i < approverGroupIDs.length; i ++) {
+            require(Fin4Groups(Fin4GroupsAddress).groupExists(approverGroupIDs[i]), "At least one of the approver group IDs does not exist");
+        }
+        tokenToIndividualApprovers[token] = individualApprovers;
+        tokenToApproverGroupIDs[token] = approverGroupIDs;
     }
 
     function _getGroupId(address token) public view returns(uint) {
