@@ -23,7 +23,7 @@ const BurnSourcerer = artifacts.require('BurnSourcerer');
 //const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 
 const verifierContractNames = [
-	'ApprovalByGroupMember',
+	'ApprovalByUsersOrGroups',
 	'SelfieTogether',
 	'BlockThese',
 	'AllowOnlyThese',

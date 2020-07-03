@@ -5,7 +5,7 @@ import "contracts/Fin4TokenBase.sol";
 import "contracts/Fin4Groups.sol";
 import "contracts/Fin4Messaging.sol";
 
-contract ApprovalByGroupMember is Fin4BaseVerifierType {
+contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
 
      constructor() public  {
         init();
@@ -23,8 +23,8 @@ contract ApprovalByGroupMember is Fin4BaseVerifierType {
     }
 
     function init() public {
-        name = "sc.verifier.approval-by-group-member.name";
-        description = "sc.verifier.approval-by-group-member.description";
+        name = "sc.verifier.approval-by-users-or-groups.name";
+        description = "sc.verifier.approval-by-users-or-groups.description";
         isAutoInitiable = true;
     }
 
