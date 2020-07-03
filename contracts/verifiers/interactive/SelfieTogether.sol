@@ -83,7 +83,7 @@ contract SelfieTogether is ApprovalByUsersOrGroups {
     }
 
     // @Override
-    function receiveApprovalFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
+    function receiveApproval(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval storage pa = pendingApprovals[pendingApprovalId];
 
         if (pa.isIndividualApprover) {
@@ -100,7 +100,7 @@ contract SelfieTogether is ApprovalByUsersOrGroups {
         }
     }
 
-    function receiveRejectionFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
+    function receiveRejection(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         string memory message;
 

@@ -106,7 +106,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
 
     // copied method signature from SpecificAddress, then nothing has to be changed in Messages.jsx
 
-    function receiveApprovalFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
+    function receiveApproval(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
         markMessagesAsRead(pendingApprovalId);
@@ -114,7 +114,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
     }
 
-    function receiveRejectionFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
+    function receiveRejection(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
         require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
         markMessagesAsRead(pendingApprovalId);

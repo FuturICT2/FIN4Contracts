@@ -63,14 +63,14 @@ contract SpecificAddress is Fin4BaseVerifierType {
         return "You were requested to approve the verifier type SpecificAddress on the token ";
     }
 
-    function receiveApprovalFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
+    function receiveApproval(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
         _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
     }
 
-    function receiveRejectionFromSpecificAddress(uint pendingApprovalId, string memory attachedMessage) public {
+    function receiveRejection(uint pendingApprovalId, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[msg.sender][pendingApprovalId];
         require(pa.approver == msg.sender, "This address is not registered as approver for this pending approval");
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
