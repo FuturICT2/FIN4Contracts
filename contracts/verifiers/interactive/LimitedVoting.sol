@@ -4,9 +4,6 @@ import "contracts/verifiers/Fin4BaseVerifierType.sol";
 // Can be replaced by direct call
 import "contracts/Fin4TokenBase.sol";
 
-//Should be made independent of it 
-import "contracts/Fin4Groups.sol";
-
 // Cannot be made independant of it
 import "contracts/Fin4Messaging.sol";
 
@@ -23,16 +20,11 @@ contract LimitedVoting is Fin4BaseVerifierType {
     }
 
     address public creator;
-    address public Fin4GroupsAddress;
     address public Fin4MessagingAddress;
     address public Fin4SystemParametersAddress;
     address public Fin4ReputationAddress;
     address public Fin4TokenManagementAddr;
     address public Fin4VotingAddress;
-    // Set in 2_deploy_contracts.js
-    function setFin4GroupsAddress(address Fin4GroupsAddr) public {
-        Fin4GroupsAddress = Fin4GroupsAddr;
-    }
     // Set in 2_deploy_contracts.js
     function setFin4tokenManagementAddress(address Fin4TokenManagementAddress) public {
         Fin4TokenManagementAddr = Fin4TokenManagementAddress;

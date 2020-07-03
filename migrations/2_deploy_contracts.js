@@ -101,7 +101,7 @@ module.exports = async function(deployer) {
 	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract)));
 	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
 	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
-	await Fin4VotingInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
+	// await Fin4VotingInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices
 
@@ -122,19 +122,16 @@ module.exports = async function(deployer) {
 	// Picture
 	await verifierTypeInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// LimitedVoting
-	await verifierTypeInstances[11].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierTypeInstances[11].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	await verifierTypeInstances[11].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
 	await verifierTypeInstances[11].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
 	await verifierTypeInstances[11].setFin4VotingAddress(Fin4VotingInstance.address);
 	// PictureVoting
-	await verifierTypeInstances[12].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierTypeInstances[12].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	await verifierTypeInstances[12].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
 	await verifierTypeInstances[12].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
 	await verifierTypeInstances[12].setFin4VotingAddress(Fin4VotingInstance.address);
 	// VideoVoting
-	await verifierTypeInstances[13].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierTypeInstances[13].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	await verifierTypeInstances[13].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
 	await verifierTypeInstances[13].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);

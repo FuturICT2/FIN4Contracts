@@ -1,6 +1,5 @@
 pragma solidity ^0.5.17;
 
-import "contracts/Fin4Groups.sol";
 import 'contracts/stub/Fin4TokenStub.sol';
 
 contract Fin4Voting{
@@ -21,12 +20,6 @@ contract Fin4Voting{
 
     address public creator;
     address public Fin4SystemParametersAddress;
-
-    address public Fin4GroupsAddress;
-
-    function setFin4GroupsAddress(address Fin4GroupsAddr) public {
-        Fin4GroupsAddress = Fin4GroupsAddr;
-    }
 
     function setFin4ReputationAddress(address Fin4ReputationAddr) public {
         require(msg.sender == creator, "Only the creator of this smart contract can call this function");
@@ -67,7 +60,7 @@ contract Fin4Voting{
 
         uint startIdx = uint(blockhash(block.number-1))%votersAddresses.length;
         uint interval = uint(blockhash(block.number-2))%3;
-        uint groupId = Fin4Groups(Fin4GroupsAddress).createGroup(groupName, false);
+        // uint groupId = Fin4Groups(Fin4GroupsAddress).createGroup(groupName, false);
 
         address[] memory newVoters = new address[](numberOfUsers);
 

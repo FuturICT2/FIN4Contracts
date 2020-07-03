@@ -6,7 +6,7 @@ import "contracts/util/strings.sol";
 
 contract Location is Fin4BaseVerifierType {
     using strings for *;
-        /*
+    /*
     Trigonemtric functions
     */
     function cosineAdjusted(int256 degree) private pure returns (int256)
