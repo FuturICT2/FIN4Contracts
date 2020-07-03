@@ -28,17 +28,17 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         uint claimIdOnTokenToReceiveVerifierDecision;
         address requester;
 
-        bool isIndividualApprover; // false means group-usage
-
-        uint approverGroupId;
-        // the following two arrays belong tightly together
-        address[] groupMemberAddresses; // store a snapshot of those here or not? #ConceptualDecision
-                                        // if not, a mechanism to mark messages as read is needed
+        // This is the list of approvers at the time of sending out the request.
+        // Group memberships might change until a decision by the first-responder
+        // is made. This list is only to be able to mark all messages that were
+        // sent out as read once a decision is made.
+        address[] messageReceivers;
         uint[] messageIds;
 
-        string attachment;
-        bool isApproved; // in case of multiple PendingApprovals waiting for each other
-        uint linkedWithPendingApprovalId;
+        bool isDecided;
+
+        // string attachment;
+        // uint linkedWithPendingApprovalId;
     }
 
     uint public nextPendingApprovalId = 0;
@@ -50,32 +50,42 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = user;
-        uint groupId = _getGroupId(tokenAddrToReceiveVerifierNotice);
-        pa.approverGroupId = groupId;
         pa.pendingApprovalId = nextPendingApprovalId;
-        pa.isIndividualApprover = false;
+        pa.isDecided = false;
 
-        string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
-            ". Once a member of the group approves, these messages get marked as read for all others."));
+        string memory message = string(abi.encodePacked(
+            "You are one of the appointed approvers for claims on the token ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
+            ". Once one approver gives their decision, this message gets marked as read for all others and they can't change the decision anymore."));
+        // TODO split into two types of message explaining if you got this directly or via group membership (mention group by name)
 
-        address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
+        uint count = 0;
 
-        pa.groupMemberAddresses = new address[](members.length);
-        pa.messageIds = new uint[](members.length);
-        for (uint i = 0; i < members.length; i ++) {
-            pa.groupMemberAddresses[i] = members[i];
-            pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(user, contractName, members[i], message, "", pa.pendingApprovalId);
+        // INDIVIDUAL APPROVERS
+        address[] individualApprovers = tokenToIndividualApprovers[token];
+        for (uint i = 0; i < individualApprovers.length; i ++) {
+            pa.messageReceivers[count] = individualApprovers[i];
+            pa.messageIds[count] = Fin4Messaging(Fin4MessagingAddress)
+                .addPendingApprovalMessage(user, contractName, individualApprovers[i], message, "", pa.pendingApprovalId);
+            count ++;
+        }
+
+        // APPROVER GROUPS
+        uint[] approverGroupIds = tokenToApproverGroupIDs[token];
+        for (uint i = 0; i < approverGroupIds.length; i ++) {
+            address[] memory groupMembers = Fin4Groups(Fin4GroupsAddress).getGroupMembers(approverGroupIds[i]);
+            for (uint j = 0; j < groupMembers.length; j ++) {
+                pa.messageReceivers[count] = groupMembers[j];
+                pa.messageIds[count] = Fin4Messaging(Fin4MessagingAddress)
+                    .addPendingApprovalMessage(user, contractName, groupMembers[j], message, "", pa.pendingApprovalId);
+                count ++;
+            }
         }
 
         pendingApprovals[nextPendingApprovalId] = pa;
         nextPendingApprovalId ++;
 
-        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "The group has been notified about your approval request.");
-    }
-
-    function getMessageText() public pure returns(string memory) {
-        return "You are a member of a user group that was appointed for approving this claim on the token ";
+        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId,
+            "The appointed approvers have been notified about your approval request.");
     }
 
     // @Override
@@ -94,38 +104,48 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         tokenToApproverGroupIDs[token] = approverGroupIDs;
     }
 
-    function _getGroupId(address token) public view returns(uint) {
-        return tokenToParameter[token];
-    }
-
-    // copied method signature from SpecificAddress, then nothing has to be changed in Messages.jsx
-
     function receiveApproval(uint pendingApprovalId, string memory attachedMessage) public {
-        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
-        require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
-        markMessagesAsRead(pendingApprovalId);
-
-        _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
+        receiveDecision(pendingApprovalId, attachedMessage, true);
     }
 
     function receiveRejection(uint pendingApprovalId, string memory attachedMessage) public {
-        PendingApproval memory pa = pendingApprovals[pendingApprovalId];
-        require(Fin4Groups(Fin4GroupsAddress).isMember(pa.approverGroupId, msg.sender), "You are not a member of the appointed approver group");
-        markMessagesAsRead(pendingApprovalId);
-
-        string memory message = string(abi.encodePacked(
-            "A member of the appointed approver group has rejected your approval request for ",
-            Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
-        if (bytes(attachedMessage).length > 0) {
-            message = string(abi.encodePacked(message, ': ', attachedMessage));
-        }
-        _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
+        receiveDecision(pendingApprovalId, attachedMessage, false);
     }
 
-    function markMessagesAsRead(uint pendingApprovalId) public {
+    function receiveDecision(uint pendingApprovalId, string memory attachedMessage, bool approved) internal {
         PendingApproval memory pa = pendingApprovals[pendingApprovalId];
+        address token = pa.tokenAddrToReceiveVerifierNotice;
+        bool userHasPermission = isIndividualApprover(token, msg.sender) ||
+            Fin4Groups(Fin4GroupsAddress).userIsInOneOfTheseGroups(tokenToApproverGroupIDs[token], msg.sender);
+        require(userHasPermission, "You don't have permission to decide on this request");
+        require(!pa.isDecided, "This request is already decided");
+
         for (uint i = 0; i < pa.messageIds.length; i ++) {
-            Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(pa.groupMemberAddresses[i], pa.messageIds[i]);
+            Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(pa.messageReceivers[i], pa.messageIds[i]);
         }
+
+        pa.isDecided = true;
+
+        if (approved) {
+            _sendApprovalNotice(address(this), token, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
+        } else {
+            string memory message = string(abi.encodePacked(
+                "A member of the appointed approver group has rejected your approval request for ",
+                Fin4TokenBase(token).name()));
+            if (bytes(attachedMessage).length > 0) {
+                message = string(abi.encodePacked(message, ': ', attachedMessage));
+            }
+            _sendRejectionNotice(address(this), token, pa.claimIdOnTokenToReceiveVerifierDecision, message);
+        }
+    }
+
+    function isIndividualApprover(address token, address user) internal returns(bool) {
+        address[] individualApprovers = tokenToIndividualApprovers[token];
+        for (uint i = 0; i < individualApprovers.length; i ++) {
+            if (individualApprovers[i] == user) {
+                return true;
+            }
+        }
+        return false;
     }
 }
