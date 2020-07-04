@@ -135,26 +135,23 @@ module.exports = async function(deployer) {
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices
 
-	// ApprovalByGroupMember
+	// ApprovalByUsersOrGroups
 	await verifierInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierInstances[0].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// SelfieTogether
-	await verifierInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	await verifierInstances[1].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// BlockThese
-	await verifierInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// AllowOnlyThese
-	await verifierInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	await verifierInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SpecificAddress
-	await verifierInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[4].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// TokenCreatorApproval
-	await verifierInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// Picture
-	await verifierInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	// PictureSelfChosenApprover
+	await verifierInstances[7].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Statement
-	await verifierInstances[12].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	await verifierInstances[11].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 	// Vote
-	await verifierInstances[13].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	await verifierInstances[12].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);
