@@ -50,12 +50,12 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         // Must move it to storage like this before pushing into arrays like this:
         // pendingRequests[nextPendingRequestId].messageReceivers.push(...) below.
         // This doesn't work: pa.messageReceivers.push(...), neither does this: pa.messageReceivers[count] = ...
-        pendingRequests[nextPendingRequestId] = pa;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = user;
         pa.pendingRequestId = nextPendingRequestId;
         pa.isDecided = false;
+        pendingRequests[nextPendingRequestId] = pa;
 
         string memory message = string(abi.encodePacked(
             "You are one of the appointed approvers for claims on the token ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
