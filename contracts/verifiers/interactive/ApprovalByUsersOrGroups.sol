@@ -42,7 +42,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
     }
 
     uint public nextPendingRequestId = 0;
-    mapping (uint => PendingRequest) public PendingRequests; // just use an array? TODO
+    mapping (uint => PendingRequest) public pendingRequests; // just use an array? TODO
 
     // @Override
     function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
@@ -83,7 +83,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
             }
         }
 
-        PendingRequests[nextPendingRequestId] = pa;
+        pendingRequests[nextPendingRequestId] = pa;
         nextPendingRequestId ++;
 
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId,
@@ -115,7 +115,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
     }
 
     function receiveDecision(uint pendingRequestId, string memory attachedMessage, bool approved) internal {
-        PendingRequest memory pa = PendingRequests[pendingRequestId];
+        PendingRequest memory pa = pendingRequests[pendingRequestId];
          // only possible if the claimer got added to an approver group after he made the claim
         require(pa.requester != msg.sender, "No self-approve allowed");
         address token = pa.tokenAddrToReceiveVerifierNotice;
