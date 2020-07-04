@@ -37,20 +37,22 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
 
         bool isDecided;
 
-        // string attachment;
+        string attachment;
         // uint linkedWithPendingRequestId;
     }
 
     uint public nextPendingRequestId = 0;
     mapping (uint => PendingRequest) public pendingRequests; // just use an array? TODO
 
-    function addPendingRequest(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) internal returns(uint) {
+    function addPendingRequest(address user, address tokenAddrToReceiveVerifierNotice, uint claimId, string memory attachment)
+        internal returns(uint) {
         PendingRequest memory pa;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = user;
         pa.pendingRequestId = nextPendingRequestId;
         pa.isDecided = false;
+        pa.attachment = attachment;
         // Must move it to storage like this before pushing into arrays like this:
         // pendingRequests[nextPendingRequestId].messageReceivers.push(...) below.
         // This doesn't work: pa.messageReceivers.push(...), neither does this: pa.messageReceivers[count] = ...
@@ -59,7 +61,9 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         return nextPendingRequestId - 1;
     }
 
-    function sendRequests(address user, uint pendingRequestId, address token) internal {
+    function sendRequests(uint pendingRequestId) internal {
+        address token = pendingRequests[pendingRequestId].tokenAddrToReceiveVerifierNotice;
+        address user = pendingRequests[pendingRequestId].requester;
         string memory message = string(abi.encodePacked(
             "You are one of the appointed approvers for claims on the token ", Fin4TokenBase(token).name(),
             ". Once one approver gives their decision, this message gets marked as read for all others and they can't change the decision anymore."));
@@ -89,8 +93,8 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
 
     // @Override
     function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
-        uint pendingRequestId = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId);
-        sendRequests(user, pendingRequestId, tokenAddrToReceiveVerifierNotice);
+        uint pendingRequestId = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId, "");
+        sendRequests(pendingRequestId);
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId,
             "The appointed approvers have been notified about your approval request.");
     }
