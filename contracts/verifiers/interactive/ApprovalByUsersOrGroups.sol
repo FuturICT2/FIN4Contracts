@@ -47,6 +47,10 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
     // @Override
     function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
         PendingRequest memory pa;
+        // Must move it to storage like this before pushing into arrays like this:
+        // pendingRequests[nextPendingRequestId].messageReceivers.push(...) below.
+        // This doesn't work: pa.messageReceivers.push(...), neither does this: pa.messageReceivers[count] = ...
+        pendingRequests[nextPendingRequestId] = pa;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = user;
@@ -58,16 +62,13 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
             ". Once one approver gives their decision, this message gets marked as read for all others and they can't change the decision anymore."));
         // TODO split into two types of message explaining if you got this directly or via group membership (mention group by name)
 
-        uint count = 0;
-
         // INDIVIDUAL APPROVERS
         address[] memory individualApprovers = tokenToIndividualApprovers[tokenAddrToReceiveVerifierNotice];
         for (uint i = 0; i < individualApprovers.length; i ++) {
             require(individualApprovers[i] != user, "Claimer is listed as individual approver, no self-approval allowed");
-            pa.messageReceivers[count] = individualApprovers[i];
-            pa.messageIds[count] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingRequestMessage(user, contractName, individualApprovers[i], message, "", pa.pendingRequestId);
-            count ++;
+            pendingRequests[nextPendingRequestId].messageReceivers.push(individualApprovers[i]);
+            pendingRequests[nextPendingRequestId].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
+                .addPendingRequestMessage(user, contractName, individualApprovers[i], message, "", pa.pendingRequestId));
         }
 
         // APPROVER GROUPS
@@ -76,14 +77,12 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
             address[] memory groupMembers = Fin4Groups(Fin4GroupsAddress).getGroupMembers(approverGroupIds[i]);
             for (uint j = 0; j < groupMembers.length; j ++) {
                 require(groupMembers[j] != user, "Claimer is in at least one of the approver groups, no self-approval allowed");
-                pa.messageReceivers[count] = groupMembers[j];
-                pa.messageIds[count] = Fin4Messaging(Fin4MessagingAddress)
-                    .addPendingRequestMessage(user, contractName, groupMembers[j], message, "", pa.pendingRequestId);
-                count ++;
+                pendingRequests[nextPendingRequestId].messageReceivers.push(groupMembers[j]);
+                pendingRequests[nextPendingRequestId].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
+                    .addPendingRequestMessage(user, contractName, groupMembers[j], message, "", pa.pendingRequestId));
             }
         }
 
-        pendingRequests[nextPendingRequestId] = pa;
         nextPendingRequestId ++;
 
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId,
