@@ -24,6 +24,7 @@ const BurnSourcerer = artifacts.require('BurnSourcerer');
 
 const verifierContractNames = [
 	'ApprovalByUsersOrGroups',
+	'PictureGivenApprovers',
 	// 'SelfieTogether',
 	'BlockThese',
 	'AllowOnlyThese',
@@ -138,20 +139,23 @@ module.exports = async function(deployer) {
 	// ApprovalByUsersOrGroups
 	await verifierInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierInstances[0].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// BlockThese
+	// PictureGivenApprovers
 	await verifierInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	// AllowOnlyThese
+	await verifierInstances[1].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	// BlockThese
 	await verifierInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	// AllowOnlyThese
+	await verifierInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// SpecificAddress
-	await verifierInstances[4].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// TokenCreatorApproval
 	await verifierInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	// TokenCreatorApproval
+	await verifierInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// PictureSelfChosenApprover
-	await verifierInstances[7].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Statement
-	await verifierInstances[11].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
-	// Vote
 	await verifierInstances[12].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	// Vote
+	await verifierInstances[13].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);
