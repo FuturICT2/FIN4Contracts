@@ -41,21 +41,27 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         // uint linkedWithPendingRequestId;
     }
 
-    uint public nextPendingRequestId = 0;
-    mapping (uint => PendingRequest) public pendingRequests; // just use an array? TODO
-
-    // @Override
-    function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
+    function addPendingRequest(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) internal returns(uint) {
         PendingRequest memory pa;
-        // Must move it to storage like this before pushing into arrays like this:
-        // pendingRequests[nextPendingRequestId].messageReceivers.push(...) below.
-        // This doesn't work: pa.messageReceivers.push(...), neither does this: pa.messageReceivers[count] = ...
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.requester = user;
         pa.pendingRequestId = nextPendingRequestId;
         pa.isDecided = false;
+        // Must move it to storage like this before pushing into arrays like this:
+        // pendingRequests[nextPendingRequestId].messageReceivers.push(...) below.
+        // This doesn't work: pa.messageReceivers.push(...), neither does this: pa.messageReceivers[count] = ...
         pendingRequests[nextPendingRequestId] = pa;
+        nextPendingRequestId ++;
+        return nextPendingRequestId - 1;
+    }
+
+    uint public nextPendingRequestId = 0;
+    mapping (uint => PendingRequest) public pendingRequests; // just use an array? TODO
+
+    // @Override
+    function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
+        uint prID = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId);
 
         string memory message = string(abi.encodePacked(
             "You are one of the appointed approvers for claims on the token ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
@@ -66,9 +72,9 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         address[] memory individualApprovers = tokenToIndividualApprovers[tokenAddrToReceiveVerifierNotice];
         for (uint i = 0; i < individualApprovers.length; i ++) {
             require(individualApprovers[i] != user, "Claimer is listed as individual approver, no self-approval allowed");
-            pendingRequests[nextPendingRequestId].messageReceivers.push(individualApprovers[i]);
-            pendingRequests[nextPendingRequestId].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
-                .addPendingRequestMessage(user, contractName, individualApprovers[i], message, "", pa.pendingRequestId));
+            pendingRequests[prID].messageReceivers.push(individualApprovers[i]);
+            pendingRequests[prID].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
+                .addPendingRequestMessage(user, contractName, individualApprovers[i], message, "", prID));
         }
 
         // APPROVER GROUPS
@@ -77,13 +83,11 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
             address[] memory groupMembers = Fin4Groups(Fin4GroupsAddress).getGroupMembers(approverGroupIds[i]);
             for (uint j = 0; j < groupMembers.length; j ++) {
                 require(groupMembers[j] != user, "Claimer is in at least one of the approver groups, no self-approval allowed");
-                pendingRequests[nextPendingRequestId].messageReceivers.push(groupMembers[j]);
-                pendingRequests[nextPendingRequestId].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
-                    .addPendingRequestMessage(user, contractName, groupMembers[j], message, "", pa.pendingRequestId));
+                pendingRequests[prID].messageReceivers.push(groupMembers[j]);
+                pendingRequests[prID].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
+                    .addPendingRequestMessage(user, contractName, groupMembers[j], message, "", prID));
             }
         }
-
-        nextPendingRequestId ++;
 
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId,
             "The appointed approvers have been notified about your approval request.");
