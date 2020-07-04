@@ -61,16 +61,18 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         return nextPendingRequestId - 1;
     }
 
-    function sendRequests(uint pendingRequestId) internal {
-        address token = pendingRequests[pendingRequestId].tokenAddrToReceiveVerifierNotice;
-        address user = pendingRequests[pendingRequestId].requester;
-        string memory message = string(abi.encodePacked(
-            "You are one of the appointed approvers for claims on the token ", Fin4TokenBase(token).name(),
-            ". Once one approver gives their decision, this message gets marked as read for all others and they can't change the decision anymore."));
-        // TODO split into two types of message explaining if you got this directly or via group membership (mention group by name)
+    function submitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId, string memory attachment,
+        string memory pendingNotice) internal {
+        uint pendingRequestId = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId, attachment);
 
-        // INDIVIDUAL APPROVERS
-        address[] memory individualApprovers = tokenToIndividualApprovers[token];
+        // SEND REQUESTS
+        string memory message = string(abi.encodePacked(
+            "You are one of the appointed approvers for claims on the token ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
+            ". Once one approver gives their decision, this message gets marked as read for all others and they can't change the decision anymore."));
+            // TODO split into two types of message explaining if you got this directly or via group membership (mention group by name)
+
+        // Individual approvers
+        address[] memory individualApprovers = tokenToIndividualApprovers[tokenAddrToReceiveVerifierNotice];
         for (uint i = 0; i < individualApprovers.length; i ++) {
             require(individualApprovers[i] != user, "Claimer is listed as individual approver, no self-approval allowed");
             pendingRequests[pendingRequestId].messageReceivers.push(individualApprovers[i]);
@@ -78,8 +80,8 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
                 .addPendingRequestMessage(user, contractName, individualApprovers[i], message, pendingRequests[pendingRequestId].attachment, pendingRequestId));
         }
 
-        // APPROVER GROUPS
-        uint[] memory approverGroupIds = tokenToApproverGroupIDs[token];
+        // Approver groups
+        uint[] memory approverGroupIds = tokenToApproverGroupIDs[tokenAddrToReceiveVerifierNotice];
         for (uint i = 0; i < approverGroupIds.length; i ++) {
             address[] memory groupMembers = Fin4Groups(Fin4GroupsAddress).getGroupMembers(approverGroupIds[i]);
             for (uint j = 0; j < groupMembers.length; j ++) {
@@ -89,12 +91,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
                     .addPendingRequestMessage(user, contractName, groupMembers[j], message, pendingRequests[pendingRequestId].attachment, pendingRequestId));
             }
         }
-    }
 
-    function submitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId, string memory attachment,
-        string memory pendingNotice) internal {
-        uint pendingRequestId = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId, attachment);
-        sendRequests(pendingRequestId);
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, pendingNotice);
     }
 
