@@ -12,8 +12,8 @@ contract VideoVoting is LimitedVoting {
         description = "The claimer has to supply a video, based on which the approver will decide to approve.";
     }
 
-    function submitProof_VideoVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory IPFShash) public {
-        super.submitProof_LimitedVoting(tokenAddrToReceiveVerifierNotice, claimId, IPFShash);
+    function submitProof_VideoVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, string memory IPFShash) public {
+        super.submitProof_LimitedVoting(tokenAddrToReceiveVerifierNotice, claimId, claimer, IPFShash);
     }
 
     // @Override

@@ -50,7 +50,6 @@ module.exports = async function(deployer) {
 	await REPTokenInstance.addMinter(LimitedVotingInstance.address);
 	await REPTokenInstance.addMinter(PictureInstance.address);
 	await REPTokenInstance.addMinter(VideoInstance.address);
-	await REPTokenInstance.addMinter(Fin4Verifying.address);
 	
 	if (!TCRactive) {
 		return;

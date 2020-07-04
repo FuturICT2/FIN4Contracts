@@ -12,8 +12,8 @@ contract PictureVoting is LimitedVoting {
         description = "The claimer has to supply a picture, based on which the approver will decide to approve.";
     }
 
-    function submitProof_PictureVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory IPFShash) public {
-        super.submitProof_LimitedVoting(tokenAddrToReceiveVerifierNotice, claimId, IPFShash);
+    function submitProof_PictureVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, string memory IPFShash) public {
+        super.submitProof_LimitedVoting(tokenAddrToReceiveVerifierNotice, claimId, claimer, IPFShash);
     }
 
     // @Override

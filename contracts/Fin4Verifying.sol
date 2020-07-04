@@ -80,23 +80,23 @@ contract Fin4Verifying {
     // Proof Submission
     function submit_Proof(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName, string memory IPFShash) public {
         if(keccak256(abi.encodePacked((verifierName))) == keccak256(abi.encodePacked(("PictureVoting"))))
-            Fin4VerifyingStub(verifiers[verifierName]).submitProof_PictureVoting(tokenAddrToReceiveVerifierNotice,claimId,IPFShash);
+            Fin4VerifyingStub(verifiers[verifierName]).submitProof_PictureVoting(tokenAddrToReceiveVerifierNotice,claimId, msg.sender, IPFShash);
         else if(keccak256(abi.encodePacked((verifierName))) == keccak256(abi.encodePacked(("LimitedVoting"))))
-            Fin4VerifyingStub(verifiers[verifierName]).submitProof_LimitedVoting(tokenAddrToReceiveVerifierNotice,claimId,IPFShash);
+            Fin4VerifyingStub(verifiers[verifierName]).submitProof_LimitedVoting(tokenAddrToReceiveVerifierNotice,claimId, msg.sender, IPFShash);
         else if(keccak256(abi.encodePacked((verifierName))) == keccak256(abi.encodePacked(("VideoVoting"))))
-            Fin4VerifyingStub(verifiers[verifierName]).submitProof_VideoVoting(tokenAddrToReceiveVerifierNotice,claimId,IPFShash);
+            Fin4VerifyingStub(verifiers[verifierName]).submitProof_VideoVoting(tokenAddrToReceiveVerifierNotice,claimId, msg.sender, IPFShash);
     }
     function submitProof_Picture(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName, address approver, string memory IPFShash) public{
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_Picture(tokenAddrToReceiveVerifierNotice, claimId, approver, IPFShash);
+        Fin4VerifyingStub(verifiers[verifierName]).submitProof_Picture(tokenAddrToReceiveVerifierNotice, claimId, msg.sender, approver, IPFShash);
     }
     function submitProof_SpecificAddress(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName, address approver) public{
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_SpecificAddress(tokenAddrToReceiveVerifierNotice,claimId,approver);
+        Fin4VerifyingStub(verifiers[verifierName]).submitProof_SpecificAddress(tokenAddrToReceiveVerifierNotice, claimId, msg.sender, approver);
     }
     function submitProof_Location_Server(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName, int256 lat1, int256 lon1) public {
         Fin4VerifyingStub(verifiers[verifierName]).submitProof_Location_Server(tokenAddrToReceiveVerifierNotice,claimId,lat1,lon1);
     }
     function submitProof_TokenCreatorApproval(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName) public {
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_TokenCreatorApproval(tokenAddrToReceiveVerifierNotice, claimId);
+        Fin4VerifyingStub(verifiers[verifierName]).submitProof_TokenCreatorApproval(tokenAddrToReceiveVerifierNotice, claimId, msg.sender);
     }
     function submitProof_Password(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName, string memory password) public{
         Fin4VerifyingStub(verifiers[verifierName]).submitProof_Password(tokenAddrToReceiveVerifierNotice,claimId,password);
@@ -115,12 +115,12 @@ contract Fin4Verifying {
     // }
 
     // Voting Interaction
-    function receiveApprovalFromSpecificAddress(string memory verifierName, uint claimId, string memory attachedMessage) public {
-        Fin4VerifyingStub(verifiers[verifierName]).receiveApprovalFromSpecificAddress(claimId, attachedMessage);
+    function receiveApprovalFromSpecificAddress(string memory verifierName, uint pendingApprovalId, string memory attachedMessage) public {
+        Fin4VerifyingStub(verifiers[verifierName]).receiveApprovalFromSpecificAddress(pendingApprovalId, msg.sender, attachedMessage);
     }
 
-    function receiveRejectionFromSpecificAddress(string memory verifierName, uint claimId, string memory attachedMessage) public {
-        Fin4VerifyingStub(verifiers[verifierName]).receiveRejectionFromSpecificAddress(claimId, attachedMessage);
+    function receiveRejectionFromSpecificAddress(string memory verifierName, uint pendingApprovalId, string memory attachedMessage) public {
+        Fin4VerifyingStub(verifiers[verifierName]).receiveRejectionFromSpecificAddress(pendingApprovalId, msg.sender, attachedMessage);
     }
 
     function endVote(string memory verifierName, uint claimId) public{

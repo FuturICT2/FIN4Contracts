@@ -49,7 +49,7 @@ contract Fin4Voting{
         return voters[add].voter != address(0);
     }
 
-    function createRandomGroupOfUsers(uint numberOfUsers,  string memory groupName, address claimer)  public returns(address[] memory) {
+    function createRandomGroupOfUsers(uint numberOfUsers, address claimer)  public returns(address[] memory) {
         
         uint subtractNumberOfVoters = 0;
 

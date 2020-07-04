@@ -74,14 +74,14 @@ contract LimitedVoting is Fin4BaseVerifierType {
     }
 
     // @Override
-    function submitProof_LimitedVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory IPFShash) public {
+    function submitProof_LimitedVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, string memory IPFShash) public {
         PendingApproval memory pa;
         pa.start = block.timestamp;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.claimId = claimId;
-        pa.requester = msg.sender;
-        address[] memory members = Fin4Voting(Fin4VotingAddress).createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), "test", msg.sender);
+        pa.requester = claimer;
+        address[] memory members = Fin4Voting(Fin4VotingAddress).createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), claimer);
         pa.nbApproved = 0;
         pa.nbRejected = 0;
         pa.attachment = IPFShash;
@@ -98,7 +98,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         for (uint i = 0; i < members.length; i ++) {
             pa.groupMemberAddresses[i] = members[i];
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(msg.sender, name, members[i], message, IPFShash, pa.claimId);
+                .addPendingApprovalMessage(claimer, name, members[i], message, IPFShash, pa.claimId);
         }
 
         pendingApprovals[claimId] = pa;
@@ -169,10 +169,10 @@ contract LimitedVoting is Fin4BaseVerifierType {
         return 0;
     }
 
-    function receiveApprovalFromSpecificAddress(uint claimId, string memory attachedMessage) public {
+    function receiveApprovalFromSpecificAddress(uint claimId, address voter, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[claimId];
-        markMessageAsRead(claimId, getIndexOf(pa.groupMemberAddresses, msg.sender));
-        pa.Approved[pa.nbApproved] = msg.sender;
+        markMessageAsRead(claimId, getIndexOf(pa.groupMemberAddresses, voter));
+        pa.Approved[pa.nbApproved] = voter;
         pa.nbApproved = pa.nbApproved + 1;
         if(pa.nbApproved > pa.groupMemberAddresses.length/2){
             markMessagesAsRead(claimId);
@@ -196,16 +196,16 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pendingApprovals[claimId] = pa;
     }
 
-    function receiveRejectionFromSpecificAddress(uint claimId, string memory attachedMessage) public {
+    function receiveRejectionFromSpecificAddress(uint claimId, address voter, string memory attachedMessage) public {
         PendingApproval memory pa = pendingApprovals[claimId];
-        markMessageAsRead(claimId, getIndexOf(pa.groupMemberAddresses, msg.sender));
+        markMessageAsRead(claimId, getIndexOf(pa.groupMemberAddresses, voter));
         string memory message = string(abi.encodePacked(
             "A member of the appointed approver group has rejected your approval request for ",
             Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
         if (bytes(attachedMessage).length > 0) {
             message = string(abi.encodePacked(message, ': ', attachedMessage));
         }
-        pa.Rejected[pa.nbRejected] = msg.sender;
+        pa.Rejected[pa.nbRejected] = voter;
         pa.nbRejected = pa.nbRejected + 1;
         if(pa.nbRejected > pa.groupMemberAddresses.length/2){
             uint REPS = 0;
