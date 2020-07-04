@@ -75,7 +75,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
             require(individualApprovers[i] != user, "Claimer is listed as individual approver, no self-approval allowed");
             pendingRequests[pendingRequestId].messageReceivers.push(individualApprovers[i]);
             pendingRequests[pendingRequestId].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
-                .addPendingRequestMessage(user, contractName, individualApprovers[i], message, "", pendingRequestId));
+                .addPendingRequestMessage(user, contractName, individualApprovers[i], message, pendingRequests[pendingRequestId].attachment, pendingRequestId));
         }
 
         // APPROVER GROUPS
@@ -86,7 +86,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
                 require(groupMembers[j] != user, "Claimer is in at least one of the approver groups, no self-approval allowed");
                 pendingRequests[pendingRequestId].messageReceivers.push(groupMembers[j]);
                 pendingRequests[pendingRequestId].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
-                    .addPendingRequestMessage(user, contractName, groupMembers[j], message, "", pendingRequestId));
+                    .addPendingRequestMessage(user, contractName, groupMembers[j], message, pendingRequests[pendingRequestId].attachment, pendingRequestId));
             }
         }
     }
