@@ -92,7 +92,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
 
     // @Override
     function getParameterForTokenCreatorToSetEncoded() public pure returns(string memory) {
-        return "address[]:Individual approvers:comma separated,uint[]:Approver groups:Group IDs comma separated";
+        return "address[]:Users:addresses comma separated,uint[]:Groups:IDs comma separated";
     }
 
     mapping (address => address[]) public tokenToIndividualApprovers;
