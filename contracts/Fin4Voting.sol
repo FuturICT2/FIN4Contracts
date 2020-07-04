@@ -39,7 +39,8 @@ contract Fin4Voting{
     }
 
     function isEligibleToBeAVoter() public returns(bool) {
-        if(Fin4TokenStub(Fin4ReputationAddress).balanceOf(msg.sender) > 100 && !isVoter(msg.sender))
+        //Check that REP balance is bigger than a certain value, for testing it is left at 0
+        if(Fin4TokenStub(Fin4ReputationAddress).balanceOf(msg.sender) >= 0 && !isVoter(msg.sender))
             return true;
         return false;
     }
@@ -56,7 +57,7 @@ contract Fin4Voting{
             subtractNumberOfVoters = 1;
         }
 
-        require(numberOfUsers <= (votersAddresses.length -subtractNumberOfVoters ), "Not enough active voters in the system!" );
+        require(numberOfUsers <= (votersAddresses.length - subtractNumberOfVoters ), "Not enough active voters in the system!" );
 
         uint startIdx = uint(blockhash(block.number-1))%votersAddresses.length;
         uint interval = uint(blockhash(block.number-2))%3;

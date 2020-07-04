@@ -115,6 +115,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     }
     function endVote(uint claimId) public{
         PendingApproval memory pa = pendingApprovals[claimId];
+        // require(endVotePossible(claimId), "End Vote Not Possible");
         if (endVotePossible(claimId)){
             markMessagesAsRead(claimId);
             uint quorum = pa.nbApproved + pa.nbRejected;

@@ -51,7 +51,7 @@ const verifiers = {
   },
   Picture: {
     chain: "On-Chain",
-    type: "Interactive",
+    type: "Social",
     claimerInput: {
       inputType: "User generated data",
       sensorData: "None",
