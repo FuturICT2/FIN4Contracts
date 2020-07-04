@@ -91,11 +91,16 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         }
     }
 
+    function submitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId, string memory attachment,
+        string memory pendingNotice) internal {
+        uint pendingRequestId = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId, attachment);
+        sendRequests(pendingRequestId);
+        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, pendingNotice);
+    }
+
     // @Override
     function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
-        uint pendingRequestId = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId, "");
-        sendRequests(pendingRequestId);
-        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId,
+        submitProof(user, tokenAddrToReceiveVerifierNotice, claimId, "",
             "The appointed approvers have been notified about your approval request.");
     }
 
