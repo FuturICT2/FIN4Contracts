@@ -41,6 +41,9 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         // uint linkedWithPendingRequestId;
     }
 
+    uint public nextPendingRequestId = 0;
+    mapping (uint => PendingRequest) public pendingRequests; // just use an array? TODO
+
     function addPendingRequest(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) internal returns(uint) {
         PendingRequest memory pa;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
@@ -56,39 +59,38 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         return nextPendingRequestId - 1;
     }
 
-    uint public nextPendingRequestId = 0;
-    mapping (uint => PendingRequest) public pendingRequests; // just use an array? TODO
-
-    // @Override
-    function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
-        uint prID = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId);
-
+    function sendRequests(address user, uint pendingRequestId, address token) internal {
         string memory message = string(abi.encodePacked(
-            "You are one of the appointed approvers for claims on the token ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
+            "You are one of the appointed approvers for claims on the token ", Fin4TokenBase(token).name(),
             ". Once one approver gives their decision, this message gets marked as read for all others and they can't change the decision anymore."));
         // TODO split into two types of message explaining if you got this directly or via group membership (mention group by name)
 
         // INDIVIDUAL APPROVERS
-        address[] memory individualApprovers = tokenToIndividualApprovers[tokenAddrToReceiveVerifierNotice];
+        address[] memory individualApprovers = tokenToIndividualApprovers[token];
         for (uint i = 0; i < individualApprovers.length; i ++) {
             require(individualApprovers[i] != user, "Claimer is listed as individual approver, no self-approval allowed");
-            pendingRequests[prID].messageReceivers.push(individualApprovers[i]);
-            pendingRequests[prID].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
-                .addPendingRequestMessage(user, contractName, individualApprovers[i], message, "", prID));
+            pendingRequests[pendingRequestId].messageReceivers.push(individualApprovers[i]);
+            pendingRequests[pendingRequestId].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
+                .addPendingRequestMessage(user, contractName, individualApprovers[i], message, "", pendingRequestId));
         }
 
         // APPROVER GROUPS
-        uint[] memory approverGroupIds = tokenToApproverGroupIDs[tokenAddrToReceiveVerifierNotice];
+        uint[] memory approverGroupIds = tokenToApproverGroupIDs[token];
         for (uint i = 0; i < approverGroupIds.length; i ++) {
             address[] memory groupMembers = Fin4Groups(Fin4GroupsAddress).getGroupMembers(approverGroupIds[i]);
             for (uint j = 0; j < groupMembers.length; j ++) {
                 require(groupMembers[j] != user, "Claimer is in at least one of the approver groups, no self-approval allowed");
-                pendingRequests[prID].messageReceivers.push(groupMembers[j]);
-                pendingRequests[prID].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
-                    .addPendingRequestMessage(user, contractName, groupMembers[j], message, "", prID));
+                pendingRequests[pendingRequestId].messageReceivers.push(groupMembers[j]);
+                pendingRequests[pendingRequestId].messageIds.push(Fin4Messaging(Fin4MessagingAddress)
+                    .addPendingRequestMessage(user, contractName, groupMembers[j], message, "", pendingRequestId));
             }
         }
+    }
 
+    // @Override
+    function autoSubmitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId) public {
+        uint pendingRequestId = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId);
+        sendRequests(user, pendingRequestId, tokenAddrToReceiveVerifierNotice);
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId,
             "The appointed approvers have been notified about your approval request.");
     }
