@@ -1,7 +1,6 @@
 pragma solidity ^0.5.17;
 
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
-import "contracts/Fin4TokenBase.sol";
 import "contracts/Fin4Messaging.sol";
 
 contract SpecificAddress is Fin4BaseVerifierType {
@@ -50,7 +49,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
         pa.pendingApprovalId = pendingApprovals[approver].length;
 
         string memory message = string(abi.encodePacked(getMessageText(),
-            Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name()));
+            Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name()));
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingRequestMessage(
             msg.sender, contractName, approver, message, "", pa.pendingApprovalId);
 
@@ -76,7 +75,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
 
         string memory message = string(abi.encodePacked("User ", addressToString(pa.approver),
-            " has rejected your approval request for ", Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name()));
+            " has rejected your approval request for ", Fin4TokenStub(pa.tokenAddrToReceiveVerifierNotice).name()));
 
         if (bytes(attachedMessage).length > 0) {
             message = string(abi.encodePacked(message, ': ', attachedMessage));

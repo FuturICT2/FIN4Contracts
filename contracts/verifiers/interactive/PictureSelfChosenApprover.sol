@@ -23,7 +23,7 @@ contract PictureSelfChosenApprover is SpecificAddress {
         pa.attachment = IPFShash;
         pa.pendingApprovalId = pendingApprovals[approver].length;
         string memory message = string(abi.encodePacked(getMessageText(),
-            Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name()));
+            Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name()));
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingRequestMessage(
             msg.sender, contractName, approver, message, IPFShash, pa.pendingApprovalId);
         pendingApprovals[approver].push(pa);

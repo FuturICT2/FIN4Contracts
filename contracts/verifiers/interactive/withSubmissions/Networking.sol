@@ -2,7 +2,6 @@ pragma solidity ^0.5.17;
 
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4Verifying.sol";
-import "contracts/Fin4TokenBase.sol";
 import "contracts/Fin4Messaging.sol";
 
 contract Networking is Fin4BaseVerifierType {
@@ -49,7 +48,7 @@ contract Networking is Fin4BaseVerifierType {
 
         string memory message = string(abi.encodePacked(
             "You were requested to approve a networking claim on the token '",
-            Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
+            Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name(),
             "'. The submitted content is '", content, "'."));
 
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingRequestMessage(
@@ -73,7 +72,7 @@ contract Networking is Fin4BaseVerifierType {
         Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(msg.sender, pa.messageId);
         string memory message = string(abi.encodePacked("Your chosen approver '", addressToString(pa.approver),
             "' has rejected your approval request for the 'Networking' verifier on a claim on token '",
-            Fin4TokenBase(pa.tokenAddrToReceiveVerifierNotice).name(), "'"));
+            Fin4TokenStub(pa.tokenAddrToReceiveVerifierNotice).name(), "'"));
 
         if (bytes(attachedMessage).length > 0) {
             message = string(abi.encodePacked(message, ': ', attachedMessage));

@@ -1,7 +1,6 @@
 pragma solidity ^0.5.17;
 
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
-import "contracts/Fin4TokenBase.sol";
 import "contracts/Fin4Groups.sol";
 import "contracts/Fin4Messaging.sol";
 
@@ -67,7 +66,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
 
         // SEND REQUESTS
         string memory message = string(abi.encodePacked(
-            "You are one of the appointed approvers for claims on the token ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
+            "You are one of the appointed approvers for claims on the token ", Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name(),
             ". Once one approver gives their decision, this message gets marked as read for all others and they can't change the decision anymore."));
             // TODO split into two types of message explaining if you got this directly or via group membership (mention group by name)
 
@@ -150,7 +149,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         } else {
             string memory message = string(abi.encodePacked(
                 "One of the appointed approvers has rejected your approval request for ",
-                Fin4TokenBase(token).name()));
+                Fin4TokenStub(token).name()));
             if (bytes(attachedMessage).length > 0) {
                 message = string(abi.encodePacked(message, ': ', attachedMessage));
             }
