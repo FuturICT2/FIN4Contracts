@@ -82,8 +82,8 @@ contract Fin4TokenBase { // abstract class
 
     mapping (uint => Claim) public claims;
 
-    function verifierStatusIsUnsubmitted(address verifier, uint claimId) public returns(bool) {
-        return claims[claimId].verifierStatuses[verifier].status == Status.UNSUBMITTED;
+    function getVerifierStatus(address verifier, uint claimId) public returns(uint) {
+        return uint(claims[claimId].verifierStatuses[verifier].status);
     }
 
     // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it

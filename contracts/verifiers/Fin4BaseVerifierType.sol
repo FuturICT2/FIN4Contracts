@@ -33,9 +33,10 @@ contract Fin4BaseVerifierType is utils {
         return "";
     }
 
-    function checkIfOpenToReceiveProof(address token, uint claimId) public {
-        require(Fin4TokenStub(token).verifierStatusIsUnsubmitted(address(this), claimId),
-            "Verifier for this claim on this token is not in unsubmitted status anymore");
+    function statusIsUndecided(address token, uint claimId) internal returns(bool) {
+        // from enum Status in Fin4TokenBase: 0 = UNSUBMITTED, 1 = PENDING, 2 = APPROVED, 3 = REJECTED
+        uint status = Fin4TokenStub(token).getVerifierStatus(address(this), claimId);
+        require(status != 2 && status != 3, "This verifier is already decided");
     }
 
     // Helper method for all verifier types to go through the same method when sending their approvals
@@ -43,16 +44,20 @@ contract Fin4BaseVerifierType is utils {
     function _sendApprovalNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId,
         string memory message) internal {
         // TODO ensure it can only be called from within this SC?
+        statusIsUndecided(tokenAddrToReceiveVerifierNotice, claimId);
         Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierApprovalNotice(verifierTypeAddress, claimId, message);
     }
 
     function _sendRejectionNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId,
         string memory message) internal {
+        statusIsUndecided(tokenAddrToReceiveVerifierNotice, claimId);
         Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierRejectionNotice(verifierTypeAddress, claimId, message);
     }
 
     function _sendPendingNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId,
         string memory message) internal {
+        require(Fin4TokenStub(tokenAddrToReceiveVerifierNotice).getVerifierStatus(address(this), claimId) == 0,
+            "This proof is already submitted");
         Fin4TokenStub(tokenAddrToReceiveVerifierNotice).receiveVerifierPendingNotice(verifierTypeAddress, claimId, message);
     }
 
