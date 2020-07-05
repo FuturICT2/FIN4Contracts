@@ -53,7 +53,7 @@ const verifierContracts = verifierContractNames.map(contractName => {
 	return 	artifacts.require(contractName);
 });
 
-const UnderlyingsActive = false; // the other necessary switch is in src/components/utils.js
+const UnderlyingsActive = true; // the other necessary switch is in src/components/utils.js
 
 module.exports = async function(deployer) {
 	// FIN4MAIN
