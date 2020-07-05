@@ -9,7 +9,7 @@ contract Fin4TokenBase { // abstract class
     address Fin4ClaimingAddress;
     address tokenCreator;
     string public description;
-    string public actionsText;
+    string actionsText;
     string public unit;
     uint public tokenCreationTime;
     uint public fixedAmount;
