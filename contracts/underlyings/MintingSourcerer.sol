@@ -9,6 +9,9 @@ contract MintingSourcerer is BaseSourcerer {
         require(false, "Depositing collateral on the MintingSourcerer is not supported.");
     }
 
+    // TODO overwrite setParameters() and block certain types of pairs. The collateral
+    // token creator must be able to limit the types of pairs the token can be used in
+
     function convert(address pat, address collateral, uint amount) public {
         bytes32 id = getId(pat, collateral);
         fetchAndBurnPAT(pat, msg.sender, amount);
