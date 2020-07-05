@@ -9,8 +9,8 @@ contract SwapSourcerer is BaseSourcerer {
         fetchAndBurnPAT(pat, msg.sender, amount);
 
         uint exchangeAmount = amount * pairs[id].exchangeRatio;
+        require(pairs[id].totalCollateralBalance >= exchangeAmount, "Not enough collateral balance on this pair to swap");
 
-        // send COLLATERAL, rely on the built-in checks for sufficient amounts or require() it beforehand?
         ERC20(collateral).transfer(getBeneficiary(id, msg.sender), exchangeAmount);
 
         pairs[id].totalExchangedPatAmount += amount;
