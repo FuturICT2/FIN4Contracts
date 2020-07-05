@@ -223,6 +223,10 @@ contract Fin4TokenBase { // abstract class
     function approveClaim(uint claimId) private {
         // TODO outsource the if into own method and use it via require here and in rejectClaim()
         // couldn't do it because of out of gas error
+
+        // TODO these guards and in the next methods shouldn't be necessary anymore because Fin4BaseVerifierType is
+        // guarding in the three notice-giving methods
+
         if (!claims[claimId].isApproved && !claims[claimId].gotRejected) {
             claims[claimId].isApproved = true;
             claims[claimId].claimApprovalOrRejectionTime = now;
