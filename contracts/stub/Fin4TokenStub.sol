@@ -14,4 +14,6 @@ contract Fin4TokenStub {
 
     function countApprovedClaimsOfThisUser(address user) public returns(uint);
 
+    function verifierStatusIsUnsubmitted(address verifier, uint claimId) public returns(bool);
+
 }

@@ -33,6 +33,11 @@ contract Fin4BaseVerifierType is utils {
         return "";
     }
 
+    function checkIfOpenToReceiveProof(address token, uint claimId) public {
+        require(Fin4TokenStub(token).verifierStatusIsUnsubmitted(address(this), claimId),
+            "Verifier for this claim on this token is not in unsubmitted status anymore");
+    }
+
     // Helper method for all verifier types to go through the same method when sending their approvals
     // to the respective claim on a token
     function _sendApprovalNotice(address verifierTypeAddress, address tokenAddrToReceiveVerifierNotice, uint claimId,
