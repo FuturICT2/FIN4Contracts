@@ -92,6 +92,10 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
             }
         }
 
+        // #ConceptualDecision TODO require(pendingRequests[pendingRequestId].messageReceivers.length > 0, "") ?
+        // or allow the case that no one gets notified about a new claim? Can happen when group owner removes all
+        // members from an approver group. New members could be added though and can then approve via command line.
+
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, pendingNotice);
     }
 
