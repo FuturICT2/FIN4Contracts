@@ -31,16 +31,16 @@ contract Fin4Voting{
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
     }
 
-    function becomeVoter() public {
-        require(voters[msg.sender].voter == address(0), "You are already a voter!");
+    function becomeVoter(address voter) public {
+        require(voters[voter].voter == address(0), "You are already a voter!");
 
-        voters[msg.sender] = VoterInfo(new address[](0), 'todocomment', msg.sender);
-        votersAddresses.push(msg.sender);
+        voters[voter] = VoterInfo(new address[](0), 'todocomment', msg.sender);
+        votersAddresses.push(voter);
     }
 
-    function isEligibleToBeAVoter() public returns(bool) {
+    function isEligibleToBeAVoter(address voter) public returns(bool) {
         //Check that REP balance is bigger than a certain value, for testing it is left at 0
-        if(Fin4TokenStub(Fin4ReputationAddress).balanceOf(msg.sender) >= 0 && !isVoter(msg.sender))
+        if(Fin4TokenStub(Fin4ReputationAddress).balanceOf(voter) >= 0 && !isVoter(voter))
             return true;
         return false;
     }

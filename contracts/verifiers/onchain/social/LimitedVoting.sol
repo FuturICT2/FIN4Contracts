@@ -115,7 +115,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     }
     function endVote(uint claimId) public{
         PendingApproval memory pa = pendingApprovals[claimId];
-        // require(endVotePossible(claimId), "End Vote Not Possible");
+        require(endVotePossible(claimId), "End Vote Not Possible");
         if (endVotePossible(claimId)){
             markMessagesAsRead(claimId);
             uint quorum = pa.nbApproved + pa.nbRejected;
@@ -193,6 +193,8 @@ contract LimitedVoting is Fin4BaseVerifierType {
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
             // Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
+        else if(pa.nbApproved==pa.nbRejected && pa.nbApproved==pa.groupMemberAddresses.length/2)
+            _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
         pendingApprovals[claimId] = pa;
     }
 
@@ -224,6 +226,8 @@ contract LimitedVoting is Fin4BaseVerifierType {
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
             // Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
+        else if(pa.nbApproved==pa.nbRejected && pa.nbApproved==pa.groupMemberAddresses.length/2)
+            _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
         pendingApprovals[claimId] = pa;
     }
     // Mark messages of all users as read
