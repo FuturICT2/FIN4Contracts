@@ -1,0 +1,6 @@
+{
+    "MNEMONIC": "",
+    "INFURA_API_KEY": "",
+    "CONTRACTS_BUILD_DIRECTORY": "./FIN4Xplorer/src/build/contracts",
+    "DEPLOYMENT_INFO_SAVING_LOCATION": "../FIN4Xplorer/src/config"
+}
