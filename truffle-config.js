@@ -11,6 +11,11 @@ module.exports = {
 			port: 7545,
 			network_id: '*'
 		},
+		docker: {
+			host: "192.178.0.2",
+			port: 8545,
+			network_id: "*",
+		},
 		ropsten: {
 			provider: function() {
 				return new HDWalletProvider(config.MNEMONIC, 'https://ropsten.infura.io/v3/' + config.INFURA_API_KEY);
