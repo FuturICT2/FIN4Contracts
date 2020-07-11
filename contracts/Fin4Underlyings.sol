@@ -159,7 +159,7 @@ contract Fin4Underlyings {
         if (user == Fin4TokenStub(pat).getTokenCreator()) {
             return true;
         }
-        // TODO more options, see outcommented checkboxes in Step4Minting.jsx
+        // TODO more options, see outcommented checkboxes in Step7Sourcerers.jsx
         return tokenToSourcererSettings[collateral].allowCollateralPairsCreatedByOthers;
     }
 }
