@@ -1,6 +1,6 @@
 pragma solidity ^0.5.17;
 
-import 'contracts/Fin4TokenBase.sol';
+import 'contracts/stub/Fin4TokenStub.sol';
 import 'contracts/underlyings/BaseSourcerer.sol';
 import 'contracts/underlyings/SuccessfulClaimNotifierInterface.sol';
 
@@ -132,8 +132,11 @@ contract Fin4Underlyings {
         }
     }
 
-    function newSourcererPairAllowedWithPat(address pat) public returns(bool) {
+    function newSourcererPairAllowedWithPat(address user, address pat) public returns(bool) {
         if (!tokenToSourcererSettings[pat].exists) {
+            return false; // by default not
+        }
+        if (user != Fin4TokenStub(pat).getTokenCreator()) {
             return false;
         }
         if (tokenToSourcererSettings[pat].tokenIsConstructing) {
@@ -142,11 +145,11 @@ contract Fin4Underlyings {
         return tokenToSourcererSettings[pat].allowAddPairsAfterCreation;
     }
 
-    function newSourcererPairAllowedWithCollateral(address pat, address collateral) public returns(bool) {
+    function newSourcererPairAllowedWithCollateral(address user, address pat, address collateral) public returns(bool) {
         if (!tokenToSourcererSettings[collateral].exists) {
             return true;
         }
-        // TODO
+        // TODO more options, see outcommented checkboxes in Step4Minting.jsx
         return true;
     }
 }

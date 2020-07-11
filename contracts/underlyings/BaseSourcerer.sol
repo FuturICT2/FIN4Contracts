@@ -49,8 +49,9 @@ contract BaseSourcerer { // abstract class
     function setParameters(address pat, address collateral, address beneficiary, uint exchangeRatio) public {
         require(pat != address(0) && collateral != address(0), "PAT and collateral can't be the zero-address");
         require(pat != collateral, "PAT and collateral can't be the same token");
-        require(Fin4UnderlyingsStub(Fin4UnderlyingsAddress).newSourcererPairAllowedWithPat(pat), "New pairs with this PAT are not allowed");
-        require(Fin4UnderlyingsStub(Fin4UnderlyingsAddress).newSourcererPairAllowedWithCollateral(pat, collateral),
+        require(Fin4UnderlyingsStub(Fin4UnderlyingsAddress).newSourcererPairAllowedWithPat(msg.sender, pat),
+            "New pairs with this PAT are not allowed");
+        require(Fin4UnderlyingsStub(Fin4UnderlyingsAddress).newSourcererPairAllowedWithCollateral(msg.sender, pat, collateral),
             "This collateral can't be used in this pair");
         bytes32 id = _getId(pat, collateral);
         require(!pairs[id].exists, "Pair already exists");
