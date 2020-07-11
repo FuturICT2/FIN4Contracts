@@ -134,9 +134,12 @@ contract Fin4Underlyings {
 
     function newSourcererPairAllowedWithPat(address pat) public returns(bool) {
         if (!tokenToSourcererSettings[pat].exists) {
+            return false;
+        }
+        if (tokenToSourcererSettings[pat].tokenIsConstructing) {
             return true;
         }
-        return tokenToSourcererSettings[pat].tokenIsConstructing || tokenToSourcererSettings[pat].allowAddPairsAfterCreation;
+        return tokenToSourcererSettings[pat].allowAddPairsAfterCreation;
     }
 
     function newSourcererPairAllowedWithCollateral(address pat, address collateral) public returns(bool) {
