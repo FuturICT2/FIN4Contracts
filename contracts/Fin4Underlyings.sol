@@ -109,7 +109,8 @@ contract Fin4Underlyings {
 
     mapping(address => SourcererSettings) public tokenToSourcererSettings;
 
-    function storeSourcererSettingsForToken(address token, bool allowAddPairsAfterCreation) public {
+    // renamed from storeSourcererSettingsForToken() to be able to reuse TokenCreationProcess.setParamsOnOtherContract() in the frontend
+    function setParameters(address token, bool allowAddPairsAfterCreation) public {
         require(!tokenToSourcererSettings[token].exists, "Sourcerer settings for this token are already stored");
         // TODO require msg.sender == token creator
         SourcererSettings storage settings = tokenToSourcererSettings[token];
@@ -127,14 +128,14 @@ contract Fin4Underlyings {
     }
 
     function newSourcererPairAllowedWithPat(address pat) public returns(bool) {
-        if (!tokenToSourcererSettings[token].exists) {
+        if (!tokenToSourcererSettings[pat].exists) {
             return true;
         }
         return tokenToSourcererSettings[pat].tokenIsConstructing || tokenToSourcererSettings[pat].allowAddPairsAfterCreation;
     }
 
     function newSourcererPairAllowedWithCollateral(address pat, address collateral) public returns(bool) {
-        if (!tokenToSourcererSettings[token].exists) {
+        if (!tokenToSourcererSettings[collateral].exists) {
             return true;
         }
         // TODO
