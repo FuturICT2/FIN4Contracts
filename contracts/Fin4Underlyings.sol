@@ -107,9 +107,9 @@ contract Fin4Underlyings {
         bool exists;
         // for use as PAT
         bool tokenIsConstructing; // only true while token creation process in the frontend is not finished
-        bool allowAddPairsAfterCreation;
+        bool allowAddPairsAfterCreation; // default: false
         // for use as Collateral
-        bool allowCollateralPairsCreatedByOthers;
+        bool allowCollateralPairsCreatedByOthers; // default: true
     }
 
     mapping(address => SourcererSettings) public tokenToSourcererSettings;
@@ -123,6 +123,13 @@ contract Fin4Underlyings {
         settings.tokenIsConstructing = true;
         settings.allowAddPairsAfterCreation = allowAddPairsAfterCreation;
         settings.allowCollateralPairsCreatedByOthers = allowCollateralPairsCreatedByOthers;
+    }
+
+    function getSourcererSettings(address token) public returns(bool, bool) {
+        if (!tokenToSourcererSettings[token].exists) {
+            return (false, true); // default
+        }
+        return (tokenToSourcererSettings[token].allowAddPairsAfterCreation, tokenToSourcererSettings[token].allowCollateralPairsCreatedByOthers);
     }
 
     function setTokenFinishedConstructing(address token) private {
