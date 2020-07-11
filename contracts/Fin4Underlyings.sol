@@ -77,8 +77,13 @@ contract Fin4Underlyings {
     }
 
     function registerUnderlyingsWithToken(address tokenAddress, bytes32[] memory _names) public {
-        tokenToRegisteredUnderlyings[tokenAddress] = _names;
+        if (_names.length > 0) {
+            tokenToRegisteredUnderlyings[tokenAddress] = _names;
+        }
         // TODO shield against underylings being added multiple times to a token
+
+        // calling it here instead of a separate call from Fin4TokenCreator because of out of gas during deployment
+        setTokenFinishedConstructing(tokenAddress);
     }
 
     function getUnderlyingsRegisteredOnToken(address tokenAddress) public returns(bytes32[] memory) {
@@ -120,7 +125,7 @@ contract Fin4Underlyings {
         // TODO add more
     }
 
-    function setTokenFinishedConstructing(address token) public {
+    function setTokenFinishedConstructing(address token) private {
         if (tokenToSourcererSettings[token].exists) {
             // the if as safeguard if someone somehow skipped that step in the frontend
             tokenToSourcererSettings[token].tokenIsConstructing = false;

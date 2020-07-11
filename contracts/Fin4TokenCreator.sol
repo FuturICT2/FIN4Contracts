@@ -47,7 +47,8 @@ contract Fin4TokenCreator {
         Fin4TokenBase token = Fin4TokenBase(tokenAddress);
         token.storeVerifierTypesAndMinters(requiredVerifierTypes, minterRoles);
 
-        if (underlyingNames.length > 0 && Fin4UnderlyingsAddress != address(0)) {
+        if (Fin4UnderlyingsAddress != address(0)) {
+            // also sets tokenIsConstructing to false
             Fin4Underlyings(Fin4UnderlyingsAddress).registerUnderlyingsWithToken(tokenAddress, underlyingNames);
         }
 
@@ -65,7 +66,6 @@ contract Fin4TokenCreator {
         symbolIsUsed[token.symbol()] = true;
 
         Fin4TokenManagement(Fin4TokenManagementAddress).registerNewToken(address(token));
-        Fin4Underlyings(Fin4UnderlyingsAddress).setTokenFinishedConstructing(tokenAddress);
     }
 }
 
