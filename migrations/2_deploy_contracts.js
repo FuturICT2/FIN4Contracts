@@ -120,15 +120,15 @@ module.exports = async function(deployer) {
 	// FIN4 UNDERLYINGS IMPLEMENTATIONS - note that the name passed in must match the contract name exactly for those with contract addresses
 	
 	if (UnderlyingsActive) {
-		await deployer.deploy(SwapSourcerer);
+		await deployer.deploy(SwapSourcerer, Fin4UnderlyingsInstanceAddress);
 		const SwapSourcererInstance = await SwapSourcerer.deployed();
 		await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("SwapSourcerer"), SwapSourcererInstance.address);
 
-		await deployer.deploy(MintingSourcerer);
+		await deployer.deploy(MintingSourcerer, Fin4UnderlyingsInstanceAddress);
 		const MintingSourcererInstance = await MintingSourcerer.deployed();
 		await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("MintingSourcerer"), MintingSourcererInstance.address);
 
-		await deployer.deploy(BurnSourcerer);
+		await deployer.deploy(BurnSourcerer, Fin4UnderlyingsInstanceAddress);
 		const BurnSourcererInstance = await BurnSourcerer.deployed();
 		await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("BurnSourcerer"), BurnSourcererInstance.address);
 	}

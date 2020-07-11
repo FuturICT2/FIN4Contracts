@@ -5,6 +5,8 @@ import "@openzeppelin/contracts/token/ERC20/ERC20Mintable.sol";
 
 contract MintingSourcerer is BaseSourcerer {
 
+    constructor(address Fin4UnderlyingsAddr) BaseSourcerer(Fin4UnderlyingsAddr) public {}
+
     function depositCollateral(address pat, address collateral, uint amount) public {
         require(false, "Depositing collateral on the MintingSourcerer is not supported.");
     }

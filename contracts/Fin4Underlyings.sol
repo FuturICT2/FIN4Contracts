@@ -96,4 +96,39 @@ contract Fin4Underlyings {
         }
     }
 
+    // SOURCERER SETTINGS
+
+    struct SourcererSettings {
+        bool exists;
+        bool tokenIsConstructing; // only true while token creation process in the frontend is not finished
+        bool allowAddPairsAfterCreation;
+    }
+
+    mapping(address => SourcererSettings) public tokenToSourcererSettings;
+
+    function storeSourcererSettingsForToken(address token, bool allowAddPairsAfterCreation) public {
+        require(!tokenToSourcererSettings[token].exists, "Sourcerer settings for this token are already stored");
+        // TODO require msg.sender == token creator
+        SourcererSettings storage sourcererSettings = tokenToSourcererSettings[token];
+        sourcererSettings.exists = true;
+        sourcererSettings.tokenIsConstructing = true;
+        sourcererSettings.allowAddPairsAfterCreation = allowAddPairsAfterCreation;
+        // TODO add more
+    }
+
+    function setTokenFinishedConstructing(address token) public {
+        if (tokenToSourcererSettings[token].exists) {
+            // the if as safeguard if someone somehow skipped that step in the frontend
+            tokenToSourcererSettings[token].tokenIsConstructing = false;
+        }
+    }
+
+    function newSourcererPairAllowedWithPat(address pat) public returns(bool) {
+        return tokenToSourcererSettings[pat].tokenIsConstructing || tokenToSourcererSettings[pat].allowAddPairsAfterCreation;
+    }
+
+    function newSourcererPairAllowedWithCollateral(address pat, address collateral) public returns(bool) {
+        // TODO
+        return true;
+    }
 }

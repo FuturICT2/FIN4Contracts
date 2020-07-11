@@ -4,6 +4,8 @@ import 'contracts/underlyings/BaseSourcerer.sol';
 
 contract SwapSourcerer is BaseSourcerer {
 
+    constructor(address Fin4UnderlyingsAddr) BaseSourcerer(Fin4UnderlyingsAddr) public {}
+
     function convert(address pat, address collateral, uint amount) public {
         bytes32 id = getId(pat, collateral);
         fetchAndBurnPAT(pat, msg.sender, amount);

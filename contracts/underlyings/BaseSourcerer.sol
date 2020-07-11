@@ -2,8 +2,15 @@ pragma solidity ^0.5.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
+import "contracts/stub/Fin4UnderlyingsStub.sol";
 
 contract BaseSourcerer { // abstract class
+
+    address Fin4UnderlyingsAddress;
+
+    constructor(address Fin4UnderlyingsAddr) public {
+        Fin4UnderlyingsAddress = Fin4UnderlyingsAddr;
+    }
 
     struct Pair {
         bool exists;
@@ -40,6 +47,9 @@ contract BaseSourcerer { // abstract class
     }
 
     function setParameters(address pat, address collateral, address beneficiary, uint exchangeRatio) public {
+        require(Fin4UnderlyingsStub(Fin4UnderlyingsAddress).newSourcererPairAllowedWithPat(pat), "New pairs with this PAT are not allowed");
+        require(Fin4UnderlyingsStub(Fin4UnderlyingsAddress).newSourcererPairAllowedWithCollateral(pat, collateral),
+            "This collateral can't be used in this pair");
         bytes32 id = _getId(pat, collateral);
         require(!pairs[id].exists, "Pair already exists");
 

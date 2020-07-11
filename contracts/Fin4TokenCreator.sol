@@ -65,6 +65,7 @@ contract Fin4TokenCreator {
         symbolIsUsed[token.symbol()] = true;
 
         Fin4TokenManagement(Fin4TokenManagementAddress).registerNewToken(address(token));
+        Fin4Underlyings(Fin4UnderlyingsAddress).setTokenFinishedConstructing(tokenAddress);
     }
 }
 
