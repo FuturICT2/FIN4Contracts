@@ -156,6 +156,9 @@ contract Fin4Underlyings {
         if (!tokenToSourcererSettings[collateral].exists) {
             return true; // by default allowed
         }
+        if (user == Fin4TokenStub(pat).getTokenCreator()) {
+            return true;
+        }
         // TODO more options, see outcommented checkboxes in Step4Minting.jsx
         return tokenToSourcererSettings[collateral].allowCollateralPairsCreatedByOthers;
     }
