@@ -100,8 +100,11 @@ contract Fin4Underlyings {
 
     struct SourcererSettings {
         bool exists;
+        // for use as PAT
         bool tokenIsConstructing; // only true while token creation process in the frontend is not finished
         bool allowAddPairsAfterCreation;
+        // for use as Collateral
+        // TODO
     }
 
     mapping(address => SourcererSettings) public tokenToSourcererSettings;
@@ -109,10 +112,10 @@ contract Fin4Underlyings {
     function storeSourcererSettingsForToken(address token, bool allowAddPairsAfterCreation) public {
         require(!tokenToSourcererSettings[token].exists, "Sourcerer settings for this token are already stored");
         // TODO require msg.sender == token creator
-        SourcererSettings storage sourcererSettings = tokenToSourcererSettings[token];
-        sourcererSettings.exists = true;
-        sourcererSettings.tokenIsConstructing = true;
-        sourcererSettings.allowAddPairsAfterCreation = allowAddPairsAfterCreation;
+        SourcererSettings storage settings = tokenToSourcererSettings[token];
+        settings.exists = true;
+        settings.tokenIsConstructing = true;
+        settings.allowAddPairsAfterCreation = allowAddPairsAfterCreation;
         // TODO add more
     }
 
@@ -124,10 +127,16 @@ contract Fin4Underlyings {
     }
 
     function newSourcererPairAllowedWithPat(address pat) public returns(bool) {
+        if (!tokenToSourcererSettings[token].exists) {
+            return true;
+        }
         return tokenToSourcererSettings[pat].tokenIsConstructing || tokenToSourcererSettings[pat].allowAddPairsAfterCreation;
     }
 
     function newSourcererPairAllowedWithCollateral(address pat, address collateral) public returns(bool) {
+        if (!tokenToSourcererSettings[token].exists) {
+            return true;
+        }
         // TODO
         return true;
     }
