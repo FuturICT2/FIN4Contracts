@@ -46,11 +46,21 @@ contract BaseSourcerer { // abstract class
         return pairs[id].beneficiary;
     }
 
+    mapping(address => bool) public knownPATs;
+
     function setParameters(address pat, address collateral, address beneficiary, uint exchangeRatio) public {
         require(pat != address(0) && collateral != address(0), "PAT and collateral can't be the zero-address");
         require(pat != collateral, "PAT and collateral can't be the same token");
-        require(Fin4UnderlyingsStub(Fin4UnderlyingsAddress).newSourcererPairAllowedWithPat(msg.sender, pat),
+
+        if (knownPATs[pat]) {
+            // this is based on knowing that the address of the token is not known before the token creation
+            // and as such it is very likely (not 100% though), that the first call with the correct token
+            // address to this method comes from the token creation process as it should.
+            // Only for subsequent calls to this method we must check with Fin4Underlyings
+            require(Fin4UnderlyingsStub(Fin4UnderlyingsAddress).newSourcererPairAllowedWithPat(msg.sender, pat),
             "New pairs with this PAT are not allowed");
+        }
+
         require(Fin4UnderlyingsStub(Fin4UnderlyingsAddress).newSourcererPairAllowedWithCollateral(msg.sender, pat, collateral),
             "This collateral can't be used in this pair");
         bytes32 id = _getId(pat, collateral);
@@ -66,6 +76,7 @@ contract BaseSourcerer { // abstract class
         pair.exchangeRatio = exchangeRatio;
 
         ids.push(id);
+        knownPATs[pat] = true;
     }
 
     // TODO token creator should be able to limit who can deposit and maybe up to which amount(s) etc.?
