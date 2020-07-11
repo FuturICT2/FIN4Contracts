@@ -109,20 +109,20 @@ contract Fin4Underlyings {
         bool tokenIsConstructing; // only true while token creation process in the frontend is not finished
         bool allowAddPairsAfterCreation;
         // for use as Collateral
-        // TODO
+        bool allowCollateralPairsCreatedByOthers;
     }
 
     mapping(address => SourcererSettings) public tokenToSourcererSettings;
 
     // renamed from storeSourcererSettingsForToken() to be able to reuse TokenCreationProcess.setParamsOnOtherContract() in the frontend
-    function setParameters(address token, bool allowAddPairsAfterCreation) public {
+    function setParameters(address token, bool allowAddPairsAfterCreation, bool allowCollateralPairsCreatedByOthers) public {
         require(!tokenToSourcererSettings[token].exists, "Sourcerer settings for this token are already stored");
         // TODO require msg.sender == token creator
         SourcererSettings storage settings = tokenToSourcererSettings[token];
         settings.exists = true;
         settings.tokenIsConstructing = true;
         settings.allowAddPairsAfterCreation = allowAddPairsAfterCreation;
-        // TODO add more
+        settings.allowCollateralPairsCreatedByOthers = allowCollateralPairsCreatedByOthers;
     }
 
     function setTokenFinishedConstructing(address token) private {
@@ -134,7 +134,7 @@ contract Fin4Underlyings {
 
     function newSourcererPairAllowedWithPat(address user, address pat) public returns(bool) {
         if (!tokenToSourcererSettings[pat].exists) {
-            return false; // by default not
+            return false; // by default not allowed
         }
         if (user != Fin4TokenStub(pat).getTokenCreator()) {
             return false;
@@ -147,9 +147,9 @@ contract Fin4Underlyings {
 
     function newSourcererPairAllowedWithCollateral(address user, address pat, address collateral) public returns(bool) {
         if (!tokenToSourcererSettings[collateral].exists) {
-            return true;
+            return true; // by default allowed
         }
         // TODO more options, see outcommented checkboxes in Step4Minting.jsx
-        return true;
+        return tokenToSourcererSettings[collateral].allowCollateralPairsCreatedByOthers;
     }
 }
