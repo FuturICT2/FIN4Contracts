@@ -50,6 +50,7 @@ contract BaseSourcerer { // abstract class
 
     function setParameters(address pat, address collateral, address beneficiary, uint exchangeRatio) public {
         require(pat != address(0) && collateral != address(0), "PAT and collateral can't be the zero-address");
+        // #ConceptualDecision unless of course we want to allow this for special (?) constructs:
         require(pat != collateral, "PAT and collateral can't be the same token");
 
         if (knownPATs[pat]) {
