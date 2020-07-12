@@ -31,6 +31,7 @@ contract Fin4Voting{
         Fin4SystemParametersAddress = Fin4SystemParametersAddr;
     }
 
+    // Add user to list of eligible voters
     function becomeVoter(address voter) public {
         require(voters[voter].voter == address(0), "You are already a voter!");
 
@@ -39,18 +40,18 @@ contract Fin4Voting{
     }
 
     function isEligibleToBeAVoter(address voter) public returns(bool) {
-        //Check that REP balance is bigger than a certain value, for testing it is left at 0
+        // Check that REP balance is bigger than a certain value, for testing it is left at 0
         if(Fin4TokenStub(Fin4ReputationAddress).balanceOf(voter) >= 0 && !isVoter(voter))
             return true;
         return false;
     }
 
+    // Check of user is already a voter
     function isVoter(address add) public view returns(bool) {
         return voters[add].voter != address(0);
     }
-
+    // Randomly pick numberOfUsers users exempting the user himself
     function createRandomGroupOfUsers(uint numberOfUsers, address claimer)  public returns(address[] memory) {
-        
         uint subtractNumberOfVoters = 0;
 
         if(isVoter(claimer)){
@@ -61,8 +62,6 @@ contract Fin4Voting{
 
         uint startIdx = uint(blockhash(block.number-1))%votersAddresses.length;
         uint interval = uint(blockhash(block.number-2))%3;
-        // uint groupId = Fin4Groups(Fin4GroupsAddress).createGroup(groupName, false);
-
         address[] memory newVoters = new address[](numberOfUsers);
 
         for(uint i = 0; i<numberOfUsers; i++){
@@ -75,11 +74,10 @@ contract Fin4Voting{
             }
             newVoters[i] = who;
         }
-
-        // Fin4Groups(Fin4GroupsAddress).addMembers(groupId, newVoters);
         return newVoters;
     }
-
+    
+    // Check if an element is in an array
     function inArray(address who, address[] memory arr) public view returns (bool) {
         // address 0x0 is not valid if pos is 0 is not in the array
         for(uint i = 0; i<arr.length; i++){

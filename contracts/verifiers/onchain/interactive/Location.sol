@@ -61,6 +61,7 @@ contract Location is Fin4BaseVerifierType {
         name = "Location";
         description = "A location, which is within a radius of a location the token creator defines, needs to be provided.";
     }
+
     // (Depricated) Function that assumes location is calculated in front end 
     function submitProof_Location(address tokenAddrToReceiveVerifierNotice, uint claimId, uint distanceToLocation) public {
         if (locationIsWithinMaxDistToSpecifiedLocation(tokenAddrToReceiveVerifierNotice, distanceToLocation)) {
@@ -88,9 +89,7 @@ contract Location is Fin4BaseVerifierType {
             _sendRejectionNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, message);
         }
     }
-
-    // TODO calculate distance here instead of trusting the front end?
-    // requires an oracle or using floating point math (sin etc.) here though #ConceptualDecision
+    
     function locationIsWithinMaxDistToSpecifiedLocation(address token, uint distanceToLocation) public view returns(bool) {
         return distanceToLocation <= _getMaxDistance(token);
     }

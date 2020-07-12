@@ -35,6 +35,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     function setFin4VotingAddress(address VotingAddr) public {
         Fin4VotingAddress = VotingAddr;
     }
+    // Set in 3_deploy_tcr.js
     function setFin4ReputationAddress(address Fin4ReputationAddr) public {
         require(msg.sender == creator, "Only the creator of this smart contract can call this function");
         Fin4ReputationAddress = Fin4ReputationAddr;
@@ -73,7 +74,6 @@ contract LimitedVoting is Fin4BaseVerifierType {
         uint linkedWithclaimId;
     }
 
-    // @Override
     function submitProof_LimitedVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, string memory IPFShash) public {
         PendingApproval memory pa;
         pa.start = block.timestamp;
@@ -102,26 +102,29 @@ contract LimitedVoting is Fin4BaseVerifierType {
         }
 
         pendingApprovals[claimId] = pa;
-        // nextclaimId ++;
-
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
     }
 
+    // Check if time has elapsed
     function endVotePossible(uint claimId) public view returns (bool){
         PendingApproval memory pa = pendingApprovals[claimId];
         if (block.timestamp > pa.start + _getTimeInMinutes(pa.tokenAddrToReceiveVerifierNotice) * 1 minutes)
             return true;
         return false;
     }
+
+    // Performs end of vote if time has elapsed
     function endVote(uint claimId) public{
         PendingApproval memory pa = pendingApprovals[claimId];
-        //require(endVotePossible(claimId), "End Vote Not Possible");
         if (endVotePossible(claimId)){
             markMessagesAsRead(claimId);
             uint quorum = pa.nbApproved + pa.nbRejected;
+            // Check if Quorum is reached
+            // If not
             if(quorum <= pa.groupMemberAddresses.length/2){
                 _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
             }
+            // If yes check simple majority
             else{
                 if(pa.nbApproved > quorum/2){
                     _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
@@ -144,7 +147,8 @@ contract LimitedVoting is Fin4BaseVerifierType {
 
     mapping (address => uint) public tokenToParameter;
     mapping (address => uint) public tokenToParameterTime;
-
+    
+    // Called when creating a token with this verifier
     function setParameters(address token, uint nbUsers, uint timeInMinutes) public {
         tokenToParameter[token] = nbUsers;
         tokenToParameterTime[token] = timeInMinutes;
@@ -174,6 +178,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         markMessageAsRead(claimId, getIndexOf(pa.groupMemberAddresses, voter));
         pa.Approved[pa.nbApproved] = voter;
         pa.nbApproved = pa.nbApproved + 1;
+        // Check if consensus is reached
         if(pa.nbApproved > pa.groupMemberAddresses.length/2){
             markMessagesAsRead(claimId);
             uint REPS = 0;
@@ -191,7 +196,6 @@ contract LimitedVoting is Fin4BaseVerifierType {
                BurningStub(Fin4ReputationAddress).burnFrom(pa.Rejected[i], REPF);
             }
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
-            // Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
         else if(pa.nbApproved==pa.nbRejected && pa.nbApproved==pa.groupMemberAddresses.length/2)
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
