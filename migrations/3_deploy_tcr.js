@@ -17,7 +17,7 @@ const config = JSON.parse(fs.readFileSync('./config.json'));
 const paramConfig = config.paramConfig;
 //const tokenHolders = config.token.tokenHolders;
 
-const TCRactive = false; // the other necessary switch is in src/components/utils.js
+const TCRactive = true; // the other necessary switch is in src/components/utils.js
 
 module.exports = async function(deployer) {
 
