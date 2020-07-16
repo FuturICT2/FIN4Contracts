@@ -91,7 +91,7 @@ contract GOV is ERC20Plus {
     @dev Overriding the ERC20 transfer function to limit transferability
     */
     function transfer(address recipient, uint256 amount) public returns (bool) {
-        require (balanceOf(msg.sender) > amount, "transfer: Not enough balance");
+        require (balanceOf(msg.sender) >= amount, "transfer: Not enough balance");
         if(msg.sender != address(voting) && msg.sender != address(parameterizer) && msg.sender != address(registry)){
             require(recipient == address(voting) || recipient == address(parameterizer) || recipient == address(registry),
                 "You do not have enough Tokens. You can only use delegated tokens on Registry contracts");
