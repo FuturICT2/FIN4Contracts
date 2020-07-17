@@ -130,7 +130,8 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
 
     function receiveDecision(uint pendingRequestId, string memory attachedMessage, bool approved) internal {
         PendingRequest memory pa = pendingRequests[pendingRequestId];
-         // only possible if the claimer got added to an approver group after he made the claim
+        // only possible if the claimer got added to an approver group after he made the claim
+        // e.g. he could be group owner and added himself
         require(pa.requester != msg.sender, "No self-approve allowed");
         address token = pa.tokenAddrToReceiveVerifierNotice;
         bool userHasPermission = isIndividualApprover(token, msg.sender) ||
