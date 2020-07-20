@@ -1,6 +1,5 @@
 pragma solidity ^0.5.17;
 
-// import 'contracts/Fin4Verifying.sol';
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/stub/Fin4ClaimingStub.sol";
 

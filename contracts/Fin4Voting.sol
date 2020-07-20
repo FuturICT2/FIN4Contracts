@@ -41,8 +41,9 @@ contract Fin4Voting{
 
     function isEligibleToBeAVoter(address voter) public returns(bool) {
         // Check that REP balance is bigger than a certain value, for testing it is left at 0
-        if(Fin4TokenStub(Fin4ReputationAddress).balanceOf(voter) >= 0 && !isVoter(voter))
+        if (Fin4TokenStub(Fin4ReputationAddress).balanceOf(voter) >= 0 && !isVoter(voter)) {
             return true;
+        }
         return false;
     }
 
@@ -50,15 +51,16 @@ contract Fin4Voting{
     function isVoter(address add) public view returns(bool) {
         return voters[add].voter != address(0);
     }
+
     // Randomly pick numberOfUsers users exempting the user himself
     function createRandomGroupOfUsers(uint numberOfUsers, address claimer)  public returns(address[] memory) {
         uint subtractNumberOfVoters = 0;
 
-        if(isVoter(claimer)){
+        if (isVoter(claimer)) {
             subtractNumberOfVoters = 1;
         }
 
-        require(numberOfUsers <= (votersAddresses.length - subtractNumberOfVoters ), "Not enough active voters in the system!" );
+        require(numberOfUsers <= (votersAddresses.length - subtractNumberOfVoters ), "Not enough active voters in the system!");
 
         uint startIdx = uint(blockhash(block.number-1))%votersAddresses.length;
         uint interval = uint(blockhash(block.number-2))%3;
@@ -68,26 +70,25 @@ contract Fin4Voting{
             address who = votersAddresses[(startIdx + i*interval)%votersAddresses.length];
 
             uint offset = 1;
-            while(who ==claimer || inArray(who, newVoters)){
-                    who = votersAddresses[(startIdx + i*interval +offset)%votersAddresses.length];
-                    offset = offset +1;
+            while (who == claimer || inArray(who, newVoters)) {
+                who = votersAddresses[(startIdx + i * interval + offset) % votersAddresses.length];
+                offset = offset + 1;
             }
             newVoters[i] = who;
         }
         return newVoters;
     }
-    
+
     // Check if an element is in an array
     function inArray(address who, address[] memory arr) public view returns (bool) {
         // address 0x0 is not valid if pos is 0 is not in the array
-        for(uint i = 0; i<arr.length; i++){
-            if(arr[i] == who){
+        for uint i = 0; i < arr.length; i++) {
+            if (arr[i] == who) {
                 return true;
             }
         }
         return false;
     }
-
 
     function allVoters() public {
         require(voters[msg.sender].voter != address(0), "Only registered voters can see other ones!");
@@ -96,7 +97,4 @@ contract Fin4Voting{
             emit Voter(votersAddresses[i], voters[votersAddresses[i]].currentVotings);
         }
     }
-
-
-
 }

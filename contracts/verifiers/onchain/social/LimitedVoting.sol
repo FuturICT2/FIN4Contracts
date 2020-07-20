@@ -8,6 +8,7 @@ import 'contracts/Fin4SystemParameters.sol';
 import 'contracts/Fin4Voting.sol';
 
 contract LimitedVoting is Fin4BaseVerifierType {
+
      constructor() public  {
         creator = msg.sender;
         init();
@@ -19,6 +20,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     address public Fin4ReputationAddress;
     address public Fin4TokenManagementAddr;
     address public Fin4VotingAddress;
+
     // Set in 2_deploy_contracts.js
     function setFin4tokenManagementAddress(address Fin4TokenManagementAddress) public {
         Fin4TokenManagementAddr = Fin4TokenManagementAddress;
@@ -81,7 +83,8 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
         pa.claimId = claimId;
         pa.requester = claimer;
-        address[] memory members = Fin4Voting(Fin4VotingAddress).createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), claimer);
+        address[] memory members = Fin4Voting(Fin4VotingAddress)
+            .createRandomGroupOfUsers(_getNbUsers(tokenAddrToReceiveVerifierNotice), claimer);
         pa.nbApproved = 0;
         pa.nbRejected = 0;
         pa.attachment = IPFShash;
@@ -108,28 +111,28 @@ contract LimitedVoting is Fin4BaseVerifierType {
     // Check if time has elapsed
     function endVotePossible(uint claimId) public view returns (bool){
         PendingApproval memory pa = pendingApprovals[claimId];
-        if (block.timestamp > pa.start + _getTimeInMinutes(pa.tokenAddrToReceiveVerifierNotice) * 1 minutes)
+        if (block.timestamp > pa.start + _getTimeInMinutes(pa.tokenAddrToReceiveVerifierNotice) * 1 minutes) {
             return true;
+        }
         return false;
     }
 
     // Performs end of vote if time has elapsed
     function endVote(uint claimId) public{
         PendingApproval memory pa = pendingApprovals[claimId];
-        if (endVotePossible(claimId)){
+        if (endVotePossible(claimId)) {
             markMessagesAsRead(claimId);
             uint quorum = pa.nbApproved + pa.nbRejected;
             // Check if Quorum is reached
             // If not
-            if(quorum <= pa.groupMemberAddresses.length/2){
+            if (quorum <= pa.groupMemberAddresses.length / 2) {
                 _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
             }
             // If yes check simple majority
-            else{
-                if(pa.nbApproved > quorum/2){
+            else {
+                if (pa.nbApproved > quorum / 2) {
                     _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
-                }
-                else {
+                } else {
                     _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, "");
                 }
             }
@@ -147,7 +150,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
 
     mapping (address => uint) public tokenToParameter;
     mapping (address => uint) public tokenToParameterTime;
-    
+
     // Called when creating a token with this verifier
     function setParameters(address token, uint nbUsers, uint timeInMinutes) public {
         tokenToParameter[token] = nbUsers;
@@ -179,26 +182,29 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.Approved[pa.nbApproved] = voter;
         pa.nbApproved = pa.nbApproved + 1;
         // Check if consensus is reached
-        if(pa.nbApproved > pa.groupMemberAddresses.length/2){
+        if (pa.nbApproved > pa.groupMemberAddresses.length/2){
             markMessagesAsRead(claimId);
             uint REPS = 0;
             uint REPF = 0;
-            if(pa.nbApproved != 0)
+            if (pa.nbApproved != 0) {
                 REPS = Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote() / pa.nbApproved;
-            if(pa.nbRejected != 0)
+            }
+            if (pa.nbRejected != 0) {
                 REPF = Fin4SystemParameters(Fin4SystemParametersAddress).REPforFailedVote() / pa.nbRejected;
+            }
             // Reward voters that approved
             for (uint i = 0; i < pa.nbApproved; i++) {
                MintingStub(Fin4ReputationAddress).mint(pa.Approved[i], REPS);
             }
             // Punish voters that rejected
             for (uint i = 0; i < pa.nbRejected; i++) {
-               BurningStub(Fin4ReputationAddress).burnFrom(pa.Rejected[i], REPF);
+                BurningStub(Fin4ReputationAddress).burnFrom(pa.Rejected[i], REPF);
             }
             _sendApprovalNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
         }
-        else if(pa.nbApproved==pa.nbRejected && pa.nbApproved==pa.groupMemberAddresses.length/2)
+        else if (pa.nbApproved==pa.nbRejected && pa.nbApproved==pa.groupMemberAddresses.length / 2) {
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, attachedMessage);
+        }
         pendingApprovals[claimId] = pa;
     }
 
@@ -213,14 +219,16 @@ contract LimitedVoting is Fin4BaseVerifierType {
         }
         pa.Rejected[pa.nbRejected] = voter;
         pa.nbRejected = pa.nbRejected + 1;
-        if(pa.nbRejected > pa.groupMemberAddresses.length/2){
+        if (pa.nbRejected > pa.groupMemberAddresses.length / 2) {
             uint REPS = 0;
             uint REPF = 0;
             markMessagesAsRead(claimId);
-            if(pa.nbRejected != 0)
+            if(pa.nbRejected != 0) {
                 REPS = Fin4SystemParameters(Fin4SystemParametersAddress).REPforSuccesfulVote() / pa.nbRejected;
-            if(pa.nbApproved != 0)
+            }
+            if(pa.nbApproved != 0) {
                 REPF = Fin4SystemParameters(Fin4SystemParametersAddress).REPforFailedVote() / pa.nbApproved;
+            }
             for (uint i = 0; i < pa.nbRejected; i++) {
                 MintingStub(Fin4ReputationAddress).mint(pa.Rejected[i], REPS);
             }
@@ -230,8 +238,9 @@ contract LimitedVoting is Fin4BaseVerifierType {
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
             // Fin4Groups(Fin4GroupsAddress).DeleteGroup(pa.approverGroupId);
         }
-        else if(pa.nbApproved==pa.nbRejected && pa.nbApproved==pa.groupMemberAddresses.length/2)
+        else if (pa.nbApproved==pa.nbRejected && pa.nbApproved==pa.groupMemberAddresses.length / 2) {
             _sendRejectionNotice(address(this), pa.tokenAddrToReceiveVerifierNotice, pa.claimIdOnTokenToReceiveVerifierDecision, message);
+        }
         pendingApprovals[claimId] = pa;
     }
     // Mark messages of all users as read

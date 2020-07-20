@@ -15,19 +15,17 @@ const Fin4Groups = artifacts.require('Fin4Groups');
 const Fin4SystemParameters = artifacts.require('Fin4SystemParameters');
 const Fin4Underlyings = artifacts.require('Fin4Underlyings');
 const Fin4Voting = artifacts.require('Fin4Voting');
+// const Fin4OracleHub = artifacts.require('Fin4OracleHub');
 
 const SwapSourcerer = artifacts.require('SwapSourcerer');
 const MintingSourcerer = artifacts.require('MintingSourcerer');
 const BurnSourcerer = artifacts.require('BurnSourcerer');
-
-const Trigonometry = artifacts.require('Trigonometry');
-const Strings = artifacts.require('strings');
-
 // dev
 // const TestImplOfSuccClaimNotifer = artifacts.require('TestImplOfSuccClaimNotifer');
 // const ERC20Mintable = artifacts.require('ERC20Mintable');
 
-//const Fin4OracleHub = artifacts.require('Fin4OracleHub');
+const Trigonometry = artifacts.require('Trigonometry');
+const Strings = artifacts.require('strings');
 
 const verifierContractNames = [
 	'ApprovalByUsersOrGroups',
@@ -71,7 +69,6 @@ const verifierTypeContracts = [
 	artifacts.require('LimitedVoting'),
 	artifacts.require('PictureVoting'),
 	artifacts.require('VideoVoting')
-	// artifacts.require('SensorOneTimeSignal'),
 ];
 
 const verifierContracts = verifierContractNames.map(contractName => {
@@ -93,9 +90,6 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Strings);
 	const StringsInstance = await Strings.deployed();
 	deployer.link(Strings, verifierTypeContracts[9]);
-
-	// await deployer.deploy(Location);
-	// const LocationInstance = await Location.deployed();
 
 	// SATELLITE CONTRACTS
 
@@ -133,8 +127,8 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4Voting, Fin4SystemParametersInstance.address);
 	const Fin4VotingInstance = await Fin4Voting.deployed();
 	Fin4VerifyingInstance.setFin4VotingAddress(Fin4VotingInstance.address);
-	//await deployer.deploy(Fin4OracleHub);
-	//const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
+	// await deployer.deploy(Fin4OracleHub);
+	// const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
 	await Fin4MainInstance.setSatelliteAddresses(
 		Fin4UncappedTokenCreatorInstance.address,
@@ -151,6 +145,8 @@ module.exports = async function(deployer) {
 	);
 
 	// VERIFIER TYPES
+
+	// TODO fix verifier deployment after merging DLT4PI
 
 	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract)));
 	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
@@ -237,34 +233,27 @@ module.exports = async function(deployer) {
 	fs.writeFile(path.join(__dirname, config.DEPLOYMENT_INFO_SAVING_LOCATION + '/deployment-info.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
-  
-    // Write Verifier info with instance addresses to src/config/verifier-info.js
-  for (let i = 0; i < verifierTypeContracts.length; i++) {
-    let verifierObject = verifiers[verifierTypeContracts[i]._json.contractName];
-    if (verifierObject !== undefined) {
-      verifierObject.address = verifierTypeInstances[i].address;
-    }
-  }
-  let verifierData =
-    `export const verifierOptions = ${JSON.stringify(verifierOptions)};\n` +
-    `export const verifiers = ${JSON.stringify(verifiers)};\n`;
-  fs.writeFile(
-    path.join(
-      __dirname,
-      config.DEPLOYMENT_INFO_SAVING_LOCATION + "/verifier-info.js"
-    ),
-    verifierData,
-    (err) => {
-      if (err) throw "Error writing file: " + err;
-    }
-  );
+
+	// Write Verifier info with instance addresses to src/config/verifier-info.js
+	for (let i = 0; i < verifierTypeContracts.length; i++) {
+		let verifierObject = verifiers[verifierTypeContracts[i]._json.contractName];
+		if (verifierObject !== undefined) {
+			verifierObject.address = verifierTypeInstances[i].address;
+		}
+	}
+	let verifierData =
+		`export const verifierOptions = ${JSON.stringify(verifierOptions)};\n` +
+		`export const verifiers = ${JSON.stringify(verifiers)};\n`;
+	fs.writeFile(path.join(__dirname, config.DEPLOYMENT_INFO_SAVING_LOCATION + '/verifier-info.js'), verifierData, (err) => {
+		if (err) throw 'Error writing file: ' + err;
+	});
 
 	// Write Fin4OracleHub address to src/config/Fin4OracleHubAddress.js
-	//data =
-	//	"const Fin4OracleHubAddress = '" + Fin4OracleHubInstance.address + "';\n" + 'export { Fin4OracleHubAddress };\n';
-	//fs.writeFile(path.join(__dirname, config.DEPLOYMENT_INFO_SAVING_LOCATION + '/Fin4OracleHubAddress.js'), data, err => {
-	//	if (err) throw 'Error writing file: ' + err;
-	//});
+	// data =
+	// 	"const Fin4OracleHubAddress = '" + Fin4OracleHubInstance.address + "';\n" + 'export { Fin4OracleHubAddress };\n';
+	// fs.writeFile(path.join(__dirname, config.DEPLOYMENT_INFO_SAVING_LOCATION + '/Fin4OracleHubAddress.js'), data, err => {
+	// 	if (err) throw 'Error writing file: ' + err;
+	// });
 
 	//console.log('-----------> Address of Fin4OracleHub: ', Fin4OracleHubInstance.address);
 

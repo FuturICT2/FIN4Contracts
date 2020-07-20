@@ -1,11 +1,13 @@
 pragma solidity ^0.5.17;
+
 // Stub that allows smart forwarding of calls to verifier contracts
 contract Fin4VerifyingStub {
     // Proof Submission
     function submitProof_PictureVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, string memory IPFShash) public;
     function submitProof_LimitedVoting(address tokenAddrToReceiveVerifierNotice, uint claimId,address claimer, string memory IPFShash) public;
     function submitProof_VideoVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, string memory IPFShash) public;
-    function submitProof_Picture(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, address approver, string memory IPFShash) public;
+    function submitProof_Picture(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, address approver,
+        string memory IPFShash) public;
     function submitProof_SpecificAddress(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, address approver) public;
     function submitProof_Location_Server(address tokenAddrToReceiveVerifierNotice, uint claimId, int256 lat1, int256 lon1) public;
     function submitProof_TokenCreatorApproval(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer) public;

@@ -10,13 +10,10 @@ const REP = artifacts.require('tokens/REP');
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
-const Fin4Verifying = artifacts.require('Fin4Verifying');
 const Fin4Voting = artifacts.require('Fin4Voting');
 const LimitedVoting = artifacts.require('LimitedVoting');
 const Picture = artifacts.require('PictureVoting');
 const Video = artifacts.require('VideoVoting');
-
-
 
 const fs = require('fs');
 //var path = require('path');
