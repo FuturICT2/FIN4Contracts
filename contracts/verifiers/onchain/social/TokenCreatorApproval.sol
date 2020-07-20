@@ -1,6 +1,6 @@
 pragma solidity ^0.5.17;
 
-import "contracts/verifiers/interactive/SpecificAddress.sol";
+import "contracts/verifiers/onchain/social/SpecificAddress.sol";
 
 contract TokenCreatorApproval is SpecificAddress {
 
@@ -12,8 +12,9 @@ contract TokenCreatorApproval is SpecificAddress {
         description = "sc.verifier.token-creator-approval.description";
     }
 
-    function submitProof_TokenCreatorApproval(address tokenAddrToReceiveVerifierNotice, uint claimId) public {
-        submitProof_SpecificAddress(tokenAddrToReceiveVerifierNotice, claimId, getCreatorOfToken(tokenAddrToReceiveVerifierNotice));
+    function submitProof_TokenCreatorApproval(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer) public {
+        // Sends a message to the token claimer so that he either approves or rejects
+        submitProof_SpecificAddress(tokenAddrToReceiveVerifierNotice, claimId, claimer, getCreatorOfToken(tokenAddrToReceiveVerifierNotice));
     }
 
     // @Override

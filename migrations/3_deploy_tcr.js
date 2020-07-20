@@ -10,6 +10,13 @@ const REP = artifacts.require('tokens/REP');
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
+const Fin4Verifying = artifacts.require('Fin4Verifying');
+const Fin4Voting = artifacts.require('Fin4Voting');
+const LimitedVoting = artifacts.require('LimitedVoting');
+const Picture = artifacts.require('PictureVoting');
+const Video = artifacts.require('VideoVoting');
+
+
 
 const fs = require('fs');
 //var path = require('path');
@@ -27,6 +34,15 @@ module.exports = async function(deployer) {
 
 	await deployer.deploy(REP);
 	const REPTokenInstance = await REP.deployed();
+	const Fin4VotingInstance = await Fin4Voting.deployed();
+	await Fin4VotingInstance.setFin4ReputationAddress(REPTokenInstance.address);
+	const LimitedVotingInstance = await LimitedVoting.deployed();
+	await LimitedVotingInstance.setFin4ReputationAddress(REPTokenInstance.address);
+
+	const PictureInstance = await Picture.deployed();
+	await PictureInstance.setFin4ReputationAddress(REPTokenInstance.address);
+	const VideoInstance = await Video.deployed();
+	await VideoInstance.setFin4ReputationAddress(REPTokenInstance.address);
 
 	// add Fin4TokenManagement and Fin4Claiming as minters on the Fin4Reputation token
 	// as they will be the ones minting REP to users for certain types of activity
@@ -36,7 +52,14 @@ module.exports = async function(deployer) {
 	await Fin4ClaimingInstance.setFin4ReputationAddress(REPTokenInstance.address);
 	await REPTokenInstance.addMinter(Fin4TokenManagementInstance.address);
 	await REPTokenInstance.addMinter(Fin4ClaimingInstance.address);
+	await REPTokenInstance.addMinter(LimitedVotingInstance.address);
+	await REPTokenInstance.addMinter(PictureInstance.address);
+	await REPTokenInstance.addMinter(VideoInstance.address);
 	await REPTokenInstance.renounceMinter(); // deployer account must not be able to mint REP, potential exploit
+
+	if (!TCRactive) {
+		return;
+	}
 
 	// Deploy Dependencies
 	await deployer.deploy(DLL);
