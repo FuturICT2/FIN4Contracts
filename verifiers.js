@@ -108,18 +108,18 @@ const verifiers = {
     description: "Claimers approve their own claim.",
     address: "",
   },
-  SelfieTogether: {
-    chain: "On-Chain",
-    type: "Social",
-    claimerInput: {
-      inputType: "User generated data",
-      sensorData: "None",
-      userData: "Picture",
-    },
-    description:
-      "The claimer supplies a picture, based on which a self-chosen approver and a member of a group of users appointed by the token creator decide to approve.",
-    address: "",
-  },
+  //SelfieTogether: {
+  //  chain: "On-Chain",
+  //  type: "Social",
+  //  claimerInput: {
+  //    inputType: "User generated data",
+  //    sensorData: "None",
+  //    userData: "Picture",
+  //  },
+  //  description:
+  //    "The claimer supplies a picture, based on which a self-chosen approver and a member of a group of users appointed by the token creator decide to approve.",
+  //  address: "",
+  //},
   // verifiers that are commented out are not deployed in 2_deploy_contracts.js yet
   //SensorOneTimeSignal: {
   //  type: "Non-Interactive",
