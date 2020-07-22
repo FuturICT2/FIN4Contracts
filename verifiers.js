@@ -49,7 +49,7 @@ const verifiers = {
       "Approval if the user provides the password matching the one the token creator set.",
     address: "",
   },
-  Picture: {
+  PictureSelfChosenApprover: {
     chain: "On-Chain",
     type: "Social",
     claimerInput: {
