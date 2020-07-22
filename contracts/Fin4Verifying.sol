@@ -44,13 +44,13 @@ contract Fin4Verifying {
     }
 
     // Verifier Parameter Submition that is done on Token Creation
-    function setParameters_Whitelisting(address token, string memory verifierName, address[] memory whitelistedUsers,
-        uint[] memory whitelistedGroupIds) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, whitelistedUsers, whitelistedGroupIds);
+    function setParameters_AllowOnlyThese(address token, string memory verifierName, address[] memory permittedUsers,
+        uint[] memory permittedGroupIds) public {
+        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, permittedUsers, permittedGroupIds);
     }
-    function setParameters_Blacklisting(address token,string memory verifierName, address[] memory blacklistedUsers,
-        uint[] memory blacklistedGroupIds) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, blacklistedUsers, blacklistedGroupIds);
+    function setParameters_BlockThese(address token,string memory verifierName, address[] memory blockedUsers,
+        uint[] memory blockedGroupIds) public {
+        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, blockedUsers, blockedGroupIds);
     }
     function setParameters_ClaimableOnlyNTimesPerUser(address token, string memory verifierName, uint claimsCap) public {
         Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, claimsCap);

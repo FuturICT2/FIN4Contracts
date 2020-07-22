@@ -57,8 +57,8 @@ const verifierContractNames = [
 const verifierTypeContracts = [
 	artifacts.require('ApprovalByGroupMember'),
 	artifacts.require('SelfieTogether'),
-	artifacts.require('Blacklisting'),
-	artifacts.require('Whitelisting'),
+	artifacts.require('BlockThese'),
+	artifacts.require('AllowOnlyThese'),
 	artifacts.require('SelfApprove'),
 	artifacts.require('SpecificAddress'),
 	artifacts.require('TokenCreatorApproval'),
@@ -241,6 +241,7 @@ module.exports = async function(deployer) {
 			verifierObject.address = verifierTypeInstances[i].address;
 		}
 	}
+
 	let verifierData =
 		`export const verifierOptions = ${JSON.stringify(verifierOptions)};\n` +
 		`export const verifiers = ${JSON.stringify(verifiers)};\n`;

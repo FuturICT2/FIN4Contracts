@@ -61,7 +61,7 @@ const verifiers = {
       "The claimer has to supply a picture, based on which the approver will decide to approve.",
     address: "",
   },
-  Blacklisting: {
+  BlockThese: {
     chain: "On-Chain",
     type: "Non-Interactive",
     claimerInput: {
@@ -73,7 +73,7 @@ const verifiers = {
       "The token creator defines group(s) and/or individual accounts that can not claim a token.",
     address: "",
   },
-  Whitelisting: {
+  AllowOnlyThese: {
     chain: "On-Chain",
     type: "Non-Interactive",
     claimerInput: {
