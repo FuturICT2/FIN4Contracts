@@ -29,50 +29,26 @@ const Strings = artifacts.require('strings');
 
 const verifierContractNames = [
 	'ApprovalByUsersOrGroups',
-	'PictureGivenApprovers',
-	// 'SelfieTogether',
 	'BlockThese',
 	'AllowOnlyThese',
-	// 'SensorOneTimeSignal',
-	/* 
-	These include the submissions feature:
-	'Idea',
-	'Networking',
-	'HappyMoment',
-	*/
 	'SelfApprove',
 	'SpecificAddress',
 	'TokenCreatorApproval',
 	'Password',
 	'PictureSelfChosenApprover',
+	//'PictureGivenApprovers',
 	'Location',
 	'ClaimableOnlyNTimesPerUser',
-	'Blocker',
-	'Statement', // has submissions
-	'Vote' // has submissions
-	// 'MinimumInterval',
-	// 'MaximumQuantityPerInterval'
-];
-
-const verifierTypeContracts = [
-	artifacts.require('ApprovalByGroupMember'),
-	artifacts.require('SelfieTogether'),
-	artifacts.require('BlockThese'),
-	artifacts.require('AllowOnlyThese'),
-	artifacts.require('SelfApprove'),
-	artifacts.require('SpecificAddress'),
-	artifacts.require('TokenCreatorApproval'),
-	artifacts.require('Password'),
-	artifacts.require('Picture'),
-	artifacts.require('Location'),
-	artifacts.require('ClaimableOnlyNTimesPerUser'),
-	artifacts.require('LimitedVoting'),
-	artifacts.require('PictureVoting'),
-	artifacts.require('VideoVoting')
+	'LimitedVoting',
+	'PictureVoting',
+	'VideoVoting'
+	//'Blocker',
+	//'Statement',
+	//'Vote'
 ];
 
 const verifierContracts = verifierContractNames.map(contractName => {
-	return 	artifacts.require(contractName);
+	return artifacts.require(contractName);
 });
 
 const UnderlyingsActive = true; // the other necessary switch is in src/components/utils.js
@@ -85,11 +61,11 @@ module.exports = async function(deployer) {
 
 	await deployer.deploy(Trigonometry);
 	const TrigonometryInstance = await Trigonometry.deployed();
-	deployer.link(Trigonometry, verifierTypeContracts[9]);
+	deployer.link(Trigonometry, verifierContracts[8]);
 
 	await deployer.deploy(Strings);
 	const StringsInstance = await Strings.deployed();
-	deployer.link(Strings, verifierTypeContracts[9]);
+	deployer.link(Strings, verifierContracts[8]);
 
 	// SATELLITE CONTRACTS
 
@@ -146,13 +122,7 @@ module.exports = async function(deployer) {
 
 	// VERIFIER TYPES
 
-	// TODO fix verifier deployment after merging DLT4PI
-
-	await Promise.all(verifierTypeContracts.map(contract => deployer.deploy(contract)));
-	const verifierTypeInstances = await Promise.all(verifierTypeContracts.map(contract => contract.deployed()));
-	await Promise.all(verifierTypeInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
-
-	await Promise.all(verifierContracts.map((contract, index) => deployer.deploy(contract)));
+	await Promise.all(verifierContracts.map(contract => deployer.deploy(contract)));
 	const verifierInstances = await Promise.all(verifierContracts.map(contract => contract.deployed()));
 	await Promise.all(verifierInstances.map((instance, index) => instance.setContractName(verifierContractNames[index])));
 	await Promise.all(verifierInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
@@ -173,48 +143,44 @@ module.exports = async function(deployer) {
 		await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("BurnSourcerer"), BurnSourcererInstance.address);
 	}
 
-	// await Fin4VotingInstance.setFin4GroupsAddress(Fin4GroupsInstance.address);
 	// Add contract addresses that verifier need
 	// TODO think about something better then identifiying them by indices
-
 	// ApprovalByUsersOrGroups
 	await verifierInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierInstances[0].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// PictureGivenApprovers
+	// BlockThese
+	await verifierInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	// AllowOnlyThese
+	await verifierInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
+	// SpecificAddress
+	await verifierInstances[4].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	// TokenCreatorApproval
+	await verifierInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	// PictureSelfChosenApprover
+	await verifierInstances[7].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	/*// PictureGivenApprovers
 	await verifierInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
 	await verifierInstances[1].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// BlockThese
-	await verifierInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	// AllowOnlyThese
-	await verifierInstances[3].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	// SpecificAddress
-	await verifierInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// TokenCreatorApproval
-	await verifierInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// PictureSelfChosenApprover
-	await verifierInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
 	// Statement
 	await verifierInstances[12].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 	// Vote
 	await verifierInstances[13].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
-	await verifierTypeInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// Picture
-	await verifierTypeInstances[8].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);*/
 	// LimitedVoting
-	await verifierTypeInstances[11].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	await verifierTypeInstances[11].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
-	await verifierTypeInstances[11].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
-	await verifierTypeInstances[11].setFin4VotingAddress(Fin4VotingInstance.address);
+	await verifierInstances[10].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[10].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
+	await verifierInstances[10].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
+	await verifierInstances[10].setFin4VotingAddress(Fin4VotingInstance.address);
 	// PictureVoting
-	await verifierTypeInstances[12].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	await verifierTypeInstances[12].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
-	await verifierTypeInstances[12].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
-	await verifierTypeInstances[12].setFin4VotingAddress(Fin4VotingInstance.address);
+	await verifierInstances[11].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[11].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
+	await verifierInstances[11].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
+	await verifierInstances[11].setFin4VotingAddress(Fin4VotingInstance.address);
 	// VideoVoting
-	await verifierTypeInstances[13].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	await verifierTypeInstances[13].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
-	await verifierTypeInstances[13].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
-	await verifierTypeInstances[13].setFin4VotingAddress(Fin4VotingInstance.address);
+	await verifierInstances[12].setFin4MessagingAddress(Fin4MessagingInstance.address);
+	await verifierInstances[12].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
+	await verifierInstances[12].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
+	await verifierInstances[12].setFin4VotingAddress(Fin4VotingInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);
