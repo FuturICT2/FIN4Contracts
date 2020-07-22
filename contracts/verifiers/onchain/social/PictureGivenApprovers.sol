@@ -1,6 +1,6 @@
 pragma solidity ^0.5.17;
 
-import "contracts/verifiers/interactive/ApprovalByUsersOrGroups.sol";
+import "contracts/verifiers/onchain/social/ApprovalByUsersOrGroups.sol";
 
 contract PictureGivenApprovers is ApprovalByUsersOrGroups {
 
