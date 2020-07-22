@@ -82,7 +82,7 @@ contract Fin4Voting{
     // Check if an element is in an array
     function inArray(address who, address[] memory arr) public view returns (bool) {
         // address 0x0 is not valid if pos is 0 is not in the array
-        for uint i = 0; i < arr.length; i++) {
+        for (uint i = 0; i < arr.length; i++) {
             if (arr[i] == who) {
                 return true;
             }
@@ -92,8 +92,7 @@ contract Fin4Voting{
 
     function allVoters() public {
         require(voters[msg.sender].voter != address(0), "Only registered voters can see other ones!");
-
-        for (uint i=0; i<votersAddresses.length; i++) {
+        for (uint i = 0; i < votersAddresses.length; i++) {
             emit Voter(votersAddresses[i], voters[votersAddresses[i]].currentVotings);
         }
     }
