@@ -120,22 +120,22 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         tokenToApproverGroupIDs[token] = approverGroupIDs;
     }
 
-    function receiveApproval(uint pendingRequestId, string memory attachedMessage) public {
-        receiveDecision(pendingRequestId, attachedMessage, true);
+    function receiveApproval(uint pendingRequestId, address voter, string memory attachedMessage) public {
+        receiveDecision(pendingRequestId, voter, attachedMessage, true);
     }
 
-    function receiveRejection(uint pendingRequestId, string memory attachedMessage) public {
-        receiveDecision(pendingRequestId, attachedMessage, false);
+    function receiveRejection(uint pendingRequestId, address voter, string memory attachedMessage) public {
+        receiveDecision(pendingRequestId, voter, attachedMessage, false);
     }
 
-    function receiveDecision(uint pendingRequestId, string memory attachedMessage, bool approved) internal {
+    function receiveDecision(uint pendingRequestId, address voter, string memory attachedMessage, bool approved) internal {
         PendingRequest memory pa = pendingRequests[pendingRequestId];
         // only possible if the claimer got added to an approver group after he made the claim
         // e.g. he could be group owner and added himself
-        require(pa.requester != msg.sender, "No self-approve allowed");
+        require(pa.requester != voter, "No self-approve allowed");
         address token = pa.tokenAddrToReceiveVerifierNotice;
-        bool userHasPermission = isIndividualApprover(token, msg.sender) ||
-            Fin4Groups(Fin4GroupsAddress).userIsInOneOfTheseGroups(tokenToApproverGroupIDs[token], msg.sender);
+        bool userHasPermission = isIndividualApprover(token, voter) ||
+            Fin4Groups(Fin4GroupsAddress).userIsInOneOfTheseGroups(tokenToApproverGroupIDs[token], voter);
         require(userHasPermission, "You don't have permission to decide on this request");
         require(!pa.isDecided, "This request is already decided");
 

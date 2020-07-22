@@ -132,7 +132,7 @@ const verifiers = {
   //    "Approval via a sensor that sends a signal. The token creator specifies the sensor via its ID.",
   //  address: "",
   //},
-  ApprovalByGroupMember: {
+  ApprovalByUsersOrGroups: {
     chain: "On-Chain",
     type: "Social",
     claimerInput: {
