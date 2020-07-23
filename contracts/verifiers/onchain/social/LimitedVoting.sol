@@ -101,7 +101,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         for (uint i = 0; i < members.length; i ++) {
             pa.groupMemberAddresses[i] = members[i];
             pa.messageIds[i] = Fin4Messaging(Fin4MessagingAddress)
-                .addPendingApprovalMessage(claimer, name, members[i], message, IPFShash, pa.claimId);
+                .addPendingRequestMessage(claimer, name, members[i], message, IPFShash, pa.claimId);
         }
 
         pendingApprovals[claimId] = pa;

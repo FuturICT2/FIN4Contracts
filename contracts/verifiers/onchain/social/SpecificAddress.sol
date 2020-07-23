@@ -50,7 +50,7 @@ contract SpecificAddress is Fin4BaseVerifierType {
 
         string memory message = string(abi.encodePacked(getMessageText(),
             Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name()));
-        pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingApprovalMessage(
+        pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingRequestMessage(
             claimer, name, approver, message, "", pa.pendingApprovalId);
 
         pendingApprovals[approver].push(pa);
