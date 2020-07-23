@@ -201,10 +201,10 @@ module.exports = async function(deployer) {
 	});
 
 	// Write Verifier info with instance addresses to src/config/verifier-info.js
-	for (let i = 0; i < verifierTypeContracts.length; i++) {
-		let verifierObject = verifiers[verifierTypeContracts[i]._json.contractName];
+	for (let i = 0; i < verifierContracts.length; i++) {
+		let verifierObject = verifiers[verifierContracts[i]._json.contractName];
 		if (verifierObject !== undefined) {
-			verifierObject.address = verifierTypeInstances[i].address;
+			verifierObject.address = verifierInstances[i].address;
 		}
 	}
 
