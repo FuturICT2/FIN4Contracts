@@ -90,7 +90,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pa.attachment = IPFShash;
         pa.isIndividualApprover = false;
         string memory message = string(abi.encodePacked(getMessageText(), Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name(),
-            ". Consensus is reached using Absolute Majority. The action that is supposed to be done is: ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).getAction()));
+            ". Consensus is reached using Absolute Majority.")); // The action that is supposed to be done is: ", Fin4TokenBase(tokenAddrToReceiveVerifierNotice).getAction()));
 
         // address[] memory members = Fin4Groups(Fin4GroupsAddress).getGroupMembers(groupId);
         pa.groupMemberAddresses = new address[](members.length);
