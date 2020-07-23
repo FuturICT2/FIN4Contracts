@@ -36,15 +36,15 @@ const verifierContractNames = [
 	'TokenCreatorApproval',
 	'Password',
 	'PictureSelfChosenApprover',
-	//'PictureGivenApprovers',
+	//'PictureGivenApprovers', // TODO post-merge
 	'Location',
 	'ClaimableOnlyNTimesPerUser',
 	'LimitedVoting',
 	'PictureVoting',
 	'VideoVoting'
-	//'Blocker',
-	//'Statement',
-	//'Vote'
+	//'Blocker',  // TODO post-merge
+	//'Statement',  // TODO post-merge
+	//'Vote' // TODO post-merge
 ];
 
 const verifierContracts = verifierContractNames.map(contractName => {
