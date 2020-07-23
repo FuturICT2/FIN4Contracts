@@ -2,6 +2,7 @@ pragma solidity ^0.5.17;
 
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4Messaging.sol";
+import "contracts/Fin4TokenBase.sol";
 
 contract SpecificAddress is Fin4BaseVerifierType {
 
