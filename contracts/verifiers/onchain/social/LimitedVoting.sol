@@ -105,7 +105,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         }
 
         pendingApprovals[claimId] = pa;
-        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId);
+        _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
     }
 
     // Check if time has elapsed
