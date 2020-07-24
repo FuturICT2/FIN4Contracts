@@ -47,7 +47,6 @@ contract LimitedVoting is Fin4BaseVerifierType {
     function init() public {
         name = "LimitedVoting";
         description = "The proof is sent to the users due to a random mechanism";
-        isAutoInitiable = false;
     }
 
     uint public nextclaimId = 0;
