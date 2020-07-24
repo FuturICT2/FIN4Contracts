@@ -8,7 +8,7 @@ contract AllowOnlyThese is Fin4BaseVerifierType { // TODO make it extend BlockTh
     constructor() public  {
         name = "sc.verifier.allow-only-these.name";
         description = "sc.verifier.allow-only-these.description";
-        isNoninteractive = true;
+        isAutoCheckable = true;
     }
 
     address public Fin4GroupsAddress;

@@ -8,7 +8,7 @@ contract BlockThese is Fin4BaseVerifierType {
     constructor() public  {
         name = "sc.verifier.block-these.name";
         description = "sc.verifier.block-these.description";
-        isNoninteractive = true;
+        isAutoCheckable = true;
     }
 
     address public Fin4GroupsAddress;

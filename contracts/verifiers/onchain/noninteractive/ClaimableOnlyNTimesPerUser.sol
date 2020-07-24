@@ -7,7 +7,7 @@ contract ClaimableOnlyNTimesPerUser is Fin4BaseVerifierType {
     constructor() public  {
         name = "sc.verifier.claimable-only-n-times-per-user.name";
         description = "sc.verifier.claimable-only-n-times-per-user.description";
-        isNoninteractive = true;
+        isAutoCheckable = true;
     }
 
     // @Override

@@ -7,7 +7,7 @@ contract Blocker is Fin4BaseVerifierType {
     constructor() public  {
         name = "sc.verifier.blocker.name";
         description = "sc.verifier.blocker.description";
-        isNoninteractive = true;
+        isAutoCheckable = true;
     }
 
     // @Override
