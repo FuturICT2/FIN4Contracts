@@ -1,11 +1,11 @@
 pragma solidity >= 0.5.17;
 
-import 'contracts/Fin4Token.sol';
+import 'contracts/campaigns/CampaignToken.sol';
 import 'contracts/Fin4TokenManagement.sol';
 import "solidity-util/lib/Strings.sol";
 import "contracts/Fin4Underlyings.sol";
 
-contract Fin4TokenCreator {
+contract CampaignCreator {
 
     // This event is only to be able to get the address of the new token into the frontend as return value of send()
     // The "real" new-token event is emitted from Fin4TokenManagement.registerNewToken()
@@ -69,10 +69,10 @@ contract Fin4TokenCreator {
     }
 }
 
-contract Fin4UncappedTokenCreator is Fin4TokenCreator {
+contract CampaignUncappedTokenCreator is CampaignCreator {
 
     constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4UnderlyingsAddr)
-    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4UnderlyingsAddr)
+    CampaignCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4UnderlyingsAddr)
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,
@@ -85,10 +85,10 @@ contract Fin4UncappedTokenCreator is Fin4TokenCreator {
     }
 }
 
-contract Fin4CappedTokenCreator is Fin4TokenCreator {
+contract CampaignCappedTokenCreator is CampaignCreator {
 
     constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4UnderlyingsAddr)
-    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4UnderlyingsAddr)
+    CampaignCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4UnderlyingsAddr)
     public {}
 
     function createNewToken(string memory name, string memory symbol, bool[] memory properties,

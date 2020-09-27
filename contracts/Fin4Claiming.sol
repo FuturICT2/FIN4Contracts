@@ -1,4 +1,4 @@
-pragma solidity ^0.5.17;
+pragma solidity >=0.5.17;
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';

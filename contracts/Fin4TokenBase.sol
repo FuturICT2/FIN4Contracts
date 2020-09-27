@@ -1,4 +1,4 @@
-pragma solidity ^0.5.17;
+pragma solidity >=0.5.17;
 
 import 'contracts/Fin4Verifying.sol';
 import "contracts/verifiers/Fin4BaseVerifierType.sol";

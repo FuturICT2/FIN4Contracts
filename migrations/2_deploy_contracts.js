@@ -6,6 +6,8 @@ const Fin4Main = artifacts.require('Fin4Main');
 const Fin4UncappedTokenCreator = artifacts.require('Fin4UncappedTokenCreator');
 const Fin4CappedTokenCreator = artifacts.require('Fin4CappedTokenCreator');
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
+const CampaignUncappedTokenCreator = artifacts.require('campaigns/CampaignUncappedTokenCreator');
+const CampaignCappedTokenCreator = artifacts.require('campaigns/CampaignCappedTokenCreator');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
 const Fin4Messaging = artifacts.require('Fin4Messaging');
@@ -16,6 +18,7 @@ const Fin4Underlyings = artifacts.require('Fin4Underlyings');
 const SwapSourcerer = artifacts.require('SwapSourcerer');
 const MintingSourcerer = artifacts.require('MintingSourcerer');
 const BurnSourcerer = artifacts.require('BurnSourcerer');
+const CampaignCreator = artifacts.require('campaigns/CampaignCreator')
 // dev
 // const TestImplOfSuccClaimNotifer = artifacts.require('TestImplOfSuccClaimNotifer');
 // const ERC20Mintable = artifacts.require('ERC20Mintable');
@@ -94,6 +97,11 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
 	const Fin4GroupsInstance = await Fin4Groups.deployed();
 
+	await deployer.deploy(CampaignUncappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstanceAddress);
+	await deployer.deploy(CampaignCappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstanceAddress);
+	const CampaignUncappedTokenCreatorInstance = await CampaignUncappedTokenCreator.deployed();
+	const CampaignCappedTokenCreatorInstance = await CampaignCappedTokenCreator.deployed();
+
 	//await deployer.deploy(Fin4OracleHub);
 	//const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
@@ -107,7 +115,9 @@ module.exports = async function(deployer) {
 		Fin4VerifyingInstance.address,
 		Fin4GroupsInstance.address,
 		Fin4SystemParametersInstance.address,
-		Fin4UnderlyingsInstanceAddress
+		Fin4UnderlyingsInstanceAddress,
+		CampaignCappedTokenCreatorInstance.address,
+		CampaignUncappedTokenCreatorInstance.address
 	);
 
 	// VERIFIER TYPES

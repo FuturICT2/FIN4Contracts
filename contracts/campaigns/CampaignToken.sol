@@ -3,7 +3,7 @@ pragma solidity >=0.5.17;
 import 'contracts/tokens/ERC20Plus.sol';
 import 'contracts/Fin4TokenBase.sol';
 
-contract Fin4Token is Fin4TokenBase, ERC20Plus {
+contract CampaignToken is Fin4TokenBase, ERC20Plus {
 
     constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
         bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, address _initialSupplyOwner)
@@ -13,11 +13,7 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
             tokenCreator = _tokenCreator;
             initialSupply = _initialSupply;
             initialSupplyOwner = _initialSupplyOwner;
-            // Otherwise token creators can mint themselves rich via command line #ConceptualDecision
-            // _removeMinter(tokenCreator);
         }
-
-    // TODO is it possible to move these two functions to Fin4TokenBase?
 
     function getTokenInfo(address user) public view returns(bool, string memory, string memory,
         string memory, string memory, uint256, uint, bool) {
@@ -46,7 +42,7 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
 
 // ----------------------------------------------------------------------------------------------------
 
-contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
+contract CampaignTokenCapped is Fin4TokenBase, ERC20PlusCapped {
 
     constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
         bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap, address _initialSupplyOwner)
