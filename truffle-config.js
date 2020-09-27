@@ -21,6 +21,7 @@ module.exports = {
 		},
 		rinkeby: {
 			provider: function() {
+				// or use http://rinkeby.dappnode:8545
 				return new HDWalletProvider(config.MNEMONIC, 'https://rinkeby.infura.io/v3/' + config.INFURA_API_KEY);
 			},
 			network_id: 4,
