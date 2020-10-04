@@ -17,7 +17,6 @@ const Fin4Underlyings = artifacts.require('Fin4Underlyings');
 const SwapSourcerer = artifacts.require('SwapSourcerer');
 const MintingSourcerer = artifacts.require('MintingSourcerer');
 const BurnSourcerer = artifacts.require('BurnSourcerer');
-const CampaignCreator = artifacts.require('campaigns/CampaignCreator')
 // dev
 // const TestImplOfSuccClaimNotifer = artifacts.require('TestImplOfSuccClaimNotifer');
 // const ERC20Mintable = artifacts.require('ERC20Mintable');
@@ -99,8 +98,8 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
 	const Fin4GroupsInstance = await Fin4Groups.deployed();
 
-	await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
-	const Fin4GroupsInstance = await Fin4Groups.deployed();
+	// await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
+	// const Fin4GroupsInstance = await Fin4Groups.deployed();
 
 	//await deployer.deploy(Fin4OracleHub);
 	//const Fin4OracleHubInstance = await Fin4OracleHub.deployed();

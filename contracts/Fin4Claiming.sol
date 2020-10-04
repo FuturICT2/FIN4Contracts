@@ -43,10 +43,11 @@ contract Fin4Claiming {
         Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
-    function submitClaim(address tokenAddress, uint amount, string memory comment) public {
+    function submitClaim(address tokenAddress, uint amount, string memory comment) public returns (uint, uint) {
         uint claimId;
         address[] memory requiredVerifierTypes;
         uint claimCreationTime;
+        uint current = now;
         uint quantity;
         (claimId, requiredVerifierTypes, claimCreationTime, quantity) = Fin4Token(tokenAddress)
             .submitClaim(msg.sender, amount, comment);
@@ -82,6 +83,8 @@ contract Fin4Claiming {
                 }
             }
         }
+
+        return (claimCreationTime, current);
     }
 
     function verifierPendingPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
