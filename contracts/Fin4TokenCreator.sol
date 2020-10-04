@@ -95,7 +95,23 @@ contract Fin4CappedTokenCreator is Fin4TokenCreator {
         uint[] memory values, address initialSupplyOwner) public {
 
         Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
-            properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2], initialSupplyOwner);
+            properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2], 0, 0, initialSupplyOwner);
+
+        emit NewFin4TokenAddress(address(token));
+    }
+}
+
+contract CampaignTokenCreator is Fin4TokenCreator {
+
+    constructor(address Fin4ClaimingAddr, address Fin4TokenManagementAddr, address Fin4UnderlyingsAddr)
+    Fin4TokenCreator(Fin4ClaimingAddr, Fin4TokenManagementAddr, Fin4UnderlyingsAddr)
+    public {}
+
+    function createNewToken(string memory name, string memory symbol, bool[] memory properties,
+        uint[] memory values, address initialSupplyOwner) public {
+
+        Fin4TokenBase token = new Fin4TokenCapped(nameCheck(name), symbolCheck(symbol), msg.sender,
+            properties[0], properties[1], properties[2], uint8(values[0]), values[1], values[2], values[3], values[4], initialSupplyOwner);
 
         emit NewFin4TokenAddress(address(token));
     }
