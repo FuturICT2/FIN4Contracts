@@ -12,7 +12,7 @@ contract PictureSelfChosenApprover is SpecificAddress {
         description = "sc.verifier.picture-self-chosen-approver.description";
     }
 
-    function submitProof_Picture(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver, string memory IPFShash) public {
+    function submitProof_PictureSelfChosenApprover(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver, string memory IPFShash) public {
         require(msg.sender != approver, "Self-approval is not allowed.");
         // TODO minimize duplicate code by reusing super method
         PendingApproval memory pa;
