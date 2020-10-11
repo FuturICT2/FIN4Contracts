@@ -49,15 +49,13 @@ contract Fin4Token is Fin4TokenBase, ERC20Plus {
 contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
 
     constructor(string memory name, string memory symbol, address _tokenCreator, bool isBurnable,
-        bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap, uint _campaignEndTime, uint _successPercentage, address _initialSupplyOwner)
+        bool isTransferable, bool isMintable, uint8 decimals, uint _initialSupply, uint cap, address _initialSupplyOwner)
         ERC20PlusCapped(name, symbol, decimals, address(0), isBurnable, cap, isTransferable, isMintable, _initialSupply, _initialSupplyOwner)
         Fin4TokenBase()
         public {
             tokenCreator = _tokenCreator;
             initialSupply = _initialSupply;
             initialSupplyOwner = _initialSupplyOwner;
-            campaignEndTime = _campaignEndTime;
-            successPercentage = _successPercentage;
         }
 
     function getTokenInfo(address user) public view returns(bool, string memory, string memory,
@@ -74,13 +72,11 @@ contract Fin4TokenCapped is Fin4TokenBase, ERC20PlusCapped {
         props[2] = isBurnable;
         props[3] = true; // isCapped
 
-        uint[] memory values = new uint[](6);
+        uint[] memory values = new uint[](4);
         values[0] = cap();
         values[1] = uint(decimals());
         values[2] = fixedAmount;
         values[3] = initialSupply;
-        values[4] = campaignEndTime;
-        values[5] = successPercentage;
 
         return (requiredVerifierTypes, nextClaimId, balanceOf(msg.sender), totalSupply(), tokenCreationTime, props, values,
             actionsText, getInitialSupplyOwnerAndTokenCreatorAndMinterRoles());

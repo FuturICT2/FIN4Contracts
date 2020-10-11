@@ -41,10 +41,11 @@ contract Fin4Main {
     address public Fin4GroupsAddress;
     address public Fin4SystemParametersAddress;
     address public Fin4UnderlyingsAddress;
-    address public CampaignTokenCreatorAddress;
+    address public CampaignCreatorAddress;
+    address public CampaignManagementAddress;
 
     function setSatelliteAddresses(address uncappedTokenCreator, address cappedTokenCreator, address tokenManagement, address claiming,
-    address collections, address messaging, address verifying, address groups, address systemParameters, address underlyings, address campaignTokenCreator) public {
+    address collections, address messaging, address verifying, address groups, address systemParameters, address underlyings, address campaignCreator, address campaignManagement) public {
         // TODO use TCR instead of giving this right only to the creator of Fin4Main? #ConceptualDecision
         require (msg.sender == Fin4MainCreator, "Only the creator of Fin4Main can set satellite addresses");
         Fin4UncappedTokenCreatorAddress = uncappedTokenCreator;
@@ -57,14 +58,15 @@ contract Fin4Main {
         Fin4GroupsAddress = groups;
         Fin4SystemParametersAddress = systemParameters;
         Fin4UnderlyingsAddress = underlyings;
-        CampaignTokenCreatorAddress = campaignTokenCreator;
+        CampaignCreatorAddress = campaignCreator;
+        CampaignManagementAddress = campaignManagement;
     }
 
     function getSatelliteAddresses() public view returns(address, address, address, address, address, address, address, address,
-        address, address, address) {
+        address, address, address, address) {
         return (Fin4UncappedTokenCreatorAddress, Fin4CappedTokenCreatorAddress, Fin4TokenManagementAddress, Fin4ClaimingAddress,
             Fin4CollectionsAddress, Fin4MessagingAddress, Fin4VerifyingAddress, Fin4GroupsAddress, Fin4SystemParametersAddress,
-            Fin4UnderlyingsAddress, CampaignTokenCreatorAddress);
+            Fin4UnderlyingsAddress, CampaignCreatorAddress, CampaignManagementAddress);
     }
 
     address public REPToken;

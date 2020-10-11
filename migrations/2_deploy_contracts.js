@@ -5,7 +5,8 @@ const config = require('../config.json');
 const Fin4Main = artifacts.require('Fin4Main');
 const Fin4UncappedTokenCreator = artifacts.require('Fin4UncappedTokenCreator');
 const Fin4CappedTokenCreator = artifacts.require('Fin4CappedTokenCreator');
-const CampaignTokenCreator = artifacts.require('CampaignTokenCreator');
+const CampaignCreator = artifacts.require('campaigns/CampaignCreator');
+const CampaignManagement = artifacts.require('campaigns/CampaignManagement')
 const Fin4TokenManagement = artifacts.require('Fin4TokenManagement');
 const Fin4Claiming = artifacts.require('Fin4Claiming');
 const Fin4Collections = artifacts.require('Fin4Collections');
@@ -83,13 +84,13 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Fin4TokenManagement, Fin4SystemParametersInstance.address);
 	const Fin4TokenManagementInstance = await Fin4TokenManagement.deployed();
 
-	await deployer.deploy(Fin4UncappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstanceAddress);
-	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstanceAddress);
-	const Fin4UncappedTokenCreatorInstance = await Fin4UncappedTokenCreator.deployed();
-	const Fin4CappedTokenCreatorInstance = await Fin4CappedTokenCreator.deployed();
+	// Create campaign management
+	await deployer.deploy(CampaignManagement);
+	const CampaignManagementInstance = await CampaignManagement.deployed();
 
-	await deployer.deploy(CampaignTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstanceAddress);
-	const CampaignTokenCreatorInstance = await CampaignTokenCreator.deployed();
+	// Create campaign creator
+	await deployer.deploy(CampaignCreator, CampaignManagementInstance.address);
+	const CampaignCreatorInstance = await CampaignCreator.deployed();
 
 	await deployer.deploy(Fin4Collections);
 	const Fin4CollectionsInstance = await Fin4Collections.deployed();
@@ -97,6 +98,11 @@ module.exports = async function(deployer) {
 	const Fin4MessagingInstance = await Fin4Messaging.deployed();
 	await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
 	const Fin4GroupsInstance = await Fin4Groups.deployed();
+
+	await deployer.deploy(Fin4UncappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstanceAddress);
+	await deployer.deploy(Fin4CappedTokenCreator, Fin4ClaimingInstance.address, Fin4TokenManagementInstance.address, Fin4UnderlyingsInstanceAddress);
+	const Fin4UncappedTokenCreatorInstance = await Fin4UncappedTokenCreator.deployed();
+	const Fin4CappedTokenCreatorInstance = await Fin4CappedTokenCreator.deployed();
 
 	// await deployer.deploy(Fin4Groups, Fin4MessagingInstance.address);
 	// const Fin4GroupsInstance = await Fin4Groups.deployed();
@@ -115,7 +121,8 @@ module.exports = async function(deployer) {
 		Fin4GroupsInstance.address,
 		Fin4SystemParametersInstance.address,
 		Fin4UnderlyingsInstanceAddress,
-		CampaignTokenCreatorInstance.address
+		CampaignCreatorInstance.address,
+		CampaignManagementInstance.address
 	);
 
 	// VERIFIER TYPES

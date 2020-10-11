@@ -16,8 +16,6 @@ contract Fin4TokenBase { // abstract class
     uint public fixedAmount;
     uint initialSupply;
     address initialSupplyOwner;
-    uint public campaignEndTime;
-    uint public successPercentage;
 
     bool private initDone = false;
     bool private Fin4ClaimingHasMinterRole = true;
@@ -91,12 +89,7 @@ contract Fin4TokenBase { // abstract class
 
     // intentional forwarding like this so that the front end doesn't need to know which token to submit a claim to at the moment of submitting it
     function submitClaim(address claimer, uint variableAmount, string memory comment) public returns (uint, address[] memory, uint, uint) {
-        uint timeInSeconds = campaignEndTime/1000;
-        uint timeNow = now;
-        console.log(timeNow);
-        console.log(timeInSeconds);
         require(initDone, "Token is not initialized");
-        require(timeInSeconds == 0 || timeInSeconds > now, "The campaign has ended.");
         Claim storage claim = claims[nextClaimId];
         claim.claimCreationTime = now;
         claim.claimId = nextClaimId;
