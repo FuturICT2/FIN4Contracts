@@ -29,12 +29,7 @@ const verifierContractNames = [
 	'BlockThese',
 	'AllowOnlyThese',
 	// 'SensorOneTimeSignal',
-	/* 
-	These include the submissions feature:
-	'Idea',
-	'Networking',
-	'HappyMoment',
-	*/
+	// These include the submissions feature: 'Idea', 'Networking'
 	'SelfApprove',
 	'SpecificAddress',
 	'TokenCreatorApproval',
@@ -44,7 +39,8 @@ const verifierContractNames = [
 	'ClaimableOnlyNTimesPerUser',
 	'Blocker',
 	'Statement', // has submissions
-	'Vote' // has submissions
+	'Vote', // has submissions
+	'HappyMoment' // has submissions
 	// 'MinimumInterval',
 	// 'MaximumQuantityPerInterval'
 ];
@@ -156,6 +152,8 @@ module.exports = async function(deployer) {
 	await verifierInstances[12].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 	// Vote
 	await verifierInstances[13].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
+	// HappyMoment
+	await verifierInstances[14].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);
