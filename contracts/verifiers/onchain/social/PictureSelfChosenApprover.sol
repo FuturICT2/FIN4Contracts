@@ -15,18 +15,17 @@ contract PictureSelfChosenApprover is SpecificAddress {
     function submitProof_PictureSelfChosenApprover(address tokenAddrToReceiveVerifierNotice, uint claimId, address approver, string memory IPFShash) public {
         require(msg.sender != approver, "Self-approval is not allowed.");
         // TODO minimize duplicate code by reusing super method
-        require(claimer != approver, "Self-approval is not allowed.");
         PendingApproval memory pa;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
         pa.claimIdOnTokenToReceiveVerifierDecision = claimId;
-        pa.requester = claimer;
+        pa.requester = msg.sender;
         pa.approver = approver;
         pa.attachment = IPFShash;
         pa.pendingApprovalId = pendingApprovals[approver].length;
         string memory message = string(abi.encodePacked(getMessageText(),
             Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name()));
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingRequestMessage(
-            claimer, name, approver, message, IPFShash, pa.pendingApprovalId);
+            msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
         pendingApprovals[approver].push(pa);
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "Your approver has been notified about the request.");
     }
