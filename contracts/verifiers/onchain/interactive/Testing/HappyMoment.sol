@@ -16,7 +16,7 @@ contract HappyMoment is Fin4BaseVerifierType {
         Fin4VerifyingAddress = Fin4VerifyingAddr;
     }
 
-    function submitProof(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory IPFShash) public {
+    function submitProof_HappyMoment(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory IPFShash) public {
         Fin4Verifying(Fin4VerifyingAddress).addSubmission(address(this), tokenAddrToReceiveVerifierNotice, msg.sender, now, 1, IPFShash);
         _sendApprovalNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "");
     }
