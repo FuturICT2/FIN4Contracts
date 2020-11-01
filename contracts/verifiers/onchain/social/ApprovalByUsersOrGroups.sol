@@ -60,6 +60,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         return nextPendingRequestId - 1;
     }
 
+    // only called from autoSubmitProof() in here or from extending verifiers, not public
     function submitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId, string memory attachment,
         string memory pendingNotice) internal {
         uint pendingRequestId = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId, attachment);

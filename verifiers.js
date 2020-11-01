@@ -132,7 +132,7 @@ const verifiers = {
     claimerInput: {
       inputType: "None",
       sensorData: "None",
-      userData: "GroupID",
+      userData: "None",
     },
     description:
       "The token creator specifies one or more user groups, of which one member has to approve.",
