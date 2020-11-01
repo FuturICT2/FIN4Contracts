@@ -43,94 +43,17 @@ contract Fin4Verifying {
         return false;
     }
 
-    // Verifier Parameter Submition that is done on Token Creation
-    function setParameters_AllowOnlyThese(address token, string memory verifierName, address[] memory permittedUsers,
-        uint[] memory permittedGroupIds) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, permittedUsers, permittedGroupIds);
-    }
-    function setParameters_BlockThese(address token,string memory verifierName, address[] memory blockedUsers,
-        uint[] memory blockedGroupIds) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, blockedUsers, blockedGroupIds);
-    }
-    function setParameters_ClaimableOnlyNTimesPerUser(address token, string memory verifierName, uint claimsCap) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, claimsCap);
-    }
-    function setParameters_Location(address token, string memory verifierName, string memory latLonString, uint maxDistance) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, latLonString, maxDistance);
-    }
-    function setParameters_MaximumQuantityPerInterval(address token, string memory verifierName, uint interval, uint maxQuantity) public {
-         Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, interval, maxQuantity);
-    }
-    function setParameters_MinimumInterval(address token, string memory verifierName, uint minimumInterval) public {
-         Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, minimumInterval);
-    }
-    function setParameters_Password(address token, string memory verifierName, string memory password) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, password);
-    }
-    function setParameters_SensorOneTimeSignal(address token, string memory verifierName, string memory sensorID) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, sensorID);
-    }
-    function setParameters_ApprovalByGroupMember(address token, string memory verifierName, uint groupId) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, groupId);
-    }
-    function setParameters_SelfieTogether(address token, string memory verifierName, uint groupId) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, groupId);
-    }
-    function setParameters_LimitedVoting(address token, string memory verifierName, uint nbUsers, uint timeInMinutes) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, nbUsers, timeInMinutes);
-    }
-    function setParameters_PictureVoting(address token, string memory verifierName, uint nbUsers, uint timeInMinutes) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, nbUsers, timeInMinutes);
-    }
-    function setParameters_VideoVoting(address token, string memory verifierName, uint nbUsers, uint timeInMinutes) public {
-        Fin4VerifyingStub(verifiers[verifierName]).setParameters(token, nbUsers, timeInMinutes);
-    }
-    // Proof Submission
-    function submit_Proof(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName, string memory IPFShash) public {
-        if(keccak256(abi.encodePacked((verifierName))) == keccak256(abi.encodePacked(("PictureVoting"))))
-            Fin4VerifyingStub(verifiers[verifierName]).submitProof_PictureVoting(tokenAddrToReceiveVerifierNotice,claimId, msg.sender, IPFShash);
-        else if(keccak256(abi.encodePacked((verifierName))) == keccak256(abi.encodePacked(("LimitedVoting"))))
-            Fin4VerifyingStub(verifiers[verifierName]).submitProof_LimitedVoting(tokenAddrToReceiveVerifierNotice,claimId, msg.sender, IPFShash);
-        else if(keccak256(abi.encodePacked((verifierName))) == keccak256(abi.encodePacked(("VideoVoting"))))
-            Fin4VerifyingStub(verifiers[verifierName]).submitProof_VideoVoting(tokenAddrToReceiveVerifierNotice,claimId, msg.sender, IPFShash);
-    }
-    function submitProof_Picture(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName, address approver,
-        string memory IPFShash) public{
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_Picture(tokenAddrToReceiveVerifierNotice, claimId, msg.sender,
-        approver, IPFShash);
-    }
-    function submitProof_SpecificAddress(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName,
-        address approver) public{
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_SpecificAddress(tokenAddrToReceiveVerifierNotice, claimId, msg.sender, approver);
-    }
-    function submitProof_Location_Server(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName,
-        int256 lat1, int256 lon1) public {
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_Location_Server(tokenAddrToReceiveVerifierNotice,claimId,lat1,lon1);
-    }
-    function submitProof_TokenCreatorApproval(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName) public {
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_TokenCreatorApproval(tokenAddrToReceiveVerifierNotice, claimId, msg.sender);
-    }
-    function submitProof_Password(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName,
-        string memory password) public {
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_Password(tokenAddrToReceiveVerifierNotice,claimId,password);
-    }
-    function submitProof_MaximumQuantityPerInterval(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName) public {
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_MaximumQuantityPerInterval(tokenAddrToReceiveVerifierNotice,claimId);
-    }
-    function submitProof_MinimumInterval(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName) public {
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_MinimumInterval(tokenAddrToReceiveVerifierNotice,claimId);
-    }
-    function submitProof_SelfApprove(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory verifierName) public {
-        Fin4VerifyingStub(verifiers[verifierName]).submitProof_SelfApprove(tokenAddrToReceiveVerifierNotice,claimId);
-    }
+    // ------------------------- VOTING INTERACTION -------------------------
 
-    // Voting Interaction
     function isEligibleToBeAVoter() public returns(bool) {
         return Fin4VerifyingStub(Fin4VotingAddress).isEligibleToBeAVoter(msg.sender);
     }
+
     function becomeVoter() public {
         Fin4VerifyingStub(Fin4VotingAddress).becomeVoter(msg.sender);
     }
+
+    // TODO
 
     function receiveApprovalFromSpecificAddress(string memory verifierName, uint pendingApprovalId, string memory attachedMessage) public {
         Fin4VerifyingStub(verifiers[verifierName]).receiveApprovalFromSpecificAddress(pendingApprovalId, msg.sender, attachedMessage);

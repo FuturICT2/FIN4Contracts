@@ -75,7 +75,12 @@ contract LimitedVoting is Fin4BaseVerifierType {
         uint linkedWithclaimId;
     }
 
-    function submitProof_LimitedVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, string memory IPFShash) public {
+    function submitProof_LimitedVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, string memory IPFShash) public {
+        address claimer = msg.sender;
+        _submitProof_LimitedVoting(tokenAddrToReceiveVerifierNotice, claimId, claimer, IPFShash);
+    }
+
+    function _submitProof_LimitedVoting(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer, string memory IPFShash) internal {
         PendingApproval memory pa;
         pa.start = block.timestamp;
         pa.tokenAddrToReceiveVerifierNotice = tokenAddrToReceiveVerifierNotice;
