@@ -1,3 +1,4 @@
+/*
 pragma solidity ^0.5.17;
 
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
@@ -54,3 +55,4 @@ contract Location is Fin4BaseVerifierType {
     }
 
 }
+*/
