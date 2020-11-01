@@ -120,12 +120,12 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         tokenToApproverGroupIDs[token] = approverGroupIDs;
     }
 
-    function receiveApproval(uint pendingRequestId, address voter, string memory attachedMessage) public {
-        receiveDecision(pendingRequestId, voter, attachedMessage, true);
+    function receiveApproval(uint pendingRequestId, string memory attachedMessage) public {
+        receiveDecision(pendingRequestId, msg.sender, attachedMessage, true);
     }
 
-    function receiveRejection(uint pendingRequestId, address voter, string memory attachedMessage) public {
-        receiveDecision(pendingRequestId, voter, attachedMessage, false);
+    function receiveRejection(uint pendingRequestId, string memory attachedMessage) public {
+        receiveDecision(pendingRequestId, msg.sender, attachedMessage, false);
     }
 
     function receiveDecision(uint pendingRequestId, address voter, string memory attachedMessage, bool approved) internal {
