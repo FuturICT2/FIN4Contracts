@@ -180,7 +180,8 @@ contract LimitedVoting is Fin4BaseVerifierType {
         return 0;
     }
 
-    function receiveApprovalFromSpecificAddress(uint claimId, address voter, string memory attachedMessage) public {
+    function receiveApproval(uint claimId, string memory attachedMessage) public {
+        address voter = msg.sender;
         PendingApproval memory pa = pendingApprovals[claimId];
         markMessageAsRead(claimId, getIndexOf(pa.groupMemberAddresses, voter));
         pa.Approved[pa.nbApproved] = voter;
@@ -212,7 +213,8 @@ contract LimitedVoting is Fin4BaseVerifierType {
         pendingApprovals[claimId] = pa;
     }
 
-    function receiveRejectionFromSpecificAddress(uint claimId, address voter, string memory attachedMessage) public {
+    function receiveRejection(uint claimId, string memory attachedMessage) public {
+        address voter = msg.sender;
         PendingApproval memory pa = pendingApprovals[claimId];
         markMessageAsRead(claimId, getIndexOf(pa.groupMemberAddresses, voter));
         string memory message = string(abi.encodePacked(

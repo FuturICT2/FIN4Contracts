@@ -45,6 +45,8 @@ contract Fin4Verifying {
 
     // ------------------------- VOTING INTERACTION -------------------------
 
+    // TODO
+
     function isEligibleToBeAVoter() public returns(bool) {
         return Fin4VerifyingStub(Fin4VotingAddress).isEligibleToBeAVoter(msg.sender);
     }
@@ -52,21 +54,6 @@ contract Fin4Verifying {
     function becomeVoter() public {
         Fin4VerifyingStub(Fin4VotingAddress).becomeVoter(msg.sender);
     }
-
-    // TODO
-
-    function receiveApprovalFromSpecificAddress(string memory verifierName, uint pendingApprovalId, string memory attachedMessage) public {
-        Fin4VerifyingStub(verifiers[verifierName]).receiveApprovalFromSpecificAddress(pendingApprovalId, msg.sender, attachedMessage);
-    }
-
-    function receiveRejectionFromSpecificAddress(string memory verifierName, uint pendingApprovalId, string memory attachedMessage) public {
-        Fin4VerifyingStub(verifiers[verifierName]).receiveRejectionFromSpecificAddress(pendingApprovalId, msg.sender, attachedMessage);
-    }
-
-    function endVote(string memory verifierName, uint claimId) public {
-        Fin4VerifyingStub(verifiers[verifierName]).endVote(claimId);
-    }
-
 
     // ------------------------- COLLECTING SUBMISSIONS -------------------------
 
