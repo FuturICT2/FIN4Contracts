@@ -111,18 +111,28 @@ module.exports = async function(deployer) {
 	// await deployer.deploy(Fin4OracleHub);
 	// const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
+	let instanceMap = {
+		Fin4Verifying: Fin4VerifyingInstance.address,
+		Fin4Messaging: Fin4MessagingInstance.address,
+		Fin4OracleHub: null,
+		Fin4Groups: Fin4GroupsInstance.address,
+		Fin4SystemParameters: Fin4SystemParametersInstance.address,
+		Fin4Reputation: null, // happens in 3_deploy_tcr.js, manually (for now?)
+		Fin4Voting: Fin4VotingInstance.address
+	}
+
 	await Fin4MainInstance.setSatelliteAddresses(
 		Fin4UncappedTokenCreatorInstance.address,
 		Fin4CappedTokenCreatorInstance.address,
 		Fin4TokenManagementInstance.address,
 		Fin4ClaimingInstance.address,
 		Fin4CollectionsInstance.address,
-		Fin4MessagingInstance.address,
-		Fin4VerifyingInstance.address,
-		Fin4GroupsInstance.address,
-		Fin4SystemParametersInstance.address,
+		instanceMap.Fin4Messaging,
+		instanceMap.Fin4Verifying,
+		instanceMap.Fin4Groups,
+		instanceMap.Fin4SystemParameters,
 		Fin4UnderlyingsInstanceAddress,
-		Fin4VotingInstance.address
+		instanceMap.Fin4Voting,
 	);
 
 	// VERIFIER TYPES
