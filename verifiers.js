@@ -47,6 +47,7 @@ const verifiers = {
     },
     description:
       "Approval if the user provides the password matching the one the token creator set.",
+    requiredAddresses: [],
     address: "",
   },
   PictureSelfChosenApprover: {
@@ -59,6 +60,7 @@ const verifiers = {
     },
     description:
       "The claimer has to supply a picture, based on which the approver will decide to approve.",
+    requiredAddresses: [],
     address: "",
   },
   BlockThese: {
@@ -71,6 +73,7 @@ const verifiers = {
     },
     description:
       "The token creator defines group(s) and/or individual accounts that can not claim a token.",
+    requiredAddresses: ['Fin4Groups'],
     address: "",
   },
   AllowOnlyThese: {
@@ -83,6 +86,7 @@ const verifiers = {
     },
     description:
       "The token creator defines group(s) and/or individual accounts that can claim a token while everyone else can not",
+    requiredAddresses: ['Fin4Groups'],
     address: "",
   },
   Location: {
@@ -95,6 +99,7 @@ const verifiers = {
     },
     description:
       "A location, which is within a radius of a location the token creator defines, needs to be provided.",
+    requiredAddresses: [],
     address: "",
   },
   SelfApprove: {
@@ -106,20 +111,9 @@ const verifiers = {
       userData: "None",
     },
     description: "Claimers approve their own claim.",
+    requiredAddresses: [],
     address: "",
   },
-  //SelfieTogether: {
-  //  chain: "On-Chain",
-  //  type: "Social",
-  //  claimerInput: {
-  //    inputType: "User generated data",
-  //    sensorData: "None",
-  //    userData: "Picture",
-  //  },
-  //  description:
-  //    "The claimer supplies a picture, based on which a self-chosen approver and a member of a group of users appointed by the token creator decide to approve.",
-  //  address: "",
-  //},
   // verifiers that are commented out are not deployed in 2_deploy_contracts.js yet
   //SensorOneTimeSignal: {
   //  type: "Non-Interactive",
@@ -142,6 +136,7 @@ const verifiers = {
     },
     description:
       "The token creator specifies one or more user groups, of which one member has to approve.",
+    requiredAddresses: ['Fin4Groups', 'Fin4Messaging'],
     address: "",
   },
   SpecificAddress: {
@@ -153,6 +148,7 @@ const verifiers = {
       userData: "Address",
     },
     description: "The claimer specifies an address, which has to approve.",
+    requiredAddresses: ['Fin4Messaging'],
     address: "",
   },
   LimitedVoting: {
@@ -164,6 +160,7 @@ const verifiers = {
       userData: "File",
     },
     description: "The proof is sent to the users due to a random mechanism",
+    requiredAddresses: ['Fin4Messaging', 'Fin4SystemParameters', 'Fin4Reputation', 'Fin4Voting'],
     address: "",
   },
   // verifiers that are commented out are not deployed in 2_deploy_contracts.js yet
@@ -200,6 +197,7 @@ const verifiers = {
     },
     description:
       "The claimer has to supply a picture, based on which the approver will decide to approve.",
+    requiredAddresses: ['Fin4Messaging', 'Fin4SystemParameters', 'Fin4Reputation', 'Fin4Voting'],
     address: "",
   },
   TokenCreatorApproval: {
@@ -211,6 +209,7 @@ const verifiers = {
       userData: "None",
     },
     description: "The token creator has to approve.",
+    requiredAddresses: ['Fin4Messaging'],
     address: "",
   },
   VideoVoting: {
@@ -223,6 +222,7 @@ const verifiers = {
     },
     description:
       "The claimer has to supply a video, based on which the approver will decide to approve.",
+    requiredAddresses: ['Fin4Messaging', 'Fin4SystemParameters', 'Fin4Reputation', 'Fin4Voting'],
     address: "",
   },
   ClaimableOnlyNTimesPerUser: {
@@ -235,6 +235,7 @@ const verifiers = {
     },
     description:
       "The token creator sets a cap how many times a token can be successfully claimed",
+    requiredAddresses: [],
     address: "",
   },
 };
