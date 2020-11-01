@@ -2,7 +2,7 @@ pragma solidity ^0.5.17;
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';
-import 'contracts/stub/MintTransferStub.sol';
+import 'contracts/stub/MintingStub.sol';
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/Fin4Underlyings.sol";
 
@@ -59,13 +59,13 @@ contract Fin4Claiming {
 
         for (uint i = 0; i < requiredVerifierTypes.length; i++) {
 
-            // TODO here we need to distingiush more refined then just isNonInteractive --> autoCheck
+            // TODO here we need to distingiush more refined then just isAutoCheckable --> autoCheck
             // e.g. ClaimableOnlyNTimesPerUser must both be checked immediately as well as a last verifier before a claim-approval.
             // Otherwise a scenario is possible in which someone makes a token with ClaimableOnlyNTimesPerUser = 3 and another interactive verifier.
             // Then a user makes 10 claims without submitting proof to the interactive verifier. ClaimableOnlyNTimesPerUser will give its blessing
             // 10 times and can't "undo" it when the user provides the proof for the interactive verifier. Result: 10 approved claims despite the limit of 3
 
-            if (Fin4BaseVerifierType(requiredVerifierTypes[i]).isNoninteractive()) {
+            if (Fin4BaseVerifierType(requiredVerifierTypes[i]).isAutoCheckable()) {
                 // Also emit VerifierPending? For now they decide immediately and so the VerifierApprove/Rejected event will follow
                 // as soon as there is some time delay (asking oracle etc.) the VerifierPending should probably be emitted
                 Fin4BaseVerifierType(requiredVerifierTypes[i]).autoCheck(msg.sender, tokenAddress, claimId);
@@ -107,7 +107,7 @@ contract Fin4Claiming {
         if (canMint) {
             // TODO verify this makes sense and msg.sender is the token
             mintedQuantity = quantity;
-            MintTransferStub(tokenAddress).mint(claimer, mintedQuantity);
+            MintingStub(tokenAddress).mint(claimer, mintedQuantity);
             // can changes to totalSupply happen at other places too though? Definitely if we use the
             // ERC20Plus contract with burning for instance... #ConceptualDecision
             emit UpdatedTotalSupply(tokenAddress, Fin4Token(tokenAddress).totalSupply());
@@ -122,7 +122,7 @@ contract Fin4Claiming {
 
         if (Fin4ReputationAddress != address(0)) {
             // REP reward for a successful claim
-            MintTransferStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
+            MintingStub(Fin4ReputationAddress).mint(claimer, Fin4SystemParameters(Fin4SystemParametersAddress).REPforTokenClaim());
         }
     }
 

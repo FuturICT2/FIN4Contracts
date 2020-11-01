@@ -9,7 +9,7 @@ contract Fin4BaseVerifierType is utils {
     string public name;
     string public description;
     bool public isAutoInitiable = false; // shortcuts the user clicking on "Initiate verifier", instead that's done automatically
-    bool public isNoninteractive = false;
+    bool public isAutoCheckable = false; // TODO unify this logic with isAutoInitiable?
 
     function setContractName(string memory _contractName) public {
         contractName = _contractName;
@@ -23,8 +23,8 @@ contract Fin4BaseVerifierType is utils {
         return description;
     }
 
-    function getInfo() public view returns(string memory, string memory, string memory, string memory, bool) {
-        return (contractName, name, description, getParameterForTokenCreatorToSetEncoded(), isNoninteractive);
+    function getInfo() public view returns(string memory, string memory, string memory, string memory) {
+        return (contractName, name, description, getParameterForTokenCreatorToSetEncoded());
     }
 
     // This method gets overriden by the verifier types and encode the parameter names

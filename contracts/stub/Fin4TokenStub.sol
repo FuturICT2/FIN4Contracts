@@ -16,4 +16,6 @@ contract Fin4TokenStub {
 
     function getVerifierStatus(address verifier, uint claimId) public returns(uint);
 
+    function balanceOf(address account) public view returns (uint256);
+
 }

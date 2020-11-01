@@ -7,7 +7,7 @@ contract Blocker is Fin4BaseVerifierType {
     constructor() public  {
         name = "sc.verifier.blocker.name";
         description = "sc.verifier.blocker.description";
-        isNoninteractive = true;
+        isAutoCheckable = true;
     }
 
     // @Override
@@ -15,7 +15,7 @@ contract Blocker is Fin4BaseVerifierType {
         string memory message = string(abi.encodePacked(
             "Your claim on token \'",
             Fin4TokenStub(tokenAddress).name(),
-            "\' got rejected from the noninteractive verifier \'Blocker\'."));
+            "\' got rejected from the verifier \'Blocker\'."));
         _sendRejectionNotice(address(this), tokenAddress, claimId, message);
     }
 

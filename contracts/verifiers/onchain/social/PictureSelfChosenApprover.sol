@@ -1,6 +1,6 @@
 pragma solidity ^0.5.17;
 
-import "contracts/verifiers/interactive/SpecificAddress.sol";
+import "contracts/verifiers/onchain/social/SpecificAddress.sol";
 
 contract PictureSelfChosenApprover is SpecificAddress {
 
@@ -23,9 +23,9 @@ contract PictureSelfChosenApprover is SpecificAddress {
         pa.attachment = IPFShash;
         pa.pendingApprovalId = pendingApprovals[approver].length;
         string memory message = string(abi.encodePacked(getMessageText(),
-            Fin4TokenStub(tokenAddrToReceiveVerifierNotice).name()));
+            Fin4TokenBase(tokenAddrToReceiveVerifierNotice).name()));
         pa.messageId = Fin4Messaging(Fin4MessagingAddress).addPendingRequestMessage(
-            msg.sender, contractName, approver, message, IPFShash, pa.pendingApprovalId);
+            msg.sender, name, approver, message, IPFShash, pa.pendingApprovalId);
         pendingApprovals[approver].push(pa);
         _sendPendingNotice(address(this), tokenAddrToReceiveVerifierNotice, claimId, "Your approver has been notified about the request.");
     }

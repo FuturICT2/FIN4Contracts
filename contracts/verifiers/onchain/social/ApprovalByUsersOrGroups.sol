@@ -60,6 +60,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         return nextPendingRequestId - 1;
     }
 
+    // only called from autoSubmitProof() in here or from extending verifiers, not public
     function submitProof(address user, address tokenAddrToReceiveVerifierNotice, uint claimId, string memory attachment,
         string memory pendingNotice) internal {
         uint pendingRequestId = addPendingRequest(user, tokenAddrToReceiveVerifierNotice, claimId, attachment);
@@ -121,21 +122,21 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
     }
 
     function receiveApproval(uint pendingRequestId, string memory attachedMessage) public {
-        receiveDecision(pendingRequestId, attachedMessage, true);
+        receiveDecision(pendingRequestId, msg.sender, attachedMessage, true);
     }
 
     function receiveRejection(uint pendingRequestId, string memory attachedMessage) public {
-        receiveDecision(pendingRequestId, attachedMessage, false);
+        receiveDecision(pendingRequestId, msg.sender, attachedMessage, false);
     }
 
-    function receiveDecision(uint pendingRequestId, string memory attachedMessage, bool approved) internal {
+    function receiveDecision(uint pendingRequestId, address voter, string memory attachedMessage, bool approved) internal {
         PendingRequest memory pa = pendingRequests[pendingRequestId];
         // only possible if the claimer got added to an approver group after he made the claim
         // e.g. he could be group owner and added himself
-        require(pa.requester != msg.sender, "No self-approve allowed");
+        require(pa.requester != voter, "No self-approve allowed");
         address token = pa.tokenAddrToReceiveVerifierNotice;
-        bool userHasPermission = isIndividualApprover(token, msg.sender) ||
-            Fin4Groups(Fin4GroupsAddress).userIsInOneOfTheseGroups(tokenToApproverGroupIDs[token], msg.sender);
+        bool userHasPermission = isIndividualApprover(token, voter) ||
+            Fin4Groups(Fin4GroupsAddress).userIsInOneOfTheseGroups(tokenToApproverGroupIDs[token], voter);
         require(userHasPermission, "You don't have permission to decide on this request");
         require(!pa.isDecided, "This request is already decided");
 
