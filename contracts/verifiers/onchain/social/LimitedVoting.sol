@@ -113,7 +113,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     }
 
     // Check if time has elapsed
-    function endVotePossible(uint claimId) public view returns (bool){
+    function endVotePossible(uint claimId) public view returns (bool) {
         PendingApproval memory pa = pendingApprovals[claimId];
         if (block.timestamp > pa.start + _getTimeInMinutes(pa.tokenAddrToReceiveVerifierNotice) * 1 minutes) {
             return true;
@@ -122,7 +122,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
     }
 
     // Performs end of vote if time has elapsed
-    function endVote(uint claimId) public{
+    function endVote(uint claimId) public {
         PendingApproval memory pa = pendingApprovals[claimId];
         if (endVotePossible(claimId)) {
             markMessagesAsRead(claimId);
@@ -165,7 +165,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         return tokenToParameter[token];
     }
 
-    function _getTimeInMinutes(address token) public view returns(uint){
+    function _getTimeInMinutes(address token) public view returns(uint) {
         return tokenToParameterTime[token];
     }
 
@@ -249,6 +249,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
         }
         pendingApprovals[claimId] = pa;
     }
+
     // Mark messages of all users as read
     function markMessagesAsRead(uint claimId) public {
         PendingApproval memory pa = pendingApprovals[claimId];
@@ -256,6 +257,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
             Fin4Messaging(Fin4MessagingAddress).markMessageAsActedUpon(pa.groupMemberAddresses[i], pa.messageIds[i]);
         }
     }
+
     // Mark message of current user as read
     function markMessageAsRead(uint claimId, uint index) public {
         PendingApproval memory pa = pendingApprovals[claimId];
