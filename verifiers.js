@@ -238,6 +238,18 @@ const verifiers = {
     requiredAddresses: [],
     address: "",
   },
+  Blocker: {
+    chain: "On-Chain",
+    type: "Non-Interactive",
+    claimerInput: {
+      inputType: "None",
+      sensorData: "None",
+      userData: "None",
+    },
+    description: "Reject any claim on this token immediately",
+    requiredAddresses: [],
+    address: "",
+  }
 };
 
 exports.verifiers = verifiers;
