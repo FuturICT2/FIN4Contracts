@@ -27,50 +27,28 @@ const BurnSourcerer = artifacts.require('BurnSourcerer');
 const Trigonometry = artifacts.require('Trigonometry');
 const Strings = artifacts.require('strings');
 
-const verifierContractNames = [
-	'ApprovalByUsersOrGroups',
-	'BlockThese',
-	'AllowOnlyThese',
-	// 'SensorOneTimeSignal',
-	// These include the submissions feature: 'Idea', 'Networking'
-	'SelfApprove',
-	'SpecificAddress',
-	'TokenCreatorApproval',
-	'Password',
-	'PictureSelfChosenApprover',
-	//'PictureGivenApprovers', // TODO post-merge
-	'Location',
-	'ClaimableOnlyNTimesPerUser',
-	'LimitedVoting',
-	'PictureVoting',
-	'VideoVoting',
-	//'Blocker',  // TODO post-merge
-	//'Statement',  // TODO post-merge
-	//'Vote' // TODO post-merge
-	'HappyMoment' // has submissions
-	// 'MinimumInterval',
-	// 'MaximumQuantityPerInterval'
-];
-
-const verifierContracts = verifierContractNames.map(contractName => {
-	return artifacts.require(contractName);
+Object.keys(verifiers).map(contractName => {
+	verifiers[contractName].contractArtifact = artifacts.require(contractName)
 });
 
 const UnderlyingsActive = true; // the other necessary switch is in src/components/utils.js
 
 module.exports = async function(deployer) {
+
 	// FIN4MAIN
 
 	await deployer.deploy(Fin4Main);
 	const Fin4MainInstance = await Fin4Main.deployed();
 
+	// LIBRARIES
+
 	await deployer.deploy(Trigonometry);
-	const TrigonometryInstance = await Trigonometry.deployed();
-	deployer.link(Trigonometry, verifierContracts[8]);
+	await Trigonometry.deployed();
+	deployer.link(Trigonometry, verifiers.Location.contractArtifact);
 
 	await deployer.deploy(Strings);
-	const StringsInstance = await Strings.deployed();
-	deployer.link(Strings, verifierContracts[8]);
+	await Strings.deployed();
+	deployer.link(Strings, verifiers.Location.contractArtifact);
 
 	// SATELLITE CONTRACTS
 
@@ -137,10 +115,25 @@ module.exports = async function(deployer) {
 
 	// VERIFIER TYPES
 
-	await Promise.all(verifierContracts.map(contract => deployer.deploy(contract)));
-	const verifierInstances = await Promise.all(verifierContracts.map(contract => contract.deployed()));
-	await Promise.all(verifierInstances.map((instance, index) => instance.setContractName(verifierContractNames[index])));
-	await Promise.all(verifierInstances.map(({ address }) => Fin4VerifyingInstance.addVerifierType(address)));
+	for (let [contractName, verifierDef] of Object.entries(verifiers)) {
+		let contract = verifierDef.contractArtifact;
+		await deployer.deploy(contract);
+		let instance = await contract.deployed();
+		await instance.setContractName(contractName);
+		for (let i = 0; i < verifierDef.requiredAddresses.length; i ++) {
+			// that's the name of the Fin4 satellite contract that the verifier needs to know the address of
+			let requiredAddress = verifierDef.requiredAddresses[i];
+			if (instanceMap[requiredAddress]) { // is null for Fin4Reputation
+				await instance['set' + requiredAddress + 'Address'](instanceMap[requiredAddress]);
+			}
+		}
+		await Fin4VerifyingInstance.addVerifierType(instance.address);
+		verifiers[contractName].address = instance.address;
+
+		// clean up before it gets written out to verifier-info.js
+		delete verifiers[contractName].contractArtifact;
+		delete verifiers[contractName].requiredAddresses;
+	};
 
 	// FIN4 UNDERLYINGS IMPLEMENTATIONS - note that the name passed in must match the contract name exactly for those with contract addresses
 	
@@ -157,47 +150,6 @@ module.exports = async function(deployer) {
 		const BurnSourcererInstance = await BurnSourcerer.deployed();
 		await Fin4UnderlyingsInstance.addSourcerer(web3.utils.fromAscii("BurnSourcerer"), BurnSourcererInstance.address);
 	}
-
-	// Add contract addresses that verifier need
-	// TODO think about something better then identifiying them by indices
-	// ApprovalByUsersOrGroups
-	await verifierInstances[0].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	await verifierInstances[0].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// BlockThese
-	await verifierInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	// AllowOnlyThese
-	await verifierInstances[2].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	// SpecificAddress
-	await verifierInstances[4].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// TokenCreatorApproval
-	await verifierInstances[5].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// PictureSelfChosenApprover
-	await verifierInstances[7].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	/*// PictureGivenApprovers
-	await verifierInstances[1].setFin4GroupsAddress(Fin4GroupsInstance.address);
-	await verifierInstances[1].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	// Statement
-	await verifierInstances[12].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
-	// Vote
-	await verifierInstances[13].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
-	await verifierInstances[6].setFin4MessagingAddress(Fin4MessagingInstance.address);*/
-	// LimitedVoting
-	await verifierInstances[10].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	await verifierInstances[10].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
-	await verifierInstances[10].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
-	await verifierInstances[10].setFin4VotingAddress(Fin4VotingInstance.address);
-	// PictureVoting
-	await verifierInstances[11].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	await verifierInstances[11].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
-	await verifierInstances[11].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
-	await verifierInstances[11].setFin4VotingAddress(Fin4VotingInstance.address);
-	// VideoVoting
-	await verifierInstances[12].setFin4MessagingAddress(Fin4MessagingInstance.address);
-	await verifierInstances[12].setFin4tokenManagementAddress(Fin4TokenManagementInstance.address);
-	await verifierInstances[12].setFin4SystemParametersAddress(Fin4SystemParametersInstance.address);
-	await verifierInstances[12].setFin4VotingAddress(Fin4VotingInstance.address);
-	// HappyMoment
-	await verifierInstances[13].setFin4VerifyingAddress(Fin4VerifyingInstance.address);
 
 	//... setFin4OracleHubAddress(Fin4OracleHubInstance.address);
 	//... setFin4VerifyingAddress(Fin4VerifyingInstance.address);
@@ -216,14 +168,6 @@ module.exports = async function(deployer) {
 	fs.writeFile(path.join(__dirname, config.DEPLOYMENT_INFO_SAVING_LOCATION + '/deployment-info.js'), data, err => {
 		if (err) throw 'Error writing file: ' + err;
 	});
-
-	// Write Verifier info with instance addresses to src/config/verifier-info.js
-	for (let i = 0; i < verifierContracts.length; i++) {
-		let verifierObject = verifiers[verifierContracts[i]._json.contractName];
-		if (verifierObject !== undefined) {
-			verifierObject.address = verifierInstances[i].address;
-		}
-	}
 
 	let verifierData =
 		`export const verifierOptions = ${JSON.stringify(verifierOptions, null, 2)};\n\n` +
