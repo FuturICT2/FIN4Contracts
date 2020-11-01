@@ -216,8 +216,8 @@ module.exports = async function(deployer) {
 	}
 
 	let verifierData =
-		`export const verifierOptions = ${JSON.stringify(verifierOptions)};\n` +
-		`export const verifiers = ${JSON.stringify(verifiers)};\n`;
+		`export const verifierOptions = ${JSON.stringify(verifierOptions, null, 2)};\n\n` +
+		`export const verifiers = ${JSON.stringify(verifiers, null, 2)};\n`;
 	fs.writeFile(path.join(__dirname, config.DEPLOYMENT_INFO_SAVING_LOCATION + '/verifier-info.js'), verifierData, (err) => {
 		if (err) throw 'Error writing file: ' + err;
 	});
