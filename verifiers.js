@@ -249,6 +249,18 @@ const verifiers = {
     description: "Reject any claim on this token immediately",
     requiredAddresses: [],
     address: "",
+  },
+  PictureGivenApprovers: {
+    chain: "On-Chain",
+    type: "Social",
+    claimerInput: {
+      inputType: "User generated data",
+      sensorData: "None",
+      userData: "Picture",
+    },
+    description: "Same as the \"Approval by users or groups\" verifier, but including a picture that the claimer has to upload. Approvers base their decision on this picture.",
+    requiredAddresses: ['Fin4Groups', 'Fin4Messaging'],
+    address: "",
   }
 };
 
