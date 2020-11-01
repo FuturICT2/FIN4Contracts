@@ -18,26 +18,20 @@ contract LimitedVoting is Fin4BaseVerifierType {
     address public Fin4MessagingAddress;
     address public Fin4SystemParametersAddress;
     address public Fin4ReputationAddress;
-    address public Fin4TokenManagementAddr;
     address public Fin4VotingAddress;
 
-    // Set in 2_deploy_contracts.js
-    function setFin4tokenManagementAddress(address Fin4TokenManagementAddress) public {
-        Fin4TokenManagementAddr = Fin4TokenManagementAddress;
-    }
-    // Set in 2_deploy_contracts.js
     function setFin4MessagingAddress(address Fin4MessagingAddr) public {
         Fin4MessagingAddress = Fin4MessagingAddr;
     }
-    // Set in 2_deploy_contracts.js
+
     function setFin4SystemParametersAddress(address SystemParametersAddr) public {
         Fin4SystemParametersAddress = SystemParametersAddr;
     }
-    // Set in 2_deploy_contracts.js
+
     function setFin4VotingAddress(address VotingAddr) public {
         Fin4VotingAddress = VotingAddr;
     }
-    // Set in 3_deploy_tcr.js
+
     function setFin4ReputationAddress(address Fin4ReputationAddr) public {
         require(msg.sender == creator, "Only the creator of this smart contract can call this function");
         Fin4ReputationAddress = Fin4ReputationAddr;
