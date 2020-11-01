@@ -29,7 +29,7 @@ const verifierOptions = {
         "Determines if and which sensor data must be provided by the claimer.",
     },
     userData: {
-      values: ["None", "Picture", "Video", "Password", "Address", "File", "GroupID"],
+      values: ["None", "Picture", "Video", "Password", "Address", "File", "GroupID", "Text"],
       description:
         "Determines if and which content must be provided by the claimer.",
     },
@@ -260,6 +260,30 @@ const verifiers = {
     },
     description: "Same as the \"Approval by users or groups\" verifier, but including a picture that the claimer has to upload. Approvers base their decision on this picture.",
     requiredAddresses: ['Fin4Groups', 'Fin4Messaging'],
+    address: "",
+  },
+  HappyMoment: {
+    chain: "On-Chain",
+    type: "Interactive",
+    claimerInput: {
+      inputType: "User generated data",
+      sensorData: "None",
+      userData: "Picture",
+    },
+    description: "Submit a picture of a happy moment. Submissions will be visible on a public site.",
+    requiredAddresses: ['Fin4Verifying'],
+    address: "",
+  },
+  Statement: {
+    chain: "On-Chain",
+    type: "Interactive",
+    claimerInput: {
+      inputType: "User generated data",
+      sensorData: "None",
+      userData: "Text",
+    },
+    description: "Submit a statement. Submissions will be visible on a public site.",
+    requiredAddresses: ['Fin4Verifying'],
     address: "",
   }
 };
