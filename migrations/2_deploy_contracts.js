@@ -27,8 +27,9 @@ const BurnSourcerer = artifacts.require('BurnSourcerer');
 const Trigonometry = artifacts.require('Trigonometry');
 const Strings = artifacts.require('strings');
 
+let contractArtifacts = {};
 Object.keys(verifiers).map(contractName => {
-	verifiers[contractName].contractArtifact = artifacts.require(contractName)
+	contractArtifacts[contractName] = artifacts.require(contractName);
 });
 
 const UnderlyingsActive = true; // the other necessary switch is in src/components/utils.js
@@ -44,11 +45,11 @@ module.exports = async function(deployer) {
 
 	await deployer.deploy(Trigonometry);
 	await Trigonometry.deployed();
-	deployer.link(Trigonometry, verifiers.Location.contractArtifact);
+	deployer.link(Trigonometry, contractArtifacts.Location);
 
 	await deployer.deploy(Strings);
 	await Strings.deployed();
-	deployer.link(Strings, verifiers.Location.contractArtifact);
+	deployer.link(Strings, contractArtifacts.Location);
 
 	// SATELLITE CONTRACTS
 
@@ -116,7 +117,7 @@ module.exports = async function(deployer) {
 	// VERIFIER TYPES
 
 	for (let [contractName, verifierDef] of Object.entries(verifiers)) {
-		let contract = verifierDef.contractArtifact;
+		let contract = contractArtifacts[contractName];
 		await deployer.deploy(contract);
 		let instance = await contract.deployed();
 		await instance.setContractName(contractName);
@@ -129,10 +130,6 @@ module.exports = async function(deployer) {
 		}
 		await Fin4VerifyingInstance.addVerifierType(instance.address);
 		verifiers[contractName].address = instance.address;
-
-		// clean up before it gets written out to verifier-info.js
-		delete verifiers[contractName].contractArtifact;
-		delete verifiers[contractName].requiredAddresses;
 	};
 
 	// FIN4 UNDERLYINGS IMPLEMENTATIONS - note that the name passed in must match the contract name exactly for those with contract addresses
