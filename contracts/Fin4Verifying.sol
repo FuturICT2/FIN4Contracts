@@ -43,18 +43,6 @@ contract Fin4Verifying {
         return false;
     }
 
-    // ------------------------- VOTING INTERACTION -------------------------
-
-    // TODO
-
-    function isEligibleToBeAVoter() public returns(bool) {
-        return Fin4VerifyingStub(Fin4VotingAddress).isEligibleToBeAVoter(msg.sender);
-    }
-
-    function becomeVoter() public {
-        Fin4VerifyingStub(Fin4VotingAddress).becomeVoter(msg.sender);
-    }
-
     // ------------------------- COLLECTING SUBMISSIONS -------------------------
 
     struct Submission {

@@ -32,14 +32,15 @@ contract Fin4Voting{
     }
 
     // Add user to list of eligible voters
-    function becomeVoter(address voter) public {
+    function becomeVoter() public {
+        address voter = msg.sender;
         require(voters[voter].voter == address(0), "You are already a voter!");
-
         voters[voter] = VoterInfo(new address[](0), 'todocomment', msg.sender);
         votersAddresses.push(voter);
     }
 
-    function isEligibleToBeAVoter(address voter) public returns(bool) {
+    function isEligibleToBeAVoter() public returns(bool) {
+        address voter = msg.sender;
         // Check that REP balance is bigger than a certain value, for testing it is left at 0
         if (Fin4TokenStub(Fin4ReputationAddress).balanceOf(voter) >= 0 && !isVoter(voter)) {
             return true;
