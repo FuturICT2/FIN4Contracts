@@ -11,12 +11,6 @@ contract Fin4Verifying {
     // all the verifier types that token creators can use
     address[] public verifierTypes;
     mapping (string => address) public verifiers;
-    address public Fin4VotingAddress;
-
-    // Set in 2_deploy_contracts.js
-    function setFin4VotingAddress(address Fin4VotingAddr) public {
-        Fin4VotingAddress = Fin4VotingAddr;
-    }
 
     function addVerifierType(address verifierType) public returns(bool) {
         verifierTypes.push(verifierType);
