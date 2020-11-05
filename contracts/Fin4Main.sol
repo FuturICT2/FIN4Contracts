@@ -42,6 +42,7 @@ contract Fin4Main {
     address public Fin4SystemParametersAddress;
     address public Fin4UnderlyingsAddress;
     address public Fin4VotingAddress;
+    // address public Fin4OracleHubAddress; TODO
 
     function setSatelliteAddresses(address uncappedTokenCreator, address cappedTokenCreator, address tokenManagement, address claiming,
     address collections, address messaging, address verifying, address groups, address systemParameters, address underlyings, address fin4voting) public {
