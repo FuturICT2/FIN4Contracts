@@ -43,6 +43,10 @@ contract Fin4Claiming {
         Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
+    function registerClaimingFee(address tokenAddress, uint feeAmountPerClaim, address feeBeneficiary) public {
+        // TODO
+    }
+
     function submitClaim(address tokenAddress, uint amount, string memory comment) public {
         uint claimId;
         address[] memory requiredVerifierTypes;
