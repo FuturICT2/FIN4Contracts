@@ -86,7 +86,6 @@ module.exports = async function(deployer) {
 
 	await deployer.deploy(Fin4Voting, Fin4SystemParametersInstance.address);
 	const Fin4VotingInstance = await Fin4Voting.deployed();
-	Fin4VerifyingInstance.setFin4VotingAddress(Fin4VotingInstance.address);
 	// await deployer.deploy(Fin4OracleHub);
 	// const Fin4OracleHubInstance = await Fin4OracleHub.deployed();
 
