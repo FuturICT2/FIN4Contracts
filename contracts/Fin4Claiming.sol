@@ -43,11 +43,27 @@ contract Fin4Claiming {
         Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
-    function registerClaimingFee(address tokenAddress, uint feeAmountPerClaim, address feeBeneficiary) public {
-        // TODO
+    struct Fee {
+        bool exists;
+        uint amountPerClaim;
+        address beneficiary;
+    }
+
+    mapping (address => Fee) public tokenToFees; 
+
+    function registerClaimingFee(address tokenAddress, uint amountPerClaim, address beneficiary) public {
+        require(tokenToFees[tokenAddress].exists == false, "Fee already registered for this token");
+        Fee storage fee = tokenToFees[tokenAddress];
+        fee.exists = true;
+        fee.amountPerClaim = amountPerClaim;
+        fee.beneficiary = beneficiary;
     }
 
     function submitClaim(address tokenAddress, uint amount, string memory comment) public {
+        if (tokenToFees[tokenAddress].exists) {
+            // TODO
+        }
+        
         uint claimId;
         address[] memory requiredVerifierTypes;
         uint claimCreationTime;
