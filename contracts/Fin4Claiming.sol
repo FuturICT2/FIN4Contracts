@@ -50,7 +50,8 @@ contract Fin4Claiming {
         address beneficiary;
     }
 
-    mapping (address => Fee) public tokenToFees; 
+    mapping (address => Fee) public tokenToFees;
+    address[] public tokensWithFees;
 
     function registerClaimingFee(address tokenAddress, uint amountPerClaim, address beneficiary) public {
         require(tokenToFees[tokenAddress].exists == false, "Fee already registered for this token");
@@ -58,6 +59,17 @@ contract Fin4Claiming {
         fee.exists = true;
         fee.amountPerClaim = amountPerClaim;
         fee.beneficiary = beneficiary;
+        tokensWithFees.push(tokenAddress);
+    }
+
+    function getClaimingFees() public view returns(address[] memory, uint[] memory, address[] memory) {
+        uint[] memory amountsPerClaim = new uint[](tokensWithFees.length);
+        address[] memory beneficiaries = new address[](tokensWithFees.length);
+        for (uint i = 0; i < tokensWithFees.length; i++) {
+            amountsPerClaim[i] = tokenToFees[tokensWithFees[i]].amountPerClaim;
+            beneficiaries[i] = tokenToFees[tokensWithFees[i]].beneficiary;
+        }
+        return (tokensWithFees, amountsPerClaim, beneficiaries);
     }
 
     function submitClaim(address tokenAddress, uint amount, string memory comment) public {
