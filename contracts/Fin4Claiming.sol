@@ -43,6 +43,7 @@ contract Fin4Claiming {
         Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
+	// TODO #ConceptualDecision this could also become a verifier instead of being added to the action step in the token creator
     struct Fee {
         bool exists;
         uint amountPerClaim;
