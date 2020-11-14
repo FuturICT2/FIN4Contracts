@@ -42,7 +42,7 @@ contract Location is Fin4BaseVerifierType {
     }
 
     // https://jonisalonen.com/2014/computing-distance-between-coordinates-can-be-simple-and-fast/
-    function calculateDistance(int256 lat0, int256 lon0, int256 lat1, int256 lon1) public view returns(uint) {
+    function calculateDistance(int256 lat0, int256 lon0, int256 lat1, int256 lon1) public pure returns(uint) {
         //converts to radiands
         int256 _lat1 = toRadiands(lat0);
         int256 _lat2 = toRadiands(lat1);
@@ -150,7 +150,7 @@ contract Location is Fin4BaseVerifierType {
         return result;
     }
 
-    function convertStringToBytes(string memory str) private returns (bytes memory) {
+    function convertStringToBytes(string memory str) private pure returns (bytes memory) {
         return bytes(str);
     }
 }

@@ -81,7 +81,7 @@ contract Fin4TokenBase { // abstract class
 
     mapping (uint => Claim) public claims;
 
-    function getVerifierStatus(address verifier, uint claimId) public returns(uint) {
+    function getVerifierStatus(address verifier, uint claimId) public view returns(uint) {
         return uint(claims[claimId].verifierStatuses[verifier].status);
     }
 

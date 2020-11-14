@@ -32,7 +32,7 @@ contract Vote is Fin4BaseVerifierType {
         tokenToVoteOptionsStrings[token] = voteOptionsString;
     }
 
-    function getVoteOptionsStringForToken(address token) public returns(string memory) {
+    function getVoteOptionsStringForToken(address token) public view returns(string memory) {
         return tokenToVoteOptionsStrings[token];
     }
 

@@ -67,7 +67,7 @@ contract Fin4Underlyings {
         return (names, isSourcerers, contractAddresses, attachments);
     }
 
-    function getSourcererParams(address sourcererAddress) public view returns(string memory) {
+    function getSourcererParams(address sourcererAddress) public pure returns(string memory) {
         return BaseSourcerer(sourcererAddress).getParameterForTokenCreatorToSetEncoded();
     }
 
@@ -86,7 +86,7 @@ contract Fin4Underlyings {
         setTokenFinishedConstructing(tokenAddress);
     }
 
-    function getUnderlyingsRegisteredOnToken(address tokenAddress) public returns(bytes32[] memory) {
+    function getUnderlyingsRegisteredOnToken(address tokenAddress) public view returns(bytes32[] memory) {
         return tokenToRegisteredUnderlyings[tokenAddress];
     }
 
@@ -125,7 +125,7 @@ contract Fin4Underlyings {
         settings.allowCollateralPairsCreatedByOthers = allowCollateralPairsCreatedByOthers;
     }
 
-    function getSourcererSettings(address token) public returns(bool, bool) {
+    function getSourcererSettings(address token) public view returns(bool, bool) {
         if (!tokenToSourcererSettings[token].exists) {
             return (false, true); // default
         }
@@ -139,7 +139,7 @@ contract Fin4Underlyings {
         }
     }
 
-    function newSourcererPairAllowedWithPat(address user, address pat) public returns(bool) {
+    function newSourcererPairAllowedWithPat(address user, address pat) public view returns(bool) {
         if (!tokenToSourcererSettings[pat].exists) {
             return false; // by default not allowed
         }
@@ -152,7 +152,7 @@ contract Fin4Underlyings {
         return tokenToSourcererSettings[pat].allowAddPairsAfterCreation;
     }
 
-    function newSourcererPairAllowedWithCollateral(address user, address pat, address collateral) public returns(bool) {
+    function newSourcererPairAllowedWithCollateral(address user, address pat, address collateral) public view returns(bool) {
         if (!tokenToSourcererSettings[collateral].exists) {
             return true; // by default allowed
         }

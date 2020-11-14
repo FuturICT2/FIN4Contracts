@@ -39,7 +39,7 @@ contract Fin4Voting{
         votersAddresses.push(voter);
     }
 
-    function isEligibleToBeAVoter() public returns(bool) {
+    function isEligibleToBeAVoter() public view returns(bool) {
         address voter = msg.sender;
         // Check that REP balance is bigger than a certain value, for testing it is left at 0
         if (Fin4TokenStub(Fin4ReputationAddress).balanceOf(voter) >= 0 && !isVoter(voter)) {
@@ -54,7 +54,7 @@ contract Fin4Voting{
     }
 
     // Randomly pick numberOfUsers users exempting the user himself
-    function createRandomGroupOfUsers(uint numberOfUsers, address claimer)  public returns(address[] memory) {
+    function createRandomGroupOfUsers(uint numberOfUsers, address claimer) public view returns(address[] memory) {
         uint subtractNumberOfVoters = 0;
 
         if (isVoter(claimer)) {
@@ -80,7 +80,7 @@ contract Fin4Voting{
     }
 
     // Check if an element is in an array
-    function inArray(address who, address[] memory arr) public view returns (bool) {
+    function inArray(address who, address[] memory arr) public pure returns (bool) {
         // address 0x0 is not valid if pos is 0 is not in the array
         for (uint i = 0; i < arr.length; i++) {
             if (arr[i] == who) {

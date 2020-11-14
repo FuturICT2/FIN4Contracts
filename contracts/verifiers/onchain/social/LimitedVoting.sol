@@ -165,7 +165,7 @@ contract LimitedVoting is Fin4BaseVerifierType {
 
     // copied method signature from SpecificAddress, then nothing has to be changed in Messages.jsx
 
-    function getIndexOf(address[] memory voters, address member) public view returns(uint) {
+    function getIndexOf(address[] memory voters, address member) public pure returns(uint) {
         for (uint i = 0; i < voters.length; i ++) {
             if (voters[i] == member) {
                 return i;

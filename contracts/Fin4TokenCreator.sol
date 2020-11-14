@@ -27,13 +27,13 @@ contract Fin4TokenCreator {
 
     // these two methods are propbably super costly
 
-    function nameCheck(string memory name) public returns(string memory) {
+    function nameCheck(string memory name) public pure returns(string memory) {
         uint len = name.length();
         require(len > 0, "Name can't be empty");
         return name;
     }
 
-    function symbolCheck(string memory symbol) public returns(string memory) {
+    function symbolCheck(string memory symbol) public view returns(string memory) {
         uint len = symbol.length();
         require(len >= 3 && len <= 5, "Symbol must have between 3 and 5 characters");
         string memory sym = symbol.upper();

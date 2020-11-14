@@ -29,7 +29,7 @@ contract BaseSourcerer { // abstract class
     mapping(bytes32 => Pair) public pairs;
     bytes32[] public ids;
 
-    function _getId(address pat, address collateral) private view returns(bytes32) {
+    function _getId(address pat, address collateral) private pure returns(bytes32) {
         return keccak256(abi.encodePacked(pat, collateral));
     }
 

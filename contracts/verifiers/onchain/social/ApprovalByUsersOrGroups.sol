@@ -159,7 +159,7 @@ contract ApprovalByUsersOrGroups is Fin4BaseVerifierType {
         }
     }
 
-    function isIndividualApprover(address token, address user) internal returns(bool) {
+    function isIndividualApprover(address token, address user) internal view returns(bool) {
         address[] memory individualApprovers = tokenToIndividualApprovers[token];
         for (uint i = 0; i < individualApprovers.length; i ++) {
             if (individualApprovers[i] == user) {
