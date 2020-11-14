@@ -46,18 +46,18 @@ contract Fin4Claiming {
 	// TODO #ConceptualDecision this could also become a verifier instead of being added to the action step in the token creator
     struct Fee {
         bool exists;
-        uint amountPerClaim;
+        uint amountPerClaimInWei;
         address beneficiary;
     }
 
     mapping (address => Fee) public tokenToFees;
     address[] public tokensWithFees;
 
-    function registerClaimingFee(address tokenAddress, uint amountPerClaim, address beneficiary) public {
+    function registerClaimingFee(address tokenAddress, uint amountPerClaimInWei, address beneficiary) public {
         require(tokenToFees[tokenAddress].exists == false, "Fee already registered for this token");
         Fee storage fee = tokenToFees[tokenAddress];
         fee.exists = true;
-        fee.amountPerClaim = amountPerClaim;
+        fee.amountPerClaimInWei = amountPerClaimInWei;
         fee.beneficiary = beneficiary;
         tokensWithFees.push(tokenAddress);
     }
@@ -66,7 +66,7 @@ contract Fin4Claiming {
         uint[] memory amountsPerClaim = new uint[](tokensWithFees.length);
         address[] memory beneficiaries = new address[](tokensWithFees.length);
         for (uint i = 0; i < tokensWithFees.length; i++) {
-            amountsPerClaim[i] = tokenToFees[tokensWithFees[i]].amountPerClaim;
+            amountsPerClaim[i] = tokenToFees[tokensWithFees[i]].amountPerClaimInWei;
             beneficiaries[i] = tokenToFees[tokensWithFees[i]].beneficiary;
         }
         return (tokensWithFees, amountsPerClaim, beneficiaries);
