@@ -72,11 +72,23 @@ contract Fin4Claiming {
         return (tokensWithFees, amountsPerClaim, beneficiaries);
     }
 
+    function submitClaimAndPayFee(address tokenAddress, uint amount, string memory comment) public payable {
+        require(tokenToFees[tokenAddress].exists, "This token requires no claiming fee");
+        require(msg.value >= tokenToFees[tokenAddress].amountPerClaimInWei, "Fee is not paid in full");
+        // that allows more then the fee to be sent to the beneficiary #ConceptualDecision
+        // using call.value() instead of send()/transfer(), via https://consensys.net/diligence/blog/2019/09/stop-using-soliditys-transfer-now/
+        // also makes it easier because then beneficiary doesn't have to be a payable address
+        (bool success, ) = tokenToFees[tokenAddress].beneficiary.call.value(msg.value)("");
+        require(success, "Transfer failed");
+        _submitClaim(tokenAddress, amount, comment);
+    }
+
     function submitClaim(address tokenAddress, uint amount, string memory comment) public {
-        if (tokenToFees[tokenAddress].exists) {
-            // TODO
-        }
-        
+        require(!tokenToFees[tokenAddress].exists, "This token requires a claiming fee, use the submitClaimAndPayFee() method");
+        _submitClaim(tokenAddress, amount, comment);
+    }
+
+    function _submitClaim(address tokenAddress, uint amount, string memory comment) private {        
         uint claimId;
         address[] memory requiredVerifierTypes;
         uint claimCreationTime;
