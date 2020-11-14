@@ -63,13 +63,12 @@ contract Fin4Voting{
 
         require(numberOfUsers <= (votersAddresses.length - subtractNumberOfVoters ), "Not enough active voters in the system!");
 
-        uint startIdx = uint(blockhash(block.number-1))%votersAddresses.length;
-        uint interval = uint(blockhash(block.number-2))%3;
+        uint startIdx = uint(blockhash(block.number-1)) % votersAddresses.length;
+        uint interval = uint(blockhash(block.number-2)) % 3;
         address[] memory newVoters = new address[](numberOfUsers);
 
-        for(uint i = 0; i<numberOfUsers; i++){
-            address who = votersAddresses[(startIdx + i*interval)%votersAddresses.length];
-
+        for (uint i = 0; i < numberOfUsers; i++) {
+            address who = votersAddresses[(startIdx + i * interval) % votersAddresses.length];
             uint offset = 1;
             while (who == claimer || inArray(who, newVoters)) {
                 who = votersAddresses[(startIdx + i * interval + offset) % votersAddresses.length];

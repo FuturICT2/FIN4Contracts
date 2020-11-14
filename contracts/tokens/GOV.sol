@@ -44,14 +44,14 @@ contract GOV is ERC20Plus {
     @dev Returns the amount of tokens delegated by the specified _tokenHolder
     */
     function getAmountsDelegatedByAUser(address _tokenHolder) public returns(uint256) {
-        return (delegatorTokensTotal[_tokenHolder]);
+        return delegatorTokensTotal[_tokenHolder];
     }
 
     /**
     @dev Returns the amount of tokens delegated to the caller
     */
     function getAmountsDelegatedToMe() public returns(uint256) {
-        return (delegateeTokens[msg.sender]);
+        return delegateeTokens[msg.sender];
     }
 
     /**
