@@ -43,7 +43,52 @@ contract Fin4Claiming {
         Fin4ReputationAddress = Fin4ReputationAddr;
     }
 
+	// TODO #ConceptualDecision this could also become a verifier instead of being added to the action step in the token creator
+    struct Fee {
+        bool exists;
+        uint amountPerClaimInWei;
+        address beneficiary;
+    }
+
+    mapping (address => Fee) public tokenToFees;
+    address[] public tokensWithFees;
+
+    function registerClaimingFee(address tokenAddress, uint amountPerClaimInWei, address beneficiary) public {
+        require(tokenToFees[tokenAddress].exists == false, "Fee already registered for this token");
+        Fee storage fee = tokenToFees[tokenAddress];
+        fee.exists = true;
+        fee.amountPerClaimInWei = amountPerClaimInWei;
+        fee.beneficiary = beneficiary;
+        tokensWithFees.push(tokenAddress);
+    }
+
+    function getClaimingFees() public view returns(address[] memory, uint[] memory, address[] memory) {
+        uint[] memory amountsPerClaim = new uint[](tokensWithFees.length);
+        address[] memory beneficiaries = new address[](tokensWithFees.length);
+        for (uint i = 0; i < tokensWithFees.length; i++) {
+            amountsPerClaim[i] = tokenToFees[tokensWithFees[i]].amountPerClaimInWei;
+            beneficiaries[i] = tokenToFees[tokensWithFees[i]].beneficiary;
+        }
+        return (tokensWithFees, amountsPerClaim, beneficiaries);
+    }
+
+    function submitClaimAndPayFee(address tokenAddress, uint amount, string memory comment) public payable {
+        require(tokenToFees[tokenAddress].exists, "This token requires no claiming fee");
+        require(msg.value >= tokenToFees[tokenAddress].amountPerClaimInWei, "Fee is not paid in full");
+        // that allows more then the fee to be sent to the beneficiary #ConceptualDecision
+        // using call.value() instead of send()/transfer(), via https://consensys.net/diligence/blog/2019/09/stop-using-soliditys-transfer-now/
+        // also makes it easier because then beneficiary doesn't have to be a payable address
+        (bool success, ) = tokenToFees[tokenAddress].beneficiary.call.value(msg.value)("");
+        require(success, "Transfer failed");
+        _submitClaim(tokenAddress, amount, comment);
+    }
+
     function submitClaim(address tokenAddress, uint amount, string memory comment) public {
+        require(!tokenToFees[tokenAddress].exists, "This token requires a claiming fee, use the submitClaimAndPayFee() method");
+        _submitClaim(tokenAddress, amount, comment);
+    }
+
+    function _submitClaim(address tokenAddress, uint amount, string memory comment) private {        
         uint claimId;
         address[] memory requiredVerifierTypes;
         uint claimCreationTime;
