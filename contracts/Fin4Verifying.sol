@@ -1,6 +1,5 @@
 pragma solidity ^0.5.17;
 
-import 'contracts/stub/Fin4VerifyingStub.sol';
 import 'contracts/verifiers/Fin4BaseVerifierType.sol';
 // Contract that handles communication between the FIN4 system and the verifier system
 contract Fin4Verifying {
