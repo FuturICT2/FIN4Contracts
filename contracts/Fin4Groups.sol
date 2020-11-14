@@ -71,15 +71,6 @@ contract Fin4Groups is utils {
         return nextGroupId - 1;
     }
 
-    function createGroup2(string memory name) public view returns(uint) {
-        // Group storage group = groups[nextGroupId];
-        // group.creator = msg.sender;
-        // group.name = name;
-        // nextGroupId ++;
-        // return nextGroupId - 1;
-        return 0;
-    }
-
     function addMembers(uint groupId, address[] memory newMembers) public  userIsCreator(groupId) {
         for (uint i = 0; i < newMembers.length; i ++) {
             groups[groupId].members.push(newMembers[i]);
