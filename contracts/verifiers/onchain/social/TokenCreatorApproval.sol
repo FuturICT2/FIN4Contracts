@@ -12,9 +12,10 @@ contract TokenCreatorApproval is SpecificAddress {
         description = "sc.verifier.token-creator-approval.description";
     }
 
-    function submitProof_TokenCreatorApproval(address tokenAddrToReceiveVerifierNotice, uint claimId, address claimer) public {
-        // Sends a message to the token claimer so that he either approves or rejects
-        submitProof_SpecificAddress(tokenAddrToReceiveVerifierNotice, claimId, claimer, getCreatorOfToken(tokenAddrToReceiveVerifierNotice));
+    // TODO can be autoSubmit
+    function submitProof_TokenCreatorApproval(address tokenAddrToReceiveVerifierNotice, uint claimId) public {
+        // Sends a message to the token creator so that he either approves or rejects
+        submitProof_SpecificAddress(tokenAddrToReceiveVerifierNotice, claimId, getCreatorOfToken(tokenAddrToReceiveVerifierNotice));
     }
 
     // @Override
