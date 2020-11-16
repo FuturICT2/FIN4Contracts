@@ -12,15 +12,24 @@ contract CampaignManagement {
         creator = msg.sender;
     }
 
-    function registerNewCampaign(address campaignAddress) public {              // Register a new campaign
+    function registerNewCampaign(address campaignAddress) public {
         allCampaigns.push(campaignAddress);
     }
 
-    function getAllCampaigns() public view returns (address[] memory) {             // Get list of all campaigns
+    function getAllCampaigns() public view returns (address[] memory) { 
         return allCampaigns;
     }
 
     function getCampaignInfo(address campaignAddr) public view returns (string memory, bool, string memory, uint, uint, address[] memory, uint, uint) {
         return Campaign(campaignAddr).getCampaignInfo(msg.sender);
     }
+
+    function getCampaignTokensClaimed(address campaignAddr) public view returns (uint[] memory, uint) {
+        return Campaign(campaignAddr).totalTokensClaimed();
+    }
+
+    function getCampaignSuccess(address campaignAddr) public view returns (bool) {
+        return Campaign(campaignAddr).campaignSuccessVerifier();
+    }
+
 }
