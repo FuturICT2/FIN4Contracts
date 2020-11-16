@@ -64,4 +64,6 @@ contract Campaign {
         else 
             return false;
     } 
+
+    // TO-DO: automate minting of campaign token
 }
