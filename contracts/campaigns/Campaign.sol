@@ -4,14 +4,14 @@ import 'contracts/tokens/ERC20Plus.sol';
 
 contract Campaign {
 
-    string public campaignName;                 // Name of the campaign. Ex - 'City of Munich Campaign'
-    address public campaignCreator;             // Person/Organisation that created the campaign     
-    string public actionsText;                  // Actions policy i.e. actions that will be rewarded
-    uint public campaignStartTime;              // Date and time when the campaign is supposed to start
-    uint public campaignEndTime;                // Date and time when the campaign is supposed to end
-    address[] allTokens;                        // List of all the tokens part of the campaign ex - clean-isar and plastic-waste token
-    uint public successThreshold;               // Number of succesful claims required on tokens
-    uint public claimPerCampaignContributor;    // Number of claim(s) a campaign contributor can make for each token in campaign
+    string public campaignName;             
+    address public campaignCreator;   
+    string public actionsText; 
+    uint public campaignStartTime;
+    uint public campaignEndTime;
+    address[] allTokens; 
+    uint public successThreshold; 
+    uint public claimPerCampaignContributor; 
     uint[] public initialSupplyList;
 
     constructor(string memory _campaignName, address campaignCreatorAddress, string memory _actionsText, uint _campaignStartTime, uint _campaignEndTime, address[] memory _allTokens, uint _successThreshold, uint _claimPerCampaignContributor) public {
