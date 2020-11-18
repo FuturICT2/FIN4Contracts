@@ -15,7 +15,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-pragma solidity ^0.5.17;
+pragma solidity >=0.5.17;
 
 contract Fin4Main {
 
@@ -43,9 +43,12 @@ contract Fin4Main {
     address public Fin4UnderlyingsAddress;
     address public Fin4VotingAddress;
     // address public Fin4OracleHubAddress; TODO
+    address public CampaignCreatorAddress;
+    address public CampaignManagementAddress;
 
     function setSatelliteAddresses(address uncappedTokenCreator, address cappedTokenCreator, address tokenManagement, address claiming,
-    address collections, address messaging, address verifying, address groups, address systemParameters, address underlyings, address fin4voting) public {
+        address collections, address messaging, address verifying, address groups, address systemParameters, address underlyings,
+        address fin4voting, address campaignCreator, address campaignManagement) public {
         // TODO use TCR instead of giving this right only to the creator of Fin4Main? #ConceptualDecision
         require (msg.sender == Fin4MainCreator, "Only the creator of Fin4Main can set satellite addresses");
         Fin4UncappedTokenCreatorAddress = uncappedTokenCreator;
@@ -59,13 +62,15 @@ contract Fin4Main {
         Fin4SystemParametersAddress = systemParameters;
         Fin4UnderlyingsAddress = underlyings;
         Fin4VotingAddress = fin4voting;
+        CampaignCreatorAddress = campaignCreator;
+        CampaignManagementAddress = campaignManagement;
     }
 
     function getSatelliteAddresses() public view returns(address, address, address, address, address, address, address, address,
-        address, address, address) {
+        address, address, address, address, address) {
         return (Fin4UncappedTokenCreatorAddress, Fin4CappedTokenCreatorAddress, Fin4TokenManagementAddress, Fin4ClaimingAddress,
             Fin4CollectionsAddress, Fin4MessagingAddress, Fin4VerifyingAddress, Fin4GroupsAddress, Fin4SystemParametersAddress,
-            Fin4UnderlyingsAddress, Fin4VotingAddress);
+            Fin4UnderlyingsAddress, Fin4VotingAddress, CampaignCreatorAddress, CampaignManagementAddress);
     }
 
     address public REPToken;
