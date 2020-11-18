@@ -1,4 +1,4 @@
-pragma solidity ^0.5.17;
+pragma solidity >=0.5.17;
 
 import 'contracts/tokens/ERC20Plus.sol';
 import 'contracts/Fin4TokenBase.sol';

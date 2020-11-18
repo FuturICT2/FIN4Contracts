@@ -1,4 +1,4 @@
-pragma solidity ^0.5.17;
+pragma solidity >=0.5.17;
 
 import 'contracts/Fin4Token.sol';
 import 'contracts/Fin4SystemParameters.sol';
@@ -80,18 +80,19 @@ contract Fin4Claiming {
         // also makes it easier because then beneficiary doesn't have to be a payable address
         (bool success, ) = tokenToFees[tokenAddress].beneficiary.call.value(msg.value)("");
         require(success, "Transfer failed");
-        _submitClaim(tokenAddress, amount, comment);
+        return _submitClaim(tokenAddress, amount, comment);
     }
 
-    function submitClaim(address tokenAddress, uint amount, string memory comment) public {
+    function submitClaim(address tokenAddress, uint amount, string memory comment) public returns (uint, uint) {
         require(!tokenToFees[tokenAddress].exists, "This token requires a claiming fee, use the submitClaimAndPayFee() method");
-        _submitClaim(tokenAddress, amount, comment);
+        return _submitClaim(tokenAddress, amount, comment);
     }
 
-    function _submitClaim(address tokenAddress, uint amount, string memory comment) private {        
+    function _submitClaim(address tokenAddress, uint amount, string memory comment) private returns (uint, uint) {       
         uint claimId;
         address[] memory requiredVerifierTypes;
         uint claimCreationTime;
+        uint current = now;
         uint quantity;
         (claimId, requiredVerifierTypes, claimCreationTime, quantity) = Fin4Token(tokenAddress)
             .submitClaim(msg.sender, amount, comment);
@@ -127,6 +128,8 @@ contract Fin4Claiming {
                 }
             }
         }
+
+        return (claimCreationTime, current);
     }
 
     function verifierPendingPingback(address tokenAddrToReceiveVerifierNotice, address verifierTypeAddress, uint claimId,
