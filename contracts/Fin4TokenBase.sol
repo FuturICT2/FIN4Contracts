@@ -2,7 +2,6 @@ pragma solidity >=0.5.17;
 
 import "contracts/verifiers/Fin4BaseVerifierType.sol";
 import "contracts/stub/Fin4ClaimingStub.sol";
-import "@nomiclabs/buidler/console.sol";
 
 contract Fin4TokenBase { // abstract class
 

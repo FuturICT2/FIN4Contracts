@@ -5,8 +5,5 @@
 		"@openzeppelin/contracts": "^2.5.0",
 		"@truffle/hdwallet-provider": "1.0.18",
 		"solidity-util": "github:willitscale/solidity-util"
-	},
-	"devDependencies": {
-		"@nomiclabs/buidler": "^1.4.7"
 	}
 }
