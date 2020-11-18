@@ -72,7 +72,7 @@ contract Fin4Claiming {
         return (tokensWithFees, amountsPerClaim, beneficiaries);
     }
 
-    function submitClaimAndPayFee(address tokenAddress, uint amount, string memory comment) public payable {
+    function submitClaimAndPayFee(address tokenAddress, uint amount, string memory comment) public payable returns (uint, uint) {
         require(tokenToFees[tokenAddress].exists, "This token requires no claiming fee");
         require(msg.value >= tokenToFees[tokenAddress].amountPerClaimInWei, "Fee is not paid in full");
         // that allows more then the fee to be sent to the beneficiary #ConceptualDecision
