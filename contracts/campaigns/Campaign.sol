@@ -1,6 +1,6 @@
 pragma solidity >=0.5.17;
 
-import 'contracts/tokens/ERC20Plus.sol';
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Campaign {
 
@@ -34,7 +34,7 @@ contract Campaign {
     function getInitialSuppliesOnTokens() public returns (uint[] memory) {
 
         for(uint i = 0; i< allTokens.length; i++ ) {
-            initialSupplyList.push(ERC20Plus(allTokens[i]).totalSupply());
+            initialSupplyList.push(ERC20(allTokens[i]).totalSupply());
         }
         return initialSupplyList;
     }  
@@ -45,7 +45,7 @@ contract Campaign {
 
     
         for(uint i = 0; i < allTokens.length; i++) {
-            uint current = ERC20Plus(allTokens[i]).totalSupply() - initialSupplyList[i];
+            uint current = ERC20(allTokens[i]).totalSupply() - initialSupplyList[i];
             result[i] = current;
             sum += current;
         }
@@ -65,5 +65,5 @@ contract Campaign {
             return false;
     } 
 
-    // TO-DO: automate minting of campaign token
+    // TODO: automate minting of campaign token
 }
