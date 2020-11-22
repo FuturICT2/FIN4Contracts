@@ -7,7 +7,6 @@ contract CampaignManagement {
     address[] public allCampaigns;
     address public creator;
 
-
     constructor() public {
         creator = msg.sender;
     }
@@ -20,7 +19,8 @@ contract CampaignManagement {
         return allCampaigns;
     }
 
-    function getCampaignInfo(address campaignAddr) public view returns (string memory, bool, string memory, uint, uint, address[] memory, uint, uint) {
+    function getCampaignInfo(address campaignAddr) public view returns (string memory, bool, string memory, uint, uint,
+        address[] memory, uint, uint) {
         return Campaign(campaignAddr).getCampaignInfo(msg.sender);
     }
 
