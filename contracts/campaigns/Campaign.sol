@@ -9,7 +9,7 @@ contract Campaign {
     string public actionsText; 
     uint public campaignStartTime;
     uint public campaignEndTime;
-    address[] allTokens; 
+    address[] public allTokens; 
     uint public successThreshold; 
     uint public claimPerCampaignContributor; 
     uint[] public initialSupplyList;
